@@ -27,6 +27,10 @@ extern NSColor *shColorIdentifier;
 	BOOL useHighlighting; // if set to YES syntax highlighting is used
 	BOOL isEditable; // determines whether this document can be edited
 	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
+	BOOL showMatchingBraces; // if YES mathing braces are highlighted
+	
+	double braceHighlightInterval; // interval to flash brace highlighting for
+	NSDictionary *highlightColorAttr; // attributes set while braces matching
 	
 	BOOL updating; // this flag is set while syntax coloring is changed to prevent recursive changes
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
@@ -41,7 +45,9 @@ extern NSColor *shColorIdentifier;
 - (void) setREditFlag: (BOOL) flag;
 - (BOOL) hasREditFlag;
 
-- (void)updateSyntaxHighlightingForRange: (NSRange) range;
+- (void) updateSyntaxHighlightingForRange: (NSRange) range;
+- (void) highlightBracesWithShift: (int) shift andWarn: (BOOL) warn;
+- (void) resetBackgroundColor: (id)sender; // end of highlighting
 
 - (IBAction)executeSelection:(id)sender;
 - (IBAction)sourceCurrentDocument:(id)sender;

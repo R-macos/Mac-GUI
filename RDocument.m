@@ -58,11 +58,14 @@ NSArray *keywordList;
 			[RDocument setDefaultSyntaxHighlightingColors];
 			defaultsInitialized=YES;
 		}
+		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor selectedTextBackgroundColor], NSBackgroundColorAttributeName, nil];
 		initialContents=nil;
 		initialContentsType=nil;
 		useHighlighting=YES;
 		isEditable=YES;
 		isREdit=NO;
+		showMatchingBraces = YES;
+		braceHighlightInterval = 0.2;
     }
 	
     return self;
@@ -237,6 +240,7 @@ create the UI for the document.
 	int last = i+range.length;
 	BOOL foundItem=NO;
 	
+	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
 	if (updating || !useHighlighting) return;
 	
 	updating=YES;
@@ -344,6 +348,70 @@ create the UI for the document.
 	updating=NO;
 }
 
+- (void) highlightBracesWithShift: (int) shift andWarn: (BOOL) warn
+{
+	NSString *completeString = [[textView textStorage] string];
+	unsigned int completeStringLength = [completeString length];
+	if (completeStringLength < 2) return;
+	
+	NSRange selRange = [textView selectedRange];
+	unsigned int cursorLocation = selRange.location;
+	cursorLocation+=shift; // add any shift as cursor movement guys need it
+	if (cursorLocation<0 || cursorLocation>=completeStringLength) return;
+	
+	unichar characterToCheck;
+	unichar openingChar = 0;
+	characterToCheck = [completeString characterAtIndex:cursorLocation];
+	int skipMatchingBrace = 0;
+	
+	if (characterToCheck == ')') openingChar='(';
+	else if (characterToCheck == ']') openingChar='[';
+	else if (characterToCheck == '}') openingChar='{';
+	
+	// well, this is rather simple so far, because it ignores cross-quoting, but for a first shot it's not too bad ;)
+	if (openingChar) {
+		while (cursorLocation--) {
+			unichar c = [completeString characterAtIndex:cursorLocation];
+			if (c == openingChar) {
+				if (!skipMatchingBrace) {
+					[[textView layoutManager] addTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(cursorLocation, 1)];
+					[self performSelector:@selector(resetBackgroundColor:) withObject:NSStringFromRange(NSMakeRange(cursorLocation, 1)) afterDelay:braceHighlightInterval];
+					return;
+				} else
+					skipMatchingBrace--;
+			} else if (c == characterToCheck)
+				skipMatchingBrace++;
+		}
+		if (warn) NSBeep();
+	} else { // ok, now reverse the roles and find the closing brace (if any)
+		unsigned maxLimit=completeStringLength;
+		//if (cursorLocation-maxLimit>4000) maxLimit=cursorLocation+4000; // just a soft limit to not search too far (but I think we're fast enough...)
+		if (characterToCheck == '(') openingChar=')';
+		else if (characterToCheck == '[') openingChar=']';
+		else if (characterToCheck == '{') openingChar='}';		
+		if (openingChar) {
+			while ((++cursorLocation)<maxLimit) {
+				unichar c = [completeString characterAtIndex:cursorLocation];
+				if (c == openingChar) {
+					if (!skipMatchingBrace) {
+						[[textView layoutManager] addTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(cursorLocation, 1)];
+						[self performSelector:@selector(resetBackgroundColor:) withObject:NSStringFromRange(NSMakeRange(cursorLocation, 1)) afterDelay:braceHighlightInterval];
+						return;
+					} else
+						skipMatchingBrace--;
+				} else if (c == characterToCheck)
+					skipMatchingBrace++;
+			}
+		}
+	}
+}
+
+-(void)resetBackgroundColor:(id)sender
+{
+	// we need to clear the whole BG because the text may have changed in between and we have the old position and not NSRangeFromString(sender)
+	[[textView layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSMakeRange(0,[[[textView textStorage] string] length])];
+}
+
 - (void)textStorageDidProcessEditing:(NSNotification *)aNotification {
 	NSTextStorage *ts = [aNotification object];
 	NSString *s = [ts string];
@@ -397,6 +465,13 @@ create the UI for the document.
 			return YES;
 		}
 	}
+    if (showMatchingBraces) {
+		if (commandSelector == @selector(moveLeft:))
+			[self highlightBracesWithShift: -2 andWarn:NO];
+		if(commandSelector == @selector(moveRight:))
+			[self highlightBracesWithShift: 0 andWarn:NO];
+	}
+	
 	return retval;
 }
 
