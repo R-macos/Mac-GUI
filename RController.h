@@ -120,6 +120,9 @@
 	float currentFontSize;
 	float currentConsoleWidth;
 
+	char *readConsTransBuffer; // transfer buffer returned by handeReadConsole
+	int readConsTransBufferSize; // size of the above buffer
+	
 	id quartzPrefPane;
 	id miscPrefPane;
 	id colorsPrefPane;

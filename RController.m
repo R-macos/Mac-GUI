@@ -124,6 +124,8 @@ static RController* sharedRController;
 	forceStdFlush = NO;
 	writeBufferLen = DEFAULT_WRITE_BUFFER_SIZE;
 	writeBufferPos = writeBuffer = (char*) malloc(writeBufferLen);
+	readConsTransBufferSize = 1024; // initial size - will grow as needed
+	readConsTransBuffer = (char*) malloc(readConsTransBufferSize);
 	
 	return self;
 }
@@ -643,7 +645,18 @@ extern BOOL isTimeToFinish;
 		[historyView reloadData];
 	}
 	
-	return [currentConsoleInput UTF8String];
+	{
+		const char *c = [currentConsoleInput UTF8String];
+		if (!c) return 0;
+		if (strlen(c)>readConsTransBufferSize-1) { // grow as necessary
+			free(readConsTransBuffer);
+			readConsTransBufferSize = (strlen(c)+2048)&0xfffffc00;
+			readConsTransBuffer = (char*) malloc(readConsTransBufferSize);
+		} // we don't shrink the buffer if gets too large - we may want to think about that ...
+		
+		strcpy(readConsTransBuffer, c);
+	}
+	return readConsTransBuffer;
 }
 
 - (int) handleEdit: (char*) file
