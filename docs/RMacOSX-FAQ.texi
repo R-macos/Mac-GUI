@@ -325,6 +325,7 @@ In this way, when you install a new version of the @emph{R.framework} this link 
 * How to get R with Aqua GUI::
 * How to install the Aqua GUI::
 * The R Console::
+* General Features::
 * The Menus::
 * Preferences::
 * The near future of the Aqua GUI::
@@ -353,6 +354,7 @@ In this section you'll find general informations on the Aqua GUI. For specific @
 can be done via the Aqua GUI using menus you should read below (@pxref{The Menus}). 
 @menu 
 * The Input and the Output::
+* Internationalization::
 * Copy and Paste::
 * The current and startup working directories::
 * Resizing the R Console::
@@ -362,10 +364,11 @@ can be done via the Aqua GUI using menus you should read below (@pxref{The Menus
 
 @node The Input and the Output
 @subsection The Input and the Output
-The current design of the R Console is to have separate frames for input (user) and output (R).
-The user is supposed to type command into the bottom frame of the R Console, this input is echoed
-into the upper frame and R will give any related output in the upper frame.
-The output frame (the upper one) is a read-only frame. 
+The current design of the R Console is to have a single frame for input (user) and output (R).
+
+@node Internationalization
+@subsection Internationalization
+TBD.
 
 @node Copy and Paste
 @subsection  Copy and Paste
@@ -402,6 +405,151 @@ next time you launch R. You can inhibit R to do this using the appropriate Prefe
 Text windows and frames are divided in Read-Only and Read and Write ones. Text colors can be set separately
 for the two kinds of windows. This happens as well for their respective backgrounds. Use the Preferences window to set these 
 colors (@pxref{Preferences}).
+
+@node General Features
+@section General Features
+@menu
+* Editor undo and line numbers::
+* Editor function list::
+* Editor completion::
+* Editor syntax coloring::
+* Editor help::
+* Editor (internal and external)::
+* Drag & drop::
+* Help system::
+* History::
+* Authentication and .libPath::
+* Preference Panes::
+@end menu
+
+@node Editor undo and line numbers
+@subsection Editor undo and line numbers
+The editor now supports undo/redo operations on an appropriate level of granularity (used to
+be all or nothing). The editor has an optional facility to show line numbers. These help with
+locating error messages. The editor also responds to the 'Go to Line' Edit menu function. The
+associated Preference Pane allows enabling/disabling the line numbers, as well as setting line
+number gutter width and text margin width. Note: Right now the line number system is fairly crude
+and makes the editor really slow on large files (1000s of lines). It will help to disable it
+for such large files.
+					
+@node Editor completion
+@subsection Editor completion
+Completion of typed input in the editor is available through the Edit menu 'Complete' or by 
+typing fn-tab.
+
+@node Editor function list
+@subsection Editor function list
+The editor provides a popup function list for functions defined in the script being edited.
+
+@node Editor syntax coloring
+@subsection Editor  syntax coloring
+It is now possible to change the syntax highlighting colors using the Syntax Color Preference
+Pane (see below)
+		
+@node Editor (internal and external)
+@subsection Editor (internal and external)
+By default, the editor used is incorporated into R.app, the Mac OS X GUI for R. It is a
+relatively simple multi-document editor that supports the features listed above. Additionally,
+two powerful commands are available to source the file being edited in its entirety (Command-E)
+or to source the current selection to R (Command-Return). Using R's edit() function, allows
+editing of R objects or files while R is kept waiting for the edit session to finish.
+It is possible to 'redirect' all R requests to open an editor to an external editor, which runs
+outside R.app. In that case, it is not possible to keep R waiting if edit() is used. Using
+AppleScript it is easy to implement Command-E and Command-Return like functionality.
+
+@node Editor help
+@subsection Editor help
+The editor contains a light-weight help system, either using an exact search or an approximate
+search.
+		
+@node Drag & drop
+@subsection Drag & drop
+Drag and drop of a directory on the R icon while R is not running will start R and
+set the working directory. By default .RData and .Rhistory are fetched from this working directory.
+If a file is dropped on thr R icon while R is not running, R is started, the file is either
+restored (if it is a saved workspace), sourced into R or opened in the selected editor. Whether
+the file is opened or sourced is specified by a Preference setting in the StartUp Preference Pane.
+Note: At this point opening a file in the editor before R is finished loading will crash R.
+While R is running, d&d of a directory updates the working directory. D&d of a file sources or
+opens the file in the selected editor. Double clicking on files bound to ("Open With ...") R, if
+R is not running, R is started and the file is sourced or opened in editor. If R is running, the
+file is opened in the editor.
+ 
+@node Help system
+@subsection Help system
+The Help screen now allows a user to go back or forward to previous help pages.
+It is now possible to print help pages. If a help topic is not found, a pop-up window allows
+to exit the help search or expand the search to a fuzzy/approximate search.  
+		
+@node History
+@subsection History
+R.app now uses history files that are compatible with history files created by R. Multiline
+support remains available from inside R.app. Multiline is particularly useful when using the
+Command Return feature while editing an R script. Import and export allows storing and importing
+history from files visible in the Mac OS Finder. Multiline is preserved. This can be set through
+the StartUp Preference Panel. Default value is 250. A variety of history entry cleanup is possible.
+At a minimum I would suggest to select "Cleanup history entries". It's optional to select removal
+of duplicate entries and strip comments.
+
+@node Authentication and .libPath
+@subsection Authentication and .libPath
+TBD
+				
+@node Preference Panes
+@subsection Preference Panes
+Several aditional preference panes have been implemented (see below).
+
+@menu
+* Startup::
+* Editor::
+* Syntax Colors::
+* Console Colors::
+* Quartz window::
+@end menu
+
+@node Startup
+@subsubsection Startup
+The Drag & drop section defines drag & drop behaviour during R start-up. Options are to open
+file in an editor or to source file. Default is to source the file.
+The Default Library Paths section enables, on next start-up of R, to add ~/R/Library to the
+library search/install path. The initial working directory section can be used to enforce
+the initial working directory. If no directory is specified, this directory is used as the
+default. The Change button allows to select a new directory. The Always apply selection will
+enforce the specified intial start-up directory. The history section controls reading of
+the history file on startup. If selected, R will read history file on start-up.
+The R history file field is used to read and store history from/to. This field can be edited
+to allow selecting files starting with a period (e.g. .Rhistory). If you want the same history
+file regardless of your selected working directory, specify a fixec path (e.g. ~/.Rhistory).
+The Default button will reset the history file to its default value. The History handling 
+area allows setting of the max number of entries to be kept in history, to remove duplicate
+entries, to cleanup history entries (this is very useful to remove blank lines when submitting
+multiple lines using Command-Return) and the strip comments before the entry is added to the
+history.
+
+@node Editor
+@subsubsection Editor
+If Built-in editor is selected, allows enable/disable of syntax coloring, brace highlighting
+and the showing of line numbers. If External editor is selected, allows specifying which
+external editor. That editor will be used for all editing functions. It runs as a separate
+application. Using an external editor means that R will never wait while editing (e.g. edit(A)
+will return immediately and open A in the external editor. Command-E and Command-Return like
+functionality would need to be implemented by other means, i.e. AppleScript. The external editor
+can be any application (e.g. SubEthaEdit, TextWrangler, BBEdit, Smultron, etc) or can be activated
+through a shell script (e.g. see or smultron, both give better control on how to start the editor).
+					
+@node Syntax Colors
+@subsubsection Syntax Colors
+Enables to select the syntax colors.
+
+@node Console Colors
+@subsubsection Console Colors
+Enables to select the input/output colors in R Console.
+
+@node Quartz window
+@subsubsection Quartz window
+Use the Quartz preference pane to override R Quartz width/height parameters if override is enabled.
+You can set the default location for initial Quartz window. Subsequent windows are offset sligthly.
+The Font section is not implemented. Restore defaults resets to default values.
 
 @node The Menus
 @section The Menus
