@@ -157,7 +157,6 @@
 		};
 		1602BB2D0719702800805588 = {
 			children = (
-				1602BB2E0719702800805588,
 				1602BB2F0719702800805588,
 			);
 			isa = PBXGroup;
@@ -169,7 +168,8 @@
 			explicitFileType = text.html.documentation;
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			path = "RMacOSX-FAQ.html";
+			name = "RMacOSX-FAQ.html";
+			path = "docs/RMacOSX-FAQ.html";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -2242,6 +2242,7 @@
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
 				1601EFBC06CBBD2000BF60D4,
+				1602BB2E0719702800805588,
 				16DB0E89072E5CFA00380720,
 				1601EFCF06CBBEC700BF60D4,
 				1601F04606CBC0EF00BF60D4,
