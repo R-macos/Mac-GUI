@@ -104,7 +104,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (void) awakeFromNib {
 	
 	[self setupToolbar];
-//	[self showWindow];
 }
 
 - (void)dealloc {
@@ -121,22 +120,21 @@ void printelt(SEXP invec, int vrow, char *strp)
 		objectValueForTableColumn: (NSTableColumn *)tableColumn
 		row: (int)row
 {
-	int i;
-
+	int i = [[tableColumn identifier] intValue];
+	if(i > xmaxused)
+		return @"";
 	
-	for(i= 1;i<=xmaxused;i++)
-		if([[tableColumn identifier] isEqualToString:[NSString stringWithFormat:@"%d",i]]) {
-			SEXP tmp = VECTOR_ELT(work, i-1);
-			char buf[1025];
-			buf[0] = '\0';
-			if (!isNull(tmp)) {
-				if(LENGTH(tmp)>row){
-					printelt(tmp, row, buf);
-					return [NSString stringWithCString:buf];
-				} else return @"";
-			} else return @"";
-		} 
-			return @"";
+ 	SEXP tmp = VECTOR_ELT(work, i-1);
+ 	char buf[1025];
+ 	buf[0] = '\0';
+ 	if (!isNull(tmp)) {
+	 		if(LENGTH(tmp)>row){
+		 			printelt(tmp, row, buf);
+		 			return [NSString stringWithCString:buf];
+		 		} else return @"";
+	 	} else return @"";
+ 
+ 
 }
 
 
@@ -152,14 +150,14 @@ void printelt(SEXP invec, int vrow, char *strp)
 	
 	buf[0] = '\0';
 
-	for(col=1;col<=xmaxused;col++)
-		if([[tableColumn identifier] isEqualToString:[NSString stringWithFormat:@"%d",col]]) 
-			break;
-
+	col = [[tableColumn identifier] intValue];
+	
 	tmp = VECTOR_ELT(work, col-1);
+	
+ 	CFStringGetCString((CFStringRef)anObject, buf, 255,  kCFStringEncodingMacRoman);
+	
 
-	CFStringGetCString((CFStringRef)anObject, buf, 255,  kCFStringEncodingMacRoman);
-
+	
 	switch(get_col_type(col)){
 		case NUMERIC:
 			if(buf[0] == '\0') 
@@ -167,7 +165,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 			 else {
 					char *endp;
 					double new = R_strtod(buf, &endp);
-					// NSLog(@"valore=%5.3lf",new);
 					REAL(tmp)[row] = new;
 					INTEGER(lens)[col-1] = max(INTEGER(lens)[col-1],row+1);
 			 }
@@ -201,7 +198,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
     for (i = 1; i <= xmaxused ; i++) {
 		NSTableColumn *col;
-		col = [[[NSTableColumn alloc] initWithIdentifier:[NSString stringWithFormat:@"%d",i]] autorelease];
+		col = [[[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]] autorelease];
 		[[col headerCell] setTitle:[NSString stringWithCString:get_col_name(i)]];
         [col setWidth: 50];
         [col setMaxWidth: 300];
@@ -406,7 +403,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 /* remove selected columns */
 -(IBAction) remCols:(id)sender
 {
-	//NSLog(@"rem cols");
 	SEXP work2,names2;
 	int i,j,ncols;
 	int *colidx;
@@ -555,11 +551,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 	newvar = 0;
 	[[REditor getDEController] setDatas:YES];	
 	[[[REditor getDEController] window] orderFront:self];
-	NSModalSession session = [NSApp beginModalSessionForWindow:[[REditor getDEController] window]];
-	while(IsDataEntry)
-		[NSApp runModalSession:session];
-	
-	[NSApp endModalSession:session];
+	[NSApp runModalForWindow:[[REditor getDEController] window]];
+
 	[pool release];
 }
 
