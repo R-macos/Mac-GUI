@@ -152,6 +152,20 @@ NSArray *keywordList;
 	[printOp runOperation];
 }
 
+/* This method is implemented to allow image data file to be loaded into R using open
+or drag and drop. In case of a successfull loading of image file, we don't want to
+create the UI for the document.
+*/
+- (BOOL)readFromFile:(NSString *)fileName ofType:(NSString *)docType{
+		if( [[RController getRController] isImageData:(char *)[fileName cString]] == 0){
+			[[RController getRController] sendInput: [NSString stringWithFormat:@"load(\"%@\")",fileName]];
+			[[NSDocumentController sharedDocumentController]  setShouldCreateUI:NO];
+			return(YES);
+		} else {
+			[[NSDocumentController sharedDocumentController]  setShouldCreateUI:YES];
+			return( [super readFromFile: fileName ofType: docType] );
+		}
+}
 
 - (BOOL) loadDataRepresentation: (NSData *)data ofType:(NSString *)aType {
 	if (initialContents) {
