@@ -14,7 +14,13 @@ User requests/bug reports:
 * is possible to crop long output? A-la mathematica using the cocoa browser as in the workspace browser? 
   What really does ESS ? Simon?
 * add arrows to the html browsers for navigation, as it is now it's too limited  
-
+* when help window is selected, the html content should have the focus to allow direct scrolling with 
+  arrow keys
+* for Bioconductor packages installation: allow for an option that uses getBioc script  
+* add an option to package installer to "update" all packages that either: of new version, or built
+  for a different verison of R
+  
+  
 Internal feedback:
 * metric info in quartz device is broken [SI]
 * growing up the window in quartz device does not refresh the drawing [SI]
