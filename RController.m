@@ -1577,9 +1577,9 @@ No error message or warning are raised.
 	op = [NSOpenPanel openPanel];
 	[op setTitle:@"R File to Source"];
 	answer = [op runModalForTypes:nil];
-	
-	[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
-		//NSLog(@"RController's sourceFile: was called, current document is %@",  [[NSDocumentController sharedDocumentController] currentDocument]);
+
+	if (answer==NSOKButton)
+		[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
 }
 
 - (IBAction)printDocument:(id)sender
