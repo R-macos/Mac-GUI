@@ -202,12 +202,15 @@ int initR(int argc, char **argv) {
     return 0;
 }
 
+static int firstRun=1;
 
-void run_REngineRmainloop(void)
+void run_REngineRmainloop(int delayed)
 {
     /* Here is the real R read-eval-loop. */
     /* We handle the console until end-of-file. */
 
+	firstRun=delayed;
+	
     R_IoBufferInit(&R_ConsoleIob);
     SETJMP(R_Toplevel.cjmpbuf);
     R_GlobalContext = R_ToplevelContext = &R_Toplevel;
@@ -219,6 +222,11 @@ void run_REngineRmainloop(void)
     signal(SIGPIPE, onpipe);
 #endif
 #endif
+	if (firstRun) {
+		firstRun=0;
+		return;
+	}
+	
     RGUI_ReplConsole(R_GlobalEnv, 0, 0);
 	end_Rmainloop(); /* must go here */
 }

@@ -160,7 +160,6 @@
 - (void) consoleInput: (NSString*) cmd interactive: (BOOL) inter;
 
 - (IBAction)otherEventLoops:(id)sender;
-- (IBAction)runREPL:(id)sender;
 - (IBAction)flushconsole:(id)sender;
 
 -(IBAction) fontSizeBigger:(id)sender;

@@ -119,8 +119,16 @@ static REngine* mainRengine=nil;
 {
 	if (!active) return;
 	loopRunning=YES;
-    run_REngineRmainloop();
+    run_REngineRmainloop(0);
 	loopRunning=NO;	
+}
+
+- (void) runDelayedREPL
+{
+	if (!active) return;
+	loopRunning=YES;
+    run_REngineRmainloop(1);
+	/* in fact loopRunning is not determinable, because later longjmp may have re-started the loop, so we just keep it at YES */
 }
 
 - (id) handler

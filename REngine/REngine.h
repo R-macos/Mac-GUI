@@ -91,6 +91,7 @@
 - (id <REPLHandler>) handler;
 - (id <CocoaHandler>) cocoaHandler; // beware, nil is legal!
 - (void) setCocoaHandler: (id <CocoaHandler>) ch;
-- (void) runREPL;
+- (void) runREPL; // starts REPL and does not return until REPL finishes
+- (void) runDelayedREPL; // starts REPL with delayed=1 thus returns immediately
 
 @end

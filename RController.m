@@ -295,7 +295,8 @@ static RController* sharedRController;
 												  repeats:NO];
 	
 	[RConsoleWindow makeKeyAndOrderFront:self];
-	[self runREPL:nil];
+	[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
+	CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
 }
 
 - (void) kickstart:(id) sender {
@@ -1152,29 +1153,6 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (void)  handleShowMessage: (char*) msg
 {
 	NSRunAlertPanel(@"R Message",[NSString stringWithCString:msg],@"OK",nil,nil);
-}
-
-/*  This is called from R with as callback to R_ProcessEvents during
-computation in "src/main/errors.c". The callback is defined at the
-moment inside "src/unix/aqua.c". In "errors.c" this is defined to
-allow for user interrupts but we also use it to make our GUI
-reponsive to user interaction.
-*/	
-
-
-
-/*  This called by a timer periodically to allow tcltk, x11 etc to process their events 
-like window resizing, locator, widgets interactions, etc.
-*/
-
-
-- (IBAction)runREPL:(id)sender {
-	@try {
-		[[REngine mainEngine] runREPL];
-	} @catch(NSException *ex) {
-		NSLog(@"R main loop exception %@", ex);
-	}
-	NSLog(@"runREPL returned");
 }
 
 - (IBAction)flushconsole:(id)sender {

@@ -1,5 +1,10 @@
 NEWS
 
+Last update: 2005-01-10 [SU]
+*	Changed the way R is started to get out of the timer/notifi-
+	cation context. This is somewhat experimental, because is
+	is quite complex (using runDelayedREPL and posting <ESC>)
+
 Last update: 2004-12-30 [SU]
 *	Fixed bug in color preferences causing an exception to be
 	thrown when chenging transparency of a pure white bg
