@@ -1,0 +1,39 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                changeAppOrCommand = id; 
+                changeEditor = id; 
+                changeExternalEditorName = id; 
+                changeHighlightInterval = id; 
+                changeInternalOrExternal = id; 
+                changeShowBraceHighlighting = id; 
+                changeShowLineNumbers = id; 
+                changeShowSyntaxColoring = id; 
+            }; 
+            CLASS = EditorPrefPane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                appOrCommand = NSMatrix; 
+                builtInPrefs = NSBox; 
+                changeEditor = NSButton; 
+                commandText = NSTextField; 
+                editorText = NSTextField; 
+                externalEditorName = NSTextField; 
+                externalSettings = NSBox; 
+                highlightInterval = NSTextField; 
+                highlightIntervalText = NSTextField; 
+                highlightNoteText = NSTextField; 
+                internalOrExternal = NSMatrix; 
+                mainView = NSView; 
+                showBraceHighlighting = NSButton; 
+                showLineNumbers = NSButton; 
+                showLineNumbersText = NSTextField; 
+                showSyntaxColoring = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
