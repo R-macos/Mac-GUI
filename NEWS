@@ -1,5 +1,11 @@
 NEWS
 
+Last update: 2005-01-13 [SU]
+*	Fixed compatibility issue with R-devel (2.1.0)
+*	Enable UTF-8 support for R-devel (2.1.0). This finally fixes
+	most encoding issues and allows support for many languages
+*	Changed REngine to use UTF-8
+
 Last update: 2005-01-12 [RG, SU]
 *	Fixed openRecent behaviour [RG]
 *	Fixed crash in the timer (REPL is non-delayed now) [SU]

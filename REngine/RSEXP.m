@@ -25,6 +25,9 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  Created by Simon Urbanek on Wed Dec 10 2003.
+ *
  */
 
 /* IMPORTANT: the entire REngine/REXP framework assumes that you're not returning contol to R in the life of a RSEXP. 
@@ -51,7 +54,7 @@
 - (id) initWithString: (NSString*) str
 {
     PROTECT(xp=allocVector(STRSXP, 1));
-    SET_VECTOR_ELT(xp, 0, mkChar([str cString]));
+    SET_VECTOR_ELT(xp, 0, mkChar([str UTF8String]));
     UNPROTECT(1);
     attr=nil;
     //NSLog(@"initWithString result: %@", self);
@@ -177,7 +180,7 @@
 
 - (NSString*) string
 {
-    return (TYPEOF(xp)==STRSXP && LENGTH(xp)>0)?[NSString stringWithCString: (char*) CHAR(STRING_ELT(xp, 0))]:nil;
+    return (TYPEOF(xp)==STRSXP && LENGTH(xp)>0)?[NSString stringWithUTF8String: (char*) CHAR(STRING_ELT(xp, 0))]:nil;
 }
 
 - (int) integer
@@ -196,7 +199,7 @@
         int i=0, l=LENGTH(xp);
         id *cont=(id *) malloc(sizeof(id)*l);
         while (i<l) {
-            cont[i]=[[NSString alloc] initWithCString: (char*) CHAR(STRING_ELT(xp, i))];
+            cont[i]=[[NSString alloc] initWithUTF8String: (char*) CHAR(STRING_ELT(xp, i))];
             i++;
         }
         {
