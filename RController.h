@@ -86,11 +86,11 @@
 	IBOutlet NSTableView *historyView;			/* TableView for the package manager */ 
 	IBOutlet NSTextField *WDirView;				/* Mini-TextField for the working directory */
 	IBOutlet NSSearchField *helpSearch;			/* help search  field */
-	IBOutlet id clearHistory;
-	IBOutlet id loadHistory;
-	IBOutlet id saveHistory;
+	IBOutlet NSButton *clearHistory;
+	IBOutlet NSButton *loadHistory;
+	IBOutlet NSButton *saveHistory;
     IBOutlet NSDrawer *HistoryDrawer;	
-	id  RConsoleWindow;
+	IBOutlet NSWindow *RConsoleWindow;
 	NSTimer *timer;
 	NSTimer *RLtimer;
 	NSTimer *Flushtimer;
@@ -99,9 +99,9 @@
 	NSToolbar *toolbar;
 	NSToolbarItem *toolbarStopItem;
 	
-    IBOutlet id fontSizeStepper;
-    IBOutlet id fontSizeField;
-    IBOutlet id fontSizeView;
+    IBOutlet NSStepper *fontSizeStepper;
+    IBOutlet NSTextField *fontSizeField;
+    IBOutlet NSView *fontSizeView;
 	
 	unsigned committedLength; // any text before this position cannot be edited by the user
     unsigned promptPosition;  // the last prompt is positioned at this position

@@ -14,15 +14,15 @@
             CLASS = ColorsPrefPane; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                alphaStepper = id; 
-                backgColorWell = id; 
-                defaultColorsButton = id; 
-                inputColorWell = id; 
+                alphaStepper = NSSlider; 
+                backgColorWell = NSColorWell; 
+                defaultColorsButton = NSButton; 
+                inputColorWell = NSColorWell; 
                 mainView = NSView; 
-                outputColorWell = id; 
-                promptColorWell = id; 
-                stderrColorWell = id; 
-                stdoutColorWell = id; 
+                outputColorWell = NSColorWell; 
+                promptColorWell = NSColorWell; 
+                stderrColorWell = NSColorWell; 
+                stdoutColorWell = NSColorWell; 
             }; 
             SUPERCLASS = NSObject; 
         }, 

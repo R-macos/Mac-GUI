@@ -38,16 +38,15 @@
 	NSString *category;
 	NSImage *icon;
 
-	id inputColorWell;
-    id outputColorWell;
-    id promptColorWell;
-    id backgColorWell;
-    id stderrColorWell;
-    id stdoutColorWell;
+	IBOutlet NSColorWell *inputColorWell;
+    IBOutlet NSColorWell *outputColorWell;
+    IBOutlet NSColorWell *promptColorWell;
+    IBOutlet NSColorWell *backgColorWell;
+    IBOutlet NSColorWell *stderrColorWell;
+    IBOutlet NSColorWell *stdoutColorWell;
 	
-	id defaultColorsButton;
-	id alphaStepper;
-	
+	IBOutlet NSButton *defaultColorsButton;
+	IBOutlet NSSlider *alphaStepper;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -79,12 +78,12 @@
 - (IBAction) changeAlphaColor:(id)sender;
 - (IBAction) setDefaultColors:(id)sender;
 
-- (id) inputColorWell;
-- (id) outputColorWell;
-- (id) promptColorWell;
-- (id) backgColorWell;
-- (id) stderrColorWell;
-- (id) stdoutColorWell;
-- (id) alphaStepper;
+- (NSColorWell*) inputColorWell;
+- (NSColorWell*) outputColorWell;
+- (NSColorWell*) promptColorWell;
+- (NSColorWell*) backgColorWell;
+- (NSColorWell*) stderrColorWell;
+- (NSColorWell*) stdoutColorWell;
+- (NSColorWell*) alphaStepper;
 
 @end

@@ -378,6 +378,63 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
   return allocVector(LGLSXP, 0);
 }
 
+SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
+{
+	char *vm;
+	SEXP ans; 
+	int i, len;
+	SEXP h_topic, h_pkg, h_desc, h_wtitle, h_url;
+	char **sTopic, **sDesc, **sPkg, **sURL;
+	
+	checkArity(op, args);
+	
+	vm = vmaxget();
+	h_topic = CAR(args); args = CDR(args);
+	h_pkg = CAR(args); args = CDR(args);
+	h_desc = CAR(args); args = CDR(args);
+	h_wtitle = CAR(args); args = CDR(args);
+	h_url = CAR(args); 
+	
+	if(!isString(h_topic) | !isString(h_pkg) | !isString(h_desc) )
+		errorcall(call, "invalid arguments");
+	
+	len = LENGTH(h_topic);
+	if (LENGTH(h_pkg)!=len || LENGTH(h_desc)!=len || LENGTH(h_wtitle)<1 || LENGTH(h_url)!=len)
+		errorcall(call, "invalid arguments (length mismatch)");
+	
+	if (len==0) {
+		[[REngine cocoaHandler] handleHelpSearch: 0 withTopics: 0 packages: 0 descriptions: 0 urls: 0 title: 0];
+		vmaxset(vm);
+		return R_NilValue;
+	}
+	
+	sTopic = (char**) malloc(sizeof(char*)*len);
+	sDesc = (char**) malloc(sizeof(char*)*len);
+	sPkg = (char**) malloc(sizeof(char*)*len);
+	sURL = (char**) malloc(sizeof(char*)*len);
+	
+	i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
+	while (i<len) {
+		sTopic[i] = CHAR(STRING_ELT(h_topic, i));
+		sDesc[i]  = CHAR(STRING_ELT(h_desc, i));
+		sPkg[i]   = CHAR(STRING_ELT(h_pkg, i));
+		sURL[i]   = CHAR(STRING_ELT(h_url, i));
+		i++;
+	}
+	
+	[[REngine cocoaHandler] handleHelpSearch: len withTopics: sTopic packages: sPkg descriptions: sDesc urls: sURL title:CHAR(STRING_ELT(h_wtitle,0))];
+	free(sTopic); free(sDesc); free(sPkg); free(sURL);
+	
+	PROTECT(ans = NEW_LOGICAL(len));
+	for(i=0;i<len;i++)
+		LOGICAL(ans)[i] = 0;
+	
+	vmaxset(vm);  
+	UNPROTECT(1);
+	
+	return ans;
+}
+
 //==================================================== the following callbacks need to be moved!!! (TODO)
 
 int freeWorkspaceList(int newlen);
@@ -534,72 +591,6 @@ int freeWorkspaceList(int newlen)
 	
 	return(newlen);
 }		
-
-int freeSearchList(int newlen);
-
-int NumOfMatches;
-char **hs_topic; 
-char **hs_pkg;
-char **hs_desc;
-char **hs_url;
-BOOL WeHaveSearchTopics;  
-SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
-{
-  char *vm;
-  SEXP ans; 
-  int i, len;
-  SEXP h_topic, h_pkg, h_desc, h_wtitle, h_url;
-  char **sTopic, **sDesc, **sPkg, **sURL;
-
-  checkArity(op, args);
-
-  vm = vmaxget();
-  h_topic = CAR(args); args = CDR(args);
-  h_pkg = CAR(args); args = CDR(args);
-  h_desc = CAR(args); args = CDR(args);
-  h_wtitle = CAR(args); args = CDR(args);
-  h_url = CAR(args); 
-  
-  if(!isString(h_topic) | !isString(h_pkg) | !isString(h_desc) )
-	errorcall(call, "invalid arguments");
-
-  len = LENGTH(h_topic);
-  if (LENGTH(h_pkg)!=len || LENGTH(h_desc)!=len || LENGTH(h_wtitle)<1 || LENGTH(h_url)!=len)
-	  errorcall(call, "invalid arguments (length mismatch)");
-  
-  if (len==0) {
-	  [[REngine cocoaHandler] handleHelpSearch: 0 withTopics: 0 packages: 0 descriptions: 0 urls: 0 title: 0];
-	  vmaxset(vm);
-	  return R_NilValue;
-  }
-  
-  sTopic = (char**) malloc(sizeof(char*)*len);
-  sDesc = (char**) malloc(sizeof(char*)*len);
-  sPkg = (char**) malloc(sizeof(char*)*len);
-  sURL = (char**) malloc(sizeof(char*)*len);
-  
-  i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
-  while (i<len) {
-	  sTopic[i] = CHAR(STRING_ELT(h_topic, i));
-	  sDesc[i]  = CHAR(STRING_ELT(h_desc, i));
-	  sPkg[i]   = CHAR(STRING_ELT(h_pkg, i));
-	  sURL[i]   = CHAR(STRING_ELT(h_url, i));
-	  i++;
-  }
-  
-  [[REngine cocoaHandler] handleHelpSearch: len withTopics: sTopic packages: sPkg descriptions: sDesc urls: sURL title:CHAR(STRING_ELT(h_wtitle,0))];
-  free(sTopic); free(sDesc); free(sPkg); free(sURL);
-  
-   
-  PROTECT(ans = NEW_LOGICAL(len));
-  for(i=0;i<len;i++)
-	  LOGICAL(ans)[i] = 0;
-   
-  vmaxset(vm);  
-  UNPROTECT(1);
-
-  return ans;
-}
 
 SEXP work, names, lens;
 PROTECT_INDEX wpi, npi, lpi;
