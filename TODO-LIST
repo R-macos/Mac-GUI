@@ -1,0 +1,43 @@
+TO DO LIST
+* metric info in quartz device is broken [SI]
+* growing up the window in quartz device does not refresh the drawing [SI]
+* we need to assume Latin1Econdig for displaying text in quartz (see example(text))[SI]
+* move the refresh button in databrowse into the toolbar [SI]
+* preference pane: startup dir, install dir?
+* in R_EditFiles:  the file name is not correctly set at the moment for newly created documents.
+* (find someone to) design some nice icons for the toolbar
+* should cut input longer than R buffer (1024). At the moment long user input is cutted into
+  lines of at most 1024 bytes. We could probably cut them into less longer lines to allow
+  for virtual any input length.
+* Jan suggested to add coloring to the package installer to distinguish between installed and
+  update packages, and non updated ones.
+* REngine should wait R to finish. It would be nice to add a flag to evaluateString method 
+  like "wait" set to YES by default. The reason is that calling multiple times REngine
+  can crash R [[SU: this is a more general problem, we need synchronization of R activity...]]
+
+- general issues:
+	- font size handling is a mess - we need a global way to change font type and size for
+	  all documents, including console and editor windows
+- workspace browser:
+	- disable "refresh" while data are fetched
+	- use toolbar instead of fixed the button
+	- edit/delete should apply to the *selected* object, not the root of the selected object ...
+	- dbl-click should be edit
+	- doesn't work with large workspaces (check why...)
+- data editor:
+	- adding rows doesn't shift contents of factors
+	- add way to rename a column
+	- editing fully NA objects causes problems (try m<-matrix(,5,5))
+- code editor:
+	- use code completion
+	- use fixed font by default
+- data manager
+	- rename to Data Browser
+	- add "search" field
+	- allow columns to be sorted by clicking on the header 
+	- don't query stats/base for datasets, because of the warnings
+	- prints "empty env.." to the console .. bad boy
+	
+RController.m:
+	- isImageData: - check whether compressed images are recognized (I doubt it..)
+

@@ -1,0 +1,138 @@
+NEWS
+
+Last update: 2004-10-10 [SU]
+*	fixed ?/help handling removed in the last update
+*	fixed improper memory handling of external input
+*	added queue to the console input to allow multiple simultaneous
+	inputs while R is still working
+*	fixed color handling - input text has now the correct color
+*	added some constraints that prevent user from accidentally
+	leaving the prompt area
+*	fixed focus issues with the help window
+*	don't unnecessarily repeat console input before commit
+*	doProcessEvents: processes exactly one event in the blocking mode
+*	added first release of R FAQ. To build it use [SI]
+	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
+*	added "Docs" target to automatically build above FAQ
+*	added sush dependency to R target - now it is possible to build
+	the entire project from scratch by simply typing "xcodebuild"
+	on the command line. Although it's the default, more precise
+	specification of the target and build style can be used such as:
+	xcodebuild -target R -buildstyle Deployment
+
+Last update: 2004-10-09 [SU]
+*	fixes in REngine (mem mgmt, 0 ptr fix); added executeString method
+*	fixed package loading (use executeString and check the result)
+*	huge cleanup of the R/Obj-C interface (stage 1). the interface is
+	separated from RController by REPLHandler protocol. the R-side
+	implementation is in Rcallbacks and RController implements the
+	REPL protocol
+*	changed output/console/prompt handling. this also makes sure that
+	a prompt is always printed at the beginning of the line, no matter
+	whether the previous output line is unfinished
+*	raise the line buffer size from 1k to 32k, also it's not hard-coded now,
+	but can be changed on the fly.
+*	replace all evaluateString: with executeString: if the return value is
+	not needed (ignoring the return value of eval.. causes memory leaks)
+*	after history paste make textView the first respondent
+	
+Last update: 2004-10-08 [SI]
+*	added toolbar colors icon and functionality. User can set font colors for
+	the R Console window. Settings are saved automatically on exit. Just for
+	fun: added also transparency of the R Console window.
+*	console font size saved in the preferences
+*	the color of the cursors is set to be the same as the prompt one
+
+Last update: 2004-10-04 [SI]
+*	fixed problem with applescript. Now uses scriptSuite and scriptTerminology
+*	in sendIpunt: a fake keydown event is now generate to wake the event loop
+	this is needed for both applescript and menu interaction
+*   help(topic) and ?topic	are now handled internally and the help page is
+	shown in the internal browser. 
+	This is only a temporary solution. The correct approach is to create a
+	new API to be called on each .show_help_on_topic_as_HTML call. Too late
+	for release 2.0.0 of R.
+*	Every call to Rengine evaluateString and parse causes R to be set in busy 
+	state this allows for feedback to the user at any REngine use.
+*	added support to save quartz device to PDF file. This is currently done
+	using devcopy onto the pdf device. Native Cocoa methods like 
+	[NSView dataWithPDFInsideRect] don't work at the moment because we don't
+	use NSGraphicsContext. Should probably be done for the next release.
+*	added clipboard copying into TIFF, PICT and PDF format
+*	added support for printing of the graphics device, the console and the
+	other editor windows
+*	user input is now splitted in lines terminated by '\n'. This allows for
+	copy and paste of bug documents. There's no limit to the input buffer
+	apart from free memory. The input is just splitted in lines but if lines
+	are longer than the maximum allowed by R (1024 currently) no action
+	is taken, lines are just passed to R for at most 1024 bytes.
+		
+Last update: 2004-09-28 [SU]
+*	added PLAIN_STDERR optional define flag (enabled in development style)
+*	fixed rmRows bug in data editor
+
+Last update: 2004-09-26
+*	fixed stderr/stdout problems, now using threads and correctly in synch
+*	R console window gets focus on startup
+*	changed credits
+*	implemented edit and remove functionality ot the workspac browser
+*	FIXME: the data editor still needs to be fixed for row adding
+	REQUIRES r-devel 2004-09-26
+	
+Last update: 2004-09-10
+*	Implemented edit functionality for data frames and matrix
+*	Implemented the Help system. 
+*	Splitviews in Package Manager, Data Manager and Help Search Interface
+*	Implemented help search interface
+*	Implemented the workspace browser
+*	Implemented quartz device in cocoa
+*	Fixed duplicate definition of variable IsReadConsoleTime.
+*	Adjusted to work with XCode 1.5
+	REQUIRES r-devel 2004-09-10
+
+Last update: 2004-08-28
+*	Fixed a package.manager: memory leaks and incorrect refreshing
+*   Implemented the data manager
+*   --gui=cocoa sets RGUI_TYPE to "AQUA", so now quartz is the default
+	graphics device
+*   Implemented package installer both for network and local repositories
+	and file and to global or local destinations. 
+	FIXME: need to implement authorization
+*	fixed font text windows	
+*   implemented "run X11 server" and added both menu and toolbar items.
+*   added "Check For R Updates" menu item functionality
+	REQUIRES: r-devel 2004-08-27
+	
+Last update: 2004-08-20
+*   Implemented open document both for menus and drag and drop on the R icon
+*	Opening file is either: load data or source a script whenever this is possible.
+*	Implemented the internal editor via NSDocument class. R can open plain text and
+	rtf files.
+*	Implemented  file.show/R_ShowFiles.
+*	Implemented  file.edit/R_EditFiles. FIXME: the file name is not correctly set
+	at the moment for newly created document.
+*	Implemented AppleScript support.
+*	Implemented in toolbar: font size change, load data/source script, new editor window,  
+							save R console, load file in editor
+*	Implemented options(width=???) on font size and/or Console width change.
+*	Implemented: setwd, changewd, showd and timer to show the current working directory
+	in a textview
+*	Implemented file.choose/R_ChooseFile
+*	Implemented: show, clear, load and save of workspace
+*	Implemented package manager for loading and detaching package with html help index
+	REQUIRES: r-devel 2004-08-20
+
+Last update: 2004-08-14
+*   Implemented console buffering. This make the R console output spedier.
+	This has been implemented in the same way it was for the aqua module
+	(see: src/modules/aqua/aquaconsole.c)
+*   In previous version Code Completion blocked R, now fixed.
+*   Implemented the History and Logs drawers. Stdout/Stderr are redirected
+	to the Logs drawer (still not asyncronously).
+*   Implemented load, save and clear history. Double clicking on history items
+	paste the content of the item in the console at current cursor position
+*   Implemented the tool bar for "stop", "quit", "history", "quartz" and "logs". Icons
+	are horrible though.
+*   added environment variable in info.plist
+
+First release: 2004-08-10

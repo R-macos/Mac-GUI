@@ -1,0 +1,20 @@
+INSTALL
+
+configure, build and install R-2.0.0 (2004-10-04) with
+
+	./configure --with-blas='-framework vecLib' --with-lapack --with-aqua 
+	make
+	sudo make install
+	
+"--with-aqua" is needed also for this Cocoa version. The R.app will init R with argument "--gui=cocoa"
+
+One you have the R.framework installed in /Library/Frameworks than you can build R.app
+
+This project has been produced with XCode 1.5
+
+To build the R for Mac OS X Faq in docs folder use
+	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
+
+
+
+

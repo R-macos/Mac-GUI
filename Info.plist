@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>*</string>
+				<string>*.R</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>DocumentType</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>****</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>NSDocumentClass</key>
+			<string>RDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>pdf</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>NSDocumentClass</key>
+			<string>RQuartz</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>R</string>
+	<key>CFBundleIconFile</key>
+	<string>RLogo.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.R-project.R</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>0FFF</string>
+	<key>CFBundleVersion</key>
+	<string>2004-10-10</string>
+	<key>LSEnvironment</key>
+	<dict>
+		<key>DYLD_FALLBACK_LIBRARY_PATH</key>
+		<string>/Library/Frameworks/R.framework/Resources/lib</string>
+		<key>DYLD_LIBRARY_PATH</key>
+		<string>/Library/Frameworks/R.framework/Resources/lib</string>
+		<key>R_HOME</key>
+		<string>/Library/Frameworks/R.framework/Resources</string>
+	</dict>
+	<key>NSAppleScriptEnabled</key>
+	<string>YES</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
