@@ -103,7 +103,7 @@ NSArray *keywordList;
     [super windowControllerDidLoadNib:aController];
 		
 	[textView setFont:[[RController getRController] currentFont]];
-	
+	[textView setContinuousSpellCheckingEnabled:NO]; // by default no continuous spell checking
 	[textView setAllowsUndo: YES];
 	[self loadInitialContents];
 	[textView setEditable: isEditable];

@@ -143,7 +143,8 @@ static RController* sharedRController;
 		[RTextView setTypingAttributes:[NSDictionary dictionaryWithDictionary:md]];
 		[md release];
 	}
- 
+	[RTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
+	
 //	[RTextView changeColor: inputColor];
 	[RTextView display];
 	[self setupToolbar];
