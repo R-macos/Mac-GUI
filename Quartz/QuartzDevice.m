@@ -663,51 +663,53 @@ static void RQuartz_SetLineWidth(double lwd,  NSBezierPath *path)
 
 static void RQuartz_SetLineEnd(R_GE_lineend lend, NSBezierPath *path)
 {
-    NSLineCapStyle linecap;
+    NSLineCapStyle linecap=nil;
     switch (lend) {
-    case GE_ROUND_CAP:
-      linecap = NSRoundLineCapStyle;
-      break;
-    case GE_BUTT_CAP:
-      linecap = NSButtLineCapStyle;
-      break;
-    case GE_SQUARE_CAP:
-      linecap = NSSquareLineCapStyle;
-      break;
-    default:
-      NSLog(@"RQuartz_SetLineEnd: Invalid line end");
-	 break; 
+		case GE_ROUND_CAP:
+			linecap = NSRoundLineCapStyle;
+			break;
+		case GE_BUTT_CAP:
+			linecap = NSButtLineCapStyle;
+			break;
+		case GE_SQUARE_CAP:
+			linecap = NSSquareLineCapStyle;
+			break;
+		default:
+			NSLog(@"RQuartz_SetLineEnd: Invalid line end");
+			break; 
     }
-    [path setLineCapStyle:linecap];
+    if (linecap)
+		[path setLineCapStyle:linecap];
 }
 
    
 static void RQuartz_SetLineJoin(R_GE_linejoin ljoin, NSBezierPath *path)
 {
-    NSLineJoinStyle linejoin;
+    NSLineJoinStyle linejoin=nil;
     switch (ljoin) {
-    case GE_ROUND_JOIN:
-      linejoin = NSRoundLineJoinStyle;
-      break;
-    case GE_MITRE_JOIN:
-      linejoin = NSMiterLineJoinStyle;
-      break;
-    case GE_BEVEL_JOIN:
-      linejoin = NSBevelLineJoinStyle;
-      break;
-    default:
-      NSLog(@"RQuartz_SetLineJoin: Invalid line join");
-	break;  
+		case GE_ROUND_JOIN:
+			linejoin = NSRoundLineJoinStyle;
+			break;
+		case GE_MITRE_JOIN:
+			linejoin = NSMiterLineJoinStyle;
+			break;
+		case GE_BEVEL_JOIN:
+			linejoin = NSBevelLineJoinStyle;
+			break;
+		default:
+			NSLog(@"RQuartz_SetLineJoin: Invalid line join");
+			break;  
     }
-   
-    [path setLineJoinStyle: linejoin];
+	if (linejoin)
+		[path setLineJoinStyle: linejoin];
 }
 
 static void RQuartz_SetLineMitre(double lmitre, NSBezierPath *path)
 {
     if (lmitre < 1)
         NSLog(@"RQuartz_SetLineMitre:Invalid line mitre");
-    [path setMiterLimit: lmitre];
+	else
+		[path setMiterLimit: lmitre];
 }
 
 
