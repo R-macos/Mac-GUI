@@ -303,7 +303,7 @@ static RController* sharedRController;
 	//[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"Rcommand" display:YES];
 
 	[RConsoleWindow makeKeyAndOrderFront:self];
-	[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
+	//[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
 	//CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
 	
 	if (!RLtimer)
@@ -315,7 +315,8 @@ static RController* sharedRController;
 }
 
 - (void) kickstart:(id) sender {
-	kill(getpid(),SIGINT);
+	//kill(getpid(),SIGINT);
+	[[REngine mainEngine] runREPL];
 }
 
 -(void) addConnectionLog
