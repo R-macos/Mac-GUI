@@ -7,7 +7,8 @@ Last update: 2004-10-22 [SI]
 *	fixed metric info problem with Quartz device. Apparently a leading pad was
 	added to the textcontainer used to acquire the metric info. Thanks to Byron
 	Ellys for this fix.
-	
+*	saveWorkSpaceFile fixed. It was impossible to create a new file.
+
 Last update: 2004-10-21 [SI]
 *	in data editor: the runModalForSession has been replaced by a modalForWindow
 	to remove the problem with high CPU consuming (thanks to Byron Ellys for the fix)
