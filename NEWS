@@ -1,9 +1,13 @@
 NEWS
 
 Last update: 2005-01-11 [SU]
+*	Added undo checkpoint at <Enter> in the editor
+*	Remove undo stack in the console after prompt to prevent
+	entries from previous lines to mess up the console (we
+	may want to add some more sohpisticated undo policy later)
 *	Fixed R startup issue which required <ESC> to be hit sometimes
 	(introduced in 2005-01-10 commit)
-*	Fixed undo issues (see below for details)
+*	Fixed undo issues (the correct manager is used)
 *	Fixed NSRunStorage exceptions (pasting large chunks or
 	huge output works now) - console now uses direct text storage
 	messages for better reliability and speed

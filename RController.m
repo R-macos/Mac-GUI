@@ -655,6 +655,9 @@ extern BOOL isTimeToFinish;
 		textLength = [[RTextView textStorage] length];
 		[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
 		outputPosition=committedLength=textLength;
+		
+		// remove undo actions to prevent undo across prompts
+		[[RTextView undoManager] removeAllActions];
 	}
 	
 	[s release];

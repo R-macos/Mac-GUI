@@ -451,6 +451,11 @@ NSArray *keywordList=nil;
 			if (whiteSpaces>0)
 				wss = [wss stringByAppendingString:[s substringWithRange:NSMakeRange(lr.location,whiteSpaces)]];
 			while (addShift>0) { wss=[wss stringByAppendingString:@"\t"]; addShift--; }
+			// add an undo checkpoint before actually committing the changes
+			if ([[textView undoManager] groupingLevel]>0) {
+				[[textView undoManager] endUndoGrouping];
+				[[textView undoManager] beginUndoGrouping];
+			}
 			[textView insertText:wss];
 			return YES;
 		}
