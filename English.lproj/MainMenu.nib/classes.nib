@@ -89,8 +89,6 @@
         }, 
         {
             ACTIONS = {
-                autoLoadHistory = id; 
-                autoSaveHistory = id; 
                 breakR = id; 
                 changeFontSize = id; 
                 checkForUpdates = id; 
@@ -102,6 +100,7 @@
                 fontSizeBigger = id; 
                 fontSizeSmaller = id; 
                 getWorkingDir = id; 
+                historyDeleteEntry = id; 
                 historyDoubleClick = id; 
                 installFromBinary = id; 
                 installFromDir = id; 
@@ -143,6 +142,7 @@
                 RTextView = NSTextView; 
                 WDirView = NSTextField; 
                 clearHistory = NSButton; 
+                deleteEntry = NSButton; 
                 fontSizeField = NSTextField; 
                 fontSizeStepper = NSStepper; 
                 fontSizeView = NSView; 

@@ -77,6 +77,7 @@
 	IBOutlet NSButton *clearHistory;
 	IBOutlet NSButton *loadHistory;
 	IBOutlet NSButton *saveHistory;
+	IBOutlet NSButton *deleteEntry;
     IBOutlet NSDrawer *HistoryDrawer;	
 	IBOutlet NSWindow *RConsoleWindow;
 	NSTimer *timer;
@@ -178,6 +179,7 @@
 - (IBAction)doLoadHistory:(id)sender;
 - (IBAction)doSaveHistory:(id)sender;
 - (IBAction)historyDoubleClick:(id)sender;
+- (IBAction)historyDeleteEntry:(id)sender;
 
 - (IBAction)newQuartzDevice:(id)sender;
 - (IBAction)breakR:(id)sender;
@@ -246,5 +248,6 @@
 
 - (NSTextView *)getRTextView;
 - (NSWindow *)getRConsoleWindow;
+- (BOOL)appLaunched;
 @end
 

@@ -56,17 +56,78 @@
     [super dealloc];
 }
 
+/*
+	commits an entry to the end of the history, except it equals a previous entry; moves
+	the current position past the last entry and also deletes any dirty entry; strips entry
+	pretty clean before adding it to the history array
+*/
 
-/** commits an entry to the end of the history, except it equals to the last entry; moves the current position past the last entry and also deletes any dirty entry */
 - (void) commit: (NSString*) entry {
-//	NSLog(@"Entry: <%@>", entry);
-    int ac = [hist count];
-    if (ac==0 || ![[hist objectAtIndex: ac-1] isEqualToString:entry]) { // only add if it's not equal to the last one
-        [hist addObject: entry];
+    int ac = [hist count]; 
+	int len; 
+    if (ac==0 || ![[hist objectAtIndex: ac-1] isEqualToString:entry]) {
+		len = [entry length]; 		
+		if ([Preferences flagForKey:stripCommentsFromHistoryEntriesKey withDefault:NO]) {
+			int i; int j; int k;
+			NSString *newEntry = [[NSString alloc] initWithString:entry];
+			NSString *restString; BOOL firstTime = YES; BOOL done; BOOL found = NO;
+			k = 0;
+			for (i = 0 ; i < len ; i++) {
+				if ([entry characterAtIndex:i] == '#') {
+					found = YES;
+					done = NO;
+					for (j = i ; !done && j < len ; j++) {
+						if ([entry characterAtIndex:j] == '\n') {
+							if (firstTime) {
+								newEntry = [entry substringWithRange: NSMakeRange(k, i)];
+								firstTime = NO;
+							} else {
+								restString = [entry substringWithRange: NSMakeRange(k, i-k)];
+								newEntry = [newEntry stringByAppendingString: restString];
+							}
+							k = j; i = j; done = YES;
+						}
+					}
+				}			
+			}
+			if (!(j>=(len-1)) && found) {
+				restString = [entry substringWithRange: NSMakeRange(k, i-k)];
+				newEntry = [newEntry stringByAppendingString: restString];
+			}		
+			entry = newEntry;
+		}
+		len = [entry length];
+		if ([Preferences flagForKey:cleanupHistoryEntriesKey withDefault:YES]) {
+			while (len > 1 && 
+				   ([entry characterAtIndex:len-1] == '\r' ||
+					[entry characterAtIndex:len-1] == '\n' ||
+					[entry characterAtIndex:len-1] == '\t' ||
+					[entry characterAtIndex:len-1] == ' '  ||
+					[entry characterAtIndex:len-1] == '#')) {
+				entry = [entry substringWithRange: NSMakeRange(0, [entry length]-1)];	
+				len = [entry length];
+			}
+		}
+		if (!(len == 1 &&
+			  [entry characterAtIndex:len-1] == '\n' ||
+			  [entry characterAtIndex:len-1] == '\r' ||
+			  [entry characterAtIndex:len-1] == '\t' ||
+			  [entry characterAtIndex:len-1] == ' '  ||
+			  [entry characterAtIndex:len-1] == '#')) {
+			if (len > 0 ) {
+				if ([Preferences flagForKey:removeDuplicateHistoryEntriesKey withDefault:NO])
+					[hist removeObject: entry];
+				[hist addObject: entry];
+			}
+		} 
     }
     if (dirtyEntry!=nil) [dirtyEntry release];
     dirtyEntry=nil;
-    pos=[hist count];
+	pos=[hist count];
+	int max = [[Preferences stringForKey:maxHistoryEntriesKey withDefault:@"250"] intValue];
+	if ([hist count] > max) 
+		[hist removeObjectAtIndex: 0];
+	pos=[hist count];
 }
 
 /** moves to the next entry; if out of the history, returns the dirty entry */
@@ -98,7 +159,7 @@
     return (pos==[hist count])?YES:NO;
 }
 
-/** updates the dirty entry with teh passed string, iff we're currently in the dirty position */
+/** updates the dirty entry with the arg, if we're currently in the dirty position */
 - (void) updateDirty: (NSString*) entry {
     if (pos==[hist count]) {
         if (entry==dirtyEntry) return;
@@ -112,6 +173,14 @@
     [hist removeAllObjects];
     if (dirtyEntry!=nil) [dirtyEntry release];
     pos=0;
+}
+
+/** removes selected entry entry */
+- (void) deleteEntry:(unsigned)index {
+    [hist removeObjectAtIndex: index];
+    if (dirtyEntry!=nil) [dirtyEntry release];
+    pos=[hist count];
+//	NSLog(@"Hist: %d", pos);
 }
 
 /** returns a snapshot of the current histroy (w/o the dirty entry). you will need to release the resulting object. */

@@ -370,6 +370,10 @@ static RController* sharedRController;
 */
 }
 
+- (BOOL)appLaunched {
+	return appLaunched;
+}
+
 - (void) kickstart:(id) sender {
 	//kill(getpid(),SIGINT);
 	[[REngine mainEngine] runREPL];
@@ -673,6 +677,7 @@ extern BOOL isTimeToFinish;
 		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [RTextView textStorage];
 		unsigned textLength = [textStorage length];
 		int promptLength=[prompt length];
+//		NSLog(@"Prompt: %@", prompt);
 		NSRange lr = [[textStorage string] lineRangeForRange:NSMakeRange(textLength,0)];
 		[textStorage beginEditing];
 		promptPosition=textLength;
@@ -740,13 +745,9 @@ extern BOOL isTimeToFinish;
 	[consoleInputQueue removeObjectAtIndex:0];
 	
 	if (addtohist) {
-		// don't register training newline ... FIXME: we should acutally include it and fix history handling at other places ..
-		if ([currentConsoleInput length]>0 && [currentConsoleInput characterAtIndex:[currentConsoleInput length]-1]=='\n')
-			[hist commit:[currentConsoleInput substringToIndex:[currentConsoleInput length]-1]];			
-		else
-			[hist commit:currentConsoleInput];
+//		Figure out how to get hold of ParseStatus here!
+		[hist commit:currentConsoleInput];
 		[historyView reloadData];
-//		NSLog(@"Input: %@",[currentConsoleInput substringToIndex:[currentConsoleInput length]-1]);
 	}
 	
 	{
@@ -992,7 +993,6 @@ The input replaces what the user is currently typing.
 
 - (IBAction)doLoadHistory:(id)sender
 {
-	[self doClearHistory:nil];
 	NSString *fname=nil;
 	if (sender) {
 		NSOpenPanel *op = [NSOpenPanel openPanel];
@@ -1004,7 +1004,7 @@ The input replaces what the user is currently typing.
 		fname = [[Preferences stringForKey:historyFileNamePathKey
 							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
 	if(fname != nil){
-		[hist resetAll];
+		[self doClearHistory:nil];
 		FILE *rhist; char c[1000]; NSString *entryString; NSString *tmpString;
 		int cc; int i; int j; int k; BOOL done;
 		if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
@@ -1125,12 +1125,19 @@ at current cursor position
 */
 - (IBAction)historyDoubleClick:(id)sender {
 	NSString *cmd;
-	int index = [sender selectedRow];
+	int index = [historyView selectedRow];
 	if(index == -1) return;
 	
 	cmd = [[hist entries] objectAtIndex:index];
 	[self consoleInput:cmd interactive:NO];
 	[RConsoleWindow makeFirstResponder:RTextView];
+}
+
+- (IBAction)historyDeleteEntry:(id)sender {
+	int index = [historyView selectedRow];
+	if((index >= 0) && (index < [[hist entries] count]))
+		[hist deleteEntry:index];
+	[historyView reloadData];
 }
 
 /*  This routine is intended to "cat" some text to the R Console without
@@ -1195,7 +1202,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
         }
         retval = YES;
     }
-	
+
 	// ---- history browsing ----
 	if (@selector(moveUp:) == commandSelector) {
         unsigned textLength = [[textView textStorage] length];        

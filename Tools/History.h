@@ -46,6 +46,7 @@
 - (BOOL) isDirty;
 - (void) updateDirty: (NSString*) entry;
 - (void) resetAll;
+- (void) deleteEntry:(unsigned)index;
 - (void) setHist: (NSArray *) entries;
 - (NSArray*) entries;
 

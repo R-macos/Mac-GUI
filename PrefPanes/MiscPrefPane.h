@@ -48,6 +48,10 @@
 	IBOutlet NSButton *setToDefault;
 	IBOutlet NSTextField *historyFileNamePath;
 	IBOutlet NSTextField *historyFileNamePathText;
+	IBOutlet NSTextField *maxHistoryEntries;
+	IBOutlet NSButton *removeDuplicateHistoryEntries;
+	IBOutlet NSButton *cleanupHistoryEntries;
+	IBOutlet NSButton *stripCommentsFromHistoryEntries;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -72,6 +76,10 @@
 - (IBAction) changeEnforceInitialWorkingDirectory:(id)sender;
 - (IBAction) changeHistoryFileNamePathToDefault: (id)sender;
 - (IBAction) changeHistoryFileNamePath:(id)sender;
+- (IBAction) changeMaxHistoryEntries:(id)sender;
+- (IBAction) changeRemoveDuplicateHistoryEntries:(id)sender;
+- (IBAction) changeCleanupHistoryEntries:(id)sender;
+- (IBAction) changeStripCommentsFromHistoryEntries:(id)sender;
 
 - (void) updatePreferences;
 

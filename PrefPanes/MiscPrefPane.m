@@ -167,6 +167,13 @@
 	[importOnStartup setState: flag?NSOnState:NSOffState];
 
 	[historyFileNamePath setStringValue:[Preferences stringForKey:historyFileNamePathKey withDefault:@".Rhistory"]];	
+	[maxHistoryEntries setStringValue:[Preferences stringForKey:maxHistoryEntriesKey withDefault:@"250"]];
+	flag = [Preferences flagForKey:removeDuplicateHistoryEntriesKey withDefault:NO];
+	[removeDuplicateHistoryEntries setState: flag?NSOnState:NSOffState];
+	flag = [Preferences flagForKey:cleanupHistoryEntriesKey withDefault:YES];
+	[cleanupHistoryEntries setState: flag?NSOnState:NSOffState];
+	flag = [Preferences flagForKey:stripCommentsFromHistoryEntriesKey withDefault:NO];
+	[stripCommentsFromHistoryEntries setState: flag?NSOnState:NSOffState];
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
@@ -226,5 +233,38 @@
 	NSString *name = ([[sender stringValue] length] == 0)?[Preferences stringForKey:historyFileNamePathKey withDefault:@".Rhistory"]:[sender stringValue];
 	[Preferences setKey:historyFileNamePathKey withObject:[name stringByAbbreviatingWithTildeInPath]];
 }
+
+- (IBAction) changeMaxHistoryEntries:(id)sender {
+	NSString *interval = ([[sender stringValue] length] == 0)?@"100":[sender stringValue];
+	if ([interval length] == 0) {
+		interval = @"100";
+	} else {
+		double value = [interval doubleValue];
+		if (value < 10)
+			interval = @"10";
+		else if (value > 10000)
+			interval = @"10000";
+	}
+	[Preferences setKey:maxHistoryEntriesKey withObject:interval];
+}
+
+- (IBAction) changeRemoveDuplicateHistoryEntries:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:removeDuplicateHistoryEntriesKey withFlag:flag];
+}
+
+- (IBAction) changeCleanupHistoryEntries:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:cleanupHistoryEntriesKey withFlag:flag];
+}
+
+- (IBAction) changeStripCommentsFromHistoryEntries:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:stripCommentsFromHistoryEntriesKey withFlag:flag];
+}
+
 
 @end

@@ -3,9 +3,9 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2004
-@set FAQ-VERSION 2.0-0 @value{FAQ-YEAR}-10-10
-@set REL-VERSION 2.0.0
+@set FAQ-YEAR 2005
+@set FAQ-VERSION 2.1-0 @value{FAQ-YEAR}-04-18
+@set REL-VERSION 2.1.0
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -51,7 +51,7 @@ FORTRAN
 @title R for Mac OS X @acronym{FAQ}
 @subtitle Frequently Asked Questions on R for Mac OS X
 @subtitle Version @value{FAQ-VERSION}
-@author Stefano M. Iacus, Simon Urbanek
+@author Stefano M. Iacus, Simon Urbanek, Rob J. Goedman
 @end titlepage
 
 @ifinfo
@@ -61,6 +61,7 @@ Frequently Asked Questions on R for Mac OS X@*
 Version @value{FAQ-VERSION}      @*
 Stefano M. Iacus                 @*
 Simon Urbanek                    @*
+Rob J. Goedman                   @*
 
 @sp 2
 @end ifinfo
@@ -78,6 +79,7 @@ Simon Urbanek                    @*
 <h2>Version @value{FAQ-VERSION}</h2>
 <address>Stefano M. Iacus</address>
 <address>Simon Urbanek</address>
+<address>Rob J. Goedman</address>
 <p><p><hr><p>
 @end html
 @end ifhtml
@@ -103,7 +105,7 @@ Simon Urbanek                    @*
 @chapter Introduction
 This R for Mac OS X FAQ is rather incomplete at the moment and requires contributions from users.
 Anything specific to the R language can be found in the official R-FAQ (see  @uref{http://cran.r-project.org/doc/FAQ/R-FAQ.html}).
-Please send any requests/questions you would like answers on to the maintaniers.
+Please send any requests/questions you would like answers on to the maintainers.
 
 This document contains information on how to build @R{} from sources, how to install and run it.
 It also contains a user guide to the Aqua GUI version of @R{}.

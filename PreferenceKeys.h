@@ -62,6 +62,10 @@
 #define importOnStartupKey @"Import history file on startup if TRUE"
 #define enforceInitialWorkingDirectoryKey @"Enforce initial wd on startup"
 #define historyFileNamePathKey @"History file path used for R type history files"
+#define maxHistoryEntriesKey @"Max number of history entries"
+#define removeDuplicateHistoryEntriesKey @"Remove duplicate history entries"
+#define cleanupHistoryEntriesKey @"Cleanup history entries"
+#define stripCommentsFromHistoryEntriesKey @"Strip comment history entries"
 
 #define useQuartzPrefPaneSettingsKey @"Use QuartzPrefPane values"
 #define quartzPrefPaneWidthKey @"QuartzPrefPane width"

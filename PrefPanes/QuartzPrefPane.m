@@ -168,23 +168,22 @@
 {
 	[useQuartzPrefPaneSettings setEnabled:NSOnState];
 	BOOL flag=[Preferences flagForKey:useQuartzPrefPaneSettingsKey withDefault: NO];
+	[useQuartzPrefPaneSettings setState:(flag?NSOnState:NSOffState)];
 	if (flag) {
-		[useQuartzPrefPaneSettings setState:(flag?NSOnState:NSOffState)];
-		[quartzPrefPaneWidth setStringValue:
-			[Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"]];
-		[quartzPrefPaneHeight setStringValue:
-			[Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"]];
-		NSString *i = [Preferences stringForKey:quartzPrefPaneLocationKey withDefault: @"Top Left"];
-		if (i) [quartzPrefPaneLocation selectItemWithTitle:i];
-		
 		[quartzPrefPaneWidth setEnabled:NSOnState];
 		[quartzPrefPaneHeight setEnabled:NSOnState];
-		[quartzPrefPaneLocation setEnabled:NSOnState];
 	} else {
 		[quartzPrefPaneWidth setEnabled:NSOffState];
 		[quartzPrefPaneHeight setEnabled:NSOffState];
-		[quartzPrefPaneLocation setEnabled:NSOffState];		
 	}
+	[quartzPrefPaneWidth setStringValue:
+		[Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"]];
+	[quartzPrefPaneHeight setStringValue:
+		[Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"]];
+	
+	[quartzPrefPaneLocation setEnabled:NSOnState];
+	NSString *i = [Preferences stringForKey:quartzPrefPaneLocationKey withDefault: @"Top Left"];
+	if (i) [quartzPrefPaneLocation selectItemWithTitle:i];
 }
 
 - (IBAction) changeUseQuartzPrefPaneSettings:(id)sender {

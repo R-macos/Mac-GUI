@@ -1,5 +1,12 @@
 NEWS
 
+Last update: 2005-03-07 [RG]
+*	Re-enabled width & height parms in quartz()
+*	Enabled history entry delete by button
+*	Optional removal of duplicate previous entry from history
+*	Optional (through pref pane) cleanup of history entries
+	(stripping of irrelevant chars, lines and/or comments)
+
 Last update: 2005-03-04 [SI]
 *	added callback for select.list (do_selectlist) R function,
 	the code needs some cleaning though.
