@@ -1,5 +1,11 @@
 NEWS
 
+Last update: 2005-01-19 [SU]
+*	Fixed typo in loc. strings (which caused an exception on start)
+*	Fixed bug in RController causing R-GUI to not comipile for
+	most recent R-devel
+*	Added some more UTF-8 support
+
 Last update: 2005-01-13 [SU]
 *	Fixed compatibility issue with R-devel (2.1.0)
 *	Enable UTF-8 support for R-devel (2.1.0). This finally fixes

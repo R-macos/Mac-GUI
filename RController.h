@@ -33,7 +33,7 @@
 #include <Rinternals.h>
 //#include "Rinit.h"
 #include "REngine/Rcallbacks.h"
-#include "IOStuff.h"
+//#include "IOStuff.h"
 //#include <R_ext/Parse.h>
 //#include <Parse.h>
 #include <R_ext/eventloop.h>

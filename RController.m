@@ -31,6 +31,7 @@
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
 #include <Fileio.h>
+#include <Rinterface.h>
 #import <sys/fcntl.h>
 #import <sys/select.h>
 #import <sys/types.h>
@@ -75,6 +76,10 @@ extern R_ReplState state;
 void run_Rmainloop(void); // from Rinit.c
 extern void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel); // from Rinit.c
 extern int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplState *state);
+
+// from Defn.h
+
+int R_SetOptionWidth(int);
 
 #import "RController.h"
 #import "Tools/CodeCompletion.h"
@@ -752,15 +757,16 @@ extern BOOL isTimeToFinish;
     
     if (nfile <=0) return 1;
 	
-    for (i = 0; i < nfile; i++){
-		if(R_FileExists(file[i]))
-			[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
+    for (i = 0; i < nfile; i++) {
+		NSString *fn = [[NSString stringWithUTF8String:file[i]] stringByExpandingTildeInPath];
+		if([[NSFileManager defaultManager] fileExistsAtPath:fn])
+			[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
 		else
 			[[NSDocumentController sharedDocumentController] newDocument: [RController getRController]];
 		
 		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
 		if(wtitle[i]!=nil)
-			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle[i]]];
+			[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle[i]]];
     }
 	return 1;
 }
@@ -772,9 +778,10 @@ extern BOOL isTimeToFinish;
     if (nfile <=0) return 1;
 	
     for (i = 0; i < nfile; i++){
-		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
+		NSString *fn = [[NSString stringWithUTF8String:file[i]] stringByExpandingTildeInPath];
+		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
 		if(wtitle[i]!=nil)
-			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle]];
+			[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
 		[document setEditable: NO];
     }
 	return 1;

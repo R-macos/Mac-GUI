@@ -33,8 +33,6 @@
 #import "../REngine/RSEXP.h"
 #import "../REngine/REngine.h"
 
-#include <Defn.h>
-
 #include <Rversion.h>
 #include <R.h>
 #include <R_ext/Boolean.h>

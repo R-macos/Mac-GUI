@@ -31,8 +31,6 @@
 #import "RQuartz.h"
 #import "../RController.h"
 
-#include <Defn.h>
-
 #include <R.h>
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>
