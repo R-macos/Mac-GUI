@@ -30,10 +30,6 @@
 #import "SearchTable.h"
 #import "REditor.h"
 
-extern BOOL InEditor;
-extern BOOL IsEditable;
-extern BOOL IsREdit;
-
 /* from Defn.h */
 extern Rboolean R_Interactive;   /* TRUE during interactive use*/
 
@@ -142,24 +138,19 @@ int  Re_Edit(char *file){
 	if(!R_FileExists(file))
 		return(0);
 		
-	InEditor = YES;
-	IsEditable = YES;
-	[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
-	
-	NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
+	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
+	[document setREditFlag: YES];
+
 	NSEnumerator *e = [[document windowControllers] objectEnumerator];
 	NSWindowController *wc = nil;
-		
 	while (wc = [e nextObject]) {
 		NSWindow *window = [wc window];
-		 IsREdit = YES;
 		NSModalSession session = [NSApp beginModalSessionForWindow:window];
-		while(IsREdit)
+		while([document hasREditFlag])
 			[NSApp runModalSession:session];
 		
 		[NSApp endModalSession:session];
 	}
-	IsREdit = NO; /* this is set in windowShouldclose, but just to be sure */
 
 	return(0);
 }
@@ -172,8 +163,6 @@ int  Re_EditFiles(int nfile, char **file, char **wtitle, char *pager){
     if (nfile <=0) return 1;
 	
     for (i = 0; i < nfile; i++){
-		InEditor = YES;
-		IsEditable = YES;
 		if(R_FileExists(file[i]))
 			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
 		else
@@ -182,7 +171,6 @@ int  Re_EditFiles(int nfile, char **file, char **wtitle, char *pager){
 		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
 		if(wtitle[i]!=nil)
 			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle[i]]];
-		InEditor = NO;
     }
 	return 1;
 }
@@ -199,15 +187,11 @@ int Re_ShowFiles(int nfile, 		/* number of files */
     if (nfile <=0) return 1;
 	
     for (i = 0; i < nfile; i++){
-		InEditor = YES;
-		IsEditable = NO;
-		[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
-		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
+		RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
 		if(wtitle[i]!=nil)
 			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle]];
-		
-		InEditor = NO;
-		IsEditable = YES;
+		[document setEditable: NO];
+		[document setHighlighting: NO];
     }
 	return 1;
 }
