@@ -76,13 +76,16 @@
 {
 	
 	// Insert code here to write your document from the given data.  You can also choose to override -fileWrapperRepresentationOfType: or -writeToFile:ofType: instead.
-	if([aType isEqual:@"rtf"])
-		return [textView RTFFromRange:
-			NSMakeRange(0, [[textView string] length])];			
-	else
-		return (NSData *)[textView string];
+	NSEnumerator *e = [[self windowControllers] objectEnumerator];
+	RDocumentWinCtrl *wc = nil;
+	while (wc = (RDocumentWinCtrl*)[e nextObject]) { 
+		if([aType isEqual:@"rtf"])
+			return [wc contentsAsRtf];
+		else
+			return (NSData*) [wc contentsAsString];
+	}
+	return nil;
 }
-
 
 /* This method is implemented to allow image data file to be loaded into R using open
 or drag and drop. In case of a successfull loading of image file, we don't want to

@@ -99,6 +99,17 @@ NSArray *keywordList=nil;
 	[self updateSyntaxHighlightingForRange:NSMakeRange(0, [[textView textStorage] length])];
 }
 
+- (NSData*) contentsAsRtf
+{
+	return [textView RTFFromRange:
+		NSMakeRange(0, [[textView string] length])];
+}
+
+- (NSString*) contentsAsString
+{
+	return [textView string];
+}	
+
 - (void) windowDidLoad
 {
 	document=(RDocument*) [self document];

@@ -93,7 +93,7 @@
 				<integer>3</integer>
 			</dict>
 		</dict>
-		<string>RDocument</string>
+		<string>RDocumentWinCtrl</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -445,7 +445,7 @@
 				<integer>23</integer>
 			</dict>
 			<key>NSvFlags</key>
-			<integer>274</integer>
+			<integer>2066</integer>
 		</dict>
 		<string>{505, 417}</string>
 		<dict>
@@ -1125,19 +1125,19 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>15</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>21</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>17</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>10</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>15</integer>
 				</dict>
 			</array>
 		</dict>
@@ -1160,19 +1160,19 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>2</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>17</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>15</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>2</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>10</integer>
 				</dict>
 			</array>
 		</dict>
@@ -1184,25 +1184,25 @@
 			</dict>
 			<key>NS.objects</key>
 			<array>
-				<dict>
-					<key>CF$UID</key>
-					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>15</integer>
-				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>21</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
+					<integer>2</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>17</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>2</integer>
+					<integer>10</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>15</integer>
 				</dict>
 			</array>
 		</dict>
@@ -1214,10 +1214,6 @@
 			</dict>
 			<key>NS.objects</key>
 			<array>
-				<dict>
-					<key>CF$UID</key>
-					<integer>12</integer>
-				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>90</integer>
@@ -1232,14 +1228,18 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
+					<integer>12</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>93</integer>
 				</dict>
 			</array>
 		</dict>
-		<string></string>
 		<string>NSTextView</string>
-		<string>NSScrollView2</string>
 		<string>File's Owner</string>
+		<string>NSScrollView2</string>
+		<string></string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1268,27 +1268,11 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>9</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>2</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>80</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>83</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>78</integer>
+					<integer>9</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1300,11 +1284,27 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
+					<integer>78</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>17</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>21</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>83</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>80</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>10</integer>
 				</dict>
 			</array>
 		</dict>
@@ -1358,16 +1358,16 @@
 				</dict>
 			</array>
 		</dict>
-		<integer>17</integer>
 		<integer>1</integer>
-		<integer>27</integer>
-		<integer>5</integer>
-		<integer>29</integer>
-		<integer>23</integer>
+		<integer>17</integer>
 		<integer>28</integer>
 		<integer>6</integer>
+		<integer>23</integer>
 		<integer>21</integer>
 		<integer>22</integer>
+		<integer>29</integer>
+		<integer>27</integer>
+		<integer>5</integer>
 		<dict>
 			<key>$classes</key>
 			<array>

@@ -72,5 +72,8 @@ extern NSColor *shColorIdentifier;
 - (void) setHighlighting: (BOOL) use;
 - (void) updatePreferences;
 
+- (NSData*) contentsAsRtf;
+- (NSString*) contentsAsString;
+
 
 @end
