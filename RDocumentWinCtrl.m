@@ -53,7 +53,7 @@ NSArray *keywordList=nil;
 + (void) setDefaultSyntaxHighlightingColors
 {
 	shColorNormal=[NSColor blackColor]; [shColorNormal retain];
-	shColorString=[NSColor blueColor]; [shColorString retain];
+	shColorString=[NSColor colorWithDeviceRed:0.35 green:0.0 blue:0.0 alpha:1.0]; [shColorString retain];
 	shColorNumber=[NSColor blueColor]; [shColorNumber retain];
 	shColorKeyword=[NSColor colorWithDeviceRed:0.7 green:0.6 blue:0.0 alpha:1.0]; [shColorKeyword retain];
 	shColorComment=[NSColor colorWithDeviceRed:0.6 green:0.4 blue:0.4 alpha:1.0]; [shColorComment retain];

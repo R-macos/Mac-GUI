@@ -50,6 +50,11 @@
 	IBOutlet NSTextField *externalEditorName;
 	IBOutlet NSMatrix *appOrCommand;
 	IBOutlet NSButton *changeEditor;
+	IBOutlet NSTextField *highlightIntervalText;
+	IBOutlet NSTextField *highlightNoteText;
+	IBOutlet NSTextField *showLineNumbersText;
+	IBOutlet NSTextField *editorText;
+	IBOutlet NSTextField *commandText;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;

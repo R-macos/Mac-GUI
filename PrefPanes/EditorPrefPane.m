@@ -159,14 +159,33 @@
 	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
 	[internalOrExternal setState:(flag?NSOnState:NSOffState) atRow:0 column:0];
 	[internalOrExternal setState:(flag?NSOffState:NSOnState) atRow:0 column:1];
-//	[builtInPrefs setHidden:flag?NSOffState:NSOnState];
+	
 	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
+	[showLineNumbers setEnabled:flag?NSOnState:NSOffState];
 	[highlightInterval setEnabled:flag?NSOnState:NSOffState];
-//	[externalSettings setHidden:flag?NSOffState:NSOnState];
+	
+	[highlightIntervalText setEnabled:flag?NSOffState:NSOnState];
+	if (flag) {
+		[highlightIntervalText setTextColor:[NSColor blackColor]];
+		[highlightNoteText setTextColor:[NSColor blackColor]];
+		[showLineNumbersText setTextColor:[NSColor blackColor]];
+		[editorText setTextColor:[NSColor grayColor]];
+		[externalEditorName setTextColor:[NSColor grayColor]];
+		[commandText setTextColor:[NSColor grayColor]];
+	} else {
+		[highlightIntervalText setTextColor:[NSColor grayColor]];
+		[highlightNoteText setTextColor:[NSColor grayColor]];
+		[showLineNumbersText setTextColor:[NSColor grayColor]];
+		[editorText setTextColor:[NSColor blackColor]];
+		[externalEditorName setTextColor:[NSColor blackColor]];
+		[commandText setTextColor:[NSColor blackColor]];
+	}
+	
 	[changeEditor setEnabled:(flag?NSOffState:NSOnState)];
 	[appOrCommand setEnabled:(flag?NSOffState:NSOnState)];
 	[externalEditorName setEnabled:(flag?NSOffState:NSOnState)];
+	
 	
 	NSArray *pathComps = [[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"] componentsSeparatedByString:@"/"];
 	NSString *name = [pathComps objectAtIndex: ([pathComps count] - 1)];
