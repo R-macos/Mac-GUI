@@ -7,9 +7,11 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
-				1CDD06110763FD2000B8FCA6,
+				687B4E430794167000074042,
+				687B4E400794165600074042,
 				D41DED57073B3FF700B900F2,
 				D41DED58073B3FF700B900F2,
+				1CDD06110763FD2000B8FCA6,
 				F8CE7270071539E600CE40EC,
 				F8CE726F071539E600CE40EC,
 				16572B2706F3A98600C69946,
@@ -18,8 +20,6 @@
 				165C0F4806EF05E000994593,
 				16D3041606B54EE3009CB94A,
 				16D3041706B54EE3009CB94A,
-				163B0CA306CE528400A380BE,
-				163B0CA406CE528400A380BE,
 				1673550C06DE155F00A75774,
 				1673550D06DE155F00A75774,
 				163B2CBA06ED1A990035FFD5,
@@ -2065,6 +2065,7 @@
 				089C165CFE840E0CC02AAC07,
 				29B97318FDCFA39411CA2CEA,
 				D41DED53073B3F8000B900F2,
+				687B4E350794130800074042,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -2205,6 +2206,198 @@
 			settings = {
 			};
 		};
+		687B4DC207940DAA00074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RConsole.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4DC307940DAA00074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = RConsole.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4DC407940DAA00074042 = {
+			fileRef = 687B4DC207940DAA00074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4DC507940DAA00074042 = {
+			fileRef = 687B4DC307940DAA00074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4DF70794110900074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RConsoleController.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4DF80794110900074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = RConsoleController.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4DF90794110900074042 = {
+			fileRef = 687B4DF70794110900074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4DFA0794110900074042 = {
+			fileRef = 687B4DF80794110900074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4E350794130800074042 = {
+			children = (
+				687B4E360794130800074042,
+			);
+			isa = PBXVariantGroup;
+			name = RConsole.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4E360794130800074042 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/RConsole.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4E370794130800074042 = {
+			fileRef = 687B4E350794130800074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4E400794165600074042 = {
+			children = (
+				687B4F9507944B8000074042,
+				687B4F9607944B8000074042,
+				163B0CA306CE528400A380BE,
+				163B0CA406CE528400A380BE,
+				687B4F0507942C1500074042,
+				687B4F0607942C1500074042,
+			);
+			isa = PBXGroup;
+			name = Editor;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4E430794167000074042 = {
+			children = (
+				687B4DC207940DAA00074042,
+				687B4DC307940DAA00074042,
+				687B4DF70794110900074042,
+				687B4DF80794110900074042,
+				687B503907945D4C00074042,
+				687B503A07945D4C00074042,
+			);
+			isa = PBXGroup;
+			name = Console;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4F0507942C1500074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RDocumentWinCtrl.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4F0607942C1500074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = RDocumentWinCtrl.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4F0707942C1500074042 = {
+			fileRef = 687B4F0507942C1500074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4F0807942C1500074042 = {
+			fileRef = 687B4F0607942C1500074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4F9507944B8000074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = REditorTextStorage.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4F9607944B8000074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = REditorTextStorage.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B4F9707944B8000074042 = {
+			fileRef = 687B4F9507944B8000074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B4F9807944B8000074042 = {
+			fileRef = 687B4F9607944B8000074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B503907945D4C00074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RConsoleTextStorage.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B503A07945D4C00074042 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = RConsoleTextStorage.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		687B503B07945D4C00074042 = {
+			fileRef = 687B503907945D4C00074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		687B503C07945D4C00074042 = {
+			fileRef = 687B503A07945D4C00074042;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 //680
 //681
 //682
@@ -2293,6 +2486,11 @@
 				D41DED59073B3FF700B900F2,
 				1CDD05480763E46900B8FCA6,
 				1CDD06120763FD2000B8FCA6,
+				687B4DC407940DAA00074042,
+				687B4DF90794110900074042,
+				687B4F0707942C1500074042,
+				687B4F9707944B8000074042,
+				687B503B07945D4C00074042,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2356,6 +2554,7 @@
 				16A2604C072AB7D80047E009,
 				16DB0E8A072E5CFA00380720,
 				D41DED55073B3F8000B900F2,
+				687B4E370794130800074042,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2409,6 +2608,11 @@
 				D41DED4D073B3EE400B900F2,
 				D41DED5A073B3FF700B900F2,
 				1CDD05490763E46900B8FCA6,
+				687B4DC507940DAA00074042,
+				687B4DFA0794110900074042,
+				687B4F0807942C1500074042,
+				687B4F9807944B8000074042,
+				687B503C07945D4C00074042,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

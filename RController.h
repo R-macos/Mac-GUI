@@ -67,14 +67,6 @@
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 
-#define iBackgroundColor 0
-#define iInputColor      1
-#define iOutputColor     2
-#define iPromptColor     3
-#define iStderrColor     4
-#define iStdoutColor     5
-#define iRootColor       6
-
 @interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent>
 {
 	IBOutlet NSTextView *RTextView;
@@ -96,6 +88,8 @@
 	NSToolbarItem *toolbarStopItem;
 	
 	NSString *textViewSync;
+	
+	NSFont *textFont;
 	
     IBOutlet NSStepper *fontSizeStepper;
     IBOutlet NSTextField *fontSizeField;

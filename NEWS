@@ -1,5 +1,29 @@
 NEWS
 
+KNOWN ISSUE: Sometimes it is necessary to hit <ESC> before
+the prompt appears after R GUI is launched. This is caused by
+the 2005-01-10 commit which may be reverted in the future.
+
+Last update: 2005-01-11 [SU]
+*	Fixed undo issues (see below for details)
+*	Fixed NSRunStorage exceptions (pasting large chunks or
+	huge output works now) - console now uses direct text storage
+	messages for better reliability and speed
+*	This is the just the beginning in the process of dismantling
+	RController into RConsole* classes. RController should handle
+	only application-wide issues. Any console-related functionality
+	should go to one of the RConsole classes.
+*	Changed document handling to proper MVC - both the editor and
+	the console consist of three parts:
+	- the document class handling new/open/save etc.
+	- window controller handling interactions with the window
+	- text storage class handling text manipulations
+	Especially the separation of the text storage may be very
+	useful for content checking (hidden chars) and highlighting.
+*	Added Rcommand document type which represents the console
+	as a document (for now not fired at launch time). The
+	corresponding NIB file is RConsole and the RConsole* classes.
+
 Last update: 2005-01-10 [SU]
 *	Changed the way R is started to get out of the timer/notifi-
 	cation context. This is somewhat experimental, because is

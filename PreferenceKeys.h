@@ -58,3 +58,13 @@
 #define quartzPrefPaneFontKey @"QuartzPrefPane font"
 #define quartzPrefPaneFontSizeKey @"QuartzPrefPane fontsize"
 
+// other constants
+
+#define iBackgroundColor 0
+#define iInputColor      1
+#define iOutputColor     2
+#define iPromptColor     3
+#define iStderrColor     4
+#define iStdoutColor     5
+#define iRootColor       6
+

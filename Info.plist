@@ -34,6 +34,18 @@
 			<key>NSDocumentClass</key>
 			<string>RQuartz</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>*.Rcommand</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Rcommand</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>NSDocumentClass</key>
+			<string>RConsole</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>R</string>

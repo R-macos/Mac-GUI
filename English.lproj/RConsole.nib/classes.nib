@@ -2,6 +2,12 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
+            CLASS = RConsoleController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {console = NSTextView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
             ACTIONS = {
                 executeSelection = id; 
                 printDocument = id; 
@@ -12,12 +18,6 @@
             LANGUAGE = ObjC; 
             OUTLETS = {textView = NSTextView; window = NSWindow; }; 
             SUPERCLASS = NSDocument; 
-        }, 
-        {
-            CLASS = RDocumentWinCtrl; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {textView = NSTextView; }; 
-            SUPERCLASS = NSWindowController; 
         }
     ); 
     IBVersion = 1; 

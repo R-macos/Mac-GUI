@@ -25,32 +25,29 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  Created by Simon Urbanek on 1/11/05.
  */
 
+#import "RConsole.h"
+#import "RConsoleController.h"
 
-#import <Cocoa/Cocoa.h>
-#import "Preferences.h"
+@implementation RConsole
 
-@interface RDocument : NSDocument
-{
-	IBOutlet	NSTextView *textView;
-	IBOutlet    NSWindow *window;
-	
-	// since contents can be loaded in "-init", when NIB is not loaded yet, we need to store the contents until NIB is loaded.
-	NSData *initialContents;
-	NSString *initialContentsType;
-	
-	BOOL isEditable; // determines whether this document can be edited
-	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
+- (void) makeWindowControllers {
+	// create RConsoleController which is a window controller - it loads the corresponding NIB and sets up the window
+	RConsoleController *cc = [[RConsoleController alloc] initWithWindowNibName:@"RConsole"];
+	[self addWindowController:cc];
 }
 
-+ (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
+- (NSData *)dataRepresentationOfType:(NSString *)type {
+    // Implement to provide a persistent data representation of your document OR remove this and implement the file-wrapper or file path based save methods.
+    return nil;
+}
 
-- (void) loadInitialContents;
-
-- (void) setEditable: (BOOL) editable;
-- (BOOL) editable;
-- (void) setREditFlag: (BOOL) flag;
-- (BOOL) hasREditFlag;
+- (BOOL)loadDataRepresentation:(NSData *)data ofType:(NSString *)type {
+    // Implement to load a persistent data representation of your document OR remove this and implement the file-wrapper or file path based load methods.
+    return YES;
+}
 
 @end

@@ -40,6 +40,7 @@
 #import "RController.h"
 #import "REngine/Rcallbacks.h"
 #import "REngine/Rengine.h"
+#import "RConsoleTextStorage.h"
 
 #import "Tools/Authorization.h"
 #import "Preferences.h"
@@ -134,6 +135,7 @@ static RController* sharedRController;
 		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
 	consoleColors = [defaultConsoleColors mutableCopy];
 	
+	textFont = [[NSFont userFixedPitchFontOfSize:currentFontSize] retain];
 	return self;
 }
 
@@ -161,11 +163,10 @@ static RController* sharedRController;
 
 - (NSFont*) currentFont
 {
-	return [RTextView font];
+	return textFont;
 }
 
 - (void) awakeFromNib {
-	NSFont *theFont;
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	
 #ifdef DEBUG_RGUI
@@ -173,6 +174,14 @@ static RController* sharedRController;
 #endif
 	
 	sharedRController = self;
+	
+	NSLayoutManager *lm = [[RTextView layoutManager] retain];
+	NSTextStorage *origTS = [[RTextView textStorage] retain];
+	RConsoleTextStorage * textStorage = [[RConsoleTextStorage alloc] init];
+	[origTS removeLayoutManager:lm];
+	[textStorage addLayoutManager:lm];
+	[lm release];
+	[origTS release];
 	
 	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
 	
@@ -200,11 +209,14 @@ static RController* sharedRController;
 	[RTextView setDrawsBackground:NO];
 	[[RTextView enclosingScrollView] setDrawsBackground:NO];
 	
+	/*
 	[RTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
 	[fontSizeStepper setIntValue:currentFontSize];
     theFont=[RTextView font];
     theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
     [RTextView setFont:theFont];
+	 */
+	[RTextView setFont: textFont];
 	{
 		NSMutableDictionary *md = [[RTextView typingAttributes] mutableCopy];
 		[md setObject: [consoleColors objectAtIndex:iInputColor] forKey: @"NSColor"];
@@ -212,6 +224,8 @@ static RController* sharedRController;
 		[md release];
 	}
 	[RTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
+	
+	NSLog(@"attr=%@", [RTextView typingAttributes]);
 	
 	//	[RTextView changeColor: inputColor];
 	[RTextView display];
@@ -293,7 +307,10 @@ static RController* sharedRController;
 												 selector:@selector(kickstart:)
 												 userInfo:0
 												  repeats:NO];
-	
+
+	// once we're ready with the doc transition, the following will actually fire up the cconsole window
+	//[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"Rcommand" display:YES];
+
 	[RConsoleWindow makeKeyAndOrderFront:self];
 	[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
 	CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
@@ -572,24 +589,24 @@ extern BOOL isTimeToFinish;
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */
 - (void) writeConsoleDirectly: (NSString*) txt withColor: (NSColor*) color{
 	@synchronized(textViewSync) {
+		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [RTextView textStorage];
 		NSRange origSel = [RTextView selectedRange];
-		NSRange insPt = NSMakeRange(outputPosition, 0);
 		unsigned tl = [txt length];
 		if (tl>0) {
 			unsigned oldCL=committedLength;
 			/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
 			origSel.length, outputPosition, tl, promptPosition, committedLength); */
+			[textStorage beginEditing];
 			committedLength=0;
-			[RTextView setSelectedRange:insPt];
-			[RTextView insertText:txt];
-			insPt.length=tl;
-			[RTextView setTextColor:color range:insPt];
+			[textStorage insertText:txt atIndex:outputPosition withColor:color];
 			if (outputPosition<=promptPosition) promptPosition+=tl;
 			committedLength=oldCL;
 			if (outputPosition<=committedLength) committedLength+=tl;
 			if (outputPosition<=origSel.location) origSel.location+=tl;
 			outputPosition+=tl;
+			[textStorage endEditing];
 			[RTextView setSelectedRange:origSel];
+			[RTextView scrollRangeToVisible:origSel];
 		}
 	}
 }
@@ -598,26 +615,33 @@ extern BOOL isTimeToFinish;
 - (void)handleWritePrompt: (NSString*) prompt {
     [self handleFlushConsole];
 	@synchronized(textViewSync) {
-		unsigned textLength = [[RTextView textStorage] length];
+		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [RTextView textStorage];
+		unsigned textLength = [textStorage length];
 		int promptLength=[prompt length];
-		NSRange lr = [[[RTextView textStorage] string] lineRangeForRange:NSMakeRange(textLength,0)];
+		NSRange lr = [[textStorage string] lineRangeForRange:NSMakeRange(textLength,0)];
+		[textStorage beginEditing];
 		promptPosition=textLength;
 		if (lr.location!=textLength) { // the prompt must be on the beginning of the line
 			[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-			[RTextView insertText: @"\n"];
-			textLength = [[RTextView textStorage] length];
-		promptLength++;
+			[textStorage insertText: @"\n" atIndex: textLength withColor:[consoleColors objectAtIndex:iPromptColor]];
+			textLength = [textStorage length];
+			promptLength++;
 		}
 		
 		if (promptLength>0) {
 			[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-			[RTextView insertText:prompt];
-			[RTextView setTextColor:[consoleColors objectAtIndex:iPromptColor] range:NSMakeRange(promptPosition, promptLength)];
+			[textStorage insertText:prompt atIndex: textLength withColor:[consoleColors objectAtIndex:iPromptColor]];
 			if (promptLength>1) // this is a trick to make sure that the insertion color doesn't change at the prompt
-				[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
-        committedLength=promptPosition+promptLength;
+				[textStorage addAttribute:@"NSColor" value:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
+			committedLength=promptPosition+promptLength;
 		}
 		committedLength=promptPosition+promptLength;
+		[textStorage endEditing];
+		{
+			NSRange targetRange = NSMakeRange(committedLength,0);
+			[RTextView setSelectedRange:targetRange];
+			[RTextView scrollRangeToVisible:targetRange];
+		}
 	}
 }
 
@@ -1851,7 +1875,12 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (void) updatePreferences {
 	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
-
+	NSFont *newFont = [NSFont userFixedPitchFontOfSize:currentFontSize];
+	if (newFont!=textFont) {
+		[textFont release];
+		textFont = [newFont retain];
+	}
+	
 	{
 		int i = 0, ccs = [consoleColorsKeys count];
 		while (i<ccs) {

@@ -25,32 +25,57 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  Created by Simon Urbanek on 1/11/05.
  */
 
+#import "REditorTextStorage.h"
 
-#import <Cocoa/Cocoa.h>
-#import "Preferences.h"
+@implementation REditorTextStorage
 
-@interface RDocument : NSDocument
+- (id) init
 {
-	IBOutlet	NSTextView *textView;
-	IBOutlet    NSWindow *window;
-	
-	// since contents can be loaded in "-init", when NIB is not loaded yet, we need to store the contents until NIB is loaded.
-	NSData *initialContents;
-	NSString *initialContentsType;
-	
-	BOOL isEditable; // determines whether this document can be edited
-	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
+	self = [super init];
+	if (self) {
+		cont = [[NSMutableAttributedString alloc] init];
+	}
+	NSLog(@"REditorTextStorage created");
+	return self;
 }
 
-+ (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
+- (void) dealloc
+{
+	[cont release];
+}
 
-- (void) loadInitialContents;
+// mandatory primitive methods
 
-- (void) setEditable: (BOOL) editable;
-- (BOOL) editable;
-- (void) setREditFlag: (BOOL) flag;
-- (BOOL) hasREditFlag;
+- (NSString*) string
+{
+	NSLog(@"str=%@", [cont string]);
+	return [cont string];
+}
+
+- (NSDictionary *) attributesAtIndex:(unsigned)index effectiveRange:(NSRangePointer)aRange
+{
+	return [cont attributesAtIndex:index effectiveRange:aRange];
+}
+
+- (void) replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString
+{
+	[cont replaceCharactersInRange:aRange withString:aString];
+	[self edited:NSTextStorageEditedCharacters range:aRange changeInLength:[aString length]-aRange.length];
+}
+
+- (void)setAttributes:(NSDictionary *)attributes range:(NSRange)aRange
+{
+	[cont setAttributes:attributes range:aRange];
+	NSLog(@"setAttr %@", attributes);
+	[self edited:NSTextStorageEditedAttributes range:aRange changeInLength:0];
+}
+
+// end of primitive methods
+
+
 
 @end
