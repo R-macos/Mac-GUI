@@ -32,3 +32,5 @@
 int requestRootAuthorization(int forceFresh);
 int removeRootAuthorization();
 int runRootScript(const char* script, char** args, FILE **fptr, int keepAuthorized);
+
+int isAdmin(); // returns 1 if the current user is a member of the admin group, 0 otherwise

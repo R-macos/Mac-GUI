@@ -30,6 +30,10 @@
 
 #include "Authorization.h"
 
+#include <sys/types.h>
+#include <grp.h>
+#include <unistd.h>
+
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 
@@ -88,3 +92,21 @@ int runRootScript(const char* script, char** args, FILE **fptr, int keepAuthoriz
 	return (myStatus == errAuthorizationSuccess)?0:-1;
 }
 
+// checks whether the current user is a member of the "admin" group
+int isAdmin()
+{
+	int ng,i;
+	gid_t gids[64], admin_gid;
+	struct group *gri;
+	
+	gri=getgrnam("admin");
+	if (!gri) return 0;
+	admin_gid=gri->gr_gid;
+	
+	ng=getgroups(64, gids);
+	while (i<ng) {
+		if (gids[i]==admin_gid) return 1;
+		i++;
+	}
+	return 0;	
+}
