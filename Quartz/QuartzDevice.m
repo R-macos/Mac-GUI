@@ -35,6 +35,7 @@
 
 #include <Defn.h>
 
+#include <Rversion.h>
 #include <R.h>
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>
@@ -52,9 +53,14 @@
 #include <Graphics.h>
 #include <Rdevices.h>
 
-
+/* since 2.1.0 devQuartz is no longer in libR, so we need to duplicate it here */
+#if (R_VERSION >= R_Version(2,1,0))
+extern char*  RGUI_Quartz_TranslateFontFamily(char* family, int face, char *devfamily);
+#define Quartz_TranslateFontFamily RGUI_Quartz_TranslateFontFamily
+#else
 extern  char* Quartz_TranslateFontFamily(char* family, int face, char *devfamily); /* from src/unix/devQuartz.c */
-
+#endif
+	 
 NSRect ClipArea;
 
 
