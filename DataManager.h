@@ -1,22 +1,15 @@
 /* DataManager */
 
 #import <Cocoa/Cocoa.h>
-
-typedef struct dataManagerEntry {
-	NSString *name;
-	NSString *desc;
-	NSString *pkg;
-	NSString *url;
-} s_dataManagerEntry;
+#import "SortableDataSource.h"
 
 @interface DataManager : NSObject
 {
     IBOutlet NSTableView *RDataSource;
 	IBOutlet id dataInfoView;
 	NSWindow *DataManagerWindow;
-	
-	int datasets;
-	s_dataManagerEntry *dataset;
+		
+	SortableDataSource *dataSource;
 }
 
 - (id) window;

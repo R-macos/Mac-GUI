@@ -12,7 +12,7 @@ static id sharedController;
 - (void)awakeFromNib
 {
 	[RDataSource setDoubleAction:@selector(loadRData:)];
-	[RDataSource setTarget: self];
+	[RDataSource setDataSource: dataSource];
 }
 
 - (id)init
@@ -20,7 +20,7 @@ static id sharedController;
     self = [super init];
     if (self) {
 		sharedController = self;
-		datasets = 0;
+		dataSource = [[SortableDataSource alloc] init];
 	}
 	
     return self;
@@ -32,57 +32,17 @@ static id sharedController;
 
 - (void) resetDatasets
 {
-	if (!datasets) return;
-	int i=0;
-	while (i<datasets) {
-		[dataset[i].name release];
-		[dataset[i].desc release];
-		[dataset[i].pkg release];
-		[dataset[i].url release];
-		i++;
-	}
-	free(dataset);
-	datasets=0;
-}
-
-/* These two routines are needed to update the History TableView */
-- (int)numberOfRowsInTableView: (NSTableView *)tableView
-{
-	return datasets;
+	[dataSource reset];
 }
 
 - (void) updateDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url
 {
-	int i=0;
-	
-	if (dataset) [self resetDatasets];
-	if (count<1) {
-		[self show];
-		return;
-	}
-	
-	dataset = malloc(sizeof(*dataset)*count);
-	while (i<count) {
-		dataset[i].name=[[NSString alloc] initWithCString: name[i]];
-		dataset[i].desc=[[NSString alloc] initWithCString: desc[i]];
-		dataset[i].pkg=[[NSString alloc] initWithCString: pkg[i]];
-		dataset[i].url=[[NSString alloc] initWithCString: url[i]];
-		i++;
-	}
-	datasets = count;
+	[dataSource reset];
+	[dataSource addColumnOfLength:count withCStrings:name name:@"data"];
+	[dataSource addColumnOfLength:count withCStrings:desc name:@"description"];
+	[dataSource addColumnOfLength:count withCStrings:pkg name:@"package"];
+	[dataSource addColumnOfLength:count withCStrings:url name:@"URL"];
 	[self show];
-}
-
-- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
-{
-	if (row>=datasets) return nil;
-	if([[tableColumn identifier] isEqualToString:@"data"])
-		return dataset[row].name;
-	else if([[tableColumn identifier] isEqualToString:@"package"])
-		return dataset[row].pkg;
-	else if([[tableColumn identifier] isEqualToString:@"description"])
-		return dataset[row].desc;
-	return nil;
 }
 
 - (id) window
@@ -103,20 +63,21 @@ static id sharedController;
 {
 	int row = [sender selectedRow];
 	if(row>=0)
-		[[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"data(%@,package=\"%@\")",dataset[row].name,dataset[row].pkg]];
+		[[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"data(%@,package=\"%@\")",
+			[dataSource objectAtColumn:@"data" row:row], [dataSource objectAtColumn:@"package" row:row]]];
 }
 
 - (IBAction)showHelp:(id)sender
 {
 	int row = [sender selectedRow];
 	if(row<0) return;
-	NSString *urlText = [NSString stringWithFormat:@"file://%@",dataset[row].url];
+	NSString *urlText = [NSString stringWithFormat:@"file://%@",[dataSource objectAtColumn:@"URL" row:row]];
 	[[dataInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }
 
 - (int) count
 {
-	return datasets;
+	return [dataSource count];
 }
 
 - (void) show
