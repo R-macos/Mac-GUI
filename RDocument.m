@@ -44,11 +44,6 @@ NSColor *shColorIdentifier;
 
 NSArray *keywordList=nil;
 
-#define numConsoleColors 7
-static NSString *consoleColorsKeys[7] = {
-	backgColorKey, inputColorKey, outputColorKey, promptColorKey,
-	stderrColorKey, stdoutColorKey, rootColorKey };
-
 @implementation RDocument
 
 + (void) setDefaultSyntaxHighlightingColors
@@ -92,12 +87,6 @@ static NSString *consoleColorsKeys[7] = {
 		initialContentsType=nil;
 		isEditable=YES;
 		isREdit=NO;
-		if (!defaultConsoleColors==nil)
-			defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
-				[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
-				[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
-		if (!consoleColors==nil)
-			consoleColors = [defaultConsoleColors mutableCopy];
     }
     return self;
 }
@@ -158,18 +147,6 @@ static NSString *consoleColorsKeys[7] = {
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
 	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
-	int i = 0;
-	while (i<numConsoleColors) {
-		NSColor *c = [Preferences unarchivedObjectForKey: consoleColorsKeys[i] withDefault: [consoleColors objectAtIndex:i]];
-		if (c != [consoleColors objectAtIndex:i]) {
-			[consoleColors replaceObjectAtIndex:i withObject:c];
-			if (i == iBackgroundColor) {
-				[textView setBackgroundColor:c];
-				[textView display];
-			}
-		}
-		i++;
-	}
 	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
 	[textView setNeedsDisplay:YES];
 }

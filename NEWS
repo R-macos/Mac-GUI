@@ -1,5 +1,9 @@
 NEWS
 
+Last update: 2004-12-29 [SU]
+*	Removed superfluous and wrong color handling code - should
+	fix crashes related to new documents.
+	
 Last update: 2004-12-29 [RG]
 *   Fixed 'Open With' R (opening a file from Finder with R)
 *   Fixed opening many 'New Document' windows

@@ -64,9 +64,6 @@ extern NSColor *shColorIdentifier;
 	
 	BOOL updating; // this flag is set while syntax coloring is changed to prevent recursive changes
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
-
-	NSMutableArray *consoleColors;
-	NSArray *defaultConsoleColors;
 }
 
 + (void) setDefaultSyntaxHighlightingColors;
