@@ -31,6 +31,7 @@
 
 #import "RConsoleController.h"
 #import "PreferenceKeys.h"
+#import "RGUI.h"
 
 @implementation RConsoleController
 
@@ -109,7 +110,7 @@
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName
 {
-	return @"R-Console";
+	return NLS(@"R Console");
 }
 
 @end

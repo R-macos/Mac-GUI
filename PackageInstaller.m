@@ -54,7 +54,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 		op = [NSOpenPanel openPanel];
 		[op setCanChooseDirectories:YES];
 		[op setCanChooseFiles:NO];
-		[op setTitle:@"Select Installation Directory"];
+		[op setTitle:NLS(@"Select Installation Directory")];
 		
 		answer = [op runModalForDirectory:nil file:nil types:[NSArray arrayWithObject:@""]];
 		[op setCanChooseDirectories:NO];
@@ -84,7 +84,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 			unlink(tmp);
 		} else {
 			if (requestRootAuthorization(0)) {
-				NSRunAlertPanel(@"Package Installer",@"The package has not been installed.",@"OK",nil,nil);	
+				NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"The package has not been installed."),NLS(@"OK"),nil,nil);	
 				return;
 			} else
 				[[RController getRController] setRootFlag:YES];
@@ -210,7 +210,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 			
 		case kOTHER:
 			if( [[urlTextField stringValue] isEqual:@""]){
-				NSBeginAlertSheet(@"Package installer",@"Ok",nil,nil,[self window],self,NULL,NULL,NULL,@"Please, specify a valid url first.");
+				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
 				return;
 			}
 			

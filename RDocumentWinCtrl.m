@@ -29,6 +29,7 @@
  *  Created by Simon Urbanek on 1/11/05.
  */
 
+#import "RGUI.h"
 #import "RDocumentWinCtrl.h"
 #import "PreferenceKeys.h"
 #import "RController.h"

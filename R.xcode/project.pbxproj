@@ -16,8 +16,8 @@
 				F8CE726F071539E600CE40EC,
 				16572B2706F3A98600C69946,
 				16572B2806F3A98600C69946,
-				165C0F4706EF05E000994593,
 				165C0F4806EF05E000994593,
+				165C0F4706EF05E000994593,
 				16D3041606B54EE3009CB94A,
 				16D3041706B54EE3009CB94A,
 				1673550C06DE155F00A75774,
@@ -2066,6 +2066,7 @@
 		29B97315FDCFA39411CA2CEA = {
 			children = (
 				32CA4F630368D1EE00C91783,
+				6855194007B8FDDF00F3A57C,
 				29B97316FDCFA39411CA2CEA,
 			);
 			isa = PBXGroup;
@@ -2258,6 +2259,20 @@
 			name = PrefPanes;
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		6855194007B8FDDF00F3A57C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RGUI.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6855194107B8FDDF00F3A57C = {
+			fileRef = 6855194007B8FDDF00F3A57C;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		686967B9079813AD002A1932 = {
 			isa = PBXFileReference;
@@ -2659,6 +2674,7 @@
 				687B503B07945D4C00074042,
 				68E2B9F20796C9D200E31F29,
 				D490C1EC07B400870034B42F,
+				6855194107B8FDDF00F3A57C,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

@@ -1,10 +1,237 @@
-"Cancel"="Abbrechen";
-"Choose File"="Wählen Sie eine Datei";
-"Choose history File"="Wählen Sie die History-Datei";
-"Choose New File Name"="Wählen Sie einen Dateinamen";
-"Closing R session"="R wird beendet";
-"Don't Save"="Nicht speichern";
-"Save"="Speichern";
-"Save history File"="History-Datei speichern";
-"Save R Console To File"="R-Konsole speichern";
-"Save workspace image?"="Soll das Workspace gespeichert werden?";
+/* From: SearchTable.m (show) */
+"<unknown>" = "<unknown>";
+
+/* Add column - label for a toolbar, keep short! */
+"Add Col" = "Add Col";
+
+/* From: REditor.m (toolbar) */
+"Add Column" = "Add Column";
+
+/* From: REditor.m (toolbar) */
+"Add New Row" = "Add New Row";
+
+/* Add row - label for a toolbar, keep short! */
+"Add Row" = "Add Row";
+
+/* From: REditor.m (toolbar) */
+"Adds a new columns to the right of a group of selected colums or just at the end of the data" = "Adds a new columns to the right of a group of selected colums or just at the end of the data";
+
+/* From: REditor.m (toolbar) */
+"Adds a row below a group of selected rows or at the bottom of the data" = "Adds a row below a group of selected rows or at the bottom of the data";
+
+/* From: RController.m (clearWorkSpace) */
+"All objects in the workspace will be removed. Are you sure you want to proceed?" = "All objects in the workspace will be removed. Are you sure you want to proceed?";
+
+/* From: WSBrowser.m (remObject) */
+"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!";
+
+/* From: RController.m (toolbar) */
+"Authentication" = "Authentication";
+
+/* From: RController.m (toolbar) */
+"Authorize R to run system commands as root" = "Authorize R to run system commands as root";
+
+/* From: RController.m (didCloseAll) */
+"Cancel" = "Abbrechen";
+
+/* From: RController.m (applicationDidFinishLaunching) */
+"Cannot start R" = "Cannot start R";
+
+/* From: RController.m (toolbar) */
+"Change the size of R console font" = "Change the size of R console font";
+
+/* From: RController.m (handleChooseFile) */
+"Choose File" = "Wählen Sie eine Datei";
+
+/* From: RController.m (doLoadHistory) */
+"Choose history File" = "Wählen Sie die History-Datei";
+
+/* From: RController.m (handleChooseFile) */
+"Choose New File Name" = "Wählen Sie einen Dateinamen";
+
+/* From: RController.m (setWorkingDir) */
+"Choose New Working Directory" = "Choose New Working Directory";
+
+/* From: RController.m (clearWorkSpace) */
+"Clear Workspace" = "Clear Workspace";
+
+/* From: RController.m (didCloseAll) */
+"Closing R session" = "R wird beendet";
+
+/* From: RController.m (toolbar) */
+"Create a new, empty document in the editor" = "Create a new, empty document in the editor";
+
+/* From: RController.m (didCloseAll) */
+"Don't Save" = "Nicht speichern";
+
+/* From: WSBrowser.m (toolbar) */
+"Edit" = "Edit";
+
+/* From: WSBrowser.m (toolbar) */
+"Edit Object" = "Edit Object";
+
+/* From: WSBrowser.m (toolbar) */
+"Edit the selected object" = "Edit the selected object";
+
+/* From: RController.m (toolbar) */
+"Font Size" = "Font Size";
+
+/* From: RController.m (toolbar) */
+"History" = "History";
+
+/* From: RController.m (toolbar) */
+"Interrupt current R computation" = "Interrupt current R computation";
+
+/* From: RController.m (toolbar) */
+"New Document" = "New Document";
+
+/* Global string @ */
+"No" = "No";
+
+/* Global string @ */
+"OK" = "OK";
+
+/* From: RController.m (toolbar) */
+"Open a new Quartz device window" = "Open a new Quartz device window";
+
+/* From: RController.m (toolbar) */
+"Open document in editor" = "Open document in editor";
+
+/* From: RController.m (toolbar) */
+"Open In Editor" = "Open In Editor";
+
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "Package Installer";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Package installer";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Please, specify a valid URL first." = "Please, specify a valid URL first.";
+
+/* From: RController.m (toolbarWillAddItem) */
+"Print this document" = "Print this document";
+
+/* From: RController.m (toolbar) */
+"Quartz" = "Quartz";
+
+/* From: RController.m (toolbar) */
+"Quit" = "Quit";
+
+/* From: RController.m (toolbar) */
+"Quit R" = "Quit R";
+
+/* From: RConsoleController.m (windowTitleForDocumentDisplayName) */
+"R Console" = "R Console";
+
+/* From: RController.m (sourceFile) */
+"R File to Source" = "R File to Source";
+
+/* From: RController.m (sourceOrLoadFile) */
+"R File to Source/Load" = "R File to Source/Load";
+
+/* From: RController.m (handleShowMessage) */
+"R Message" = "R Message";
+
+/* From: WSBrowser.m (toolbar) */
+"Refresh" = "Refresh";
+
+/* From: WSBrowser.m (toolbar) */
+"Refresh Objects List" = "Refresh Objects List";
+
+/* From: WSBrowser.m (toolbar) */
+"Remove" = "Remove";
+
+/* Remove columns - label for a toolbar, keep short! */
+"Remove Col" = "Remove Col";
+
+/* From: REditor.m (toolbar) */
+"Remove Columns" = "Remove Columns";
+
+/* From: WSBrowser.m (toolbar) */
+"Remove Object" = "Remove Object";
+
+/* From: WSBrowser.m (remObject) */
+"Remove Object from Workspace" = "Remove Object from Workspace";
+
+/* Remove row - label for a toolbar, keep short! */
+"Remove Row" = "Remove Row";
+
+/* From: REditor.m (toolbar) */
+"Remove Rows" = "Remove Rows";
+
+/* From: REditor.m (toolbar) */
+"Remove selected columns" = "Remove selected columns";
+
+/* From: WSBrowser.m (toolbar) */
+"Remove Selected Object" = "Remove Selected Object";
+
+/* From: REditor.m (toolbar) */
+"Removes selected rows" = "Removes selected rows";
+
+/* Global string @ */
+"Save" = "Speichern";
+
+/* From: RController.m (toolbar) */
+"Save Console Window" = "Save Console Window";
+
+/* From: RController.m (doSaveHistory) */
+"Save history File" = "History-Datei speichern";
+
+/* From: RController.m (saveDocumentAs) */
+"Save R Console To File" = "R-Konsole speichern";
+
+/* From: RController.m (toolbar) */
+"Save R console window" = "Save R console window";
+
+/* From: RController.m (didCloseAll) */
+"Save workspace image?" = "Soll das Workspace gespeichert werden?";
+
+/* From: PackageInstaller.m (installSelected) */
+"Select Installation Directory" = "Select Installation Directory";
+
+/* From: RController.m (installFromDir) */
+"Select Package Directory" = "Select Package Directory";
+
+/* From: RController.m (toolbar) */
+"Set Colors" = "Set Colors";
+
+/* From: RController.m (toolbar) */
+"Set R Colors" = "Set R Colors";
+
+/* From: RController.m (toolbar) */
+"Set R console colors" = "Set R console colors";
+
+/* From: RController.m (toolbar) */
+"Show/Hide R command history" = "Show/Hide R command history";
+
+/* From: RController.m (toolbar) */
+"Source or Load in R" = "Source or Load in R";
+
+/* From: RController.m (toolbar) */
+"Source script or load data in R" = "Source script or load data in R";
+
+/* From: RController.m (toolbar) */
+"Source/Load" = "Source/Load";
+
+/* From: RController.m (toolbar) */
+"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Start the X11 window server to allow R using X11 device and Tcl/Tk";
+
+/* From: RController.m (toolbar) */
+"Start X11" = "Start X11";
+
+/* From: RController.m (toolbar) */
+"Start X11 Server" = "Start X11 Server";
+
+/* From: RController.m (toolbar) */
+"Stop" = "Stop";
+
+/* From: PackageInstaller.m (installSelected) */
+"The package has not been installed." = "The package has not been installed.";
+
+/* From: RController.m (applicationDidFinishLaunching) */
+"Unable to start R: %@" = "Unable to start R: %@";
+
+/* Global string @ */
+"Yes" = "Yes";
+

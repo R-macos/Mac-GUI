@@ -28,6 +28,7 @@
  */
 
 
+#import "RGUI.h"
 #import "RDocument.h"
 #import "RDocumentWinCtrl.h"
 #import "RController.h"

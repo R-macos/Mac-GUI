@@ -26,13 +26,18 @@
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
- *  Created by Simon Urbanek on 1/11/05.
+ *  Created by Simon Urbanek on 2/8/05.
+ *
  */
 
-#import <Cocoa/Cocoa.h>
+#ifndef __RGUI_H__
+#define __RGUI_H__
 
-@interface RConsole : NSDocument {
-	
-}
+/* GUI version */
+#define R_GUI_VERSION_STR "1.01" /* it must be a string, but should parse to a valid real number */
 
-@end
+/* macros for translatable strings */
+#define NLS(S) NSLocalizedString(S,@"")
+#define NLSC(S,C) NSLocalizedString(S,C)
+
+#endif

@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#import "RGUI.h"
 #import "REditor.h"
 #include "Defn.h"
 #include <R.h>
@@ -108,7 +109,7 @@ void printelt(SEXP invec, int vrow, char *strp)
     }
     }
     else
-	error("dataentry: internal memory error");
+	error("dataentry: internal memory error"); /* FIXME: localize */
 }
 
 @implementation REditor
@@ -280,11 +281,11 @@ void printelt(SEXP invec, int vrow, char *strp)
     
     if ([itemIdent isEqual: AddColToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Add Col"];
-		[toolbarItem setPaletteLabel: @"Add Column"];
+		[toolbarItem setLabel: NLSC(@"Add Col",@"Add column - label for a toolbar, keep short!")];
+		[toolbarItem setPaletteLabel: NLS(@"Add Column")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Adds a new columns to the right of a group of selected colums or just at the end of the data"];
+		[toolbarItem setToolTip: NLS(@"Adds a new columns to the right of a group of selected colums or just at the end of the data")];
 		[toolbarItem setImage: [NSImage imageNamed: @"add_col"]];
 		
 		// Tell the item what message to send when it is clicked 
@@ -292,11 +293,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setAction: @selector(addCol:)];
     } else  if ([itemIdent isEqual: RemoveColsToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Remove Col"];
-		[toolbarItem setPaletteLabel: @"Remove Columns"];
+		[toolbarItem setLabel: NLSC(@"Remove Col",@"Remove columns - label for a toolbar, keep short!")];
+		[toolbarItem setPaletteLabel: NLS(@"Remove Columns")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Remove Selected Columns"];
+		[toolbarItem setToolTip: NLS(@"Remove selected columns")];
 		[toolbarItem setImage: [NSImage imageNamed: @"rem_col"]];
 		
 		// Tell the item what message to send when it is clicked 
@@ -304,11 +305,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setAction: @selector(remCols:)];
     } else  if ([itemIdent isEqual: AddRowToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Add Row"];
-		[toolbarItem setPaletteLabel: @"Add Row"];
+		[toolbarItem setLabel: NLSC(@"Add Row",@"Add row - label for a toolbar, keep short!")];
+		[toolbarItem setPaletteLabel: NLS(@"Add New Row")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Adds a row below a group of selected rows or at the bottom of the data"];
+		[toolbarItem setToolTip: NLS(@"Adds a row below a group of selected rows or at the bottom of the data")];
 		[toolbarItem setImage: [NSImage imageNamed: @"add_row"]];
 		
 		// Tell the item what message to send when it is clicked 
@@ -316,11 +317,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setAction: @selector(addRow:)];
     } else  if ([itemIdent isEqual: RemoveRowsToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Remove Row"];
-		[toolbarItem setPaletteLabel: @"Remove Row"];
+		[toolbarItem setLabel: NLSC(@"Remove Row",@"Remove row - label for a toolbar, keep short!")];
+		[toolbarItem setPaletteLabel: NLS(@"Remove Rows")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Removes selected rows"];
+		[toolbarItem setToolTip: NLS(@"Removes selected rows")];
 		[toolbarItem setImage: [NSImage imageNamed: @"rem_row"]];
 		
 		// Tell the item what message to send when it is clicked 

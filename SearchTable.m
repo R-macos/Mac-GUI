@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#import "RGUI.h"
 #import "SearchTable.h"
 #import "RController.h"
 #import <WebKit/WebKit.h>
@@ -78,7 +79,7 @@ static id sharedHSController;
 - (void) show
 {
 	[self reloadData];
-	[searchTableWindow setTitle:(windowTitle)?windowTitle:@"<unknown>"];
+	[searchTableWindow setTitle:(windowTitle)?windowTitle:NLS(@"<unknown>")];
 	[searchTableWindow makeKeyAndOrderFront:self];
 }
 

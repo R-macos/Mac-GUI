@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#import "RGUI.h"
 #include <R.h>
 #include <Rversion.h>
 #include <Rinternals.h>
@@ -61,8 +62,6 @@
 #define writeBufferHighWaterMark  (DEFAULT_WRITE_BUFFER_SIZE-4096)
 // low water-mark of the buffer - if less than the water mark is available then the buffer will be flushed
 #define writeBufferLowWaterMark   2048
-
-#define NLS(S) NSLocalizedString(S,@"")
 
 /*  RController.m: main GUI code originally based on Simon Urbanek's work of embedding R in Cocoa app (RGui?)
 The Code and File Completion is due to Simon U.
@@ -298,7 +297,7 @@ static RController* sharedRController;
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
 {
 	if (![[REngine mainEngine] activate]) {
-		NSRunAlertPanel(@"Cannot start R",[NSString stringWithFormat:@"Unable to start R: %@", [[REngine mainEngine] lastError]],@"OK",nil,nil);
+		NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
 		exit(-1);
 	}
 	
@@ -1220,7 +1219,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (void)  handleShowMessage: (char*) msg
 {
-	NSRunAlertPanel(@"R Message",[NSString stringWithCString:msg],@"OK",nil,nil);
+	NSRunAlertPanel(NLS(@"R Message"),[NSString stringWithCString:msg],NLS(@"OK"),nil,nil);
 }
 
 - (IBAction)flushconsole:(id)sender {
@@ -1481,74 +1480,74 @@ This method calls the showHelpFor method of the Help Manager which opens
     
     if ([itemIdent isEqual: SaveDocToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Save"];
-		[toolbarItem setPaletteLabel: @"Save Console Window"];
-		[toolbarItem setToolTip: @"Save R Console Window"];
+		[toolbarItem setLabel: NLS(@"Save")];
+		[toolbarItem setPaletteLabel: NLS(@"Save Console Window")];
+		[toolbarItem setToolTip: NLS(@"Save R console window")];
 		[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(saveDocument:)];
     } else if ([itemIdent isEqual: NewEditWinToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"New Document"];
-		[toolbarItem setPaletteLabel: @"New Document"];
-		[toolbarItem setToolTip: @"Create a new, empty document in the editor"];
+		[toolbarItem setLabel: NLS(@"New Document")];
+		[toolbarItem setPaletteLabel: NLS(@"New Document")];
+		[toolbarItem setToolTip: NLS(@"Create a new, empty document in the editor")];
 		[toolbarItem setImage: [NSImage imageNamed: @"emptyDoc"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(newDocument:)];
 		
     } else  if ([itemIdent isEqual: X11ToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Start X11"];
-		[toolbarItem setPaletteLabel: @"Start X11 Server"];
-		[toolbarItem setToolTip: @"Start The X11 Window Server To Allow R Using X11 device and Tcl/Tk"];
+		[toolbarItem setLabel: NLS(@"Start X11")];
+		[toolbarItem setPaletteLabel: NLS(@"Start X11 Server")];
+		[toolbarItem setToolTip: NLS(@"Start the X11 window server to allow R using X11 device and Tcl/Tk")];
 		[toolbarItem setImage: [NSImage imageNamed: @"X11"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(runX11:)];
 		
     }  else  if ([itemIdent isEqual: SetColorsToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Set Colors"];
-		[toolbarItem setPaletteLabel: @"Set R Colors"];
-		[toolbarItem setToolTip: @"Set R Console Colors"];
+		[toolbarItem setLabel: NLS(@"Set Colors")];
+		[toolbarItem setPaletteLabel: NLS(@"Set R Colors")];
+		[toolbarItem setToolTip: NLS(@"Set R console colors")];
 		[toolbarItem setImage: [NSImage imageNamed: @"colors"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(openColors:)];
 		
     } else  if ([itemIdent isEqual: LoadFileInEditorToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Open In Editor"];
-		[toolbarItem setPaletteLabel: @"Open In Editor"];
-		[toolbarItem setToolTip: @"Open In Editor"];
+		[toolbarItem setLabel: NLS(@"Open In Editor")];
+		[toolbarItem setPaletteLabel: NLS(@"Open In Editor")];
+		[toolbarItem setToolTip: NLS(@"Open document in editor")];
 		[toolbarItem setImage: [NSImage imageNamed: @"RDoc"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(openDocument:)];
 		
     } else  if ([itemIdent isEqual: SourceRCodeToolbarIdentifier]) {
-		[toolbarItem setLabel: @"Source/Load"];
-		[toolbarItem setPaletteLabel: @"Source Or Load In R"];
-		[toolbarItem setToolTip: @"Source Script Or Load Data In R"];
+		[toolbarItem setLabel: NLS(@"Source/Load")];
+		[toolbarItem setPaletteLabel: NLS(@"Source or Load in R")];
+		[toolbarItem setToolTip: NLS(@"Source script or load data in R")];
 		[toolbarItem setImage: [NSImage imageNamed: @"sourceR"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(sourceOrLoadFile:)];
 		
     } else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Quartz"];
-		[toolbarItem setPaletteLabel: @"Quartz"];
-		[toolbarItem setToolTip: @"Open a new Quartz device window"];
+		[toolbarItem setLabel: NLS(@"Quartz")];
+		[toolbarItem setPaletteLabel: NLS(@"Quartz")];
+		[toolbarItem setToolTip: NLS(@"Open a new Quartz device window")];
 		[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(newQuartzDevice:) ];
 		
 	} else if([itemIdent isEqual: InterruptToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Abort"];
-		[toolbarItem setPaletteLabel: @"Abort"];
+		[toolbarItem setLabel: NLS(@"Stop")];
+		[toolbarItem setPaletteLabel: NLS(@"Stop")];
 		toolbarStopItem = toolbarItem;
-		[toolbarItem setToolTip: @"Interrupt current R computation"];
+		[toolbarItem setToolTip: NLS(@"Interrupt current R computation")];
 		[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(breakR:) ];
 		
 	}  else if([itemIdent isEqual: FontSizeToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Font Size"];
-		[toolbarItem setPaletteLabel: @"Font Size"];
-		[toolbarItem setToolTip: @"Grow or shrink the size of R Console font"];
+		[toolbarItem setLabel: NLS(@"Font Size")];
+		[toolbarItem setPaletteLabel: NLS(@"Font Size")];
+		[toolbarItem setToolTip: NLS(@"Change the size of R console font")];
 		[toolbarItem setTarget: self];
 		[toolbarItem performSelector:@selector(setView:) withObject:fontSizeView];
 		[toolbarItem setAction:NULL];
@@ -1560,33 +1559,33 @@ This method calls the showHelpFor method of the Help Manager which opens
 		}
 		
 	}  else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Quartz"];
-		[toolbarItem setPaletteLabel: @"Quartz"];
-		[toolbarItem setToolTip: @"Open a new Quartz device window"];
+		[toolbarItem setLabel: NLS(@"Quartz")];
+		[toolbarItem setPaletteLabel: NLS(@"Quartz")];
+		[toolbarItem setToolTip: NLS(@"Open a new Quartz device window")];
 		[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(newQuartzDevice:) ];
 		
 	} else if([itemIdent isEqual: ShowHistoryToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"History"];
-		[toolbarItem setPaletteLabel: @"History"];
-		[toolbarItem setToolTip: @"Show/Hide R Command History"];
+		[toolbarItem setLabel: NLS(@"History")];
+		[toolbarItem setPaletteLabel: NLS(@"History")];
+		[toolbarItem setToolTip: NLS(@"Show/Hide R command history")];
 		[toolbarItem setImage: [NSImage imageNamed: @"history"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(toggleHistory:) ];
 		
 	} else if([itemIdent isEqual: AuthenticationToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Authentication"];
-		[toolbarItem setPaletteLabel: @"Authentication"];
-		[toolbarItem setToolTip: @"Authorize R to run system commands as root"];
+		[toolbarItem setLabel: NLS(@"Authentication")];
+		[toolbarItem setPaletteLabel: NLS(@"Authentication")];
+		[toolbarItem setToolTip: NLS(@"Authorize R to run system commands as root")];
 		[toolbarItem setImage: [NSImage imageNamed: @"lock-locked"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(toggleAuthentication:) ];
 		
 	} else if([itemIdent isEqual: QuitRToolbarItemIdentifier]) {
-		[toolbarItem setLabel: @"Quit"];
-		[toolbarItem setPaletteLabel: @"Quit"];
-		[toolbarItem setToolTip: @"Quit R"];
+		[toolbarItem setLabel: NLS(@"Quit")];
+		[toolbarItem setPaletteLabel: NLS(@"Quit")];
+		[toolbarItem setToolTip: NLS(@"Quit R")];
 		[toolbarItem setImage: [NSImage imageNamed: @"quit"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(quitR:) ];
@@ -1638,7 +1637,7 @@ This method calls the showHelpFor method of the Help Manager which opens
     // added is found by referencing the @"item" key in the userInfo 
     NSToolbarItem *addedItem = [[notif userInfo] objectForKey: @"item"];
     if ([[addedItem itemIdentifier] isEqual: NSToolbarPrintItemIdentifier]) {
-		[addedItem setToolTip: @"Print Your Document"];
+		[addedItem setToolTip: NLS(@"Print this document")];
 		[addedItem setTarget: self];
     }
 }  
@@ -1729,7 +1728,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	op = [NSOpenPanel openPanel];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
-	[op setTitle:@"Choose New Working Directory"];
+	[op setTitle:NLS(@"Choose New Working Directory")];
 	
 	answer = [op runModalForDirectory:[[NSFileManager defaultManager] currentDirectoryPath] file:nil types:[NSArray arrayWithObject:@""]];
 	
@@ -1755,7 +1754,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	op = [NSOpenPanel openPanel];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
-	[op setTitle:@"Select Package Directory"];
+	[op setTitle:NLS(@"Select Package Directory")];
 	
 	answer = [op runModalForDirectory:nil file:nil types:[NSArray arrayWithObject:@""]];
 	[op setCanChooseDirectories:NO];
@@ -1818,8 +1817,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (IBAction)clearWorkSpace:(id)sender
 {
-	NSBeginAlertSheet(@"Clear Workspace",@"Yes",@"No !!!",nil,RConsoleWindow,self,@selector(shouldClearWS:returnCode:contextInfo:),NULL,NULL,
-					  @"All objects in the workspace will be removed. Are you sure you want to proceed?");    
+	NSBeginAlertSheet(NLS(@"Clear Workspace"), NLS(@"Yes"), NLS(@"No") , nil, RConsoleWindow, self, @selector(shouldClearWS:returnCode:contextInfo:), NULL, NULL,
+					  NLS(@"All objects in the workspace will be removed. Are you sure you want to proceed?"));
 }
 
 /* this gets called by the "wanna save?" sheet on window close */
@@ -1869,7 +1868,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	int answer;
 	NSOpenPanel *op;
 	op = [NSOpenPanel openPanel];
-	[op setTitle:@"R File to Source/Load"];
+	[op setTitle:NLS(@"R File to Source/Load")];
 	answer = [op runModalForTypes:nil];
 	
 	if (answer==NSOKButton)
@@ -1881,7 +1880,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	int answer;
 	NSOpenPanel *op;
 	op = [NSOpenPanel openPanel];
-	[op setTitle:@"R File to Source"];
+	[op setTitle:NLS(@"R File to Source")];
 	answer = [op runModalForTypes:nil];
 	
 	if (answer==NSOKButton)

@@ -256,11 +256,11 @@ if (!item) { \
     
     if ([itemIdent isEqual: EditObjectToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Edit"];
-		[toolbarItem setPaletteLabel: @"Edit Object"];
+		[toolbarItem setLabel: NLS(@"Edit")];
+		[toolbarItem setPaletteLabel: NLS(@"Edit Object")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Edit the selected object"];
+		[toolbarItem setToolTip: NLS(@"Edit the selected object")];
 		[toolbarItem setImage: [NSImage imageNamed: @"objEdit"]];
 		
 		// Tell the item what message to send when it is clicked 
@@ -268,11 +268,11 @@ if (!item) { \
 		[toolbarItem setAction: @selector(editObject:)];
     } else  if ([itemIdent isEqual: RemoveObjectToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Delete"];
-		[toolbarItem setPaletteLabel: @"Remove Object"];
+		[toolbarItem setLabel: NLS(@"Remove")];
+		[toolbarItem setPaletteLabel: NLS(@"Remove Object")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Remove Selected Object"];
+		[toolbarItem setToolTip: NLS(@"Remove Selected Object")];
 		[toolbarItem setImage: [NSImage imageNamed: @"objRem"]];
 		
 		// Tell the item what message to send when it is clicked 
@@ -280,11 +280,11 @@ if (!item) { \
 		[toolbarItem setAction: @selector(remObject:)];
     }  else  if ([itemIdent isEqual: RefreshObjectsListToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: @"Refresh"];
-		[toolbarItem setPaletteLabel: @"Refresh Objects List"];
+		[toolbarItem setLabel: NLS(@"Refresh")];
+		[toolbarItem setPaletteLabel: NLS(@"Refresh Objects List")];
 		
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: @"Refresh Objects List"];
+		[toolbarItem setToolTip: NLS(@"Refresh Objects List")];
 		[toolbarItem setImage: [NSImage imageNamed: @"refresh"]];
 		
 		// Tell the item what message to send when it is clicked 
@@ -373,8 +373,8 @@ if (!item) { \
 	if([objName isEqual:@""])
 		return;
 
-	NSBeginAlertSheet(@"Remove Object from Workspace",@"Yes",@"No !!!",nil,WSBWindow,self,@selector(shouldRemoveObj:returnCode:contextInfo:),NULL,objName,
-				  [NSString stringWithFormat:@"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action", objName]);    
+	NSBeginAlertSheet(NLS(@"Remove Object from Workspace"), NLS(@"Yes"), NLS(@"No"), nil, WSBWindow, self, @selector(shouldRemoveObj:returnCode:contextInfo:), NULL, objName,
+				  [NSString stringWithFormat:NLS(@"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!"), objName]);    
 }
 
 /* this gets called by the "wanna remove object?" sheet */
