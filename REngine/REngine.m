@@ -139,7 +139,7 @@ extern void run_Rmainloop(); // run REPL (in libR.dylib)
 
 - (RSEXP*) evaluateExpressions: (RSEXP*) expr
 {
-    SEXP es;
+    SEXP es=0;
     int er=0;
     int i=0,l;
 
