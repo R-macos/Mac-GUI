@@ -49,7 +49,7 @@
 - (void)setTitle:(NSString *)newTitle;
 
 
-- (BOOL)addPane:(AMPreferencePane *)newPane withIdentifier:(NSString *)identifier;
+- (BOOL)addPane:(id<AMPrefPaneProtocol>)newPane withIdentifier:(NSString *)identifier;
 
 - (void)addPluginFromPath:(NSString *)path;
 

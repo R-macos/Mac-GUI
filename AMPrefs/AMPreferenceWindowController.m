@@ -31,7 +31,7 @@
 - (void)removeAllPanes;
 - (NSString *)autosaveName;
 - (void)setAutosaveName:(NSString *)newAutosaveName;
-- (AMPrefPaneIcon *)iconForPrefPane:(AMPreferencePane *)prefPane;
+- (AMPrefPaneIcon *)iconForPrefPane:(id<AMPrefPaneProtocol>)prefPane;
 - (void)changeContentView:(NSView *)contentView;
 - (void)createIconViewPane;
 - (void)toolbarShowAll;
@@ -200,7 +200,7 @@
 	}
 }
 
-- (BOOL)addPane:(AMPreferencePane *)newPane withIdentifier:(NSString *)identifier
+- (BOOL)addPane:(id<AMPrefPaneProtocol>)newPane withIdentifier:(NSString *)identifier
 {
 	BOOL result;
 	if (result = ([prefPanes objectForKey:identifier] == nil)) {
@@ -209,7 +209,7 @@
 		}
 		if (result) {
 			[prefPanes setObject:newPane forKey:identifier];
-			if ([newPane respondsToSelector:@selector(mainView)] && [newPane mainView]) {
+			if ([(NSObject*)newPane respondsToSelector:@selector(mainView)] && [newPane mainView]) {
 				[(AMPrefPaneIconView *)iconView addIcon:[self iconForPrefPane:newPane]];
 			}
 		}
@@ -427,7 +427,7 @@
 	}
 }
 
-- (AMPrefPaneIcon *)iconForPrefPane:(AMPreferencePane *)prefPane
+- (AMPrefPaneIcon *)iconForPrefPane:(id<AMPrefPaneProtocol>)prefPane
 {
 	AMPrefPaneIcon *result = [[[AMPrefPaneIcon alloc] initWithIdentifier:[prefPane identifier] image:[prefPane icon] andTitle:[prefPane label]] autorelease];
 	[result setCategory:[prefPane category]];
