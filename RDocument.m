@@ -72,8 +72,14 @@
 	while (wc = (RDocumentWinCtrl*)[e nextObject]) { 
 		if ([initialContentsType isEqual:@"rtf"])
 			[wc replaceContentsWithRtf: initialContents];
-		else
-			[wc replaceContentsWithString: [NSString stringWithCString:[initialContents bytes] length:[initialContents length]]];
+		else {
+			NSString * cs = [NSString stringWithUTF8String:[initialContents bytes]];
+			if (!cs) cs = [NSString stringWithCString:[initialContents bytes] length:[initialContents length]];
+			if (cs) {
+				SLog(@"new contents:\"%@\"", cs);
+				[wc replaceContentsWithString: cs];
+			}
+		}
 	}
 }
 
@@ -114,11 +120,21 @@ create the UI for the document.
 	}
 	
 	initialContentsType = [[NSString alloc] initWithString:aType];
-	initialContents = [[NSData alloc] initWithData: data];
+	{ // terminate the data so it can be loaded as 0ts
+		int tl = [data length]+4;
+		void *buf = (void*) malloc(tl);
+		SLog(@"RDocument.loadDataRepresentation loading from %@, %d bytes of data", data, [data length]);
+		memcpy(buf, [data bytes], [data length]);
+		memset(buf+tl-4, 0, 4); // set trailing 4 bytes to 0 to make sure the termination is safe
+		
+		// for performance resons we leave it to the NSData to take over the ownership, no need to copy anything.
+		initialContents = [[NSData alloc] initWithBytesNoCopy:buf length:tl freeWhenDone:YES];
+		SLog(@" - resulting ic = %@", initialContents);
+	}
 
 	[self loadInitialContents];
 
-	return YES;	
+	return YES;
 }
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title{
