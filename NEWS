@@ -1,5 +1,18 @@
 NEWS
 
+Last update: 2004-11-14 [SU]
+*	added isAdmin() in Tools/Authorization to query the admin status
+	of the current user (more precisely membership in the "admin" group)
+*	changed default package installation target - for admin users the
+	default is now system-wide installation
+*	clean-up of the MiscPrefPane, removed redundant code from RController
+*	added support for R_LIBS option: in MiscPrefs there is a flag that
+	can be set resulting in ~/R/Library to be added to R_LIBS. This
+	obsoletes hack in Rprofile which modified .libPaths without respecting
+	or updating R_LIBS which in turn broke some R CMD ... scripts.
+	Note that this setting has no effect if the hack is still in place
+	(most notably in the R 2.0.0 release)
+
 Last update: 2004-11-06 [SI]
 *	added Rob Goedman (for external editor support) code.
 *	added standard copyright notes everywhere. Please check and

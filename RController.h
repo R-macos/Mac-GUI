@@ -72,6 +72,7 @@
 #define externalEditorNameKey  @"External Editor Name"
 #define appOrCommandKey  @"Is it a .app or a command"
 #define editOrSourceKey  @"Edit or source in file"
+#define miscRAquaLibPathKey @"Append RAqua libs to R_LIBS"
 
 #import "AMPreferenceWindowController.h"
 
@@ -138,7 +139,8 @@
 	NSString *highlightInterval;
 	NSString *externalEditorName;
 	NSString *appOrCommand;
-	NSString *editOrSource;
+
+	BOOL openInEditor;
 	
 	NSMutableArray *consoleInputQueue;
 	NSString *currentConsoleInput;
@@ -263,6 +265,8 @@
 
 - (void) RConsoleDidResize: (NSNotification *)notification;
 - (void) setOptionWidth:(BOOL)force;
+- (void) setOpenInEditor:(BOOL)flag;
+- (BOOL) openInEditor;
 
 - (IBAction) changeInputColor:(id)sender;
 - (IBAction) changeOutputColor:(id)sender;
@@ -280,7 +284,6 @@
 - (IBAction) changeShowLineNumbers:(id)sender;
 - (IBAction) changeExternalEditorName:(id)sender;
 - (IBAction) changeAppOrCommand:(id)sender;
-- (IBAction) changeEditOrSource:(id)sender;
 
 - (void) setInputColor:(NSColor *)newColor;
 - (void) setOutputColor:(NSColor *)newColor;
@@ -297,7 +300,6 @@
 - (void) setShowLineNumbers:(int)state;
 - (void) setExternalEditorName:(NSString *)name;
 - (void) setAppOrCommand:(int)app;
-- (void) setEditOrSource:(int)app;
 
 - (void) readDefaults;
 

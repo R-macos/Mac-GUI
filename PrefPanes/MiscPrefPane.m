@@ -30,7 +30,7 @@
 
 #import "MiscPrefPane.h"
 #import "RController.h"
-
+#import "Authorization.h"
 
 @interface MiscPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
@@ -128,20 +128,17 @@
 // AMPrefPaneProtocol
 - (NSView *)mainView
 {
-	if (!mainView) {
-		[NSBundle loadNibNamed:@"MiscPrefPane" owner:self];
+	if (!mainView && [NSBundle loadNibNamed:@"MiscPrefPane" owner:self]) {
+		// load the default for RAquaLibPath
+		NSData *theData=[[NSUserDefaults standardUserDefaults] dataForKey:miscRAquaLibPathKey];
+		BOOL flag = !isAdmin(); // the default is YES for users and NO for admins
+		if (theData!=nil)
+			flag=[(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"];
+		[cbRAquaPath setState: flag?NSOnState:NSOffState];
 	}
+	
 	return mainView;
 }
-
-
-// AMPrefPaneInformalProtocol
-
-- (void)willSelect
-{}
-
-- (void)didSelect
-{}
 
 - (int)shouldUnselect
 {
@@ -149,20 +146,20 @@
 	return AMUnselectNow;
 }
 
-- (void)willUnselect
-{}
-
-- (void)didUnselect
-{}
-
-	/* end of std methods implementation */
-
 - (IBAction) changeEditOrSource:(id)sender {
-    [[RController getRController] changeEditOrSource:sender];
+	[self setOpenInEditor: ([sender selectCellAtRow:0 column:0] == NSOffState)?NO:YES];
 }
 
-- (NSMatrix *) editOrSource {
-	return editOrSource;
+- (void) setOpenInEditor:(BOOL)flag {
+	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"] forKey:editOrSourceKey];
+	[editOrSource setState:flag?NSOffState:NSOnState atRow:1 column:0];
+	[editOrSource setState:flag?NSOnState:NSOffState atRow:0 column:0];
+	[[RController getRController] setOpenInEditor: flag];
+}
+
+- (IBAction) changeLibPaths:(id)sender
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:[sender state]?@"YES":@"NO"] forKey:miscRAquaLibPathKey];
 }
 
 @end

@@ -160,6 +160,21 @@ static RController* sharedRController;
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	
 	sharedRController = self;
+	
+	{ // first initialize R_LIBS if necessary
+		NSData *theData=[[NSUserDefaults standardUserDefaults] dataForKey:miscRAquaLibPathKey];
+		BOOL flag = !isAdmin(); // the default is YES for users and NO for admins
+		if (theData!=nil)
+			flag=[(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"];
+		if (flag) {
+			char *cRLIBS = getenv("R_LIBS");
+			NSString *addPath = [@"~/R/Library" stringByExpandingTildeInPath];
+			if (cRLIBS && *cRLIBS)
+				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
+			setenv("R_LIBS", [addPath cString], 1);
+		}
+	}		
+	
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 	
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
@@ -1579,6 +1594,15 @@ No error message or warning are raised.
 	}
 }
 
+- (void) setOpenInEditor: (BOOL) flag
+{
+	openInEditor = flag;
+}
+
+- (BOOL) openInEditor
+{
+	return openInEditor;
+}
 
 -(IBAction) checkForUpdates:(id)sender{
 	[[REngine mainEngine] executeString: @"Rapp.updates()"];
@@ -2036,25 +2060,6 @@ case the color is set to its default value.
 	}
 }
 
-- (void) setEditOrSource:(int)edit {
-	if(editOrSource)
-		[editOrSource release];
-	
-	if (edit == 1) {
-		editOrSource = @"YES";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:editOrSource] 
-												  forKey:editOrSourceKey];
-		[[miscPrefPane editOrSource] setState:0 atRow:1 column:0];
-		[[miscPrefPane editOrSource] setState:1 atRow:0 column:0];
-	} else {
-		editOrSource = @"NO";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:editOrSource] 
-												  forKey:editOrSourceKey];
-		[[miscPrefPane editOrSource] setState:NSOffState atRow:0 column:0];
-		[[miscPrefPane editOrSource] setState:NSOnState atRow:1 column:0];
-	}
-}
-
 - (IBAction) changeInternalOrExternal:(id)sender {
 	if ([sender selectCellAtRow:0 column:0] == NSOffState)
 		[self setInternalOrExternal:0];
@@ -2092,13 +2097,6 @@ case the color is set to its default value.
 		[self setAppOrCommand:0];
 	else
 		[self setAppOrCommand:1];
-}
-
-- (IBAction) changeEditOrSource:(id)sender {
-	if ([sender selectCellAtRow:0 column:0] == NSOffState)
-		[self setEditOrSource:0];
-	else
-		[self setEditOrSource:1];
 }
 
 - (void)changeInputColor:(id)sender {
@@ -2269,15 +2267,11 @@ case the color is set to its default value.
 		[self setAppOrCommand: 1];
 	
 	theData=[defaults dataForKey:editOrSourceKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-			[self setEditOrSource: 1];
-		} else {
-			[self setEditOrSource: 0];
-		}
-	} else 
-		[self setEditOrSource: 1];
-	
+	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+
+	theData=[defaults dataForKey:miscRAquaLibPathKey];
+	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+
 }
 
 

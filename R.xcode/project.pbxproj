@@ -1126,9 +1126,9 @@
 			sourceTree = "<group>";
 		};
 		16A25F6E072AAD120047E009 = {
+			explicitFileType = text.html.documentation;
 			fileEncoding = 30;
 			isa = PBXFileReference;
-			lastKnownFileType = text.html;
 			path = index.html;
 			refType = 4;
 			sourceTree = "<group>";

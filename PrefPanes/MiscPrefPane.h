@@ -40,6 +40,7 @@
 
 	IBOutlet NSView *mainView;
 	IBOutlet NSMatrix *editOrSource;
+	IBOutlet NSButton *cbRAquaPath;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -52,18 +53,16 @@
 - (NSString *)category;
 
 // AMPrefPaneInformalProtocol
-- (void)willSelect;
-- (void)didSelect;
-	//	Deselecting the preference pane
 - (int)shouldUnselect;
-	// should be NSPreferencePaneUnselectReply
-- (void)willUnselect;
-- (void)didUnselect;
 
 // Other methods
 
 - (IBAction) changeEditOrSource:(id)sender;
-- (NSMatrix *) editOrSource;
+- (void) setOpenInEditor: (BOOL) flag;
+
+- (IBAction) changeLibPaths:(id)sender;
+
+//- (NSMatrix *) editOrSource;
 
 
 @end
