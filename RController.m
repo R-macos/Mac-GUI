@@ -888,7 +888,12 @@ extern BOOL isTimeToFinish;
 	
 /* Allow changes only for uncommitted text */
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString {
-    return affectedCharRange.location >= committedLength;
+	if (affectedCharRange.location < committedLength) { /* if the insertion is outside editable scope, append at the end */
+		[textView setSelectedRange:NSMakeRange([[textView textStorage] length],0)];
+		[textView insertText:replacementString];
+		return NO;
+	}
+	return YES;
 }
 	
 - (void) handleBusy: (BOOL) isBusy {
