@@ -25,12 +25,12 @@ NSArray *keywordList=nil;
 
 + (void) setDefaultSyntaxHighlightingColors
 {
-	shColorNormal=[NSColor blackColor];
-	shColorString=[NSColor blueColor];
-	shColorNumber=[NSColor blueColor];
-	shColorKeyword=[NSColor colorWithDeviceRed:0.7 green:0.6 blue:0.0 alpha:1.0];
-	shColorComment=[NSColor colorWithDeviceRed:0.6 green:0.4 blue:0.4 alpha:1.0];
-	shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.4 alpha:1.0];
+	shColorNormal=[NSColor blackColor]; [shColorNormal retain];
+	shColorString=[NSColor blueColor]; [shColorString retain];
+	shColorNumber=[NSColor blueColor]; [shColorNumber retain];
+	shColorKeyword=[NSColor colorWithDeviceRed:0.7 green:0.6 blue:0.0 alpha:1.0]; [shColorKeyword retain];
+	shColorComment=[NSColor colorWithDeviceRed:0.6 green:0.4 blue:0.4 alpha:1.0]; [shColorComment retain];
+	shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.4 alpha:1.0]; [shColorIdentifier retain];
 	
 	keywordList = [[NSArray alloc] initWithObjects: @"for", @"if", @"else", @"TRUE", @"FALSE", @"while",
 		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
