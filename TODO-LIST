@@ -4,9 +4,14 @@ User requests/bug reports:
 * edit object menu disabled
 * multiple packages installation crashes package manager (a couple of users report this)
 * preferences panel for initial working directory and quartz device settings
-* selecting a directory via dialog is broken: one should enter the directory
+* selecting a directory via dialog is broken: one should enter the directory, if no subdir exists
+  it can be selected
 * drag and drop don't work correctly should try to load data and eventually source the file. At the
-moment the file is loaded in R editor.
+  moment the file is loaded in R editor.
+* add import/export functionality to read and write old_style history files
+* change everywhere buttons with toolbar whenever possible
+* is possible to crop long output? A-la mathematica using the cocoa browser as in the workspace browser? 
+  What really does ESS ? Simon?
 
 Internal feedback:
 * metric info in quartz device is broken [SI]
