@@ -101,19 +101,7 @@ static RController* sharedRController;
     NSString *cmd = [args objectForKey:@""];
     if (!cmd || [cmd isEqualToString:@""])
         return [NSNumber numberWithBool:NO];
-	int len = [cmd length] - 1; 
-	unichar characterToCheck;
-	characterToCheck = [cmd characterAtIndex:len];
-	//NSLog(@"cmd with length %d called: %@", len, cmd);
-	while ((len >= 0) && (characterToCheck == NSCarriageReturnCharacter)) {
-		len--;
-		characterToCheck = [cmd characterAtIndex:len];
-	}
-	NSRange range;
-	range.location = 0; range.length = len+1;
-	NSString *buf = [cmd substringWithRange:range];
-	//NSLog(@"buf with length %d created: %@", [buf length], buf);
-	[[RController getRController] sendInput: buf];
+	[[RController getRController] sendInput: cmd];
 	return [NSNumber numberWithBool:YES];
 }
 @end
