@@ -1239,6 +1239,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	[[NSDocumentController sharedDocumentController] newDocument: sender];
 }
 
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
+	[[RDocumentController sharedDocumentController] openDocumentWithContentsOfFile: filename display:YES];
+	return YES;
+}
+
 - (IBAction)openDocument:(id)sender{
 	[[NSDocumentController sharedDocumentController] openDocument: sender];
 }

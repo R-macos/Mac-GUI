@@ -42,6 +42,10 @@
 	return self;
 }
 
+- (void)noteNewRecentDocument:(NSDocument *)aDocument {
+	[super noteNewRecentDocument:(NSDocument *)aDocument];
+}
+
 - (IBAction)newDocument:(id)sender {
 	[self openNamedFile:@"" display:YES];
 }
@@ -89,7 +93,6 @@
 		}
 		else
 			if (useInternalEditor) {
-//				NSLog(@" "); 	// Weirdness - crashes if not here on clicking .R file
 				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];				
 			}
 		if (editorIsApp) {
@@ -122,7 +125,6 @@
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 
 	if (useInternalEditor) {
-//		NSLog(@" ");	// Weirdness - crashes in CFRetain if not here
 		return [super openDocumentWithContentsOfFile:aFile display:flag];		
 	} else {
 		NSString *cmd;

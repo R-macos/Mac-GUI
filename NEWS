@@ -1,5 +1,10 @@
 NEWS
 
+Last update: 2005-01-12 [RG, SU]
+*	Fixed openRecent behaviour [RG]
+*	Fixed crash in the timer (REPL is non-delayed now) [SU]
+*	Fixed document open/save bugs [SU]
+
 Last update: 2005-01-11 [SU]
 *	Added undo checkpoint at <Enter> in the editor
 *	Remove undo stack in the console after prompt to prevent
