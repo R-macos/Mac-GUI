@@ -8,7 +8,11 @@ Last update: 2004-10-22 [SI]
 	added to the textcontainer used to acquire the metric info. Thanks to Byron
 	Ellys for this fix.
 *	saveWorkSpaceFile fixed. It was impossible to create a new file.
-
+*	introduced sourceOrLoadFile: in alternative to sourceFile. This is now connected to
+	Source/Load button in the R Console Window toolbar.
+*	added readFromFile method in RDocument to allow data loading with binary files. It allows
+	also for drag and drop of image data on the R Icon
+	
 Last update: 2004-10-21 [SI]
 *	in data editor: the runModalForSession has been replaced by a modalForWindow
 	to remove the problem with high CPU consuming (thanks to Byron Ellys for the fix)

@@ -187,6 +187,7 @@
 - (IBAction)performHelpSearch:(id)sender;
 
 - (IBAction)sourceFile:(id)sender;
+- (IBAction)sourceOrLoadFile:(id)sender;
 
 - (IBAction)makeConsoleKey:(id)sender;
 
