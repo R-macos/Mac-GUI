@@ -479,6 +479,7 @@
 		1633F03D06E630B900225AA9 = {
 			children = (
 				1633F03E06E630B900225AA9,
+				1638AFAF07D2247500BEE02D,
 			);
 			isa = PBXVariantGroup;
 			name = RQuartz.nib;
@@ -642,6 +643,30 @@
 			settings = {
 			};
 		};
+		1638AFAD07D2247500BEE02D = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/RConsole.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		1638AFAE07D2247500BEE02D = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/RDocument.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		1638AFAF07D2247500BEE02D = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/RQuartz.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		163B0CA306CE528400A380BE = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -673,6 +698,7 @@
 		163B0CF706CE58F000A380BE = {
 			children = (
 				163B0CF806CE58F000A380BE,
+				1638AFAE07D2247500BEE02D,
 			);
 			isa = PBXVariantGroup;
 			name = RDocument.nib;
@@ -2602,6 +2628,7 @@
 		687B4E350794130800074042 = {
 			children = (
 				687B4E360794130800074042,
+				1638AFAD07D2247500BEE02D,
 			);
 			isa = PBXVariantGroup;
 			name = RConsole.nib;
