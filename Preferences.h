@@ -25,15 +25,20 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  Create by Simon Urbanek on 12/5/2004
  */
-
-/* Preferences */
 
 #import <Cocoa/Cocoa.h>
 
 @protocol PreferencesDependent
 - (void) updatePreferences;
 @end
+
+// YES=1, NO=0
+#ifndef UNKNOWN
+#define UNKNOWN 2
+#endif
 
 @interface Preferences : NSObject
 {
@@ -49,14 +54,19 @@
 - (void) removeDependent: (id<PreferencesDependent>) dep;
 
 - (void) setKey: (NSString*) key withObject: (id) value;
+- (void) setKey: (NSString*) key withFlag: (BOOL) value; // note: set doesn't recognize UNKNOWN!
 - (void) setKey: (NSString*) key withArchivedObject: (id) value;
 
 // global actions
 + (void) setKey: (NSString*) key withObject: (id) value;
++ (void) setKey: (NSString*) key withFlag: (BOOL) value;
 + (void) setKey: (NSString*) key withArchivedObject: (id) value;
 
 + (NSString *) stringForKey: (NSString*) key withDefault: (NSString*) defaultString;
++ (NSString *) stringForKey: (NSString*) key; // returns nil if there is no such entry
 + (float) floatForKey: (NSString*) key withDefault: (float) defaultValue;
++ (BOOL) flagForKey: (NSString*) key withDefault: (BOOL) flag;
++ (BOOL) flagForKey: (NSString*) key; // returns UNKNOWN if there is no such entry
 + (id) objectForKey: (NSString*) key withDefault: (id) defaultObj;
 + (id) unarchivedObjectForKey: (NSString*) key withDefault: (id) defaultObj;
 

@@ -99,9 +99,19 @@ Preferences *globalPrefs=nil;
 	[[Preferences sharedPreferences] setKey: key withObject: [NSArchiver archivedDataWithRootObject:value]];
 }
 
++ (void) setKey: (NSString*) key withFlag: (BOOL) value
+{
+	[[Preferences sharedPreferences] setKey: key withObject: value?@"YES":@"NO"];
+}
+
 - (void) setKey: (NSString*) key withArchivedObject: (id) value
 {
 	[self setKey: key withObject: [NSArchiver archivedDataWithRootObject:value]];
+}
+
+- (void) setKey: (NSString*) key withFlag: (BOOL) value
+{
+	[self setKey: key withObject: value?@"YES":@"NO"];
 }
 
 - (void) setKey: (NSString*) key withObject: (id) value
@@ -126,6 +136,11 @@ Preferences *globalPrefs=nil;
 	return defaultString;
 }
 
++ (NSString *) stringForKey: (NSString*) key
+{
+	return [Preferences stringForKey: key withDefault: nil];
+}
+
 + (float) floatForKey: (NSString*) key withDefault: (float) defaultValue
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -134,6 +149,27 @@ Preferences *globalPrefs=nil;
 		if (s) return [s floatValue];
 	}
 	return defaultValue;
+}
+
++ (BOOL) flagForKey: (NSString*) key withDefault: (BOOL) flag
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		NSString *s=[defaults stringForKey:key];
+		if (s) {
+			if ([s isEqualTo: @"YES"]) return YES;
+			if ([s isEqualTo: @"NO"]) return NO;
+		}
+	}
+	if ((flag==YES || flag==NO) &&
+		[[Preferences sharedPreferences] writeDefaults])
+		[globalPrefs setKey: key withObject: flag?@"YES":@"NO"];
+	return flag;
+}
+
++ (BOOL) flagForKey: (NSString*) key
+{
+	return [Preferences flagForKey: key withDefault: UNKNOWN];
 }
 
 + (id) objectForKey: (NSString*) key withDefault: (id) defaultObj
