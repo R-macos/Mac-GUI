@@ -168,17 +168,10 @@ for quartz. This method is called by RController -> activateQuartz
 - (IBAction)copy:(id)sender
 {
 	NSPasteboard *pb = [NSPasteboard generalPasteboard];
-	[pb declareTypes: [NSArray arrayWithObjects:NSTIFFPboardType, NSPDFPboardType, nil ] owner:self];
+	// we use PDF as the primary type; owner should be nil, because we could get released (see NSPB docs for details)
+	[pb declareTypes: [NSArray arrayWithObjects: NSPDFPboardType, NSTIFFPboardType, nil ] owner:nil];
 
 	QUARTZ_WORK_BEGIN;
-	[deviceView lockFocus];
-	NSBitmapImageRep* bitmap = [ [NSBitmapImageRep alloc]
-			initWithFocusedViewRect: [deviceView bounds] ];
-	[deviceView unlockFocus];
-
-	NSData* data1 = [bitmap TIFFRepresentation];
-	[pb setData: data1 forType:NSTIFFPboardType];
-	[bitmap release];
 
 	[deviceView setPDFDrawing:YES];
 	[deviceView lockFocus];
@@ -186,6 +179,15 @@ for quartz. This method is called by RController -> activateQuartz
 	[deviceView unlockFocus];
 	[deviceView setPDFDrawing:NO];
 
+	[deviceView lockFocus];
+	NSBitmapImageRep* bitmap = [ [NSBitmapImageRep alloc]
+			initWithFocusedViewRect: [deviceView bounds] ];
+	[deviceView unlockFocus];
+	
+	NSData* data1 = [bitmap TIFFRepresentation];
+	[pb setData: data1 forType:NSTIFFPboardType];
+	[bitmap release];
+	
 	QUARTZ_WORK_END;
 }
 
