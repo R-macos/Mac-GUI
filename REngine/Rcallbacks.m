@@ -81,7 +81,9 @@ extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
 
 void Re_WritePrompt(char *prompt)
 {
-    [[REngine mainHandler] handleWritePrompt:[NSString stringWithCString:prompt]];
+	NSString *s = [[NSString alloc] initWithUTF8String: prompt];
+    [[REngine mainHandler] handleWritePrompt:s];
+	[s release];
 }
 
 void Re_ProcessEvents(void){
@@ -132,7 +134,16 @@ void Re_RBusy(int which)
 
 void Re_WriteConsole(char *buf, int len)
 {
-	[[REngine mainHandler] handleWriteConsole: [NSString stringWithCString:buf length:len]];
+	NSString *s = nil;
+	if (buf[len]) { /* well, this is an ultima ratio, we are assuming null-terminated string, but one never knows ... */
+		char *c = (char*) malloc(len+1);
+		memcpy(c, buf, len);
+		c[len]=0;
+		s = [[NSString alloc] initWithUTF8String:c];
+		free(c);
+	} else s = [[NSString alloc] initWithUTF8String:buf];
+    [[REngine mainHandler] handleWriteConsole: s];
+    [s release];
 }
 
 /* Indicate that input is coming from the console */

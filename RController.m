@@ -608,7 +608,7 @@ extern BOOL isTimeToFinish;
 
 - (void)  handleProcessingInput: (char*) cmd
 {
-	NSString *s = [NSString stringWithCString:cmd];
+	NSString *s = [[NSString alloc] initWithUTF8String:cmd];
 	unsigned textLength = [[RTextView textStorage] length];
 	
 	[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
@@ -621,6 +621,7 @@ extern BOOL isTimeToFinish;
 		[self openHelpFor: cmd];
 		cmd[0] = '\n'; cmd[1] = 0;
 	}
+	[s release];
 }
 
 - (char*) handleReadConsole: (int) addtohist
