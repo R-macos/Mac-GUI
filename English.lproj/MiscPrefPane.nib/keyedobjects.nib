@@ -922,7 +922,7 @@
 				<integer>16</integer>
 			</dict>
 		</dict>
-		<string>changeEditOrSource</string>
+		<string>changeEditOrSource:</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -966,15 +966,11 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>19</integer>
+					<integer>10</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>16</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>10</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -983,6 +979,10 @@
 				<dict>
 					<key>CF$UID</key>
 					<integer>14</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>19</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1009,15 +1009,11 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>16</integer>
+					<integer>2</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>14</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>2</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1026,6 +1022,10 @@
 				<dict>
 					<key>CF$UID</key>
 					<integer>12</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>16</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1043,19 +1043,7 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>19</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>16</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>30</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1063,7 +1051,19 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
+					<integer>16</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>30</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>14</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>19</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1109,12 +1109,12 @@
 				</dict>
 			</array>
 		</dict>
-		<string>NSButtonCell</string>
-		<string>NSMatrix1</string>
 		<string>View</string>
-		<string>NSButtonCell1</string>
 		<string>File's Owner</string>
+		<string>NSMatrix1</string>
+		<string>NSButtonCell1</string>
 		<string>NSView</string>
+		<string>NSButtonCell</string>
 		<string>NSBox</string>
 		<dict>
 			<key>$class</key>
@@ -1144,7 +1144,7 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>16</integer>
+					<integer>30</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1152,27 +1152,7 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>2</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>19</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>12</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>9</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>30</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -1180,7 +1160,27 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
+					<integer>19</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>69</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>10</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>16</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>12</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>2</integer>
 				</dict>
 			</array>
 		</dict>
@@ -1234,16 +1234,16 @@
 				</dict>
 			</array>
 		</dict>
-		<integer>20</integer>
-		<integer>21</integer>
-		<integer>1</integer>
-		<integer>18</integer>
-		<integer>17</integer>
-		<integer>5</integer>
-		<integer>11</integer>
 		<integer>19</integer>
+		<integer>21</integer>
+		<integer>11</integer>
 		<integer>16</integer>
+		<integer>18</integer>
 		<integer>22</integer>
+		<integer>5</integer>
+		<integer>20</integer>
+		<integer>17</integer>
+		<integer>1</integer>
 		<dict>
 			<key>$classes</key>
 			<array>
