@@ -1,8 +1,18 @@
 NEWS
+
+Last update: 2004-10-22 [SI]
+*	a new constant BUILD_FOR_R_2_1_x has been introduced to build R.app against
+	the current version of R-devel (at the moment 2.1.0). Please read the INSTALL
+	to understand the matter.
+*	fixed metric info problem with Quartz device. Apparently a leading pad was
+	added to the textcontainer used to acquire the metric info. Thanks to Byron
+	Ellys for this fix.
+	
 Last update: 2004-10-21 [SI]
 *	in data editor: the runModalForSession has been replaced by a modalForWindow
-	to remove the problem with high CPU consuming (byron's patch)
-*	column numbers instead of column names are used to identify columns (byron's patch)
+	to remove the problem with high CPU consuming (thanks to Byron Ellys for the fix)
+*	column numbers instead of column names are used to identify columns (thanks to 
+	Byron Ellys for the fix)
 
 Last update: 2004-10-18 [SU]
 *	fixed working directory selection

@@ -36,5 +36,15 @@ environment variable. Proceed as follows:
 	to   
 	/Library/Frameworks/R.framework/Resources
 
+
+ Building R.app against R-2.1.x (r-devel)
+==========================================
+In R-2.1.x two new headers have been introduced to support GUIs and embedding.
+In particular, ptr_Raqua_Edit has been replaced by a generic ptr_R_EditFile. This
+means that ptr_Raqua_edit no longer exists in 2.1.x and viceversa, old (2.0.0) R.app
+won't be able to find the symbol ptr_R_EditFile.
+To build R.app against R.framework 2_1_x or higher define the constant "BUILD_FOR_R_2_1_x"
+
+
 --
- Last update: 2004-10-18
+ Last update: 2004-10-22
