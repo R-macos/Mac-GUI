@@ -1261,6 +1261,7 @@
 		16A25FAC072AAFDF0047E009 = {
 			children = (
 				16A25FAD072AAFDF0047E009,
+				685355FF07B0052E00FDAAC3,
 			);
 			isa = PBXVariantGroup;
 			name = MiscPrefPane.nib;
@@ -1369,6 +1370,7 @@
 		16A2604A072AB7D80047E009 = {
 			children = (
 				16A2604B072AB7D80047E009,
+				6880973207AFFB2000F90DB0,
 			);
 			isa = PBXVariantGroup;
 			name = ColorsPrefPane.nib;
@@ -2062,21 +2064,18 @@
 		29B97317FDCFA39411CA2CEA = {
 			children = (
 				686967DA07981764002A1932,
-				1611E321070B86850025F66D,
-				1611E323070B86990025F66D,
-				1C34E61006F9EC7D00211ACC,
-				16A2604A072AB7D80047E009,
-				16A25FAC072AAFDF0047E009,
-				16A25FA5072AAFD40047E009,
-				1633F03D06E630B900225AA9,
-				163B0D0406CE597300A380BE,
+				29B97318FDCFA39411CA2CEA,
+				687B4E350794130800074042,
 				163B0CF706CE58F000A380BE,
+				1633F03D06E630B900225AA9,
+				6853563B07B0285E00FDAAC3,
 				162B6A0406CD770C00C0B085,
 				8D1107310486CEB800E47090,
 				089C165CFE840E0CC02AAC07,
-				29B97318FDCFA39411CA2CEA,
-				D41DED53073B3F8000B900F2,
-				687B4E350794130800074042,
+				1611E321070B86850025F66D,
+				163B0D0406CE597300A380BE,
+				1611E323070B86990025F66D,
+				1C34E61006F9EC7D00211ACC,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -2217,6 +2216,26 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		685355FF07B0052E00FDAAC3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/MiscPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6853563B07B0285E00FDAAC3 = {
+			children = (
+				16A2604A072AB7D80047E009,
+				D41DED53073B3F8000B900F2,
+				16A25FAC072AAFDF0047E009,
+				16A25FA5072AAFD40047E009,
+			);
+			isa = PBXGroup;
+			name = PrefPanes;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		686967B9079813AD002A1932 = {
 			isa = PBXFileReference;
@@ -2459,6 +2478,14 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		6880973207AFFB2000F90DB0 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/ColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		68E2B9F00796C9D200E31F29 = {
 			fileEncoding = 4;
