@@ -61,11 +61,37 @@ NSArray *keywordList=nil;
 		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor selectedTextBackgroundColor], NSBackgroundColorAttributeName, nil];
 		initialContents=nil;
 		initialContentsType=nil;
-		useHighlighting=YES;
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		NSData *theData=[defaults dataForKey:showSyntaxColoringKey];
+		if(theData != nil){
+			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"]) {
+				useHighlighting=NO;
+			} else {
+				useHighlighting=YES;
+			}
+		} else 
+			useHighlighting=YES;
+		
 		isEditable=YES;
 		isREdit=NO;
-		showMatchingBraces = YES;
-		braceHighlightInterval = 0.2;
+		theData=[defaults dataForKey:showBraceHighlightingKey];
+		if(theData != nil){
+			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])
+				showMatchingBraces = NO;
+			else
+				showMatchingBraces = YES;
+		} else 
+			showMatchingBraces = YES;
+		
+		theData=[defaults dataForKey:highlightIntervalKey];
+		if(theData != nil){
+			braceHighlightInterval = [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] doubleValue];
+		} else {
+			braceHighlightInterval = 0.2;
+		}	
+		
+		
+		
     }
 	
     return self;
