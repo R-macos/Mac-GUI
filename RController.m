@@ -894,13 +894,16 @@ extern BOOL isTimeToFinish;
 
 - (int) handleCustomPrint: (char*) type withObject: (RSEXP*) obj
 {
-	//NSLog(@"CustomPrint \"%s\", %@ (att=%@)\n", type, obj, [[obj attributes] listHead]);
-
+	if (!obj) return -2;
 	if (!strcmp(type, "help-files")) {
-		if ([obj type]==STRSXP && [obj length]>0) 
-			[[HelpManager sharedController] showHelpUsingFile: [obj string]];
-		else
-			NSBeginAlertSheet(NLS(@"Help topic not found"),NLS(@"OK"),nil,nil,[RTextView window],self,nil,NULL,NULL,NLS(@"Specified help topic was not found."));
+		RSEXP *x = [obj attr:@"topic"];
+		NSString *topic = @"<unknown>";
+		if (x && [x string]) topic = [x string];
+		[x release];
+		if ([obj type]==STRSXP && [obj length]>0) {
+			[[HelpManager sharedController] showHelpUsingFile: [obj string] topic: topic];
+		} else
+			NSBeginAlertSheet(NLS(@"Help topic not found"),NLS(@"OK"),nil,nil,[RTextView window],self,nil,NULL,NULL,[NSString stringWithFormat: NLS(@"Help for the topic \"%@\" was not found."), topic]);
 	}
 	
 	return 0;

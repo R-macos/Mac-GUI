@@ -70,10 +70,10 @@ static id sharedHMController;
 	}
 }
 
-- (void)showHelpUsingFile: (NSString *)file
+- (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic
 {
 	NSString *url = [NSString stringWithFormat:@"file://%@",file];
-	NSLog(@"showHelpUsingFile:\"%@\", URL=%@", file, url);
+	// NSLog(@"showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
 	if(url != nil)
 	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 	[helpWindow makeKeyAndOrderFront:self];

@@ -53,7 +53,7 @@
 - (IBAction)showRFAQ:(id)sender;
 - (IBAction)whatsNew:(id)sender;
 
-- (void)showHelpUsingFile: (NSString *)file; // displays results only, used by help() in 2.1 and later
+- (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic; // displays results only, used by help() in 2.1 and later
 - (void)showHelpFor:(NSString *)topic; // runs a search
 
 + (id) sharedController;
