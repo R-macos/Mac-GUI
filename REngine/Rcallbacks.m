@@ -50,6 +50,12 @@
 
 #import "REngine.h"
 
+/* we have no access to config.h, so for the moment, let's disable i18n on C level - our files aren't even precessed by R anyway. */
+#ifdef _
+#undef _
+#endif
+#define _(A) (A)
+
 /* from Defn.h */
 extern Rboolean R_Interactive;   /* TRUE during interactive use*/
 
