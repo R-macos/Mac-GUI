@@ -168,12 +168,13 @@ static RController* sharedRController;
 			flag=[(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"];
 		if (flag) {
 			char *cRLIBS = getenv("R_LIBS");
-			NSString *addPath = [@"~/R/Library" stringByExpandingTildeInPath];
+			NSString *addPath = [@"~/Library/R/library" stringByExpandingTildeInPath];
 			if (cRLIBS && *cRLIBS)
 				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
 			setenv("R_LIBS", [addPath cString], 1);
 		}
 	}		
+	setenv("R_GUI_APP_VERSION", R_GUI_VERSION_STR, 1);
 	
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 	
