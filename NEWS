@@ -1,5 +1,14 @@
 NEWS
 
+Last update: 2004-10-30 [SU]
+*	moved callbacks for data manager, package manager, package installer
+	and system command out to a separate handler. This means rather major
+	changes in the code and the way data is stored in those managers (removed
+	all global variables for the above managers). There are now two handlers in
+	REngine - one mandatory (REPL) and one optional (Cocoa).
+*	separated authorization code - it lives now in Authorization.c in Tools
+*	minor cleanups - the method names are now more consistent across classes
+
 Last update: 2004-10-25 [SU]
 *	added brace highlighting (partially based on code by Rob Goedman)
 *	reversed declaration order of RQuartz copy operation: PDF first,

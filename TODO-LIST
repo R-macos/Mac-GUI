@@ -65,3 +65,8 @@ Internal feedback:
 RController.m:
 	- isImageData: - check whether compressed images are recognized (I doubt it..)
 
+Design issues and notes:
+*	Cocoa exception handling is incomplatible with the setjmp and longjmp mechanism:
+	they are not allowed to occur while exception-handled code is run. I suspect we
+	cannot guarantee this.
+*	Define glogal settings for exceptions (NSExceptionHangingMask)

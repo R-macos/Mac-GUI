@@ -30,6 +30,11 @@ static REngine* mainRengine=nil;
 	return [mainRengine handler];
 }
 
++ (id <CocoaHandler>) cocoaHandler
+{
+	return [mainRengine cocoaHandler];
+}
+
 - (REngine*) init
 {
     return [self initWithHandler:nil];
@@ -56,6 +61,7 @@ static REngine* mainRengine=nil;
 	argv[i]=0;
 	
     replHandler=hand;
+	cocoaHandler=nil; // cocoaHandlier is optional
     mainRengine=self;
     loopRunning=NO;
 	active=NO;
@@ -100,6 +106,16 @@ static REngine* mainRengine=nil;
 - (id) handler
 {
     return replHandler;
+}
+
+- (id <CocoaHandler>) cocoaHandler
+{
+	return cocoaHandler;
+}
+
+- (void) setCocoaHandler: (id <CocoaHandler>) ch
+{
+	cocoaHandler=ch;
 }
 
 - (void) begin

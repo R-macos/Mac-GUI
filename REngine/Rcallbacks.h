@@ -17,6 +17,21 @@
 - (int)   handleChooseFile: (char*) buf len: (int) length isNew: (int) new;
 - (void)  handleShowMessage: (char*) msg;
 - (void)  handleProcessingInput: (char*) cmd;
+- (int)   handleEdit: (char*) file;
+- (int)   handleEditFiles: (int) nfile withNames: (char**) file titles: (char**) wtitle pager: (char*) pager;
+- (int)   handleShowFiles: (int) nfile withNames: (char**) file headers: (char**) headers windowTitle: (char*) wtitle pager: (char*) pages andDelete: (BOOL) del;
+@end
+
+/* protocol defining additional callbacks specific to Aqua/Cocoa GUI */
+@protocol CocoaHandler
+// return value is unused so far - the return value on R side is 'stat', so any changes to that parameter are propagated to R
+- (int) handlePackages: (int) count withNames: (char**) name descriptions: (char**) desc URLs: (char**) url status: (BOOL*) stat;
+// returns either nil or array of booleans of the size 'count' specifying which datasets to load
+- (BOOL*) handleDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url;
+// return value is unused so far
+- (int) handleInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label;
+// its usage is identical to that of the 'system' command
+- (int) handleSystemCommand: (char*) cmd;
 @end
 
 #endif /* end of Obj-C code */
@@ -49,9 +64,5 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env);
 SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env);
 SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env);
 SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho);
-
-int requestRootAuthorization(int forceFresh);
-int removeRootAuthorization();
-int runRootScript(const char* script, char** args, FILE **fptr, int keepAuthorized);
 
 #endif

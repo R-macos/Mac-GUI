@@ -2,18 +2,11 @@
 #import "RController.h"
 #import "RCallbacks.h"
 #import "REngine.h"
+#import "Authorization.h"
 
 #include <unistd.h>
 
-static id sharedPIController;
-
-extern int  NumOfRepPkgs;
-extern BOOL WeHaveRepository;
-extern char **r_name;
-extern char **i_ver;
-extern char **r_ver;
-
-extern int freeRepositoryList(int newlen);
+static id sharedController;
 
 char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 	"~/Library/R/library"};
@@ -99,8 +92,8 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 		
 		packagesToInstall = [[NSMutableString alloc] initWithString: @"c("];
 		
-		while (current_index != NSNotFound){
-			[packagesToInstall appendFormat:@"\"%s\"",r_name[current_index]];
+		while (current_index != NSNotFound) {
+			[packagesToInstall appendFormat:@"\"%@\"",package[current_index].name];
 			current_index = [rows indexGreaterThanIndex: current_index];
 			if(current_index != NSNotFound)
 				[packagesToInstall appendString:@","];
@@ -286,50 +279,59 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 
 - (id)init
 {
-	
     self = [super init];
     if (self) {
-		sharedPIController = self;
-		// Add your subclass-specific initialization here.
-        // If an error occurs here, send a [self release] message and return nil.
+		sharedController = self;
 		[pkgDataSource setTarget: self];
+		packages = 0;
     }
 	
     return self;
 }
 
 - (void)dealloc {
+	[self resetPackages];
 	[super dealloc];
 }
 
-/* These two routines are needed to update the History TableView */
+- (void) resetPackages
+{
+	if (!packages) return;
+	int i=0;
+	while (i<packages) {
+		[package[i].name release];
+		[package[i].iver release];
+		[package[i].rver release];
+		i++;
+	}
+	free(package);
+	packages=0;
+}
+
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
-	return NumOfRepPkgs;
+	return packages;
 }
 
-- (id)tableView: (NSTableView *)tableView
-		objectValueForTableColumn: (NSTableColumn *)tableColumn
-			row: (int)row
+- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
 {
+	if (row>=packages) return nil;
 	if([[tableColumn identifier] isEqualToString:@"package"])
-		return [NSString stringWithCString:r_name[row]];
+		return package[row].name;
 	else if([[tableColumn identifier] isEqualToString:@"instVer"])
-		return [NSString stringWithCString:i_ver[row]];
+		return package[row].iver;
 	else if([[tableColumn identifier] isEqualToString:@"repVer"])
-		return [NSString stringWithCString:r_ver[row]];
-	else return nil;
-				
+		return package[row].rver;
+	return nil;				
 }
-
 
 - (id) window
 {
 	return pkgWindow;
 }
 
-+ (id) getPIController{
-	return sharedPIController;
++ (id) sharedController {
+	return sharedController;
 }
 
 - (IBAction) reloadPIData:(id)sender
@@ -338,22 +340,41 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 	[pkgDataSource reloadData];
 }
 
-- (void) doReloadData
+- (void) reloadData
 {
 	[pkgDataSource setHidden:NO];
 	[pkgDataSource reloadData];
 }
 
-+ (void) reloadData
+- (void) show
 {
-	[[PackageInstaller getPIController] doReloadData];
-	
+	[self reloadData];
+	[[self window] makeKeyAndOrderFront:self];
 }
 
-+ (void)togglePackageInstaller
+- (void) updateInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label
 {
-	[PackageInstaller reloadData];
-	[[[PackageInstaller getPIController] window] orderFront:self];
+	int i=0;
+	
+	if (packages) [self resetPackages];
+	if (count<1) {
+		[self show];
+		return;
+	}
+
+	if (label) repositoryLabel = [NSString stringWithCString: label];
+	
+	package = malloc(sizeof(*package)*count);
+	while (i<count) {
+		package[i].name=[[NSString alloc] initWithCString: name[i]];
+		package[i].iver=[[NSString alloc] initWithCString: iver[i]];
+		package[i].rver=[[NSString alloc] initWithCString: rver[i]];
+		package[i].status=stat[i];
+		i++;
+	}
+	packages=count;
+	
+	[self show];
 }
 
 @end

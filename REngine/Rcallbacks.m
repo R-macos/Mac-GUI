@@ -5,13 +5,8 @@
 #include <Rinternals.h>
 
 #include <sys/select.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
 #include <stdio.h>
-
-#include <Security/Authorization.h>
-#include <Security/AuthorizationTags.h>
 
 #include "Print.h"
 
@@ -131,82 +126,34 @@ void Re_ShowMessage(char *buf)
 	[[REngine mainHandler] handleShowMessage: buf];
 }
 
-//==================================================== the following callback need to be moved!!! (TODO)
-
 int  Re_Edit(char *file){
-	if(!R_FileExists(file))
-		return(0);
-		
-	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
-	[document setREditFlag: YES];
-
-	NSEnumerator *e = [[document windowControllers] objectEnumerator];
-	NSWindowController *wc = nil;
-	while (wc = [e nextObject]) {
-		NSWindow *window = [wc window];
-		NSModalSession session = [NSApp beginModalSessionForWindow:window];
-		while([document hasREditFlag])
-			[NSApp runModalSession:session];
-		
-		[NSApp endModalSession:session];
-	}
-
-	return(0);
+	return [[REngine mainHandler] handleEdit: file];
 }
-
-/* FIXME: the filename is not set for newvly created files */
 
 int  Re_EditFiles(int nfile, char **file, char **wtitle, char *pager){
-	int    	i;
-    
-    if (nfile <=0) return 1;
-	
-    for (i = 0; i < nfile; i++){
-		if(R_FileExists(file[i]))
-			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
-		else
-			[[NSDocumentController sharedDocumentController] newDocument: [RController getRController]];
-		
-		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
-		if(wtitle[i]!=nil)
-			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle[i]]];
-    }
-	return 1;
+	return [[REngine mainHandler] handleEditFiles: nfile withNames: file titles: wtitle pager: pager];
 }
 
-int Re_ShowFiles(int nfile, 		/* number of files */
-                 char **file,		/* array of filenames */
-                 char **headers,	/* the `headers' args of file.show. Printed before each file. */
-                 char *wtitle,          /* title for window = `title' arg of file.show */
-                 Rboolean del,	        /* should files be deleted after use? */
-                 char *pager)		/* pager to be used */
+int Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean del, char *pager)
 {
-	int    	i;
-    
-    if (nfile <=0) return 1;
-	
-    for (i = 0; i < nfile; i++){
-		RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
-		if(wtitle[i]!=nil)
-			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle]];
-		[document setEditable: NO];
-		[document setHighlighting: NO];
-    }
-	return 1;
+	return [[REngine mainHandler] handleShowFiles: nfile withNames: file headers: headers windowTitle: wtitle pager: pager andDelete: del];
 }
 
+//==================================================== the following callbacks are Cocoa-specific callbacks (see CocoaHandler)
 
-int NumOfAllPkgs=0;
-
-char **p_name=0;
-char **p_desc=0;
-char **p_url=0;
-BOOL *p_stat=0;
-
-int freePackagesList(int newlen);
-
-/* FIXME: Possible memory leaks, check */
-BOOL WeHavePackages=NO;
+int Re_system(char *cmd) {
+	if ([REngine cocoaHandler])
+		return [[REngine cocoaHandler] handleSystemCommand: cmd];
+	else { // fallback in case there's no handler
+		   // reset signal handlers
+		signal(SIGINT, SIG_DFL);
+		signal(SIGTERM, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGALRM, SIG_DFL);
+		signal(SIGCHLD, SIG_DFL);
+		return system(cmd);
+	}		
+}
 
 SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 {
@@ -214,57 +161,68 @@ SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 	char *vm;
 	SEXP ans; 
 	int i, len;
+	
+	char **sName, **sDesc, **sURL;
+	BOOL *bStat;
+	
 	checkArity(op, args);
 
+	if (![REngine cocoaHandler]) return R_NilValue;
+	
 	vm = vmaxget();
 	pkgstatus = CAR(args); args = CDR(args);
 	pkgname = CAR(args); args = CDR(args);
 	pkgdesc = CAR(args); args = CDR(args);
 	pkgurl = CAR(args); args = CDR(args);
   
-   
-	if(!isString(pkgname) | !isLogical(pkgstatus) | !isString(pkgdesc) | !isString(pkgurl))
+	if(!isString(pkgname) || !isLogical(pkgstatus) || !isString(pkgdesc) || !isString(pkgurl))
 		errorcall(call, "invalid arguments");
    
-	len = LENGTH(pkgname);	
-	if(len>0){
-		WeHavePackages = YES;
-		NumOfAllPkgs = freePackagesList(len);		
-		for(i=0;i<NumOfAllPkgs;i++){
-			p_name[i] = strdup(CHAR(STRING_ELT(pkgname, i)));
-			p_desc[i] = strdup( CHAR(STRING_ELT(pkgdesc, i)));
-			p_url[i] = strdup( CHAR(STRING_ELT(pkgurl, i)));
-			p_stat[i] = (BOOL)LOGICAL(pkgstatus)[i];
-		}
-  }
+	len = LENGTH(pkgname);
+	if (len!=LENGTH(pkgstatus) || len!=LENGTH(pkgdesc) || len!=LENGTH(pkgurl))
+		errorcall(call, "invalid arguments (length mismatch)");
 
-	PROTECT(ans = NEW_LOGICAL(NumOfAllPkgs));
-	for(i=1;i<=NumOfAllPkgs;i++)
-		LOGICAL(ans)[i-1] = LOGICAL(pkgstatus)[i-1];
-   
-	vmaxset(vm);
-  
+	if (len==0) {
+		[[REngine cocoaHandler] handlePackages: 0 withNames: 0 descriptions: 0 URLs: 0 status: 0];
+		vmaxset(vm);
+		return pkgstatus;
+	}
+
+	sName = (char**) malloc(sizeof(char*)*len);
+	sDesc = (char**) malloc(sizeof(char*)*len);
+	sURL  = (char**) malloc(sizeof(char*)*len);
+	bStat = (BOOL*) malloc(sizeof(BOOL)*len);
+
+	i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
+	while (i<len) {
+		sName[i] = CHAR(STRING_ELT(pkgname, i));
+		sDesc[i] = CHAR(STRING_ELT(pkgdesc, i));
+		sURL [i] = CHAR(STRING_ELT(pkgurl, i));
+		bStat[i] = (BOOL)LOGICAL(pkgstatus)[i];
+		i++;
+	}
+	[[REngine cocoaHandler] handlePackages: len withNames: sName descriptions: sDesc URLs: sURL status: bStat];
+	free(sName); free(sDesc); free(sURL);
+	
+	PROTECT(ans = NEW_LOGICAL(len));
+	for(i=0;i<len;i++)
+		LOGICAL(ans)[i] = bStat[i];
 	UNPROTECT(1);
-	[PackageManager togglePackageManager];
-	return ans;
+	free(bStat);
+	
+	vmaxset(vm);
+  	return ans;
 }
-
-
-int		NumOfDSets=0;
-BOOL WeHaveDataSets = NO;
-char **d_name=0;
-char **d_pkg=0;
-char **d_desc=0;
-char **d_url=0;
-int freeDataSetList(int newlen);
-
 
 SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
 {
-  SEXP  dsets, dpkg, ddesc, durl;
+  SEXP  dsets, dpkg, ddesc, durl, ans;
   char *vm;
-  SEXP ans; 
   int i, len;
+  
+  char **sName, **sDesc, **sURL, **sPkg;
+  BOOL *res;
+
   checkArity(op, args);
 
   vm = vmaxget();
@@ -273,115 +231,65 @@ SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
   ddesc = CAR(args); args = CDR(args);
   durl = CAR(args);
   
-  if(!isString(dsets) | !isString(dpkg) | !isString(ddesc)  | !isString(durl) )
+  if (!isString(dsets) || !isString(dpkg) || !isString(ddesc)  || !isString(durl) )
 	errorcall(call, "invalid arguments");
 
   len = LENGTH(dsets);
-  if(len>0){
-	WeHaveDataSets = YES;
-	NumOfDSets = freeDataSetList(len);		
-	for(i=0;i<NumOfDSets;i++){
-		d_name[i] = strdup(CHAR(STRING_ELT(dsets, i)));
-		d_pkg[i] = strdup( CHAR(STRING_ELT(dpkg, i)));
-		d_desc[i] = strdup( CHAR(STRING_ELT(ddesc, i)));
-		d_url[i] = strdup( CHAR(STRING_ELT(durl, i)));		
-	}
+  if (LENGTH(dpkg)!=len || LENGTH(ddesc)!=len || LENGTH(durl)!=len)
+	  errorcall(call, "invalid arguments (length mismatch)");
+	  
+  if (len==0) {
+	  [[REngine cocoaHandler] handleDatasets: 0 withNames: 0 descriptions: 0 packages: 0 URLs: 0];
+	  vmaxset(vm);
+	  return R_NilValue;
+  }
+
+  sName = (char**) malloc(sizeof(char*)*len);
+  sDesc = (char**) malloc(sizeof(char*)*len);
+  sURL  = (char**) malloc(sizeof(char*)*len);
+  sPkg  = (char**) malloc(sizeof(char*)*len);
+  
+  i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
+  while (i<len) {
+	  sName[i] = CHAR(STRING_ELT(dsets, i));
+	  sDesc[i] = CHAR(STRING_ELT(ddesc, i));
+	  sURL [i] = CHAR(STRING_ELT(durl, i));
+	  sPkg [i] = CHAR(STRING_ELT(dpkg, i));
+	  i++;
+  }
+
+  res = [[REngine cocoaHandler] handleDatasets: len withNames: sName descriptions: sDesc packages: sPkg URLs: sURL];
+  
+  free(sName); free(sDesc); free(sPkg); free(sURL);
+  
+  if (res) {
+	  PROTECT(ans=allocVector(LGLSXP, len));
+	  i=0;
+	  while (i<len) {
+		  LOGICAL(ans)[i]=res[i];
+		  i++;
+	  }
+	  UNPROTECT(1);
+  } else {
+	  // this should be the default:	  ans=R_NilValue;
+	  // but until the R code is fixed to accept this, we have to fake a result
+	  ans=allocVector(LGLSXP, 0);
   }
   
-  PROTECT(ans = NEW_LOGICAL(NumOfDSets));
-  for(i=1;i<=NumOfDSets;i++)
-   LOGICAL(ans)[i-1] = 0;
-   
   vmaxset(vm);
   
-  UNPROTECT(1);
-	[DataManager toggleDataManager];
   return ans;
 }
-
-int freeDataSetList(int newlen)
-{
-	if(d_name){
-		free(d_name);
-		d_name = 0;
-	}
-	
-	if(d_pkg){
-		free(d_pkg);
-		d_pkg = 0;
-	}
-	
-	if(d_desc){
-		free(d_desc);
-		d_desc = 0;
-	}
-	
-	if(d_url){
-		free(d_url);
-		d_url = 0;
-	}
-
-	if(newlen <= 0)
-		newlen = 0;
-	else {
-		d_name = (char **)calloc(newlen, sizeof(char *) );
-		d_pkg = (char **)calloc(newlen, sizeof(char *) );
-		d_desc = (char **)calloc(newlen, sizeof(char *) );
-		d_url = (char **)calloc(newlen, sizeof(char *) );
-	}
-	
-	return(newlen);
-}		
-
-int freePackagesList(int newlen)
-{
-	if(p_name){
-		free(p_name);
-		p_name = 0;
-	}
-	
-	if(p_url){
-		free(p_url);
-		p_url = 0;
-	}
-	
-	if(p_desc){
-		free(p_desc);
-		p_desc = 0;
-	}
-	
-	if(p_stat){
-		free(p_stat);
-		p_stat = 0;
-	}
-	
-	if(newlen <= 0)
-		newlen = 0;
-	else {
-		p_name = (char **)calloc(newlen, sizeof(char *) );
-		p_url = (char **)calloc(newlen, sizeof(char *) );
-		p_desc = (char **)calloc(newlen, sizeof(char *) );
-		p_stat = (BOOL *)calloc(newlen, sizeof(BOOL) );
-	}
-	
-	return(newlen);
-}		
-
-
-int  NumOfRepPkgs=0;
-BOOL WeHaveRepository = NO;
-char **r_name=0;
-char **i_ver=0;
-char **r_ver=0;
-int freeRepositoryList(int newlen);
 
 SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
 {
   char *vm;
-  SEXP ans; 
   int i, len;
   SEXP rpkgs, rvers, ivers, wwwhere, install_dflt;
-  
+
+  char **sName, **sIVer, **sRVer;
+  BOOL *bStat;
+
   checkArity(op, args);
 
   vm = vmaxget();
@@ -391,71 +299,41 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
   wwwhere = CAR(args); args=CDR(args);
   install_dflt = CAR(args); 
   
-  
-  if(!isString(rpkgs) | !isString(rvers) | !isString(ivers) | !isString(wwwhere) )
-	errorcall(call, "invalid arguments");
-  if(!isLogical(install_dflt))
-    errorcall(call, "invalid arguments");
-   
-
+  if(!isString(rpkgs) || !isString(rvers) || !isString(ivers) || !isString(wwwhere) || !isLogical(install_dflt))
+	  errorcall(call, "invalid arguments");
 
   len = LENGTH(rpkgs);
-  if(len>0){
-	WeHaveRepository = YES;
-	NumOfRepPkgs = freeRepositoryList(len);		
-	for(i=0;i<NumOfRepPkgs;i++){
-		r_name[i] = strdup(CHAR(STRING_ELT(rpkgs, i)));
-		i_ver[i] = strdup( CHAR(STRING_ELT(ivers, i)));
-		r_ver[i] = strdup( CHAR(STRING_ELT(rvers, i)));
-	}
+  if (LENGTH(rvers)!=len || LENGTH(ivers)!=len || LENGTH(wwwhere)<1 || LENGTH(install_dflt)!=len)
+	  errorcall(call, "invalid arguments (length mismatch)");
+	  
+  if (len==0) {
+	  [[REngine cocoaHandler] handleInstalledPackages: 0 withNames: 0 installedVersions: 0 repositoryVersions: 0 update: 0 label: 0];
+	  vmaxset(vm);
+	  return R_NilValue;
   }
   
-  PROTECT(ans =  NEW_LOGICAL(NumOfRepPkgs));
-
-  for(i=0;i<NumOfRepPkgs;i++)
-	LOGICAL(ans)[i] = 0;
+  sName = (char**) malloc(sizeof(char*)*len);
+  sIVer = (char**) malloc(sizeof(char*)*len);
+  sRVer = (char**) malloc(sizeof(char*)*len);
+  bStat = (BOOL*) malloc(sizeof(BOOL)*len);
   
-
+  i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
+  while (i<len) {
+	  sName[i] = CHAR(STRING_ELT(rpkgs, i));
+	  sIVer[i] = CHAR(STRING_ELT(ivers, i));
+	  sRVer[i] = CHAR(STRING_ELT(rvers, i));
+	  bStat[i] = (BOOL)LOGICAL(install_dflt)[i];
+	  i++;
+  }
+  
+  [[REngine cocoaHandler] handleInstalledPackages: len withNames: sName installedVersions: sIVer repositoryVersions: sRVer update: bStat label:CHAR(STRING_ELT(wwwhere,0))];
+  free(sName); free(sIVer); free(sRVer); free(bStat);
+    
   vmaxset(vm);
-  
-  UNPROTECT(1);  /*ans*/
-  	[PackageInstaller togglePackageInstaller];
-
-  return ans;
+  return allocVector(LGLSXP, 0);
 }
 
-
-
-int freeRepositoryList(int newlen)
-{
-	if(r_name){
-		free(r_name);
-		r_name = 0;
-	}
-	
-	if(i_ver){
-		free(i_ver);
-		i_ver = 0;
-	}
-	
-	if(r_ver){
-		free(r_ver);
-		r_ver = 0;
-	}
-	
-	if(newlen <= 0)
-		newlen = 0;
-	else {
-		r_name = (char **)calloc(newlen, sizeof(char *) );
-		i_ver = (char **)calloc(newlen, sizeof(char *) );
-		r_ver = (char **)calloc(newlen, sizeof(char *) );
-	}
-	
-	return(newlen);
-}		
-
-
-
+//==================================================== the following callbacks need to be moved!!! (TODO)
 
 int freeWorkspaceList(int newlen);
 
@@ -847,109 +725,3 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
 
     return work2;
 }
-
-int Re_system(char *cmd) {
-	int cstat=-1;
-	pid_t pid;
-	
-	if ([[RController getRController] getRootFlag]) {
-		FILE *f;
-		char *argv[3] = { "-c", cmd, 0 };
-		int fd;
- 		NSBundle *b = [NSBundle mainBundle];
-		char *sushPath=0;
-		if (b) {
-			NSString *sush=[[b resourcePath] stringByAppendingString:@"/sush"];
-			sushPath = (char*) malloc([sush cStringLength]+1);
-			[sush getCString:sushPath maxLength:[sush cStringLength]];
-		}
-		
-		fd = runRootScript(sushPath?sushPath:"/bin/sh",argv,&f,1);
-		if (!fd && f)
-			[[RController getRController] setRootFD:fileno(f)];
-		if (sushPath) free(sushPath);
-		return fd;
-	}
-	
-	pid=fork();
-	if (pid==0) {
-		// int sr;
-		// reset signal handlers
-		signal(SIGINT, SIG_DFL);
-		signal(SIGTERM, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGALRM, SIG_DFL);
-		signal(SIGCHLD, SIG_DFL);
-		execl("/bin/sh","/bin/sh","-c",cmd,0);
-		exit(-1);
-		//sr=system(cmd);
-		//exit(WEXITSTATUS(sr));
-	}
-	if (pid==-1) return -1;
-
-	[[RController getRController] addChildProcess: pid];
-	
-	while (1) {
-		pid_t w = waitpid(pid, &cstat, WNOHANG);
-		if (w!=0) break;
-		Re_ProcessEvents();
-	}
-	[[RController getRController] rmChildProcess: pid];
-	return cstat;
-}
-
-AuthorizationRef rootAuthorizationRef=0;
-
-int removeRootAuthorization()
-{
-	if (rootAuthorizationRef) {
-		AuthorizationFree (rootAuthorizationRef, kAuthorizationFlagDefaults);
-		rootAuthorizationRef=0;
-	}
-	return 0;
-}
-
-int requestRootAuthorization(int forceFresh)
-{
-    OSStatus myStatus;
-    AuthorizationFlags myFlags = kAuthorizationFlagDefaults;	
-	
-	if (rootAuthorizationRef) {
-		if (!forceFresh)
-			return 0;
-		removeRootAuthorization();
-	}
-	
-    myStatus = AuthorizationCreate(NULL, kAuthorizationEmptyEnvironment,
-                                   myFlags, &rootAuthorizationRef);
-    if (myStatus != errAuthorizationSuccess)
-        return -1;
-    do {
-        AuthorizationItem myItems = {kAuthorizationRightExecute, 0, NULL, 0};
-        AuthorizationRights myRights = {1, &myItems};
-        myFlags = kAuthorizationFlagDefaults | kAuthorizationFlagInteractionAllowed |
-            kAuthorizationFlagPreAuthorize | kAuthorizationFlagExtendRights;
-        myStatus = AuthorizationCopyRights (rootAuthorizationRef, &myRights, NULL, myFlags, NULL );
-		
-        if (myStatus != errAuthorizationSuccess) break;
-        return 0;
-	} while (0);
-	AuthorizationFree (rootAuthorizationRef, kAuthorizationFlagDefaults);
-	rootAuthorizationRef=0;
-	return -1;
-}
-
-int runRootScript(const char* script, char** args, FILE **fptr, int keepAuthorized) {
-    OSStatus myStatus;
-	AuthorizationFlags myFlags = kAuthorizationFlagDefaults;
-	
-	if (!rootAuthorizationRef && requestRootAuthorization(0)) return -1;
-	
-	myStatus = AuthorizationExecuteWithPrivileges
-		(rootAuthorizationRef, script, myFlags, args, fptr);
-	
-	if (!keepAuthorized) removeRootAuthorization();
-	
-	return (myStatus == errAuthorizationSuccess)?0:-1;
-}
-

@@ -21,8 +21,10 @@
 #define RENGINE_END   [self end]
 
 @interface REngine : NSObject {
-	/* the object handling all R callbacks - the Rcallback.h for the protocol definition */
+	/* the object handling all regular R callbacks - the Rcallback.h for the protocol definition - this one must be provided */
     id <REPLHandler> replHandler;
+	/* this callback handler is optional and involves various GUI stuff. those callback are activated only if Aqua/Cocoa is specified as GUI */
+	id <CocoaHandler> cocoaHandler;
 	
 	/* set to NO if the engine is initialized but activate was not called yet - that is R was not really initialized yet */
 	BOOL active;
@@ -40,6 +42,7 @@
 
 + (REngine*) mainEngine;
 + (id <REPLHandler>) mainHandler;
++ (id <CocoaHandler>) cocoaHandler;
 
 - (REngine*) init;
 - (REngine*) initWithHandler: (id <REPLHandler>) hand;
@@ -64,6 +67,8 @@
 
 // REPL mode
 - (id <REPLHandler>) handler;
+- (id <CocoaHandler>) cocoaHandler; // beware, nil is legal!
+- (void) setCocoaHandler: (id <CocoaHandler>) ch;
 - (void) runREPL;
 
 @end

@@ -5,32 +5,22 @@
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
 
-static id sharedDMController;
-extern int		NumOfDSets;
-
-extern char **d_name;
-extern char **d_pkg;
-extern char **d_desc;
-extern char **d_url;
+static id sharedController;
 
 @implementation DataManager
 
 - (void)awakeFromNib
 {
-			[RDataSource setDoubleAction:@selector(loadRData:)];
-		    [RDataSource setTarget: sharedDMController];
+	[RDataSource setDoubleAction:@selector(loadRData:)];
+	[RDataSource setTarget: self];
 }
 
 - (id)init
 {
-
     self = [super init];
     if (self) {
-		sharedDMController = self;
-		// Add your subclass-specific initialization here.
-        // If an error occurs here, send a [self release] message and return nil.
- 
-
+		sharedController = self;
+		datasets = 0;
 	}
 	
     return self;
@@ -40,71 +30,99 @@ extern char **d_url;
 	[super dealloc];
 }
 
+- (void) resetDatasets
+{
+	if (!datasets) return;
+	int i=0;
+	while (i<datasets) {
+		[dataset[i].name release];
+		[dataset[i].desc release];
+		[dataset[i].pkg release];
+		[dataset[i].url release];
+		i++;
+	}
+	free(dataset);
+	datasets=0;
+}
+
 /* These two routines are needed to update the History TableView */
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
-	return NumOfDSets;
+	return datasets;
 }
 
-- (id)tableView: (NSTableView *)tableView
-		objectValueForTableColumn: (NSTableColumn *)tableColumn
-		row: (int)row
+- (void) updateDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url
 {
-			if([[tableColumn identifier] isEqualToString:@"data"])
-					return [NSString stringWithCString:d_name[row]];
-			else if([[tableColumn identifier] isEqualToString:@"package"])
-					return [NSString stringWithCString:d_pkg[row]];
-			else if([[tableColumn identifier] isEqualToString:@"description"])
-					return [NSString stringWithCString:d_desc[row]];
-			else return nil;
-				
+	int i=0;
+	
+	if (dataset) [self resetDatasets];
+	if (count<1) {
+		[self show];
+		return;
+	}
+	
+	dataset = malloc(sizeof(*dataset)*count);
+	while (i<count) {
+		dataset[i].name=[[NSString alloc] initWithCString: name[i]];
+		dataset[i].desc=[[NSString alloc] initWithCString: desc[i]];
+		dataset[i].pkg=[[NSString alloc] initWithCString: pkg[i]];
+		dataset[i].url=[[NSString alloc] initWithCString: url[i]];
+		i++;
+	}
+	datasets = count;
+	[self show];
 }
 
-
+- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
+{
+	if (row>=datasets) return nil;
+	if([[tableColumn identifier] isEqualToString:@"data"])
+		return dataset[row].name;
+	else if([[tableColumn identifier] isEqualToString:@"package"])
+		return dataset[row].pkg;
+	else if([[tableColumn identifier] isEqualToString:@"description"])
+		return dataset[row].desc;
+	return nil;
+}
 
 - (id) window
 {
 	return DataManagerWindow;
 }
 
-+ (id) getDMController{
-	return sharedDMController;
++ (DataManager*) sharedController{
+	return sharedController;
 }
 
-
-- (void) doReloadData
+- (void) reloadData
 {
 	[RDataSource reloadData];
 }
-
-+ (void) reloadData
-{
-	[[DataManager getDMController] doReloadData];
-	
-}
-
 
 - (IBAction)loadRData:(id)sender
 {
 	int row = [sender selectedRow];
 	if(row>=0)
-//		[[RController getRController] sendInput:[NSString stringWithFormat:@"data(%s,package=\"%s\")",d_name[row],d_pkg[row]]];
-	[[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"data(%s,package=\"%s\")",d_name[row],d_pkg[row]]];
-
+		[[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"data(%@,package=\"%@\")",dataset[row].name,dataset[row].pkg]];
 }
 
 - (IBAction)showHelp:(id)sender
 {
 	int row = [sender selectedRow];
 	if(row<0) return;
-	NSString *urlText = [NSString stringWithFormat:@"file://%@",[NSString stringWithCString:d_url[row]]];
+	NSString *urlText = [NSString stringWithFormat:@"file://%@",dataset[row].url];
 	[[dataInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }
 
-+ (void)toggleDataManager
+- (int) count
 {
-			[DataManager reloadData];
-			[[[DataManager getDMController] window] orderFront:self];
+	return datasets;
+}
+
+- (void) show
+{
+	[self reloadData];
+	[DataManagerWindow makeKeyAndOrderFront:self];
 }
 
 @end

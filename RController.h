@@ -71,7 +71,7 @@
 
 /* Preference keys */
 
-@interface RController : NSObject <REPLHandler>
+@interface RController : NSObject <REPLHandler, CocoaHandler>
 {
 	IBOutlet NSTextView *RTextView;
 	IBOutlet NSProgressIndicator *progressWheel;

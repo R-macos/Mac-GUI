@@ -1,6 +1,5 @@
 /* PackageInstaller */
 
-
 #define kSystemLevel	0
 #define kUserLevel		1
 #define kOtherLocation  2
@@ -19,6 +18,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef struct pkgInstallerEntry {
+	NSString *name;
+	NSString *iver;
+	NSString *rver;
+	BOOL status;
+} s_pkgInstallerEntry;
+
 @interface PackageInstaller : NSObject
 {
     IBOutlet NSTableView *pkgDataSource;
@@ -31,6 +37,10 @@
 	int pkgUrl;
 	int pkgInst;
 	int pkgFormat;
+	
+	int packages;
+	s_pkgInstallerEntry *package;
+	NSString *repositoryLabel;
 }
 
 - (IBAction)installSelected:(id)sender;
@@ -42,10 +52,12 @@
 - (IBAction)setFormat:(id)sender;
 
 - (id) window;
-- (void) doReloadData;
+- (void) reloadData;
+- (void) resetPackages;
 
-+ (id) getPIController;
-+ (void) reloadData;
-+ (void)togglePackageInstaller;
+- (void) show;
+- (void) updateInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label;
+
++ (id) sharedController;
 
 @end

@@ -5,11 +5,13 @@
 #import <sys/select.h>
 #import <sys/types.h>
 #import <sys/time.h>
+#import <sys/wait.h>
 #import <signal.h>
 #import <unistd.h>
 #import "Rcallbacks.h"
 #import "Rengine.h"
 
+#import "Authorization.h"
 
 #import "MiscPrefPane.h"
 #import "QuartzPrefPane.h"
@@ -36,8 +38,6 @@ typedef struct {
 } R_ReplState;
 
 extern R_ReplState state;
-extern BOOL WeHavePackages;
-extern BOOL WeHaveDataSets;
 
 void run_Rmainloop(void); // from Rinit.c
 extern void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel); // from Rinit.c
@@ -129,7 +129,7 @@ static RController* sharedRController;
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	
 	sharedRController = self;
-	[[REngine alloc] initWithHandler:self arguments:args];
+	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 	
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
 	[RTextView setDrawsBackground:NO];
@@ -598,6 +598,137 @@ extern BOOL isTimeToFinish;
 	return [currentConsoleInput UTF8String];
 }
 
+- (int) handleEdit: (char*) file
+{
+	if(!R_FileExists(file))
+		return(0);
+	
+	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
+	[document setREditFlag: YES];
+	
+	NSEnumerator *e = [[document windowControllers] objectEnumerator];
+	NSWindowController *wc = nil;
+	while (wc = [e nextObject]) {
+		NSWindow *window = [wc window];
+		NSModalSession session = [NSApp beginModalSessionForWindow:window];
+		while([document hasREditFlag])
+			[NSApp runModalSession:session];
+		
+		[NSApp endModalSession:session];
+	}
+	
+	return(0);
+}
+
+/* FIXME: the filename is not set for newvly created files */
+- (int) handleEditFiles: (int) nfile withNames: (char**) file titles: (char**) wtitle pager: (char*) pager
+{
+	int    	i;
+    
+    if (nfile <=0) return 1;
+	
+    for (i = 0; i < nfile; i++){
+		if(R_FileExists(file[i]))
+			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
+		else
+			[[NSDocumentController sharedDocumentController] newDocument: [RController getRController]];
+		
+		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
+		if(wtitle[i]!=nil)
+			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle[i]]];
+    }
+	return 1;
+}
+
+- (int) handleShowFiles: (int) nfile withNames: (char**) file headers: (char**) headers windowTitle: (char*) wtitle pager: (char*) pages andDelete: (BOOL) del
+{
+	int    	i;
+    
+    if (nfile <=0) return 1;
+	
+    for (i = 0; i < nfile; i++){
+		RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
+		if(wtitle[i]!=nil)
+			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle]];
+		[document setEditable: NO];
+		[document setHighlighting: NO];
+    }
+	return 1;
+}
+
+//======== Cocoa Handler ======
+
+- (int) handlePackages: (int) count withNames: (char**) name descriptions: (char**) desc URLs: (char**) url status: (BOOL*) stat
+{
+	[[PackageManager sharedController] updatePackages:count withNames:name descriptions:desc URLs:url status:stat];
+	return 0;
+}
+
+- (BOOL*) handleDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url
+{
+	[[DataManager sharedController] updateDatasets:count withNames:name descriptions:desc packages:pkg URLs:url];
+	return 0; // we don't load the DS this way, we use REngine instead
+}
+
+- (int) handleInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label
+{
+	[[PackageInstaller sharedController] updateInstalledPackages:count withNames:name installedVersions:iver repositoryVersions:rver update:stat label:label];
+	return 0;
+}
+
+- (int) handleSystemCommand: (char*) cmd
+{	
+	int cstat=-1;
+	pid_t pid;
+	
+	if ([self getRootFlag]) {
+		FILE *f;
+		char *argv[3] = { "-c", cmd, 0 };
+		int fd;
+ 		NSBundle *b = [NSBundle mainBundle];
+		char *sushPath=0;
+		if (b) {
+			NSString *sush=[[b resourcePath] stringByAppendingString:@"/sush"];
+			sushPath = (char*) malloc([sush cStringLength]+1);
+			[sush getCString:sushPath maxLength:[sush cStringLength]];
+		}
+		
+		fd = runRootScript(sushPath?sushPath:"/bin/sh",argv,&f,1);
+		if (!fd && f)
+			[self setRootFD:fileno(f)];
+		if (sushPath) free(sushPath);
+		return fd;
+	}
+	
+	pid=fork();
+	if (pid==0) {
+		// int sr;
+		// reset signal handlers
+		signal(SIGINT, SIG_DFL);
+		signal(SIGTERM, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGALRM, SIG_DFL);
+		signal(SIGCHLD, SIG_DFL);
+		execl("/bin/sh","/bin/sh","-c",cmd,0);
+		exit(-1);
+		//sr=system(cmd);
+		//exit(WEXITSTATUS(sr));
+	}
+	if (pid==-1) return -1;
+	
+	[[RController getRController] addChildProcess: pid];
+	
+	while (1) {
+		pid_t w = waitpid(pid, &cstat, WNOHANG);
+		if (w!=0) break;
+		Re_ProcessEvents();
+	}
+	[[RController getRController] rmChildProcess: pid];
+	return cstat;
+}	
+
+//==========
+
 - (BOOL)windowShouldClose:(id)sender
 {
 	
@@ -996,7 +1127,6 @@ extern BOOL isTimeToFinish;
 		[self setRootFlag:YES];
 	}
 }
-
 
 - (IBAction)newDocument:(id)sender{
 	[[NSDocumentController sharedDocumentController] newDocument: sender];
@@ -1504,7 +1634,7 @@ No error message or warning are raised.
 
 - (IBAction)togglePackageInstaller:(id)sender
 {
-	[PackageInstaller togglePackageInstaller];
+	[[PackageInstaller sharedController] show];
 }
 
 - (IBAction)toggleWSBrowser:(id)sender
@@ -1556,22 +1686,23 @@ No error message or warning are raised.
 
 - (IBAction)togglePackageManager:(id)sender
 {
-	if(WeHavePackages==NO)
+	if ([[PackageManager sharedController] count]==0)
 		[[REngine mainEngine] executeString:@"package.manager()"];
-	[PackageManager togglePackageManager];
+	else
+		[[PackageManager sharedController] show];
 }
 
 - (IBAction)toggleDataManager:(id)sender
 {
-	if(WeHaveDataSets==NO)
+	if ([[DataManager sharedController] count]==0) {
+		[[DataManager sharedController] show];
 		[[REngine mainEngine] executeString: @"data.manager()"];
-
-	[DataManager toggleDataManager];
+	} else
+		[[DataManager sharedController] show];
 }
 
 
 -(IBAction) runX11:(id)sender{
-	//[[REngine mainEngine] executeString: @"system(\"open -a X11.app\")"];
 	system("open -a X11.app");
 }
 			
