@@ -159,7 +159,7 @@
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
-	int tmp = (int)[sender selectCellAtRow:0 column:0];
+	int tmp = [[sender cellAtRow:0 column:0] state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:editOrSourceKey withFlag:flag];
 }

@@ -61,8 +61,11 @@ static id sharedHMController;
 		REngine *re = [REngine mainEngine];	
 		NSString *hlp = [NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))", [sender stringValue]];
 		RSEXP *x = [re evaluateString:hlp];
-		if(x==nil)
-            return;
+		if ((x==nil) || ([x string]==NULL)) {
+			NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:[sender stringValue]];
+			NSRunInformationalAlertPanel(@"Can't find help for topic", topicString, @"OK", nil, nil);
+			return;
+		}
 		NSString *url = [x string];
 		if(url != nil)
 			[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",url]]]];

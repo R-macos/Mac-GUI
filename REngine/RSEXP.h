@@ -38,10 +38,10 @@
 }
 
 /** constructors */
-- (RSEXP*) initWithSEXP: (SEXP) ct;
-- (RSEXP*) initWithString: (NSString*) str;
-- (RSEXP*) initWithDoubleArray: (double*) arr length: (int) len;
-- (RSEXP*) initWithIntArray: (int*) arr length: (int) len;
+- (id) initWithSEXP: (SEXP) ct;
+- (id) initWithString: (NSString*) str;
+- (id) initWithDoubleArray: (double*) arr length: (int) len;
+- (id) initWithIntArray: (int*) arr length: (int) len;
 
 /** main methods */
 - (int) type;

@@ -189,7 +189,7 @@
 
 - (IBAction) changeInternalOrExternal:(id)sender
 {
-	int tmp = (int)[sender selectCellAtRow:0 column:0];
+	int tmp = [[sender cellAtRow:0 column:0] state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:internalOrExternalKey withFlag:flag];
 }
@@ -232,7 +232,7 @@
 }
 
 - (IBAction) changeAppOrCommand:(id)sender {
-	int tmp = (int)[sender selectCellAtRow:0 column:0];
+	int tmp = [[sender cellAtRow:0 column:0] state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:appOrCommandKey withFlag:flag];
 }

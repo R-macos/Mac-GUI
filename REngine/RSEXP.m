@@ -38,7 +38,7 @@
 
 @implementation RSEXP
 
-- (RSEXP*) initWithSEXP: (SEXP) ct
+- (id) initWithSEXP: (SEXP) ct
 {
     xp=ct;
     attr=nil;
@@ -48,7 +48,7 @@
     return self;
 }
 
-- (RSEXP*) initWithString: (NSString*) str
+- (id) initWithString: (NSString*) str
 {
     PROTECT(xp=allocVector(STRSXP, 1));
     SET_VECTOR_ELT(xp, 0, mkChar([str cString]));
@@ -58,7 +58,7 @@
     return self;
 }
 
-- (RSEXP*) initWithDoubleArray: (double*) arr length: (int) len
+- (id) initWithDoubleArray: (double*) arr length: (int) len
 {
     if (len<0) len=0;
     PROTECT(xp=allocVector(REALSXP, len));
@@ -70,7 +70,7 @@
     return self;    
 }
 
-- (RSEXP*) initWithIntArray: (int*) arr length: (int) len
+- (id) initWithIntArray: (int*) arr length: (int) len
 {
     if (len<0) len=0;
     PROTECT(xp=allocVector(INTSXP, len));

@@ -65,6 +65,7 @@
 + (NSString *) stringForKey: (NSString*) key withDefault: (NSString*) defaultString;
 + (NSString *) stringForKey: (NSString*) key; // returns nil if there is no such entry
 + (float) floatForKey: (NSString*) key withDefault: (float) defaultValue;
++ (int) integerForKey: (NSString*) key withDefault: (int) defaultValue;
 + (BOOL) flagForKey: (NSString*) key withDefault: (BOOL) flag;
 + (BOOL) flagForKey: (NSString*) key; // returns UNKNOWN if there is no such entry
 + (id) objectForKey: (NSString*) key withDefault: (id) defaultObj;

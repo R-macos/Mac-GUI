@@ -49,3 +49,12 @@
 #define appOrCommandKey  @"Is it a .app or a command"
 #define editOrSourceKey  @"Edit or source in file"
 #define miscRAquaLibPathKey @"Append RAqua libs to R_LIBS"
+
+#define useQuartzPrefPaneSettingsKey @"Use QuartzPrefPane values"
+#define quartzPrefPaneWidthKey @"QuartzPrefPane width"
+#define quartzPrefPaneHeightKey @"QuartzPrefPane height"
+#define quartzPrefPaneLocationKey @"QuartzPrefPane location"
+#define quartzPrefPaneLocationIntKey @"QuartzPrefPane location as an integer"
+#define quartzPrefPaneFontKey @"QuartzPrefPane font"
+#define quartzPrefPaneFontSizeKey @"QuartzPrefPane fontsize"
+

@@ -1,5 +1,9 @@
 NEWS
 
+Last update: 2004-12-10 [RG]
+*	Quartz window location and size preferences
+	implemented. Font not done yet.
+
 Last update: 2004-12-08 [RG]
 *	(re-)enabled printing of docs in editor,
 	for now, clears and restores background color

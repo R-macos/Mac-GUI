@@ -933,7 +933,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	[s release];
 }
 
-+ (id) getRController{
++ (RController*) getRController{
 	return sharedRController;
 }
 
@@ -1155,7 +1155,11 @@ like window resizing, locator, widgets interactions, etc.
 
 
 - (IBAction)newQuartzDevice:(id)sender {
-	[[REngine mainEngine] executeString:@"quartz()"];
+	NSString *width = [Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"];
+	NSString *height = [Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"];
+	NSString *cmd = [[[[@"quartz(display=\"\",width=" stringByAppendingString:width]
+		stringByAppendingString:@",height="] stringByAppendingString:height] stringByAppendingString:@")"];
+	[[REngine mainEngine] executeString:cmd];
 }
 
 - (IBAction)breakR:(id)sender{

@@ -188,6 +188,16 @@ Preferences *globalPrefs=nil;
 	return defaultValue;
 }
 
++ (int) integerForKey: (NSString*) key withDefault: (int) defaultValue
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		NSString *s=[defaults stringForKey:key];
+		if (s) return [s intValue];
+	}
+	return defaultValue;
+}
+
 + (BOOL) flagForKey: (NSString*) key withDefault: (BOOL) flag
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

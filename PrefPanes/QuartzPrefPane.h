@@ -36,10 +36,19 @@
 
 #import <Foundation/Foundation.h>
 #import "../AMPrefs/AMPrefPaneProtocol.h"
+#import "Preferences.h"
 
-
-@interface QuartzPrefPane : NSObject <AMPrefPaneProtocol> {
+@interface QuartzPrefPane : NSObject <AMPrefPaneProtocol, PreferencesDependent> {
 	IBOutlet NSView *mainView;
+	IBOutlet NSButton *useQuartzPrefPaneSettings;
+	IBOutlet NSTextField *quartzPrefPaneWidth;
+	IBOutlet NSTextField *quartzPrefPaneHeight;
+	IBOutlet NSPopUpButton *quartzPrefPaneLocation;
+	IBOutlet NSTextField *quartzPrefPaneFont;
+	IBOutlet NSTextField *quartzPrefPaneFontSize;
+	IBOutlet NSButton *changeQuartzPrefPaneFont;
+	IBOutlet NSButton *setQuartzPrefPaneDefaults;
+	
 	NSString *identifier;
 	NSString *label;
 	NSString *category;
@@ -63,5 +72,14 @@
 	// should be NSPreferencePaneUnselectReply
 - (void)willUnselect;
 - (void)didUnselect;
+
+// PrefPane specific
+
+- (void) changeUseQuartzPrefPaneSettings:(id)sender;
+- (void) changeQuartzPrefPaneWidth:(id)sender;
+- (void) changeQuartzPrefPaneHeight:(id)sender;
+- (void) changeQuartzPrefPaneLocation:(id)sender;
+- (void) changeQuartzPrefPaneFont:(id)sender;
+- (void) changeQuartzPrefPaneDefaults:(id)sender;
 
 @end

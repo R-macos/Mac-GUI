@@ -47,6 +47,7 @@
 #import "RQuartz.h"
 #import "RDeviceView.h"
 #import "QuartzDevice.h"
+#import "Preferences.h"
 
 #include <Graphics.h>
 #include <Rdevices.h>
@@ -167,6 +168,7 @@ static void RQuartz_SetLineEnd(R_GE_lineend lend,   NSBezierPath *path);
 static void RQuartz_SetLineJoin(R_GE_linejoin ljoin,    NSBezierPath *path);
 static void RQuartz_SetLineMitre(double lmitre,   NSBezierPath *path);
 NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd);
+NSPoint computeTopLeftCornerForDevNum(int devnum);
 			   
 Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 						   double width,double height,
@@ -175,7 +177,13 @@ Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 						   Rboolean autorefresh,int quartzpos,
 						   int bg)
 { 
-
+	NSString *val = [Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"];
+	width = [val doubleValue];
+	val = [Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"];
+	height = [val doubleValue];
+//	NSLog(@"quartzpos value: %d", quartzpos);
+	quartzpos = [[Preferences stringForKey:quartzPrefPaneLocationIntKey withDefault:@"3"] intValue];
+//	NSLog(@"Oref quartzpos value: %d", quartzpos);
     QuartzDesc *xd;
     int ps;
 
@@ -364,6 +372,8 @@ static void 	RQuartz_Activate(NewDevDesc *dd)
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 	xd->DevNum = devnum;
 	[xd->DevView setDevNum: devnum];
+	NSPoint topLeftCorner = computeTopLeftCornerForDevNum(devnum-1);
+	[xd->DevWindow setFrameTopLeftPoint:topLeftCorner];	
 	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Active",devnum+1]];
 
 }
@@ -870,6 +880,54 @@ static Rboolean RQuartz_Locator(double *x,double *y,NewDevDesc*dd){
 			}
 		}
 	}
+}
 
+NSPoint computeTopLeftCornerForDevNum(int devnum) {
+	NSPoint topLeftCorner;
+	NSScreen *screen = [NSScreen mainScreen];
+	NSDictionary *screenDict = [screen deviceDescription];
+	NSSize resolution = [[screenDict objectForKey:NSDeviceResolution] sizeValue];
+	NSSize screenSize = [[screenDict objectForKey:NSDeviceSize] sizeValue];
+	//	NSLog(@"Resolution: %f %f", resolution.width, resolution.height);
+	//	NSLog(@"Screen size: %f %f", screenSize.width, screenSize.height);
+	int quartzpos = [[Preferences stringForKey:quartzPrefPaneLocationIntKey withDefault:@"3"] intValue];
+	int width = [[Preferences stringForKey:quartzPrefPaneWidthKey withDefault:@"4.5"] intValue];
+	int height = [[Preferences stringForKey:quartzPrefPaneHeightKey withDefault:@"4.5"] intValue];
+	float x, y;
+	switch(quartzpos){
+		case 0:									// Top right
+			x = screenSize.width - (width + 1) * resolution.width;
+			y = screenSize.height - 0.5 * resolution.height;
+			break;
+			
+		case 1:									// Bottom right
+			x = screenSize.width - (width + 1) * resolution.width;
+			y = (height + 1) * resolution.height;
+			break;
+			
+		case 2:									// Bottom left
+			x = 0.5 * resolution.width; 
+			y = (height + 1) * resolution.height;
+			break;	
+			
+		case 3:									// Top left
+			x = 0.5 * resolution.width;
+			y = screenSize.height - 0.5 * resolution.height;
+			break;	
+			
+		case 4:									// Centered
+			x = screenSize.width/2 - (width * resolution.width)/2; 
+			y = screenSize.height/2 + (height * resolution.height)/2;
+			break;	
+			
+		default:
+			x = 0.5 * resolution.width; 
+			y = screenSize.height - 0.5 * resolution.height;
+			break; 
+	}
+	topLeftCorner.x = x + devnum * 21;
+	topLeftCorner.y = y - devnum * 23;
+//	NSLog(@"Screen at: %f %f", topLeftCorner.x, topLeftCorner.y);
+	return topLeftCorner;
 }
 
