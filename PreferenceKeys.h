@@ -56,6 +56,9 @@
 #define appOrCommandKey  @"Is it a .app or a command"
 #define editOrSourceKey  @"Edit or source in file"
 #define miscRAquaLibPathKey @"Append RAqua libs to R_LIBS"
+#define enableHorzScrollbarKey @"Add horizontal scrollbar if TRUE"
+#define lineFragmentPaddingWidthKey @"Line fragment padding in editor"
+#define lineNumberGutterWidthKey @"Line number gutter width"
 
 #define useQuartzPrefPaneSettingsKey @"Use QuartzPrefPane values"
 #define quartzPrefPaneWidthKey @"QuartzPrefPane width"

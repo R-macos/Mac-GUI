@@ -20,10 +20,10 @@
 	colorsPrefPane = [[[ColorsPrefPane alloc] initWithIdentifier:@"Colors" label:NLSC(@"PrefP-Colors",@"Colors preference pane") category:NLSC(@"PrefG-Views",@"Views preference group")] autorelease];
 	[self addPane:colorsPrefPane withIdentifier:[colorsPrefPane identifier]];
 	
-	syntaxColorsPrefPane = [[[SyntaxColorsPrefPane alloc] initWithIdentifier:@"Syntax Colors" label:NLSC(@"PrefP-Syntax",@"Syntax colors preference pane") category:NLSC(@"PrefG-General",@"General preference group")] autorelease];
+	syntaxColorsPrefPane = [[[SyntaxColorsPrefPane alloc] initWithIdentifier:@"Syntax Colors" label:NLSC(@"PrefP-Syntax",@"Syntax colors preference pane") category:NLSC(@"PrefG-Editor",@"Editor preference group")] autorelease];
 	[self addPane:syntaxColorsPrefPane withIdentifier:[syntaxColorsPrefPane identifier]];
 	
-	editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:NLSC(@"PrefP-Editor",@"Editor preference pane") category:NLSC(@"PrefG-General",@"General preference group")] autorelease];
+	editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:NLSC(@"PrefP-Editor",@"Editor preference pane") category:NLSC(@"PrefG-Editor",@"Editor preference group")] autorelease];
 	[self addPane:editorPrefPane withIdentifier:[editorPrefPane identifier]];
 	
 	// set up some configuration options

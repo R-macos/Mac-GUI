@@ -32,8 +32,10 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "PreferenceKeys.h"
+#import "Preferences.h"
 
-@interface RRulerView : NSRulerView 
+@interface RRulerView : NSRulerView <PreferencesDependent>
 {
     unsigned fontSize;
     NSMutableDictionary *marginAttributes;
@@ -43,5 +45,7 @@
 
 - (id)initWithScrollView:(NSScrollView *)aScrollView orientation:(NSRulerOrientation)orientation showLineNumbers:(BOOL) use textView:(NSTextView *)tv;
 - (void)updateView;
+- (void) updatePreferences;
+
 
 @end

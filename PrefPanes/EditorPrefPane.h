@@ -50,11 +50,16 @@
 	IBOutlet NSTextField *externalEditorName;
 	IBOutlet NSMatrix *appOrCommand;
 	IBOutlet NSButton *changeEditor;
+	IBOutlet NSButton *enableHorzScrollbar;
+	IBOutlet NSTextField *lineNumberGutterWidth;
+	IBOutlet NSTextField *fragmentPaddingWidth;
 	IBOutlet NSTextField *highlightIntervalText;
 	IBOutlet NSTextField *highlightNoteText;
 	IBOutlet NSTextField *showLineNumbersText;
 	IBOutlet NSTextField *editorText;
 	IBOutlet NSTextField *commandText;
+	IBOutlet NSTextField *lineNumberGutterWidthText;
+	IBOutlet NSTextField *fragmentPaddingWidthText;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -79,6 +84,9 @@
 - (IBAction) changeHighlightInterval:(id)sender;
 - (IBAction) changeShowLineNumbers:(id)sender;
 - (IBAction) changeAppOrCommand:(id)sender;
+- (IBAction) changeEnableHorzScrollbar:(id)sender;
+- (IBAction) changeLineNumberGutterWidth:(id)sender;
+- (IBAction) changeFragmentPaddingWidth:(id)sender;
 
 - (void) updatePreferences;
 

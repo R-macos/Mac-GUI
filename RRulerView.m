@@ -33,8 +33,6 @@
 
 #import "RRulerView.h"
 
-#define gutterThickness 30.0
-
 @interface RRulerView (PrivateMethods)
 
 - (void)drawEmptyMargin:(NSRect)aRect;
@@ -98,6 +96,9 @@
 
 -(void)drawEmptyMargin:(NSRect)aRect
 {
+	float gutterThickness;
+	gutterThickness = [[Preferences stringForKey:lineNumberGutterWidthKey
+					withDefault: @"16.0"] floatValue];
     [self setRuleThickness: gutterThickness];
     
     [[NSColor controlHighlightColor] set];
@@ -113,10 +114,11 @@
 
 -(void)drawNumbersInMargin:(NSRect)aRect
 {
-    unsigned		index, numberOfLines, numberOfGlyphs;
+    unsigned		index, numberOfLines, numberOfGlyphs, rLineNumber;
     NSRange		lineRange;
     NSLayoutManager	*lm;
     NSRect              docRect, lineRect, numRect;
+	BOOL displayNextLineNumber;
     
     docRect = [[self scrollView] documentVisibleRect];
     id textView = [[[NSDocumentController sharedDocumentController] currentDocument] textView];
@@ -124,35 +126,56 @@
     lm = [textView layoutManager];    
     numberOfGlyphs = [lm numberOfGlyphs];
     
-    for ( numberOfLines = 1, index = 0; index < numberOfGlyphs; numberOfLines++ )
+	NSTextStorage *ts = [textView textStorage];
+	NSString *s = [ts string];
+	unichar c;
+	displayNextLineNumber = YES;
+    for ( rLineNumber = 1, numberOfLines = 1, index = 0; index < numberOfGlyphs; numberOfLines++ )
     {
         lineRect = [lm lineFragmentRectForGlyphAtIndex:index effectiveRange:&lineRange];
+		// This offsets the margin of our rulerView so that it scrolls with the textView properly.
+		lineRect = NSOffsetRect(lineRect, -docRect.origin.x, -docRect.origin.y);
+		numRect = NSMakeRect(aRect.origin.x, lineRect.origin.y, aRect.size.width, lineRect.size.height);
         index = NSMaxRange( lineRange );
-        
-        // This offsets the margin of our rulerView so that it scrolls with the textView properly.
-        lineRect = NSOffsetRect(lineRect, -docRect.origin.x, -docRect.origin.y);
-        numRect = NSMakeRect(aRect.origin.x, lineRect.origin.y, aRect.size.width, lineRect.size.height);
-        
-        [self drawOneNumberInMargin: numberOfLines inRect: numRect];
+		c = [s characterAtIndex:lineRange.location + lineRange.length - 1];
+		if (displayNextLineNumber) {
+			[self drawOneNumberInMargin: rLineNumber inRect: numRect];
+			rLineNumber++;
+			if (!(c=='\n')) {
+				displayNextLineNumber = NO;	
+			} 
+		} else {
+			[self drawOneNumberInMargin: 0 inRect: numRect];
+			if (c=='\n') {
+				displayNextLineNumber = YES;			
+			} else {
+				displayNextLineNumber = NO;
+			}			
+		}
     }
     lineRect = [lm extraLineFragmentRect];
-    
-    // This offsets the margin of our rulerView so that it scrolls with the textView properly.
+	// This offsets the margin of our rulerView so that it scrolls with the textView properly.
     lineRect = NSOffsetRect(lineRect, -docRect.origin.x, -docRect.origin.y);
     numRect = NSMakeRect(aRect.origin.x, lineRect.origin.y, aRect.size.width, lineRect.size.height);
-    
-    [self drawOneNumberInMargin: numberOfLines inRect: numRect];
+    [self drawOneNumberInMargin: rLineNumber inRect: numRect];
 }
 
 -(void)drawOneNumberInMargin:(unsigned) aNumber inRect:(NSRect)r
 {
     NSString    *s;
     NSSize      stringSize;
-    
-    s = [NSString stringWithFormat:@"%d", aNumber, nil];
+	
+    if (aNumber == 0)
+		s = [NSString stringWithFormat:@"."];
+	else
+		s = [NSString stringWithFormat:@"%d", aNumber, nil];
     stringSize = [s sizeWithAttributes:marginAttributes];
     
     [s drawInRect: NSMakeRect(r.origin.x, r.origin.y + ((r.size.height / 2) - (stringSize.height / 2)), [self ruleThickness] - 2, r.size.height) withAttributes: marginAttributes];
 }
+
+- (void) updatePreferences {	
+}
+
 
 @end

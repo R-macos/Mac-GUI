@@ -164,13 +164,16 @@
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[showLineNumbers setEnabled:flag?NSOnState:NSOffState];
 	[highlightInterval setEnabled:flag?NSOnState:NSOffState];
-	
-	[highlightIntervalText setEnabled:flag?NSOffState:NSOnState];
+	[enableHorzScrollbar setEnabled:flag?NSOnState:NSOffState];
+	[lineNumberGutterWidth setEnabled:flag?NSOnState:NSOffState];
+	[fragmentPaddingWidth setEnabled:flag?NSOnState:NSOffState];
 	if (flag) {
 		[highlightIntervalText setTextColor:[NSColor blackColor]];
 		[highlightNoteText setTextColor:[NSColor blackColor]];
 		[showLineNumbersText setTextColor:[NSColor blackColor]];
 		[editorText setTextColor:[NSColor grayColor]];
+		[lineNumberGutterWidthText setTextColor:[NSColor blackColor]];
+		[fragmentPaddingWidthText setTextColor:[NSColor blackColor]];
 		[externalEditorName setTextColor:[NSColor grayColor]];
 		[commandText setTextColor:[NSColor grayColor]];
 	} else {
@@ -178,6 +181,8 @@
 		[highlightNoteText setTextColor:[NSColor grayColor]];
 		[showLineNumbersText setTextColor:[NSColor grayColor]];
 		[editorText setTextColor:[NSColor blackColor]];
+		[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
+		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
 		[externalEditorName setTextColor:[NSColor blackColor]];
 		[commandText setTextColor:[NSColor blackColor]];
 	}
@@ -200,7 +205,28 @@
 	[highlightInterval setStringValue:[Preferences stringForKey:highlightIntervalKey withDefault: @"0.30"]];
 
 	[showLineNumbers setState:[Preferences flagForKey:showLineNumbersKey withDefault: YES]?NSOnState:NSOffState];
-
+	
+	if (![Preferences flagForKey:showLineNumbersKey withDefault: YES]) {
+		[enableHorzScrollbar setEnabled:NSOffState];		
+		[lineNumberGutterWidth setEnabled:NSOffState];
+		[fragmentPaddingWidth setEnabled:NSOffState];
+		[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
+		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
+	}
+/*
+	if (![Preferences flagForKey:enableHorzScrollbarKey withDefault: YES]) {
+		[lineNumberGutterWidth setEnabled:NSOffState];
+		[fragmentPaddingWidth setEnabled:NSOffState];
+		[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
+		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
+	}
+*/
+	[enableHorzScrollbar setState:[Preferences flagForKey:enableHorzScrollbarKey withDefault: YES]?NSOnState:NSOffState];
+	
+	[lineNumberGutterWidth setStringValue:[Preferences stringForKey:lineNumberGutterWidthKey withDefault: @"16.0"]];
+	
+	[fragmentPaddingWidth setStringValue:[Preferences stringForKey:lineFragmentPaddingWidthKey withDefault: @"6.0"]];
+	
 	flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
 	[appOrCommand setState:flag?NSOffState:NSOnState atRow:1 column:0];
 	[appOrCommand setState:flag?NSOnState:NSOffState atRow:0 column:0];
@@ -265,5 +291,39 @@
 		[Preferences setKey:externalEditorNameKey withObject:[sp filename]];
 	}
 }
+
+- (IBAction) changeEnableHorzScrollbar:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:enableHorzScrollbarKey withFlag:flag];
+	
+}
+
+- (IBAction) changeLineNumberGutterWidth:(id)sender {
+	NSString *interval = ([[sender stringValue] length] == 0)?@"0.2":[sender stringValue];
+	if ([interval length] == 0) {
+		interval = @"16.0";
+	} else {
+		double value = [interval doubleValue];
+		if (value < 6.0)
+			interval = @"6.0";
+	}
+	[Preferences setKey:lineNumberGutterWidthKey withObject:interval];	
+}
+
+- (IBAction) changeFragmentPaddingWidth:(id)sender {
+	NSString *interval = ([[sender stringValue] length] == 0)?@"0.2":[sender stringValue];
+	if ([interval length] == 0) {
+		interval = @"6.0";
+	} else {
+		double value = [interval doubleValue];
+		if (value < 3.0)
+			interval = @"3.0";
+		else if (value > 20.0)
+			interval = @"20.0";
+	}
+	[Preferences setKey:lineFragmentPaddingWidthKey withObject:interval];	
+}
+
 
 @end

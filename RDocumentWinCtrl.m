@@ -153,19 +153,29 @@ NSArray *keywordList=nil;
 		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
     }
 	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
+	BOOL horzScrollbarEnabled = [Preferences flagForKey:enableHorzScrollbarKey withDefault: YES];
 	if (showLineNos) {
 		// This should probably get loaded from NSUserDefaults.
 		NSFont *font = [NSFont fontWithName:@"Monaco" size: 10];
 		
-		// Make sure that we don't wrap lines.
-		[scrollView setHasHorizontalScroller: YES];
-		[textView setHorizontallyResizable: YES]; 
 		NSSize layoutSize = [textView maxSize];
 		layoutSize.width = layoutSize.height;
-		[textView setMaxSize: layoutSize];
-		[[textView textContainer] setWidthTracksTextView: NO];
-		[[textView textContainer] setHeightTracksTextView: NO];
-		[[textView textContainer] setContainerSize: layoutSize];
+		if (horzScrollbarEnabled) {
+			// Make sure that we don't wrap lines.
+			[scrollView setHasHorizontalScroller: YES];
+			[textView setHorizontallyResizable: YES]; 
+			[textView setMaxSize: layoutSize];
+			[[textView textContainer] setWidthTracksTextView: NO];
+			[[textView textContainer] setHeightTracksTextView: NO];
+			[[textView textContainer] setContainerSize: layoutSize];			
+		} else {
+			[scrollView setHasHorizontalScroller: NO];
+			[textView setHorizontallyResizable: YES]; 
+			[textView setMaxSize: layoutSize];
+			[[textView textContainer] setWidthTracksTextView: YES];
+			[[textView textContainer] setHeightTracksTextView: NO];
+			[[textView textContainer] setContainerSize: layoutSize];						
+		}
 		
 		// Create and install our line numbers
 		if (theRulerView) [theRulerView release];
@@ -178,7 +188,9 @@ NSArray *keywordList=nil;
 		[scrollView setLineScroll: [font pointSize]];
 		
 		// Add a small pad to the textViews
-		[[textView textContainer] setLineFragmentPadding: 10.0];
+		float lineFragmentPadding;
+		lineFragmentPadding = [[Preferences stringForKey:lineFragmentPaddingWidthKey withDefault: @"6.0"] floatValue];
+		[[textView textContainer] setLineFragmentPadding: lineFragmentPadding];
 		
 		[textView setUsesRuler: YES];
 		[textView setFont: font];
@@ -214,13 +226,6 @@ NSArray *keywordList=nil;
 		   selector:@selector(textDidChange:)
 			   name:NSTextDidChangeNotification
 			 object: textView];
-	/*
-	 [[NSNotificationCenter defaultCenter] 
-		addObserver:self
-		   selector:@selector(windowDidBecomeKey:)
-			   name:NSWindowDidBecomeKeyNotification
-			 object:theRulerView];
-	 */
 	[[textView textStorage] setDelegate:self];	
 	[self updatePreferences];
 }
@@ -556,11 +561,8 @@ NSArray *keywordList=nil;
 		}
     if (showMatchingBraces) {
 		if (commandSelector == @selector(deleteBackward:)) {
-			//			[self highlightBracesWithShift: -1 andWarn:NO];
 			deleteBackward = YES;
 		}
-		//		if (commandSelector == @selector(deleteBackwardByDecomposingPreviousCharacter:))
-		//			[self highlightBracesWithShift: -1 andWarn:NO];
 		if (commandSelector == @selector(moveLeft:))
 			[self highlightBracesWithShift: -1 andWarn:NO];
 		if(commandSelector == @selector(moveRight:))
