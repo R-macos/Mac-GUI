@@ -48,6 +48,7 @@
 	IBOutlet NSButton *showLineNumbers;
 	IBOutlet NSTextField *externalEditorName;
 	IBOutlet NSMatrix *appOrCommand;
+	IBOutlet NSButton *changeEditor;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -60,31 +61,31 @@
 - (NSString *)category;
 
 	// AMPrefPaneInformalProtocol
-- (void)willSelect;
-- (void)didSelect;
-	//	Deselecting the preference pane
 - (int)shouldUnselect;
-	// should be NSPreferencePaneUnselectReply
-- (void)willUnselect;
-- (void)didUnselect;
 
 	// Other methods
 
+- (IBAction) changeEditor:(id)sender;
 - (IBAction) changeInternalOrExternal:(id)sender;
 - (NSMatrix *) internalOrExternal;
-- (id) builtInPrefs;
-- (id) externalSettings;
-- (IBAction) changeShowSyntaxColoring:(id)sender;
-- (id) showSyntaxColoring;
-- (IBAction) changeShowBraceHighlighting:(id)sender;
-- (id) showBraceHighlighting;
-- (IBAction) changeHighlightInterval:(id)sender;
-- (id) highlightInterval;
-- (IBAction) changeShowLineNumbers:(id)sender;
-- (id) showLineNumbers;
+- (void)  setUseInternalEditor:(BOOL)flag;
 - (IBAction) changeExternalEditorName:(id)sender;
-- (id) externalEditorName;
+- (NSTextField *) externalEditorName;
+- (void) setExternalEditor:(NSString *)name;
+- (IBAction) changeShowSyntaxColoring:(id)sender;
+- (NSButton *) showSyntaxColoring;
+- (void) setDoSyntaxColoring:(BOOL)flag;
+- (IBAction) changeShowBraceHighlighting:(id)sender;
+- (NSButton *) showBraceHighlighting;
+- (void) setDoBraceHighlighting:(BOOL)flag;
+- (IBAction) changeHighlightInterval:(id)sender;
+- (NSTextField *) highlightInterval;
+- (void) setCurrentHighlightInterval:(NSString *)aString;
+- (IBAction) changeShowLineNumbers:(id)sender;
+- (NSButton *) showLineNumbers;
+- (void) setDoLineNumbers:(BOOL)flag;
 - (IBAction) changeAppOrCommand:(id)sender;
 - (NSMatrix *) appOrCommand;
+- (void) setEditorIsApp:(BOOL)flag;
 
 @end

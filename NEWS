@@ -1,6 +1,10 @@
 NEWS
 
 Last update: 2004-11-27 [RG]
+*	cleaned storing preferences EditorPrefPane and
+	added New editor selection panel
+*	fixed storing preferences MiscPrefPane
+*	fixed blanks in filename paths for openDocument
 *	fixed Save Document As for Quartz window
 
 Last update: 2004-11-24 [SU]
@@ -270,3 +274,8 @@ Last update: 2004-08-14
 *   added environment variable in info.plist
 
 First release: 2004-08-10
+
+Authors:
+SI	Stefano M Iacus
+SU	Simon Urbanek
+RG	Rob J Goedman

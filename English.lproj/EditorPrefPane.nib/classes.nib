@@ -3,9 +3,8 @@
         {
             ACTIONS = {
                 changeAppOrCommand = id; 
-                changeBuiltInPrefs = id; 
+                changeEditor = id; 
                 changeExternalEditorName = id; 
-                changeExternalSettings = id; 
                 changeHighlightInterval = id; 
                 changeInternalOrExternal = id; 
                 changeShowBraceHighlighting = id; 
@@ -17,6 +16,7 @@
             OUTLETS = {
                 appOrCommand = NSMatrix; 
                 builtInPrefs = NSBox; 
+                changeEditor = NSButton; 
                 externalEditorName = NSTextField; 
                 externalSettings = NSBox; 
                 highlightInterval = NSTextField; 

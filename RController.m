@@ -55,16 +55,16 @@
 #define writeBufferLowWaterMark   2048
 
 /*  RController.m: main GUI code originally based on Simon Urbanek's work of embedding R in Cocoa app (RGui?)
-	The Code and File Completion is due to Simon U.
-	History handler is due to Simon U.
+The Code and File Completion is due to Simon U.
+History handler is due to Simon U.
 */
 
 typedef struct {
-  ParseStatus    status;
-  int            prompt_type;
-  int            browselevel;
-  unsigned char  buf[1025];
-  unsigned char *bufp;
+	ParseStatus    status;
+	int            prompt_type;
+	int            browselevel;
+	unsigned char  buf[1025];
+	unsigned char *bufp;
 } R_ReplState;
 
 extern R_ReplState state;
@@ -187,9 +187,9 @@ static RController* sharedRController;
 	colorsPrefPane = NULL;
 	miscPrefPane = NULL;
 	editorPrefPane = NULL;
-
+	
 	[self setupPrefWindow];
-
+	
 	[self readDefaults];
 	[RConsoleWindow setBackgroundColor:backgColor];
 	[RConsoleWindow display];
@@ -206,7 +206,7 @@ static RController* sharedRController;
 	}
 	[RTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
 	
-//	[RTextView changeColor: inputColor];
+	//	[RTextView changeColor: inputColor];
 	[RTextView display];
 	[self setupToolbar];
 	[self showWindow];
@@ -221,8 +221,8 @@ static RController* sharedRController;
 												repeats:YES];
 	
 	hist=[[History alloc] init];
-
-
+	
+	
     BOOL WantThread = YES;
 	
     if(WantThread){ // re-route the stdout to our own file descriptor and use ConnectionCache on it
@@ -232,7 +232,7 @@ static RController* sharedRController;
         close(pfd[1]);
         
         stdoutFD=pfd[0];
-
+		
         pipe(pfd);
 #ifndef PLAIN_STDERR
         dup2(pfd[1], STDERR_FILENO);
@@ -240,12 +240,12 @@ static RController* sharedRController;
 #endif
         
         stderrFD=pfd[0];
-
+		
 		[self addConnectionLog];
     }
-
+	
 	[historyView setDoubleAction: @selector(historyDoubleClick:)];
-
+	
 	currentSize = [[RTextView textContainer] containerSize].width;
 	//currentFontSize = [[RTextView font] pointSize];
 	currentConsoleWidth = -1;
@@ -258,7 +258,7 @@ static RController* sharedRController;
 		NSRunAlertPanel(@"Cannot start R",[NSString stringWithFormat:@"Unable to start R: %@", [[REngine mainEngine] lastError]],@"OK",nil,nil);
 		exit(-1);
 	}
-		
+	
 	preferences = [[NSMutableDictionary alloc] init];
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
@@ -280,14 +280,14 @@ static RController* sharedRController;
 												selector:@selector(flushTimerHook:)
 												userInfo:0
 												 repeats:YES];
-
+	
 	if (!RLtimer)
 		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
 												   target:self
 												 selector:@selector(runRELP:)
 												 userInfo:0
 												  repeats:NO];
-
+	
 }
 
 -(void) addConnectionLog
@@ -319,12 +319,12 @@ static RController* sharedRController;
 	int bufFD=0;
     fd_set readfds;
 	struct timeval timv;
-
+	
 	timv.tv_sec=0; timv.tv_usec=300000; /* timeout */
-
+	
 	connectionToController = [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0]
 															sendPort:[portArray objectAtIndex:1]];
-
+	
 	rc = ((RController *)[connectionToController rootProxy]);
 	
     fcntl(stdoutFD, F_SETFL, O_NONBLOCK);
@@ -444,7 +444,7 @@ static RController* sharedRController;
 		[self changeFontSize:NULL];
 	} else
 		[[NSFontManager sharedFontManager] modifyFont:sender];
-
+	
 }
 
 // This action is called to change the font size.  It's called by the NSPopUpButton in the toolbar item's 
@@ -472,12 +472,12 @@ extern BOOL isTimeToFinish;
 		[timer invalidate];
 		timer = nil;
 	}
-
+	
 	if(RLtimer){
 		[RLtimer invalidate];
 		RLtimer = nil;
 	}
-		
+	
 	if(Flushtimer){
 		[Flushtimer invalidate];
 		Flushtimer = nil;
@@ -487,7 +487,7 @@ extern BOOL isTimeToFinish;
 		[WDirtimer invalidate];
 		WDirtimer = nil;
 	}
-		
+	
 	return NSTerminateNow;
 }
 
@@ -547,7 +547,7 @@ extern BOOL isTimeToFinish;
 		writeBufferPos=writeBuffer;
 		fits=writeBufferLen-1;
 	}
-
+	
 	strcpy(writeBufferPos, s);
 	writeBufferPos+=sl;
 	
@@ -566,7 +566,7 @@ extern BOOL isTimeToFinish;
 	if (tl>0) {
 		unsigned oldCL=committedLength;
 		/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
-			  origSel.length, outputPosition, tl, promptPosition, committedLength); */
+		origSel.length, outputPosition, tl, promptPosition, committedLength); */
 		committedLength=0;
 		[RTextView setSelectedRange:insPt];
 		[RTextView insertText:txt];
@@ -608,7 +608,7 @@ extern BOOL isTimeToFinish;
 
 - (void)  handleProcessingInput: (char*) cmd
 {
-	NSString *s = [[NSString alloc] initWithUTF8String:cmd];
+	NSString *s = [NSString stringWithCString:cmd];
 	unsigned textLength = [[RTextView textStorage] length];
 	
 	[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
@@ -621,7 +621,6 @@ extern BOOL isTimeToFinish;
 		[self openHelpFor: cmd];
 		cmd[0] = '\n'; cmd[1] = 0;
 	}
-	[s release];
 }
 
 - (char*) handleReadConsole: (int) addtohist
@@ -636,7 +635,7 @@ extern BOOL isTimeToFinish;
 	
 	currentConsoleInput = [consoleInputQueue objectAtIndex:0];
 	[consoleInputQueue removeObjectAtIndex:0];
-
+	
 	if (addtohist) {
 		// don't register training newline ... FIXME: we should acutally include it and fix history handling at other places ..
 		if ([currentConsoleInput length]>0 && [currentConsoleInput characterAtIndex:[currentConsoleInput length]-1]=='\n')
@@ -807,25 +806,25 @@ extern BOOL isTimeToFinish;
 }
 
 /*  This is used to send commands through the GUI, i.e. from menus 
-	The input replaces what the user is currently typing.
+The input replaces what the user is currently typing.
 */
 - (void) sendInput: (NSString*) text {
 	[self consoleInput:text interactive:YES];
 	/*
-	unsigned textLength = [[RTextView textStorage] length];
-	[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-	NSEvent* event = [NSEvent keyEventWithType:NSKeyDown
-									  location:NSMakePoint(0,0)
-								 modifierFlags:0
-									 timestamp:0
-								  windowNumber:[RConsoleWindow windowNumber]
-									   context:nil
-									characters:@"\n"
-				   charactersIgnoringModifiers:nil
-									 isARepeat:NO
-									   keyCode:nil
-		];
-	[NSApp postEvent:event atStart:YES];
+	 unsigned textLength = [[RTextView textStorage] length];
+	 [RTextView setSelectedRange:NSMakeRange(textLength, 0)];
+	 NSEvent* event = [NSEvent keyEventWithType:NSKeyDown
+									   location:NSMakePoint(0,0)
+								  modifierFlags:0
+									  timestamp:0
+								   windowNumber:[RConsoleWindow windowNumber]
+										context:nil
+									 characters:@"\n"
+					charactersIgnoringModifiers:nil
+									  isARepeat:NO
+										keyCode:nil
+		 ];
+	 [NSApp postEvent:event atStart:YES];
 	 */
 }
 
@@ -837,9 +836,9 @@ extern BOOL isTimeToFinish;
 
 - (id)tableView: (NSTableView *)tableView
 		objectValueForTableColumn: (NSTableColumn *)tableColumn
-		row: (int)row
+			row: (int)row
 {
-			return (NSString*) [[hist entries]  objectAtIndex: row];
+	return (NSString*) [[hist entries]  objectAtIndex: row];
 }
 
 /*  Clears the history  and updates the TableView */
@@ -851,9 +850,9 @@ extern BOOL isTimeToFinish;
 }
 
 /*  Loads the content of the history of a file. The default extension .history
-	This file is not compatible with unix history files as it could be multiline.
-	This rountien cannot load standard unix history files.
-	FIXME: We can probably import standard unix history files
+This file is not compatible with unix history files as it could be multiline.
+This rountien cannot load standard unix history files.
+FIXME: We can probably import standard unix history files
 */
 
 - (IBAction)doLoadHistory:(id)sender
@@ -876,10 +875,10 @@ extern BOOL isTimeToFinish;
 }
 
 /*  Saves the content of the history of a file. The default extension .history
-	This file is not compatible with unix history files as it could be multiline.
-	FIXME: we can probably allow for exporting as single line
+This file is not compatible with unix history files as it could be multiline.
+FIXME: we can probably allow for exporting as single line
 */
-	
+
 - (IBAction)doSaveHistory:(id)sender
 {
 	int answer;
@@ -890,13 +889,13 @@ extern BOOL isTimeToFinish;
 	answer = [sp runModal];
 	if(answer == NSOKButton) {
 		[NSArchiver archiveRootObject: [hist entries]
-					toFile: [sp filename]];
+							   toFile: [sp filename]];
 	}
 	
 }
 
 /*  On double-click on items of the History TableView, the item is pasted into the console
-	at current cursor position
+at current cursor position
 */
 - (IBAction)historyDoubleClick:(id)sender {
 	NSString *cmd;
@@ -910,7 +909,7 @@ extern BOOL isTimeToFinish;
 
 
 /*  This routine is intended to "cat" some text to the R Console without
-	issuing the newline.
+issuing the newline.
 - (void) consolePaste: (NSString*) text {
 	unsigned textLength = [[RTextView textStorage] length];
 	[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
@@ -918,7 +917,7 @@ extern BOOL isTimeToFinish;
 }
 */
 /* This function is used by two threads to write  stderr and/or stdout to the console
-   outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
+outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 */
 - (void) writeLogsWithBytes: (char*) buf length: (int) len type: (int) outputType
 {
@@ -944,7 +943,7 @@ extern BOOL isTimeToFinish;
 		textLength = [[RTextView textStorage] length];
 		[RTextView setTextColor:inputColor range:NSMakeRange(committedLength,textLength-committedLength)];
 	}
-
+	
 	if (inter) {
 		if ([cmd characterAtIndex:[cmd length]-1]!='\n') cmd=[cmd stringByAppendingString: @"\n"];
 		[consoleInputQueue addObject:[[NSString alloc] initWithString:cmd]];
@@ -953,7 +952,7 @@ extern BOOL isTimeToFinish;
 
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     BOOL retval = NO;
-
+	
 	//NSLog(@"RTextView commandSelector: %@\n", NSStringFromSelector(commandSelector));
 	
     if (@selector(insertNewline:) == commandSelector) {
@@ -1012,7 +1011,7 @@ extern BOOL isTimeToFinish;
         [textView setSelectedRange: NSMakeRange(committedLength,0)];
         retval = YES;
     }
-
+	
 	if (@selector(moveToBeginningOfParagraphAndModifySelection:) == commandSelector || @selector(moveToBeginningOfLineAndModifySelection:) == commandSelector) {
 		// FIXME: this kills the selection - we should retain it ...
         [textView setSelectedRange: NSMakeRange(committedLength,0)];
@@ -1091,7 +1090,7 @@ extern BOOL isTimeToFinish;
     
 	return retval;
 }
-	
+
 /* Allow changes only for uncommitted text */
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString {
 	if (affectedCharRange.location < committedLength) { /* if the insertion is outside editable scope, append at the end */
@@ -1101,13 +1100,13 @@ extern BOOL isTimeToFinish;
 	}
 	return YES;
 }
-	
+
 - (void) handleBusy: (BOOL) isBusy {
     if (isBusy)
         [progressWheel startAnimation:self];
     else
         [progressWheel stopAnimation:self];
-
+	
 	busyRFlag = isBusy;
 	if (toolbarStopItem) {
 		if (isBusy || childPID>0)
@@ -1123,19 +1122,19 @@ extern BOOL isTimeToFinish;
 }
 
 /*  This is called from R with as callback to R_ProcessEvents during
-	computation in "src/main/errors.c". The callback is defined at the
-	moment inside "src/unix/aqua.c". In "errors.c" this is defined to
-	allow for user interrupts but we also use it to make our GUI
-	reponsive to user interaction.
+computation in "src/main/errors.c". The callback is defined at the
+moment inside "src/unix/aqua.c". In "errors.c" this is defined to
+allow for user interrupts but we also use it to make our GUI
+reponsive to user interaction.
 */	
 
 
 
 /*  This called by a timer periodically to allow tcltk, x11 etc to process their events 
-	like window resizing, locator, widgets interactions, etc.
+like window resizing, locator, widgets interactions, etc.
 */
 
-  
+
 - (IBAction)runRELP:(id)sender {
 	run_Rmainloop();
 }
@@ -1231,13 +1230,13 @@ extern BOOL isTimeToFinish;
 	int answer;
 	NSSavePanel *sp;
 	NSOpenPanel *op;
-
+	
 	buf[0] = '\0';
 	if(isNew==1){
 		sp = [NSSavePanel savePanel];
 		[sp setTitle:@"Choose New File Name"];
 		answer = [sp runModalForDirectory:nil file:nil];
-	
+		
 		if(answer == NSOKButton) {
 			if([sp filename] != nil){
 				CFStringGetCString((CFStringRef)[sp filename], buf, len-1,  kCFStringEncodingMacRoman); 
@@ -1248,7 +1247,7 @@ extern BOOL isTimeToFinish;
 		op = [NSOpenPanel openPanel];
 		[op setTitle:@"Choose File"];
 		answer = [op runModalForDirectory:nil file:nil];
-	
+		
 		if(answer == NSOKButton) {
 			if([op filename] != nil){
 				CFStringGetCString((CFStringRef)[op filename], buf, len-1,  kCFStringEncodingMacRoman); 
@@ -1257,7 +1256,7 @@ extern BOOL isTimeToFinish;
 		}
 	}	
 	return strlen(buf);
-
+	
 }	
 
 - (void) loadFile:(char *)fname
@@ -1266,24 +1265,24 @@ extern BOOL isTimeToFinish;
 	
 	switch(res){
 		case -1:
-		NSLog(@"cannot open file");
-		break;
-		
+			NSLog(@"cannot open file");
+			break;
+			
 		case 0:
 			[self sendInput: [NSString stringWithFormat:@"load(\"%s\")",fname]];
-		break;
-		
+			break;
+			
 		case 1:
 			[self sendInput: [NSString stringWithFormat:@"source(\"%s\")",fname]];
-		break;	
+			break;	
 		default:
-		break; 
+			break; 
 	}
 }
 
 // FIXME: is this really sufficient? what about compressed files?
 /*  isImageData:	returns -1 on error, 0 if the file is RDX2 or RDX1, 
-					1 otherwise.
+1 otherwise.
 */	
 - (int)isImageData:(char *)fname
 {
@@ -1307,7 +1306,7 @@ extern BOOL isTimeToFinish;
 
 - (void) doProcessEvents: (BOOL) blocking {
 	NSEvent *event;
-
+	
 	if (blocking){
 		event = [NSApp nextEventMatchingMask:NSAnyEventMask
 								   untilDate:[NSDate distantFuture]
@@ -1327,28 +1326,28 @@ extern BOOL isTimeToFinish;
 - (void) handleProcessEvents{
 	[self doProcessEvents: NO];
 }
-	
+
 
 /* 
 This method calls the showHelpFor method of the Help Manager which opens
-the internal html browser/help system of R.app
-This method is called from ReadConsole.
+ the internal html browser/help system of R.app
+ This method is called from ReadConsole.
  
-The input C string 'topic' is parsed and the behaviour is the following:
-
-topic = ?something  => showHelpFor:@"something"
-topic = help(something) => showHelpFor:@"something"
-topic = help(something); print(anotherthing);   =>  showHelpFor:@"something"
-
-which means that all the rest of the input is discarded.
-No error message or warning are raised.
-*/
+ The input C string 'topic' is parsed and the behaviour is the following:
+ 
+ topic = ?something  => showHelpFor:@"something"
+ topic = help(something) => showHelpFor:@"something"
+ topic = help(something); print(anotherthing);   =>  showHelpFor:@"something"
+ 
+ which means that all the rest of the input is discarded.
+ No error message or warning are raised.
+ */
 
 - (void) openHelpFor: (char *) topic 
 {
 	char tmp[300];
 	int i;
-
+	
 	if(topic[0] == '?' && (strlen(topic)>1))
 		[[HelpManager getHMController] showHelpFor: [NSString stringWithCString:topic+1]];
 	if(strncmp("help(",topic,5)==0){
@@ -1363,9 +1362,9 @@ No error message or warning are raised.
 }
 
 - (void) setupToolbar {
-
+	
     // Create a new toolbar instance, and attach it to our document window 
-   toolbar = [[[NSToolbar alloc] initWithIdentifier: RToolbarIdentifier] autorelease];
+	toolbar = [[[NSToolbar alloc] initWithIdentifier: RToolbarIdentifier] autorelease];
     
     // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
     [toolbar setAllowsUserCustomization: YES];
@@ -1400,7 +1399,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"emptyDoc"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(newDocument:)];
-
+		
     } else  if ([itemIdent isEqual: X11ToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Start X11"];
 		[toolbarItem setPaletteLabel: @"Start X11 Server"];
@@ -1408,7 +1407,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"X11"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(runX11:)];
-
+		
     }  else  if ([itemIdent isEqual: SetColorsToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Set Colors"];
 		[toolbarItem setPaletteLabel: @"Set R Colors"];
@@ -1416,7 +1415,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"colors"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(openColors:)];
-
+		
     } else  if ([itemIdent isEqual: LoadFileInEditorToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Open In Editor"];
 		[toolbarItem setPaletteLabel: @"Open In Editor"];
@@ -1424,7 +1423,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"RDoc"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(openDocument:)];
-
+		
     } else  if ([itemIdent isEqual: SourceRCodeToolbarIdentifier]) {
 		[toolbarItem setLabel: @"Source/Load"];
 		[toolbarItem setPaletteLabel: @"Source Or Load In R"];
@@ -1432,7 +1431,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"sourceR"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(sourceOrLoadFile:)];
-
+		
     } else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Quartz"];
 		[toolbarItem setPaletteLabel: @"Quartz"];
@@ -1440,7 +1439,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(newQuartzDevice:) ];
-
+		
 	} else if([itemIdent isEqual: InterruptToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Abort"];
 		[toolbarItem setPaletteLabel: @"Abort"];
@@ -1449,7 +1448,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(breakR:) ];
-
+		
 	}  else if([itemIdent isEqual: FontSizeToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Font Size"];
 		[toolbarItem setPaletteLabel: @"Font Size"];
@@ -1463,7 +1462,7 @@ No error message or warning are raised.
 			[toolbarItem setMinSize:[[toolbarItem view] bounds].size];
 			[toolbarItem setMaxSize:[[toolbarItem view] bounds].size];
 		}
-
+		
 	}  else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Quartz"];
 		[toolbarItem setPaletteLabel: @"Quartz"];
@@ -1471,7 +1470,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(newQuartzDevice:) ];
-	
+		
 	} else if([itemIdent isEqual: ShowHistoryToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"History"];
 		[toolbarItem setPaletteLabel: @"History"];
@@ -1479,7 +1478,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"history"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(toggleHistory:) ];
-	
+		
 	} else if([itemIdent isEqual: AuthenticationToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Authentication"];
 		[toolbarItem setPaletteLabel: @"Authentication"];
@@ -1487,7 +1486,7 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"lock-locked"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(toggleAuthentication:) ];
-	
+		
 	} else if([itemIdent isEqual: QuitRToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Quit"];
 		[toolbarItem setPaletteLabel: @"Quit"];
@@ -1495,11 +1494,11 @@ No error message or warning are raised.
 		[toolbarItem setImage: [NSImage imageNamed: @"quit"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(quitR:) ];
-	
+		
 	} else {
-	// itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
-	// Returning nil will inform the toolbar this kind of item is not supported 
-	toolbarItem = nil;
+		// itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
+		// Returning nil will inform the toolbar this kind of item is not supported 
+		toolbarItem = nil;
     }
     return toolbarItem;
 }
@@ -1553,7 +1552,7 @@ No error message or warning are raised.
     // the chance to tear down information related to the item that may have been cached.   The notification object
     // is the toolbar from which the item is being removed.  The item being added is found by referencing the @"item"
     // key in the userInfo 
-   // NSToolbarItem *removedItem = [[notif userInfo] objectForKey: @"item"];
+	// NSToolbarItem *removedItem = [[notif userInfo] objectForKey: @"item"];
 }
 
 - (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
@@ -1626,8 +1625,8 @@ No error message or warning are raised.
 -(IBAction) getWorkingDir:(id)sender
 {
 	[self sendInput:@"getwd()"];
-//	[[REngine mainEngine] evaluateString: @"getwd()"];
-
+	//	[[REngine mainEngine] evaluateString: @"getwd()"];
+	
 }
 
 -(IBAction) resetWorkingDir:(id)sender
@@ -1646,19 +1645,19 @@ No error message or warning are raised.
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
 	[op setTitle:@"Choose New Working Directory"];
-
+	
 	answer = [op runModalForDirectory:[NSString stringWithCString:buf] file:nil types:[NSArray arrayWithObject:@""]];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
-
+	
 	if(answer == NSOKButton) {
 		if([op directory] != nil){
 			CFStringGetCString((CFStringRef)[op directory], buf, 300,  kCFStringEncodingMacRoman); 
 			chdir(buf);
-			}
+		}
 	}
 	
-
+	
 }
 
 - (IBAction) showWorkingDir:(id)sender
@@ -1666,7 +1665,7 @@ No error message or warning are raised.
 	char	buf[301];
     
 	getcwd(buf, 300);
-
+	
 	[WDirView setEditable:YES];
 	[WDirView setStringValue: [NSString stringWithCString:buf]];
 	[WDirView setEditable:NO];
@@ -1687,7 +1686,7 @@ No error message or warning are raised.
 	answer = [op runModalForDirectory:nil file:nil types:[NSArray arrayWithObject:@""]];
 	[op setCanChooseDirectories:NO];
 	[op setCanChooseFiles:YES];		
-
+	
 	if(answer == NSOKButton) 
 		if([op directory] != nil)
 			[[REngine mainEngine] executeString: [NSString stringWithFormat:@"install.from.file(pkg=\"%@\")",[op directory]] ];
@@ -1712,20 +1711,20 @@ No error message or warning are raised.
 {
 	[WSBrowser toggleWorkspaceBrowser];
 	[[REngine mainEngine] executeString:@"browseEnv(html=F)"];
-
+	
 }
 
 - (IBAction)loadWorkSpace:(id)sender
 {
 	[self sendInput:@"load(\".RData\")"];
-//	[[REngine mainEngine] evaluateString:@"load(\".RData\")" ];
-
+	//	[[REngine mainEngine] evaluateString:@"load(\".RData\")" ];
+	
 }
 
 - (IBAction)saveWorkSpace:(id)sender
 {
 	[self sendInput:@"save.image()"];
-//	[[REngine mainEngine] evaluateString:@"save.image()"];
+	//	[[REngine mainEngine] evaluateString:@"save.image()"];
 	
 }
 
@@ -1746,7 +1745,7 @@ No error message or warning are raised.
 - (IBAction)clearWorkSpace:(id)sender
 {
 	NSBeginAlertSheet(@"Clear Workspace",@"Yes",@"No !!!",nil,RConsoleWindow,self,@selector(shouldClearWS:returnCode:contextInfo:),NULL,NULL,
-	@"All objects in the workspace will be removed. Are you sure you want to proceed?");    
+					  @"All objects in the workspace will be removed. Are you sure you want to proceed?");    
 }
 
 /* this gets called by the "wanna save?" sheet on window close */
@@ -1776,7 +1775,7 @@ No error message or warning are raised.
 -(IBAction) runX11:(id)sender{
 	system("open -a X11.app");
 }
-			
+
 -(IBAction) openColors:(id)sender{
 	[prefsWindow selectPaneWithIdentifier:@"Colors"];
 	[prefsWindow showWindow:self];
@@ -1787,7 +1786,7 @@ No error message or warning are raised.
 
 - (IBAction)performHelpSearch:(id)sender {
     if ([[sender stringValue] length]>0) {
-//		[self sendInput:[NSString stringWithFormat:@"help.search(\"%@\")", [sender stringValue]]];
+		//		[self sendInput:[NSString stringWithFormat:@"help.search(\"%@\")", [sender stringValue]]];
 		[[REngine mainEngine] executeString: [NSString stringWithFormat:@"print(help.search(\"%@\"))", [sender stringValue]]];
         [helpSearch setStringValue:@""];
     }
@@ -1812,7 +1811,7 @@ No error message or warning are raised.
 	op = [NSOpenPanel openPanel];
 	[op setTitle:@"R File to Source"];
 	answer = [op runModalForTypes:nil];
-
+	
 	if (answer==NSOKButton)
 		[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
 }
@@ -1869,12 +1868,12 @@ case the color is set to its default value.
         outputColor = [newColor copyWithZone:[self zone]];
 	else 
 		outputColor = [[NSColor blackColor] copyWithZone:[self zone]];
-
+	
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:outputColor] 
 											  forKey:outputColorKey];
 	[[colorsPrefPane outputColorWell] setColor: outputColor];
     [[colorsPrefPane outputColorWell] setNeedsDisplay:YES];
-
+	
 }
 
 - (void)setPromptColor:(NSColor *)newColor {
@@ -1885,7 +1884,7 @@ case the color is set to its default value.
         promptColor = [newColor copyWithZone:[self zone]];
 	else 
 		promptColor = [[NSColor purpleColor] copyWithZone:[self zone]];
-
+	
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:promptColor] 
 											  forKey:promptColorKey];
 	[[colorsPrefPane promptColorWell] setColor: promptColor];
@@ -1901,7 +1900,7 @@ case the color is set to its default value.
         stdoutColor = [newColor copyWithZone:[self zone]];
 	else 
 		stdoutColor = [[NSColor lightGrayColor] copyWithZone:[self zone]];
-
+	
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:stdoutColor] 
 											  forKey:stdoutColorKey];
 	[[colorsPrefPane stdoutColorWell] setColor: stdoutColor];
@@ -1916,7 +1915,7 @@ case the color is set to its default value.
         stderrColor = [newColor copyWithZone:[self zone]];
 	else 
 		stderrColor = [[NSColor redColor] copyWithZone:[self zone]];
-
+	
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:stderrColor] 
 											  forKey:stderrColorKey];
 	[[colorsPrefPane stderrColorWell] setColor: stderrColor];
@@ -1937,7 +1936,7 @@ case the color is set to its default value.
 												 green:1.0
 												  blue:1.0
 												 alpha:alphaValue] copyWithZone:[self zone]];
-
+	
 	[RConsoleWindow setBackgroundColor:backgColor];
 	[RConsoleWindow display];
 	
@@ -1947,171 +1946,73 @@ case the color is set to its default value.
     [[colorsPrefPane backgColorWell] setNeedsDisplay:YES];
 }
 
-- (void) setInternalOrExternal:(int)internal {
-	if(internalOrExternal)
-		[internalOrExternal release];
-	
-	if (internal == 1) {
-		[[editorPrefPane externalSettings] setHidden:YES]; 
-		[[editorPrefPane builtInPrefs] setHidden:NO]; 
-		internalOrExternal = @"YES";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:internalOrExternal] 
-												  forKey:internalOrExternalKey];
-		[[editorPrefPane internalOrExternal] setState:0 atRow:0 column:1];
-		[[editorPrefPane internalOrExternal] setState:1 atRow:0 column:0];
-	} else {
-		[[editorPrefPane externalSettings] setHidden:NO]; 
-		[[editorPrefPane builtInPrefs] setHidden:YES]; 
-		internalOrExternal = @"NO";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:internalOrExternal] 
-												forKey:internalOrExternalKey];
-		[[editorPrefPane internalOrExternal] setState:0 atRow:0 column:0];
-		[[editorPrefPane internalOrExternal] setState:1 atRow:0 column:1];
-	}
+- (void) setUseInternalEditor:(BOOL)flag 
+{
+	useInternalEditor = flag;
 }
 
-- (void) setShowSyntaxColoring:(int)state {
-	if(showSyntaxColoring)
-		[showSyntaxColoring release];
-	
-	if (state == NSOnState) {
-		showSyntaxColoring = @"YES";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showSyntaxColoring] 
-												  forKey:showSyntaxColoringKey];
-		[[editorPrefPane showSyntaxColoring] setState:YES]; 
-	} else {
-		showSyntaxColoring = @"NO";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showSyntaxColoring] 
-												  forKey:showSyntaxColoringKey];
-		[[editorPrefPane showSyntaxColoring] setState:NO]; 
-	}
+- (BOOL) useInternalEditor
+{
+	return useInternalEditor;
 }
 
-- (void) setShowBraceHighlighting:(int)state {
-	if(showBraceHighlighting)
-		[showBraceHighlighting release];
-	
-	if (state == NSOnState) {
-		showBraceHighlighting = @"YES";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showBraceHighlighting] 
-											  forKey:showBraceHighlightingKey];
-		[[editorPrefPane showBraceHighlighting] setState:1]; 
-	} else {
-		showBraceHighlighting = @"NO";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showBraceHighlighting] 
-											  forKey:showBraceHighlightingKey];
-		[[editorPrefPane showBraceHighlighting] setState:0]; 
-	}
+- (void) setDoSyntaxColoring: (BOOL) flag
+{
+	doSyntaxColoring = flag;
 }
 
-- (void) setHighlightInterval:(NSString *)aString {
-	if(highlightInterval)
-		[highlightInterval release];
-	
-	if ([aString length] == 0) {
-		highlightInterval = @"0.2";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:highlightInterval] 
-											  forKey:highlightIntervalKey];
-		[[editorPrefPane highlightInterval] setStringValue:highlightInterval]; 
-	} else {
-		double val = [aString doubleValue];
-		if (val < 0.1)
-			aString = @"0.1";
-		else if (val > 0.8)
-			aString = @"0.8";
-		highlightInterval = aString;
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:highlightInterval] 
-											  forKey:highlightIntervalKey];
-		[[editorPrefPane highlightInterval] setStringValue:aString]; 
-	}
+- (BOOL) doSyntaxColoring
+{
+	return doSyntaxColoring;
 }
 
-- (void) setShowLineNumbers:(int)state {
-	if(showLineNumbers)
-		[showLineNumbers release];
-	
-	if (state == NSOnState) {
-		showLineNumbers = @"YES";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showLineNumbers] 
-											  forKey:showLineNumbersKey];
-		[[editorPrefPane showLineNumbers] setState:1]; 
-	} else {
-		showLineNumbers = @"NO";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showLineNumbers] 
-											  forKey:showLineNumbersKey];
-		[[editorPrefPane showLineNumbers] setState:0]; 
-	}
+- (void) setDoBraceHighlighting: (BOOL) flag
+{
+	doBraceHighlighting = flag;
 }
 
-- (void)setExternalEditorName:(NSString *)name {
-	if(externalEditorName)
-		[externalEditorName release];
-	
-	externalEditorName = name;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:externalEditorName] 
-											  forKey:externalEditorNameKey];
-	if ([name length] == 0 )
-		[[editorPrefPane externalEditorName] setStringValue: @""];
-	else
-		[[editorPrefPane externalEditorName] setStringValue: name];
+- (BOOL) doBraceHighlighting
+{
+	return doBraceHighlighting;
 }
 
-- (void) setAppOrCommand:(int)app {
-	if(appOrCommand)
-		[appOrCommand release];
-	
-	if (app == 1) {
-		appOrCommand = @"YES";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:appOrCommand] 
-												  forKey:appOrCommandKey];
-		[[editorPrefPane appOrCommand] setState:0 atRow:1 column:0];
-		[[editorPrefPane appOrCommand] setState:1 atRow:0 column:0];
-	} else {
-		appOrCommand = @"NO";
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:appOrCommand] 
-												  forKey:appOrCommandKey];
-		[[editorPrefPane appOrCommand] setState:NSOffState atRow:0 column:0];
-		[[editorPrefPane appOrCommand] setState:NSOnState atRow:1 column:0];
-	}
+- (void) setCurrentHighlightInterval: (NSString *) aString
+{
+	currentHighlightInterval = [aString doubleValue];
 }
 
-- (IBAction) changeInternalOrExternal:(id)sender {
-	if ([sender selectCellAtRow:0 column:0] == NSOffState)
-		[self setInternalOrExternal:0];
-	else
-		[self setInternalOrExternal:1];
+- (double) currentHighlightInterval
+{
+	return currentHighlightInterval;
 }
 
-- (IBAction) changeShowSyntaxColoring:(id)sender {
-    [self setShowSyntaxColoring:[sender state]];
+- (void) setDoLineNumbers: (BOOL) flag
+{
+	doLineNumbers = flag;
 }
 
-- (IBAction) changeShowBraceHighlighting:(id)sender {
-    [self setShowBraceHighlighting:[sender state]];
+- (BOOL) doLineNumbers
+{
+	return doLineNumbers;
 }
 
-- (IBAction) changeHighlightInterval:(id)sender {
-    [self setHighlightInterval:[sender stringValue]];
+- (void) setExternalEditor: (NSString *) name
+{
+	externalEditor = name;
 }
 
-- (IBAction) changeShowLineNumbers:(id)sender {
-    [self setShowLineNumbers:[sender state]];
+- (NSString *) externalEditor
+{
+	return externalEditor;
 }
 
-- (void)changeExternalEditorName:(id)sender {
-	NSString *name = [sender stringValue];
-	if ([name length] == 0) {
-		[self setExternalEditorName:nil];
-		 	} else {
-				[self setExternalEditorName: name];
-			}
+- (void) setEditorIsApp:(BOOL)flag {
+	editorIsApp = flag;
 }
 
-- (IBAction) changeAppOrCommand:(id)sender {
-	if ([sender selectCellAtRow:0 column:0] == NSOffState)
-		[self setAppOrCommand:0];
-	else
-		[self setAppOrCommand:1];
+- (BOOL) editorIsApp
+{
+	return editorIsApp;
 }
 
 - (void)changeInputColor:(id)sender {
@@ -2147,14 +2048,14 @@ case the color is set to its default value.
 
 - (void)setAlphaValue:(float)f {
     alphaValue = f;
-
+	
 	if(backgColor)
 		[self setBackGColor:backgColor];
 	
 	[[NSUserDefaults standardUserDefaults] setFloat:alphaValue 
-											  forKey:alphaValueKey];
+											 forKey:alphaValueKey];
 	[[colorsPrefPane alphaStepper] setFloatValue:alphaValue];
-
+	
 }
 
 - (IBAction) setDefaultColors:(id)sender {
@@ -2174,7 +2075,7 @@ case the color is set to its default value.
 	
 	
 	if( [defaults stringForKey:FontSizeKey] == nil )
-			currentFontSize = 11.0;
+		currentFontSize = 11.0;
 	else
 		currentFontSize =  [defaults floatForKey:FontSizeKey];
 	
@@ -2182,7 +2083,7 @@ case the color is set to its default value.
 		[self setAlphaValue: 1.0];
 	else
 		[self setAlphaValue: [defaults floatForKey:alphaValueKey]];
-
+	
 	NSData *theData=[defaults dataForKey:backgColorKey];
 	if(theData != nil)		
 		[self setBackGColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
@@ -2194,99 +2095,57 @@ case the color is set to its default value.
 		[self setInputColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setInputColor: nil];
-
+	
 	theData=[defaults dataForKey:outputColorKey];
 	if(theData != nil)		
 		[self setOutputColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setOutputColor: nil];
-
+	
 	theData=[defaults dataForKey:promptColorKey];
 	if(theData != nil)		
 		[self setPromptColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setPromptColor: nil];
-		
+	
 	theData = [defaults dataForKey:stderrColorKey];
 	if(theData != nil)		
 		[self setStderrColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setStderrColor: nil];
-		
+	
 	theData=[defaults dataForKey:stdoutColorKey];
 	if(theData != nil)		
 		[self setStdoutColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setStdoutColor: nil];
 	
-	theData=[defaults dataForKey:internalOrExternalKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"]) {
-			[self setInternalOrExternal: 0];			
-		} else {
-			[self setInternalOrExternal: 1];
-		}
-	} else 
-		[self setInternalOrExternal: 1];
-	
-	theData=[defaults dataForKey:showSyntaxColoringKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"]) {
-			[self setShowSyntaxColoring: 0];
-		} else {
-			[self setShowSyntaxColoring: 1];
-		}
-	} else 
-		[self setShowSyntaxColoring: 1];
-	
-	theData=[defaults dataForKey:showBraceHighlightingKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])
-			[self setShowBraceHighlighting: 0];
-		else
-			[self setShowBraceHighlighting: 1];
-	} else 
-		[self setShowBraceHighlighting: 1];
-	
-	theData=[defaults dataForKey:highlightIntervalKey];
-	if(theData != nil){
-		[self setHighlightInterval: (NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	} else {
-		[self setHighlightInterval: @"0.2"];
-	}	
-	
-	theData=[defaults dataForKey:showLineNumbersKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])
-			[self setShowLineNumbers: 0];
-		else
-			[self setShowLineNumbers: 1];
-	} else 
-		[self setShowLineNumbers: 0];
-	
-	theData=[defaults dataForKey:externalEditorNameKey];
-	if(theData != nil){
-		[self setExternalEditorName: (NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	} else {
-		[self setExternalEditorName: nil];
-	}	
-
-	theData=[defaults dataForKey:appOrCommandKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-			[self setAppOrCommand: 1];
-		} else {
-			[self setAppOrCommand: 0];
-		}
-	} else 
-		[self setAppOrCommand: 1];
+	theData=[defaults dataForKey:miscRAquaLibPathKey];
+	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
 	
 	theData=[defaults dataForKey:editOrSourceKey];
 	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-
-	theData=[defaults dataForKey:miscRAquaLibPathKey];
-	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-
+	
+	theData=[defaults dataForKey:appOrCommandKey];
+	[editorPrefPane setEditorIsApp: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+	
+	theData=[defaults dataForKey:internalOrExternalKey];
+	[editorPrefPane setUseInternalEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+	
+	theData=[defaults dataForKey:showSyntaxColoringKey];
+	[editorPrefPane setDoSyntaxColoring: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+	
+	theData=[defaults dataForKey:showBraceHighlightingKey];
+	[editorPrefPane setDoBraceHighlighting: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+	
+	theData=[defaults dataForKey:highlightIntervalKey];
+	[editorPrefPane setCurrentHighlightInterval: theData == nil?@"0.20":(NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
+	
+	theData=[defaults dataForKey:showLineNumbersKey];
+	[editorPrefPane setDoLineNumbers: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
+	
+	theData=[defaults dataForKey:externalEditorNameKey];
+	[editorPrefPane setExternalEditor: theData == nil?@"":(NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
 }
 
 
@@ -2357,25 +2216,24 @@ case the color is set to its default value.
 
 - (BOOL)shouldLoadPreferencePane:(NSString *)identifier
 {
-//	NSLog(@"shouldLoadPreferencePane: %@", identifier);
+	//	NSLog(@"shouldLoadPreferencePane: %@", identifier);
 	return YES;
 }
 
 - (void)willSelectPreferencePane:(NSString *)identifier
 {
-//	NSLog(@"willSelectPreferencePane: %@", identifier);
+	//	NSLog(@"willSelectPreferencePane: %@", identifier);
 }
 
 - (void)didUnselectPreferencePane:(NSString *)identifier
 {
-//	NSLog(@"didUnselectPreferencePane: %@", identifier);
+	//	NSLog(@"didUnselectPreferencePane: %@", identifier);
 }
 
 - (NSString *)displayNameForCategory:(NSString *)category
 {
 	return category;
 }
-
 
 - (NSTextView *)getRTextView{
 	return RTextView;

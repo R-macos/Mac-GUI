@@ -98,28 +98,28 @@
 	History *hist;
 	NSToolbar *toolbar;
 	NSToolbarItem *toolbarStopItem;
-
+	
     IBOutlet id fontSizeStepper;
     IBOutlet id fontSizeField;
     IBOutlet id fontSizeView;
-
+	
 	unsigned committedLength; // any text before this position cannot be edited by the user
     unsigned promptPosition;  // the last prompt is positioned at this position
 	unsigned outputPosition;  // any output (stdxx or consWrite) is to be place here, if -1 then the text can be appended
-
+	
     int stdoutFD;
     int stderrFD;
 	int rootFD;
 	
 	pid_t childPID;
-
+	
     BOOL runSystemAsRoot;
 	BOOL busyRFlag;
 	
 	float currentSize;
 	float currentFontSize;
 	float currentConsoleWidth;
-
+	
 	char *readConsTransBuffer; // transfer buffer returned by handeReadConsole
 	int readConsTransBufferSize; // size of the above buffer
 	
@@ -136,14 +136,13 @@
 	NSColor *stdoutColor;
 	float alphaValue;
 	
-	NSString *internalOrExternal;
-	NSString *showSyntaxColoring;
-	NSString *showLineNumbers;
-	NSString *showBraceHighlighting;
-	NSString *highlightInterval;
-	NSString *externalEditorName;
-	NSString *appOrCommand;
-
+	BOOL doSyntaxColoring;
+	BOOL doLineNumbers;
+	BOOL doBraceHighlighting;
+	double currentHighlightInterval;
+	NSString *externalEditor;
+	BOOL editorIsApp;
+	BOOL useInternalEditor;
 	BOOL openInEditor;
 	
 	NSMutableArray *consoleInputQueue;
@@ -157,7 +156,7 @@
 	
 	AMPreferenceWindowController *prefsWindow;
 	NSMutableDictionary *preferences;
-
+	
 }
 
 - (IBAction)showPrefsWindow:(id)sender;
@@ -175,7 +174,7 @@
 
 - (void) showWindow;
 
-/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
+	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
 - (void) doProcessEvents: (BOOL) blocking;
 
 - (void) addChildProcess: (pid_t) pid;
@@ -188,13 +187,13 @@
 - (BOOL) textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector;
 - (BOOL) textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString;
 
-/* write to the console bypassing any cache buffers - for internal use only! */
+	/* write to the console bypassing any cache buffers - for internal use only! */
 - (void) writeConsoleDirectly: (NSString*) text withColor: (NSColor*) color;
 
 /* sendInput is an alias for "consoleInput: text interactive: YES" */
 - (void) sendInput: (NSString*) text;
 
-/* replace the current console input with the "cmd" string. if "inter" is set to YES, then the input is immediatelly committed, otherwise it is only written to the input area, but not committed. Int tje interactive mode an optimization is made to not display the content before commit, because the lines are displayed as they are processed anyway. */
+	/* replace the current console input with the "cmd" string. if "inter" is set to YES, then the input is immediatelly committed, otherwise it is only written to the input area, but not committed. Int tje interactive mode an optimization is made to not display the content before commit, because the lines are displayed as they are processed anyway. */
 - (void) consoleInput: (NSString*) cmd interactive: (BOOL) inter;
 
 - (IBAction)otherEventLoops:(id)sender;
@@ -216,7 +215,7 @@
 - (int) numberOfRowsInTableView: (NSTableView *)tableView;
 - (id) tableView: (NSTableView *)tableView
 		objectValueForTableColumn: (NSTableColumn *)tableColumn
-		row: (int)row;
+			 row: (int)row;
 
 - (IBAction)doClearHistory:(id)sender;
 - (IBAction)doLoadHistory:(id)sender;
@@ -237,7 +236,7 @@
 
 - (IBAction)newDocument:(id)sender;
 - (IBAction)openDocument:(id)sender;
-	
+
 - (IBAction)loadWorkSpace:(id)sender;
 - (IBAction)loadWorkSpaceFile:(id)sender;
 - (IBAction)saveWorkSpace:(id)sender;
@@ -281,14 +280,6 @@
 - (IBAction) changeAlphaColor:(id)sender;
 - (IBAction) setDefaultColors:(id)sender;
 
-- (IBAction) changeInternalOrExternal:(id)sender;
-- (IBAction) changeShowSyntaxColoring:(id)sender;
-- (IBAction) changeShowBraceHighlighting:(id)sender;
-- (IBAction) changeHighlightInterval:(id)sender;
-- (IBAction) changeShowLineNumbers:(id)sender;
-- (IBAction) changeExternalEditorName:(id)sender;
-- (IBAction) changeAppOrCommand:(id)sender;
-
 - (void) setInputColor:(NSColor *)newColor;
 - (void) setOutputColor:(NSColor *)newColor;
 - (void) setPromptColor:(NSColor *)newColor;
@@ -297,13 +288,20 @@
 - (void) setStdoutColor:(NSColor *)newColor;
 - (void) setAlphaValue:(float)f;
 
-- (void) setInternalOrExternal:(int)internal;
-- (void) setShowSyntaxColoring:(int)state;
-- (void) setShowBraceHighlighting:(int)state;
-- (void) setHighlightInterval:(NSString *)aString;
-- (void) setShowLineNumbers:(int)state;
-- (void) setExternalEditorName:(NSString *)name;
-- (void) setAppOrCommand:(int)app;
+- (void) setUseInternalEditor:(BOOL)flag;
+- (BOOL) useInternalEditor;
+- (void) setDoSyntaxColoring:(BOOL)flag;
+- (BOOL) doSyntaxColoring;
+- (void) setDoBraceHighlighting:(BOOL)flag;
+- (BOOL) doBraceHighlighting;
+- (void) setCurrentHighlightInterval:(NSString *)aString;
+- (double) currentHighlightInterval;
+- (void) setDoLineNumbers:(BOOL)flag;
+- (BOOL) doLineNumbers;
+- (void) setExternalEditor:(NSString *)name;
+- (NSString *) externalEditor;
+- (void) setEditorIsApp:(BOOL)flag;
+- (BOOL) editorIsApp;
 
 - (void) readDefaults;
 
