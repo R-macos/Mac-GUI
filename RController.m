@@ -54,6 +54,8 @@
 // low water-mark of the buffer - if less than the water mark is available then the buffer will be flushed
 #define writeBufferLowWaterMark   2048
 
+#define NLS(S) NSLocalizedString(S,@"")
+
 /*  RController.m: main GUI code originally based on Simon Urbanek's work of embedding R in Cocoa app (RGui?)
 The Code and File Completion is due to Simon U.
 History handler is due to Simon U.
@@ -859,7 +861,7 @@ extern BOOL isTimeToFinish;
 - (BOOL)windowShouldClose:(id)sender
 {
 	
-	NSBeginAlertSheet(@"Closing R session",@"Save",@"Don't Save",@"Cancel",[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,@"Save workspace image?");
+	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
     return NO;
 }
 
@@ -927,7 +929,7 @@ FIXME: We can probably import standard unix history files
 	int answer;
 	
 	op = [NSOpenPanel openPanel];
-	[op setTitle:@"Choose history File"];
+	[op setTitle:NLS(@"Choose history File")];
 	
 	answer = [op runModalForTypes: [NSArray arrayWithObject:@"history"]];
 	
@@ -951,7 +953,7 @@ FIXME: we can probably allow for exporting as single line
 	NSSavePanel *sp;
 	sp = [NSSavePanel savePanel];
 	[sp setRequiredFileType:@"history"];
-	[sp setTitle:@"Save history File"];
+	[sp setTitle:NLS(@"Save history File")];
 	answer = [sp runModal];
 	if(answer == NSOKButton) {
 		[NSArchiver archiveRootObject: [hist entries]
@@ -1268,7 +1270,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		NSSavePanel *sp;
 		sp = [NSSavePanel savePanel];
 		[sp setRequiredFileType:@"txt"];
-		[sp setTitle:@"Save R Console To File"];
+		[sp setTitle:NLS(@"Save R Console To File")];
 		answer = [sp runModalForDirectory:nil file:@"R Console.txt"];
 		
 		if(answer == NSOKButton) {
@@ -1295,7 +1297,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	buf[0] = '\0';
 	if(isNew==1){
 		sp = [NSSavePanel savePanel];
-		[sp setTitle:@"Choose New File Name"];
+		[sp setTitle:NLS(@"Choose New File Name")];
 		answer = [sp runModalForDirectory:nil file:nil];
 		
 		if(answer == NSOKButton) {
@@ -1306,7 +1308,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		}
 	} else {
 		op = [NSOpenPanel openPanel];
-		[op setTitle:@"Choose File"];
+		[op setTitle:NLS(@"Choose File")];
 		answer = [op runModalForDirectory:nil file:nil];
 		
 		if(answer == NSOKButton) {

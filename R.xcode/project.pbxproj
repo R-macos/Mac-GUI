@@ -585,6 +585,7 @@
 		163B0D0406CE597300A380BE = {
 			children = (
 				163B0D0506CE597300A380BE,
+				686967BF079814E0002A1932,
 			);
 			isa = PBXVariantGroup;
 			name = Credits.rtf;
@@ -1997,6 +1998,13 @@
 			);
 			hasScannedForEncodings = 1;
 			isa = PBXProject;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				de,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
 			targets = (
@@ -2053,6 +2061,7 @@
 		};
 		29B97317FDCFA39411CA2CEA = {
 			children = (
+				686967DA07981764002A1932,
 				1611E321070B86850025F66D,
 				1611E323070B86990025F66D,
 				1C34E61006F9EC7D00211ACC,
@@ -2078,6 +2087,7 @@
 		29B97318FDCFA39411CA2CEA = {
 			children = (
 				29B97319FDCFA39411CA2CEA,
+				686967B9079813AD002A1932,
 			);
 			isa = PBXVariantGroup;
 			name = MainMenu.nib;
@@ -2207,6 +2217,56 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		686967B9079813AD002A1932 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/MainMenu.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		686967BF079814E0002A1932 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
+			name = de;
+			path = de.lproj/Credits.rtf;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		686967D807981746002A1932 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		686967DA07981764002A1932 = {
+			children = (
+				686967D807981746002A1932,
+				686967E7079818C1002A1932,
+			);
+			isa = PBXVariantGroup;
+			name = Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		686967DB07981764002A1932 = {
+			fileRef = 686967DA07981764002A1932;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		686967E7079818C1002A1932 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = de;
+			path = de.lproj/Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		687B4DC207940DAA00074042 = {
 			fileEncoding = 4;
@@ -2586,6 +2646,7 @@
 				16DB0E8A072E5CFA00380720,
 				D41DED55073B3F8000B900F2,
 				687B4E370794130800074042,
+				686967DB07981764002A1932,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

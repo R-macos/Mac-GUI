@@ -23,6 +23,15 @@ There are several tricks I did and there are several things to take into account
 
 	it works! On the contrary AquaTclTk doesn't work at all, or at least is works as badly as it was for the Carbon RAqua.
 
+Note: to build the R for Mac OS X FAQ manually use the following command from the shell
+	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
+
+For everything else read the NEWS file 
+
+stefano
+
+Milan and Augsburg, 2004-10-10
+
 === Note to developers ===
 If you intend to work on the source code of R.app, please adjust your editor to use tabs. Each indentation level
 should be exactly one tab. The preferred setting in Xcode is (in Preferences -> TextEditing)
@@ -32,11 +41,7 @@ This will give you the proper indenting behavior and fairly well readable code. 
 any positive value you find pleasant, just make sure both entries are identical. Use Xcode-style indentation whenever possible.
 The strict use of tabs as indentation marks makes it possible for everyone to view the code with the spacing s/he prefers.
 
-Note: to build the R for Mac OS XFaq manually use the following command from the shell
-	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
-
-For everything else read the NEWS file 
-
-stefano
-
-Milan and Augsburg, 2004-10-10
+Update (2005-01-13, SU) About localization:
+We have added new (experimental) support for localization of the GUI. Although this is great news for the users, this requires good cooperation of the developer and some extra work. If you add and language-dependent constants (like @"Choose a file"), first look up in Localized.strings whether there is such text alrady and if so use it 1:1 in the NLS(...) macro. If there is no such entry, add it to the corresponding localized files and flag those additions by an empty comment (e.g. @"Save"=@"Save"; // ), such that it can be localized later by our translators.
+If you make any changes to the NIB files, always remember to update the locallized versions. You can use "nibtool" to perform the updates semi-automatically. It is ok to wait with the update if you have more batch updates, because the changes can be made incrementally.
+Both procedures can be automated with corresponding scripts - I'll update this file when I add them to the project.
