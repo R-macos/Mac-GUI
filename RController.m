@@ -45,6 +45,7 @@
 #import "Tools/Authorization.h"
 #import "Preferences.h"
 #import "SearchTable.h"
+#import <Rversion.h>
 
 // size of the console output cache buffer
 #define DEFAULT_WRITE_BUFFER_SIZE 32768
@@ -202,6 +203,15 @@ static RController* sharedRController;
 		}
 	}
 	setenv("R_GUI_APP_VERSION", R_GUI_VERSION_STR, 1);
+	
+#if (R_VERSION >= R_Version(2,1,0))
+	// we enforce UTF-8 locale for R 2.1.0 and higher if LANG is not UTF-8 already
+	{
+		char *cloc = getenv("LANG");
+		if (!cloc || strlen(cloc)<7 || strcasecmp(cloc+strlen(cloc)-5,"UTF-8"))
+			setenv("LANG", "en_US.UTF-8", 1);
+	}
+#endif
 	
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 	
