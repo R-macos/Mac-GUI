@@ -102,6 +102,8 @@ extern int  (*ptr_R_EditFiles)(int, char **, char **, char *);
 
 #if (R_VERSION >= R_Version(2,1,0))
 extern int  (*ptr_R_EditFile)(char *); /* in r-devel ptr_Raqua_Edit is no longer used*/
+
+extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy for help/search/pkg-info */
 #else
 extern int  (*ptr_Raqua_Edit)(char *);
 #endif
@@ -181,6 +183,7 @@ int initR(int argc, char **argv) {
 
 #if (R_VERSION >= R_Version(2,1,0))
 	ptr_R_EditFile = Re_Edit;
+	ptr_Raqua_CustomPrint = Re_CustomPrint;
 #else
 	ptr_Raqua_Edit = Re_Edit;
 #endif

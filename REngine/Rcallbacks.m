@@ -195,6 +195,17 @@ int Re_system(char *cmd) {
 	}		
 }
 
+int  Re_CustomPrint(char *type, SEXP obj)
+{
+	if ([REngine cocoaHandler]) {
+		RSEXP *par = [[RSEXP alloc] initWithSEXP: obj];
+		int res = [[REngine cocoaHandler] handleCustomPrint: type withObject: par];
+		[par release];
+		return res;
+	}
+	return -1;
+}
+
 SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 {
 	SEXP pkgname, pkgstatus, pkgdesc, pkgurl;

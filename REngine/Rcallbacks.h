@@ -39,6 +39,8 @@
 /* this part is relevant only in included in Obj-C files */
 #ifdef __OBJC__
 
+#import "RSEXP.h"
+
 /* protocol defining the callback interface on the Cocoa side, that is the receiving object. */
 @protocol REPLHandler
 - (void)  handleWriteConsole: (NSString*) msg;
@@ -65,6 +67,7 @@
 // its usage is identical to that of the 'system' command
 - (int) handleSystemCommand: (char*) cmd;
 - (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
+- (int) handleCustomPrint: (char*) type withObject: (RSEXP*) obj;
 @end
 
 #endif /* end of Obj-C code */
@@ -89,6 +92,7 @@ int  Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean
 int  Re_EditFiles(int nfile, char **file, char **title, char *pager);
 int  Re_Edit(char *file);
 int  Re_system(char *cmd);
+int  Re_CustomPrint(char *type, SEXP obj);
 
 void Re_ProcessEvents(void);
 SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env);
