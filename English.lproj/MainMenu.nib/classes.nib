@@ -17,6 +17,7 @@
             ACTIONS = {
                 activateQuartzDevice = id; 
                 executeSelection = id; 
+                goToLine = id; 
                 sourceCurrentDocument = id; 
                 sourceFile = id; 
             }; 
