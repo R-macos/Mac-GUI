@@ -46,6 +46,7 @@
 #import "QuartzPrefPane.h"
 #import "ColorsPrefPane.h"
 #import "EditorPrefPane.h"
+#import "SearchTable.h"
 
 // size of the console output cache buffer
 #define DEFAULT_WRITE_BUFFER_SIZE 32768
@@ -726,6 +727,12 @@ extern BOOL isTimeToFinish;
 	return 0;
 }
 
+- (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title
+{
+	[[SearchTable sharedController] updateHelpSearch:count withTopics:topics packages:pkgs descriptions:descs urls:urls title:title];
+	return 0;
+}
+
 - (BOOL*) handleDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url
 {
 	[[DataManager sharedController] updateDatasets:count withNames:name descriptions:desc packages:pkg URLs:url];
@@ -1355,7 +1362,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	int i;
 	
 	if(topic[0] == '?' && (strlen(topic)>1))
-		[[HelpManager getHMController] showHelpFor: [NSString stringWithCString:topic+1]];
+		[[HelpManager sharedController] showHelpFor: [NSString stringWithCString:topic+1]];
 	if(strncmp("help(",topic,5)==0){
 		for(i=5;i<strlen(topic); i++){
 			if(topic[i]==')')
@@ -1363,7 +1370,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 			tmp[i-5] = topic[i];
 		}
 		tmp[i-5] = '\0';
-		[[HelpManager getHMController] showHelpFor: [NSString stringWithCString:tmp]];
+		[[HelpManager sharedController] showHelpFor: [NSString stringWithCString:tmp]];
 	}
 }
 

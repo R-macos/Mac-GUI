@@ -32,63 +32,61 @@
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
 
-extern int NumOfMatches;
-extern char **hs_topic; 
-extern char **hs_pkg;
-extern char **hs_desc;
-extern char **hs_url;
-
-
 static id sharedHSController;
 
 @implementation SearchTable
 
 - (id)init
 {
-
     self = [super init];
     if (self) {
 		sharedHSController = self;
-		// Add your subclass-specific initialization here.
-        // If an error occurs here, send a [self release] message and return nil.
-		    [topicsDataSource setTarget: self];
-
+		windowTitle = nil;
+		dataSource = [[SortableDataSource alloc] init];
     }
 	
     return self;
+}
+
+- (void) awakeFromNib
+{
+	[topicsDataSource setTarget: self];
+	[topicsDataSource setDataSource: dataSource];
 }
 
 - (void)dealloc {
 	[super dealloc];
 }
 
-/* These two routines are needed to update the History TableView */
-- (int)numberOfRowsInTableView: (NSTableView *)tableView
+- (void) updateHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title
 {
-	return NumOfMatches;
+	[dataSource reset];
+	[dataSource addColumnOfLength:count withCStrings:topics name:@"topic"];
+	[dataSource addColumnOfLength:count withCStrings:pkgs name:@"package"];
+	[dataSource addColumnOfLength:count withCStrings:descs name:@"description"];
+	[dataSource addColumnOfLength:count withCStrings:urls name:@"URL"];
+	if (windowTitle) [windowTitle release];
+	windowTitle = [[NSString alloc] initWithCString: title];
+	[self show];
 }
 
-- (id)tableView: (NSTableView *)tableView
-		objectValueForTableColumn: (NSTableColumn *)tableColumn
-		row: (int)row
+- (int) count
 {
-			if([[tableColumn identifier] isEqualToString:@"topic"])
-					return [NSString stringWithCString:hs_topic[row]];
-			else if([[tableColumn identifier] isEqualToString:@"package"])
-					return [NSString stringWithCString:hs_pkg[row]];
-			else if([[tableColumn identifier] isEqualToString:@"description"])
-					return [NSString stringWithCString:hs_desc[row]];
-			else return nil;
-				
+	return [dataSource count];
 }
 
-
+- (void) show
+{
+	[self reloadData];
+	[searchTableWindow setTitle:(windowTitle)?windowTitle:@"<unknown>"];
+	[searchTableWindow makeKeyAndOrderFront:self];
+}
 
 - (IBAction) showInfo:(id)sender
 {
 	int row = [sender selectedRow];
 	if(row < 0) return;
-	NSString *urlText = [NSString stringWithFormat:@"file://%@",[NSString stringWithCString:hs_url[row]]];
+	NSString *urlText = [NSString stringWithFormat:@"file://%@",[dataSource objectAtColumn:@"URL" row:row]];
 	[[TopicHelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }
 
@@ -98,27 +96,13 @@ static id sharedHSController;
 	return searchTableWindow;
 }
 
-+ (id) getHSController{
++ (id) sharedController{
 	return sharedHSController;
 }
 
-
-- (void) doReloadData
+- (void) reloadData
 {
 	[topicsDataSource reloadData];
-}
-
-+ (void) reloadData
-{
-	[[SearchTable getHSController] doReloadData];
-	
-}
-
-+ (void) toggleHSBrowser:(NSString *)winTitle
-{
-			[SearchTable reloadData];
-			[[[SearchTable getHSController] window] setTitle:winTitle];
-			[[[SearchTable getHSController] window] orderFront:self];
 }
 
 @end

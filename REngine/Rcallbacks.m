@@ -549,6 +549,7 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
   SEXP ans; 
   int i, len;
   SEXP h_topic, h_pkg, h_desc, h_wtitle, h_url;
+  char **sTopic, **sDesc, **sPkg, **sURL;
 
   checkArity(op, args);
 
@@ -562,69 +563,43 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
   if(!isString(h_topic) | !isString(h_pkg) | !isString(h_desc) )
 	errorcall(call, "invalid arguments");
 
-
   len = LENGTH(h_topic);
-  if(len>0){
-	WeHaveSearchTopics = YES;
-	NumOfMatches = freeSearchList(len);		
-	for(i=0;i<NumOfMatches;i++){
-		hs_topic[i] = strdup(CHAR(STRING_ELT(h_topic, i)));
-		hs_pkg[i] = strdup( CHAR(STRING_ELT(h_pkg, i)));
-		hs_desc[i] = strdup( CHAR(STRING_ELT(h_desc, i)));
-		hs_url[i] = strdup( CHAR(STRING_ELT(h_url, i)));
-		/* CHAR(STRING_ELT(wtitle,0)) */
-	}
-  }
-
-   
-  PROTECT(ans = NEW_LOGICAL(NumOfMatches));
-  for(i=1;i<=NumOfMatches;i++)
-   LOGICAL(ans)[i-1] = 0;
- [SearchTable toggleHSBrowser: [NSString stringWithCString:CHAR(STRING_ELT(h_wtitle,0))]];
-   
-  vmaxset(vm);
+  if (LENGTH(h_pkg)!=len || LENGTH(h_desc)!=len || LENGTH(h_wtitle)<1 || LENGTH(h_url)!=len)
+	  errorcall(call, "invalid arguments (length mismatch)");
   
+  if (len==0) {
+	  [[REngine cocoaHandler] handleHelpSearch: 0 withTopics: 0 packages: 0 descriptions: 0 urls: 0 title: 0];
+	  vmaxset(vm);
+	  return R_NilValue;
+  }
+  
+  sTopic = (char**) malloc(sizeof(char*)*len);
+  sDesc = (char**) malloc(sizeof(char*)*len);
+  sPkg = (char**) malloc(sizeof(char*)*len);
+  sURL = (char**) malloc(sizeof(char*)*len);
+  
+  i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
+  while (i<len) {
+	  sTopic[i] = CHAR(STRING_ELT(h_topic, i));
+	  sDesc[i]  = CHAR(STRING_ELT(h_desc, i));
+	  sPkg[i]   = CHAR(STRING_ELT(h_pkg, i));
+	  sURL[i]   = CHAR(STRING_ELT(h_url, i));
+	  i++;
+  }
+  
+  [[REngine cocoaHandler] handleHelpSearch: len withTopics: sTopic packages: sPkg descriptions: sDesc urls: sURL title:CHAR(STRING_ELT(h_wtitle,0))];
+  free(sTopic); free(sDesc); free(sPkg); free(sURL);
+  
+   
+  PROTECT(ans = NEW_LOGICAL(len));
+  for(i=0;i<len;i++)
+	  LOGICAL(ans)[i] = 0;
+   
+  vmaxset(vm);  
   UNPROTECT(1);
 
   return ans;
 }
-
-int freeSearchList(int newlen)
-{
-	if(hs_topic){
-		free(hs_topic);
-		hs_topic = 0;
-	}
-	
-	if(hs_pkg){
-		free(hs_pkg);
-		hs_pkg = 0;
-	}
-	
-	if(hs_desc){
-		free(hs_desc);
-		hs_desc = 0;
-	}
-		
-	if(hs_url){
-		free(hs_url);
-		hs_url = 0;
-	}
-	
-	if(newlen <= 0)
-		newlen = 0;
-	else {
-		hs_topic = (char **)calloc(newlen, sizeof(char *) );
-		hs_pkg = (char **)calloc(newlen, sizeof(char *) );
-		hs_desc = (char **)calloc(newlen, sizeof(char *) );
-		hs_url = (char **)calloc(newlen, sizeof(char *) );
-	}
-	
-	return(newlen);
-}		
-
-
-
 
 SEXP work, names, lens;
 PROTECT_INDEX wpi, npi, lpi;

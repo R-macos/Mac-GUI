@@ -37,7 +37,6 @@ static id sharedHMController;
 
 - (id)init
 {
-	
     self = [super init];
     if (self) {
 		sharedHMController = self;
@@ -134,7 +133,7 @@ static id sharedHMController;
 	[x release];
 }
 
-+ (id) getHMController{
++ (id) sharedController{
 	return sharedHMController;
 }
 

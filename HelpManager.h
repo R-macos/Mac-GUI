@@ -45,12 +45,13 @@
     IBOutlet NSSearchField *searchField;
 	IBOutlet NSWindow *helpWindow;
 }
+
 - (IBAction)runHelpSearch:(id)sender;
 - (IBAction)showMainHelp:(id)sender;
 - (IBAction)showRFAQ:(id)sender;
 - (IBAction)whatsNew:(id)sender;
 - (void)showHelpFor:(NSString *)topic;
 
-+ (id) getHMController;
++ (id) sharedController;
 
 @end

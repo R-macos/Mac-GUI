@@ -32,20 +32,24 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
+#import "SortableDataSource.h"
 
 @interface SearchTable : NSObject
 {
 	IBOutlet NSTableView *topicsDataSource;	/* TableView for the history */ 
 	IBOutlet id TopicHelpView;
 	id  searchTableWindow;
+	
+	NSString *windowTitle;
+	SortableDataSource *dataSource;
 }
 
 - (id) window;
 - (IBAction) showInfo:(id)sender;
-- (void) doReloadData;
 
-+ (void) reloadData;
-+ (void) toggleHSBrowser: (NSString *)winTitle;
-
+- (void) updateHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
+- (void) reloadData;
+- (int) count;
+- (void) show;
 
 @end
