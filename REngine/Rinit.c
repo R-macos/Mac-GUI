@@ -102,7 +102,7 @@ extern int  (*ptr_R_EditFiles)(int, char **, char **, char *);
 
 #if (R_VERSION >= R_Version(2,1,0))
 extern int  (*ptr_R_EditFile)(char *); /* in r-devel ptr_Raqua_Edit is no longer used*/
-
+extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy for help/search/pkg-info */
 #else
 extern int  (*ptr_Raqua_Edit)(char *);
@@ -117,7 +117,7 @@ extern SEXP (*ptr_do_browsepkgs)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+
 extern int  (*ptr_CocoaSystem)(char *);
 
 extern Rboolean (*ptr_CocoaInnerQuartzDevice)(NewDevDesc *,char *,
@@ -204,8 +204,9 @@ int initR(int argc, char **argv) {
 	ptr_CocoaGetQuartzParameters = getQuartzParameters;
 	ptr_CocoaSystem = Re_system;
 	ptr_do_dataentry = Re_dataentry;
+#if (R_VERSION >= R_Version(2,1,0))
 	ptr_do_selectlist = Re_do_selectlist;
-	
+#endif	
 	setup_Rmainloop();
 
     return 0;

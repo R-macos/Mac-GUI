@@ -35,6 +35,7 @@
 #include <R.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
+#include <Rversion.h>
 
 #include <sys/select.h>
 #include <unistd.h>
@@ -71,7 +72,6 @@ extern void (*ptr_R_Busy)(int);
 extern int  (*ptr_R_ChooseFile)(int, char *, int);
 extern void (*ptr_R_loadhistory)(SEXP, SEXP, SEXP, SEXP);
 extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
-extern void (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 
 //extern void (*ptr_R_StartCocoaRL)();
 
