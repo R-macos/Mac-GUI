@@ -2,8 +2,9 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004  Stefano M. Iacus and Simon Urbanek
- *                                         and The R Foundation
+ *                     Copyright (C) 2004  The R Foundation
+ *                     written by Stefano M. Iacus and Simon Urbanek
+ *
  *                  
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
