@@ -1,10 +1,8 @@
 NEWS
 
-KNOWN ISSUE: Sometimes it is necessary to hit <ESC> before
-the prompt appears after R GUI is launched. This is caused by
-the 2005-01-10 commit which may be reverted in the future.
-
 Last update: 2005-01-11 [SU]
+*	Fixed R startup issue which required <ESC> to be hit sometimes
+	(introduced in 2005-01-10 commit)
 *	Fixed undo issues (see below for details)
 *	Fixed NSRunStorage exceptions (pasting large chunks or
 	huge output works now) - console now uses direct text storage

@@ -62,14 +62,14 @@
 
 - (void) replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString
 {
-	NSLog(@"replace [%d/%d] by %d chars [%@]", aRange.location, aRange.length, [aString length], aString);
+	//NSLog(@"replace [%d/%d] by %d chars [%@]", aRange.location, aRange.length, [aString length], aString);
 	[cont replaceCharactersInRange:aRange withString:aString];
 	[self edited:NSTextStorageEditedCharacters range:aRange changeInLength:[aString length]-aRange.length];
 }
 
 - (void)setAttributes:(NSDictionary *)attributes range:(NSRange)aRange
 {
-	NSLog(@"attrs set at [%d/%d] which amounts to [:%d] and cur len is %d",  aRange.location, aRange.length, aRange.location+aRange.length, [cont length]);
+	//NSLog(@"attrs set at [%d/%d] which amounts to [:%d] and cur len is %d",  aRange.location, aRange.length, aRange.location+aRange.length, [cont length]);
 	[cont setAttributes:attributes range:aRange];
 	[self edited:NSTextStorageEditedAttributes range:aRange changeInLength:0];
 }
@@ -79,7 +79,7 @@
 // This is the default method for writing text to the console. Note that the application should use begin/endEditing and in addition to textStorage methods it may want to use setSelectedRange: and scrollRangeToVisible: of textView to update the text caret.
 - (void) insertText: (NSString*) text atIndex: (int) index withColor: (NSColor*) color
 {
-	NSLog(@"insert %d chars at %d to result in %d length", [text length], index, [cont length]+[text length]);
+	//NSLog(@"insert %d chars at %d to result in %d length", [text length], index, [cont length]+[text length]);
 	[cont replaceCharactersInRange: NSMakeRange(index,0) withString: text];
 	[cont addAttribute:@"NSColor" value:color range: NSMakeRange(index, [text length])];
 	[cont addAttribute:@"NSFont" value:[[RController getRController] currentFont] range: NSMakeRange(index, [text length])];

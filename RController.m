@@ -224,9 +224,7 @@ static RController* sharedRController;
 		[md release];
 	}
 	[RTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
-	
-	NSLog(@"attr=%@", [RTextView typingAttributes]);
-	
+		
 	//	[RTextView changeColor: inputColor];
 	[RTextView display];
 	[self setupToolbar];
@@ -301,23 +299,23 @@ static RController* sharedRController;
 												userInfo:0
 												 repeats:YES];
 	
-	if (!RLtimer)
-		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
-												   target:self
-												 selector:@selector(kickstart:)
-												 userInfo:0
-												  repeats:NO];
-
 	// once we're ready with the doc transition, the following will actually fire up the cconsole window
 	//[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"Rcommand" display:YES];
 
 	[RConsoleWindow makeKeyAndOrderFront:self];
 	[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
-	CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
+	//CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
+	
+	if (!RLtimer)
+		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
+												   target:self
+												 selector:@selector(kickstart:)
+												 userInfo:0
+												  repeats:NO];	
 }
 
 - (void) kickstart:(id) sender {
-	//kill(getpid(),SIGINT);
+	kill(getpid(),SIGINT);
 }
 
 -(void) addConnectionLog
