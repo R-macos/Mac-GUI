@@ -1673,7 +1673,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 {
 	NSOpenPanel *op;
 	int answer;
-	[self bla];
+
 	op = [NSOpenPanel openPanel];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
