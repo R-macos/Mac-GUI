@@ -39,7 +39,6 @@ extern Rboolean R_Interactive;   /* TRUE during interactive use*/
 
 extern FILE*    R_Consolefile;   /* Console output file */
 extern FILE*    R_Outputfile;   /* Output file */
-extern char*    R_TempDir;   /* Name of per-session dir */
 
 typedef enum {
     SA_NORESTORE,/* = 0 */
