@@ -968,14 +968,16 @@
 		};
 		16A25F57072AACF40047E009 = {
 			children = (
-				D41DED4A073B3EE400B900F2,
-				D41DED4B073B3EE400B900F2,
 				16A26031072AB6660047E009,
 				16A26032072AB6660047E009,
+				D41DED4A073B3EE400B900F2,
+				D41DED4B073B3EE400B900F2,
 				16A25F58072AACF40047E009,
 				16A25F59072AACF40047E009,
 				16A25F5A072AACF40047E009,
 				16A25F5B072AACF40047E009,
+				684D008307BD72BE0047EEF6,
+				684D008407BD72BE0047EEF6,
 				1CDD05460763E46900B8FCA6,
 				1CDD05470763E46900B8FCA6,
 			);
@@ -2258,6 +2260,76 @@
 			settings = {
 			};
 		};
+		684D008307BD72BE0047EEF6 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = SyntaxColorsPrefPane.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		684D008407BD72BE0047EEF6 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SyntaxColorsPrefPane.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		684D008507BD72BE0047EEF6 = {
+			fileRef = 684D008307BD72BE0047EEF6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		684D008607BD72BE0047EEF6 = {
+			fileRef = 684D008407BD72BE0047EEF6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		684D008707BD72F10047EEF6 = {
+			children = (
+				684D008807BD72F10047EEF6,
+				684D008A07BD73090047EEF6,
+				684D008B07BD731D0047EEF6,
+			);
+			isa = PBXVariantGroup;
+			name = SyntaxColorsPrefPane.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		684D008807BD72F10047EEF6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/SyntaxColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		684D008907BD72F10047EEF6 = {
+			fileRef = 684D008707BD72F10047EEF6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		684D008A07BD73090047EEF6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/SyntaxColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		684D008B07BD731D0047EEF6 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = it;
+			path = it.lproj/SyntaxColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		685355FF07B0052E00FDAAC3 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.nib;
@@ -2268,6 +2340,7 @@
 		};
 		6853563B07B0285E00FDAAC3 = {
 			children = (
+				684D008707BD72F10047EEF6,
 				16A2604A072AB7D80047E009,
 				D41DED53073B3F8000B900F2,
 				16A25FAC072AAFDF0047E009,
@@ -2709,6 +2782,7 @@
 				68E2B9F20796C9D200E31F29,
 				D490C1EC07B400870034B42F,
 				6855194107B8FDDF00F3A57C,
+				684D008507BD72BE0047EEF6,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2774,6 +2848,7 @@
 				D41DED55073B3F8000B900F2,
 				687B4E370794130800074042,
 				686967DB07981764002A1932,
+				684D008907BD72F10047EEF6,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2834,6 +2909,7 @@
 				687B503C07945D4C00074042,
 				68E2B9F30796C9D200E31F29,
 				D490C1ED07B400870034B42F,
+				684D008607BD72BE0047EEF6,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
