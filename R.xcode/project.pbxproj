@@ -193,6 +193,70 @@
 			settings = {
 			};
 		};
+		161034F007D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = ja;
+			path = ja.lproj/Localizable.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F107D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/MainMenu.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F207D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/SyntaxColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F307D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/ColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F407D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/EditorPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F507D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/MiscPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F607D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = ja;
+			path = ja.lproj/QuartzPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		161034F707D2232400677899 = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
+			name = ja;
+			path = ja.lproj/Credits.rtf;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		1611E2E9070B83770025F66D = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -635,7 +699,7 @@
 				163B0D0506CE597300A380BE,
 				686967BF079814E0002A1932,
 				16B66A5607B6EB260053EDB2,
-				1689A2DC07D2154C00B3E0E2,
+				161034F707D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = Credits.rtf;
@@ -973,70 +1037,6 @@
 			settings = {
 			};
 		};
-		1689A2DC07D2154C00B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.rtf;
-			name = jp;
-			path = jp.lproj/Credits.rtf;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2DD07D2155900B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.strings;
-			name = jp;
-			path = jp.lproj/Localizable.strings;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2DE07D2156600B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = jp;
-			path = jp.lproj/MainMenu.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2DF07D2157E00B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = jp;
-			path = jp.lproj/SyntaxColorsPrefPane.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2E007D2157E00B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = jp;
-			path = jp.lproj/ColorsPrefPane.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2E107D2157F00B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = jp;
-			path = jp.lproj/EditorPrefPane.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2E207D2157F00B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = jp;
-			path = jp.lproj/MiscPrefPane.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		1689A2E307D2157F00B3E0E2 = {
-			isa = PBXFileReference;
-			lastKnownFileType = wrapper.nib;
-			name = jp;
-			path = jp.lproj/QuartzPrefPane.nib;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		169970A106DCD17300FFACB0 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1364,7 +1364,7 @@
 				68C0CFD307BBDAF000EA34B7,
 				68C0CFD407BBDAF300EA34B7,
 				16151A5A07CD2B660018B619,
-				1689A2E307D2157F00B3E0E2,
+				161034F607D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = QuartzPrefPane.nib;
@@ -1392,7 +1392,7 @@
 				685355FF07B0052E00FDAAC3,
 				68C30D4007B80D7B0020A506,
 				16151A5907CD2B5B0018B619,
-				1689A2E207D2157F00B3E0E2,
+				161034F507D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = MiscPrefPane.nib;
@@ -1504,7 +1504,7 @@
 				6880973207AFFB2000F90DB0,
 				68C30D3D07B80D6C0020A506,
 				16151A5707CD2B430018B619,
-				1689A2E007D2157E00B3E0E2,
+				161034F307D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = ColorsPrefPane.nib;
@@ -2160,6 +2160,7 @@
 				it,
 				fr,
 				jp,
+				ja,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
@@ -2244,7 +2245,7 @@
 				686967B9079813AD002A1932,
 				68C30D3A07B80D510020A506,
 				16151A5507CD2B2B0018B619,
-				1689A2DE07D2156600B3E0E2,
+				161034F107D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = MainMenu.nib;
@@ -2417,7 +2418,7 @@
 				684D008A07BD73090047EEF6,
 				684D008B07BD731D0047EEF6,
 				16151A5607CD2B3B0018B619,
-				1689A2DF07D2157E00B3E0E2,
+				161034F207D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = SyntaxColorsPrefPane.nib;
@@ -2520,7 +2521,7 @@
 				686967D807981746002A1932,
 				686967E7079818C1002A1932,
 				16B66A3107B6E1F10053EDB2,
-				1689A2DD07D2155900B3E0E2,
+				161034F007D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = Localizable.strings;
@@ -3126,7 +3127,7 @@
 				6812EC9E07BA6A360000B6A8,
 				1659C15A07BBA5040076DC4F,
 				16151A5807CD2B500018B619,
-				1689A2E107D2157F00B3E0E2,
+				161034F407D2232400677899,
 			);
 			isa = PBXVariantGroup;
 			name = EditorPrefPane.nib;
