@@ -15,6 +15,14 @@ This project has been produced with XCode 1.5
 To build the R for Mac OS X Faq in docs folder use
 	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
 
+NOTE:
+To run R.app from inside the XCode debugger, you have to setup the R_HOME 
+env variable. Proceed as follows:
+* Select the "R" executable
+* choose "Info"
+* Click the "variables" tab and set 
+	R_HOME  to   /Library/Frameworks/R.framework/Resources
+
 
 
 
