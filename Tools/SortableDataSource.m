@@ -58,6 +58,18 @@
 	free(ca);
 }
 
+- (void) addColumnOfLength: (int) clen withUTF8Strings: (char**) cstr name: (NSString*) name
+{
+	NSString **ca = (NSString**) malloc(sizeof(NSString*)*clen);
+	int i=0;
+	while (i<clen) {
+		ca[i] = [NSString stringWithUTF8String: cstr[i]];
+		i++;
+	}
+	[self addColumn: [NSArray arrayWithObjects:ca count:clen] withName:name];
+	free(ca);
+}
+
 - (id) init
 {
     self = [super init];

@@ -38,6 +38,7 @@
 
 - (void) addColumn: (NSArray*) colCont withName: (NSString*) name;
 - (void) addColumnOfLength: (int) clen withCStrings: (char**) cstr name: (NSString*) name;
+- (void) addColumnOfLength: (int) clen withUTF8Strings: (char**) cstr name: (NSString*) name;
 - (void) reset;
 - (unsigned) count;
 - (id) objectAtColumn: (NSString*) name row: (int) row;
