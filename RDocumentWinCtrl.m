@@ -153,14 +153,14 @@ NSArray *keywordList=nil;
 		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
     }
 	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
-	BOOL horzScrollbarEnabled = [Preferences flagForKey:enableHorzScrollbarKey withDefault: YES];
+	BOOL lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
 	if (showLineNos) {
 		// This should probably get loaded from NSUserDefaults.
 		NSFont *font = [NSFont fontWithName:@"Monaco" size: 10];
 		
 		NSSize layoutSize = [textView maxSize];
 		layoutSize.width = layoutSize.height;
-		if (horzScrollbarEnabled) {
+		if (!lineWrappingEnabled) {
 			// Make sure that we don't wrap lines.
 			[scrollView setHasHorizontalScroller: YES];
 			[textView setHorizontallyResizable: YES]; 

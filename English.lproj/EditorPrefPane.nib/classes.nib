@@ -4,7 +4,7 @@
             ACTIONS = {
                 changeAppOrCommand = id; 
                 changeEditor = id; 
-                changeEnableHorzScrollbar = id; 
+                changeEnableLineWrapping = id; 
                 changeExternalEditorName = id; 
                 changeFragmentPaddingWidth = id; 
                 changeHighlightInterval = id; 
@@ -22,7 +22,7 @@
                 changeEditor = NSButton; 
                 commandText = NSTextField; 
                 editorText = NSTextField; 
-                enableHorzScrollbar = NSButton; 
+                enableLineWrapping = NSButton; 
                 externalEditorName = NSTextField; 
                 externalSettings = NSBox; 
                 fragmentPaddingWidth = NSTextField; 

@@ -164,7 +164,7 @@
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[showLineNumbers setEnabled:flag?NSOnState:NSOffState];
 	[highlightInterval setEnabled:flag?NSOnState:NSOffState];
-	[enableHorzScrollbar setEnabled:flag?NSOnState:NSOffState];
+	[enableLineWrapping setEnabled:flag?NSOnState:NSOffState];
 	[lineNumberGutterWidth setEnabled:flag?NSOnState:NSOffState];
 	[fragmentPaddingWidth setEnabled:flag?NSOnState:NSOffState];
 	if (flag) {
@@ -207,21 +207,13 @@
 	[showLineNumbers setState:[Preferences flagForKey:showLineNumbersKey withDefault: YES]?NSOnState:NSOffState];
 	
 	if (![Preferences flagForKey:showLineNumbersKey withDefault: YES]) {
-		[enableHorzScrollbar setEnabled:NSOffState];		
+		[enableLineWrapping setEnabled:NSOffState];		
 		[lineNumberGutterWidth setEnabled:NSOffState];
 		[fragmentPaddingWidth setEnabled:NSOffState];
 		[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
 		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
 	}
-/*
-	if (![Preferences flagForKey:enableHorzScrollbarKey withDefault: YES]) {
-		[lineNumberGutterWidth setEnabled:NSOffState];
-		[fragmentPaddingWidth setEnabled:NSOffState];
-		[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
-		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
-	}
-*/
-	[enableHorzScrollbar setState:[Preferences flagForKey:enableHorzScrollbarKey withDefault: YES]?NSOnState:NSOffState];
+	[enableLineWrapping setState:[Preferences flagForKey:enableLineWrappingKey withDefault: YES]?NSOnState:NSOffState];
 	
 	[lineNumberGutterWidth setStringValue:[Preferences stringForKey:lineNumberGutterWidthKey withDefault: @"16.0"]];
 	
@@ -292,10 +284,10 @@
 	}
 }
 
-- (IBAction) changeEnableHorzScrollbar:(id)sender {
+- (IBAction) changeEnableLineWrapping:(id)sender {
 	int tmp = (int)[sender state];
 	BOOL flag = tmp?YES:NO;
-	[Preferences setKey:enableHorzScrollbarKey withFlag:flag];
+	[Preferences setKey:enableLineWrappingKey withFlag:flag];
 	
 }
 

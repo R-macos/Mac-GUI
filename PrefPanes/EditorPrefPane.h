@@ -50,7 +50,7 @@
 	IBOutlet NSTextField *externalEditorName;
 	IBOutlet NSMatrix *appOrCommand;
 	IBOutlet NSButton *changeEditor;
-	IBOutlet NSButton *enableHorzScrollbar;
+	IBOutlet NSButton *enableLineWrapping;
 	IBOutlet NSTextField *lineNumberGutterWidth;
 	IBOutlet NSTextField *fragmentPaddingWidth;
 	IBOutlet NSTextField *highlightIntervalText;
@@ -84,7 +84,7 @@
 - (IBAction) changeHighlightInterval:(id)sender;
 - (IBAction) changeShowLineNumbers:(id)sender;
 - (IBAction) changeAppOrCommand:(id)sender;
-- (IBAction) changeEnableHorzScrollbar:(id)sender;
+- (IBAction) changeEnableLineWrapping:(id)sender;
 - (IBAction) changeLineNumberGutterWidth:(id)sender;
 - (IBAction) changeFragmentPaddingWidth:(id)sender;
 
