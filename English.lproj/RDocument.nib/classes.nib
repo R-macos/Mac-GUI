@@ -18,6 +18,8 @@
                 executeSelection = id; 
                 functionGo = id; 
                 goHelpSearch = id; 
+                goToLine = id; 
+                goToLineCloseSheet = id; 
                 printDocument = id; 
                 resetBackgroundColor = id; 
                 setHelpSearchType = id; 
@@ -28,6 +30,8 @@
             OUTLETS = {
                 fnListBox = NSPopUpButton; 
                 fnListView = NSView; 
+                goToLineField = NSTextField; 
+                goToLineSheet = NSPanel; 
                 helpDrawer = NSDrawer; 
                 helpWebView = WebView; 
                 scrollView = NSScrollView; 
