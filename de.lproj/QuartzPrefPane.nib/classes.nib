@@ -1,0 +1,30 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                changeQuartzPrefPaneDefaults = id; 
+                changeQuartzPrefPaneFont = id; 
+                changeQuartzPrefPaneHeight = id; 
+                changeQuartzPrefPaneLocation = id; 
+                changeQuartzPrefPaneWidth = id; 
+                changeUseQuartzPrefPaneSettings = id; 
+            }; 
+            CLASS = QuartzPrefPane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                changeQuartzPrefPaneFont = NSButton; 
+                mainView = NSView; 
+                quartzPrefPaneFont = NSTextField; 
+                quartzPrefPaneFontSize = NSTextField; 
+                quartzPrefPaneHeight = NSTextField; 
+                quartzPrefPaneLocation = NSPopUpButton; 
+                quartzPrefPaneWidth = NSTextField; 
+                setQuartzPrefPaneDefaults = NSButton; 
+                useQuartzPrefPaneSettings = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
