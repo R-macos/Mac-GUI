@@ -16,6 +16,7 @@
 #import "MiscPrefPane.h"
 #import "QuartzPrefPane.h"
 #import "ColorsPrefPane.h"
+#import "EditorPrefPane.h"
 
 // size of the console output cache buffer
 #define DEFAULT_WRITE_BUFFER_SIZE 32768
@@ -53,6 +54,7 @@ extern int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplSt
 #import "WSBrowser.h"
 #import "HelpManager.h"
 #import "RQuartz.h"
+#import "RDocumentController.h"
 
 #import <unistd.h>
 #import <sys/fcntl.h>
@@ -70,7 +72,19 @@ static RController* sharedRController;
     NSString *cmd = [args objectForKey:@""];
     if (!cmd || [cmd isEqualToString:@""])
         return [NSNumber numberWithBool:NO];
-	[[RController getRController] sendInput: cmd];
+	int len = [cmd length] - 1; 
+	unichar characterToCheck;
+	characterToCheck = [cmd characterAtIndex:len];
+	//NSLog(@"cmd with length %d called: %@", len, cmd);
+	while ((len >= 0) && (characterToCheck == NSCarriageReturnCharacter)) {
+		len--;
+		characterToCheck = [cmd characterAtIndex:len];
+	}
+	NSRange range;
+	range.location = 0; range.length = len+1;
+	NSString *buf = [cmd substringWithRange:range];
+	//NSLog(@"buf with length %d created: %@", [buf length], buf);
+	[[RController getRController] sendInput: buf];
 	return [NSNumber numberWithBool:YES];
 }
 @end
@@ -137,6 +151,7 @@ static RController* sharedRController;
 	quartzPrefPane = NULL;
 	colorsPrefPane = NULL;
 	miscPrefPane = NULL;
+	editorPrefPane = NULL;
 
 	[self setupPrefWindow];
 
@@ -603,7 +618,7 @@ extern BOOL isTimeToFinish;
 	if(!R_FileExists(file))
 		return(0);
 	
-	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
+	RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
 	[document setREditFlag: YES];
 	
 	NSEnumerator *e = [[document windowControllers] objectEnumerator];
@@ -629,7 +644,7 @@ extern BOOL isTimeToFinish;
 	
     for (i = 0; i < nfile; i++){
 		if(R_FileExists(file[i]))
-			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
+			[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
 		else
 			[[NSDocumentController sharedDocumentController] newDocument: [RController getRController]];
 		
@@ -647,7 +662,7 @@ extern BOOL isTimeToFinish;
     if (nfile <=0) return 1;
 	
     for (i = 0; i < nfile; i++){
-		RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
+		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file[i])] display:true];
 		if(wtitle[i]!=nil)
 			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle]];
 		[document setEditable: NO];
@@ -1876,6 +1891,198 @@ case the color is set to its default value.
     [[colorsPrefPane backgColorWell] setNeedsDisplay:YES];
 }
 
+- (void) setInternalOrExternal:(int)internal {
+	if(internalOrExternal)
+		[internalOrExternal release];
+	
+	if (internal == 1) {
+		[[editorPrefPane externalSettings] setHidden:YES]; 
+		[[editorPrefPane builtInPrefs] setHidden:NO]; 
+		internalOrExternal = @"YES";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:internalOrExternal] 
+												  forKey:internalOrExternalKey];
+		[[editorPrefPane internalOrExternal] setState:0 atRow:0 column:1];
+		[[editorPrefPane internalOrExternal] setState:1 atRow:0 column:0];
+	} else {
+		[[editorPrefPane externalSettings] setHidden:NO]; 
+		[[editorPrefPane builtInPrefs] setHidden:YES]; 
+		internalOrExternal = @"NO";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:internalOrExternal] 
+												forKey:internalOrExternalKey];
+		[[editorPrefPane internalOrExternal] setState:0 atRow:0 column:0];
+		[[editorPrefPane internalOrExternal] setState:1 atRow:0 column:1];
+	}
+}
+
+- (void) setShowSyntaxColoring:(int)state {
+	if(showSyntaxColoring)
+		[showSyntaxColoring release];
+	
+	if (state == NSOnState) {
+		showSyntaxColoring = @"YES";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showSyntaxColoring] 
+												  forKey:showSyntaxColoringKey];
+		[[editorPrefPane showSyntaxColoring] setState:YES]; 
+	} else {
+		showSyntaxColoring = @"NO";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showSyntaxColoring] 
+												  forKey:showSyntaxColoringKey];
+		[[editorPrefPane showSyntaxColoring] setState:NO]; 
+	}
+}
+
+- (void) setShowBraceHighlighting:(int)state {
+	if(showBraceHighlighting)
+		[showBraceHighlighting release];
+	
+	if (state == NSOnState) {
+		showBraceHighlighting = @"YES";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showBraceHighlighting] 
+											  forKey:showBraceHighlightingKey];
+		[[editorPrefPane showBraceHighlighting] setState:1]; 
+	} else {
+		showBraceHighlighting = @"NO";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showBraceHighlighting] 
+											  forKey:showBraceHighlightingKey];
+		[[editorPrefPane showBraceHighlighting] setState:0]; 
+	}
+}
+
+- (void) setHighlightInterval:(NSString *)aString {
+	if(highlightInterval)
+		[highlightInterval release];
+	
+	if ([aString length] == 0) {
+		highlightInterval = @"0.2";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:highlightInterval] 
+											  forKey:highlightIntervalKey];
+		[[editorPrefPane highlightInterval] setStringValue:highlightInterval]; 
+	} else {
+		double val = [aString doubleValue];
+		if (val < 0.1)
+			aString = @"0.1";
+		else if (val > 0.8)
+			aString = @"0.8";
+		highlightInterval = aString;
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:highlightInterval] 
+											  forKey:highlightIntervalKey];
+		[[editorPrefPane highlightInterval] setStringValue:aString]; 
+	}
+}
+
+- (void) setShowLineNumbers:(int)state {
+	if(showLineNumbers)
+		[showLineNumbers release];
+	
+	if (state == NSOnState) {
+		showLineNumbers = @"YES";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showLineNumbers] 
+											  forKey:showLineNumbersKey];
+		[[editorPrefPane showLineNumbers] setState:1]; 
+	} else {
+		showLineNumbers = @"NO";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:showLineNumbers] 
+											  forKey:showLineNumbersKey];
+		[[editorPrefPane showLineNumbers] setState:0]; 
+	}
+}
+
+- (void)setExternalEditorName:(NSString *)name {
+	if(externalEditorName)
+		[externalEditorName release];
+	
+	externalEditorName = name;
+	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:externalEditorName] 
+											  forKey:externalEditorNameKey];
+	if ([name length] == 0 )
+		[[editorPrefPane externalEditorName] setStringValue: @""];
+	else
+		[[editorPrefPane externalEditorName] setStringValue: name];
+}
+
+- (void) setAppOrCommand:(int)app {
+	if(appOrCommand)
+		[appOrCommand release];
+	
+	if (app == 1) {
+		appOrCommand = @"YES";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:appOrCommand] 
+												  forKey:appOrCommandKey];
+		[[editorPrefPane appOrCommand] setState:0 atRow:1 column:0];
+		[[editorPrefPane appOrCommand] setState:1 atRow:0 column:0];
+	} else {
+		appOrCommand = @"NO";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:appOrCommand] 
+												  forKey:appOrCommandKey];
+		[[editorPrefPane appOrCommand] setState:NSOffState atRow:0 column:0];
+		[[editorPrefPane appOrCommand] setState:NSOnState atRow:1 column:0];
+	}
+}
+
+- (void) setEditOrSource:(int)edit {
+	if(editOrSource)
+		[editOrSource release];
+	
+	if (edit == 1) {
+		editOrSource = @"YES";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:editOrSource] 
+												  forKey:editOrSourceKey];
+		[[miscPrefPane editOrSource] setState:0 atRow:1 column:0];
+		[[miscPrefPane editOrSource] setState:1 atRow:0 column:0];
+	} else {
+		editOrSource = @"NO";
+		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:editOrSource] 
+												  forKey:editOrSourceKey];
+		[[miscPrefPane editOrSource] setState:NSOffState atRow:0 column:0];
+		[[miscPrefPane editOrSource] setState:NSOnState atRow:1 column:0];
+	}
+}
+
+- (IBAction) changeInternalOrExternal:(id)sender {
+	if ([sender selectCellAtRow:0 column:0] == NSOffState)
+		[self setInternalOrExternal:0];
+	else
+		[self setInternalOrExternal:1];
+}
+
+- (IBAction) changeShowSyntaxColoring:(id)sender {
+    [self setShowSyntaxColoring:[sender state]];
+}
+
+- (IBAction) changeShowBraceHighlighting:(id)sender {
+    [self setShowBraceHighlighting:[sender state]];
+}
+
+- (IBAction) changeHighlightInterval:(id)sender {
+    [self setHighlightInterval:[sender stringValue]];
+}
+
+- (IBAction) changeShowLineNumbers:(id)sender {
+    [self setShowLineNumbers:[sender state]];
+}
+
+- (void)changeExternalEditorName:(id)sender {
+	NSString *name = [sender stringValue];
+	if ([name length] == 0) {
+		[self setExternalEditorName:nil];
+		 	} else {
+				[self setExternalEditorName: name];
+			}
+}
+
+- (IBAction) changeAppOrCommand:(id)sender {
+	if ([sender selectCellAtRow:0 column:0] == NSOffState)
+		[self setAppOrCommand:0];
+	else
+		[self setAppOrCommand:1];
+}
+
+- (IBAction) changeEditOrSource:(id)sender {
+	if ([sender selectCellAtRow:0 column:0] == NSOffState)
+		[self setEditOrSource:0];
+	else
+		[self setEditOrSource:1];
+}
 
 - (void)changeInputColor:(id)sender {
     [self setInputColor:[sender color]];
@@ -1958,7 +2165,6 @@ case the color is set to its default value.
 	else
 		[self setInputColor: nil];
 
-
 	theData=[defaults dataForKey:outputColorKey];
 	if(theData != nil)		
 		[self setOutputColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
@@ -1970,23 +2176,91 @@ case the color is set to its default value.
 		[self setPromptColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setPromptColor: nil];
-	
-
-	
+		
 	theData = [defaults dataForKey:stderrColorKey];
 	if(theData != nil)		
 		[self setStderrColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setStderrColor: nil];
-
-	
+		
 	theData=[defaults dataForKey:stdoutColorKey];
 	if(theData != nil)		
 		[self setStdoutColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
 	else
 		[self setStdoutColor: nil];
 	
-		
+	theData=[defaults dataForKey:internalOrExternalKey];
+	if(theData != nil){
+		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"]) {
+			[self setInternalOrExternal: 0];			
+		} else {
+			[self setInternalOrExternal: 1];
+		}
+	} else 
+		[self setInternalOrExternal: 1];
+	
+	theData=[defaults dataForKey:showSyntaxColoringKey];
+	if(theData != nil){
+		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"]) {
+			[self setShowSyntaxColoring: 0];
+		} else {
+			[self setShowSyntaxColoring: 1];
+		}
+	} else 
+		[self setShowSyntaxColoring: 1];
+	
+	theData=[defaults dataForKey:showBraceHighlightingKey];
+	if(theData != nil){
+		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])
+			[self setShowBraceHighlighting: 0];
+		else
+			[self setShowBraceHighlighting: 1];
+	} else 
+		[self setShowBraceHighlighting: 1];
+	
+	theData=[defaults dataForKey:highlightIntervalKey];
+	if(theData != nil){
+		[self setHighlightInterval: (NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
+	} else {
+		[self setHighlightInterval: @"0.2"];
+	}	
+	
+	theData=[defaults dataForKey:showLineNumbersKey];
+	if(theData != nil){
+		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])
+			[self setShowLineNumbers: 0];
+		else
+			[self setShowLineNumbers: 1];
+	} else 
+		[self setShowLineNumbers: 0];
+	
+	theData=[defaults dataForKey:externalEditorNameKey];
+	if(theData != nil){
+		[self setExternalEditorName: (NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
+	} else {
+		[self setExternalEditorName: nil];
+	}	
+
+	theData=[defaults dataForKey:appOrCommandKey];
+	if(theData != nil){
+		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
+			[self setAppOrCommand: 1];
+		} else {
+			[self setAppOrCommand: 0];
+		}
+	} else 
+		[self setAppOrCommand: 1];
+	
+	theData=[defaults dataForKey:editOrSourceKey];
+	if(theData != nil){
+		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
+			[self setEditOrSource: 1];
+		} else {
+			[self setEditOrSource: 0];
+		}
+	} else 
+		[self setEditOrSource: 1];
+	
 }
 
 
@@ -2008,6 +2282,9 @@ case the color is set to its default value.
 		
 		colorsPrefPane = [[[ColorsPrefPane alloc] initWithIdentifier:@"Colors" label:@"Colors" category:@"Console"] autorelease];
 		[prefsWindow addPane:colorsPrefPane withIdentifier:[colorsPrefPane identifier]];
+		
+		editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:@"Editor" category:@"Editor"] autorelease];
+		[prefsWindow addPane:editorPrefPane withIdentifier:[editorPrefPane identifier]];
 		
 		// set up some configuration options
 		[prefsWindow setUsesConfigurationPane:YES];

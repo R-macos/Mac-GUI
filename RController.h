@@ -64,10 +64,16 @@
 #define promptColorKey @"Prompt Color"
 #define alphaValueKey  @"Alpha Value"
 #define FontSizeKey    @"Console Font Size"
+#define internalOrExternalKey  @"Use Internal Editor"
+#define showSyntaxColoringKey  @"Show syntax coloring"
+#define showBraceHighlightingKey  @"Show brace highlighting"
+#define highlightIntervalKey  @"Highlight interval"
+#define showLineNumbersKey  @"Show line numbers"
+#define externalEditorNameKey  @"External Editor Name"
+#define appOrCommandKey  @"Is it a .app or a command"
+#define editOrSourceKey  @"Edit or source in file"
 
 #import "AMPreferenceWindowController.h"
-
-
 
 /* Preference keys */
 
@@ -115,6 +121,7 @@
 	id quartzPrefPane;
 	id miscPrefPane;
 	id colorsPrefPane;
+	id editorPrefPane;
 	
 	NSColor *inputColor;
 	NSColor *outputColor;
@@ -123,7 +130,16 @@
 	NSColor *stderrColor;
 	NSColor *stdoutColor;
 	float alphaValue;
-		
+	
+	NSString *internalOrExternal;
+	NSString *showSyntaxColoring;
+	NSString *showLineNumbers;
+	NSString *showBraceHighlighting;
+	NSString *highlightInterval;
+	NSString *externalEditorName;
+	NSString *appOrCommand;
+	NSString *editOrSource;
+	
 	NSMutableArray *consoleInputQueue;
 	NSString *currentConsoleInput;
 	
@@ -257,6 +273,15 @@
 - (IBAction) changeAlphaColor:(id)sender;
 - (IBAction) setDefaultColors:(id)sender;
 
+- (IBAction) changeInternalOrExternal:(id)sender;
+- (IBAction) changeShowSyntaxColoring:(id)sender;
+- (IBAction) changeShowBraceHighlighting:(id)sender;
+- (IBAction) changeHighlightInterval:(id)sender;
+- (IBAction) changeShowLineNumbers:(id)sender;
+- (IBAction) changeExternalEditorName:(id)sender;
+- (IBAction) changeAppOrCommand:(id)sender;
+- (IBAction) changeEditOrSource:(id)sender;
+
 - (void) setInputColor:(NSColor *)newColor;
 - (void) setOutputColor:(NSColor *)newColor;
 - (void) setPromptColor:(NSColor *)newColor;
@@ -264,6 +289,15 @@
 - (void) setStderrColor:(NSColor *)newColor;
 - (void) setStdoutColor:(NSColor *)newColor;
 - (void) setAlphaValue:(float)f;
+
+- (void) setInternalOrExternal:(int)internal;
+- (void) setShowSyntaxColoring:(int)state;
+- (void) setShowBraceHighlighting:(int)state;
+- (void) setHighlightInterval:(NSString *)aString;
+- (void) setShowLineNumbers:(int)state;
+- (void) setExternalEditorName:(NSString *)name;
+- (void) setAppOrCommand:(int)app;
+- (void) setEditOrSource:(int)app;
 
 - (void) readDefaults;
 
