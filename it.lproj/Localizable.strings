@@ -31,9 +31,12 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Autorizza R a eseguire comandi di sistema come root";
 
-/* From: HelpManager.m (runHelpSearch)
-   From: HelpManager.m (showHelpFor) */
-"Can't find help for topic" = "Help non disponibile per l'argomento";
+/* From: HelpManager.m (showHelpFor) */
+"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+
+/* From: Tools/History.m (exportHistory)
+   From: Tools/History.m (importHistory) */
+"Can't open history file %2" = "Can't open history file %2";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annulla";
@@ -83,6 +86,12 @@
 /* From: RController.m (toolbar) */
 "Font Size" = "Dimensione Font";
 
+/* From: RController.m (handleCustomPrint) */
+"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
+
+/* From: RController.m (handleCustomPrint) */
+"Help topic not found" = "Help topic not found";
+
 /* From: RController.m (toolbar) */
 "History" = "History";
 
@@ -110,20 +119,20 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Apri nell'Editor";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Installatore Pacchetti";
+
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Installatore Pacchetti";
-
-/* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Specificare una URL valida.";
+
+/* Editor preference group */
+"PrefG-Editor" = "Source Editor";
 
 /* General preference group */
 "PrefG-General" = "Generale";
-
-/* General preference group */
-"PrefG-Editor" = "Source Editor";
 
 /* Views preference group */
 "PrefG-Views" = "Aspetto";
@@ -280,9 +289,6 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Il pacchetto non è stato installato.";
-
-/* From: HelpManager.m (runHelpSearch) */
-"Topic: " = "Argomento: ";
 
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "Non è stato possibile lanciare R: %@";

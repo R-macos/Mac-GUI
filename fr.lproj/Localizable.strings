@@ -31,9 +31,12 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Autorise R d'effectuer des commandes système en super-utilisateur (root)";
 
-/* From: HelpManager.m (runHelpSearch)
-   From: HelpManager.m (showHelpFor) */
-"Can't find help for topic" = "Aucune rubrique d'aide n'a été trouvée";
+/* From: HelpManager.m (showHelpFor) */
+"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+
+/* From: Tools/History.m (exportHistory)
+   From: Tools/History.m (importHistory) */
+"Can't open history file %2" = "Can't open history file %2";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annuler";
@@ -83,6 +86,12 @@
 /* From: RController.m (toolbar) */
 "Font Size" = "Taille Police";
 
+/* From: RController.m (handleCustomPrint) */
+"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
+
+/* From: RController.m (handleCustomPrint) */
+"Help topic not found" = "Help topic not found";
+
 /* From: RController.m (toolbar) */
 "History" = "Historique";
 
@@ -110,11 +119,11 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Ouvrir dans Éditeur";
 
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "Installateur de Package";
-
 /* From: PackageInstaller.m (reloadURL) */
 "Package installer" = "Installateur de Package";
+
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "Installateur de Package";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "S'il vous plait, spécifiez d'abord une adresse URL valide.";
@@ -280,9 +289,6 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Le package n'a pas été installé.";
-
-/* From: HelpManager.m (runHelpSearch) */
-"Topic: " = "Rubrique : ";
 
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "Impossible de démarrer R : %@";

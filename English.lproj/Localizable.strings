@@ -31,9 +31,12 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Authorize R to run system commands as root";
 
-/* From: HelpManager.m (runHelpSearch)
-   From: HelpManager.m (showHelpFor) */
+/* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+
+/* From: Tools/History.m (exportHistory)
+   From: Tools/History.m (importHistory) */
+"Can't open history file %2" = "Can't open history file %2";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Cancel";
@@ -83,6 +86,12 @@
 /* From: RController.m (toolbar) */
 "Font Size" = "Font Size";
 
+/* From: RController.m (handleCustomPrint) */
+"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
+
+/* From: RController.m (handleCustomPrint) */
+"Help topic not found" = "Help topic not found";
+
 /* From: RController.m (toolbar) */
 "History" = "History";
 
@@ -99,9 +108,6 @@
 "No" = "No";
 
 /* Global string @ */
-"Yes" = "Yes";
-
-/* Global string @ */
 "OK" = "OK";
 
 /* From: RController.m (toolbar) */
@@ -113,20 +119,20 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Open In Editor";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Package installer";
+
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Package Installer";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Package installer";
-
-/* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Please, specify a valid URL first.";
+
+/* Editor preference group */
+"PrefG-Editor" = "Source Editor";
 
 /* General preference group */
 "PrefG-General" = "General";
-
-/* General preference group */
-"PrefG-Editor" = "Source Editor";
 
 /* Views preference group */
 "PrefG-Views" = "Views";
@@ -284,15 +290,9 @@
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "The package has not been installed.";
 
-/* From: HelpManager.m (runHelpSearch) */
-"Topic: " = "Topic: ";
-
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "Unable to start R: %@";
 
 /* Global string @ */
 "Yes" = "Yes";
-
-/* From: History.m (importHistory) */
-"Can't open history file %2" = "Can't open history file %2";
 

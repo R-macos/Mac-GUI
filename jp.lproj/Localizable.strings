@@ -87,7 +87,7 @@
 "Font Size" = "フォントサイズ";
 
 /* From: RController.m (handleCustomPrint) */
-"Help for the topic ¥ was not found." = "Help for the topic ¥ was not found.";
+"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
 
 /* From: RController.m (handleCustomPrint) */
 "Help topic not found" = "Help topic not found";
