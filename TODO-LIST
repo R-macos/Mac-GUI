@@ -1,4 +1,11 @@
-TO DO LIST
+TO-DO/BUGS LIST
+
+User requests/bug reports:
+* edit object menu disabled
+* multiple packages installation crashes package manager (a couple of users report this)
+* preferences panel for initial working directory and quartz device settings
+
+Internal feedback:
 * metric info in quartz device is broken [SI]
 * growing up the window in quartz device does not refresh the drawing [SI]
 * we need to assume Latin1Econdig for displaying text in quartz (see example(text))[SI]
