@@ -16,8 +16,6 @@
 
 static REngine* mainRengine=nil;
 
-extern void run_Rmainloop(); // run REPL (in libR.dylib)
-
 @implementation REngine
 
 + (REngine*) mainEngine
@@ -95,7 +93,7 @@ extern void run_Rmainloop(); // run REPL (in libR.dylib)
 {
 	if (!active) return;
 	loopRunning=YES;
-    run_Rmainloop();
+    run_REngineRmainloop();
 	loopRunning=NO;	
 }
 

@@ -29,8 +29,6 @@ extern Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 						   int bg);
 extern void getQuartzParameters(double *width, double *height, double *ps, char *family, 
 						 Rboolean *antialias, Rboolean *autorefresh, int *quartzpos);
-						   
-void run_Rmainloop(void);
 
 /*-------------------------------------------------------------------*
  * UNIX initialization (includes Darwin/Mac OS X)                    *
@@ -168,7 +166,7 @@ int initR(int argc, char **argv) {
 }
 
 
-void run_Rmainloop(void)
+void run_REngineRmainloop(void)
 {
     /* Here is the real R read-eval-loop. */
     /* We handle the console until end-of-file. */

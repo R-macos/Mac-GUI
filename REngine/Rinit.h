@@ -3,6 +3,7 @@
 
 extern char* lastInitRError;
 
+void run_REngineRmainloop(void);
 int initR(int argc, char **argv);
 
 #endif
