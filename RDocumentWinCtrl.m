@@ -283,8 +283,11 @@ NSArray *keywordList=nil;
 	NSString *s = [[textView textStorage] string];
 	NSMenuItem *mi = (NSMenuItem*) sender;
 	int pos = [mi tag];
-	if (pos>=0 && pos<[s length])
-		[textView setSelectedRange:NSMakeRange(pos,0)];
+	if (pos>=0 && pos<[s length]) {
+		NSRange fr = NSMakeRange(pos,0);
+		[textView setSelectedRange:fr];
+		[textView scrollRangeToVisible:fr];
+	}
 }
 
 - (void) functionRescan
