@@ -298,12 +298,13 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 {
 	[formatCheckBox setEnabled:NO];
 	[urlTextField setEnabled:NO];
-	pkgInst = kUserLevel;
+	pkgInst = isAdmin()?kSystemLevel:kUserLevel;
 	pkgUrl = kCRANBin;
 	pkgFormat = kBinary;
 	[formatCheckBox setState:pkgFormat];
 	[repositoryButton setTag:pkgUrl];
 	[locationMatrix setTag:pkgInst];
+	[locationMatrix selectCellWithTag:pkgInst];
 }
 
 - (id)init
