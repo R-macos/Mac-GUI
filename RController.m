@@ -85,6 +85,7 @@ static RController* sharedRController;
 	childPID = 0;
 	RLtimer = nil;
 	busyRFlag = YES;
+	outputPosition = promptPosition = committedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
 	forceStdFlush = NO;
@@ -153,23 +154,12 @@ static RController* sharedRController;
 	[ RConsoleWindow setDocumentEdited:YES];
 	
     //NSLog(@"RController: awake: done");
-
-	timer = [NSTimer scheduledTimerWithTimeInterval:0.05
-					target:self
-					selector:@selector(otherEventLoops:)
-					userInfo:0
-					repeats:YES];
-	Flushtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
-					target:self
-					selector:@selector(flushconsole:)
-					userInfo:0
-					repeats:YES];
 	
 	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
-					target:self
-					selector:@selector(showWorkingDir:)
-					userInfo:0
-					repeats:YES];
+												 target:self
+											   selector:@selector(showWorkingDir:)
+											   userInfo:0
+												repeats:YES];
 	
 	hist=[[History alloc] init];
 
@@ -210,10 +200,9 @@ static RController* sharedRController;
 		exit(-1);
 	}
 		
-	HaveConsoleBuffer = NO;
-	
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
+	[self flushROutput];
 	
 	[[NSNotificationCenter defaultCenter] 
 		addObserver:self
@@ -221,12 +210,24 @@ static RController* sharedRController;
 			   name:NSWindowDidResizeNotification
 			 object: RConsoleWindow];
 	
+	timer = [NSTimer scheduledTimerWithTimeInterval:0.05
+											 target:self
+										   selector:@selector(otherEventLoops:)
+										   userInfo:0
+											repeats:YES];
+	Flushtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+												  target:self
+												selector:@selector(flushTimerHook:)
+												userInfo:0
+												 repeats:YES];
+
 	if (!RLtimer)
 		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
 												   target:self
 												 selector:@selector(runRELP:)
 												 userInfo:0
 												  repeats:NO];
+
 }
 
 -(void) addConnectionLog
@@ -343,9 +344,9 @@ static RController* sharedRController;
 
 - (void) flushStdConsole
 {
-	forceStdFlush=YES;
 	fflush(stderr);
 	fflush(stdout);
+	forceStdFlush=YES;
 }
 
 - (void) addChildProcess: (pid_t) pid
@@ -358,6 +359,7 @@ static RController* sharedRController;
 {
 	childPID=0;
 	if (!busyRFlag && toolbarStopItem) [toolbarStopItem setEnabled:NO];
+	[self flushStdConsole];
 }
 
 // When you have the toolbar in text-only mode, this action is called
@@ -445,11 +447,20 @@ extern BOOL isTimeToFinish;
     [RConsoleWindow orderFront:nil];
 }
 
-- (void) handleFlushConsole {
+- (void) flushTimerHook: (NSTimer*) source
+{
+	[self flushROutput];
+}
+
+- (void) flushROutput {
 	if (writeBuffer!=writeBufferPos) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
 		writeBufferPos=writeBuffer;
 	}
+}
+
+- (void) handleFlushConsole {
+	[self flushROutput];
 	[self flushStdConsole];
 }
 
@@ -461,7 +472,8 @@ extern BOOL isTimeToFinish;
 	
 	// let's flush the buffer if the new string is large and it would, but the buffer should be occupied
 	if (fits<sl && fits>writeBufferHighWaterMark) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]];
+		// for efficiency we're not using handleFlushConsole, because that would trigger stdxx flush, too
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
 		writeBufferPos=writeBuffer;
 		fits = writeBufferLen-1;
 	}
@@ -469,7 +481,7 @@ extern BOOL isTimeToFinish;
 	while (fits<sl) {	// ok, we're in a situation where we must split the string
 		memcpy(writeBufferPos, s, fits);
 		writeBufferPos[writeBufferLen-1]=0;
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
 		sl-=fits; s+=fits;
 		writeBufferPos=writeBuffer;
 		fits=writeBufferLen-1;
@@ -480,21 +492,32 @@ extern BOOL isTimeToFinish;
 	
 	// flush the buffer if the low watermark is reached
 	if (fits-sl<writeBufferLowWaterMark) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
 		writeBufferPos=writeBuffer;
 	}
 }
 
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */
-- (void) writeConsoleDirectly: (NSString*) txt {
-    [RTextView insertText:txt];
-    unsigned textLength = [[RTextView textStorage] length];
-    if (textLength > committedLength) {
-        NSRange tRange=NSMakeRange(committedLength, textLength - committedLength);
-        [RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-        [RTextView setTextColor:outputColor range:tRange];
-        promptPosition = committedLength = textLength;
-    }
+- (void) writeConsoleDirectly: (NSString*) txt withColor: (NSColor*) color{
+	NSRange origSel = [RTextView selectedRange];
+	NSRange insPt = NSMakeRange(outputPosition, 0);
+	unsigned tl = [txt length];
+	if (tl>0) {
+		unsigned oldCL=committedLength;
+		/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
+			  origSel.length, outputPosition, tl, promptPosition, committedLength); */
+		committedLength=0;
+		[RTextView setSelectedRange:insPt];
+		[RTextView insertText:txt];
+		insPt.length=tl;
+		[RTextView setTextColor:color range:insPt];
+		if (outputPosition<=promptPosition) promptPosition+=tl;
+		committedLength=oldCL;
+		if (outputPosition<=committedLength) committedLength+=tl;
+		if (outputPosition<=origSel.location) origSel.location+=tl;
+		outputPosition+=tl;
+		[RTextView setSelectedRange:origSel];
+	}
 }
 
 /* Just writes the prompt in a different color */
@@ -531,7 +554,7 @@ extern BOOL isTimeToFinish;
 	[RTextView insertText:s];
 	textLength = [[RTextView textStorage] length];
 	[RTextView setTextColor:inputColor range:NSMakeRange(committedLength, textLength-committedLength)];
-	committedLength=textLength;
+	outputPosition=committedLength=textLength;
 	
 	if((*cmd == '?') || (!strncmp("help(",cmd,5))){ 
 		[self openHelpFor: cmd];
@@ -697,23 +720,8 @@ extern BOOL isTimeToFinish;
 {
 	NSColor *color=(outputType==0)?stdoutColor:((outputType==1)?stderrColor:[NSColor purpleColor]);
 	
-	[self handleFlushConsole];
-	{
-		int oldCL=committedLength;
-		NS_DURING
-		NSRange currentSelection=[RTextView selectedRange];
-		committedLength=promptPosition;
-		[RTextView setSelectedRange:NSMakeRange(promptPosition, 0)];
-		[RTextView insertText:[NSString stringWithCString:buf length:len]];
-		[RTextView setTextColor:color range:NSMakeRange(promptPosition, len)];
-		promptPosition+=len;
-		committedLength=oldCL+len;
-		currentSelection.location+=len;
-		[RTextView setSelectedRange:currentSelection];
-		NS_HANDLER
-			;
-		NS_ENDHANDLER
-	}		
+	[self flushROutput];
+	[self writeConsoleDirectly:[NSString stringWithCString:buf length:len] withColor:color];
 }    
 
 + (id) getRController{
@@ -1631,16 +1639,6 @@ No error message or warning are raised.
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
 	[printOp runOperation];
-}
-
--(void) setHaveConsoleBuffer:(BOOL)flag
-{
-	HaveConsoleBuffer = flag;
-}
-
--(BOOL) haveConsoleBuffer
-{
-	return HaveConsoleBuffer;
 }
 
 /* This method is called by a ColorWell and by the readDefaults.
