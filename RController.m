@@ -101,6 +101,7 @@ int R_SetOptionWidth(int);
 #import "HelpManager.h"
 #import "Quartz/RQuartz.h"
 #import "RDocumentController.h"
+#import "SelectList.h"
 
 #import <unistd.h>
 #import <sys/fcntl.h>
@@ -830,6 +831,12 @@ extern BOOL isTimeToFinish;
 - (int) handlePackages: (int) count withNames: (char**) name descriptions: (char**) desc URLs: (char**) url status: (BOOL*) stat
 {
 	[[PackageManager sharedController] updatePackages:count withNames:name descriptions:desc URLs:url status:stat];
+	return 0;
+}
+
+- (int) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat
+{
+	[[SelectList sharedController] updateListItems:count withNames:name status:stat];
 	return 0;
 }
 
