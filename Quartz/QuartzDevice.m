@@ -543,7 +543,7 @@ static void 	RQuartz_Text(double x, double y, char *str,
 		attrStr = [[[NSAttributedString alloc] initWithString:tmp 
 										attributes:attr] autorelease];
 	} else {
-	 attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithCString:str] 
+	 attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:str] 
 										attributes:attr] autorelease];
 	}
 	
@@ -850,6 +850,7 @@ static void 	RQuartz_MetricInfo(int c,
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 	NSFont* font= RQuartz_Font(gc,dd);
 	NSRect rect,rect2;
+	unichar uc = (unichar)c;
 	char str[2];
 	str[1] = '\0';	
 	str[0] = (char)c;
@@ -869,7 +870,7 @@ static void 	RQuartz_MetricInfo(int c,
 			attrStr = [[[NSAttributedString alloc] initWithString:tmp 
 										attributes:attr] autorelease];
 		} else {
-			attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithCString:str] 
+			attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithCharacters:&uc length:1] 
 										attributes:attr] autorelease];
 		}
 		
