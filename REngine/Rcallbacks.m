@@ -448,6 +448,7 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 
 #import "../WSBrowser.h"
 #import "../REditor.h"
+#import "../SelectList.h"
 
 int freeWorkspaceList(int newlen);
 
@@ -615,6 +616,7 @@ double ssNA_REAL;
 #endif
 
 extern BOOL IsDataEntry;
+extern BOOL IsSelectList;
 /*
    ssNewVector is just an interface to allocVector but it lets us
    set the fields to NA. We need to have a special NA for reals and
@@ -750,7 +752,8 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
 }
 
 static char selected[100]; /* Why 100, src/gnuwin32/extra.c */
-static int done;
+int selectListDone;
+int *itemStatus;
 
 SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 {
@@ -758,7 +761,6 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
     char **clist;
     int i, j = -1, n,  multiple, nsel = 0;
      Rboolean haveTitle;
-	int *status;
 	
     checkArity(op, args);
     list = CAR(args);
@@ -774,10 +776,10 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 	
     n = LENGTH(list);
     clist = (char **) R_alloc(n + 1, sizeof(char *));
-    status = (int *) R_alloc(n + 1, sizeof(int));
+    itemStatus = (int *) R_alloc(n + 1, sizeof(int));
     for(i = 0; i < n; i++) {
 		clist[i] = CHAR(STRING_ELT(list, i));
-		status[i] = 0;
+		itemStatus[i] = 0;
     }
     clist[n] = NULL;
 	
@@ -792,36 +794,35 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 		for(i = 0; i < n; i++)
 			for(j = 0; j < LENGTH(preselect); j++)
 				if(strcmp(clist[i], CHAR(STRING_ELT(preselect, j))) == 0) {
-					status[i] = 1;
+					itemStatus[i] = 1;
 					break;
 				}
     }
 	
 	if(n==0)
-		[[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0];
-	[[REngine cocoaHandler] handleListItems: n withNames: clist status: (BOOL*)status];
+		[[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0 multiple: 0];
+	
+		[[REngine cocoaHandler] handleListItems: n withNames: clist status: (BOOL*)itemStatus multiple:multiple];
+	
+		selectListDone = 0;
 		
+		IsSelectList = YES;
+		[SelectList startSelectList: [NSString stringWithCString:  (haveTitle ? CHAR(STRING_ELT(CADDDR(args), 0)):
+			(multiple ? "Select one or more" : "Select one"))]];
+		IsSelectList = NO;
+	
 		
- 		done = 0;
-/*		while(!done) {
-			Sleep(100);
-			R_ProcessEvents();
-		}
-*/		
-		if(multiple) {
-			if (done == 1) { /* Finish */
-				for(i = 0; i < n; i++)  if(status[i]==1) nsel++;
+		if (selectListDone == 1) { /* Finish */
+			for(i = 0; i < n; i++)  if(itemStatus[i]==1) nsel++;
 				PROTECT(ans = allocVector(STRSXP, nsel));
 				for(i = 0, j = 0; i < n; i++)
-					if(status[i]==1)
+					if(itemStatus[i]==1)
 						SET_STRING_ELT(ans, j++, mkChar(clist[i]));
-			} else { /* cancel */
+		} else { /* cancel */
 				PROTECT(ans = allocVector(STRSXP, 0));
-			}
-		} else {
-			PROTECT(ans = allocVector(STRSXP, 1));
-			SET_STRING_ELT(ans, 0, mkChar(selected));
 		}
+
+		
 UNPROTECT(1);
 return ans;
 }

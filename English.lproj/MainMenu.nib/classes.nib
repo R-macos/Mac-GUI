@@ -180,6 +180,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
+            ACTIONS = {cancelSelection = id; returnSelected = id; }; 
             CLASS = SelectList; 
             LANGUAGE = ObjC; 
             OUTLETS = {

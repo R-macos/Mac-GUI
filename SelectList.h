@@ -25,8 +25,14 @@ typedef struct itemListEntry {
 - (void) show;
 
 - (void) resetListItems; // removes all items data
-- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat;
-
+- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple;
+				   
 - (int) count;
+
+- (IBAction)returnSelected:(id)sender;
+- (IBAction)cancelSelection:(id)sender;
+- (BOOL)windowShouldClose:(id)sender;
+
++ (void)startSelectList: (NSString *)title;
 
 @end

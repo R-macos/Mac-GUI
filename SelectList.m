@@ -4,6 +4,10 @@ static SelectList *sharedController = nil;
 
 @implementation SelectList
 
+extern int *itemStatus;
+extern int 	selectListDone;
+
+BOOL IsSelectList;
 
 - (id)init
 {
@@ -43,6 +47,7 @@ static SelectList *sharedController = nil;
 }
 
 
+
 - (id) window
 {
 	return SelectListWindow;
@@ -65,10 +70,11 @@ static SelectList *sharedController = nil;
 	totalItems=0;
 }
 
-- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat;
+- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple;
 {
 	int i=0;
-	
+	[listDataSource setAllowsMultipleSelection: multiple];
+
 	if (totalItems) [self resetListItems];
 	if (count<1) {
 		[self show];
@@ -77,6 +83,7 @@ static SelectList *sharedController = nil;
 	
 	
 	listItem = malloc(sizeof(*listItem)*count);
+
 	while (i<count) {
 		listItem[i].name =[[NSString alloc] initWithCString: item[i]];
 		i++;
@@ -95,5 +102,55 @@ static SelectList *sharedController = nil;
 	[listDataSource reloadData];
 	[[self window] makeKeyAndOrderFront:self];
 }
+
+
+- (IBAction)returnSelected:(id)sender
+{
+	int i;
+	
+	NSIndexSet *rows =  [listDataSource selectedRowIndexes];			
+	unsigned current_index = [rows firstIndex];
+	if(current_index == NSNotFound)
+		return;
+		
+	for(i=0; i<totalItems; i++)
+		itemStatus[i] = 0;
+	while (current_index != NSNotFound) {
+		itemStatus[current_index] = 1;
+		current_index = [rows indexGreaterThanIndex: current_index];
+	}
+
+	selectListDone = 1;
+	
+	[[self window] performClose: sender];
+
+}
+
+- (BOOL)windowShouldClose:(id)sender{
+	
+	if(IsSelectList){
+		[NSApp stopModal];
+		IsSelectList = NO;
+	}
+	return YES;	
+}
+
+- (IBAction)cancelSelection:(id)sender
+{
+	selectListDone = 0;
+
+	[[self window] performClose: sender];
+}
+
++ (void)startSelectList: (NSString *)title;
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
+	[[[SelectList sharedController] window] setTitle:title];
+	[[[SelectList sharedController] window] orderFront:self];
+	[NSApp runModalForWindow:[[SelectList sharedController] window]];
+	
+	[pool release];
+}
+
 
 @end

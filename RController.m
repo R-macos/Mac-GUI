@@ -834,10 +834,9 @@ extern BOOL isTimeToFinish;
 	return 0;
 }
 
-- (int) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat
+- (void) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple;
 {
-	[[SelectList sharedController] updateListItems:count withNames:name status:stat];
-	return 0;
+	[[SelectList sharedController] updateListItems:count withNames:name status:stat multiple: multiple];
 }
 
 - (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title
