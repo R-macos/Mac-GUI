@@ -241,6 +241,54 @@
 			settings = {
 			};
 		};
+		16151A5507CD2B2B0018B619 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = fr;
+			path = fr.lproj/MainMenu.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		16151A5607CD2B3B0018B619 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = fr;
+			path = fr.lproj/SyntaxColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		16151A5707CD2B430018B619 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = fr;
+			path = fr.lproj/ColorsPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		16151A5807CD2B500018B619 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = fr;
+			path = fr.lproj/EditorPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		16151A5907CD2B5B0018B619 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = fr;
+			path = fr.lproj/MiscPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		16151A5A07CD2B660018B619 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = fr;
+			path = fr.lproj/QuartzPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		162B69ED06CD753800C0B085 = {
 			isa = PBXFileReference;
 			lastKnownFileType = image.icns;
@@ -1250,6 +1298,7 @@
 				16A25FA6072AAFD40047E009,
 				68C0CFD307BBDAF000EA34B7,
 				68C0CFD407BBDAF300EA34B7,
+				16151A5A07CD2B660018B619,
 			);
 			isa = PBXVariantGroup;
 			name = QuartzPrefPane.nib;
@@ -1276,6 +1325,7 @@
 				16A25FAD072AAFDF0047E009,
 				685355FF07B0052E00FDAAC3,
 				68C30D4007B80D7B0020A506,
+				16151A5907CD2B5B0018B619,
 			);
 			isa = PBXVariantGroup;
 			name = MiscPrefPane.nib;
@@ -1386,6 +1436,7 @@
 				16A2604B072AB7D80047E009,
 				6880973207AFFB2000F90DB0,
 				68C30D3D07B80D6C0020A506,
+				16151A5707CD2B430018B619,
 			);
 			isa = PBXVariantGroup;
 			name = ColorsPrefPane.nib;
@@ -2039,6 +2090,7 @@
 				German,
 				de,
 				it,
+				fr,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA;
 			projectDirPath = "";
@@ -2122,6 +2174,7 @@
 				29B97319FDCFA39411CA2CEA,
 				686967B9079813AD002A1932,
 				68C30D3A07B80D510020A506,
+				16151A5507CD2B2B0018B619,
 			);
 			isa = PBXVariantGroup;
 			name = MainMenu.nib;
@@ -2293,6 +2346,7 @@
 				684D008807BD72F10047EEF6,
 				684D008A07BD73090047EEF6,
 				684D008B07BD731D0047EEF6,
+				16151A5607CD2B3B0018B619,
 			);
 			isa = PBXVariantGroup;
 			name = SyntaxColorsPrefPane.nib;
@@ -2999,6 +3053,7 @@
 				D41DED54073B3F8000B900F2,
 				6812EC9E07BA6A360000B6A8,
 				1659C15A07BBA5040076DC4F,
+				16151A5807CD2B500018B619,
 			);
 			isa = PBXVariantGroup;
 			name = EditorPrefPane.nib;
