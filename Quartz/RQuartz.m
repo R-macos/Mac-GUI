@@ -66,6 +66,7 @@
     self = [super init];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:) name:NSWindowDidResizeNotification object:deviceWindow];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidDeminiaturize:) name:NSWindowDidDeminiaturizeNotification object:deviceWindow];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidUnhide:) name:NSApplicationDidUnhideNotification object:deviceWindow];
     return self;
 }
 
@@ -111,6 +112,12 @@
 		[deviceView setPDFDrawing:YES];
 		[deviceView drawRect:[deviceView frame]];		
 	}
+}
+
+- (void)applicationDidUnhide:(NSNotification *)aNotification {
+	//	NSLog(@"applicationDidUnhide called");
+	[deviceView setPDFDrawing:YES];
+	[deviceView drawRect:[deviceView frame]];		
 }
 
 - (void)deminiaturize:(id)sender

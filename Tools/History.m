@@ -78,7 +78,7 @@
 	int i;
 	BOOL done;
 	fname = [[Preferences stringForKey:historyFileNamePathKey
-							withDefault: @"~/.Rhistory"] stringByExpandingTildeInPath];
+						   withDefault: @"~/.Rhistory"] stringByExpandingTildeInPath];
 	if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
 		rhist = fopen([fname cString], "r");
 		if (rhist==NULL) {
@@ -90,21 +90,26 @@
 				for (i=0;i<1000 && !done && cc!=EOF;i++) {
 					c[i] = cc;
 					if (cc == '\n' || i==999) {
-						c[i]=0;								// Don't want a newline
-						[self commit:[[NSString alloc] initWithCString:&c[0]]];
-						cc = fgetc(rhist);
-						j++;
-						done = TRUE;
-					} else {
+						if (i==0) {											// Empty line
+							cc = fgetc(rhist);
+							done = TRUE;
+						} else {
+							c[i]=0;												// Don't want a newline
+							[self commit:[[NSString alloc] initWithCString:&c[0]]];
+							cc = fgetc(rhist);
+							j++;
+							done = TRUE;
+						}
+					} else {													// Keep collecting chars
 						cc = fgetc(rhist);
 						if (cc == EOF) {
 							if (i>0) {
 								j++;
-								c[i+1]=0;								// Don't want a newline
-								[self commit:[[NSString alloc] initWithCString:&c[0]]];						
+								c[i+1]=0;										// Don't want a newline
+								[self commit:[[NSString alloc] initWithCString:&c[0]]];
 							}
 							done=TRUE;
-						}
+						}						
 					}
 				}
 			}
@@ -133,14 +138,13 @@
 			rhist = fopen([fname cString], "w");
 			int i;
 			for (i=0 ; i < ac ; i++) {
-				NSLog(@"Entry: %@", [hist objectAtIndex:i]);
 				fprintf(rhist, "%s\n", [[hist objectAtIndex:i] cString]);		
 			}
 			fclose(rhist);	
 		}
 	}
 }
-	
+
 - (void)editHistory {
 	[self exportHistory];
 	NSString *fname = [[Preferences stringForKey:historyFileNamePathKey
