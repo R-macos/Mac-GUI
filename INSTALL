@@ -8,23 +8,33 @@ configure, build and install R-2.0.0 (2004-10-04) with
 	
 "--with-aqua" is needed also for this Cocoa version. The R.app will init R with argument "--gui=cocoa"
 
-One you have the R.framework installed in /Library/Frameworks than you can build R.app
+Once you have the R.framework installed in /Library/Frameworks, you can build R.app
 
-This project has been produced with XCode 1.5
+ Building R.app
+================
 
-To build the R for Mac OS X Faq in docs folder use
+This project has been produced with XCode 1.5 - update your XCode if necessary.
+The project can be built by selecting "R" target and "Build" inside the XCode GUI.
+
+To build the project from the command line in Mac-GUI directory use:
+	xcodebuild -target R -buildstyle Deployment
+
+To build the R for Mac OS X Faq use either
+	xcodebuild -target Docs
+or manually in docs folder
 	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
+	
+In any case the resulting html FAQ file can be found in Mac-GUI/docs directory.
 
 NOTE:
 To run R.app from inside the XCode debugger, you have to setup the R_HOME 
-env variable. Proceed as follows:
-* Select the "R" executable
-* choose "Info"
-* Click the "variables" tab and set 
+environment variable. Proceed as follows:
+* Select the "R" executable (in Groups & Files view: R -> Executables -> R)
+* choose "Info" (shortcut: <Cmd><I>)
+* Click the "Arguments" tab, in the lower list (Variables ..) use (+) and set 
 	R_HOME  
 	to   
 	/Library/Frameworks/R.framework/Resources
 
-
-
-
+--
+ Last update: 2004-10-18
