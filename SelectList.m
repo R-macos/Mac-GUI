@@ -117,10 +117,11 @@ BOOL IsSelectList;
 		i++;
 	}
 	totalItems = count;
+	[listDataSource deselectAll:self];
+	[listDataSource reloadData]; // make sure we have all data loaded before proceeding with the selection
 
 	pool = [[NSAutoreleasePool alloc] init];	
 	
-	[listDataSource deselectAll:self];
 	if (stat)
 		for(i=0; i<totalItems; i++){
 			if(stat[i]){
@@ -131,8 +132,21 @@ BOOL IsSelectList;
 		};
 	
 	[[self window] setTitle:title];
-	[self show];
 	running = YES;
+	{ /* try to be smart - resize the window such that the all items are visible (with an upper limit) */
+		NSRect rw = [[self window] frame];
+		NSRect rf = [listDataSource visibleRect];
+		NSRect rr = [listDataSource frameOfCellAtColumn:0 row:0];
+		NSRect rl = [listDataSource frameOfCellAtColumn:0 row:1];
+
+		float nonTableH = rw.size.height - rf.size.height;
+		float showCount = ((float)((count>20)?20:count));
+		
+		rw.size.height = nonTableH + rr.origin.y + (rl.origin.y-rr.origin.y)*showCount - 1.0;
+
+		[[self window] setFrame:rw display:YES];
+	}
+	[self show];
 	[NSApp runModalForWindow:[self window]];
 	
 	if (result == 1) {
