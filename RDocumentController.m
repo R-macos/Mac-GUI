@@ -4,6 +4,7 @@
  *  R.app Copyright notes:
  *                     Copyright (C) 2004  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
+ *                     RDocumentController written by Rob Goedman
  *
  *                  
  *  R Copyright notes:
@@ -38,161 +39,85 @@
 }
 
 - (IBAction)newDocument:(id)sender {
-	NSString *editor;
-	NSString *cmd;
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *theData=[defaults dataForKey:internalOrExternalKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-			editor = nil;			
-		} else {
-			theData=[defaults dataForKey:externalEditorNameKey];
-			if(theData != nil) {
-				editor = (NSString *)[NSUnarchiver unarchiveObjectWithData:theData];
-			} else {
-				editor = nil;
-			}	
-		}
-	} else 
-		editor = nil;
-	if (editor == nil)
-		[super newDocument:(id)sender];
-	else {
-		theData=[defaults dataForKey:appOrCommandKey];
-		if(theData != nil){
-			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-				cmd = [@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app"]];
-			} else {
-				cmd = editor;
-			}
-		} else 
-			cmd = [@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app"]];
-		system([cmd cString]);
-	}
+	[self openNamedFile:@"" display:YES];
 }
 
 - (IBAction)openDocument:(id)sender {
-	NSString *editor;
-	NSString *cmd;
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *theData=[defaults dataForKey:internalOrExternalKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-			editor = nil;			
-		} else {
-			theData=[defaults dataForKey:externalEditorNameKey];
-			if(theData != nil) {
-				editor = (NSString *)[NSUnarchiver unarchiveObjectWithData:theData];
-			} else {
-				editor = nil;
-			}	
-		}
-	} else 
-		editor = nil;
-	if (editor == nil)
-		[super openDocument:(id)sender];
-	else {
-		NSArray *files = [super fileNamesFromRunningOpenPanel];
-		int i = [files count];
-		int j;
-		for (j=0;j<i;j++) {
-			//			NSLog(@"openDocument: %@:", [NSString stringWithString: [files objectAtIndex:j]]);
-			theData=[defaults dataForKey:appOrCommandKey];
-			if(theData != nil){
-				if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-					cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app \""]] stringByAppendingString: [[NSString stringWithString: [files objectAtIndex:j]] stringByAppendingString:@"\""]];
-				} else {
-					cmd = [[editor stringByAppendingString:@" \""] stringByAppendingString: [[NSString stringWithString: [files objectAtIndex:j]] stringByAppendingString:@"\""]];
-				}
-			} else 
-				cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app \""]] stringByAppendingString: [[NSString stringWithString: [files objectAtIndex:j]] stringByAppendingString:@"\""]];
-			system([cmd cString]);
-		}
+	NSArray *files = [super fileNamesFromRunningOpenPanel];
+	int i = [files count];
+	int j;
+	for (j=0;j<i;j++) {
+		[self openDocumentWithContentsOfFile: [files objectAtIndex:j] display:YES];	
 	}
 }
 
-- (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag {
-	//	NSLog(@"openDocumentWith: %@:", aFile);
-	int res = [[RController getRController] isImageData: (char *)[aFile cString]];
+- (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
+{
+	int res = [[RController getRController] isImageData: aFile];
 	if (res == -1)
-		NSLog(@"Can't open file %@", aFile);
-	else if (res == 0 ) {
-		[[RController getRController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
-	} else {
-		NSString *editor;
-		NSString *cmd;
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSData *theData=[defaults dataForKey:editOrSourceKey];
-		if(theData != nil && ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])){
-			//			NSLog(@"Source the file!");
-			[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")",aFile]];
-		} else {
-			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-				theData=[defaults dataForKey:internalOrExternalKey];
-				if(theData != nil){
-					if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-						editor = nil;			
-					} else {
-						theData=[defaults dataForKey:externalEditorNameKey];
-						if(theData != nil) {
-							editor = (NSString *)[NSUnarchiver unarchiveObjectWithData:theData];
-						} else {
-							editor = nil;
-						}	
-					}
-				} else 
-					editor = nil;
-				if (editor == nil)
-					return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
-				else {
-					theData=[defaults dataForKey:appOrCommandKey];
-					if(theData != nil){
-						if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-							cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: [NSString stringWithFormat:@"\"%@\"", aFile]];
-						} else {
-							cmd = [[editor stringByAppendingString:@" "] stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@"\"%@\"", aFile]]];
-						}
-					} else 
-						cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: [NSString stringWithFormat:@"\"%@\"", aFile]];
-					system([cmd cString]);
-				}
-			}		
-		}	
-	}
+		NSLog(@"File format: %@ not recognized by isImageData", aFile);
+	else 
+		if (res == 0 )
+			[[RController getRController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
+	else 
+		[self openNamedFile: aFile display:flag];
 	return 0;
 }
 
-- (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag {
-	//	NSLog(@"openRDocumentWith: %@", aFile);
-	NSString *editor;
+/* 
+	Below is the path taken by drag & drop on the R icon, by New Document and by Open
+	Document. If edit is selected in MiscPrefPane, the file is opened in either the
+	internal or external editor (selected in the EditorPrefPane). If source is selected
+	in MiscPrefPane, an existing file is sourced into R. A new file opens a new document.
+*/
+
+- (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
+{
 	NSString *cmd;
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	NSData *theData=[defaults dataForKey:internalOrExternalKey];
-	if(theData != nil){
-		if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-			editor = nil;			
+	if ([aFile isEqualToString:@""] || [[RController getRController] openInEditor]) {
+		if ([aFile isEqualToString:@""] && [[RController getRController] useInternalEditor])
+			return [super newDocument:nil];
+		else
+			if ([[RController getRController] useInternalEditor]) 
+				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
+		if ([[RController getRController] editorIsApp]) {
+			cmd = [@"open -a " stringByAppendingString:[[[RController getRController] externalEditor] stringByAppendingString:@".app"]];
+			if (![aFile isEqualToString:@""])
+				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
 		} else {
-			theData=[defaults dataForKey:externalEditorNameKey];
-			if(theData != nil) {
-				editor = (NSString *)[NSUnarchiver unarchiveObjectWithData:theData];
-			} else {
-				editor = nil;
-			}	
+			cmd = [[RController getRController] externalEditor]; 
+			if (![aFile isEqualToString:@""])
+				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 		}
+		system([cmd cString]);		
 	} else 
-		editor = nil;
-	if (editor == nil)
+		[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")",aFile]];
+	return 0;
+}
+
+/* 
+	Below is the path taken by callbacks from R like edit(object) or edit(file="/Users/...")
+    If the internal editor is used, R is kept in modal mode and after editing, the file content
+    is returned, e.g. to be assigned as in x = edit(x). If an external editor is selected,
+    the editor is opened and R displays the old content and is ready for input. The selection
+    of source or edit has no influence.
+*/
+
+- (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
+{
+	NSString *cmd;
+	if ([[RController getRController] useInternalEditor])
 		return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
 	else {
-		theData=[defaults dataForKey:appOrCommandKey];
-		if(theData != nil){
-			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-				cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: aFile];
-			} else {
-				cmd = [[editor stringByAppendingString:@" -c "]stringByAppendingString: [NSString stringWithString: aFile]];
-			}
-		} else 
-			cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: aFile];
+		if ([[RController getRController] editorIsApp]) {
+			cmd = [@"open -a " stringByAppendingString:[[[RController getRController] externalEditor] stringByAppendingString:@".app"]];
+			if (![aFile isEqualToString:@""])
+				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
+		} else {
+			cmd = [[RController getRController] externalEditor]; 
+			if (![aFile isEqualToString:@""])
+				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
+		}
 		system([cmd cString]);
 		return 0;
 	}

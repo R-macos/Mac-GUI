@@ -39,5 +39,6 @@
 - (IBAction)openDocument:(id)sender;
 - (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag;
 - (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag;
+- (id) openNamedFile:(NSString *)aFile display:(BOOL) flag;
 
 @end

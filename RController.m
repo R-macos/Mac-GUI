@@ -1262,7 +1262,7 @@ like window resizing, locator, widgets interactions, etc.
 	
 }	
 
-- (void) loadFile:(char *)fname
+- (void) loadFile:(NSString *)fname
 {
 	int res = [[RController getRController] isImageData:fname];
 	
@@ -1272,11 +1272,11 @@ like window resizing, locator, widgets interactions, etc.
 			break;
 			
 		case 0:
-			[self sendInput: [NSString stringWithFormat:@"load(\"%s\")",fname]];
+			[self sendInput: [NSString stringWithFormat:@"load(\"%@\")",fname]];
 			break;
 			
 		case 1:
-			[self sendInput: [NSString stringWithFormat:@"source(\"%s\")",fname]];
+			[self sendInput: [NSString stringWithFormat:@"source(\"%@\")",fname]];
 			break;	
 		default:
 			break; 
@@ -1287,24 +1287,27 @@ like window resizing, locator, widgets interactions, etc.
 /*  isImageData:	returns -1 on error, 0 if the file is RDX2 or RDX1, 
 1 otherwise.
 */	
-- (int)isImageData:(char *)fname
+- (int)isImageData:(NSString *)fname
 {
-	FILE * fp;
-	int flen;
-	
+	NSFileHandle *fh = [NSFileHandle fileHandleForReadingAtPath:fname];
+	NSData *header;
 	char buf[5];
-	if( (fp = R_fopen(R_ExpandFileName(fname), "r")) ){
-		fseek(fp, 0L, SEEK_END);
-		flen = ftell(fp);
-		rewind(fp);
-		if(flen<4) 
-			return(1);
-		fread(buf, 1, 4, fp);
-		buf[4] = '\0';
-		if( (strcmp(buf,"RDX2")==0) || ((strcmp(buf,"RDX1")==0))) return(0);
-		else return(1);
-	} else
-		return(-1);
+
+	if (!fh)
+		return -1;
+
+	header = [fh readDataOfLength:4];
+	[fh closeFile];
+	
+	if (!header || [header length]<4)
+		return -1;
+
+	memcpy(buf, [header bytes], 4);
+	
+	buf[4]=0;
+	if( (strcmp(buf,"RDX2")==0) || ((strcmp(buf,"RDX1")==0)))
+		return(0);
+	return(1);
 }
 
 - (void) doProcessEvents: (BOOL) blocking {
@@ -1804,7 +1807,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	answer = [op runModalForTypes:nil];
 	
 	if (answer==NSOKButton)
-		[self loadFile:(char *)[[op filename] cString]];
+		[self loadFile:[op filename]];
 }
 
 - (IBAction)sourceFile:(id)sender

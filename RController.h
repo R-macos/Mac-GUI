@@ -263,8 +263,8 @@
 
 - (void)setupToolbar;
 
-- (int) isImageData:(char *)fname;
-- (void) loadFile:(char *)fname;
+- (int) isImageData:(NSString *)fname;
+- (void) loadFile:(NSString *)fname;
 
 - (void) RConsoleDidResize: (NSNotification *)notification;
 - (void) setOptionWidth:(BOOL)force;

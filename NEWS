@@ -1,5 +1,14 @@
 NEWS
 
+Last update: 2004-11-29 [RG, SU]
+*	improved structure of RDocumentController, made edit
+	default in MiscPrefPane [RG]
+*	fixed handling of file names - use NSString wherever possible
+	to avoid encoding problems [SU]
+*	fixed some occurrences of non-UTF-8 strings in the R communication
+	path (among others fixes sourcing and file-competion issues of
+	filenames containing non-ASCII characters) [SU]
+
 Last update: 2004-11-27 [RG]
 *	cleaned storing preferences EditorPrefPane and
 	added New editor selection panel

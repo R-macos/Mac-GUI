@@ -209,7 +209,7 @@ or drag and drop. In case of a successfull loading of image file, we don't want 
 create the UI for the document.
 */
 - (BOOL)readFromFile:(NSString *)fileName ofType:(NSString *)docType{
-		if( [[RController getRController] isImageData:(char *)[fileName cString]] == 0){
+		if( [[RController getRController] isImageData:fileName] == 0){
 			[[RController getRController] sendInput: [NSString stringWithFormat:@"load(\"%@\")",fileName]];
 			[[NSDocumentController sharedDocumentController]  setShouldCreateUI:NO];
 			return(YES);
