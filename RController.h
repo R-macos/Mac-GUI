@@ -51,8 +51,6 @@
 	IBOutlet id saveHistory;
     IBOutlet NSDrawer *HistoryDrawer;	
 	IBOutlet NSPanel *RColorPanel;
-    unsigned committedLength;
-    unsigned promptPosition; 
 	id  RConsoleWindow;
 	NSTimer *timer;
 	NSTimer *RLtimer;
@@ -66,6 +64,10 @@
     IBOutlet id fontSizeField;
     IBOutlet id fontSizeView;
 
+	unsigned committedLength; // any text before this position cannot be edited by the user
+    unsigned promptPosition;  // the last prompt is positioned at this position
+	unsigned outputPosition;  // any output (stdxx or consWrite) is to be place here, if -1 then the text can be appended
+
     int stdoutFD;
     int stderrFD;
 	int rootFD;
@@ -78,8 +80,6 @@
 	float currentSize;
 	float currentFontSize;
 	float currentConsoleWidth;
-
-	BOOL HaveConsoleBuffer;
 
 	NSColor *inputColor;
 	NSColor *outputColor;
@@ -125,7 +125,7 @@
 - (BOOL) textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString;
 
 /* write to the console bypassing any cache buffers - for internal use only! */
-- (void) writeConsoleDirectly: (NSString*) text;
+- (void) writeConsoleDirectly: (NSString*) text withColor: (NSColor*) color;
 
 /* sendInput is an alias for "consoleInput: text interactive: YES" */
 - (void) sendInput: (NSString*) text;
@@ -202,9 +202,6 @@
 - (void) RConsoleDidResize: (NSNotification *)notification;
 - (void) setOptionWidth:(BOOL)force;
 
--(void) setHaveConsoleBuffer:(BOOL)flag;
--(BOOL) haveConsoleBuffer;
-
 - (IBAction) changeInputColor:(id)sender;
 - (IBAction) changeOutputColor:(id)sender;
 - (IBAction) changePromptColor:(id)sender;
@@ -225,6 +222,9 @@
 - (void) readDefaults;
 
 + (RController*) getRController;
+
+- (void) flushROutput;
+- (void) flushTimerHook: (NSTimer*) source; // hook for flush timer
 
 - (void) handleWriteConsole: (NSString *)txt;
 - (void) handleWritePrompt: (NSString *)prompt;
