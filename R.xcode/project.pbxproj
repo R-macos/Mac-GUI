@@ -7,6 +7,8 @@
 	objects = {
 		080E96DDFE201D6D7F000001 = {
 			children = (
+				D41DED57073B3FF700B900F2,
+				D41DED58073B3FF700B900F2,
 				F8CE7270071539E600CE40EC,
 				F8CE726F071539E600CE40EC,
 				16572B2706F3A98600C69946,
@@ -952,6 +954,8 @@
 		};
 		16A25F57072AACF40047E009 = {
 			children = (
+				D41DED4A073B3EE400B900F2,
+				D41DED4B073B3EE400B900F2,
 				16A26031072AB6660047E009,
 				16A26032072AB6660047E009,
 				16A25F58072AACF40047E009,
@@ -2013,6 +2017,7 @@
 				8D1107310486CEB800E47090,
 				089C165CFE840E0CC02AAC07,
 				29B97318FDCFA39411CA2CEA,
+				D41DED53073B3F8000B900F2,
 			);
 			isa = PBXGroup;
 			name = Resources;
@@ -2202,6 +2207,8 @@
 				16A26033072AB6660047E009,
 				1C0BD6BF07345B4300D43C33,
 				1CC7C86707396890005CF3AA,
+				D41DED4C073B3EE400B900F2,
+				D41DED59073B3FF700B900F2,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2264,6 +2271,7 @@
 				16A2602B072AB6360047E009,
 				16A2604C072AB7D80047E009,
 				16DB0E8A072E5CFA00380720,
+				D41DED55073B3F8000B900F2,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2314,6 +2322,8 @@
 				16A26034072AB6660047E009,
 				1C0BD6C007345B4300D43C33,
 				1CC7C86807396890005CF3AA,
+				D41DED4D073B3EE400B900F2,
+				D41DED5A073B3FF700B900F2,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2364,6 +2374,96 @@
 //8D2
 //8D3
 //8D4
+//D40
+//D41
+//D42
+//D43
+//D44
+		D41DED4A073B3EE400B900F2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = EditorPrefPane.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D41DED4B073B3EE400B900F2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = EditorPrefPane.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D41DED4C073B3EE400B900F2 = {
+			fileRef = D41DED4A073B3EE400B900F2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D41DED4D073B3EE400B900F2 = {
+			fileRef = D41DED4B073B3EE400B900F2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D41DED53073B3F8000B900F2 = {
+			children = (
+				D41DED54073B3F8000B900F2,
+			);
+			isa = PBXVariantGroup;
+			name = EditorPrefPane.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D41DED54073B3F8000B900F2 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/EditorPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D41DED55073B3F8000B900F2 = {
+			fileRef = D41DED53073B3F8000B900F2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D41DED57073B3FF700B900F2 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RDocumentController.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D41DED58073B3FF700B900F2 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = RDocumentController.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D41DED59073B3FF700B900F2 = {
+			fileRef = D41DED57073B3FF700B900F2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D41DED5A073B3FF700B900F2 = {
+			fileRef = D41DED58073B3FF700B900F2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//D40
+//D41
+//D42
+//D43
+//D44
 //F80
 //F81
 //F82
