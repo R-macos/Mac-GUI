@@ -126,7 +126,7 @@
 "PrefG-Views" = "Aspetto";
 
 /* Colors preference pane */
-"PrefP-Colors" = "Colori";
+"PrefP-Colors" = "Colori Console";
 
 /* Editor preference pane */
 "PrefP-Editor" = "Editor";
@@ -138,7 +138,7 @@
 "PrefP-Startup" = "Avvio";
 
 /* Syntax colors preference pane */
-"PrefP-Syntax" = "PrefP-Syntax";
+"PrefP-Syntax" = "Colori Sintassi";
 
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Stampa questo documento";
