@@ -8,6 +8,7 @@
 
 #import "RDocument.h"
 #import "RController.h"
+#import "REngine.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -393,6 +394,23 @@ NSArray *keywordList;
 		[[RController getRController] sendInput:stx];
 	}
 	execNewlineFlag=YES;
+}
+
+- (IBAction)sourceCurrentDocument:(id)sender
+{
+	if ([self isDocumentEdited]) {
+		RSEXP *x=[[REngine mainEngine] evaluateString:@"tempfile()"];
+		NSString *fn=nil;
+		if (x && (fn=[x string])) {
+			if ([self writeToFile:fn ofType:@"R"])
+				[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")", fn]];
+		}
+	} else {
+		NSString *fn=[self fileName];
+		if (fn) {
+			[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")", fn]];
+		}
+	}
 }
 
 @end

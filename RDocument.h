@@ -44,5 +44,6 @@ extern NSColor *shColorIdentifier;
 - (void)updateSyntaxHighlightingForRange: (NSRange) range;
 
 - (IBAction)executeSelection:(id)sender;
+- (IBAction)sourceCurrentDocument:(id)sender;
 
 @end
