@@ -20,6 +20,7 @@ typedef struct itemListEntry {
 + (SelectList*) sharedController;
 
 - (id) window;
+- (id) tableView;
 - (void) reloadData;
 
 - (void) show;

@@ -53,6 +53,11 @@ BOOL IsSelectList;
 	return SelectListWindow;
 }
 
+- (id) tableView
+{
+	return listDataSource;
+}
+
 - (void) reloadData
 {
 	[listDataSource reloadData];
@@ -145,6 +150,16 @@ BOOL IsSelectList;
 + (void)startSelectList: (NSString *)title;
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
+	int i,k=0;
+	for(i=0; i<[[[SelectList sharedController] tableView] numberOfRows]; i++){
+		if(itemStatus[i]==1){
+			k++;
+			[[[SelectList sharedController] tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:i] 
+												byExtendingSelection:(BOOL)(k!=1)];
+		}
+	}
+	
+
 	[[[SelectList sharedController] window] setTitle:title];
 	[[[SelectList sharedController] window] orderFront:self];
 	[NSApp runModalForWindow:[[SelectList sharedController] window]];
