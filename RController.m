@@ -40,6 +40,8 @@
 // if there is no Rinterface, we need private Defn.h
 #include <Defn.h>
 #endif
+#include <langinfo.h>
+
 #import <sys/fcntl.h>
 #import <sys/select.h>
 #import <sys/types.h>
@@ -218,28 +220,23 @@ static RController* sharedRController;
 	setenv("R_GUI_APP_VERSION", R_GUI_VERSION_STR, 1);
 	
 #if (R_VERSION >= R_Version(2,1,0))
-	// we enforce UTF-8 locale for R 2.1.0 and higher if LANG is not UTF-8 already
 	{
-		char *cloc = getenv("LANG");
-		if (!cloc || strlen(cloc)<7 || strcasecmp(cloc+strlen(cloc)-5,"UTF-8")) {
-			/* if not set, try to figure out the locale from 'preferredLocalizations' */
-			char lbuf[64];
-			NSArray *pl = [[NSBundle mainBundle] preferredLocalizations];
-			strcpy(lbuf, "en_US.UTF-8");
-			if (pl && [pl count]>0) {
-				NSString *ls = (NSString*) [pl objectAtIndex:0];
-				if (ls && [ls length]>0 && ![ls isEqualToString:@"English"]) {
-					strncpy(lbuf, [ls UTF8String],48);
-					lbuf[48]=0;
-					/* FIXME: for some reason R doesn't like en.UTF-8 - as we have no region info (only 10.4+ has that) R needs en_.UTF-8
-						secondly, we need to fall-back to en_US.UTF-8 in case R doesn't know the locale, otherwise we'll get no UTF-8
-					    all this needs some more testing as R-devel stabilizes */
-					strcat(lbuf,"_.UTF-8:en_US.UTF-8");
-				}
-			}
-			setenv("LANG", lbuf, 1);
+		char cloc[64];
+		char *c = getenv("LANG");
+		cloc[63]=0;
+		if (c)
+			strcpy(cloc, c);
+		else {
+			CFLocaleRef lr = CFLocaleCopyCurrent();
+			CFStringRef ls = CFLocaleGetIdentifier(lr);
+			strncpy(cloc, [((NSString*)ls) UTF8String],63);
+			CFRelease(lr);
 		}
-		NSLog(@"Using locale \"%s\"", getenv("LANG"));
+		
+		if (!strchr(cloc,'.'))
+			strcat(cloc,".UTF-8");
+		setenv("LANG", cloc, 1);
+		//NSLog(@"LANG=%s", getenv("LANG"));
 	}
 #endif
 	
