@@ -37,6 +37,10 @@
 #define alphaValueKey  @"Alpha Value"
 #define FontSizeKey    @"Console Font Size"
 
+#import "AMPreferenceWindowController.h"
+
+
+
 /* Preference keys */
 
 @interface RController : NSObject <REPLHandler>
@@ -50,7 +54,6 @@
 	IBOutlet id loadHistory;
 	IBOutlet id saveHistory;
     IBOutlet NSDrawer *HistoryDrawer;	
-	IBOutlet NSPanel *RColorPanel;
 	id  RConsoleWindow;
 	NSTimer *timer;
 	NSTimer *RLtimer;
@@ -81,6 +84,10 @@
 	float currentFontSize;
 	float currentConsoleWidth;
 
+	id quartzPrefPane;
+	id miscPrefPane;
+	id colorsPrefPane;
+	
 	NSColor *inputColor;
 	NSColor *outputColor;
 	NSColor *promptColor;
@@ -88,17 +95,7 @@
 	NSColor *stderrColor;
 	NSColor *stdoutColor;
 	float alphaValue;
-	
-	id inputColorWell;
-    id outputColorWell;
-    id promptColorWell;
-    id backgColorWell;
-    id stderrColorWell;
-    id stdoutColorWell;
-	
-	id defaultColorsButton;
-	id alphaStepper;
-	
+		
 	NSMutableArray *consoleInputQueue;
 	NSString *currentConsoleInput;
 	
@@ -107,7 +104,24 @@
 	char *writeBuffer;
 	char *writeBufferPos;
 	int  writeBufferLen;	
+	
+	AMPreferenceWindowController *prefsWindow;
+	NSMutableDictionary *preferences;
+
 }
+
+- (IBAction)showPrefsWindow:(id)sender;
+
+- (AMPreferenceWindowController *)prefsWindow;
+- (void)setPrefsWindow:(AMPreferenceWindowController *)newPrefsWindow;
+
+- (BOOL)shouldLoadPreferencePane:(NSString *)identifier;
+
+- (void)willSelectPreferencePane:(NSString *)identifier;
+- (void)didUnselectPreferencePane:(NSString *)identifier;
+
+- (IBAction)sortByAlphabet:(id)sender;
+- (IBAction)sortByCategory:(id)sender;
 
 - (void) showWindow;
 
@@ -239,5 +253,9 @@
 
 - (NSFont*) currentFont;
 
+- (void)setupPrefWindow;
+
+- (NSTextView *)getRTextView;
+- (NSWindow *)getRConsoleWindow;
 @end
 

@@ -10,6 +10,11 @@
 #import "Rcallbacks.h"
 #import "Rengine.h"
 
+
+#import "MiscPrefPane.h"
+#import "QuartzPrefPane.h"
+#import "ColorsPrefPane.h"
+
 // size of the console output cache buffer
 #define DEFAULT_WRITE_BUFFER_SIZE 32768
 // high water-mark of the buffer - it's [length - x] where x is the smallest possible size to be flushed before a new string will be split.
@@ -129,6 +134,12 @@ static RController* sharedRController;
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
 	[RTextView setDrawsBackground:NO];
 	[[RTextView enclosingScrollView] setDrawsBackground:NO];
+	quartzPrefPane = NULL;
+	colorsPrefPane = NULL;
+	miscPrefPane = NULL;
+
+	[self setupPrefWindow];
+
 	[self readDefaults];
 	[RConsoleWindow setBackgroundColor:backgColor];
 	[RConsoleWindow display];
@@ -198,6 +209,7 @@ static RController* sharedRController;
 		exit(-1);
 	}
 		
+	preferences = [[NSMutableDictionary alloc] init];
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
 	[self flushROutput];
@@ -438,6 +450,7 @@ extern BOOL isTimeToFinish;
     [backgColor release];
     [stderrColor release];
     [stdoutColor release];
+	[preferences release];
 	[super dealloc];
 }
 
@@ -1563,7 +1576,9 @@ No error message or warning are raised.
 }
 			
 -(IBAction) openColors:(id)sender{
-	[RColorPanel orderFront:self];
+	[prefsWindow selectPaneWithIdentifier:@"Colors"];
+	[prefsWindow showWindow:self];
+	[[prefsWindow window] makeKeyAndOrderFront:self];
 }
 
 
@@ -1639,9 +1654,9 @@ case the color is set to its default value.
 	
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:inputColor] 
 											  forKey:inputColorKey];
-	[inputColorWell setColor: inputColor];
+	[[colorsPrefPane inputColorWell] setColor: inputColor];
 	[RTextView setInsertionPointColor: inputColor];
-    [inputColorWell setNeedsDisplay:YES];
+    [[colorsPrefPane inputColorWell] setNeedsDisplay:YES];
 }
 
 - (void)setOutputColor:(NSColor *)newColor {
@@ -1655,8 +1670,9 @@ case the color is set to its default value.
 
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:outputColor] 
 											  forKey:outputColorKey];
-	[outputColorWell setColor: outputColor];
-    [outputColorWell setNeedsDisplay:YES];
+	[[colorsPrefPane outputColorWell] setColor: outputColor];
+    [[colorsPrefPane outputColorWell] setNeedsDisplay:YES];
+
 }
 
 - (void)setPromptColor:(NSColor *)newColor {
@@ -1670,8 +1686,8 @@ case the color is set to its default value.
 
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:promptColor] 
 											  forKey:promptColorKey];
-	[promptColorWell setColor: promptColor];
-    [promptColorWell setNeedsDisplay:YES];
+	[[colorsPrefPane promptColorWell] setColor: promptColor];
+    [[colorsPrefPane promptColorWell] setNeedsDisplay:YES];
 	[RTextView setNeedsDisplay: YES];	
 }
 
@@ -1686,8 +1702,8 @@ case the color is set to its default value.
 
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:stdoutColor] 
 											  forKey:stdoutColorKey];
-	[stdoutColorWell setColor: stdoutColor];
-    [stdoutColorWell setNeedsDisplay:YES];
+	[[colorsPrefPane stdoutColorWell] setColor: stdoutColor];
+    [[colorsPrefPane stdoutColorWell] setNeedsDisplay:YES];
 }
 
 - (void)setStderrColor:(NSColor *)newColor {
@@ -1701,8 +1717,8 @@ case the color is set to its default value.
 
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:stderrColor] 
 											  forKey:stderrColorKey];
-	[stderrColorWell setColor: stderrColor];
-    [stderrColorWell setNeedsDisplay:YES];
+	[[colorsPrefPane stderrColorWell] setColor: stderrColor];
+    [[colorsPrefPane stderrColorWell] setNeedsDisplay:YES];
 }
 
 - (void)setBackGColor:(NSColor *)newColor {
@@ -1725,8 +1741,8 @@ case the color is set to its default value.
 	
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:backgColor] 
 											  forKey:backgColorKey];
-	[backgColorWell setColor: backgColor];
-    [backgColorWell setNeedsDisplay:YES];
+	[[colorsPrefPane backgColorWell] setColor: backgColor];
+    [[colorsPrefPane backgColorWell] setNeedsDisplay:YES];
 }
 
 
@@ -1757,7 +1773,7 @@ case the color is set to its default value.
 
 - (IBAction) changeAlphaColor:(id)sender {
 	[self setAlphaValue:[sender floatValue]];
-	[self setBackGColor: [backgColorWell color]];
+	[self setBackGColor: [[colorsPrefPane backgColorWell] color]];
 	[RTextView setNeedsDisplay: YES];
 }
 
@@ -1769,7 +1785,7 @@ case the color is set to its default value.
 	
 	[[NSUserDefaults standardUserDefaults] setFloat:alphaValue 
 											  forKey:alphaValueKey];
-	[alphaStepper setFloatValue:alphaValue];
+	[[colorsPrefPane alphaStepper] setFloatValue:alphaValue];
 
 }
 
@@ -1840,6 +1856,105 @@ case the color is set to its default value.
 		[self setStdoutColor: nil];
 	
 		
+}
+
+
+- (void)setupPrefWindow
+{
+	if (!prefsWindow) {
+		// create the preference window controller
+		[self setPrefsWindow:[[AMPreferenceWindowController alloc] initWithAutosaveName:@"PreferencePanel"]];
+		// we act as delegate ourselves
+		[prefsWindow setDelegate:self];
+		// load plugins from the bundle's standard plugins folder
+		//	[prefsWindow addPluginsOfType:nil fromPath:[[NSBundle mainBundle] builtInPlugInsPath]];
+		// creating some test preference panes
+		quartzPrefPane = [[[QuartzPrefPane alloc] initWithIdentifier:@"Quartz" label:@"Quartz" category:@"Graphics"] autorelease];
+		[prefsWindow addPane:quartzPrefPane withIdentifier:[quartzPrefPane identifier]];
+		
+		miscPrefPane = [[[MiscPrefPane alloc] initWithIdentifier:@"Misc" label:@"Misc" category:@"General"] autorelease];
+		[prefsWindow addPane:miscPrefPane withIdentifier:[miscPrefPane identifier]];
+		
+		colorsPrefPane = [[[ColorsPrefPane alloc] initWithIdentifier:@"Colors" label:@"Colors" category:@"Console"] autorelease];
+		[prefsWindow addPane:colorsPrefPane withIdentifier:[colorsPrefPane identifier]];
+		
+		// set up some configuration options
+		[prefsWindow setUsesConfigurationPane:YES];
+		[prefsWindow setSortByCategory:YES];
+		// select prefs pane for display
+		[prefsWindow selectPaneWithIdentifier:@"Misc"];
+	}	
+}
+
+- (IBAction)showPrefsWindow:(id)sender
+{
+	[prefsWindow showWindow:self];
+	[[prefsWindow window] makeKeyAndOrderFront:self];
+}
+
+- (void)sortByAlphabet:(id)sender
+{
+	[prefsWindow setSortByCategory:NO];
+	[prefsWindow selectIconViewPane];
+}
+
+- (void)sortByCategory:(id)sender
+{
+	[prefsWindow setSortByCategory:YES];
+	[prefsWindow selectIconViewPane];
+}
+
+
+- (AMPreferenceWindowController *)prefsWindow
+{
+    return prefsWindow;
+}
+
+- (void)setPrefsWindow:(AMPreferenceWindowController *)newPrefsWindow
+{
+    id old = nil;
+	
+    if (newPrefsWindow != prefsWindow) {
+        old = prefsWindow;
+        prefsWindow = [newPrefsWindow retain];
+        [old release];
+    }
+}
+
+- (BOOL)shouldLoadPreferencePane:(NSString *)identifier
+{
+//	NSLog(@"shouldLoadPreferencePane: %@", identifier);
+	return YES;
+}
+
+- (void)willSelectPreferencePane:(NSString *)identifier
+{
+	NSLog(@"willSelectPreferencePane: %@", identifier);
+}
+
+- (void)didUnselectPreferencePane:(NSString *)identifier
+{
+	NSLog(@"didUnselectPreferencePane: %@", identifier);
+}
+
+- (NSString *)displayNameForCategory:(NSString *)category
+{
+	NSString *result = nil;
+	if ([category isEqual:@"Graphics"]) {
+		result = @"graphics";
+	} else if ([category isEqual:@"General"]) {
+		result = @"general";
+	}
+	return result;
+}
+
+
+- (NSTextView *)getRTextView{
+	return RTextView;
+}
+
+- (NSWindow *)getRConsoleWindow{
+	return RConsoleWindow;
 }
 
 @end
