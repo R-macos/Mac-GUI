@@ -252,7 +252,7 @@ static RController* sharedRController;
 	RController *rc;
 	unsigned int bufSize=2048;
     char *buf=(char*) malloc(bufSize);
-    int n,pib=0, flushMark=bufSize-(bufSize>>2);
+    int n=0, pib=0, flushMark=bufSize-(bufSize>>2);
 	int bufFD=0;
     fd_set readfds;
 	struct timeval timv;
