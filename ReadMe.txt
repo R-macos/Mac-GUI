@@ -63,6 +63,8 @@ Analogously there is a script "update.strings" for automatic merging of newly ad
 	- edit the translation file for the new NIB - right hand side must be translated. IMPORTANT: Before editing, make sure you set the encoding in the editor to UTF-8!! Not doing so will cause the translation to fail silently and you will wonder why nothing works.
 	- run update.localization -t
 	  Don't forget the -t switch! Otherwise the script will overwrite the file you just translated!
+	  
+	*** An important note to those with write SVN access: don't forget to DELETE the .svn FOLDER of the newly created NIB!! This is VERY IMPORTANT!! The .svn folder is copied from the original English NIB, so it will incorrectly point to the English version. If you commit this, you will overwrite the English version with your localized NIB! We definitely don't want that.
 
 * adjusting locale-specific widgets in existing, localized NIBs
 	- you can edit widgets in the localized NIBs, such as stretching them. Those changes won't be overwritten when updating the "English" master later. However, make locale-specific changes ONLY. If you want to make a change from which other locales may benefit then rather do the change in the master NIB.
