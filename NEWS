@@ -3,6 +3,8 @@ NEWS
 Last update: 2004-10-15 [SU]
 *	code cleanups to get rid of most warnings
 *	fixed linking issues caused by run_Rmainloop confliucting with R
+*	fixed resizing behavior of the help window
+*	disable continuous spell checking by default
 
 Last update: 2004-10-14 [SU]
 *	fixed output synchronization. all console output sources eventually
