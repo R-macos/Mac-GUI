@@ -166,7 +166,7 @@
 			sourceTree = "<group>";
 		};
 		1602BB2E0719702800805588 = {
-			explicitFileType = text.html;
+			explicitFileType = text.html.documentation;
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = "RMacOSX-FAQ.html";
@@ -2802,6 +2802,18 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		689B3D3A07F4B01D006F6F37 = {
+			containerPortal = 29B97313FDCFA39411CA2CEA;
+			isa = PBXContainerItemProxy;
+			proxyType = 1;
+			remoteGlobalIDString = 1C54CDAE0719742A00176826;
+			remoteInfo = Docs;
+		};
+		689B3D3B07F4B01D006F6F37 = {
+			isa = PBXTargetDependency;
+			target = 1C54CDAE0719742A00176826;
+			targetProxy = 689B3D3A07F4B01D006F6F37;
+		};
 		68C0CFD307BBDAF000EA34B7 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.nib;
@@ -2911,6 +2923,7 @@
 			};
 			dependencies = (
 				1CF110900719797100121801,
+				689B3D3B07F4B01D006F6F37,
 			);
 			isa = PBXNativeTarget;
 			name = R;
