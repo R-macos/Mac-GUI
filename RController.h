@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#define R_GUI_VERSION_STR "1.01" /* it must be a string, but should parse to a valid real number */
 
 #include <R.h>
 #include <Rinternals.h>
