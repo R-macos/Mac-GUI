@@ -92,7 +92,7 @@
 /* From: RController.m (toolbar) */
 "New Document" = "Nuovo Documento";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "New Quartz Device" = "Nuova Finestra Grafica Quartz";
 
 /* Global string @ */
@@ -110,11 +110,11 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Apri nell'Editor";
 
-/* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Installatore Pacchetti";
-
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Installatore Pacchetti";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Specificare una URL valida.";
@@ -137,16 +137,19 @@
 /* Startup preference pane */
 "PrefP-Startup" = "Avvio";
 
+/* Syntax colors preference pane */
+"PrefP-Syntax" = "PrefP-Syntax";
+
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Stampa questo documento";
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "Quartz (%d) - Active" = "Quartz (%d) - Attivo";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "Quartz (%d) - Inactive" = "Quartz (%d) - Inattivo";
 
 /* From: RController.m (toolbar) */

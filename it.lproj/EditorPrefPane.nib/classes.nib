@@ -17,13 +17,18 @@
                 appOrCommand = NSMatrix; 
                 builtInPrefs = NSBox; 
                 changeEditor = NSButton; 
+                commandText = NSTextField; 
+                editorText = NSTextField; 
                 externalEditorName = NSTextField; 
                 externalSettings = NSBox; 
                 highlightInterval = NSTextField; 
+                highlightIntervalText = NSTextField; 
+                highlightNoteText = NSTextField; 
                 internalOrExternal = NSMatrix; 
                 mainView = NSView; 
                 showBraceHighlighting = NSButton; 
                 showLineNumbers = NSButton; 
+                showLineNumbersText = NSTextField; 
                 showSyntaxColoring = NSButton; 
             }; 
             SUPERCLASS = NSObject; 
