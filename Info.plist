@@ -45,7 +45,7 @@
 	<key>CFBundleSignature</key>
 	<string>0FFF</string>
 	<key>CFBundleVersion</key>
-	<string>experimental build %SVN%</string>
+	<string>1.0+ experimental build %SVN%</string>
 	<key>LSEnvironment</key>
 	<dict>
 		<key>DYLD_FALLBACK_LIBRARY_PATH</key>
