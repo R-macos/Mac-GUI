@@ -49,7 +49,7 @@
 /** main methods */
 - (int) type;
 - (int) length;
-- (RSEXP*) attribute;
+- (RSEXP*) attributes;
 
 /** direct access (avoid if possible) */
 - (void) protect;
@@ -62,6 +62,10 @@
 // the following methods return *references*, not copies, so make sure you copy its contents before R gets control back!
 - (double*) doubleArray;
 - (int*) intArray;
+
+// note: no caching is done, each RSEXP is allocated anew!
+- (RSEXP*) listHead;
+- (RSEXP*) listTail;
 
 /** the array may containg NSString* (for STRSXP) or RSEXP* (for VECSXP) - make sure you take that into account; strings are always copies */
 - (NSArray*) array;

@@ -142,9 +142,35 @@
     return 1;
 }
 
-- (RSEXP*) attribute
+- (RSEXP*) attributes
 {
     return attr;
+}
+
+- (RSEXP*) attr: (NSString*) name
+{
+	// ToDo: have to run now ... argh ...
+	return nil;
+}
+
+- (RSEXP*) listHead
+{
+	SEXP h;
+	if (!xp) return nil;
+	if (TYPEOF(xp)!=LISTSXP) return nil;
+	h = CAR(xp);
+	if (!h || h==R_NilValue) return nil;
+	return [[RSEXP alloc] initWithSEXP: h];
+}
+
+- (RSEXP*) listTail
+{
+	SEXP t;
+	if (!xp) return nil;
+	if (TYPEOF(xp)!=LISTSXP) return nil;
+	t = CDR(xp);
+	if (!t || t==R_NilValue) return nil;
+	return [[RSEXP alloc] initWithSEXP: t];
 }
 
 - (SEXP) directSEXP
