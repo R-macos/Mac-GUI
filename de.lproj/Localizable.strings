@@ -23,7 +23,7 @@
 "All objects in the workspace will be removed. Are you sure you want to proceed?" = "Alle Objekte werden aus dem Worspace entfern. Sind Sie sicher, dass Sie das wollen?";
 
 /* From: WSBrowser.m (remObject) */
-"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "Sinds Sie sicher, dass Sie das Objekt '%@' aus dem Arbeitsbereich entfernen wollen? Dies kann nicht mehr rückgängig gemacht werden!";
+"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "Sind Sie sicher, dass Sie das Objekt '%@' aus dem Arbeitsbereich entfernen wollen? Dies kann nicht mehr rückgängig gemacht werden!";
 
 /* From: RController.m (toolbar) */
 "Authentication" = "Authorisierung";
@@ -31,9 +31,12 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Authorisiert R, Befehle als 'root' Administrator auszuführen";
 
-/* From: HelpManager.m (runHelpSearch)
-   From: HelpManager.m (showHelpFor) */
-"Can't find help for topic" = "Das Hilfethema kann nicht gefunden werden";
+/* From: HelpManager.m (showHelpFor) */
+"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+
+/* From: Tools/History.m (exportHistory)
+   From: Tools/History.m (importHistory) */
+"Can't open history file %2" = "Die Verlauf-Datei %2 konnte nicht gefunden werden";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Abbrechen";
@@ -48,7 +51,7 @@
 "Choose File" = "Wählen Sie eine Datei";
 
 /* From: RController.m (doLoadHistory) */
-"Choose history File" = "Wählen Sie die History-Datei";
+"Choose history File" = "Wählen Sie die Verlauf-Datei";
 
 /* From: PrefPanes/MiscPrefPane.m (chooseWorkingDir) */
 "Choose Initial Working Directory" = "Wählen Sie Voreinstellung für das Arbeitsverzeichnis";
@@ -83,6 +86,12 @@
 /* From: RController.m (toolbar) */
 "Font Size" = "Schriftgröße";
 
+/* From: RController.m (handleCustomPrint) */
+"Help for the topic \"%@\" was not found." = "Das Hilfethema zu \"%@\" wurde nicht gefunden.";
+
+/* From: RController.m (handleCustomPrint) */
+"Help topic not found" = "Hilfethema nicht gefunden";
+
 /* From: RController.m (toolbar) */
 "History" = "Verlauf";
 
@@ -110,20 +119,20 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Im Editor öffnen";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Package installer";
+
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Package Installer";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Package installer";
-
-/* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Bitte wählen Sie zuerst eine gültige URL.";
+
+/* Editor preference group */
+"PrefG-Editor" = "Editor";
 
 /* General preference group */
 "PrefG-General" = "Allgemeines";
-
-/* General preference group */
-"PrefG-Editor" = "Editor";
 
 /* Views preference group */
 "PrefG-Views" = "Ansichten";
@@ -252,7 +261,7 @@
 "Set R console colors" = "Ändert Farben in der R Konsole";
 
 /* From: AMPrefs/AMPreferenceWindowController.m (toolbar) */
-"Show All" = "Show All";
+"Show All" = "Alle anzeigen";
 
 /* From: RController.m (toolbar) */
 "Show/Hide R command history" = "Verlaufsfenster anzeigen/verbergen";
@@ -280,9 +289,6 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Dieses Package ist nicht installiert.";
-
-/* From: HelpManager.m (runHelpSearch) */
-"Topic: " = "Hilfethema: ";
 
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "R kann nicht gestartet werden: %@";
