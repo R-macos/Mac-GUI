@@ -1,5 +1,14 @@
 NEWS
 
+-- Release Version 1.01 - this revision is supplied with R 2.0.1 --
+
+Last update: 2004-11-16 [SU]
+*	fixed handling of line endings: PC endings (\r\n) are now supported
+	as R console input (also fixes some problems with AppleScript)
+*	added transport buffer for ReadConsole to be logically correct.
+	this also remedies the compilation warning in RController
+*	fixed a bug in isAdmin() - uninitialized variable
+
 Last update: 2004-11-14 [SU]
 *	added isAdmin() in Tools/Authorization to query the admin status
 	of the current user (more precisely membership in the "admin" group)
@@ -79,6 +88,8 @@ Last update: 2004-10-18 [SU]
 *	fixed working directory selection
 *	added sourceCurrentDocument: implementation; if the document is dirty,
 	a temporary file is created, sourced and finally deleted
+
+-- Release Version 1.00 - this revision is supplied with R 2.0.0 --
 
 Last update: 2004-10-15 [SU]
 *	code cleanups to get rid of most warnings
