@@ -44,4 +44,36 @@ The strict use of tabs as indentation marks makes it possible for everyone to vi
 Update (2005-01-13, SU) About localization:
 We have added new (experimental) support for localization of the GUI. Although this is great news for the users, this requires good cooperation of the developer and some extra work. If you add and language-dependent constants (like @"Choose a file"), first look up in Localized.strings whether there is such text alrady and if so use it 1:1 in the NLS(...) macro. If there is no such entry, add it to the corresponding localized files and flag those additions by an empty comment (e.g. @"Save"=@"Save"; // ), such that it can be localized later by our translators.
 If you make any changes to the NIB files, always remember to update the locallized versions. You can use "nibtool" to perform the updates semi-automatically. It is ok to wait with the update if you have more batch updates, because the changes can be made incrementally.
-Both procedures can be automated with corresponding scripts - I'll update this file when I add them to the project.
+
+Update (2005-02-01, SU)
+There is a script "update.localization" in the project directory that automatically updates localized NIBs to match changes made in the master 'English' versions. It is the aggressive form of NIB update (see nibtool) which means that it retains only sizes of existing components, but any other changes made to the localized NIB after translation will be lost. It also generates corresponding <nib>.<lang>.strings files that can be used for translation. Any existing files (localized NIBs and NIB-relased string files) will be overwritten.
+
+ How To - NIB localization:
+----------------------------
+* adding new localization
+	- in Xcode, select the NIB, go to Info, click on "Add Localization"
+	  use country's ISO 639 or 3166 code for the localization instead of full name
+	- run update.localization
+	  this will create translation files in Translated.string for all NIBs and languages, including the new one
+	- edit the translation file for the new NIB - right hand side must be translated. IMPORTANT: Before editing, make sure you set the encoding in the editor to UTF-8!! Not doing so will cause the translation to fail silently and you will wonder why nothing works.
+	- run update.localization -t
+	  Don't forget the -t switch! Otherwise the script will overwrite the file you just translated!
+
+* adjusting locale-specific widgets in existing, localized NIBs
+	- you can edit widgets in the localized NIBs, such as stretching them. Those changes won't be overwritten when updating the "English" master later. However, make locale-specific changes ONLY. If you want to make a change from which other locales may benefit then rather do the change in the master NIB.
+
+* updating master NIB files
+	- always base your changes on the master "English" version of the NIB
+	- run update.localization
+	  this synchronizes the changes made in the master with other locales. This also generates a new set of Translated.strings files
+	  
+	[the following is optional]
+	- edit the translation file. This is necessary if new widgets have been added and thus they need to be translated.
+	- run update.localization -t
+	  again, don't forget the -t option or your new translation file will be overwritten
+
+Some notes about NIB files:
+- It is a good idea to check the translation files even if you actually don't want to translate the NIB. The file will show you any inconsistencies in the strings used, such as trailing spaces or newlines.
+- When desigining a view, always keep in mind that many languages need more space for the same phrase than english. Keep sufficient space around/following a text such that the localized files don't need to be modified one by one. (I could probably remove this one if we used German as the master language ;)).
+- Don't forget to re-run update.localization when you make non-GUI changes to the NIBs, such as new connections. It's easy to forget, because it has nothing to do with the GUI, but still, the localized NIBs need to be updated, too.
+- Always run update.localization before a release
