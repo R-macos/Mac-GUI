@@ -1,4 +1,8 @@
 NEWS
+Last update: 2004-10-21 [SI]
+*	in data editor: the runModalForSession has been replaced by a modalForWindow
+	to remove the problem with high CPU consuming (byron's patch)
+*	column numbers instead of column names are used to identify columns (byron's patch)
 
 Last update: 2004-10-18 [SU]
 *	fixed working directory selection
