@@ -95,8 +95,10 @@
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
                 makeConsoleKey = id; 
+                newDocument = id; 
                 newQuartzDevice = id; 
                 openColors = id; 
+                openDocument = id; 
                 openDocumentInEditor = id; 
                 otherEventLoops = id; 
                 performHelpSearch = id; 
@@ -108,8 +110,13 @@
                 saveWorkSpaceFile = id; 
                 setDefaultColors = id; 
                 setWorkingDir = id; 
+                showPrefsWindow = id; 
                 showWorkSpace = id; 
                 showWorkingDir = id; 
+                sortByAlphabet = id; 
+                sortByCategory = id; 
+                sourceFile = id; 
+                sourceOrLoadFile = id; 
                 toggleAuthentication = id; 
                 toggleDataManager = id; 
                 toggleHistory = id; 
