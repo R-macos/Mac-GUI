@@ -248,6 +248,7 @@ Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 	xd->DevTextStorage = [xd->DevView getDevTextStorage];
 	xd->DevLayoutManager = [xd->DevView getDevLayoutManager];
 	xd->DevTextContainer = [xd->DevView getDevTextContainer];	
+	[xd->DevTextContainer setLineFragmentPadding:0.0];
 	[xd->DevView setDevNum: xd->DevNum];
 	[xd->DevView setPDFDrawing: FALSE];
     return 1;
