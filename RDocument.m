@@ -54,7 +54,7 @@
 }
 
 - (void) makeWindowControllers {
-	// create RConsoleController which is a window controller - it loads the corresponding NIB and sets up the window
+	// create RDocumentWinCtr which is a window controller - it loads the corresponding NIB and sets up the window
 	RDocumentWinCtrl *cc = [[RDocumentWinCtrl alloc] initWithWindowNibName:@"RDocument"];
 	[self addWindowController:cc];
 }
@@ -70,8 +70,6 @@
 		else
 			[wc replaceContentsWithString: [NSString stringWithCString:[initialContents bytes] length:[initialContents length]]];
 	}
-	[initialContents release];
-	initialContents=nil;
 }
 
 - (NSData *)dataRepresentationOfType:(NSString *)aType
