@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#import "RGUI.h"
 #import "HelpManager.h"
 #import "RController.h"
 #import "REngine/REngine.h"
@@ -62,8 +63,8 @@ static id sharedHMController;
 		NSString *hlp = [NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))", [sender stringValue]];
 		RSEXP *x = [re evaluateString:hlp];
 		if ((x==nil) || ([x string]==NULL)) {
-			NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:[sender stringValue]];
-			NSRunInformationalAlertPanel(@"Can't find help for topic", topicString, @"OK", nil, nil);
+			NSString *topicString = [[[NSString alloc] initWithString: NLS(@"Topic: ")] stringByAppendingString:[sender stringValue]];
+			NSRunInformationalAlertPanel(NLS(@"Can't find help for topic"), topicString, NLS(@"OK"), nil, nil);
 			return;
 		}
 		NSString *url = [x string];
@@ -127,7 +128,7 @@ static id sharedHMController;
 	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(%@, htmlhelp=TRUE))",topic]];
 	if ((x==nil) || ([x string]==NULL)) {
 		NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:topic];
-		NSRunInformationalAlertPanel(@"Can't find help for topic", topicString, @"OK", nil, nil);
+		NSRunInformationalAlertPanel(NLS(@"Can't find help for topic"), topicString, NLS(@"OK"), nil, nil);
 		return;
 	}
 	

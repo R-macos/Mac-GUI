@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
-
+#import "../RGUI.h"
 #import "EditorPrefPane.h"
 #import "../RController.h"
 #import "../Tools/Authorization.h"
@@ -240,7 +240,7 @@
 	int answer;
 	NSOpenPanel *sp;
 	sp = [NSOpenPanel openPanel];
-	[sp setTitle:@"Select editor application"];
+	[sp setTitle:NLS(@"Select editor application")];
 	answer = [sp runModalForDirectory:@"/Applications" file:nil types:nil];
 	if(answer == NSOKButton) {
 		[Preferences setKey:externalEditorNameKey withObject:[sp filename]];

@@ -33,20 +33,25 @@ stefano
 Milan and Augsburg, 2004-10-10
 
 === Note to developers ===
+
 If you intend to work on the source code of R.app, please adjust your editor to use tabs. Each indentation level
 should be exactly one tab. The preferred setting in Xcode is (in Preferences -> TextEditing)
   [X] Editor uses tabs
   Tab width: [4] Indent width: [4]
+
 This will give you the proper indenting behavior and fairly well readable code. You can replace the "4" in both fields by
 any positive value you find pleasant, just make sure both entries are identical. Use Xcode-style indentation whenever possible.
 The strict use of tabs as indentation marks makes it possible for everyone to view the code with the spacing s/he prefers.
 
-Update (2005-01-13, SU) About localization:
-We have added new (experimental) support for localization of the GUI. Although this is great news for the users, this requires good cooperation of the developer and some extra work. If you add and language-dependent constants (like @"Choose a file"), first look up in Localized.strings whether there is such text alrady and if so use it 1:1 in the NLS(...) macro. If there is no such entry, add it to the corresponding localized files and flag those additions by an empty comment (e.g. @"Save"=@"Save"; // ), such that it can be localized later by our translators.
-If you make any changes to the NIB files, always remember to update the locallized versions. You can use "nibtool" to perform the updates semi-automatically. It is ok to wait with the update if you have more batch updates, because the changes can be made incrementally.
+ About Localization - Quick Overview
+-------------------------------------
+We have added new (experimental) support for localization of the GUI. Although this is great news for the users, this requires cooperation of the developer and some extra work. Please read "Localizing Obj-C code" amd "NIB localization" below!
 
-Update (2005-02-01, SU)
 There is a script "update.localization" in the project directory that automatically updates localized NIBs to match changes made in the master 'English' versions. It is the aggressive form of NIB update (see nibtool) which means that it retains only sizes of existing components, but any other changes made to the localized NIB after translation will be lost. It also generates corresponding <nib>.<lang>.strings files that can be used for translation. Any existing files (localized NIBs and NIB-relased string files) will be overwritten.
+
+Analogously there is a script "update.strings" for automatic merging of newly added Obj-C strings. Again, read next sections for details.
+
+** I can't stress this often enough - make sure your editor is set to UTF-8 encoding when editing localization-related files! Even the default in Xcode is MacRoman, so make sure you set it to UTF-8 in your preferences! If you don't, then Xcode will open UTF-8 files as MacRoman thus ruining the file! All localization tools described here handle UTF-8 ONLY! **
 
  How To - NIB localization:
 ----------------------------
@@ -68,12 +73,36 @@ There is a script "update.localization" in the project directory that automatica
 	  this synchronizes the changes made in the master with other locales. This also generates a new set of Translated.strings files
 	  
 	[the following is optional]
-	- edit the translation file. This is necessary if new widgets have been added and thus they need to be translated.
+	- edit the translation file. This is necessary if new widgets have been added and thus they need to be translated. Again, make sure you use UTF-8 encoding!
 	- run update.localization -t
 	  again, don't forget the -t option or your new translation file will be overwritten
 
-Some notes about NIB files:
+Some notes on NIB files:
 - It is a good idea to check the translation files even if you actually don't want to translate the NIB. The file will show you any inconsistencies in the strings used, such as trailing spaces or newlines.
 - When desigining a view, always keep in mind that many languages need more space for the same phrase than english. Keep sufficient space around/following a text such that the localized files don't need to be modified one by one. (I could probably remove this one if we used German as the master language ;)).
 - Don't forget to re-run update.localization when you make non-GUI changes to the NIBs, such as new connections. It's easy to forget, because it has nothing to do with the GUI, but still, the localized NIBs need to be updated, too.
 - Always run update.localization before a release
+
+ Localizing Obj-C code
+-----------------------
+
+When writing code, keep in mind that all user-visible string constants should be localized. The Apple-documented way is to use NSLocalizedString macros (see Cocoa deocumentation), but to make it somewhat easier, there are NLS and NLSC macros in RGUI.h which should be used INSTEAD! They are equivalent to NSLocalizableString(xx,xx) with NLS passing an empty string as comment. The reason for the macros (beside reducing the typing effort) is that there are also some scripts that allow us to automate and simplify the process. Both macros can be used with Obj-C strings ONLY. Handling of C strings is not supported yet (use NSString whenever you can!).
+
+Macros:
+  NLS(@"text")
+  NLSC(@"text", @"comment to clarify the context - not visible to user, only visible to the translator")
+Examples:
+  NSString *message = NLS(@"Hello, world");
+  [item setValue: [NSString stringWithFormat: NLS(@"Hello, %@"), name]];
+  [toolbar setLabel: NLSC(@"Add Col", @"Add column - toolbar entry, keep short!")];
+
+The most straight-forward way to localize existing code is to replace any (user-visible) @".." string constant with NLS(@".."). Note that NSLog messages and fixed strings (e.g. keys used in preferences) should not be translated.
+
+Once the code is ready, run (in project directory)
+./update.strings
+this script generates Localized.strings from the sources and merges localization from each language into a new file, replacing old localization.  It relies on two other scripts: 'filterNLS' which filters all NLS/NLSC macros and generates Localized.strings (using genstrings and iconv) and 'mergeLS' which merges changes into a localized version of the strings. In addition, empty comments (i.e. all NLS entries) are replaced by @"From: <file> (<function>)" to provide some context. Warnings of multiple key use can be safely ignored if the meaning is consistent.
+
+Some practical notes:
+- If you CHANGE the handle in the Obj-C code, the previous localization is lost. You should NEVER change the handle, unless you have really strong reason to do so. Note that changing the english text can be done through Localizable.strings, too! You don't have to change the handle to rephrase a given text.
+- It is OK to change the comment part when using NLSC, because that information is not used for merging.
+- One handle can have one translation only. If you need the same text in two different contexts, use different handles and change the english text in the localization file.

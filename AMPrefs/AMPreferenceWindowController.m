@@ -6,6 +6,7 @@
 //  Copyright (c) 2003 Andreas Mayer. All rights reserved.
 //
 
+#import "../RGUI.h" /* for NLS nacro */
 #import "AMPreferenceWindowController.h"
 #import "AMPrefPaneProtocol.h"
 #import "AMPrefPaneIcon.h"
@@ -513,7 +514,7 @@
 			[result setAction:@selector(toolbarShowAll)];
 			[result setEnabled:YES];
 			[result setImage:[NSImage imageNamed:@"Prefs"]];
-			[result setLabel:NSLocalizedString(@"Show All", @"")];
+			[result setLabel:NLS(@"Show All")];
 		}
 	} else if (pane = [prefPanes objectForKey:itemIdentifier]) {
 		if (result = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier]) {

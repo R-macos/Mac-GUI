@@ -1,5 +1,9 @@
 NEWS
 
+Last update: 2005-02-05 [SU]
+*	Added localization in all Obj-C code; updated l10n scripts
+*	Added scripts for localization of Obj-C code
+
 Last update: 2005-02-03 [RG]
 *	Added simple line number support in source editor.
 *	Fixed some issues around deleteBackward in editor

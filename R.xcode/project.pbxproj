@@ -1054,7 +1054,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F64072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = AMPreferencePane.h;
@@ -1062,7 +1062,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F65072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
 			path = AMPreferencePane.m;
@@ -1070,7 +1070,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F66072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = AMPreferenceWindowController.h;
@@ -1078,7 +1078,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F67072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
 			path = AMPreferenceWindowController.m;
@@ -1086,7 +1086,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F68072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = AMPrefPaneIcon.h;
@@ -1094,7 +1094,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F69072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
 			path = AMPrefPaneIcon.m;
@@ -1102,7 +1102,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F6A072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = AMPrefPaneIconView.h;
@@ -1110,7 +1110,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F6B072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
 			path = AMPrefPaneIconView.m;
@@ -1118,7 +1118,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F6C072AAD110047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = AMPrefPaneProtocol.h;
@@ -1142,7 +1142,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F6F072AAD120047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
 			path = NSImage_AMAdditions.h;
@@ -1150,7 +1150,7 @@
 			sourceTree = "<group>";
 		};
 		16A25F70072AAD120047E009 = {
-			fileEncoding = 30;
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
 			path = NSImage_AMAdditions.m;

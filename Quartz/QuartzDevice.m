@@ -29,7 +29,7 @@
 
 /* QuartzDevice.m */
 
-
+#import "../RGUI.h"
 #import "../REngine/RSEXP.h"
 #import "../REngine/REngine.h"
 
@@ -346,7 +346,7 @@ static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
      }
 
  
-	[RQuartz changeDocumentTitle: newDocument Title:@"New Quartz Device"];
+	[RQuartz changeDocumentTitle: newDocument Title:NLS(@"New Quartz Device")];
 //	xd->topLeftPoint = computeTopLeftCornerForDevNum(0);
 //	[[newDocument getDeviceWindow] setFrame:
 //		NSMakeRect(xd->topLeftPoint.x, xd->topLeftPoint.y, xd->windowWidth, xd->windowHeight) display:NO];
@@ -412,7 +412,7 @@ static void 	RQuartz_Activate(NewDevDesc *dd)
 		xd->topLeftPoint = computeTopLeftCornerForDevNum(devnum-1);
 		[xd->DevWindow setFrameTopLeftPoint:xd->topLeftPoint];	
 	}
-	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Active",devnum+1]];
+	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:NLS(@"Quartz (%d) - Active"),devnum+1]];
 
 }
 
@@ -420,7 +420,7 @@ static void 	RQuartz_Deactivate(NewDevDesc *dd)
 {
 	int 		devnum = devNumber((DevDesc *)dd);
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
-	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Inactive",devnum+1]];
+	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:NLS(@"Quartz (%d) - Inactive"),devnum+1]];
 }
 
 static void 	RQuartz_Size(double *left, double *right,
@@ -915,7 +915,8 @@ static Rboolean RQuartz_Locator(double *x,double *y,NewDevDesc*dd){
 					return 0;
 				break;	
 				default:
-					NSLog(@"Unknown event from locator");
+					// don't bark - it may be other button thus the action may be ok
+					//NSLog(@"Unknown event from locator");
 					return 0;
 				break;	
 			}

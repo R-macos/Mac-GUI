@@ -1,7 +1,9 @@
 #!/bin/sh
+#
+# Created 2005/02/01 by Simon Urbanek
 
 # list of localizations we want to generate from English
-LANGUAGES="de it"
+LANGUAGES=`cat LANGUAGES`
 
 # Get all (non-backup) NIBs in English.lproj assuming that this is where we do active development
 NIBS=`ls -d English.lproj/*.nib | grep -v \~ | awk -F / '{print substr($2,1,length($2)-4)}'`

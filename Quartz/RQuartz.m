@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
-
+#import "../RGUI.h"
 #import "RQuartz.h"
 #import "../RController.h"
 #import "RDeviceView.h"
@@ -196,7 +196,7 @@ for quartz. This method is called by RController -> activateQuartz
 	NSSavePanel *sp;
 	sp = [NSSavePanel savePanel];
 	[sp setRequiredFileType:@"pdf"];
-	[sp setTitle:@"Save Content of Quartz Device to PDF file"];
+	[sp setTitle:NLS(@"Save Content of Quartz Device to PDF file")];
 	answer = [sp runModal];
 	if(answer == NSOKButton) {
 		/*  The following code should create a PDF file form the draw: method of deviceView

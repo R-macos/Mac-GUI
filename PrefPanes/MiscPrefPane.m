@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
-
+#import "../RGUI.h"
 #import "MiscPrefPane.h"
 #import "../RController.h"
 #import "../Tools/Authorization.h"
@@ -181,7 +181,7 @@
 	op = [NSOpenPanel openPanel];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
-	[op setTitle:@"Choose Initial Working Directory"];
+	[op setTitle:NLS(@"Choose Initial Working Directory")];
 	
 	answer = [op runModalForDirectory:[workingDir stringValue] file:nil types:[NSArray arrayWithObject:@""]];
 	

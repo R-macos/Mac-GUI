@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#import "../RGUI.h"
 #import "RDeviceView.h"
 #import "RQuartz.h"
 #import "../RController.h"
@@ -139,7 +140,7 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
  
     if ([self inLiveResize])
     {
-        NSString *str = [NSString stringWithFormat: @"Resizing to %g x %g",
+        NSString *str = [NSString stringWithFormat: NLS(@"Resizing to %g x %g"),
                                                     frame.size.width, frame.size.height];
         drawStringInRect(frame, str, 20);
         return;

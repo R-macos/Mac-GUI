@@ -221,8 +221,23 @@ static RController* sharedRController;
 	// we enforce UTF-8 locale for R 2.1.0 and higher if LANG is not UTF-8 already
 	{
 		char *cloc = getenv("LANG");
-		if (!cloc || strlen(cloc)<7 || strcasecmp(cloc+strlen(cloc)-5,"UTF-8"))
-			setenv("LANG", "en_US.UTF-8", 1);
+		if (!cloc || strlen(cloc)<7 || strcasecmp(cloc+strlen(cloc)-5,"UTF-8")) {
+			/* if not set, try to figure out the locale from 'preferredLocalizations' */
+			char lbuf[64];
+			NSArray *pl = [[NSBundle mainBundle] preferredLocalizations];
+			strcpy(lbuf, "en_US.UTF-8");
+			if (pl && [pl count]>0) {
+				NSString *ls = (NSString*) [pl objectAtIndex:0];
+				if (ls && [ls length]>0 && ![ls isEqualToString:@"English"]) {
+					strncpy(lbuf, [ls UTF8String],48);
+					lbuf[48]=0;
+					/* FIXME: for some reason R doesn't like en.UTF-8 - as we have no region info (only 10.4+ has that) R needs en_.UTF-8 */
+					strcat(lbuf,"_.UTF-8");
+				}
+			}
+			setenv("LANG", lbuf, 1);
+		}
+		NSLog(@"Using locale \"%s\"", getenv("LANG"));
 	}
 #endif
 	
