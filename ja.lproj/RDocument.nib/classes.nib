@@ -1,0 +1,30 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                executeSelection = id; 
+                printDocument = id; 
+                resetBackgroundColor = id; 
+                sourceCurrentDocument = id; 
+            }; 
+            CLASS = RDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {textView = NSTextView; window = NSWindow; }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {
+                executeSelection = id; 
+                printDocument = id; 
+                resetBackgroundColor = id; 
+                sourceCurrentDocument = id; 
+            }; 
+            CLASS = RDocumentWinCtrl; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {scrollView = NSScrollView; textView = NSTextView; }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
