@@ -33,6 +33,8 @@
 #import "Preferences.h"
 #import "RDocument.h"
 //#import "RRulerView.h"
+#import <WebKit/WebKit.h>
+#import <WebKit/WebFrame.h>
 
 @class RRulerView;
 
@@ -47,6 +49,16 @@ extern NSColor *shColorIdentifier;
 {
 	IBOutlet NSScrollView *scrollView;
     IBOutlet NSTextView *textView;
+	
+	IBOutlet NSView *searchToolbarView;
+	IBOutlet NSSearchField *searchToolbarField;
+	
+	IBOutlet NSView *fnListView;
+	IBOutlet NSPopUpButton *fnListBox;
+	
+	IBOutlet NSDrawer *helpDrawer;
+	IBOutlet WebView *helpWebView;
+	
     RRulerView *theRulerView;
 
 	RDocument *document;
@@ -55,11 +67,17 @@ extern NSColor *shColorIdentifier;
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted
 	BOOL deleteBackward;
 	
+	int hsType; // help search type
+	
 	double braceHighlightInterval; // interval to flash brace highlighting for
 	NSDictionary *highlightColorAttr; // attributes set while braces matching
 	
 	BOOL updating; // this flag is set while syntax coloring is changed to prevent recursive changes
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
+	
+	id editorToolbar; // toolbar proxy object
+	
+	NSString *helpTempFile; // path to temporary file used for help
 }
 
 - (void) replaceContentsWithString: (NSString*) strContents;
@@ -73,6 +91,9 @@ extern NSColor *shColorIdentifier;
 - (IBAction)sourceCurrentDocument:(id)sender;
 - (IBAction)printDocument:(id)sender;
 
+- (IBAction)setHelpSearchType:(id)sender;
+- (IBAction)goHelpSearch:(id)sender;
+
 - (void) setEditable: (BOOL) editable;
 
 - (void) setHighlighting: (BOOL) use;
@@ -82,5 +103,11 @@ extern NSColor *shColorIdentifier;
 - (NSString*) contentsAsString;
 
 - (NSTextView *) textView;
+- (NSView*) searchToolbarView;
+- (NSView*) fnListView;
+
+- (void) functionGo: (id) sender;
+- (void) functionReset;
+
 
 @end

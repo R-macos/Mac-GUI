@@ -2599,6 +2599,34 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		68756ED807FDDAEF0014821A = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = REditorToolbar.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		68756ED907FDDAEF0014821A = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = REditorToolbar.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		68756EDA07FDDAEF0014821A = {
+			fileRef = 68756ED807FDDAEF0014821A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		68756EDB07FDDAEF0014821A = {
+			fileRef = 68756ED907FDDAEF0014821A;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		687B4DC207940DAA00074042 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -2690,6 +2718,8 @@
 				163B0CA406CE528400A380BE,
 				687B4F0507942C1500074042,
 				687B4F0607942C1500074042,
+				68756ED807FDDAEF0014821A,
+				68756ED907FDDAEF0014821A,
 			);
 			isa = PBXGroup;
 			name = Editor;
@@ -2981,6 +3011,7 @@
 				6855194107B8FDDF00F3A57C,
 				684D008507BD72BE0047EEF6,
 				168776EB07D7C62B0064425C,
+				68756EDA07FDDAEF0014821A,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3109,6 +3140,7 @@
 				D490C1ED07B400870034B42F,
 				684D008607BD72BE0047EEF6,
 				168776EC07D7C62B0064425C,
+				68756EDB07FDDAEF0014821A,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

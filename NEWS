@@ -1,5 +1,16 @@
 NEWS
 
+Last-update: 2005-03-31 [SU]
+*	Added editor toolbar
+*	Added help search capability to editor
+*	Added pop-up list of functions to edtior
+*	Made editor and console use new toolbar look in OS X 10.4 
+*	Assume UTF-8 when loading documents by default
+*	Make `system' call modal even for root. This should fix
+	installation of packages when authentication is on.
+	Still, we have no way of interrupting root tasks.
+*	Add startup debugging messages (Development target only)
+
 Last update: 2005-03-07 [RG]
 *	Re-enabled width & height parms in quartz()
 *	Enabled history entry delete by button

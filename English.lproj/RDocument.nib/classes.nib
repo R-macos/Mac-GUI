@@ -16,13 +16,25 @@
         {
             ACTIONS = {
                 executeSelection = id; 
+                functionGo = id; 
+                goHelpSearch = id; 
                 printDocument = id; 
                 resetBackgroundColor = id; 
+                setHelpSearchType = id; 
                 sourceCurrentDocument = id; 
             }; 
             CLASS = RDocumentWinCtrl; 
             LANGUAGE = ObjC; 
-            OUTLETS = {scrollView = NSScrollView; textView = NSTextView; }; 
+            OUTLETS = {
+                fnListBox = NSPopUpButton; 
+                fnListView = NSView; 
+                helpDrawer = NSDrawer; 
+                helpWebView = WebView; 
+                scrollView = NSScrollView; 
+                searchToolbarField = NSSearchField; 
+                searchToolbarView = NSView; 
+                textView = NSTextView; 
+            }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 

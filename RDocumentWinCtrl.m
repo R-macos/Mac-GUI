@@ -36,6 +36,8 @@
 #import "REngine.h"
 #import "REditorTextStorage.h"
 #import "RRulerView.h"
+#import "REditorToolbar.h"
+#import "REngine.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -47,6 +49,10 @@ NSColor *shColorComment;
 NSColor *shColorIdentifier;
 
 NSArray *keywordList=nil;
+
+// note: those must match tags in the NIB!
+#define hsTypeExact   1
+#define hsTypeApprox  2
 
 @implementation RDocumentWinCtrl
 
@@ -83,14 +89,16 @@ NSArray *keywordList=nil;
 		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
 }
 
-- (id)init
+- (id)init // NOTE: init is *not* used! put any initialization in windowDidLoad
 {
     self = [super init];
     if (self) {
-		document=nil;
-		updating=NO;
+		document = nil;
+		editorToolbar = nil;
+		hsType = hsTypeExact;
+		updating  = NO;
 		[[Preferences sharedPreferences] addDependent:self];
-		execNewlineFlag=NO;
+		execNewlineFlag = NO;
 		if (!defaultsInitialized) {
 			[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 			defaultsInitialized=YES;
@@ -100,10 +108,9 @@ NSArray *keywordList=nil;
     return self;
 }
 
-
-
 - (void)dealloc {
 	if (highlightColorAttr) [highlightColorAttr release];
+	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
 	[super dealloc];
@@ -141,8 +148,10 @@ NSArray *keywordList=nil;
 - (void) windowDidLoad
 {
     if (self) {
+		hsType=1;
 		document=nil;
 		updating=NO;
+		helpTempFile=nil;
 		[[Preferences sharedPreferences] addDependent:self];
 		execNewlineFlag=NO;
 		if (!defaultsInitialized) {
@@ -228,6 +237,9 @@ NSArray *keywordList=nil;
 			 object: textView];
 	[[textView textStorage] setDelegate:self];	
 	[self updatePreferences];
+	
+	editorToolbar = [[REditorToolbar alloc] initWithEditor:self];
+	[self functionReset];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)aNotification {
@@ -237,6 +249,130 @@ NSArray *keywordList=nil;
 - (NSUndoManager*) windowWillReturnUndoManager: (NSWindow*) sender
 {
 	return [[self document] undoManager];
+}
+
+- (void) functionReset
+{
+	if (fnListBox) {
+		NSMenuItem *fmi = [[NSMenuItem alloc] initWithTitle:@"<functions>" action:nil keyEquivalent:@""];
+		[fmi setTag:-1];
+		[fnListBox removeAllItems];
+		[[fnListBox menu] addItem:fmi];
+	}
+		
+}
+
+- (void) functionAdd: (NSString*) fn atPosition: (int) pos
+{
+	if (fnListBox) {
+		if ([[[fnListBox menu] itemAtIndex:0] tag]==-1)
+			[fnListBox removeAllItems];
+		NSMenuItem *mi = [fnListBox itemWithTitle:fn];
+		if (!mi) {
+			mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(goFunction:) keyEquivalent:@""];
+			[mi setTag: pos];
+			[[fnListBox menu] addItem:mi];
+		} else {
+			[mi setTag:pos];
+		}
+	}
+}
+
+- (void) functionGo: (id) sender
+{
+	NSString *s = [[textView textStorage] string];
+	NSMenuItem *mi = (NSMenuItem*) sender;
+	int pos = [mi tag];
+	if (pos>=0 && pos<[s length])
+		[textView setSelectedRange:NSMakeRange(pos,0)];
+}
+
+- (void) functionRescan
+{
+	NSTextStorage *ts = [textView textStorage];
+	NSString *s = [ts string];
+	int oix = 0;
+	int pim = 0;
+	int sit = 0;
+	int fnf = 0;
+	NSMenu *fnm = [fnListBox menu];
+	NSRange sr = [textView selectedRange];
+	
+	SLog(@"RDoumentWinCtrl.functionRescan");
+	while (1) {
+		NSRange r = [s rangeOfString:@"function" options:0 range:NSMakeRange(oix,[s length]-oix)];
+		if (r.length<8) break;
+		oix=r.location+r.length;
+		
+		{
+			int li = r.location-1;
+			SLog(@" - potential function at %d", li);
+			unichar fc;
+			while (li>0 && ((fc=[s characterAtIndex:li])==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+			if (li>0) {
+				fc=[s characterAtIndex:li];
+				if (fc=='=' || (fc=='-' && [s characterAtIndex:--li]=='<')) {
+					int lci;
+					li--;
+					SLog(@" - matched =/<- at %d", li);
+					while (li>0 && ((fc=[s characterAtIndex:li])==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+					lci=li;
+					while (li>=0 && (((fc=[s characterAtIndex:li])>='0' && fc<='9')||(fc>='a' && fc<='z')||(fc>='A' && fc<='Z')||
+									 fc=='.'||fc=='_')) li--;
+					if (lci!=li) {
+						NSString *fn = [s substringWithRange:NSMakeRange(li+1,lci-li)];
+						int fp = li+1;
+						NSMenuItem *mi = nil;
+						SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
+						fnf++;
+						if (fp<sr.location) sit=pim;
+						if (pim<[fnm numberOfItems]) {
+							mi = (NSMenuItem*) [fnm itemAtIndex:pim];
+							if ([[mi title] isEqual:fn]) {
+								SLog(@" - replacing function at %d (title match)", pim);
+								[mi setTag:fp];
+								pim++;
+							} else if ([mi tag]==fp) {
+								SLog(@" - replacing function at %d (position match)", pim);
+								if (![[mi title] isEqual:fn])
+									[mi setTitle:fn];
+								pim++;
+							} else {
+								while (mi && [mi tag]<fp) {
+									[fnm removeItemAtIndex:pim];
+									mi=nil;
+									if (pim<[fnm numberOfItems])
+										mi=(NSMenuItem*) [fnm itemAtIndex:pim];
+								}
+								if (mi) {
+									SLog(@" - inserting at %d", pim);
+									mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+									[mi setTag:fp];
+									[mi setTarget:self];
+									[fnm insertItem:mi atIndex:pim];
+									pim++;
+								}
+							}
+						}
+						if (!mi && pim>=[fnm numberOfItems]) {
+							SLog(@" - appending");
+							mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+							[mi setTag:fp];
+							[mi setTarget:self];
+							[fnm addItem:[mi autorelease]];
+							pim++;
+						} 
+					}
+				}
+			}
+		}
+	}
+	while (pim<[fnm numberOfItems])
+		[fnm removeItemAtIndex:pim];
+	if (fnf==0)
+		[self functionReset];
+	else
+		[fnListBox selectItemAtIndex:sit];
 }
 
 - (void) updatePreferences {
@@ -312,16 +448,17 @@ NSArray *keywordList=nil;
 {
 	NSTextStorage *ts = [textView textStorage];
 	NSString *s = [ts string];
-	//NSLog(@"colorize \"%@\"", [s substringWithRange:lr]);
 	
 	int i = range.location;
 	int bb = i;
 	int last = i+range.length;
 	BOOL foundItem=NO;
 	
+	SLog(@"RDocumentWinCtrl.updateSyntaxHL: %d:%d", range.location, range.length);
+
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 	//	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
-	if (updating || !useHighlighting) return;
+	if (range.length<1 || updating || !useHighlighting) return;
 	
 	updating=YES;
 	
@@ -427,6 +564,7 @@ NSArray *keywordList=nil;
 		[ts addAttribute:@"shType" value:@"none" range:fr];
 		[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
 	}
+	[self functionRescan];
 	[ts endEditing];
 	updating=NO;
 }
@@ -615,6 +753,69 @@ NSArray *keywordList=nil;
 			[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")", fn]];
 		}
 	}
+}
+
+- (IBAction)setHelpSearchType:(id)sender
+{
+	NSMenuItem *mi = (NSMenuItem*) sender;
+	NSMenu *m = [mi menu];
+	int hst = [mi tag];
+	if (mi && m && hst!=hsType) {
+		SLog(@"setHelpSearchType: old=%d, new=%d", hsType, hst);
+		NSMenuItem *cmi = [m itemWithTag:hsType];
+		if (cmi) [cmi setState:NSOffState];
+		hsType = hst;
+		[mi setState:NSOnState];
+	}
+}
+
+- (IBAction)goHelpSearch:(id)sender
+{
+	NSSearchField *sf = (NSSearchField*) sender;
+	NSString *ss = [sf stringValue];
+	SLog(@"RDocumentWinCtrl.goHelpSearch: \"%@\", type=%d", ss, hsType);
+	if ([ss length]<1)
+		[helpDrawer close];
+	else {
+		[helpDrawer open];
+		switch (hsType) {
+			case hsTypeExact: {
+				RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(help(\"%@\"),silent=TRUE)", ss]];
+				if (x) {
+					NSString *path = [x string];
+					if (path) {
+						NSString *url = [NSString stringWithFormat:@"file://%@",path];
+						[[helpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+					}
+					[x release];
+				}
+				break;
+			}
+			case hsTypeApprox: {
+				if (!helpTempFile)
+					helpTempFile = [NSString stringWithFormat:@"/tmp/RguiHS%x", (int) self];
+				SLog(@" - approx search will use %@", helpTempFile);
+				RSEXP * x= [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try({function(a){sink('%@'); cat(paste('<html><table>',paste('<tr><td><b>',a[,1],'</b> (<a href=\"file://',a[,4],'/html/00Index.html\">',a[,3],'</a></td><td>',a[,2],'</td></tr>',sep='',collapse=''),'</table></html>',sep=''));sink();'OK'}}(help.search(\"%@\")$matches),silent=TRUE)", helpTempFile, ss]];
+				SLog(@" - resulting SEXP=%@", x);
+				if (x && [x string] && [[x string] isEqual:@"OK"]) {
+					NSString *url = [NSString stringWithFormat:@"file://%@",helpTempFile];
+					[[helpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+				}
+				[x release];
+				break;
+			}
+		}
+	}
+}
+
+- (NSView*) searchToolbarView
+{
+	return searchToolbarView;
+}
+
+- (NSView*) fnListView
+{
+	return fnListView;
 }
 
 @end
