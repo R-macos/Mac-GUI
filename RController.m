@@ -27,6 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
 #include <Fileio.h>
