@@ -63,27 +63,25 @@
     // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
     NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
     
-    if ([itemIdent isEqual: RETI_Dummy1]) {
+    if ([itemIdent isEqual: RETI_Save]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: NLS(@"Dummy1")];
-		[toolbarItem setPaletteLabel: NLS(@"Dummy1 Label")];
-		[toolbarItem setToolTip: NLS(@"Dummy1 Tip")];
+		[toolbarItem setLabel: NLS(@"Save")];
+		[toolbarItem setPaletteLabel: NLS(@"Save")];
+		[toolbarItem setToolTip: NLS(@"Save current document")];
 		[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
-		[toolbarItem setTarget: self];
+		[toolbarItem setTarget: [winCtrl document]];
 		[toolbarItem setAction: @selector(saveDocument:)];
-	} else if ([itemIdent isEqual: RETI_Dummy2]) {
+	} else if ([itemIdent isEqual: RETI_HelpSearch]) { /* help search filed - view item */
 		NSView *myView = [winCtrl searchToolbarView];
 		// Set up the standard properties 
 		[toolbarItem setLabel:@"Search"];
 		[toolbarItem setPaletteLabel:@"Search"];
 		[toolbarItem setToolTip:@"Search Help"];
-		// Use a custom view, a rounded text field,
-		// attached to searchFieldOutlet in InterfaceBuilder as
-		// the custom view 
+		// Use a custom view, a rounded text field, attached to searchFieldOutlet in InterfaceBuilder as the custom view 
 		[toolbarItem setView:myView];
 		[toolbarItem setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
 		[toolbarItem setMaxSize:NSMakeSize(300,NSHeight([myView frame]))];
-		// Create the custom menu 
+		// Create the custom menu (alternative if icons are disabled)
 		NSMenu *submenu=[[[NSMenu alloc] init] autorelease];
 		NSMenuItem *submenuItem=[[[NSMenuItem alloc] initWithTitle: @"Search Panel"
 															action: @selector(searchUsingSearchPanel:)
@@ -94,49 +92,25 @@
 		[menuFormRep setSubmenu:submenu];
 		[menuFormRep setTitle:[toolbarItem label]];
 		[toolbarItem setMenuFormRepresentation:menuFormRep];
-	} else if ([itemIdent isEqual: RETI_FnList]) {
+	} else if ([itemIdent isEqual: RETI_FnList]) { /* function list - view item */
 		NSView *myView = [winCtrl fnListView];
-		// Set up the standard properties 
 		[toolbarItem setLabel:@"Functions"];
 		[toolbarItem setPaletteLabel:@"Functions"];
 		[toolbarItem setToolTip:@"List of Functions"];
-		// Use a custom view, a rounded text field,
-		// attached to searchFieldOutlet in InterfaceBuilder as
-		// the custom view 
 		[toolbarItem setView:myView];
 		[toolbarItem setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
 		[toolbarItem setMaxSize:NSMakeSize(200,NSHeight([myView frame]))];
-		/* NO: Create the custom menu 
-		NSMenu *submenu=[[[NSMenu alloc] init] autorelease];
-		NSMenuItem *submenuItem=[[[NSMenuItem alloc] initWithTitle: @"Search Panel"
-															action: @selector(searchUsingSearchPanel:)
-													 keyEquivalent: @""] autorelease];
-		NSMenuItem *menuFormRep=[[[NSMenuItem alloc] init] autorelease];
-		[submenu addItem: submenuItem];
-		[submenuItem setTarget:self];
-		[menuFormRep setSubmenu:submenu];
-		[menuFormRep setTitle:[toolbarItem label]];
-		[toolbarItem setMenuFormRepresentation:menuFormRep];
-		*/
-	} else {
-		// itemIdent refered to a toolbar item that is not provide or supported by us or Cocoa 
-		// Returning nil will inform the toolbar this kind of item is not supported 
+	} else
 		toolbarItem = nil;
-	}
+
 	return toolbarItem;
 }
 
 - (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
-    // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
-    // user chooses to revert to the default items this set will be used 
     return [NSArray arrayWithObjects: RET_ListDefault, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the list of all allowed items by identifier.  By default, the toolbar 
-    // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
-    // The set of allowed items is used to construct the customization palette 
     return [NSArray arrayWithObjects: RET_ListAll, nil];
 }
 
@@ -159,14 +133,11 @@
 }
 
 - (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
-    // Optional method:  This message is sent to us since we are the target of some toolbar item actions 
-    // (for example:  of the save items action) 
-	//NSString *iid = [toolbarItem itemIdentifier];
+	NSString *iid = [toolbarItem itemIdentifier];
     BOOL enable = YES; // default is YES, if there are any that need to be disabled - check for them
     
-	//if ([iid isEqual: ... ]) {
-	//enable = [RConsoleWindow isDocumentEdited];
-    //}
+	if ([iid isEqual: RETI_Save ])
+		enable = [[winCtrl document] isDocumentEdited];
 	
     return enable;
 }

@@ -35,13 +35,13 @@
 #import <Cocoa/Cocoa.h>
 #import "RDocumentWinCtrl.h"
 
-#define	RETI_Dummy1 @"RETI Dummy1"
-#define	RETI_Dummy2 @"RETI Dummy2"
-#define RETI_FnList @"RETI FnList"
+#define	RETI_Save       @"RETI Save Document"
+#define	RETI_HelpSearch @"RETI Help Search"
+#define RETI_FnList     @"RETI FnList"
 
-#define RET_ListAll RETI_Dummy1, RETI_Dummy2, RETI_FnList, \
+#define RET_ListAll RETI_Save, RETI_HelpSearch, RETI_FnList, \
 NSToolbarPrintItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier
-#define RET_ListDefault RETI_Dummy1, NSToolbarPrintItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, RETI_FnList, RETI_Dummy2
+#define RET_ListDefault RETI_Save, NSToolbarPrintItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, RETI_FnList, RETI_HelpSearch
 
 @interface REditorToolbar : NSObject {
 	RDocumentWinCtrl *winCtrl;
