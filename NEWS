@@ -1,8 +1,13 @@
 NEWS
 
+Last update: 2004-10-18 [SU]
+*	fixed working directory selection
+*	added sourceCurrentDocument: implementation; if the document is dirty,
+	a temporary file is created, sourced and finally deleted
+
 Last update: 2004-10-15 [SU]
 *	code cleanups to get rid of most warnings
-*	fixed linking issues caused by run_Rmainloop confliucting with R
+*	fixed linking issues caused by run_Rmainloop conflicting with R
 *	fixed resizing behavior of the help window
 *	disable continuous spell checking by default
 
