@@ -52,7 +52,6 @@
 {
 	if (self = [super init]) {
 		[[Preferences sharedPreferences] addDependent:self];
-		[self updatePreferences];
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -66,6 +65,11 @@
 		[self setIcon:theImage];
 	}
 	return self;
+}
+
+- (void) awakeFromNib
+{
+	[self updatePreferences];
 }
 
 - (void) dealloc
@@ -220,7 +224,8 @@
 	c=[Preferences unarchivedObjectForKey:backgColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[backgColorWell color]]) {
 		[backgColorWell setColor:c];
-		[alphaStepper setFloatValue:[c alphaComponent]];
+		if ([alphaStepper floatValue]!=[c alphaComponent])
+			[alphaStepper setFloatValue:[c alphaComponent]];
 	}
 }
 
