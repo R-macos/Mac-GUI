@@ -1,5 +1,10 @@
 NEWS
 
+Last update: 2005-03-04 [SI]
+*	added callback for select.list (do_selectlist) R function.
+	This is still incomplete: should mark pre-selected items, should
+	return selected items, should wait for OK/Cancel action
+	
 Last update: 2005-02-28 [RG]
 *	Made all history files R compatible
 *	Updated relevant prefpanes
