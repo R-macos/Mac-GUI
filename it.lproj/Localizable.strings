@@ -31,6 +31,10 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Autorizza R a eseguire comandi di sistema come root";
 
+/* From: HelpManager.m (runHelpSearch)
+   From: HelpManager.m (showHelpFor) */
+"Can't find help for topic" = "Help non disponibile per l'argomento";
+
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annulla";
 
@@ -45,6 +49,9 @@
 
 /* From: RController.m (doLoadHistory) */
 "Choose history File" = "Seleziona History File";
+
+/* From: PrefPanes/MiscPrefPane.m (chooseWorkingDir) */
+"Choose Initial Working Directory" = "Scegli Directory di Lavoro Iniziale";
 
 /* From: RController.m (handleChooseFile) */
 "Choose New File Name" = "Scegliere un Nuovo Nome";
@@ -85,6 +92,9 @@
 /* From: RController.m (toolbar) */
 "New Document" = "Nuovo Documento";
 
+/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+"New Quartz Device" = "Nuova Finestra Grafica Quartz";
+
 /* Global string @ */
 "No" = "No";
 
@@ -92,7 +102,7 @@
 "OK" = "OK";
 
 /* From: RController.m (toolbar) */
-"Open a new Quartz device window" = "Apre nuova fiestra grafica Quartz";
+"Open a new Quartz device window" = "Apre nuova finestra grafica Quartz";
 
 /* From: RController.m (toolbar) */
 "Open document in editor" = "Apre documento nell'editor";
@@ -100,20 +110,44 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Apri nell'Editor";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Installatore Pacchetti";
+
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Installatore Pacchetti";
-
-/* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Specificare una URL valida.";
+
+/* General preference group */
+"PrefG-General" = "Generale";
+
+/* Views preference group */
+"PrefG-Views" = "Aspetto";
+
+/* Colors preference pane */
+"PrefP-Colors" = "Colori";
+
+/* Editor preference pane */
+"PrefP-Editor" = "Editor";
+
+/* Quartz preference pane */
+"PrefP-Quartz" = "Quartz";
+
+/* Startup preference pane */
+"PrefP-Startup" = "Avvio";
 
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Stampa questo documento";
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
+
+/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+"Quartz (%d) - Active" = "Quartz (%d) - Attivo";
+
+/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+"Quartz (%d) - Inactive" = "Quartz (%d) - Inattivo";
 
 /* From: RController.m (toolbar) */
 "Quit" = "Esci";
@@ -169,11 +203,17 @@
 /* From: REditor.m (toolbar) */
 "Removes selected rows" = "Elimina righe selezionate";
 
+/* From: Quartz/RDeviceView.m (drawRect) */
+"Resizing to %g x %g" = "Ridimensiona a %g x %g";
+
 /* Global string @ */
 "Save" = "Salva";
 
 /* From: RController.m (toolbar) */
 "Save Console Window" = "Salve Contenuto Finestra Console";
+
+/* From: Quartz/RQuartz.m (saveDocument) */
+"Save Content of Quartz Device to PDF file" = "Salva contenuto finestra grafica Quartz come file PDF";
 
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Salva file history";
@@ -187,8 +227,11 @@
 /* From: RController.m (didCloseAll) */
 "Save workspace image?" = "Salvare un'immagine del workspace?";
 
+/* From: PrefPanes/EditorPrefPane.m (changeEditor) */
+"Select editor application" = "Seleziona applicazione editor";
+
 /* From: PackageInstaller.m (installSelected) */
-"Select Installation Directory" = "Scegliere Directory di Install";
+"Select Installation Directory" = "Scegliere Directory di Installazione";
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Seleziona Directory Pacchetto";
@@ -201,6 +244,9 @@
 
 /* From: RController.m (toolbar) */
 "Set R console colors" = "Aggiusta colori R Console";
+
+/* From: AMPrefs/AMPreferenceWindowController.m (toolbar) */
+"Show All" = "Show All";
 
 /* From: RController.m (toolbar) */
 "Show/Hide R command history" = "Mostra/Nascondi R command history";
@@ -228,6 +274,9 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Il pacchetto non è stato installato.";
+
+/* From: HelpManager.m (runHelpSearch) */
+"Topic: " = "Argomento: ";
 
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "Non è stato possibile lanciare R: %@";
