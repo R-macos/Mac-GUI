@@ -2,31 +2,30 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef struct itemListEntry {
-	NSString *name;
-	BOOL status;
-} s_itemListEntry;
-
 @interface SelectList : NSObject
 {
 	IBOutlet NSTableView *listDataSource;	/* TableView for the list */ 
 	id  SelectListWindow;
 	
 	int totalItems;
-	s_itemListEntry *listItem;
+	NSString **listItem;
+	BOOL *itemStatus;
+	
+	int result;
+	BOOL running;
+	NSString *title;
 }
 
 
 + (SelectList*) sharedController;
 
 - (id) window;
-- (id) tableView;
 - (void) reloadData;
 
 - (void) show;
 
 - (void) resetListItems; // removes all items data
-- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple;
+- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) ttl;
 				   
 - (int) count;
 
@@ -34,6 +33,7 @@ typedef struct itemListEntry {
 - (IBAction)cancelSelection:(id)sender;
 - (BOOL)windowShouldClose:(id)sender;
 
-+ (void)startSelectList: (NSString *)title;
+- (int) runSelectList; // should be called only after updateListItems was called at least once
+- (void) runFinished; // should be called to clean up any external buffer references - next round will be initiated by updateListItems:
 
 @end

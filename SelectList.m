@@ -1,11 +1,9 @@
+#import "RGUI.h"
 #import "SelectList.h"
 
 static SelectList *sharedController = nil;
 
 @implementation SelectList
-
-extern int *itemStatus;
-extern int 	selectListDone;
 
 BOOL IsSelectList;
 
@@ -17,6 +15,9 @@ BOOL IsSelectList;
 		[listDataSource setTarget: self];
 		totalItems = 0;
 		listItem = 0;
+		result = -1;
+		itemStatus = 0;
+		running = NO;
     }
 	
     return self;
@@ -31,6 +32,7 @@ BOOL IsSelectList;
 	[self resetListItems];
 	[super dealloc];
 }
+
 /* These two routines are needed to update the SelectList TableView */
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
@@ -41,21 +43,14 @@ BOOL IsSelectList;
 {
 	if (row<totalItems) {
 		if([[tableColumn identifier] isEqualToString:@"item"])
-			return listItem[row].name;
+			return listItem[row];
 	}
 	return nil; 
 }
 
-
-
 - (id) window
 {
 	return SelectListWindow;
-}
-
-- (id) tableView
-{
-	return listDataSource;
 }
 
 - (void) reloadData
@@ -65,36 +60,34 @@ BOOL IsSelectList;
 
 - (void) resetListItems
 {
-	if (!totalItems) return;
+	if (!totalItems || !listItem) return;
 	int i=0;
 	while (i<totalItems) {
-		[listItem[i].name release];
+		[listItem[i] release];
 		i++;
 	}
 	free(listItem);
 	totalItems=0;
 }
 
-- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple;
+- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) ttl
 {
 	int i=0;
+	title = ttl;
+	result = -1;
+	itemStatus = stat;
 	[listDataSource setAllowsMultipleSelection: multiple];
 
 	if (totalItems) [self resetListItems];
-	if (count<1) {
-		[self show];
-		return;
-	}
+	if (count<1)
+		return;	
 	
-	
-	listItem = malloc(sizeof(*listItem)*count);
-
+	listItem = (NSString**) malloc(sizeof(NSString*) * count);
 	while (i<count) {
-		listItem[i].name =[[NSString alloc] initWithCString: item[i]];
+		listItem[i] =[[NSString alloc] initWithUTF8String: item[i]];
 		i++;
 	}
 	totalItems = count;
-	[self show];
 }
 
 - (int) count
@@ -111,21 +104,21 @@ BOOL IsSelectList;
 
 - (IBAction)returnSelected:(id)sender
 {
-	int i;
-	
 	NSIndexSet *rows =  [listDataSource selectedRowIndexes];			
 	unsigned current_index = [rows firstIndex];
+
 	if(current_index == NSNotFound)
 		return;
-		
-	for(i=0; i<totalItems; i++)
-		itemStatus[i] = 0;
-	while (current_index != NSNotFound) {
-		itemStatus[current_index] = 1;
-		current_index = [rows indexGreaterThanIndex: current_index];
+	
+	if (itemStatus) {
+		memset(itemStatus, 0, sizeof(BOOL)*totalItems);
+		while (current_index != NSNotFound) {
+			itemStatus[current_index] = YES;
+			current_index = [rows indexGreaterThanIndex: current_index];
+		}
 	}
 
-	selectListDone = 1;
+	result = 1;
 	
 	[[self window] performClose: sender];
 
@@ -133,39 +126,47 @@ BOOL IsSelectList;
 
 - (BOOL)windowShouldClose:(id)sender{
 	
-	if(IsSelectList){
+	if(running){
 		[NSApp stopModal];
-		IsSelectList = NO;
+		running = NO;
 	}
 	return YES;	
 }
 
 - (IBAction)cancelSelection:(id)sender
 {
-	selectListDone = 0;
+	result = 0;
 
 	[[self window] performClose: sender];
 }
 
-+ (void)startSelectList: (NSString *)title;
+- (int) runSelectList
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
 	int i,k=0;
-	for(i=0; i<[[[SelectList sharedController] tableView] numberOfRows]; i++){
-		if(itemStatus[i]==1){
-			k++;
-			[[[SelectList sharedController] tableView] selectRowIndexes:[NSIndexSet indexSetWithIndex:i] 
-												byExtendingSelection:(BOOL)(k!=1)];
-		}
-	}
-	
-
-	[[[SelectList sharedController] window] setTitle:title];
-	[[[SelectList sharedController] window] orderFront:self];
-	[NSApp runModalForWindow:[[SelectList sharedController] window]];
+	[listDataSource deselectAll:self];
+	if (itemStatus)
+		for(i=0; i<totalItems; i++){
+			if(itemStatus[i]){
+				k++;
+				[listDataSource selectRowIndexes:[NSIndexSet indexSetWithIndex:i] 
+							byExtendingSelection:(k!=1)?YES:NO];
+			}
+		};
+			
+	[[self window] setTitle:title];
+	[self show];
+	running = YES;
+	[NSApp runModalForWindow:[self window]];
 	
 	[pool release];
+	
+	return result;
 }
 
+- (void) runFinished
+{
+	itemStatus = 0;
+}
 
 @end

@@ -834,9 +834,14 @@ extern BOOL isTimeToFinish;
 	return 0;
 }
 
-- (void) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple;
+- (int) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) title;
 {
-	[[SelectList sharedController] updateListItems:count withNames:name status:stat multiple: multiple];
+	int result;
+	SelectList *list = [SelectList sharedController];
+	[list updateListItems:count withNames:name status:stat multiple: multiple title:title];
+	result=[list runSelectList];
+	[list runFinished];
+	return result;
 }
 
 - (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title
@@ -890,7 +895,7 @@ extern BOOL isTimeToFinish;
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGALRM, SIG_DFL);
 		signal(SIGCHLD, SIG_DFL);
-		execl("/bin/sh","/bin/sh","-c",cmd,0);
+		execl("/bin/sh", "/bin/sh", "-c", cmd, NULL);
 		exit(-1);
 		//sr=system(cmd);
 		//exit(WEXITSTATUS(sr));
@@ -993,7 +998,7 @@ The input replaces what the user is currently typing.
 - (IBAction)doLoadHistory:(id)sender
 {
 	[self doClearHistory:nil];
-	NSString *fname;
+	NSString *fname=nil;
 	if (sender) {
 		NSOpenPanel *op = [NSOpenPanel openPanel];
 		[op setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
@@ -1065,7 +1070,7 @@ The input replaces what the user is currently typing.
 }
 
 - (void)doSaveHistory:(id)sender {
-	NSString *fname;
+	NSString *fname = nil;
 	if (sender) {
 		NSSavePanel *sp = [NSSavePanel savePanel];
 		[sp setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
@@ -1432,7 +1437,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		}
 	} else {
 		if (!flag && !appLaunched) {
-			int i; int j;
+			int i, j=-1;
 			for (i=[filename length]-1 ; i>=0 ; i--) {
 				if ([filename characterAtIndex:i] == '/') {
 					j = i; i = -1;
