@@ -1,4 +1,9 @@
 NEWS
+Last update: 2004-10-13 [SI]
+*	added support for activation of quartz device
+	and creation of new quartz deivce from the GUI
+	This functionality was present in the old Aqua GUI.
+	
 Last update: 2004-10-11 [SI]
 *	first svn release
 

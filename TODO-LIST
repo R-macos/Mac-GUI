@@ -2,7 +2,7 @@ TO DO LIST
 * metric info in quartz device is broken [SI]
 * growing up the window in quartz device does not refresh the drawing [SI]
 * we need to assume Latin1Econdig for displaying text in quartz (see example(text))[SI]
-* move the refresh button in databrowse into the toolbar [SI]
+* move the refresh button in databrowse into the toolbar [SI]   
 * preference pane: startup dir, install dir?
 * in R_EditFiles:  the file name is not correctly set at the moment for newly created documents.
 * (find someone to) design some nice icons for the toolbar

@@ -335,6 +335,7 @@ static void 	RQuartz_Activate(NewDevDesc *dd)
 	xd->DevNum = devnum;
 	[xd->DevView setDevNum: devnum];
 	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Active",devnum+1]];
+
 }
 static void 	RQuartz_Deactivate(NewDevDesc *dd)
 {

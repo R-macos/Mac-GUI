@@ -28,6 +28,7 @@ extern NSColor *shColorIdentifier;
 + (void) setDefaultSyntaxHighlightingColors;
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
+- (NSString *)whoAmI;
 
 - (void)updateSyntaxHighlightingForRange: (NSRange) range;
 

@@ -35,6 +35,7 @@
 }
 
 
+
 - (id)init
 {
     self = [super init];
@@ -75,6 +76,21 @@
 			NSWindow *window = [wc window];
 			[window setTitle: title];
 		}
+}
+
+/* This method is only invoked from the GUI to activate the device 
+with CMD+SHIFT+A and essentially called in RController -> activateQuartzDevice
+*/
+- (void)activateDev{
+	selectDevice([deviceView getDevNum]);
+}
+
+
+/* this function return the "kind" of document, not just the type which is "pdf
+for quartz. This method is called by RController -> activateQuartz
+*/
+- (NSString *)whoAmI{
+	return @"quartz";
 }
 
 - (BOOL) knowsPageRange: (NSRangePointer) range

@@ -160,6 +160,7 @@
 - (IBAction)historyDoubleClick:(id)sender;
 
 - (IBAction)newQuartzDevice:(id)sender;
+- (IBAction)activateQuartzDevice:(id)sender;
 - (IBAction)breakR:(id)sender;
 - (IBAction)quitR:(id)sender;
 - (IBAction)toggleHistory:(id)sender;

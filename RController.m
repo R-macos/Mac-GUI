@@ -936,6 +936,15 @@ extern BOOL isTimeToFinish;
 	[[REngine mainEngine] executeString:@"quartz()"];
 }
 
+/* method whoAmI is defined only for RDocument and RQuartz 
+*/
+- (IBAction)activateQuartzDevice:(id)sender {
+	NSDocument *doc = [[NSDocumentController sharedDocumentController] currentDocument];
+	if(doc!= nil)
+		if([[doc whoAmI] isEqual:@"quartz"])
+			[doc activateDev];
+}
+
 - (IBAction)breakR:(id)sender{
 	if (childPID)
 		kill(childPID, SIGINT);

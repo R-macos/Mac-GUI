@@ -220,6 +220,13 @@ NSArray *keywordList;
 		}
 }
 
+/* this function return the "kind" of document, not just the type which could be
+anything for RDocument. This method is called by RController -> activateQuartz
+*/
+- (NSString *)whoAmI{
+	return @"REditor";
+}
+
 /* This is needed to force the NSDocument to know when edited windows are dirty */
 - (void) textDidChange: (NSNotification *)notification{
 	NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];

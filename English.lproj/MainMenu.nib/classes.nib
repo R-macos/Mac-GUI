@@ -65,6 +65,7 @@
             ACTIONS = {
                 RNewDocument = id; 
                 RSourceLoadFile = id; 
+                activateQuartzDevice = id; 
                 breakR = id; 
                 changeAlphaColor = id; 
                 changeBackGColor = id; 
@@ -90,7 +91,7 @@
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
                 newQuartzDevice = id; 
-                openColorsPanel = id; 
+                openColors = id; 
                 openDocumentInEditor = id; 
                 otherEventLoops = id; 
                 performHelpSearch = id; 

@@ -20,8 +20,10 @@
 
 - (RDeviceView *)getDeviceView;
 - (NSWindow *)getDeviceWindow;
+- (void)activateDev;
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
+- (NSString *)whoAmI;	
 
 
 @end
