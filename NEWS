@@ -2,7 +2,9 @@ NEWS
 
 Last update: 2004-11-06 [SI]
 *	added Rob Goedman (for external editor support) code.
-
+*	added standard copyright notes everywhere. Please check and
+	add specific credits to users contributed code if any.
+	
 Last update: 2004-11-05 [SU]
 *	fixed a small leak and early deallocation of the keywordList (this fixes
 	crash observed when editing a file dropped on R while R is initialized).
