@@ -1,8 +1,18 @@
 NEWS
 
+Last update: 2005-02-01 [SU]
+*	Added forward/back buttons in help browser window
+*	Added update.localization script for automated update of
+	localized NIB files.
+*	Switched over to Cocoa API for auto-completion. Unfortunately
+	the system is somewhat limited, so it's far from perfect.
+	It seems that we need to implement our own drop-down to make
+	it behave more intuitively (so, please, hold your horses before
+	reporting bugs on this one...).
+
 Last update: 2005-01-19 [SU]
 *	Fixed typo in loc. strings (which caused an exception on start)
-*	Fixed bug in RController causing R-GUI to not comipile for
+*	Fixed bug in RController causing R-GUI to not compile for
 	most recent R-devel
 *	Added some more UTF-8 support
 
