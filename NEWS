@@ -1,5 +1,13 @@
 NEWS
 
+Last update: 2004-11-05 [SU]
+*	fixed a small leak and early deallocation of the keywordList (this fixes
+	crash observed when editing a file dropped on R while R is initialized).
+	retain all colors, too, to make sure they don't get deallocated
+*	added SortedDataSource which provides a persistent table as data source.
+	it is used by DataManager now and should by used by all managers later.
+	the sorting part is not implemented yet, though.
+
 Last update: 2004-10-30 [SU]
 *	moved callbacks for data manager, package manager, package installer
 	and system command out to a separate handler. This means rather major
