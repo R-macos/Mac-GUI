@@ -5,7 +5,7 @@ Last update: 2004-10-22 [SI]
 	by Andreas Mayer. At the moment only color preferences are implemented.
 	Quartz and misc preferences pane are there but not yet working.
 	The preferences are still saved/loaded using NSDefaults
-	You may need to "svn update" better than from inside of XCode
+	You may need to "svn update" from the shell better than from inside of XCode
 	
 Last update: 2004-10-22 [SU]
 *	newly typed text outside insertion scope is appended at the end (thanks to
