@@ -12,6 +12,14 @@
 
 #include <Rdefines.h>
 
+/* This constant conditionalize the callback entry point for the internal editor. Since R 2.1.x,
+   there exists a general entry point ptr_R_EditFile for all the guis. So there is no longer
+   the need to have ptr_Raqua_Edit in src/unix/aqua.c
+   To build for 2_1_x or higher define BUILD_FOR_R_2_1_x
+*/
+
+/* #define BUILD_FOR_R_2_1_x  */
+
 /* This constant defines the maximal length of single ReadConsole input, which usually corresponds to the maximal length of a single line. The buffer is allocated dynamically, so an arbitrary size is fine. */
 #ifndef MAX_R_LINE_SIZE
 #define MAX_R_LINE_SIZE 32767
@@ -65,7 +73,13 @@ extern void (*ptr_R_Busy)(int);
 /* extern void (*ptr_R_CleanUp)(SA_TYPE, int, int); */
 extern int  (*ptr_R_ShowFiles)(int, char **, char **, char *, Rboolean, char *);
 extern int  (*ptr_R_EditFiles)(int, char **, char **, char *);
+
+
+#ifdef BUILD_FOR_R_2_1_x
+extern int  (*ptr_R_EditFile)(char *); /* in r-devel ptr_Raqua_Edit is no longer used*/
+#else
 extern int  (*ptr_Raqua_Edit)(char *);
+#endif
 extern int  (*ptr_R_ChooseFile)(int, char *, int);
 extern void (*ptr_R_loadhistory)(SEXP, SEXP, SEXP, SEXP);
 extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
@@ -140,9 +154,12 @@ int initR(int argc, char **argv) {
     ptr_R_Busy = Re_RBusy;
     ptr_R_ProcessEvents =  Re_ProcessEvents;
 
+#ifdef BUILD_FOR_R_2_1_x
+	ptr_R_EditFile = Re_Edit;
+#else
 	ptr_Raqua_Edit = Re_Edit;
-
-
+#endif
+	
     ptr_R_ShowFiles = Re_ShowFiles;
 	ptr_R_EditFiles = Re_EditFiles;
     ptr_R_ChooseFile = Re_ChooseFile;
