@@ -46,7 +46,7 @@ extern NSColor *shColorIdentifier;
 @interface RDocumentWinCtrl : NSWindowController <PreferencesDependent>
 {
 	IBOutlet NSScrollView *scrollView;
-    NSTextView *textView;
+    IBOutlet NSTextView *textView;
     RRulerView *theRulerView;
 
 	RDocument *document;

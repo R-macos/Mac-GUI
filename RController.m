@@ -874,9 +874,12 @@ extern BOOL isTimeToFinish;
 
 - (BOOL)windowShouldClose:(id)sender
 {
+	[[RDocumentController sharedDocumentController] closeAllDocumentsWithDelegate:self didCloseAllSelector:@selector(didCloseAll:) contextInfo:nil];	
+	return NO;
+}	
 	
+- (void)didCloseAll:(id)sender {
 	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
-    return NO;
 }
 
 /* this gets called by the "wanna save?" sheet on window close */

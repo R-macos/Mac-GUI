@@ -131,8 +131,6 @@ NSArray *keywordList=nil;
 		// For now replaced selectedTextBackgroundColor by redColor
 		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
     }
-	NSSize contentSize = [scrollView contentSize]; 
-	textView = [[NSTextView alloc] initWithFrame: NSMakeRect(0, 0, contentSize.width, contentSize.height)];
 	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
 	if (showLineNos) {
 		// This should probably get loaded from NSUserDefaults.
