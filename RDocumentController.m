@@ -94,7 +94,8 @@
 		}
 		else
 			if (useInternalEditor) {
-				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];				
+				NSString *fname = [aFile stringByExpandingTildeInPath];
+				return [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];				
 			}
 		if (editorIsApp) {
 			cmd = [@"open -a " stringByAppendingString:externalEditor];
@@ -126,7 +127,8 @@
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 
 	if (useInternalEditor) {
-		return [super openDocumentWithContentsOfFile:aFile display:flag];		
+		NSString *fname = [aFile stringByExpandingTildeInPath];
+		return [super openDocumentWithContentsOfFile:fname display:flag];		
 	} else {
 		NSString *cmd;
 		if (editorIsApp) {

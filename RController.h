@@ -77,6 +77,9 @@
 	IBOutlet NSButton *clearHistory;
 	IBOutlet NSButton *loadHistory;
 	IBOutlet NSButton *saveHistory;
+	IBOutlet NSButton *importHistory;
+	IBOutlet NSButton *exportHistory;
+	IBOutlet NSButton *editHistory;
     IBOutlet NSDrawer *HistoryDrawer;	
 	IBOutlet NSWindow *RConsoleWindow;
 	NSTimer *timer;
@@ -176,6 +179,11 @@
 - (IBAction)doClearHistory:(id)sender;
 - (IBAction)doLoadHistory:(id)sender;
 - (IBAction)doSaveHistory:(id)sender;
+- (IBAction)autoLoadHistory:(id)sender;
+- (IBAction)autoSaveHistory:(id)sender;
+- (IBAction)doImportHistory:(id)sender;
+- (IBAction)doExportHistory:(id)sender;
+- (IBAction)doEditHistory:(id)sender;
 - (IBAction)historyDoubleClick:(id)sender;
 
 - (IBAction)newQuartzDevice:(id)sender;

@@ -29,8 +29,10 @@
 
 
 #import <Cocoa/Cocoa.h>
+#import "PreferenceKeys.h"
+#import "Preferences.h"
 
-@interface History : NSObject {
+@interface History : NSObject <PreferencesDependent> {
     NSMutableArray* hist;
     NSString* dirtyEntry;
     int pos;
@@ -49,5 +51,9 @@
 
 - (void) encodeWithCoder:(NSCoder *)coder;
 - (id) initWithCoder:(NSCoder *)coder;
+
+- (void) exportHistory;
+- (void) importHistory;
+- (void) editHistory;
 
 @end

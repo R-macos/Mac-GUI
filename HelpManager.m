@@ -55,23 +55,43 @@ static id sharedHMController;
 	if([[sender stringValue] length]==0) 
 		return;
 	
+	NSString *searchString;
+	NSCharacterSet *charSet;
+	charSet = [NSCharacterSet characterSetWithCharactersInString:@"'\""];
+	searchString = [[sender stringValue] stringByTrimmingCharactersInSet:charSet];
+	NSLog(@"runHelpSearch: <%@>", searchString);
+	
+	//		[self sendInput:[NSString stringWithFormat:@"help(\"%@\")", searchString]];
 	if([[ matchRadio selectedCell] tag] == kFuzzyMatch){
-		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", [sender stringValue]]];
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", searchString]];
 			[sender setStringValue:@""];
 	} else {
-		REngine *re = [REngine mainEngine];	
-		NSString *hlp = [NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))", [sender stringValue]];
-		RSEXP *x = [re evaluateString:hlp];
-		if ((x==nil) || ([x string]==NULL)) {
-			NSString *topicString = [[[NSString alloc] initWithString: NLS(@"Topic: ")] stringByAppendingString:[sender stringValue]];
-			NSRunInformationalAlertPanel(NLS(@"Can't find help for topic"), topicString, NLS(@"OK"), nil, nil);
-			return;
-		}
-		NSString *url = [x string];
-		if(url != nil)
-			[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@",url]]]];
-		[x release];
+		[self showHelpFor: searchString];
 	}
+}
+
+- (void)showHelpFor:(NSString *)topic
+{
+	NSString *searchString;
+	NSCharacterSet *charSet;
+	charSet = [NSCharacterSet characterSetWithCharactersInString:@"'\""];
+	searchString = [topic stringByTrimmingCharactersInSet:charSet];
+//	NSLog(@"showHelpFor: <%@>", searchString);
+	
+	REngine *re = [REngine mainEngine];	
+	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))",searchString]];
+	if ((x==nil) || ([x string]==NULL)) {
+		NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:searchString];
+		int res = NSRunInformationalAlertPanel(NLS(@"Can't find help for topic, would you like to expand the search?"), topicString, NLS(@"No"), NLS(@"Yes"), nil);
+		if (!res)
+			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", searchString]];
+		return;
+	}
+	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
+	if(url != nil)
+	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+	[helpWindow makeKeyAndOrderFront:self];
+	[x release];
 }
 
 - (IBAction)showMainHelp:(id)sender
@@ -119,24 +139,6 @@ static id sharedHMController;
 	 RSEXP *x= [re evaluateString:@"file.show(file.path(R.home(),\"NEWS.aqua\"))"];
 	 if(x==nil)
 		return;
-	[x release];
-}
-
-- (void)showHelpFor:(NSString *)topic
-{
-	REngine *re = [REngine mainEngine];	
-	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(%@, htmlhelp=TRUE))",topic]];
-	if ((x==nil) || ([x string]==NULL)) {
-		NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:topic];
-		NSRunInformationalAlertPanel(NLS(@"Can't find help for topic"), topicString, NLS(@"OK"), nil, nil);
-		return;
-	}
-	
-	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
-	
-	if(url != nil)
-	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-	[helpWindow makeKeyAndOrderFront:self];
 	[x release];
 }
 

@@ -29,6 +29,8 @@
 
 
 #import "History.h"
+#import "RController.h"
+#import "RDocumentController.h"
 
 
 @implementation History
@@ -64,6 +66,86 @@
     if (dirtyEntry!=nil) [dirtyEntry release];
     dirtyEntry=nil;
     pos=[hist count];
+}
+
+- (void)importHistory {
+	[[RController getRController] doClearHistory:nil];
+	FILE *rhist;
+	NSString * fname;
+	char c[1000];
+	int cc;
+	int j = 0;
+	int i;
+	BOOL done;
+	fname = [[Preferences stringForKey:historyFileNamePathKey
+							withDefault: @"~/.Rhistory"] stringByExpandingTildeInPath];
+	if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
+		rhist = fopen([fname cString], "r");
+		if (rhist==NULL) {
+			NSLog(NLS(@"Can't open history file %2"), fname);
+		} else {
+			cc = fgetc(rhist);
+			while( cc != EOF ) {				
+				done = FALSE;
+				for (i=0;i<1000 && !done && cc!=EOF;i++) {
+					c[i] = cc;
+					if (cc == '\n' || i==999) {
+						c[i]=0;								// Don't want a newline
+						[self commit:[[NSString alloc] initWithCString:&c[0]]];
+						cc = fgetc(rhist);
+						j++;
+						done = TRUE;
+					} else {
+						cc = fgetc(rhist);
+						if (cc == EOF) {
+							if (i>0) {
+								j++;
+								c[i+1]=0;								// Don't want a newline
+								[self commit:[[NSString alloc] initWithCString:&c[0]]];						
+							}
+							done=TRUE;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (j>250) {
+		j = j - 200;
+		for (i=0;i<j;i++)
+			[hist removeObjectAtIndex:0];
+	}
+	pos = [hist count];
+	fclose(rhist);	
+}
+
+- (void)exportHistory {
+	FILE *rhist;
+	NSString * fname;
+	fname = [[Preferences stringForKey:historyFileNamePathKey
+						   withDefault: @"~/.Rhistory"] stringByExpandingTildeInPath];
+	if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
+		rhist = fopen([fname cString], "r");
+		if (rhist==NULL) {
+			NSLog(NLS(@"Can't open history file %2"), fname);
+		} else {
+			int ac = [hist count];
+			rhist = fopen([fname cString], "w");
+			int i;
+			for (i=0 ; i < ac ; i++) {
+				NSLog(@"Entry: %@", [hist objectAtIndex:i]);
+				fprintf(rhist, "%s\n", [[hist objectAtIndex:i] cString]);		
+			}
+			fclose(rhist);	
+		}
+	}
+}
+	
+- (void)editHistory {
+	[self exportHistory];
+	NSString *fname = [[Preferences stringForKey:historyFileNamePathKey
+							withDefault: @"~/.Rhistory"] stringByExpandingTildeInPath];
+	[[NSDocumentController sharedDocumentController] openNamedFile:fname display:YES];
 }
 
 /** moves to the next entry; if out of the history, returns the dirty entry */
@@ -123,6 +205,10 @@
 - (id) initWithCoder:(NSCoder *)coder{
 	[self setHist:[coder decodeObject]];
 	return self;
+}
+
+- (void)updatePreferences {
+	
 }
 
 @end

@@ -41,6 +41,7 @@
 #include <Defn.h>
 #endif
 #include <langinfo.h>
+#include <locale.h>
 
 #import <sys/fcntl.h>
 #import <sys/select.h>
@@ -91,6 +92,7 @@ int R_SetOptionWidth(int);
 #import "RController.h"
 #import "Tools/CodeCompletion.h"
 #import "Tools/FileCompletion.h"
+#import "HelpManager.h"
 #import "RDocument.h"
 #import "PackageManager.h"
 #import "DataManager.h"
@@ -306,6 +308,9 @@ static RController* sharedRController;
 	//currentFontSize = [[RTextView font] pointSize];
 	currentConsoleWidth = -1;
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:@"initialWorkingDirectoryKey" withDefault:@"~"] stringByExpandingTildeInPath]];
+	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
+		[self autoLoadHistory:nil];
+	}
 }
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
@@ -724,6 +729,7 @@ extern BOOL isTimeToFinish;
 		else
 			[hist commit:currentConsoleInput];
 		[historyView reloadData];
+//		NSLog(@"Input: %@",[currentConsoleInput substringToIndex:[currentConsoleInput length]-1]);
 	}
 	
 	{
@@ -748,7 +754,6 @@ extern BOOL isTimeToFinish;
 		[pool release];
 		return 0;
 	}
-	
 	RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: fn display:YES];
 	[document setREditFlag: YES];
 	
@@ -757,9 +762,9 @@ extern BOOL isTimeToFinish;
 	while (wc = [e nextObject]) {
 		NSWindow *window = [wc window];
 		NSModalSession session = [NSApp beginModalSessionForWindow:window];
-		while([document hasREditFlag])
+		while([document hasREditFlag]) {
 			[NSApp runModalSession:session];
-		
+		}
 		[NSApp endModalSession:session];
 	}
 	
@@ -890,6 +895,8 @@ extern BOOL isTimeToFinish;
 }	
 	
 - (void)didCloseAll:(id)sender {
+	if ([Preferences flagForKey:importOnStartupKey withDefault:YES])
+		[self autoSaveHistory:nil];
 	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
 }
 
@@ -957,6 +964,8 @@ FIXME: We can probably import standard unix history files
 	int answer;
 	
 	op = [NSOpenPanel openPanel];
+	[op setDirectory:[[Preferences stringForKey:initialWorkingDirectoryKey
+									withDefault: @"~"] stringByExpandingTildeInPath]];
 	[op setTitle:NLS(@"Choose history File")];
 	
 	answer = [op runModalForTypes: [NSArray arrayWithObject:@"history"]];
@@ -965,9 +974,21 @@ FIXME: We can probably import standard unix history files
 		if([op filename] != nil){
 			[hist resetAll];
 			[hist setHist: [NSUnarchiver unarchiveObjectWithFile: [op filename]]];
+			[historyView scrollRowToVisible:[historyView numberOfRows]];
 			[historyView reloadData];
 		}
 	}
+}
+
+- (void)autoLoadHistory:(id)sender
+{
+	NSString *fname = [[[Preferences stringForKey:initialWorkingDirectoryKey
+									  withDefault: @"~"] stringByExpandingTildeInPath]
+										stringByAppendingString:@"/Rhistory.history"]; 
+	[hist resetAll];
+	[hist setHist: [NSUnarchiver unarchiveObjectWithFile: fname]];
+	[historyView scrollRowToVisible:[historyView numberOfRows]];
+	[historyView reloadData];
 }
 
 /*  Saves the content of the history of a file. The default extension .history
@@ -975,11 +996,12 @@ This file is not compatible with unix history files as it could be multiline.
 FIXME: we can probably allow for exporting as single line
 */
 
-- (IBAction)doSaveHistory:(id)sender
-{
+- (void)doSaveHistory:(id)sender {
 	int answer;
 	NSSavePanel *sp;
 	sp = [NSSavePanel savePanel];
+	[sp setDirectory:[[Preferences stringForKey:initialWorkingDirectoryKey
+									withDefault: @"~"] stringByExpandingTildeInPath]];
 	[sp setRequiredFileType:@"history"];
 	[sp setTitle:NLS(@"Save history File")];
 	answer = [sp runModal];
@@ -987,7 +1009,30 @@ FIXME: we can probably allow for exporting as single line
 		[NSArchiver archiveRootObject: [hist entries]
 							   toFile: [sp filename]];
 	}
-	
+}
+
+- (void)autoSaveHistory:(id)sender
+{
+	NSString *fname = [[[Preferences stringForKey:initialWorkingDirectoryKey
+									  withDefault: @"~"] stringByExpandingTildeInPath]
+										stringByAppendingString:@"/Rhistory.history"]; 
+	[NSArchiver archiveRootObject: [hist entries] toFile: fname];
+}
+
+- (IBAction)doImportHistory:(id)sender {
+	[hist importHistory];
+	[historyView scrollRowToVisible:[historyView numberOfRows]];
+	[historyView reloadData];
+}
+
+- (IBAction)doExportHistory:(id)sender {
+	[hist exportHistory];
+}
+
+- (IBAction)doEditHistory:(id)sender {
+	[hist editHistory];
+	[historyView scrollRowToVisible:[historyView numberOfRows]];
+	[historyView reloadData];
 }
 
 /*  On double-click on items of the History TableView, the item is pasted into the console
@@ -1002,7 +1047,6 @@ at current cursor position
 	[self consoleInput:cmd interactive:NO];
 	[RConsoleWindow makeFirstResponder:RTextView];
 }
-
 
 /*  This routine is intended to "cat" some text to the R Console without
 issuing the newline.
@@ -1268,12 +1312,12 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (IBAction)toggleHistory:(id)sender{
-    NSDrawerState state = [HistoryDrawer state];
-    if (NSDrawerOpeningState == state || NSDrawerOpenState == state) {
-        [HistoryDrawer close];
-    } else {
-        [HistoryDrawer open];
-    }
+	NSDrawerState state = [HistoryDrawer state];
+	if (NSDrawerOpeningState == state || NSDrawerOpenState == state) {
+		[HistoryDrawer close];
+	} else {
+		[HistoryDrawer open];
+	}
 }
 
 - (IBAction)toggleAuthentication:(id)sender{
@@ -1455,8 +1499,10 @@ This method calls the showHelpFor method of the Help Manager which opens
 	char tmp[300];
 	int i;
 	
-	if(topic[0] == '?' && (strlen(topic)>1))
-		[[HelpManager sharedController] showHelpFor: [NSString stringWithCString:topic+1]];
+//	NSLog(@"openHelpFor: <%@>", [NSString stringWithCString:topic]);
+	if(topic[0] == '?' && (strlen(topic)>2))
+		[[HelpManager sharedController] showHelpFor: 
+			[NSString stringWithCString:topic+1 length:strlen(topic)-2]];
 	if(strncmp("help(",topic,5)==0){
 		for(i=5;i<strlen(topic); i++){
 			if(topic[i]==')')
@@ -1584,8 +1630,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[toolbarItem setToolTip: NLS(@"Show/Hide R command history")];
 		[toolbarItem setImage: [NSImage imageNamed: @"history"]];
 		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(toggleHistory:) ];
-		
+		[toolbarItem setAction: @selector(toggleHistory:) ];			
 	} else if([itemIdent isEqual: AuthenticationToolbarItemIdentifier]) {
 		[toolbarItem setLabel: NLS(@"Authentication")];
 		[toolbarItem setPaletteLabel: NLS(@"Authentication")];
@@ -1869,8 +1914,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (IBAction)performHelpSearch:(id)sender {
     if ([[sender stringValue] length]>0) {
-		//		[self sendInput:[NSString stringWithFormat:@"help.search(\"%@\")", [sender stringValue]]];
-		[[REngine mainEngine] executeString: [NSString stringWithFormat:@"print(help.search(\"%@\"))", [sender stringValue]]];
+		[[HelpManager sharedController] showHelpFor:[sender stringValue]];
         [helpSearch setStringValue:@""];
     }
 }

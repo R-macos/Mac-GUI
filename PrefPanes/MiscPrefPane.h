@@ -43,6 +43,13 @@
 	IBOutlet NSMatrix *editOrSource;
 	IBOutlet NSButton *cbRAquaPath;
 	IBOutlet NSTextField *workingDir;
+	IBOutlet NSButton *importOnStartup;
+	IBOutlet NSButton *setToDefault;
+	IBOutlet NSButton *setRAppToDefault;
+	IBOutlet NSTextField *historyFileNamePath;
+	IBOutlet NSTextField *historyFileNamePathText;
+	IBOutlet NSTextField *rAppHistoryFileNamePath;
+	IBOutlet NSTextField *rAppHistoryFileNamePathText;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -63,6 +70,11 @@
 - (IBAction) changeLibPaths:(id)sender;
 - (IBAction) changeWorkingDir: (id)sender;
 - (IBAction) chooseWorkingDir:(id)sender;
+- (IBAction) changeImportOnStartup:(id)sender;
+- (IBAction) changeHistoryFileNamePathToDefault: (id)sender;
+- (IBAction) changeHistoryFileNamePath:(id)sender;
+- (IBAction) changeRAppHistoryFileNamePathToDefault: (id)sender;
+- (IBAction) changeRAppHistoryFileNamePath:(id)sender;
 
 - (void) updatePreferences;
 

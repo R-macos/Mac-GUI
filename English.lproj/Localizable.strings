@@ -33,7 +33,7 @@
 
 /* From: HelpManager.m (runHelpSearch)
    From: HelpManager.m (showHelpFor) */
-"Can't find help for topic" = "Can't find help for topic";
+"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Cancel";
@@ -97,6 +97,9 @@
 
 /* Global string @ */
 "No" = "No";
+
+/* Global string @ */
+"Yes" = "Yes";
 
 /* Global string @ */
 "OK" = "OK";
@@ -289,4 +292,7 @@
 
 /* Global string @ */
 "Yes" = "Yes";
+
+/* From: History.m (importHistory) */
+"Can't open history file %2" = "Can't open history file %2";
 

@@ -152,15 +152,30 @@
 	// the default is YES for users and NO for admins
 	BOOL flag = [Preferences flagForKey:miscRAquaLibPathKey withDefault: !isAdmin()];
 	[cbRAquaPath setState: flag?NSOnState:NSOffState];
+	
 	flag=[Preferences flagForKey:editOrSourceKey withDefault: YES];
-	[editOrSource setState:flag?NSOnState:NSOffState atRow:0 column:0];
-	[editOrSource setState:flag?NSOffState:NSOnState atRow:1 column:0];
-	[workingDir setStringValue:[Preferences stringForKey:@"initialWorkingDirectoryKey" withDefault:@"~"]];
+	if (flag)
+		[editOrSource selectCellAtRow:0 column:0];
+	else
+		[editOrSource selectCellAtRow:1 column:0];
+	[workingDir setStringValue:[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"]];
+	
+	flag = [Preferences flagForKey:importOnStartupKey withDefault:YES];
+	[importOnStartup setState: flag?NSOnState:NSOffState];
+
+	[rAppHistoryFileNamePath setStringValue:[Preferences stringForKey:rAppHistoryFileNamePathKey withDefault:[[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByAppendingString:@"/Rhistory.history"]]];
+	
+	[historyFileNamePath setStringValue:[Preferences stringForKey:historyFileNamePathKey withDefault:@"~/.Rhistory"]];	
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
-	BOOL flag=[Preferences flagForKey:editOrSourceKey withDefault: YES];
-	[Preferences setKey:editOrSourceKey withFlag:!flag];
+	BOOL flag;
+	int res = (int)[sender selectedRow];
+	if (res)
+		flag = NO;
+	else
+		flag = YES;
+	[Preferences setKey:editOrSourceKey withFlag:flag];
 }
 
 - (IBAction) changeLibPaths:(id)sender {
@@ -171,7 +186,7 @@
 
 - (IBAction) changeWorkingDir:(id)sender {
 	NSString *name = ([[sender stringValue] length] == 0)?@"~":[sender stringValue];
-	[Preferences setKey:@"initialWorkingDirectoryKey" withObject:name];
+	[Preferences setKey:initialWorkingDirectoryKey withObject:name];
 }
 
 - (IBAction) chooseWorkingDir:(id)sender {
@@ -186,7 +201,31 @@
 	answer = [op runModalForDirectory:[workingDir stringValue] file:nil types:[NSArray arrayWithObject:@""]];
 	
 	if(answer == NSOKButton && [op directory] != nil)
-		[Preferences setKey:@"initialWorkingDirectoryKey" withObject:[[op directory] stringByAbbreviatingWithTildeInPath]];
+		[Preferences setKey:initialWorkingDirectoryKey withObject:[[op directory] stringByAbbreviatingWithTildeInPath]];
+}
+
+- (IBAction) changeImportOnStartup:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:importOnStartupKey withFlag:flag];
+}
+
+- (IBAction) changeRAppHistoryFileNamePathToDefault: (id)sender {
+	[Preferences setKey:rAppHistoryFileNamePathKey withObject:[[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByAppendingString:@"/Rhistory.history"]];
+}
+
+- (IBAction) changeHistoryFileNamePathToDefault: (id)sender {
+	[Preferences setKey:historyFileNamePathKey withObject:@"~/.Rhistory"];	
+}
+
+- (IBAction) changeRAppHistoryFileNamePath:(id)sender {
+	NSString *name = ([[sender stringValue] length] == 0)?@"~/.Rhistory":[sender stringValue];
+	[Preferences setKey:rAppHistoryFileNamePathKey withObject:[name stringByAbbreviatingWithTildeInPath]];
+}
+
+- (IBAction) changeHistoryFileNamePath:(id)sender {
+	NSString *name = ([[sender stringValue] length] == 0)?[Preferences stringForKey:rAppHistoryFileNamePathKey withDefault:[[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByAppendingString:@"/Rhistory.history"]]:[sender stringValue];
+	[Preferences setKey:historyFileNamePathKey withObject:[name stringByAbbreviatingWithTildeInPath]];
 }
 
 @end

@@ -94,6 +94,9 @@
                 checkForUpdates = id; 
                 clearWorkSpace = id; 
                 doClearHistory = id; 
+                doEditHistory = id; 
+                doExportHistory = id; 
+                doImportHistory = id; 
                 doLoadHistory = id; 
                 doSaveHistory = id; 
                 flushconsole = id; 
@@ -104,6 +107,7 @@
                 installFromBinary = id; 
                 installFromDir = id; 
                 installFromSource = id; 
+                kickstart = id; 
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
                 makeConsoleKey = id; 
@@ -140,11 +144,14 @@
                 RTextView = NSTextView; 
                 WDirView = NSTextField; 
                 clearHistory = NSButton; 
+                editHistory = NSButton; 
+                exportHistory = NSButton; 
                 fontSizeField = NSTextField; 
                 fontSizeStepper = NSStepper; 
                 fontSizeView = NSView; 
                 helpSearch = NSSearchField; 
                 historyView = NSTableView; 
+                importHistory = NSButton; 
                 loadHistory = NSButton; 
                 prefsCtrl = PrefWindowController; 
                 progressWheel = NSProgressIndicator; 

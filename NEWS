@@ -3,6 +3,16 @@ NEWS
 Last update: 2005-02-18 [SI]
 *	added French localization; changed credits
 
+Last update: 2005-02-18 [RG]
+*	Added support for .Rhistory files (import, export
+	and editing)
+*	Added support for persistent R.app history files
+
+Last update: 2005-02-16 [RG]
+*	Fixed some consistency issues with help
+*	Made the R Console searchfield initially an exact search
+*	Enabled expanded search if help topic not found
+
 Last update: 2005-02-13 [SU]
 *	Fixed crash in console after output w/o EOL
 

@@ -59,6 +59,9 @@
 #define enableLineWrappingKey @"Enable line wrapping if TRUE"
 #define lineFragmentPaddingWidthKey @"Line fragment padding in editor"
 #define lineNumberGutterWidthKey @"Line number gutter width"
+#define importOnStartupKey @"Import history file on startup if TRUE"
+#define historyFileNamePathKey @"History file path used for R type history files"
+#define rAppHistoryFileNamePathKey @"History file path used for R.app type hist files"
 
 #define useQuartzPrefPaneSettingsKey @"Use QuartzPrefPane values"
 #define quartzPrefPaneWidthKey @"QuartzPrefPane width"

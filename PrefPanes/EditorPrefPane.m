@@ -157,8 +157,10 @@
 - (void) updatePreferences
 {
 	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	[internalOrExternal setState:(flag?NSOnState:NSOffState) atRow:0 column:0];
-	[internalOrExternal setState:(flag?NSOffState:NSOnState) atRow:0 column:1];
+	if (flag)
+		[appOrCommand selectCellAtRow:0 column:0];
+	else
+		[appOrCommand selectCellAtRow:0 column:1];
 	
 	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
@@ -220,14 +222,21 @@
 	[fragmentPaddingWidth setStringValue:[Preferences stringForKey:lineFragmentPaddingWidthKey withDefault: @"6.0"]];
 	
 	flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
-	[appOrCommand setState:flag?NSOffState:NSOnState atRow:1 column:0];
-	[appOrCommand setState:flag?NSOnState:NSOffState atRow:0 column:0];
+	if (flag)
+		[appOrCommand selectCellAtRow:1 column:0];
+	else
+		[appOrCommand selectCellAtRow:0 column:0];
 }
 
 - (IBAction) changeInternalOrExternal:(id)sender
 {
-	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	[Preferences setKey:internalOrExternalKey withFlag:!flag];
+	BOOL flag;
+	int res = (int)[sender selectedColumn];
+	if (res)
+		flag = NO;
+	else
+		flag = YES;
+	[Preferences setKey:internalOrExternalKey withFlag:flag];
 }
 
 - (void)changeExternalEditorName:(id)sender {
@@ -268,8 +277,13 @@
 }
 
 - (IBAction) changeAppOrCommand:(id)sender {
-	BOOL flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
-	[Preferences setKey:appOrCommandKey withFlag:!flag];
+	BOOL flag;
+	int res = (int)[sender selectedRow];
+	if (res)
+		flag = NO;
+	else
+		flag = YES;
+	[Preferences setKey:appOrCommandKey withFlag:flag];
 }
 
 - (IBAction) changeEditor:(id)sender;
