@@ -52,5 +52,5 @@
 - (int) count;
 - (void) show;
 
-+ (SearchTable*) sharedController;
++ (id) sharedController;
 @end

@@ -31,6 +31,7 @@
 	[image release];
 	[title release];
 	[category release];
+	[super dealloc];
 }
 
 - (NSString *)itemIdentifier

@@ -13,9 +13,9 @@
 - (NSView *)loadMainView;
 - (NSBundle *)pluginBundle;
 - (void)setPluginBundle:(NSBundle *)newPluginBundle;
-- (NSObject <AMPrefPaneProtocol> *)prefPane;
+- (NSObject <AMPrefPaneProtocol>*)prefPane;
 - (void)setIdentifier:(NSString *)newIdentifier;
-- (void)setPrefPane:(id <AMPrefPaneProtocol>)newPrefPane;
+- (void)setPrefPane:(NSObject <AMPrefPaneProtocol>*)newPrefPane;
 - (void)setLabel:(NSString *)newLabel;
 - (void)setMainView:(NSView *)newMainView;
 - (void)setIcon:(NSImage *)newIcon;
@@ -212,20 +212,20 @@
 }
 
 
-- (id <AMPrefPaneProtocol>)prefPane
+- (NSObject <AMPrefPaneProtocol>*)prefPane
 {
 	if (!prefPane && pluginBundle) {
 		// load bundle nib file
 		NSString* pluginPrincipalClass = [pluginBundle objectForInfoDictionaryKey:NSPrincipalClassKey];
 		Class pluginClass = [pluginBundle classNamed:pluginPrincipalClass];
-		id <AMPrefPaneProtocol> newPrefPane = nil;
+		NSObject <AMPrefPaneProtocol>* newPrefPane = nil;
 		if (newPrefPane = [[[pluginClass alloc] initWithBundle:pluginBundle] autorelease]) {
 			[self setPrefPane:newPrefPane];
 			if ([prefPane respondsToSelector:@selector(loadMainView)])
 				[prefPane loadMainView];
 		}
 	}
-	return (id <AMPrefPaneProtocol>)prefPane;
+	return prefPane;
 }
 
 - (void)setPrefPane:(NSObject <AMPrefPaneProtocol>*)newPrefPane

@@ -63,6 +63,7 @@
 - (void) dealloc
 {
 	[[Preferences sharedPreferences] removeDependent: self];
+	[super dealloc];
 }
 
 

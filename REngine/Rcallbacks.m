@@ -30,7 +30,6 @@
  *
  */
 
-
 #include <Defn.h>
 #include <R.h>
 #include <Rdefines.h>
@@ -49,6 +48,16 @@
 #include <R_ext/eventloop.h>
 
 #import "REngine.h"
+
+/* localization - we don't want to include GUI specific includes, so we define it manually */
+#ifdef NLS
+#undef NLS
+#endif
+#ifdef NLSC
+#undef NLSC
+#endif
+#define NLS(S) NSLocalizedString(S,@"")
+#define NLSC(S,C) NSLocalizedString(S,C)
 
 /* we have no access to config.h, so for the moment, let's disable i18n on C level - our files aren't even precessed by R anyway. */
 #ifdef _
@@ -122,7 +131,7 @@ int Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory)
 			readconsPos=c;
 		else
 			readconsPos=readconsBuffer=0;
-		[[REngine mainHandler] handleProcessingInput: buf];
+		[[REngine mainHandler] handleProcessingInput: (char*) buf];
 		return 1;
 	}
 
@@ -757,16 +766,14 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
     return work2;
 }
 
-static char selected[100]; /* Why 100, src/gnuwin32/extra.c */
-int selectListDone;
-int *itemStatus;
-
 SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 {
     SEXP list, preselect, ans = R_NilValue;
     char **clist;
     int i, j = -1, n,  multiple, nsel = 0;
-     Rboolean haveTitle;
+	Rboolean haveTitle;
+	BOOL *itemStatus = 0;
+	int selectListDone = 0;
 	
     checkArity(op, args);
     list = CAR(args);
@@ -782,53 +789,40 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 	
     n = LENGTH(list);
     clist = (char **) R_alloc(n + 1, sizeof(char *));
-    itemStatus = (int *) R_alloc(n + 1, sizeof(int));
+    itemStatus = (BOOL *) R_alloc(n + 1, sizeof(BOOL));
     for(i = 0; i < n; i++) {
 		clist[i] = CHAR(STRING_ELT(list, i));
-		itemStatus[i] = 0;
+		itemStatus[i] = NO;
     }
     clist[n] = NULL;
 	
-
-/*    wselect = newwindow(haveTitle ? CHAR(STRING_ELT(CADDDR(args), 0)):
-						(multiple ? "Select one or more" : "Select one"),
-						rect(0, 0, xmax, ymax),
-						Titlebar | Centered | Modal);
- */
-
     if(!isNull(preselect) && LENGTH(preselect)) {
 		for(i = 0; i < n; i++)
 			for(j = 0; j < LENGTH(preselect); j++)
 				if(strcmp(clist[i], CHAR(STRING_ELT(preselect, j))) == 0) {
-					itemStatus[i] = 1;
+					itemStatus[i] = YES;
 					break;
-				}
+				};
     }
-	
-	if(n==0)
-		[[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0 multiple: 0];
-	
-		[[REngine cocoaHandler] handleListItems: n withNames: clist status: (BOOL*)itemStatus multiple:multiple];
-	
-		selectListDone = 0;
-		
-		IsSelectList = YES;
-		[SelectList startSelectList: [NSString stringWithCString:  (haveTitle ? CHAR(STRING_ELT(CADDDR(args), 0)):
-			(multiple ? "Select one or more" : "Select one"))]];
-		IsSelectList = NO;
-	
-		
-		if (selectListDone == 1) { /* Finish */
-			for(i = 0; i < n; i++)  if(itemStatus[i]==1) nsel++;
-				PROTECT(ans = allocVector(STRSXP, nsel));
-				for(i = 0, j = 0; i < n; i++)
-					if(itemStatus[i]==1)
-						SET_STRING_ELT(ans, j++, mkChar(clist[i]));
-		} else { /* cancel */
-				PROTECT(ans = allocVector(STRSXP, 0));
-		}
 
-		
-UNPROTECT(1);
-return ans;
+	if (n==0)
+		selectListDone = [[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0 multiple: 0 title: @""];
+	else
+		selectListDone = [[REngine cocoaHandler] handleListItems: n withNames: clist status: itemStatus multiple: multiple
+														   title: haveTitle
+			?[NSString stringWithUTF8String: CHAR(STRING_ELT(CADDDR(args), 0))]
+			:(multiple ? NLS(@"Select one or more") : NLS(@"Select one")) ];
+	
+	if (selectListDone == 1) { /* Finish */
+		for(i = 0; i < n; i++)  if(itemStatus[i]) nsel++;
+		PROTECT(ans = allocVector(STRSXP, nsel));
+		for(i = 0, j = 0; i < n; i++)
+			if(itemStatus[i])
+				SET_STRING_ELT(ans, j++, mkChar(clist[i]));
+	} else { /* cancel */
+		PROTECT(ans = allocVector(STRSXP, 0));
+	}
+
+	UNPROTECT(1);
+	return ans;
 }

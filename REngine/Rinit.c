@@ -162,7 +162,7 @@ int initR(int argc, char **argv) {
     }
 
 	if (state.buflen<128) state.buflen=1024;
-	state.buf=(char*) malloc(state.buflen);
+	state.buf=(unsigned char*) malloc(state.buflen);
 	
    // printf("R primary initialization done. Setting up parameters.\n");
 

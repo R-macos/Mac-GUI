@@ -46,6 +46,7 @@
 - (void) dealloc
 {
 	[cont release];
+	[super dealloc];
 }
 
 // mandatory primitive methods

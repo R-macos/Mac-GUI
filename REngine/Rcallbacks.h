@@ -61,7 +61,8 @@
 @protocol CocoaHandler
 // return value is unused so far - the return value on R side is 'stat', so any changes to that parameter are propagated to R
 - (int) handlePackages: (int) count withNames: (char**) name descriptions: (char**) desc URLs: (char**) url status: (BOOL*) stat;
-- (void) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple;
+// return value: 0=cancel, 1=ok
+- (int) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) title;
 // returns either nil or array of booleans of the size 'count' specifying which datasets to load
 - (BOOL*) handleDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url;
 // return value is unused so far
