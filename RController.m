@@ -1929,12 +1929,12 @@ case the color is set to its default value.
 
 - (void)willSelectPreferencePane:(NSString *)identifier
 {
-	NSLog(@"willSelectPreferencePane: %@", identifier);
+//	NSLog(@"willSelectPreferencePane: %@", identifier);
 }
 
 - (void)didUnselectPreferencePane:(NSString *)identifier
 {
-	NSLog(@"didUnselectPreferencePane: %@", identifier);
+//	NSLog(@"didUnselectPreferencePane: %@", identifier);
 }
 
 - (NSString *)displayNameForCategory:(NSString *)category
