@@ -51,6 +51,8 @@
 - (id)initWithIdentifier:(NSString *)theIdentifier label:(NSString *)theLabel category:(NSString *)theCategory
 {
 	if (self = [super init]) {
+		[[Preferences sharedPreferences] addDependent:self];
+		[self updatePreferences];
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -66,6 +68,10 @@
 	return self;
 }
 
+- (void) dealloc
+{
+	[[Preferences sharedPreferences] removeDependent:self];
+}
 
 - (NSString *)identifier
 {
@@ -166,74 +172,56 @@
 
 
 - (IBAction)changeInputColor:(id)sender {
-    [[RController getRController] changeInputColor:sender];
+	[Preferences setKey:inputColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
 - (IBAction)changeOutputColor:(id)sender {
-    [[RController getRController] changeOutputColor:sender];
+	[Preferences setKey:outputColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
 - (IBAction)changePromptColor:(id)sender {
-    [[RController getRController] changePromptColor:sender];
+	[Preferences setKey:promptColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
 - (IBAction)changeStdoutColor:(id)sender {
-    [[RController getRController] changeStdoutColor:sender];
+	[Preferences setKey:stdoutColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
 - (IBAction)changeStderrColor:(id)sender {
-    [[RController getRController] changeStderrColor:sender];
+	[Preferences setKey:stderrColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
 - (IBAction)changeBackGColor:(id)sender {
-    [[RController getRController] changeBackGColor:sender];
+	NSColor *well = [backgColorWell color];
+	NSColor *bgc = [NSColor colorWithCalibratedRed: [well redComponent] green:[well greenComponent] blue:[well blueComponent] alpha:[alphaStepper floatValue]];
+	[Preferences setKey:backgColorKey withArchivedObject:bgc];
 }
 
 - (IBAction) changeAlphaColor:(id)sender {
-    [[RController getRController] changeAlphaColor:sender];
+	[self changeBackGColor:sender];
 }
-
 
 - (IBAction) setDefaultColors:(id)sender {
     [[RController getRController] setDefaultColors:sender];
 }
 
-- (id) inputColorWell
+- (void) updatePreferences
 {
-	return inputColorWell;
+	NSColor *c=[Preferences unarchivedObjectForKey:inputColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[inputColorWell color]]) [inputColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:outputColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[outputColorWell color]]) [outputColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:promptColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[promptColorWell color]]) [promptColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:stdoutColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[stdoutColorWell color]]) [stdoutColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:stderrColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[stderrColorWell color]]) [stderrColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:backgColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[backgColorWell color]]) {
+		[backgColorWell setColor:c];
+		[alphaStepper setFloatValue:[c alphaComponent]];
+	}
 }
-
-- (id) outputColorWell
-{
-	return outputColorWell;
-}
-
-
-- (id) promptColorWell
-{
-	return promptColorWell;
-}
-
-- (id) backgColorWell
-{
-	return backgColorWell;
-}
-
-- (id) stderrColorWell
-{
-	return stderrColorWell;
-}
-
-- (id) stdoutColorWell
-{
-	return stdoutColorWell;
-}
-
-
-- (id) alphaStepper
-{
-	return alphaStepper;
-}
-
 
 @end

@@ -29,9 +29,9 @@
 
 #import <Foundation/Foundation.h>
 #import "AMPrefPaneProtocol.h"
+#import "Preferences.h"
 
-
-@interface ColorsPrefPane : NSObject <AMPrefPaneProtocol> {
+@interface ColorsPrefPane : NSObject <AMPrefPaneProtocol, PreferencesDependent> {
 	IBOutlet NSView *mainView;
 	NSString *identifier;
 	NSString *label;
@@ -67,8 +67,6 @@
 - (void)willUnselect;
 - (void)didUnselect;
 
-
-
 - (IBAction) changeInputColor:(id)sender;
 - (IBAction) changeOutputColor:(id)sender;
 - (IBAction) changePromptColor:(id)sender;
@@ -77,13 +75,6 @@
 - (IBAction) changeBackGColor:(id)sender;
 - (IBAction) changeAlphaColor:(id)sender;
 - (IBAction) setDefaultColors:(id)sender;
-
-- (NSColorWell*) inputColorWell;
-- (NSColorWell*) outputColorWell;
-- (NSColorWell*) promptColorWell;
-- (NSColorWell*) backgColorWell;
-- (NSColorWell*) stderrColorWell;
-- (NSColorWell*) stdoutColorWell;
-- (NSColorWell*) alphaStepper;
+- (void) updatePreferences;
 
 @end

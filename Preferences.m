@@ -31,66 +31,142 @@
 
 Preferences *globalPrefs=nil;
 
+@interface Preferences (Private)
+- (BOOL) writeDefaults;
+@end
+
 @implementation Preferences
 
-- (IBAction)load:(id)sender
+- (id) init
 {
+	self = [super init];
+	
+	dependents = [[NSMutableArray alloc] init];
+	batch = NO;
+	changed = NO;
+	writeDefaults = YES;
+	
+	return self;
 }
 
-- (IBAction)save:(id)sender
+- (void) addDependent: (id<PreferencesDependent>) dep
 {
-	CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication);
+	[dependents addObject:dep];
 }
 
-- (void) awakeFromNib
+- (void) removeDependent: (id<PreferencesDependent>) dep
 {
-	if (!globalPrefs) globalPrefs=self;
-	[self load:self];
+	[dependents removeObject:dep];
+}
+
+- (void) notifyDependents
+{
+	if (!batch) {
+		NSEnumerator *enumerator = [dependents objectEnumerator];	
+		id<PreferencesDependent> dep;
+		while (dep = (id<PreferencesDependent>) [enumerator nextObject]) {
+			[dep updatePreferences];
+		}
+		changed = NO;
+	}
+}
+
+- (void) beginBatch
+{
+	batch = YES;
+}
+
+- (void) endBatch
+{
+	batch = NO;
+	if (changed) [self notifyDependents];
+}
+
+- (BOOL) writeDefaults
+{
+	return writeDefaults;
 }
 
 //--- global methods ---
 
-+ (void) setKey: (NSString*) key withString: (NSString*) value
++ (void) setKey: (NSString*) key withObject: (id) value
 {
-	CFPreferencesSetAppValue((CFStringRef)key, (CFStringRef)value, kCFPreferencesCurrentApplication);
+	[[Preferences sharedPreferences] setKey: key withObject: value];
 }
 
-+ (NSString *) stringForKey: (NSString*) key
++ (void) setKey: (NSString*) key withArchivedObject: (id) value
 {
-	CFStringRef cs = CFPreferencesCopyAppValue((CFStringRef)key, kCFPreferencesCurrentApplication);
-	if (cs)
-		return [((NSString*)cs) autorelease];
-	return nil;
+	[[Preferences sharedPreferences] setKey: key withObject: [NSArchiver archivedDataWithRootObject:value]];
 }
 
-+ (void) setKey: (NSString*) key withInteger: (int) value
+- (void) setKey: (NSString*) key withArchivedObject: (id) value
 {
-	CFNumberRef ti = CFNumberCreate(NULL, kCFNumberIntType, &value); 
-	CFPreferencesSetAppValue((CFStringRef)key, ti, kCFPreferencesCurrentApplication);
-	CFRelease(ti);
+	[self setKey: key withObject: [NSArchiver archivedDataWithRootObject:value]];
 }
 
-// returns -1 if the preference doesn't exist
-+ (int) integerForKey: (NSString*) key
+- (void) setKey: (NSString*) key withObject: (id) value
 {
-	CFNumberRef ti = CFPreferencesCopyAppValue((CFStringRef)key, kCFPreferencesCurrentApplication);
-	if (!ti) return -1;
-	{
-		int i = -1;
-		CFNumberGetValue(ti, kCFNumberIntType, &i);
-		CFRelease(ti);
-		return i;
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		[defaults setObject:value forKey:key];
+		changed=YES;
+		[self notifyDependents];
 	}
 }
 
-+ (void) sync
++ (NSString *) stringForKey: (NSString*) key withDefault: (NSString*) defaultString
 {
-	CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication);	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		NSString *s=[defaults stringForKey:key];
+		if (s) return s;
+	}
+	if (defaultString && [[Preferences sharedPreferences] writeDefaults])
+		[globalPrefs setKey: key withObject: defaultString];
+	return defaultString;
 }
 
-// especially during initialization it's not guaranteed that this won't be nil
++ (float) floatForKey: (NSString*) key withDefault: (float) defaultValue
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		NSString *s=[defaults stringForKey:key];
+		if (s) return [s floatValue];
+	}
+	return defaultValue;
+}
+
++ (id) objectForKey: (NSString*) key withDefault: (id) defaultObj
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		id obj=[defaults objectForKey:key];
+		if (obj) return obj;
+	}
+	if (defaultObj && [[Preferences sharedPreferences] writeDefaults])
+		[globalPrefs setKey: key withObject: defaultObj];
+	return defaultObj;
+}
+
++ (id) unarchivedObjectForKey: (NSString*) key withDefault: (id) defaultObj
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		NSData *data=[defaults dataForKey:key];
+		if (data) {
+			id obj = [NSUnarchiver unarchiveObjectWithData:data];
+			if (obj) return obj;
+		}
+	}
+	if (defaultObj && [[Preferences sharedPreferences] writeDefaults])
+		[globalPrefs setKey: key withArchivedObject: defaultObj];
+	return defaultObj;
+}
+
 + (Preferences*) sharedPreferences
 {
+	if (!globalPrefs)
+		globalPrefs=[[Preferences alloc] init];
 	return globalPrefs;
 }
 

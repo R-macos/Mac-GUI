@@ -25,41 +25,25 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  Created by Simon Urbanek on 12/5/04.
  */
 
-/* Preferences */
+#define backgColorKey @"Background Color"
+#define inputColorKey @"Input Color"
+#define outputColorKey @"Output Color"
+#define stdoutColorKey @"Stdout Color"
+#define stderrColorKey @"Stderr Color"
+#define promptColorKey @"Prompt Color"
+#define rootColorKey   @"Root Color"
 
-#import <Cocoa/Cocoa.h>
-
-@protocol PreferencesDependent
-- (void) updatePreferences;
-@end
-
-@interface Preferences : NSObject
-{
-	NSMutableArray *dependents;
-	BOOL batch, changed; // batch-operation related flags
-	BOOL writeDefaults; // if YES then any pref retrival fn with non-nil default will write the default if the key is empty. this means that the apps should be aware that fetching a key may result in an update due to an implicit write
-}
-
-- (void) beginBatch;
-- (void) endBatch;
-
-- (void) addDependent: (id<PreferencesDependent>) dep;
-- (void) removeDependent: (id<PreferencesDependent>) dep;
-
-- (void) setKey: (NSString*) key withObject: (id) value;
-- (void) setKey: (NSString*) key withArchivedObject: (id) value;
-
-// global actions
-+ (void) setKey: (NSString*) key withObject: (id) value;
-+ (void) setKey: (NSString*) key withArchivedObject: (id) value;
-
-+ (NSString *) stringForKey: (NSString*) key withDefault: (NSString*) defaultString;
-+ (float) floatForKey: (NSString*) key withDefault: (float) defaultValue;
-+ (id) objectForKey: (NSString*) key withDefault: (id) defaultObj;
-+ (id) unarchivedObjectForKey: (NSString*) key withDefault: (id) defaultObj;
-
-+ (Preferences*) sharedPreferences;
-
-@end
+#define FontSizeKey    @"Console Font Size"
+#define internalOrExternalKey  @"Use Internal Editor"
+#define showSyntaxColoringKey  @"Show syntax coloring"
+#define showBraceHighlightingKey  @"Show brace highlighting"
+#define highlightIntervalKey  @"Highlight interval"
+#define showLineNumbersKey  @"Show line numbers"
+#define externalEditorNameKey  @"External Editor Name"
+#define appOrCommandKey  @"Is it a .app or a command"
+#define editOrSourceKey  @"Edit or source in file"
+#define miscRAquaLibPathKey @"Append RAqua libs to R_LIBS"

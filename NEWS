@@ -1,5 +1,25 @@
 NEWS
 
+** IMPORTANT WARNING ** THIS RELEASE IS WORK IN PROGRESS! [SU]
+SOME FEATURES DON'T WORK EVEN IF THEY WORKED BEFORE!
+PLEASE WAIT FOR THIS WARNINIG TO DISAPPEAR BEFORE REPORTING BUGS!!
+
+Last update: 2004-12-05 [SU]
+*	fixed casting issues in AMPrefs
+*	added handleHelpSearch callback, moved the corresponding
+	code out of Rcallbacks, converted SearchTable to use
+	SortableDataSource
+*	moved preferences controller from Rcontroller into its
+	own class PrefWindowController - makes more sense and is now
+	handled by NIB instead of manual allocation
+*	Added proper Preferences class handling all preferences
+*	cleanup of Rcontroller and prefs handling - currently
+	only color preferences use the new system, therefore other
+	preferences don't work (yet)!
+*	moved preference keys to PreferenceKeys.h header
+*	added support for configurable working directory (but the
+	corresponding prefs pane still needs to be implemented)
+
 Last update: 2004-11-29 [RG, SU]
 *	improved structure of RDocumentController, made edit
 	default in MiscPrefPane [RG]

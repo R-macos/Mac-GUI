@@ -42,6 +42,7 @@
 #import <Cocoa/Cocoa.h>
 #import "History.h"
 #import "ConnectionCache.h"
+#import "PrefWindowController.h"
 
 #define RToolbarIdentifier                       @"R Toolbar Identifier"
 #define FontSizeToolbarItemIdentifier            @"Font Size Item Identifier"
@@ -57,29 +58,19 @@
 #define	X11ToolbarItemIdentifier 	             @"X11 Item Identifier"
 #define	SetColorsToolbarItemIdentifier 	         @"SetColors Item Identifier"
 
-#define backgColorKey @"Background Color"
-#define inputColorKey @"Input Color"
-#define outputColorKey @"Output Color"
-#define stdoutColorKey @"Stdout Color"
-#define stderrColorKey @"Stderr Color"
-#define promptColorKey @"Prompt Color"
-#define alphaValueKey  @"Alpha Value"
-#define FontSizeKey    @"Console Font Size"
-#define internalOrExternalKey  @"Use Internal Editor"
-#define showSyntaxColoringKey  @"Show syntax coloring"
-#define showBraceHighlightingKey  @"Show brace highlighting"
-#define highlightIntervalKey  @"Highlight interval"
-#define showLineNumbersKey  @"Show line numbers"
-#define externalEditorNameKey  @"External Editor Name"
-#define appOrCommandKey  @"Is it a .app or a command"
-#define editOrSourceKey  @"Edit or source in file"
-#define miscRAquaLibPathKey @"Append RAqua libs to R_LIBS"
-
 #import "AMPreferenceWindowController.h"
+#import "Preferences.h"
+#import "PreferenceKeys.h"
 
-/* Preference keys */
+#define iBackgroundColor 0
+#define iInputColor      1
+#define iOutputColor     2
+#define iPromptColor     3
+#define iStderrColor     4
+#define iStdoutColor     5
+#define iRootColor       6
 
-@interface RController : NSObject <REPLHandler, CocoaHandler>
+@interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent>
 {
 	IBOutlet NSTextView *RTextView;
 	IBOutlet NSProgressIndicator *progressWheel;
@@ -103,6 +94,8 @@
     IBOutlet NSTextField *fontSizeField;
     IBOutlet NSView *fontSizeView;
 	
+	IBOutlet PrefWindowController *prefsCtrl;
+
 	unsigned committedLength; // any text before this position cannot be edited by the user
     unsigned promptPosition;  // the last prompt is positioned at this position
 	unsigned outputPosition;  // any output (stdxx or consWrite) is to be place here, if -1 then the text can be appended
@@ -123,19 +116,10 @@
 	char *readConsTransBuffer; // transfer buffer returned by handeReadConsole
 	int readConsTransBufferSize; // size of the above buffer
 	
-	id quartzPrefPane;
-	id miscPrefPane;
-	id colorsPrefPane;
-	id editorPrefPane;
-	
-	NSColor *inputColor;
-	NSColor *outputColor;
-	NSColor *promptColor;
-	NSColor *backgColor;
-	NSColor *stderrColor;
-	NSColor *stdoutColor;
-	float alphaValue;
-	
+	NSMutableArray *consoleColors;
+	NSArray *consoleColorsKeys;
+	NSArray *defaultConsoleColors;
+		
 	BOOL doSyntaxColoring;
 	BOOL doLineNumbers;
 	BOOL doBraceHighlighting;
@@ -153,26 +137,7 @@
 	char *writeBuffer;
 	char *writeBufferPos;
 	int  writeBufferLen;	
-	
-	AMPreferenceWindowController *prefsWindow;
-	NSMutableDictionary *preferences;
-	
 }
-
-- (IBAction)showPrefsWindow:(id)sender;
-
-- (AMPreferenceWindowController *)prefsWindow;
-- (void)setPrefsWindow:(AMPreferenceWindowController *)newPrefsWindow;
-
-- (BOOL)shouldLoadPreferencePane:(NSString *)identifier;
-
-- (void)willSelectPreferencePane:(NSString *)identifier;
-- (void)didUnselectPreferencePane:(NSString *)identifier;
-
-- (IBAction)sortByAlphabet:(id)sender;
-- (IBAction)sortByCategory:(id)sender;
-
-- (void) showWindow;
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
 - (void) doProcessEvents: (BOOL) blocking;
@@ -271,22 +236,7 @@
 - (void) setOpenInEditor:(BOOL)flag;
 - (BOOL) openInEditor;
 
-- (IBAction) changeInputColor:(id)sender;
-- (IBAction) changeOutputColor:(id)sender;
-- (IBAction) changePromptColor:(id)sender;
-- (IBAction) changeStdoutColor:(id)sender;
-- (IBAction) changeStderrColor:(id)sender;
-- (IBAction) changeBackGColor:(id)sender;
-- (IBAction) changeAlphaColor:(id)sender;
 - (IBAction) setDefaultColors:(id)sender;
-
-- (void) setInputColor:(NSColor *)newColor;
-- (void) setOutputColor:(NSColor *)newColor;
-- (void) setPromptColor:(NSColor *)newColor;
-- (void) setBackGColor:(NSColor *)newColor;
-- (void) setStderrColor:(NSColor *)newColor;
-- (void) setStdoutColor:(NSColor *)newColor;
-- (void) setAlphaValue:(float)f;
 
 - (void) setUseInternalEditor:(BOOL)flag;
 - (BOOL) useInternalEditor;
@@ -303,8 +253,6 @@
 - (void) setEditorIsApp:(BOOL)flag;
 - (BOOL) editorIsApp;
 
-- (void) readDefaults;
-
 + (RController*) getRController;
 
 - (void) flushROutput;
@@ -318,8 +266,6 @@
 - (int)  handleChooseFile: (char *)buf len:(int)len isNew:(int)isNew;	
 
 - (NSFont*) currentFont;
-
-- (void)setupPrefWindow;
 
 - (NSTextView *)getRTextView;
 - (NSWindow *)getRConsoleWindow;

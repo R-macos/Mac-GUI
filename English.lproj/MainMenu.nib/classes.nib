@@ -1,6 +1,12 @@
 {
     IBClasses = (
         {
+            CLASS = AMPreferenceWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {delegate = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
             ACTIONS = {loadRData = id; showHelp = id; }; 
             CLASS = DataManager; 
             LANGUAGE = ObjC; 
@@ -33,6 +39,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = MyWebView; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
         {
             ACTIONS = {
                 installSelected = id; 
@@ -65,6 +72,12 @@
                 packageDataSource = NSTableView; 
             }; 
             SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {showPrefsWindow = id; sortByAlphabet = id; sortByCategory = id; }; 
+            CLASS = PrefWindowController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = AMPreferenceWindowController; 
         }, 
         {
             ACTIONS = {

@@ -41,11 +41,7 @@
 #import "Rengine.h"
 
 #import "Authorization.h"
-
-#import "MiscPrefPane.h"
-#import "QuartzPrefPane.h"
-#import "ColorsPrefPane.h"
-#import "EditorPrefPane.h"
+#import "Preferences.h"
 #import "SearchTable.h"
 
 // size of the console output cache buffer
@@ -128,6 +124,14 @@ static RController* sharedRController;
 	readConsTransBufferSize = 1024; // initial size - will grow as needed
 	readConsTransBuffer = (char*) malloc(readConsTransBufferSize);
 	
+	consoleColorsKeys = [[NSArray alloc] initWithObjects:
+		backgColorKey, inputColorKey, outputColorKey, promptColorKey,
+		stderrColorKey, stdoutColorKey, rootColorKey];
+	defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
+		[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
+		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
+	consoleColors = [defaultConsoleColors mutableCopy];
+	
 	return self;
 }
 
@@ -164,19 +168,24 @@ static RController* sharedRController;
 	
 	sharedRController = self;
 	
+	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
+	
+	[[Preferences sharedPreferences] addDependent: self];
+	[self updatePreferences];
+	
 	{ // first initialize R_LIBS if necessary
-		NSData *theData=[[NSUserDefaults standardUserDefaults] dataForKey:miscRAquaLibPathKey];
+		NSString *prefStr = [Preferences stringForKey:miscRAquaLibPathKey withDefault:nil];
 		BOOL flag = !isAdmin(); // the default is YES for users and NO for admins
-		if (theData!=nil)
-			flag=[(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"];
+		if (prefStr)
+			flag=[prefStr isEqualToString: @"YES"];
 		if (flag) {
 			char *cRLIBS = getenv("R_LIBS");
 			NSString *addPath = [@"~/Library/R/library" stringByExpandingTildeInPath];
 			if (cRLIBS && *cRLIBS)
 				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
-			setenv("R_LIBS", [addPath cString], 1);
+			setenv("R_LIBS", [addPath UTF8String], 1);
 		}
-	}		
+	}
 	setenv("R_GUI_APP_VERSION", R_GUI_VERSION_STR, 1);
 	
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
@@ -184,16 +193,7 @@ static RController* sharedRController;
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
 	[RTextView setDrawsBackground:NO];
 	[[RTextView enclosingScrollView] setDrawsBackground:NO];
-	quartzPrefPane = NULL;
-	colorsPrefPane = NULL;
-	miscPrefPane = NULL;
-	editorPrefPane = NULL;
 	
-	[self setupPrefWindow];
-	
-	[self readDefaults];
-	[RConsoleWindow setBackgroundColor:backgColor];
-	[RConsoleWindow display];
 	[RTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
 	[fontSizeStepper setIntValue:currentFontSize];
     theFont=[RTextView font];
@@ -201,7 +201,7 @@ static RController* sharedRController;
     [RTextView setFont:theFont];
 	{
 		NSMutableDictionary *md = [[RTextView typingAttributes] mutableCopy];
-		[md setObject: inputColor forKey: @"NSColor"];
+		[md setObject: [consoleColors objectAtIndex:iInputColor] forKey: @"NSColor"];
 		[RTextView setTypingAttributes:[NSDictionary dictionaryWithDictionary:md]];
 		[md release];
 	}
@@ -210,7 +210,7 @@ static RController* sharedRController;
 	//	[RTextView changeColor: inputColor];
 	[RTextView display];
 	[self setupToolbar];
-	[self showWindow];
+
 	[ RConsoleWindow setDocumentEdited:YES];
 	
     //NSLog(@"RController: awake: done");
@@ -250,7 +250,8 @@ static RController* sharedRController;
 	currentSize = [[RTextView textContainer] containerSize].width;
 	//currentFontSize = [[RTextView font] pointSize];
 	currentConsoleWidth = -1;
-	chdir(R_ExpandFileName("~/"));
+	
+	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:@"initialWorkingDirectory" withDefault:@"~"] stringByExpandingTildeInPath]];
 }
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
@@ -260,7 +261,6 @@ static RController* sharedRController;
 		exit(-1);
 	}
 	
-	preferences = [[NSMutableDictionary alloc] init];
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
 	[self flushROutput];
@@ -495,18 +495,11 @@ extern BOOL isTimeToFinish;
 
 - (void) dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-    [inputColor release];
-    [outputColor release];
-    [promptColor release];
-    [backgColor release];
-    [stderrColor release];
-    [stdoutColor release];
-	[preferences release];
+	[[Preferences sharedPreferences] removeDependent:self];
+	[defaultConsoleColors release];
+	[consoleColors release];
+	[consoleColorsKeys release];
 	[super dealloc];
-}
-
-- (void)showWindow {
-    [RConsoleWindow orderFront:nil];
 }
 
 - (void) flushTimerHook: (NSTimer*) source
@@ -516,7 +509,7 @@ extern BOOL isTimeToFinish;
 
 - (void) flushROutput {
 	if (writeBuffer!=writeBufferPos) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
 		writeBufferPos=writeBuffer;
 	}
 }
@@ -535,7 +528,7 @@ extern BOOL isTimeToFinish;
 	// let's flush the buffer if the new string is large and it would, but the buffer should be occupied
 	if (fits<sl && fits>writeBufferHighWaterMark) {
 		// for efficiency we're not using handleFlushConsole, because that would trigger stdxx flush, too
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
 		writeBufferPos=writeBuffer;
 		fits = writeBufferLen-1;
 	}
@@ -543,7 +536,7 @@ extern BOOL isTimeToFinish;
 	while (fits<sl) {	// ok, we're in a situation where we must split the string
 		memcpy(writeBufferPos, s, fits);
 		writeBufferPos[writeBufferLen-1]=0;
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
 		sl-=fits; s+=fits;
 		writeBufferPos=writeBuffer;
 		fits=writeBufferLen-1;
@@ -554,7 +547,7 @@ extern BOOL isTimeToFinish;
 	
 	// flush the buffer if the low watermark is reached
 	if (fits-sl<writeBufferLowWaterMark) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:outputColor];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
 		writeBufferPos=writeBuffer;
 	}
 }
@@ -599,9 +592,9 @@ extern BOOL isTimeToFinish;
     if (promptLength>0) {
         [RTextView setSelectedRange:NSMakeRange(textLength, 0)];
         [RTextView insertText:prompt];
-        [RTextView setTextColor:promptColor range:NSMakeRange(promptPosition, promptLength)];
+        [RTextView setTextColor:[consoleColors objectAtIndex:iPromptColor] range:NSMakeRange(promptPosition, promptLength)];
 		if (promptLength>1) // this is a trick to make sure that the insertion color doesn't change at the prompt
-			[RTextView setTextColor:inputColor range:NSMakeRange(promptPosition+promptLength-1, 1)];
+			[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
         committedLength=promptPosition+promptLength;
     }
 	committedLength=promptPosition+promptLength;
@@ -615,7 +608,7 @@ extern BOOL isTimeToFinish;
 	[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
 	[RTextView insertText:s];
 	textLength = [[RTextView textStorage] length];
-	[RTextView setTextColor:inputColor range:NSMakeRange(committedLength, textLength-committedLength)];
+	[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
 	outputPosition=committedLength=textLength;
 	[s release];
 	
@@ -929,7 +922,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 */
 - (void) writeLogsWithBytes: (char*) buf length: (int) len type: (int) outputType
 {
-	NSColor *color=(outputType==0)?stdoutColor:((outputType==1)?stderrColor:[NSColor purpleColor]);
+	NSColor *color=(outputType==0)?[consoleColors objectAtIndex:iStdoutColor]:((outputType==1)?[consoleColors objectAtIndex:iStderrColor]:[consoleColors objectAtIndex:iRootColor]);
 	buf[len]=0; /* this MAY be dangerous ... */
 	NSString *s = [[NSString alloc] initWithUTF8String:buf];
 	[self flushROutput];
@@ -951,7 +944,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		[RTextView setSelectedRange:NSMakeRange(committedLength,0)];
 		[RTextView insertText: cmd];
 		textLength = [[RTextView textStorage] length];
-		[RTextView setTextColor:inputColor range:NSMakeRange(committedLength,textLength-committedLength)];
+		[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength,textLength-committedLength)];
 	}
 	
 	if (inter) {
@@ -1669,8 +1662,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 			chdir(buf);
 		}
 	}
-	
-	
 }
 
 - (IBAction) showWorkingDir:(id)sender
@@ -1790,12 +1781,10 @@ This method calls the showHelpFor method of the Help Manager which opens
 }
 
 -(IBAction) openColors:(id)sender{
-	[prefsWindow selectPaneWithIdentifier:@"Colors"];
-	[prefsWindow showWindow:self];
-	[[prefsWindow window] makeKeyAndOrderFront:self];
+	[prefsCtrl selectPaneWithIdentifier:@"Colors"];
+	[prefsCtrl showWindow:self];
+	[[prefsCtrl window] makeKeyAndOrderFront:self];
 }
-
-
 
 - (IBAction)performHelpSearch:(id)sender {
     if ([[sender stringValue] length]>0) {
@@ -1851,112 +1840,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
 	[printOp runOperation];
-}
-
-/* This method is called by a ColorWell and by the readDefaults.
-In the latter case it could be that the newColor is "nil". In this
-case the color is set to its default value.
-*/
-- (void)setInputColor:(NSColor *)newColor {
-	if(inputColor)
-		[inputColor release];
-	
-    if (newColor)
-        inputColor = [newColor copyWithZone:[self zone]];
-	else 
-		inputColor = [[NSColor blueColor] copyWithZone:[self zone]];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:inputColor] 
-											  forKey:inputColorKey];
-	[[colorsPrefPane inputColorWell] setColor: inputColor];
-	[RTextView setInsertionPointColor: inputColor];
-    [[colorsPrefPane inputColorWell] setNeedsDisplay:YES];
-}
-
-- (void)setOutputColor:(NSColor *)newColor {
-	if(outputColor)
-		[outputColor release];
-	
-    if (newColor)
-        outputColor = [newColor copyWithZone:[self zone]];
-	else 
-		outputColor = [[NSColor blackColor] copyWithZone:[self zone]];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:outputColor] 
-											  forKey:outputColorKey];
-	[[colorsPrefPane outputColorWell] setColor: outputColor];
-    [[colorsPrefPane outputColorWell] setNeedsDisplay:YES];
-	
-}
-
-- (void)setPromptColor:(NSColor *)newColor {
-	if(promptColor)
-		[promptColor release];
-	
-    if (newColor)
-        promptColor = [newColor copyWithZone:[self zone]];
-	else 
-		promptColor = [[NSColor purpleColor] copyWithZone:[self zone]];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:promptColor] 
-											  forKey:promptColorKey];
-	[[colorsPrefPane promptColorWell] setColor: promptColor];
-    [[colorsPrefPane promptColorWell] setNeedsDisplay:YES];
-	[RTextView setNeedsDisplay: YES];	
-}
-
-- (void)setStdoutColor:(NSColor *)newColor {
-	if(stdoutColor)
-		[stdoutColor release];
-	
-    if (newColor)
-        stdoutColor = [newColor copyWithZone:[self zone]];
-	else 
-		stdoutColor = [[NSColor lightGrayColor] copyWithZone:[self zone]];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:stdoutColor] 
-											  forKey:stdoutColorKey];
-	[[colorsPrefPane stdoutColorWell] setColor: stdoutColor];
-    [[colorsPrefPane stdoutColorWell] setNeedsDisplay:YES];
-}
-
-- (void)setStderrColor:(NSColor *)newColor {
-	if(stderrColor)
-		[stderrColor release];
-	
-    if (newColor)
-        stderrColor = [newColor copyWithZone:[self zone]];
-	else 
-		stderrColor = [[NSColor redColor] copyWithZone:[self zone]];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:stderrColor] 
-											  forKey:stderrColorKey];
-	[[colorsPrefPane stderrColorWell] setColor: stderrColor];
-    [[colorsPrefPane stderrColorWell] setNeedsDisplay:YES];
-}
-
-- (void)setBackGColor:(NSColor *)newColor {
-	if(backgColor)
-		[backgColor release];
-	
-    if (newColor)
-		backgColor = [ [NSColor colorWithCalibratedRed:[newColor redComponent] 
-												 green:[newColor greenComponent]
-												  blue:[newColor blueComponent]
-												 alpha:alphaValue] copyWithZone:[self zone]];
-	else 
-		backgColor = [ [NSColor colorWithCalibratedRed:1.0 
-												 green:1.0
-												  blue:1.0
-												 alpha:alphaValue] copyWithZone:[self zone]];
-	
-	[RConsoleWindow setBackgroundColor:backgColor];
-	[RConsoleWindow display];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:backgColor] 
-											  forKey:backgColorKey];
-	[[colorsPrefPane backgColorWell] setColor: backgColor];
-    [[colorsPrefPane backgColorWell] setNeedsDisplay:YES];
 }
 
 - (void) setUseInternalEditor:(BOOL)flag 
@@ -2028,224 +1911,34 @@ case the color is set to its default value.
 	return editorIsApp;
 }
 
-- (void)changeInputColor:(id)sender {
-    [self setInputColor:[sender color]];
-}
-
-- (void)changeOutputColor:(id)sender {
-    [self setOutputColor:[sender color]];
-}
-
-- (void)changePromptColor:(id)sender {
-    [self setPromptColor:[sender color]];
-}
-
-- (void)changeStdoutColor:(id)sender {
-    [self setStdoutColor:[sender color]];
-}
-
-- (void)changeStderrColor:(id)sender {
-    [self setStderrColor:[sender color]];
-}
-
-- (void)changeBackGColor:(id)sender {
-	[self setBackGColor:[sender color]];
-	[RTextView setBackgroundColor:[sender color]];
-}
-
-- (IBAction) changeAlphaColor:(id)sender {
-	[self setAlphaValue:[sender floatValue]];
-	[self setBackGColor: [[colorsPrefPane backgColorWell] color]];
-	[RTextView setNeedsDisplay: YES];
-}
-
-- (void)setAlphaValue:(float)f {
-    alphaValue = f;
-	
-	if(backgColor)
-		[self setBackGColor:backgColor];
-	
-	[[NSUserDefaults standardUserDefaults] setFloat:alphaValue 
-											 forKey:alphaValueKey];
-	[[colorsPrefPane alphaStepper] setFloatValue:alphaValue];
-	
-}
-
 - (IBAction) setDefaultColors:(id)sender {
-	[self setAlphaValue: 1.0];
-	[self setBackGColor: nil];
-	[self setInputColor: nil];
-	[self setOutputColor: nil];
-	[self setPromptColor: nil];
-	[self setStderrColor: nil];
-	[self setStdoutColor: nil];
-	
+	int i = 0, ccs = [consoleColorsKeys count];
+	[[Preferences sharedPreferences] beginBatch];
+	while (i<ccs) {
+		[Preferences setKey:[consoleColorsKeys objectAtIndex:i] withArchivedObject:[defaultConsoleColors objectAtIndex: i]];
+		i++;
+	}
+	[[Preferences sharedPreferences] endBatch];
 }
 
+- (void) updatePreferences {
+	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
 
-- (void) readDefaults {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	
-	
-	if( [defaults stringForKey:FontSizeKey] == nil )
-		currentFontSize = 11.0;
-	else
-		currentFontSize =  [defaults floatForKey:FontSizeKey];
-	
-	if( [defaults stringForKey:alphaValueKey] == nil )
-		[self setAlphaValue: 1.0];
-	else
-		[self setAlphaValue: [defaults floatForKey:alphaValueKey]];
-	
-	NSData *theData=[defaults dataForKey:backgColorKey];
-	if(theData != nil)		
-		[self setBackGColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	else
-		[self setBackGColor: nil];
-	
-	theData=[defaults dataForKey:inputColorKey];
-	if(theData != nil)		
-		[self setInputColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	else
-		[self setInputColor: nil];
-	
-	theData=[defaults dataForKey:outputColorKey];
-	if(theData != nil)		
-		[self setOutputColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	else
-		[self setOutputColor: nil];
-	
-	theData=[defaults dataForKey:promptColorKey];
-	if(theData != nil)		
-		[self setPromptColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	else
-		[self setPromptColor: nil];
-	
-	theData = [defaults dataForKey:stderrColorKey];
-	if(theData != nil)		
-		[self setStderrColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	else
-		[self setStderrColor: nil];
-	
-	theData=[defaults dataForKey:stdoutColorKey];
-	if(theData != nil)		
-		[self setStdoutColor: (NSColor *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	else
-		[self setStdoutColor: nil];
-	
-	theData=[defaults dataForKey:miscRAquaLibPathKey];
-	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:editOrSourceKey];
-	[miscPrefPane setOpenInEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:appOrCommandKey];
-	[editorPrefPane setEditorIsApp: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:internalOrExternalKey];
-	[editorPrefPane setUseInternalEditor: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:showSyntaxColoringKey];
-	[editorPrefPane setDoSyntaxColoring: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:showBraceHighlightingKey];
-	[editorPrefPane setDoBraceHighlighting: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:highlightIntervalKey];
-	[editorPrefPane setCurrentHighlightInterval: theData == nil?@"0.20":(NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
-	
-	theData=[defaults dataForKey:showLineNumbersKey];
-	[editorPrefPane setDoLineNumbers: theData == nil || [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]];
-	
-	theData=[defaults dataForKey:externalEditorNameKey];
-	[editorPrefPane setExternalEditor: theData == nil?@"":(NSString *)[NSUnarchiver unarchiveObjectWithData:theData]];
-}
-
-
-- (void)setupPrefWindow
-{
-	if (!prefsWindow) {
-		// create the preference window controller
-		[self setPrefsWindow:[[AMPreferenceWindowController alloc] initWithAutosaveName:@"PreferencePanel"]];
-		// we act as delegate ourselves
-		[prefsWindow setDelegate:self];
-		// load plugins from the bundle's standard plugins folder
-		//	[prefsWindow addPluginsOfType:nil fromPath:[[NSBundle mainBundle] builtInPlugInsPath]];
-		// creating some test preference panes
-		quartzPrefPane = [[[QuartzPrefPane alloc] initWithIdentifier:@"Quartz" label:@"Quartz" category:@"Graphics"] autorelease];
-		[prefsWindow addPane:quartzPrefPane withIdentifier:[quartzPrefPane identifier]];
-		
-		miscPrefPane = [[[MiscPrefPane alloc] initWithIdentifier:@"Misc" label:@"Misc" category:@"General"] autorelease];
-		[prefsWindow addPane:miscPrefPane withIdentifier:[miscPrefPane identifier]];
-		
-		colorsPrefPane = [[[ColorsPrefPane alloc] initWithIdentifier:@"Colors" label:@"Colors" category:@"Console"] autorelease];
-		[prefsWindow addPane:colorsPrefPane withIdentifier:[colorsPrefPane identifier]];
-		
-		editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:@"Editor" category:@"Editor"] autorelease];
-		[prefsWindow addPane:editorPrefPane withIdentifier:[editorPrefPane identifier]];
-		
-		// set up some configuration options
-		[prefsWindow setUsesConfigurationPane:YES];
-		[prefsWindow setSortByCategory:YES];
-		// select prefs pane for display
-		[prefsWindow selectPaneWithIdentifier:@"All"];
-	}	
-}
-
-- (IBAction)showPrefsWindow:(id)sender
-{
-	[prefsWindow showWindow:self];
-	[[prefsWindow window] makeKeyAndOrderFront:self];
-}
-
-- (void)sortByAlphabet:(id)sender
-{
-	[prefsWindow setSortByCategory:NO];
-	[prefsWindow selectIconViewPane];
-}
-
-- (void)sortByCategory:(id)sender
-{
-	[prefsWindow setSortByCategory:YES];
-	[prefsWindow selectIconViewPane];
-}
-
-
-- (AMPreferenceWindowController *)prefsWindow
-{
-    return prefsWindow;
-}
-
-- (void)setPrefsWindow:(AMPreferenceWindowController *)newPrefsWindow
-{
-    id old = nil;
-	
-    if (newPrefsWindow != prefsWindow) {
-        old = prefsWindow;
-        prefsWindow = [newPrefsWindow retain];
-        [old release];
-    }
-}
-
-- (BOOL)shouldLoadPreferencePane:(NSString *)identifier
-{
-	//	NSLog(@"shouldLoadPreferencePane: %@", identifier);
-	return YES;
-}
-
-- (void)willSelectPreferencePane:(NSString *)identifier
-{
-	//	NSLog(@"willSelectPreferencePane: %@", identifier);
-}
-
-- (void)didUnselectPreferencePane:(NSString *)identifier
-{
-	//	NSLog(@"didUnselectPreferencePane: %@", identifier);
-}
-
-- (NSString *)displayNameForCategory:(NSString *)category
-{
-	return category;
+	{
+		int i = 0, ccs = [consoleColorsKeys count];
+		while (i<ccs) {
+			NSColor *c = [Preferences unarchivedObjectForKey: [consoleColorsKeys objectAtIndex:i] withDefault: [consoleColors objectAtIndex:i]];
+			if (c != [consoleColors objectAtIndex:i]) {
+				[consoleColors replaceObjectAtIndex:i withObject:c];
+				if (i == iBackgroundColor) {
+					[RConsoleWindow setBackgroundColor:c];
+					[RConsoleWindow display];
+				}
+			}
+			i++;
+		}
+	}
+	[RTextView setNeedsDisplay:YES];
 }
 
 - (NSTextView *)getRTextView{
