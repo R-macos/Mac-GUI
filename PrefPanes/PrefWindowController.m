@@ -1,3 +1,4 @@
+#import "../RGUI.h"
 #import "PrefWindowController.h"
 
 @implementation PrefWindowController
@@ -10,16 +11,16 @@
 
 - (void) awakeFromNib
 {
-	quartzPrefPane = [[[QuartzPrefPane alloc] initWithIdentifier:@"Quartz" label:@"Quartz" category:@"Graphics"] autorelease];
+	quartzPrefPane = [[[QuartzPrefPane alloc] initWithIdentifier:@"Quartz" label:NLSC(@"PrefP-Quartz",@"Quartz preference pane") category:NLSC(@"PrefG-Views",@"Views preference group") ] autorelease];
 	[self addPane:quartzPrefPane withIdentifier:[quartzPrefPane identifier]];
 	
-	miscPrefPane = [[[MiscPrefPane alloc] initWithIdentifier:@"Misc" label:@"Misc" category:@"General"] autorelease];
+	miscPrefPane = [[[MiscPrefPane alloc] initWithIdentifier:@"Misc" label:NLSC(@"PrefP-Startup",@"Startup preference pane") category:NLSC(@"PrefG-General",@"General preference group")] autorelease];
 	[self addPane:miscPrefPane withIdentifier:[miscPrefPane identifier]];
 	
-	colorsPrefPane = [[[ColorsPrefPane alloc] initWithIdentifier:@"Colors" label:@"Colors" category:@"Console"] autorelease];
+	colorsPrefPane = [[[ColorsPrefPane alloc] initWithIdentifier:@"Colors" label:NLSC(@"PrefP-Colors",@"Colors preference pane") category:NLSC(@"PrefG-Views",@"Views preference group")] autorelease];
 	[self addPane:colorsPrefPane withIdentifier:[colorsPrefPane identifier]];
 	
-	editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:@"Editor" category:@"Editor"] autorelease];
+	editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:NLSC(@"PrefP-Editor",@"Editor preference pane") category:NLSC(@"PrefG-General",@"General preference group")] autorelease];
 	[self addPane:editorPrefPane withIdentifier:[editorPrefPane identifier]];
 	
 	// set up some configuration options

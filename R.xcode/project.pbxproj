@@ -2217,6 +2217,14 @@
 //682
 //683
 //684
+		6812EC9E07BA6A360000B6A8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/EditorPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		6828383307804CC2004617B7 = {
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -2887,6 +2895,7 @@
 		D41DED53073B3F8000B900F2 = {
 			children = (
 				D41DED54073B3F8000B900F2,
+				6812EC9E07BA6A360000B6A8,
 			);
 			isa = PBXVariantGroup;
 			name = EditorPrefPane.nib;
