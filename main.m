@@ -16,7 +16,7 @@
 int main(int argc, const char *argv[])
 {
 #ifdef DEBUG_RGUI
-	[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: 255]; // log+handle all but "other"
+	[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: NSLogAndHandleEveryExceptionMask]; // log+handle all but "other"
 #endif
 	return(NSApplicationMain(argc, argv));
 }

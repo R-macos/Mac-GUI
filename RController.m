@@ -1965,6 +1965,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	NSLog(@"Logged exception %@ with trace %@", exception, stack);
 	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/bin/atos"]) {
+		NSPipe *sop = [[NSPipe alloc] init];
+		NSFileHandle *soh = [sop fileHandleForReading];
 		NSLog(@"Calling atos to retrieve symbols, please wait!");
 		[args addObject:@"-p"];
 		[args addObject:pid];
@@ -1972,9 +1974,26 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 		[ls setLaunchPath:@"/usr/bin/atos"];
 		[ls setArguments:args];
+		[ls setStandardOutput:sop];
 		[ls launch];
-		[ls waitUntilExit];
+		while ([ls isRunning]) {
+			NSData *data = [soh availableData];
+			if (data && [data length]>0) { /* remove empty lines in the trace */
+				const char *c = [data bytes], *d=c;
+				while (*d) {
+					if (*d=='\n' && d[1]=='\n') {
+						int l=d-c;
+						while (*d=='\n') d++;
+						fwrite(c, 1, l+1, stderr);
+						c=d;
+					} else d++;
+				}
+				if (*c && d-c)
+					fwrite(c, 1, d-c, stderr);
+			}
+		}
 		[ls release];
+		[sop release];
 	} else
 		NSLog(@"Unable to find atos - symbols can't be dumped!");
 	return NO;
