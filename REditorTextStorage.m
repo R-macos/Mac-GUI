@@ -39,7 +39,6 @@
 	if (self) {
 		cont = [[NSMutableAttributedString alloc] init];
 	}
-	NSLog(@"REditorTextStorage created");
 	return self;
 }
 
@@ -52,7 +51,6 @@
 
 - (NSString*) string
 {
-	NSLog(@"str=%@", [cont string]);
 	return [cont string];
 }
 
@@ -70,7 +68,6 @@
 - (void)setAttributes:(NSDictionary *)attributes range:(NSRange)aRange
 {
 	[cont setAttributes:attributes range:aRange];
-	NSLog(@"setAttr %@", attributes);
 	[self edited:NSTextStorageEditedAttributes range:aRange changeInLength:0];
 }
 
