@@ -1063,6 +1063,34 @@
 			settings = {
 			};
 		};
+		168776E907D7C62B0064425C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = SelectList.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		168776EA07D7C62B0064425C = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = SelectList.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		168776EB07D7C62B0064425C = {
+			fileRef = 168776E907D7C62B0064425C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		168776EC07D7C62B0064425C = {
+			fileRef = 168776EA07D7C62B0064425C;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		169970A106DCD17300FFACB0 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1803,6 +1831,8 @@
 				16E4F1FB06F1191B009DB2A8,
 				167BDD5D06D4C0F5005381BB,
 				167BDD5E06D4C0F5005381BB,
+				168776E907D7C62B0064425C,
+				168776EA07D7C62B0064425C,
 			);
 			isa = PBXGroup;
 			name = Managers;
@@ -2937,6 +2967,7 @@
 				D490C1EC07B400870034B42F,
 				6855194107B8FDDF00F3A57C,
 				684D008507BD72BE0047EEF6,
+				168776EB07D7C62B0064425C,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3064,6 +3095,7 @@
 				68E2B9F30796C9D200E31F29,
 				D490C1ED07B400870034B42F,
 				684D008607BD72BE0047EEF6,
+				168776EC07D7C62B0064425C,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
