@@ -102,13 +102,18 @@ int Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory)
 	}
 		
 	if (readconsBuffer) {
+		int skipPC=0;
 		char *c = readconsPos;
 		while (*c && *c!='\n' && *c!='\r') c++;
-		if (*c=='\r' && c[1]!='\n') *c='\n'; /* this should fix mac-only line endings */
-		if (*c) c++; /* if not at the end, point past the content to use */
-		if (c-readconsPos>=len) c=readconsPos+(len-1);
-		memcpy(buf, readconsPos, c-readconsPos);
+		if (*c=='\r') { /* convert PC and Mac endings to unix */
+			*c='\n';
+			if (c[1]=='\n') skipPC=1;
+		}
+        if (*c) c++; /* if not at the end, point past the content to use */
+        if (c-readconsPos>=len) c=readconsPos+(len-1);
+        memcpy(buf, readconsPos, c-readconsPos);
 		buf[c-readconsPos]=0;
+        if (skipPC) c++;
 		if (*c)
 			readconsPos=c;
 		else
