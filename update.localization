@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # list of localizations we want to generate from English
-LANGUAGES=de
+LANGUAGES="de it"
 
 # Get all (non-backup) NIBs in English.lproj assuming that this is where we do active development
 NIBS=`ls -d English.lproj/*.nib | grep -v \~ | awk -F / '{print substr($2,1,length($2)-4)}'`
