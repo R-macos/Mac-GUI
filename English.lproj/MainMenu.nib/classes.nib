@@ -153,6 +153,11 @@
             SUPERCLASS = NSObject; 
         }, 
         {
+            CLASS = RDocumentController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSDocumentController; 
+        }, 
+        {
             CLASS = REditor; 
             LANGUAGE = ObjC; 
             OUTLETS = {dataWindow = NSWindow; editorSource = NSTableView; }; 

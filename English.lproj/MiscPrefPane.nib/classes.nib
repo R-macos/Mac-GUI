@@ -2,9 +2,10 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
+            ACTIONS = {changeEditOrSource = id; }; 
             CLASS = MiscPrefPane; 
             LANGUAGE = ObjC; 
-            OUTLETS = {mainView = NSView; }; 
+            OUTLETS = {editOrSource = NSMatrix; mainView = NSView; }; 
             SUPERCLASS = NSObject; 
         }
     ); 
