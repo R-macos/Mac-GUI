@@ -46,6 +46,7 @@
 - (void)  handleWriteConsole: (NSString*) msg;
 - (char*) handleReadConsole: (int) addtohist;
 - (void)  handleBusy: (BOOL) which;
+- (void)  handleFlushConsole;
 - (void)  handleWritePrompt: (NSString*) prompt;
 - (void)  handleProcessEvents;
 - (int)   handleChooseFile: (char*) buf len: (int) length isNew: (int) new;

@@ -92,7 +92,7 @@ extern void (*ptr_R_ShowMessage)();
 extern int  (*ptr_R_ReadConsole)(char *, unsigned char *, int, int);
 extern void (*ptr_R_WriteConsole)(char *, int);
 extern void (*ptr_R_ResetConsole)();
-extern void (*ptr_R_FlushConsole)();
+extern void (*ptr_do_flushconsole)();
 extern void (*ptr_R_ClearerrConsole)();
 extern void (*ptr_R_Busy)(int);
 /* extern void (*ptr_R_CleanUp)(SA_TYPE, int, int); */
@@ -117,7 +117,7 @@ extern SEXP (*ptr_do_browsepkgs)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
-extern void (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_CocoaSystem)(char *);
 
 extern Rboolean (*ptr_CocoaInnerQuartzDevice)(NewDevDesc *,char *,
@@ -177,7 +177,7 @@ int initR(int argc, char **argv) {
     ptr_R_ReadConsole =  Re_ReadConsole;
     ptr_R_WriteConsole = Re_WriteConsole;
     ptr_R_ResetConsole = Re_ResetConsole;
-    ptr_R_FlushConsole = Re_FlushConsole;
+    ptr_do_flushconsole = Re_FlushConsole;
     ptr_R_ClearerrConsole = Re_ClearerrConsole;
     ptr_R_Busy = Re_RBusy;
     ptr_R_ProcessEvents =  Re_ProcessEvents;
