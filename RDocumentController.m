@@ -118,9 +118,10 @@
 	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"SubEthaEdit"];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 
-	if (useInternalEditor)
+	if (useInternalEditor) {
+		NSLog(@" ");	// Weirdness - crashes in CFRetain if not here
 		return [super openDocumentWithContentsOfFile:aFile display:flag];		
-	else {
+	} else {
 		NSString *cmd;
 		if (editorIsApp) {
 			cmd = [@"open -a " stringByAppendingString:externalEditor];

@@ -163,6 +163,10 @@
 	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[highlightInterval setEnabled:flag?NSOnState:NSOffState];
+//	[externalSettings setHidden:flag?NSOffState:NSOnState];
+	[changeEditor setEnabled:(flag?NSOffState:NSOnState)];
+	[appOrCommand setEnabled:(flag?NSOffState:NSOnState)];
+	[externalEditorName setEnabled:(flag?NSOffState:NSOnState)];
 	
 	NSArray *pathComps = [[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"] componentsSeparatedByString:@"/"];
 	NSString *name = [pathComps objectAtIndex: ([pathComps count] - 1)];
