@@ -8,7 +8,7 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {executeSelection = id; }; 
+            ACTIONS = {activateQuartzDevice = id; executeSelection = id; sourceFile = id; }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
@@ -65,7 +65,6 @@
             ACTIONS = {
                 RNewDocument = id; 
                 RSourceLoadFile = id; 
-                activateQuartzDevice = id; 
                 breakR = id; 
                 changeAlphaColor = id; 
                 changeBackGColor = id; 
@@ -90,6 +89,7 @@
                 installFromSource = id; 
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
+                makeConsoleKey = id; 
                 newQuartzDevice = id; 
                 openColors = id; 
                 openDocumentInEditor = id; 
