@@ -2,14 +2,14 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004  The R Foundation
+ *                     Copyright (C) 2005  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
  *                     Copyright (C) 1998-2001   The R Development Core Team
- *                     Copyright (C) 2002-2004   The R Foundation
+ *                     Copyright (C) 2002-2005   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,6 +71,7 @@ extern void (*ptr_R_Busy)(int);
 extern int  (*ptr_R_ChooseFile)(int, char *, int);
 extern void (*ptr_R_loadhistory)(SEXP, SEXP, SEXP, SEXP);
 extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
+extern void (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 
 //extern void (*ptr_R_StartCocoaRL)();
 
@@ -744,4 +745,81 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
     UNPROTECT(nprotect);
 
     return work2;
+}
+
+static char selected[100]; /* Why 100, src/gnuwin32/extra.c */
+static int done;
+
+SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
+{
+    SEXP list, preselect, ans = R_NilValue;
+    char **clist;
+    int i, j = -1, n,  multiple, nsel = 0;
+     Rboolean haveTitle;
+	int *status;
+	
+    checkArity(op, args);
+    list = CAR(args);
+    if(!isString(list)) error(_("invalid 'list' argument"));
+    preselect = CADR(args);
+    if(!isNull(preselect) && !isString(preselect))
+		error(_("invalid 'preselect' argument"));
+    multiple = asLogical(CADDR(args));
+    if(multiple == NA_LOGICAL) multiple = 0;
+    haveTitle = isString(CADDDR(args));
+    if(!multiple && isString(preselect) && LENGTH(preselect) != 1)
+		error(_("invalid 'preselect' argument"));
+	
+    n = LENGTH(list);
+    clist = (char **) R_alloc(n + 1, sizeof(char *));
+    status = (int *) R_alloc(n + 1, sizeof(int));
+    for(i = 0; i < n; i++) {
+		clist[i] = CHAR(STRING_ELT(list, i));
+		status[i] = 0;
+    }
+    clist[n] = NULL;
+	
+
+/*    wselect = newwindow(haveTitle ? CHAR(STRING_ELT(CADDDR(args), 0)):
+						(multiple ? "Select one or more" : "Select one"),
+						rect(0, 0, xmax, ymax),
+						Titlebar | Centered | Modal);
+ */
+
+    if(!isNull(preselect) && LENGTH(preselect)) {
+		for(i = 0; i < n; i++)
+			for(j = 0; j < LENGTH(preselect); j++)
+				if(strcmp(clist[i], CHAR(STRING_ELT(preselect, j))) == 0) {
+					status[i] = 1;
+					break;
+				}
+    }
+	
+	if(n==0)
+		[[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0];
+	[[REngine cocoaHandler] handleListItems: n withNames: clist status: status];
+		
+		
+ 		done = 0;
+/*		while(!done) {
+			Sleep(100);
+			R_ProcessEvents();
+		}
+*/		
+		if(multiple) {
+			if (done == 1) { /* Finish */
+				for(i = 0; i < n; i++)  if(status[i]==1) nsel++;
+				PROTECT(ans = allocVector(STRSXP, nsel));
+				for(i = 0, j = 0; i < n; i++)
+					if(status[i]==1)
+						SET_STRING_ELT(ans, j++, mkChar(clist[i]));
+			} else { /* cancel */
+				PROTECT(ans = allocVector(STRSXP, 0));
+			}
+		} else {
+			PROTECT(ans = allocVector(STRSXP, 1));
+			SET_STRING_ELT(ans, 0, mkChar(selected));
+		}
+UNPROTECT(1);
+return ans;
 }

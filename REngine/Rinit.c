@@ -9,7 +9,7 @@
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
  *                     Copyright (C) 1998-2001   The R Development Core Team
- *                     Copyright (C) 2002-2004   The R Foundation
+ *                     Copyright (C) 2002-2005   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,6 +117,7 @@ extern SEXP (*ptr_do_browsepkgs)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
+extern void (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_CocoaSystem)(char *);
 
 extern Rboolean (*ptr_CocoaInnerQuartzDevice)(NewDevDesc *,char *,
@@ -203,6 +204,7 @@ int initR(int argc, char **argv) {
 	ptr_CocoaGetQuartzParameters = getQuartzParameters;
 	ptr_CocoaSystem = Re_system;
 	ptr_do_dataentry = Re_dataentry;
+	ptr_do_selectlist = Re_do_selectlist;
 	
 	setup_Rmainloop();
 
