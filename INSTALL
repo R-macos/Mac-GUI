@@ -10,6 +10,9 @@ configure, build and install R-2.0.0 (2004-10-04) with
 
 Once you have the R.framework installed in /Library/Frameworks, you can build R.app
 
+Note: for R 2.1.x (now R-devel) it is highly recommended to use "--enable-utf8"
+
+
  Building R.app
 ================
 
@@ -37,13 +40,9 @@ environment variable. Proceed as follows:
 	/Library/Frameworks/R.framework/Resources
 
 
- Building R.app against R-2.1.x (r-devel)
-==========================================
-In R-2.1.x two new headers have been introduced to support GUIs and embedding.
-In particular, ptr_Raqua_Edit has been replaced by a generic ptr_R_EditFile. This
-means that ptr_Raqua_edit no longer exists in 2.1.x and viceversa, old (2.0.0) R.app
-won't be able to find the symbol ptr_R_EditFile.
-
+Note about binary compatibility:
+The general rules for R apply, that is binary compatibility is given only if the major and minor version numbers match - only the patch level may differ. When using the X.Y.Z version form it means that X.Y must match. For example R-GUIs linked to 2.0.x and 2.1.x are NOT binary compatible (in fact there is even some conditional code in the GUI).
+The compiled R.app is usually bound to a specific version, such as 2.0.1. If you upgrade R removing the older version, let's say using R.app built for 2.0.0 and updating R to 2.0.1, you may need to fix the absolute path to libR.dylib. The nightly builds use generic path /Library/Frameworks/R.framework/Resources/lib/libR.dylib which points to the latest version of R, but this is done by an additional call to install_name_tool in the building script. Release versions of the GUI use fixed-version path as they come with a specific R version (in fact the default behavior doesn't depends on the GUI, but on libR.dylib - changing its own reference entry changes the way R.app is linked).
 
 --
- Last update: 2004-10-22
+ Last update: 2004-02-01
