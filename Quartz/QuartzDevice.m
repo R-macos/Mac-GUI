@@ -347,9 +347,13 @@ static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
 
  
 	[RQuartz changeDocumentTitle: newDocument Title:NLS(@"New Quartz Device")];
-//	xd->topLeftPoint = computeTopLeftCornerForDevNum(0);
-//	[[newDocument getDeviceWindow] setFrame:
-//		NSMakeRect(xd->topLeftPoint.x, xd->topLeftPoint.y, xd->windowWidth, xd->windowHeight) display:NO];
+	xd->topLeftPoint = computeTopLeftCornerForDevNum(0);
+//	NSLog(@"topLeftPoint: %f %f", xd->topLeftPoint.x, xd->topLeftPoint.y);
+	[[newDocument getDeviceWindow] setFrameOrigin:
+		NSMakePoint(xd->topLeftPoint.x, xd->topLeftPoint.y - xd->windowHeight)];
+//	NSRect wrect;
+//	wrect = [[newDocument getDeviceWindow] frame];
+//	NSLog(@"frame: %f %f", wrect.origin.x, wrect.origin.y);
 	[[newDocument getDeviceWindow] setContentSize:NSMakeSize(xd->windowWidth, xd->windowHeight) ];
 	[[newDocument getDeviceWindow] orderFrontRegardless];
 	
@@ -404,12 +408,12 @@ static void 	RQuartz_Activate(NewDevDesc *dd)
 */
 	
 //	NSLog(@"fheight: %f ", fheight);
-//	NSLog(@"topLeftPoint: %f %f", xd->topLeftPoint.x, xd->topLeftPoint.y);
 //	NSLog(@"rect: %f %f", rect.origin.x, rect.origin.y + fheight);
 	if (xd->topLeftPoint.x < 5.0 ||
 		fwidth==rect.size.width && fheight==rect.size.height &&
 		xd->topLeftPoint.x == rect.origin.x && xd->topLeftPoint.y == rect.origin.y + fheight) {
 		xd->topLeftPoint = computeTopLeftCornerForDevNum(devnum-1);
+//		NSLog(@"topLeftPoint: %f %f", xd->topLeftPoint.x, xd->topLeftPoint.y);
 		[xd->DevWindow setFrameTopLeftPoint:xd->topLeftPoint];	
 	}
 	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:NLS(@"Quartz (%d) - Active"),devnum+1]];
