@@ -459,6 +459,68 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 	return ans;
 }
 
+SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
+{
+    SEXP list, preselect, ans = R_NilValue;
+    char **clist;
+    int i, j = -1, n,  multiple, nsel = 0;
+	Rboolean haveTitle;
+	BOOL *itemStatus = 0;
+	int selectListDone = 0;
+	
+    checkArity(op, args);
+    list = CAR(args);
+    if(!isString(list)) error(_("invalid 'list' argument"));
+    preselect = CADR(args);
+    if(!isNull(preselect) && !isString(preselect))
+		error(_("invalid 'preselect' argument"));
+    multiple = asLogical(CADDR(args));
+    if(multiple == NA_LOGICAL) multiple = 0;
+    haveTitle = isString(CADDDR(args));
+    if(!multiple && isString(preselect) && LENGTH(preselect) != 1)
+		error(_("invalid 'preselect' argument"));
+	
+    n = LENGTH(list);
+    clist = (char **) R_alloc(n + 1, sizeof(char *));
+    itemStatus = (BOOL *) R_alloc(n + 1, sizeof(BOOL));
+    for(i = 0; i < n; i++) {
+		clist[i] = CHAR(STRING_ELT(list, i));
+		itemStatus[i] = NO;
+    }
+    clist[n] = NULL;
+	
+    if(!isNull(preselect) && LENGTH(preselect)) {
+		for(i = 0; i < n; i++)
+			for(j = 0; j < LENGTH(preselect); j++)
+				if(strcmp(clist[i], CHAR(STRING_ELT(preselect, j))) == 0) {
+					itemStatus[i] = YES;
+					break;
+				};
+    }
+	
+	if (n==0)
+		selectListDone = [[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0 multiple: 0 title: @""];
+	else
+		selectListDone = [[REngine cocoaHandler] handleListItems: n withNames: clist status: itemStatus multiple: multiple
+														   title: haveTitle
+			?[NSString stringWithUTF8String: CHAR(STRING_ELT(CADDDR(args), 0))]
+			:(multiple ? NLS(@"Select one or more") : NLS(@"Select one")) ];
+	
+	if (selectListDone == 1) { /* Finish */
+		for(i = 0; i < n; i++)  if(itemStatus[i]) nsel++;
+		PROTECT(ans = allocVector(STRSXP, nsel));
+		for(i = 0, j = 0; i < n; i++)
+			if(itemStatus[i])
+				SET_STRING_ELT(ans, j++, mkChar(clist[i]));
+	} else { /* cancel */
+		PROTECT(ans = allocVector(STRSXP, 0));
+	}
+
+UNPROTECT(1);
+return ans;
+}
+
+
 //==================================================== the following callbacks need to be moved!!! (TODO)
 
 #import "../WSBrowser.h"
@@ -559,8 +621,6 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 
   return R_NilValue;
 }
-
-
 
 
 int freeWorkspaceList(int newlen)
@@ -764,65 +824,4 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
     UNPROTECT(nprotect);
 
     return work2;
-}
-
-SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
-{
-    SEXP list, preselect, ans = R_NilValue;
-    char **clist;
-    int i, j = -1, n,  multiple, nsel = 0;
-	Rboolean haveTitle;
-	BOOL *itemStatus = 0;
-	int selectListDone = 0;
-	
-    checkArity(op, args);
-    list = CAR(args);
-    if(!isString(list)) error(_("invalid 'list' argument"));
-    preselect = CADR(args);
-    if(!isNull(preselect) && !isString(preselect))
-		error(_("invalid 'preselect' argument"));
-    multiple = asLogical(CADDR(args));
-    if(multiple == NA_LOGICAL) multiple = 0;
-    haveTitle = isString(CADDDR(args));
-    if(!multiple && isString(preselect) && LENGTH(preselect) != 1)
-		error(_("invalid 'preselect' argument"));
-	
-    n = LENGTH(list);
-    clist = (char **) R_alloc(n + 1, sizeof(char *));
-    itemStatus = (BOOL *) R_alloc(n + 1, sizeof(BOOL));
-    for(i = 0; i < n; i++) {
-		clist[i] = CHAR(STRING_ELT(list, i));
-		itemStatus[i] = NO;
-    }
-    clist[n] = NULL;
-	
-    if(!isNull(preselect) && LENGTH(preselect)) {
-		for(i = 0; i < n; i++)
-			for(j = 0; j < LENGTH(preselect); j++)
-				if(strcmp(clist[i], CHAR(STRING_ELT(preselect, j))) == 0) {
-					itemStatus[i] = YES;
-					break;
-				};
-    }
-
-	if (n==0)
-		selectListDone = [[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0 multiple: 0 title: @""];
-	else
-		selectListDone = [[REngine cocoaHandler] handleListItems: n withNames: clist status: itemStatus multiple: multiple
-														   title: haveTitle
-			?[NSString stringWithUTF8String: CHAR(STRING_ELT(CADDDR(args), 0))]
-			:(multiple ? NLS(@"Select one or more") : NLS(@"Select one")) ];
-	
-	if (selectListDone == 1) { /* Finish */
-		for(i = 0; i < n; i++)  if(itemStatus[i]) nsel++;
-		PROTECT(ans = allocVector(STRSXP, nsel));
-		for(i = 0, j = 0; i < n; i++)
-			if(itemStatus[i])
-				SET_STRING_ELT(ans, j++, mkChar(clist[i]));
-	} else { /* cancel */
-		PROTECT(ans = allocVector(STRSXP, 0));
-	}
-
-	UNPROTECT(1);
-	return ans;
 }
