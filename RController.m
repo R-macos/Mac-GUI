@@ -1226,7 +1226,7 @@ No error message or warning are raised.
 		[toolbarItem setToolTip: @"Source Script Or Load Data In R"];
 		[toolbarItem setImage: [NSImage imageNamed: @"sourceR"]];
 		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(sourceFile:)];
+		[toolbarItem setAction: @selector(sourceOrLoadFile:)];
 
     } else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Quartz"];
@@ -1574,6 +1574,18 @@ No error message or warning are raised.
 		[[REngine mainEngine] executeString: [NSString stringWithFormat:@"print(help.search(\"%@\"))", [sender stringValue]]];
         [helpSearch setStringValue:@""];
     }
+}
+
+- (IBAction)sourceOrLoadFile:(id)sender
+{
+	int answer;
+	NSOpenPanel *op;
+	op = [NSOpenPanel openPanel];
+	[op setTitle:@"R File to Source/Load"];
+	answer = [op runModalForTypes:nil];
+	
+	if (answer==NSOKButton)
+		[self loadFile:(char *)[[op filename] cString]];
 }
 
 - (IBAction)sourceFile:(id)sender
