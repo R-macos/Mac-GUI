@@ -692,6 +692,30 @@
 			settings = {
 			};
 		};
+		1659C15A07BBA5040076DC4F = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = it;
+			path = it.lproj/EditorPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		1659C15B07BBA5170076DC4F = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/QuartzPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		1659C15D07BBA5580076DC4F = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = it;
+			path = it.lproj/QuartzPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
 		165C0F4706EF05E000994593 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1238,6 +1262,8 @@
 		16A25FA5072AAFD40047E009 = {
 			children = (
 				16A25FA6072AAFD40047E009,
+				1659C15B07BBA5170076DC4F,
+				1659C15D07BBA5580076DC4F,
 			);
 			isa = PBXVariantGroup;
 			name = QuartzPrefPane.nib;
@@ -2896,6 +2922,7 @@
 			children = (
 				D41DED54073B3F8000B900F2,
 				6812EC9E07BA6A360000B6A8,
+				1659C15A07BBA5040076DC4F,
 			);
 			isa = PBXVariantGroup;
 			name = EditorPrefPane.nib;
