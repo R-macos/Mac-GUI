@@ -123,7 +123,7 @@
 
 - (NSString*) description
 {
-    return [NSString stringWithFormat:@"RSEXP, %@[%d]",[self typeName],[self length]];
+    return [NSString stringWithFormat:@"RSEXP@%x, %@[%d]",xp, [self typeName],[self length]];
 }
 
 - (int) length
@@ -176,6 +176,16 @@
 	return [[RSEXP alloc] initWithSEXP: t];
 }
 
+- (RSEXP*) listTag
+{
+	SEXP t;
+	if (!xp) return nil;
+	if (TYPEOF(xp)!=LISTSXP) return nil;
+	t = TAG(xp);
+	if (!t || t==R_NilValue) return nil;
+	return [[RSEXP alloc] initWithSEXP: t];
+}
+
 - (SEXP) directSEXP
 {
     return xp;
@@ -210,6 +220,11 @@
 - (NSString*) string
 {
     return (TYPEOF(xp)==STRSXP && LENGTH(xp)>0)?[NSString stringWithUTF8String: (char*) CHAR(STRING_ELT(xp, 0))]:nil;
+}
+
+- (NSString*) stringAt: (int) index
+{
+    return (TYPEOF(xp)==STRSXP && LENGTH(xp)>index)?[NSString stringWithUTF8String: (char*) CHAR(STRING_ELT(xp, index))]:nil;
 }
 
 - (int) integer

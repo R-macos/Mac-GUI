@@ -68,13 +68,15 @@
 - (double*) doubleArray;
 - (int*) intArray;
 
-// note: no caching is done, each RSEXP is allocated anew!
-- (RSEXP*) listHead;
-- (RSEXP*) listTail;
+// note: no caching is done, each RSEXP is allocated anew! don't forget to release!
+- (RSEXP*) listHead;  // = CAR
+- (RSEXP*) listTail;  // = CDR (hence either a list or nil)
+- (RSEXP*) listTag;   // = TAG
 
 /** the array may containg NSString* (for STRSXP) or RSEXP* (for VECSXP) - make sure you take that into account; strings are always copies */
 - (NSArray*) array;
-- (NSString*) string;
+- (NSString*) string; // in fact this is just a shortcut for stringAt: 0
+- (NSString*) stringAt: (int) index;
 
 - (id) value;
 - (RSEXP*) elementAt: (int) index;
