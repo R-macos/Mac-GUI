@@ -368,21 +368,36 @@ static void 	RQuartz_Close(NewDevDesc *dd)
 
 static void 	RQuartz_Activate(NewDevDesc *dd)
 {
+	NSScreen *screen = [NSScreen mainScreen];
+	NSDictionary *screenDict = [screen deviceDescription];
+	NSSize resolution = [[screenDict objectForKey:NSDeviceResolution] sizeValue];
+	// NSSize screenSize = [[screenDict objectForKey:NSDeviceSize] sizeValue];
+	// NSLog(@"Resolution: %f %f", resolution.width, resolution.height);
+	// NSLog(@"Screen size: %f %f", screenSize.width, screenSize.height);
 	int 		devnum = devNumber((DevDesc *)dd);
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 	xd->DevNum = devnum;
 	[xd->DevView setDevNum: devnum];
-	NSPoint topLeftCorner = computeTopLeftCornerForDevNum(devnum-1);
-	[xd->DevWindow setFrameTopLeftPoint:topLeftCorner];	
+	NSRect rect = [xd->DevWindow frame];
+	float width = [[Preferences stringForKey:quartzPrefPaneWidthKey withDefault:@"4.5"] floatValue];
+	float height = [[Preferences stringForKey:quartzPrefPaneHeightKey withDefault:@"4.5"] floatValue];
+	float fwidth = width * resolution.width;
+	float fheight = height * resolution.height + 22.0;
+	if (fwidth==rect.size.width && fheight==rect.size.height) {
+		NSPoint topLeftCorner = computeTopLeftCornerForDevNum(devnum-1);
+		[xd->DevWindow setFrameTopLeftPoint:topLeftCorner];	
+	}
 	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Active",devnum+1]];
 
 }
+
 static void 	RQuartz_Deactivate(NewDevDesc *dd)
 {
 	int 		devnum = devNumber((DevDesc *)dd);
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Inactive",devnum+1]];
 }
+
 static void 	RQuartz_Size(double *left, double *right,
 		     	 double *bottom, double *top, NewDevDesc *dd)
 {
@@ -477,6 +492,7 @@ static double 	RQuartz_StrWidth(char *str,
 
 	return [xd->DevLayoutManager usedRectForTextContainer:xd->DevTextContainer].size.width;
 }
+
 static void 	RQuartz_Text(double x, double y, char *str,
 			    double rot, double hadj, 
 			    R_GE_gcontext *gc,
@@ -521,7 +537,8 @@ static void 	RQuartz_Text(double x, double y, char *str,
 	[xd->DevLayoutManager drawGlyphsForGlyphRange: glyphRange atPoint: NSMakePoint(0,0)];
 	
 		[xd->DevView unlockFocus];
-}				
+}
+
 static void 	RQuartz_Rect(double x0, double y0, double x1, double y1,
 			    R_GE_gcontext *gc,
 			    NewDevDesc *dd)
@@ -648,9 +665,6 @@ static void 	RQuartz_Mode(int mode, NewDevDesc *dd)
 		[xd->DevWindow flushWindow];
 }				
 
-
-
-
 static void RQuartz_SetFill(int fill, double gamma,  NewDevDesc *dd)
 {
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
@@ -660,6 +674,7 @@ static void RQuartz_SetFill(int fill, double gamma,  NewDevDesc *dd)
 		 blue:(float)R_BLUE(fill)/255.0
 		 alpha:(float)R_ALPHA(fill)/255.0] setFill];
 }
+
 static void RQuartz_SetStroke(int color, double gamma,  NewDevDesc *dd)
 {
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
@@ -669,6 +684,7 @@ static void RQuartz_SetStroke(int color, double gamma,  NewDevDesc *dd)
 		 blue:(float)R_BLUE(color)/255.0
 		 alpha:(float)R_ALPHA(color)/255.0] setStroke];
 }
+
 static void RQuartz_SetLineProperties(R_GE_gcontext *gc,  NSBezierPath *path, NewDevDesc *dd)
 {
     RQuartz_SetLineWidth(gc->lwd, path);
@@ -888,8 +904,8 @@ NSPoint computeTopLeftCornerForDevNum(int devnum) {
 	NSDictionary *screenDict = [screen deviceDescription];
 	NSSize resolution = [[screenDict objectForKey:NSDeviceResolution] sizeValue];
 	NSSize screenSize = [[screenDict objectForKey:NSDeviceSize] sizeValue];
-	//	NSLog(@"Resolution: %f %f", resolution.width, resolution.height);
-	//	NSLog(@"Screen size: %f %f", screenSize.width, screenSize.height);
+	// NSLog(@"Resolution: %f %f", resolution.width, resolution.height);
+	// NSLog(@"Screen size: %f %f", screenSize.width, screenSize.height);
 	int quartzpos = [[Preferences stringForKey:quartzPrefPaneLocationIntKey withDefault:@"3"] intValue];
 	int width = [[Preferences stringForKey:quartzPrefPaneWidthKey withDefault:@"4.5"] intValue];
 	int height = [[Preferences stringForKey:quartzPrefPaneHeightKey withDefault:@"4.5"] intValue];
@@ -927,7 +943,7 @@ NSPoint computeTopLeftCornerForDevNum(int devnum) {
 	}
 	topLeftCorner.x = x + devnum * 21;
 	topLeftCorner.y = y - devnum * 23;
-//	NSLog(@"Screen at: %f %f", topLeftCorner.x, topLeftCorner.y);
+	// NSLog(@"Screen at: %f %f", topLeftCorner.x, topLeftCorner.y);
 	return topLeftCorner;
 }
 

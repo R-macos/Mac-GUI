@@ -146,7 +146,7 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
         return;
     }
 	
-	if(PDFDrawing){
+	if (PDFDrawing) {
 		RQuartz_DiplayGList(self);
 		PDFDrawing = NO;
 	}
