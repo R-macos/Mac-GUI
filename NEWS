@@ -1,5 +1,14 @@
 NEWS
 
+Last update: 2004-11-27 [RG]
+*	fixed Save Document As for Quartz window
+
+Last update: 2004-11-24 [SU]
+*	fixed bug in UTF-8 handling; removed the use of auto-release
+	pools in Re_.. callbacks.
+	Still ToDo: R doesn't understand UTF-8 so the GUI should use
+	cString default encoding (even if we can't change it programmatically)
+
 -- Release Version 1.01 - this revision is supplied with R 2.0.1 --
 
 Last update: 2004-11-16 [SU]

@@ -156,6 +156,11 @@ for quartz. This method is called by RController -> activateQuartz
 	QUARTZ_WORK_END;
 }
 
+- (IBAction)saveDocumentAs:(id)sender
+{
+	[self saveDocument:sender];
+}
+
 - (IBAction)saveDocument:(id)sender
 {
 	int answer;
