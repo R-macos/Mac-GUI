@@ -6,6 +6,7 @@
 
 #define RemoveObjectToolbarItemIdentifier @"Remove Objects"
 #define EditObjectToolbarItemIdentifier @"Edit Object"
+#define RefreshObjectsListToolbarItemIdentifier @"Refresh Objects List"
 
 @interface WSBrowser : NSObject
 {

@@ -249,6 +249,18 @@ if (!item) { \
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(remObject:)];
+    }  else  if ([itemIdent isEqual: RefreshObjectsListToolbarItemIdentifier]) {
+		// Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Refresh"];
+		[toolbarItem setPaletteLabel: @"Refresh Objects List"];
+		
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: @"Refresh Objects List"];
+		[toolbarItem setImage: [NSImage imageNamed: @"refresh"]];
+		
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(reloadWSBData:)];
     } else {
 		// itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
 		// Returning nil will inform the toolbar this kind of item is not supported 
@@ -262,7 +274,7 @@ if (!item) { \
     // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
     // user chooses to revert to the default items this set will be used 
     return [NSArray arrayWithObjects:	EditObjectToolbarItemIdentifier,  RemoveObjectToolbarItemIdentifier,
-		nil];
+		RefreshObjectsListToolbarItemIdentifier, nil];
 }
 
 
@@ -271,7 +283,7 @@ if (!item) { \
     // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
     // The set of allowed items is used to construct the customization palette 
     return [NSArray arrayWithObjects: 	EditObjectToolbarItemIdentifier,  RemoveObjectToolbarItemIdentifier, 
-		nil];
+		RefreshObjectsListToolbarItemIdentifier, nil];
 }
 
 
@@ -280,11 +292,13 @@ if (!item) { \
     // Optional method:  This message is sent to us since we are the target of some toolbar item actions 
     // (for example:  of the save items action) 
     BOOL enable = NO;
-	if([WSBDataSource numberOfSelectedRows]==0) return(NO);
+	int nsel = [WSBDataSource numberOfSelectedRows];
 
-	if ([[toolbarItem itemIdentifier] isEqual: EditObjectToolbarItemIdentifier]) {
+	if( ([[toolbarItem itemIdentifier] isEqual: EditObjectToolbarItemIdentifier]) && (nsel>0) ) {
 		enable = YES;
-    } else if ([[toolbarItem itemIdentifier] isEqual: RemoveObjectToolbarItemIdentifier]) {
+    } else if( ([[toolbarItem itemIdentifier] isEqual: RemoveObjectToolbarItemIdentifier]) && (nsel>0)) {
+		enable = YES;
+    } else if ([[toolbarItem itemIdentifier] isEqual: RefreshObjectsListToolbarItemIdentifier]) {
 		enable = YES;
     }		
     return enable;
