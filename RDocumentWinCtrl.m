@@ -239,7 +239,7 @@ NSArray *keywordList=nil;
 	[self updatePreferences];
 	
 	editorToolbar = [[REditorToolbar alloc] initWithEditor:self];
-	[self functionReset];
+	[self functionRescan];
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)aNotification {
