@@ -28,10 +28,17 @@
  */
 
 #include <R.h>
+#include <Rversion.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
 #include <Fileio.h>
+#if (R_VERSION >= R_Version(2,1,0))
+// Rinterface is public, but present only in 2.1+
 #include <Rinterface.h>
+#else
+// if there is no Rinterface, we need private Defn.h
+#include <Defn.h>
+#endif
 #import <sys/fcntl.h>
 #import <sys/select.h>
 #import <sys/types.h>
@@ -47,7 +54,6 @@
 #import "Tools/Authorization.h"
 #import "Preferences.h"
 #import "SearchTable.h"
-#import <Rversion.h>
 
 // size of the console output cache buffer
 #define DEFAULT_WRITE_BUFFER_SIZE 32768
