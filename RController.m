@@ -34,9 +34,6 @@ extern R_ReplState state;
 extern BOOL WeHavePackages;
 extern BOOL WeHaveDataSets;
 
-BOOL InEditor = NO;		/*  if NO, R tries to laod data or source a script; 
-							if YES the file is opened in the internal editor */
-
 void run_Rmainloop(void); // from Rinit.c
 extern void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel); // from Rinit.c
 extern int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplState *state);
@@ -944,15 +941,6 @@ extern BOOL isTimeToFinish;
 	[[REngine mainEngine] executeString:@"quartz()"];
 }
 
-/* method whoAmI is defined only for RDocument and RQuartz 
-*/
-- (IBAction)activateQuartzDevice:(id)sender {
-	NSDocument *doc = [[NSDocumentController sharedDocumentController] currentDocument];
-	if(doc!= nil)
-		if([[doc whoAmI] isEqual:@"quartz"])
-			[doc activateDev];
-}
-
 - (IBAction)breakR:(id)sender{
 	if (childPID)
 		kill(childPID, SIGINT);
@@ -962,6 +950,11 @@ extern BOOL isTimeToFinish;
 
 - (IBAction)quitR:(id)sender{
 	[self windowShouldClose:RConsoleWindow];
+}
+
+- (IBAction)makeConsoleKey:(id)sender
+{
+	[RConsoleWindow makeKeyAndOrderFront:sender];
 }
 
 - (IBAction)toggleHistory:(id)sender{
@@ -986,32 +979,40 @@ extern BOOL isTimeToFinish;
 }
 
 
-- (IBAction)RNewDocument:(id)sender{
+- (IBAction)newDocument:(id)sender{
 	[[NSDocumentController sharedDocumentController] newDocument: sender];
 }
 
-- (IBAction)RSourceLoadFile:(id)sender{
+- (IBAction)openDocument:(id)sender{
 	[[NSDocumentController sharedDocumentController] openDocument: sender];
 }
 
-
-- (IBAction)openDocumentInEditor:(id)sender{
-	InEditor = YES;
-	[[NSDocumentController sharedDocumentController] openDocument: sender];
-	InEditor = NO;
+- (IBAction)saveDocumentAs:(id)sender{
+	NSDocument *cd = [[NSDocumentController sharedDocumentController] currentDocument];
+	
+	if (cd)
+		[cd saveDocumentAs:sender];
+	else {
+		int answer;
+		NSSavePanel *sp;
+		sp = [NSSavePanel savePanel];
+		[sp setRequiredFileType:@"txt"];
+		[sp setTitle:@"Save R Console To File"];
+		answer = [sp runModalForDirectory:nil file:@"R Console.txt"];
+		
+		if(answer == NSOKButton) {
+			[[RTextView string] writeToFile:[sp filename] atomically:YES];
+		}
+	}
 }
 
 - (IBAction)saveDocument:(id)sender{
-	int answer;
-	NSSavePanel *sp;
-	sp = [NSSavePanel savePanel];
-	[sp setRequiredFileType:@"txt"];
-	[sp setTitle:@"Save R Console To File"];
-	answer = [sp runModalForDirectory:nil file:@"R Console.txt"];
+	NSDocument *cd = [[NSDocumentController sharedDocumentController] currentDocument];
 	
-	if(answer == NSOKButton) {
-	  [[RTextView string] writeToFile:[sp filename] atomically:YES];
-	}
+	if (cd)
+		[cd saveDocument:sender];
+	else // for the console this is the same as Save As ..
+		[self saveDocumentAs:sender];
 }
 
 - (int) handleChooseFile:(char *)buf len:(int)len isNew:(int)isNew
@@ -1047,10 +1048,6 @@ extern BOOL isTimeToFinish;
 	return strlen(buf);
 
 }	
-
-- (IBAction)saveDocumentAs:(id)sender{
-	[self saveDocument:sender];
-}
 
 - (void) loadFile:(char *)fname
 {
@@ -1177,161 +1174,117 @@ No error message or warning are raised.
     NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
     
     if ([itemIdent isEqual: SaveDocToolbarItemIdentifier]) {
-	// Set the text label to be displayed in the toolbar and customization palette 
-	[toolbarItem setLabel: @"Save"];
-	[toolbarItem setPaletteLabel: @"Save Console Window"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Save R Console Window"];
-	[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(saveDocument:)];
-    } else  if ([itemIdent isEqual: NewEditWinToolbarItemIdentifier]) {
-	// Set the text label to be displayed in the toolbar and customization palette 
-	[toolbarItem setLabel: @"New Window"];
-	[toolbarItem setPaletteLabel: @"New Editor Window"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"New Editor Window"];
-	[toolbarItem setImage: [NSImage imageNamed: @"NewDocumentItemImage"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(RNewDocument:)];
-    } else  if ([itemIdent isEqual: X11ToolbarItemIdentifier]) {
-	// Set the text label to be displayed in the toolbar and customization palette 
-	[toolbarItem setLabel: @"Start X11"];
-	[toolbarItem setPaletteLabel: @"Start X11 Server"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Start The X11 Window Server To Allow R Using X11 device and Tcl/Tk"];
-	[toolbarItem setImage: [NSImage imageNamed: @"X11"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(runX11:)];
-    }  else  if ([itemIdent isEqual: SetColorsToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"Save"];
+		[toolbarItem setPaletteLabel: @"Save Console Window"];
+		[toolbarItem setToolTip: @"Save R Console Window"];
+		[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(saveDocument:)];
+    } else if ([itemIdent isEqual: NewEditWinToolbarItemIdentifier]) {
+		// Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: @"New Document"];
+		[toolbarItem setPaletteLabel: @"New Document"];
+		[toolbarItem setToolTip: @"Create a new, empty document in the editor"];
+		[toolbarItem setImage: [NSImage imageNamed: @"emptyDoc"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(newDocument:)];
+
+    } else  if ([itemIdent isEqual: X11ToolbarItemIdentifier]) {
+		[toolbarItem setLabel: @"Start X11"];
+		[toolbarItem setPaletteLabel: @"Start X11 Server"];
+		[toolbarItem setToolTip: @"Start The X11 Window Server To Allow R Using X11 device and Tcl/Tk"];
+		[toolbarItem setImage: [NSImage imageNamed: @"X11"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(runX11:)];
+
+    }  else  if ([itemIdent isEqual: SetColorsToolbarItemIdentifier]) {
 		[toolbarItem setLabel: @"Set Colors"];
 		[toolbarItem setPaletteLabel: @"Set R Colors"];
-		
-		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
 		[toolbarItem setToolTip: @"Set R Console Colors"];
 		[toolbarItem setImage: [NSImage imageNamed: @"colors"]];
-		
-		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(openColors:)];
+
     } else  if ([itemIdent isEqual: LoadFileInEditorToolbarItemIdentifier]) {
-	// Set the text label to be displayed in the toolbar and customization palette 
-	[toolbarItem setLabel: @"Open In Editor"];
-	[toolbarItem setPaletteLabel: @"Open In Editor"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Open In Editor"];
-	[toolbarItem setImage: [NSImage imageNamed: @"LoadDocumentItemImage"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(openDocumentInEditor:)];
+		[toolbarItem setLabel: @"Open In Editor"];
+		[toolbarItem setPaletteLabel: @"Open In Editor"];
+		[toolbarItem setToolTip: @"Open In Editor"];
+		[toolbarItem setImage: [NSImage imageNamed: @"RDoc"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(openDocument:)];
+
     } else  if ([itemIdent isEqual: SourceRCodeToolbarIdentifier]) {
-	// Set the text label to be displayed in the toolbar and customization palette 
-	[toolbarItem setLabel: @"Source/Load"];
-	[toolbarItem setPaletteLabel: @"Source Or Load In R"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Source Script Or Load Data In R"];
-	[toolbarItem setImage: [NSImage imageNamed: @"RInput"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(RSourceLoadFile:)];
+		[toolbarItem setLabel: @"Source/Load"];
+		[toolbarItem setPaletteLabel: @"Source Or Load In R"];
+		[toolbarItem setToolTip: @"Source Script Or Load Data In R"];
+		[toolbarItem setImage: [NSImage imageNamed: @"sourceR"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(sourceFile:)];
+
     } else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"Quartz"];
-	[toolbarItem setPaletteLabel: @"Quartz"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Open a new Quartz device window"];
-	[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(newQuartzDevice:) ];
+		[toolbarItem setLabel: @"Quartz"];
+		[toolbarItem setPaletteLabel: @"Quartz"];
+		[toolbarItem setToolTip: @"Open a new Quartz device window"];
+		[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(newQuartzDevice:) ];
+
 	} else if([itemIdent isEqual: InterruptToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"Abort"];
-	[toolbarItem setPaletteLabel: @"Abort"];
-	toolbarStopItem = toolbarItem;
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Interrupt current R computation"];
-	[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(breakR:) ];
+		[toolbarItem setLabel: @"Abort"];
+		[toolbarItem setPaletteLabel: @"Abort"];
+		toolbarStopItem = toolbarItem;
+		[toolbarItem setToolTip: @"Interrupt current R computation"];
+		[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(breakR:) ];
+
 	}  else if([itemIdent isEqual: FontSizeToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"Font Size"];
-	[toolbarItem setPaletteLabel: @"Font Size"];
-	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Grow or shrink the size of R Console font"];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem performSelector:@selector(setView:) withObject:fontSizeView];
-    [toolbarItem setAction:NULL];
-	[toolbarItem setView:fontSizeView];
-	if ([toolbarItem view]!=NULL)
-    {
-	[toolbarItem setMinSize:[[toolbarItem view] bounds].size];
-	[toolbarItem setMaxSize:[[toolbarItem view] bounds].size];
-    }
+		[toolbarItem setLabel: @"Font Size"];
+		[toolbarItem setPaletteLabel: @"Font Size"];
+		[toolbarItem setToolTip: @"Grow or shrink the size of R Console font"];
+		[toolbarItem setTarget: self];
+		[toolbarItem performSelector:@selector(setView:) withObject:fontSizeView];
+		[toolbarItem setAction:NULL];
+		[toolbarItem setView:fontSizeView];
+		if ([toolbarItem view]!=NULL)
+		{
+			[toolbarItem setMinSize:[[toolbarItem view] bounds].size];
+			[toolbarItem setMaxSize:[[toolbarItem view] bounds].size];
+		}
+
 	}  else if([itemIdent isEqual: NewQuartzToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"Quartz"];
-	[toolbarItem setPaletteLabel: @"Quartz"];
+		[toolbarItem setLabel: @"Quartz"];
+		[toolbarItem setPaletteLabel: @"Quartz"];
+		[toolbarItem setToolTip: @"Open a new Quartz device window"];
+		[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(newQuartzDevice:) ];
 	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Open a new Quartz device window"];
-	[toolbarItem setImage: [NSImage imageNamed: @"quartz"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(newQuartzDevice:) ];
 	} else if([itemIdent isEqual: ShowHistoryToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"History"];
-	[toolbarItem setPaletteLabel: @"History"];
+		[toolbarItem setLabel: @"History"];
+		[toolbarItem setPaletteLabel: @"History"];
+		[toolbarItem setToolTip: @"Show/Hide R Command History"];
+		[toolbarItem setImage: [NSImage imageNamed: @"history"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(toggleHistory:) ];
 	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Show/Hide R Command History"];
-	[toolbarItem setImage: [NSImage imageNamed: @"history"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(toggleHistory:) ];
 	} else if([itemIdent isEqual: AuthenticationToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"Authentication"];
-	[toolbarItem setPaletteLabel: @"Authentication"];
+		[toolbarItem setLabel: @"Authentication"];
+		[toolbarItem setPaletteLabel: @"Authentication"];
+		[toolbarItem setToolTip: @"Authorize R to run system commands as root"];
+		[toolbarItem setImage: [NSImage imageNamed: @"lock-locked"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(toggleAuthentication:) ];
 	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Authorize R to run system commands as root"];
-	[toolbarItem setImage: [NSImage imageNamed: @"lock-locked"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(toggleAuthentication:) ];
 	} else if([itemIdent isEqual: QuitRToolbarItemIdentifier]) {
-	[toolbarItem setLabel: @"Quit"];
-	[toolbarItem setPaletteLabel: @"Quit"];
+		[toolbarItem setLabel: @"Quit"];
+		[toolbarItem setPaletteLabel: @"Quit"];
+		[toolbarItem setToolTip: @"Quit R"];
+		[toolbarItem setImage: [NSImage imageNamed: @"quit"]];
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(quitR:) ];
 	
-	// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-	[toolbarItem setToolTip: @"Quit R"];
-	[toolbarItem setImage: [NSImage imageNamed: @"quit"]];
-	
-	// Tell the item what message to send when it is clicked 
-	[toolbarItem setTarget: self];
-	[toolbarItem setAction: @selector(quitR:) ];
 	} else {
 	// itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
 	// Returning nil will inform the toolbar this kind of item is not supported 
@@ -1346,15 +1299,15 @@ No error message or warning are raised.
     // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
     // user chooses to revert to the default items this set will be used 
     return [NSArray arrayWithObjects:	InterruptToolbarItemIdentifier, SourceRCodeToolbarIdentifier,
-										NewQuartzToolbarItemIdentifier, X11ToolbarItemIdentifier,
-										NSToolbarSeparatorItemIdentifier,
-										AuthenticationToolbarItemIdentifier, ShowHistoryToolbarItemIdentifier,
-		                                SetColorsToolbarItemIdentifier,
-										NSToolbarSeparatorItemIdentifier, 
-										SaveDocToolbarItemIdentifier, LoadFileInEditorToolbarItemIdentifier,
-										NewEditWinToolbarItemIdentifier, NSToolbarPrintItemIdentifier, 
-										NSToolbarSeparatorItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
-										QuitRToolbarItemIdentifier, nil];
+		NewQuartzToolbarItemIdentifier, X11ToolbarItemIdentifier,
+		NSToolbarSeparatorItemIdentifier,
+		AuthenticationToolbarItemIdentifier, ShowHistoryToolbarItemIdentifier,
+		SetColorsToolbarItemIdentifier,
+		NSToolbarSeparatorItemIdentifier, /* SaveDocToolbarItemIdentifier, */
+		LoadFileInEditorToolbarItemIdentifier,
+		NewEditWinToolbarItemIdentifier, NSToolbarPrintItemIdentifier, 
+		NSToolbarSeparatorItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
+		QuitRToolbarItemIdentifier, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
@@ -1362,13 +1315,13 @@ No error message or warning are raised.
     // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
     // The set of allowed items is used to construct the customization palette 
     return [NSArray arrayWithObjects: 	QuitRToolbarItemIdentifier, AuthenticationToolbarItemIdentifier, ShowHistoryToolbarItemIdentifier, 
-					InterruptToolbarItemIdentifier, NewQuartzToolbarItemIdentifier, SaveDocToolbarItemIdentifier,
-					NewEditWinToolbarItemIdentifier, LoadFileInEditorToolbarItemIdentifier,
-					NSToolbarPrintItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
-					NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, 
-					NSToolbarSeparatorItemIdentifier, X11ToolbarItemIdentifier,
-		            SetColorsToolbarItemIdentifier,
-					FontSizeToolbarItemIdentifier, SourceRCodeToolbarIdentifier, nil];
+		InterruptToolbarItemIdentifier, NewQuartzToolbarItemIdentifier, /* SaveDocToolbarItemIdentifier, */
+		NewEditWinToolbarItemIdentifier, LoadFileInEditorToolbarItemIdentifier,
+		NSToolbarPrintItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
+		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, 
+		NSToolbarSeparatorItemIdentifier, X11ToolbarItemIdentifier,
+		SetColorsToolbarItemIdentifier,
+		FontSizeToolbarItemIdentifier, SourceRCodeToolbarIdentifier, nil];
 }
 
 - (void) toolbarWillAddItem: (NSNotification *) notif {
@@ -1599,7 +1552,8 @@ No error message or warning are raised.
 
 
 -(IBAction) runX11:(id)sender{
-	[[REngine mainEngine] executeString: @"system(\"open -a X11.app\")"];
+	//[[REngine mainEngine] executeString: @"system(\"open -a X11.app\")"];
+	system("open -a X11.app");
 }
 			
 -(IBAction) openColors:(id)sender{
@@ -1616,6 +1570,17 @@ No error message or warning are raised.
     }
 }
 
+- (IBAction)sourceFile:(id)sender
+{
+	int answer;
+	NSOpenPanel *op;
+	op = [NSOpenPanel openPanel];
+	[op setTitle:@"R File to Source"];
+	answer = [op runModalForTypes:nil];
+	
+	[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
+		//NSLog(@"RController's sourceFile: was called, current document is %@",  [[NSDocumentController sharedDocumentController] currentDocument]);
+}
 
 - (IBAction)printDocument:(id)sender
 {

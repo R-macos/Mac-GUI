@@ -160,13 +160,10 @@
 - (IBAction)historyDoubleClick:(id)sender;
 
 - (IBAction)newQuartzDevice:(id)sender;
-- (IBAction)activateQuartzDevice:(id)sender;
 - (IBAction)breakR:(id)sender;
 - (IBAction)quitR:(id)sender;
 - (IBAction)toggleHistory:(id)sender;
 - (IBAction)toggleAuthentication:(id)sender;
-- (IBAction)RNewDocument:(id)sender;
-- (IBAction)RSourceLoadFile:(id)sender;
 
 - (IBAction)installFromBinary:(id)sender;
 - (IBAction)installFromDir:(id)sender;
@@ -174,6 +171,9 @@
 
 - (IBAction)togglePackageInstaller:(id)sender;
 
+- (IBAction)newDocument:(id)sender;
+- (IBAction)openDocument:(id)sender;
+	
 - (IBAction)loadWorkSpace:(id)sender;
 - (IBAction)loadWorkSpaceFile:(id)sender;
 - (IBAction)saveWorkSpace:(id)sender;
@@ -186,6 +186,10 @@
 - (IBAction)toggleWSBrowser:(id)sender;
 - (IBAction)performHelpSearch:(id)sender;
 
+- (IBAction)sourceFile:(id)sender;
+
+- (IBAction)makeConsoleKey:(id)sender;
+
 - (void) shouldClearWS:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void) addConnectionLog;
@@ -197,7 +201,6 @@
 
 - (int) isImageData:(char *)fname;
 - (void) loadFile:(char *)fname;
-- (IBAction)openDocumentInEditor:(id)sender;
 
 - (void) RConsoleDidResize: (NSNotification *)notification;
 - (void) setOptionWidth:(BOOL)force;

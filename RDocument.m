@@ -9,11 +9,6 @@
 #import "RDocument.h"
 #import "RController.h"
 
-extern BOOL InEditor;
-BOOL IsRTF = NO;
-BOOL IsEditable = YES;
-BOOL IsREdit = NO;
-
 BOOL defaultsInitialized = NO;
 
 NSColor *shColorNormal;
@@ -45,9 +40,9 @@ NSArray *keywordList;
 */ 
 - (BOOL)windowShouldClose:(id)sender{
 	
-	if(IsREdit){
+	if(isREdit){
 		[NSApp stopModal];
-		IsREdit = NO;
+		isREdit = NO;
 	}
 	return YES;
 }
@@ -62,15 +57,19 @@ NSArray *keywordList;
 			[RDocument setDefaultSyntaxHighlightingColors];
 			defaultsInitialized=YES;
 		}
-		// Add your subclass-specific initialization here.
-        // If an error occurs here, send a [self release] message and return nil.
+		initialContents=nil;
+		initialContentsType=nil;
+		useHighlighting=YES;
+		isEditable=YES;
+		isREdit=NO;
     }
 	
     return self;
 }
 
 - (void)dealloc {
-	[dataFromFile release];
+	if (initialContents) [initialContents release];
+	if (initialContentsType) [initialContentsType release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
 }
@@ -82,48 +81,32 @@ NSArray *keywordList;
     return @"RDocument";
 }
 
-- (void) loadtextViewWithData: (NSData *)data {
-	unsigned char *buf;
-	int len = [data length];
-	buf = malloc(len+1);
-	if(buf!=nil){
-		[data getBytes:buf];
-		buf[len] = '\0';
-		[textView setFont:[NSFont userFixedPitchFontOfSize:11.0]];
+- (void) loadInitialContents
+{
+	if (!initialContents || !textView) return;
+	if ([initialContentsType isEqual:@"rtf"])
 		[textView replaceCharactersInRange:
-		NSMakeRange(0, [[textView string] length])
-		withString: [NSString stringWithCString:buf]];
-	free(buf);
-	}
-}
-
-- (void) loadtextViewWithRTFData: (NSData *)data {
-	[textView replaceCharactersInRange:
-		NSMakeRange(0, [[textView string] length])
-		withRTF:data];
+			NSMakeRange(0, [[textView textStorage] length])
+								   withRTF:initialContents];
+	else
+		[textView replaceCharactersInRange:
+			NSMakeRange(0, [[textView textStorage] length])
+								   withString:[NSString stringWithCString:[initialContents bytes] length:[initialContents length]]];
+	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
+	[initialContents release];
+	initialContents=nil;
 }
 
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
-	
-	// Add any code here that needs to be executed once the windowController has loaded the document's window.
-	if(dataFromFile) {
-		if(IsRTF)
-			[self loadtextViewWithRTFData: dataFromFile];
-		else
-			[self loadtextViewWithData: dataFromFile];
-		[dataFromFile release];
-		dataFromFile = nil;
-	}
-	
+		
 	[textView setFont:[[RController getRController] currentFont]];
 	
 	[textView setAllowsUndo: YES];
-	[textView setEditable: IsEditable];
-	// update highlighting before the delegate is set up for efficience reason
-	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
+	[self loadInitialContents];
+	[textView setEditable: isEditable];
 	[[NSNotificationCenter defaultCenter] 
 		addObserver:self
 		   selector:@selector(textDidChange:)
@@ -170,44 +153,17 @@ NSArray *keywordList;
 
 
 - (BOOL) loadDataRepresentation: (NSData *)data ofType:(NSString *)aType {
-	if([aType isEqual:@"rtf"])  IsRTF = YES;
-	else	IsRTF = NO;
-
-	if(InEditor){	
-		if(textView) {
-			if(IsRTF)
-				[self loadtextViewWithRTFData:data];
-			else 
-				[self loadtextViewWithData:data];
-		}   else
-				dataFromFile = [data retain];
+	if (initialContents) {
+		[initialContents release];
+		initialContents=nil;
 	}
-	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
+	
+	initialContentsType = [[NSString alloc] initWithString:aType];
+	initialContents = [[NSData alloc] initWithData: data];
+
+	if (textView) [self loadInitialContents];
+
 	return YES;	
-}
-/*  This function is invoked when user drags a file on the R icon. This function is also used
-	to open a file in the internal editor. In the latter case we let Cococa do the rest.
-*/	
-
-
-- (BOOL)readFromFile:(NSString *)fileName ofType:(NSString *)docType
-{
-	char fname[1030];
-	NSString *extension = [[fileName pathExtension] lowercaseString];
-
-	if(InEditor==NO){
-		CFStringGetCString((CFStringRef)fileName, fname, 1024,  kCFStringEncodingMacRoman); 
-		[[RController getRController] loadFile:fname];
-		[[NSDocumentController sharedDocumentController] setShouldCreateUI:false];
-		[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
-		return YES;
-	} else {
-		BOOL result=NO;
-		[[NSDocumentController sharedDocumentController] setShouldCreateUI:true];
-		if (result=[self loadDataRepresentation: [[NSData alloc] initWithContentsOfFile:fileName] ofType:extension])		
-			[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
-		return result;
-	}
 }
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title{
@@ -220,11 +176,32 @@ NSArray *keywordList;
 		}
 }
 
-/* this function return the "kind" of document, not just the type which could be
-anything for RDocument. This method is called by RController -> activateQuartz
-*/
-- (NSString *)whoAmI{
-	return @"REditor";
+- (void) setHighlighting: (BOOL) use
+{
+	useHighlighting=use;
+	if (textView) {
+		if (use)
+			[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
+		else
+			[textView setTextColor:[NSColor blackColor] range:NSMakeRange(0,[[textView textStorage] length])];
+	}
+}
+
+- (void) setEditable: (BOOL) editable
+{
+	isEditable=editable;
+	if (textView)
+		[textView setEditable:editable];
+}
+
+- (void) setREditFlag: (BOOL) flag
+{
+	isREdit=flag;
+}
+
+- (BOOL) hasREditFlag
+{
+	return isREdit;
 }
 
 /* This is needed to force the NSDocument to know when edited windows are dirty */
@@ -245,7 +222,7 @@ anything for RDocument. This method is called by RController -> activateQuartz
 	int last = i+range.length;
 	BOOL foundItem=NO;
 	
-	if (updating) return;
+	if (updating || !useHighlighting) return;
 	
 	updating=YES;
 	
