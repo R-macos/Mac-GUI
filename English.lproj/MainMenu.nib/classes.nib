@@ -180,6 +180,17 @@
             SUPERCLASS = NSObject; 
         }, 
         {
+            CLASS = SelectList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                SelectListWindow = id; 
+                cancelButton = NSButton; 
+                listDataSource = NSTableView; 
+                okButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
             ACTIONS = {reloadWSBData = id; }; 
             CLASS = WSBrowser; 
             LANGUAGE = ObjC; 
