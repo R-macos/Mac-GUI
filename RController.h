@@ -40,6 +40,11 @@
 #import <sys/types.h>
 
 #import <Cocoa/Cocoa.h>
+
+#ifdef DEBUG_RGUI
+#import <ExceptionHandling/NSExceptionHandler.h>
+#endif
+
 #import "Tools/History.h"
 #import "Tools/ConnectionCache.h"
 #import "PrefPanes/PrefWindowController.h"

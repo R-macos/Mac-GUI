@@ -9,8 +9,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+#ifdef DEBUG_RGUI
+#import <ExceptionHandling/NSExceptionHandler.h>
+#endif
+
 int main(int argc, const char *argv[])
 {
-
+#ifdef DEBUG_RGUI
+	[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: 255]; // log+handle all but "other"
+#endif
    return(NSApplicationMain(argc, argv));
 }

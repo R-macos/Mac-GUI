@@ -60,6 +60,7 @@
 //104
 		1058C7A0FEA54F0111CA2CBB = {
 			children = (
+				6828383807804DFC004617B7,
 				162D387B06F71A3000C0936C,
 				167BE02006D5143A005381BB,
 				1674D23406BA2E37008AC794,
@@ -1990,6 +1991,7 @@
 			buildStyles = (
 				4A9504CCFFE6A4B311CA0CBA,
 				4A9504CDFFE6A4B311CA0CBA,
+				6828383307804CC2004617B7,
 			);
 			hasScannedForEncodings = 1;
 			isa = PBXProject;
@@ -2153,7 +2155,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "-DPLAIN_STDERR";
+				OTHER_CFLAGS = "-DPLAIN_STDERR -DDEBUG_RGUI";
 				ZERO_LINK = YES;
 			};
 			isa = PBXBuildStyle;
@@ -2173,6 +2175,38 @@
 //4A2
 //4A3
 //4A4
+//680
+//681
+//682
+//683
+//684
+		6828383307804CC2004617B7 = {
+			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "-DDEBUG_RGUI";
+			};
+			isa = PBXBuildStyle;
+			name = Debug;
+		};
+		6828383807804DFC004617B7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = ExceptionHandling.framework;
+			path = /System/Library/Frameworks/ExceptionHandling.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6828383907804DFC004617B7 = {
+			fileRef = 6828383807804DFC004617B7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//680
+//681
+//682
+//683
+//684
 //8D0
 //8D1
 //8D2
@@ -2391,6 +2425,7 @@
 				1674D23506BA2E37008AC794,
 				167BE02106D5143A005381BB,
 				162D387C06F71A3000C0936C,
+				6828383907804DFC004617B7,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

@@ -37,6 +37,7 @@
 #import <sys/wait.h>
 #import <signal.h>
 #import <unistd.h>
+#import "RController.h"
 #import "REngine/Rcallbacks.h"
 #import "REngine/Rengine.h"
 
@@ -165,6 +166,10 @@ static RController* sharedRController;
 - (void) awakeFromNib {
 	NSFont *theFont;
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
+	
+#ifdef DEBUG_RGUI
+	[[NSExceptionHandler defaultExceptionHandler] setDelegate:self];
+#endif
 	
 	sharedRController = self;
 	
@@ -1642,7 +1647,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 {
 	NSOpenPanel *op;
 	int answer;
-	
+
 	op = [NSOpenPanel openPanel];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
@@ -1866,6 +1871,38 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (NSWindow *)getRConsoleWindow{
 	return RConsoleWindow;
 }
+
+#ifdef DEBUG_RGUI
+- (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldLogException:(NSException *)exception mask:(unsigned int)aMask	// mask is NSLog<exception type>Mask, exception's userInfo has stack trace for key NSStackTraceKey
+{
+	NSString *stack = [[exception userInfo] objectForKey:NSStackTraceKey];
+	NSTask *ls=[[NSTask alloc] init];
+	NSString *pid = [[NSNumber numberWithInt:getpid()] stringValue];
+	NSMutableArray *args = [NSMutableArray arrayWithCapacity:20];
+	
+	NSLog(@"Logged exception %@ with trace %@", exception, stack);
+	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/bin/atos"]) {
+		NSLog(@"Calling atos to retrieve symbols, please wait!");
+		[args addObject:@"-p"];
+		[args addObject:pid];
+		[args addObjectsFromArray:[stack componentsSeparatedByString:@" "]];
+	
+		[ls setLaunchPath:@"/usr/bin/atos"];
+		[ls setArguments:args];
+		[ls launch];
+		[ls waitUntilExit];
+		[ls release];
+	} else
+		NSLog(@"Unable to find atos - symbols can't be dumped!");
+	return NO;
+}
+
+- (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldHandleException:(NSException *)exception mask:(unsigned int)aMask	// mask is NSHandle<exception type>Mask, exception's userInfo has stack trace for key
+{
+	return NO;
+}
+
+#endif
 
 @end
 
