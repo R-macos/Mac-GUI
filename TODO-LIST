@@ -18,6 +18,8 @@ TO DO LIST
 - general issues:
 	- font size handling is a mess - we need a global way to change font type and size for
 	  all documents, including console and editor windows
+	- RController is not NSDocument-based, which messes up lots of automatic menu handling
+	- synchronize stdxx output on rmChild (need a semaphore)
 - workspace browser:
 	- disable "refresh" while data are fetched
 	- use toolbar instead of fixed the button

@@ -1,4 +1,25 @@
 NEWS
+
+Last update: 2004-10-14 [SU]
+*	fixed output synchronization. all console output sources eventually
+	use writeConsoleDirectly: and the insertion point is controlled by
+	outputPosition.
+*	add more flexible flush support (flushROutput and FlushStdConsole)
+*	fixed document handling to be consistent with Cocoa; this means
+	that menu items are handled implicitly by the first responder
+	(where possible) and most default actions apply to the editor.
+	Old versions of R GUI didn't have this, but mainly because there
+	was no good editor supplied.
+*	removed all global flags (IsRTF, IsREdit, ...)
+*	toolbar icons changed (new icons added, some re-worked)
+*	added menu+shortcut for "switch to console"
+*	moved some menu items to logically more suitable places
+	(e.g. "New document" is in "File" ...)
+*	changed drop-document handling; the document is loaded in the editor
+	(it can be easily executed by <Cmd><Enter> if necessary)
+*	fixed activation of Quartz to use FR dispatching (this way it's not
+	enabled in the console or editor where it doesn't make any sense)
+
 Last update: 2004-10-13 [SI]
 *	added support for activation of quartz device
 	and creation of new quartz deivce from the GUI
