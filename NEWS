@@ -2,6 +2,9 @@ NEWS
 
 Last update: 2004-10-25 [SU]
 *	added brace highlighting (partially based on code by Rob Goedman)
+*	reversed declaration order of RQuartz copy operation: PDF first,
+	TIFF second. This may help some PDF editors ... We may want to make this
+	configurable and/or have two separate copy commands.
 
 Last update: 2004-10-22 [SI]
 *	added first embrional version of R preferences using AMPreferencePane class
