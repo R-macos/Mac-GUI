@@ -1,0 +1,23 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                changeEditOrSource = id; 
+                changeLibPaths = id; 
+                changeWorkingDir = id; 
+                chooseWorkingDir = id; 
+            }; 
+            CLASS = MiscPrefPane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                cbRAquaPath = NSButton; 
+                editOrSource = NSMatrix; 
+                mainView = NSView; 
+                workingDir = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
