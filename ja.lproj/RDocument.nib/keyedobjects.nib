@@ -11,17 +11,17 @@
 			<key>$class</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>112</integer>
+				<integer>113</integer>
 			</dict>
 			<key>NSClassesKeys</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>97</integer>
+				<integer>98</integer>
 			</dict>
 			<key>NSClassesValues</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>98</integer>
+				<integer>99</integer>
 			</dict>
 			<key>NSConnections</key>
 			<dict>
@@ -63,12 +63,12 @@
 			<key>NSOidsKeys</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>99</integer>
+				<integer>100</integer>
 			</dict>
 			<key>NSOidsValues</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>100</integer>
+				<integer>101</integer>
 			</dict>
 			<key>NSRoot</key>
 			<dict>
@@ -228,7 +228,7 @@
 			</dict>
 		</dict>
 		<string>{{566, 388}, {507, 419}}</string>
-		<string>Window</string>
+		<string>ウィンドウ</string>
 		<string>NSWindow</string>
 		<string>View</string>
 		<dict>
@@ -1265,7 +1265,7 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>12</integer>
+					<integer>97</integer>
 				</dict>
 			</array>
 		</dict>
@@ -1273,6 +1273,7 @@
 		<string>NSTextView</string>
 		<string>NSScrollView2</string>
 		<string>File's Owner</string>
+		<string>Window</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1355,10 +1356,6 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>101</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>102</integer>
 				</dict>
 				<dict>
@@ -1396,6 +1393,10 @@
 				<dict>
 					<key>CF$UID</key>
 					<integer>111</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>112</integer>
 				</dict>
 			</array>
 		</dict>

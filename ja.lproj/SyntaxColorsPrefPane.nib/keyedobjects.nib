@@ -11,17 +11,17 @@
 			<key>$class</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>211</integer>
+				<integer>212</integer>
 			</dict>
 			<key>NSClassesKeys</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>166</integer>
+				<integer>167</integer>
 			</dict>
 			<key>NSClassesValues</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>167</integer>
+				<integer>168</integer>
 			</dict>
 			<key>NSConnections</key>
 			<dict>
@@ -63,12 +63,12 @@
 			<key>NSOidsKeys</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>168</integer>
+				<integer>169</integer>
 			</dict>
 			<key>NSOidsValues</key>
 			<dict>
 				<key>CF$UID</key>
-				<integer>169</integer>
+				<integer>170</integer>
 			</dict>
 			<key>NSRoot</key>
 			<dict>
@@ -810,7 +810,7 @@
 				<integer>16</integer>
 			</dict>
 		</dict>
-		<string>Normal</string>
+		<string>ノーマル</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -967,7 +967,7 @@
 				<integer>54</integer>
 			</dict>
 		</dict>
-		<string>String</string>
+		<string>文字列</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1074,7 +1074,7 @@
 				<integer>54</integer>
 			</dict>
 		</dict>
-		<string>Identifier</string>
+		<string>識別子</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1218,7 +1218,7 @@
 				<integer>16</integer>
 			</dict>
 		</dict>
-		<string>Keyword</string>
+		<string>キーワード</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1362,7 +1362,7 @@
 				<integer>16</integer>
 			</dict>
 		</dict>
-		<string>Comment</string>
+		<string>コメント</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1431,7 +1431,7 @@
 				<integer>54</integer>
 			</dict>
 		</dict>
-		<string>Number</string>
+		<string>数値</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1561,7 +1561,7 @@
 				<integer>54</integer>
 			</dict>
 		</dict>
-		<string>Colors</string>
+		<string>カラー</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1690,7 +1690,7 @@
 				<integer>41</integer>
 			</dict>
 		</dict>
-		<string>Defaults</string>
+		<string>デフォルト</string>
 		<string></string>
 		<dict>
 			<key>$class</key>
@@ -2474,10 +2474,6 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>94</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>151</integer>
 				</dict>
 				<dict>
@@ -2502,11 +2498,11 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>3</integer>
+					<integer>157</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>157</integer>
+					<integer>3</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -2540,8 +2536,13 @@
 					<key>CF$UID</key>
 					<integer>165</integer>
 				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>166</integer>
+				</dict>
 			</array>
 		</dict>
+		<string>Colors</string>
 		<string>ColorWell1</string>
 		<string>Field211</string>
 		<string>NXColorWell11</string>
@@ -2759,10 +2760,6 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>170</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>171</integer>
 				</dict>
 				<dict>
@@ -2920,6 +2917,10 @@
 				<dict>
 					<key>CF$UID</key>
 					<integer>210</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>211</integer>
 				</dict>
 			</array>
 		</dict>

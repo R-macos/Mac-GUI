@@ -476,7 +476,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>Built-in editor</string>
+		<string>内蔵エディタ</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -612,7 +612,7 @@
 			<key>NSTag</key>
 			<integer>1</integer>
 		</dict>
-		<string>External Editor</string>
+		<string>外部エディタ</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1115,7 +1115,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>Show syntax coloring</string>
+		<string>構文を色分け</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1220,7 +1220,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>Show brace highlighting</string>
+		<string>対応する括弧をハイライト</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1300,7 +1300,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>Show line numbers</string>
+		<string>行番号の表示</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1367,7 +1367,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>Highlight interval:</string>
+		<string>ハイライトの間隔:</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1614,7 +1614,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>(Valid range is between 0.1 and 0.8 sec.)</string>
+		<string>(有効範囲は0.1-0.8秒です)</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1697,7 +1697,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>(Wrapping and padding for new windows only)</string>
+		<string>(ラッピング/パディングは新規ウィンドウのみ)</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1777,7 +1777,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>Wrap lines</string>
+		<string>行をラップする</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1913,7 +1913,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>Text padding:</string>
+		<string>テキストのパディング:</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2049,7 +2049,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>Margin width:</string>
+		<string>マージンの幅:</string>
 		<string>{{2, 2}, {256, 231}}</string>
 		<dict>
 			<key>$classes</key>
@@ -2094,7 +2094,7 @@
 				<integer>125</integer>
 			</dict>
 		</dict>
-		<string>Built-in editor preferences</string>
+		<string>内蔵エディタの設定</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2322,7 +2322,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>Editor:
+		<string>エディタ:
 </string>
 		<dict>
 			<key>$class</key>
@@ -2467,7 +2467,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>Application</string>
+		<string>アプリケーション</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2528,7 +2528,7 @@
 			<key>NSTag</key>
 			<integer>1</integer>
 		</dict>
-		<string>Command</string>
+		<string>コマンド</string>
 		<string>{206, 18}</string>
 		<string>{4, 2}</string>
 		<string>NSActionCell</string>
@@ -2637,7 +2637,7 @@
 				<integer>76</integer>
 			</dict>
 		</dict>
-		<string>Note: Command is executed in a shell</string>
+		<string>注: コマンドはシェル内で実行されます</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2717,7 +2717,7 @@
 				<integer>17</integer>
 			</dict>
 		</dict>
-		<string>New editor</string>
+		<string>新規エディタ</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2828,7 +2828,7 @@
 				<integer>165</integer>
 			</dict>
 		</dict>
-		<string>External editor settings</string>
+		<string>外部エディタの設定</string>
 		<dict>
 			<key>$class</key>
 			<dict>

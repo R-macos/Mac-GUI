@@ -537,7 +537,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Open file in editor</string>
+		<string>エディタでファイルを開く</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -667,7 +667,7 @@
 			<key>NSTag</key>
 			<integer>1</integer>
 		</dict>
-		<string>Source input file</string>
+		<string>入力ファイルをソースとして読み込む</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -839,7 +839,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>Default Action when R Opens a File</string>
+		<string>Rがファイルを開く際のデフォルト動作</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1138,7 +1138,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Add $HOME/R/Library</string>
+		<string>$HOME/R/Library を追加</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1258,7 +1258,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>(was default in RAqua)</string>
+		<string>(RAquaのデフォルト)</string>
 		<dict>
 			<key>$classes</key>
 			<array>
@@ -1337,7 +1337,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>Note: This change is effective only after a restart of R.app</string>
+		<string>注: 変更はR.appを再起動した後に有効になります</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1388,7 +1388,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>Default Library Paths</string>
+		<string>デフォルトのライブラリパス</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1568,7 +1568,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>Initial working directory:Directory</string>
+		<string>初期作業ディレクトリ:Directory</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1648,7 +1648,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Change</string>
+		<string>変更</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1759,7 +1759,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>Startup</string>
+		<string>スタートアップ</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1955,7 +1955,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>R history file:</string>
+		<string>R履歴ファイル:</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2035,7 +2035,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Default</string>
+		<string>デフォルト</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2205,7 +2205,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>R.app history file:</string>
+		<string>R.app 履歴ファイル:</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2442,7 +2442,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Read history file on startup</string>
+		<string>起動時に履歴ファイルを読み込む</string>
 		<string>{{2, 2}, {451, 128}}</string>
 		<string>{{17, 16}, {455, 145}}</string>
 		<string>{0, 0}</string>
@@ -2477,7 +2477,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>History</string>
+		<string>履歴</string>
 		<string>{489, 360}</string>
 		<dict>
 			<key>$class</key>
