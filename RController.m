@@ -179,7 +179,10 @@ static RController* sharedRController;
 }
 
 - (BOOL) getRootFlag { return runSystemAsRoot; }
-- (void) setRootFD: (int) fd { rootFD=fd; }
+
+- (void) setRootFD: (int) fd {
+	rootFD=fd;
+}
 
 - (NSFont*) currentFont
 {
@@ -188,6 +191,7 @@ static RController* sharedRController;
 
 - (void) awakeFromNib {
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
+	SLog(@"RController.awakeFromNib");
 	
 #ifdef DEBUG_RGUI
 	[[NSExceptionHandler defaultExceptionHandler] setDelegate:self];
@@ -204,10 +208,15 @@ static RController* sharedRController;
 	[origTS release];
 	
 	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
+	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
+	[RTextView setDrawsBackground:NO];
+	[[RTextView enclosingScrollView] setDrawsBackground:NO];
 	
+	SLog(@" - load preferences");
 	[[Preferences sharedPreferences] addDependent: self];
 	[self updatePreferences];
 	
+	SLog(@" - init R_LIBS");	
 	{ // first initialize R_LIBS if necessary
 		NSString *prefStr = [Preferences stringForKey:miscRAquaLibPathKey withDefault:nil];
 		BOOL flag = !isAdmin(); // the default is YES for users and NO for admins
@@ -219,11 +228,26 @@ static RController* sharedRController;
 			if (cRLIBS && *cRLIBS)
 				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
 			setenv("R_LIBS", [addPath UTF8String], 1);
+			SLog(@" - setting R_LIBS=%s", [addPath UTF8String]);
 		}
 	}
+	SLog(@" - set APP VERSION");
 	setenv("R_GUI_APP_VERSION", R_GUI_VERSION_STR, 1);
 	
+	SLog(@" - set R home");
+	if (!getenv("R_HOME")) {
+		NSBundle *rfb = [NSBundle bundleWithIdentifier:@"org.r-project.R-framework"];
+		if (!rfb)
+			SLog(@" * problem: R_HOME is not set and I can't find the framework bundle");
+		else {
+			SLog(@"   %s", [[rfb resourcePath] UTF8String]);
+			setenv("R_HOME", [[rfb resourcePath] UTF8String], 1);
+		}
+	}
+	
+	/* setup LANG variable to match the system locale based on user's CFLocale */
 #if (R_VERSION >= R_Version(2,1,0))
+	SLog(@" - set locale");
 	{
 		char cloc[64];
 		char *c = getenv("LANG");
@@ -240,16 +264,14 @@ static RController* sharedRController;
 		if (!strchr(cloc,'.'))
 			strcat(cloc,".UTF-8");
 		setenv("LANG", cloc, 1);
-		//NSLog(@"LANG=%s", getenv("LANG"));
+		SLog(@" - setting LANG=%s", getenv("LANG"));
 	}
 #endif
 	
+	SLog(@" - init R");
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
-	
-	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
-	[RTextView setDrawsBackground:NO];
-	[[RTextView enclosingScrollView] setDrawsBackground:NO];
-	
+
+	SLog(@" - font and other widgets");
 	/*
 	[RTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
 	[fontSizeStepper setIntValue:currentFontSize];
@@ -273,7 +295,8 @@ static RController* sharedRController;
 	[ RConsoleWindow setDocumentEdited:YES];
 	
     //NSLog(@"RController: awake: done");
-	
+
+	SLog(@" - setup timer");
 	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
 												 target:self
 											   selector:@selector(showWorkingDir:)
@@ -285,6 +308,7 @@ static RController* sharedRController;
 	
     BOOL WantThread = YES;
 	
+	SLog(@" - setup stdout/err grabber");
     if(WantThread){ // re-route the stdout to our own file descriptor and use ConnectionCache on it
         int pfd[2];
         pipe(pfd);
@@ -304,6 +328,7 @@ static RController* sharedRController;
 		[self addConnectionLog];
     }
 	
+	SLog(@" - set cwd and load history");
 	[historyView setDoubleAction: @selector(historyDoubleClick:)];
 	
 	currentSize = [[RTextView textContainer] containerSize].width;
@@ -313,22 +338,28 @@ static RController* sharedRController;
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
 		[self doLoadHistory:nil];
 	}
+	SLog(@" - awake is done");
 }
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
 {
+	SLog(@"RController.applicationDidFinishLaunching");
+	SLog(@" - initalizing R");
 	if (![[REngine mainEngine] activate]) {
 		NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
 		exit(-1);
 	}
 	
+	SLog(@" - set R options");
 	// force html-help, because that's the only format we can handle ATM
 	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
 	
+	SLog(@" - clean up and flush console");
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
 	[self flushROutput];
 	
+	SLog(@" - setup notification and timers");
 	[[NSNotificationCenter defaultCenter] 
 		addObserver:self
 		   selector:@selector(RConsoleDidResize:)
@@ -349,10 +380,12 @@ static RController* sharedRController;
 	// once we're ready with the doc transition, the following will actually fire up the cconsole window
 	//[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"Rcommand" display:YES];
 
+	SLog(@" - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
 	//[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
 	//CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
 	
+	SLog(@" - setup REPL trigger timer");
 	if (!RLtimer)
 		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
 												   target:self
@@ -368,6 +401,7 @@ static RController* sharedRController;
 	NSLog(@"R.app thinks: %@", [[NSFileManager defaultManager] currentDirectoryPath]);
 	NSLog(@"Prefs think: %@", [Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"]);
 */
+	SLog(@" - done, ready to go");
 }
 
 - (BOOL)appLaunched {
@@ -420,10 +454,15 @@ static RController* sharedRController;
     fcntl(stderrFD, F_SETFL, O_NONBLOCK);
     while (1) {
 		int selr=0, maxfd=stdoutFD;
+		int validRootFD=-1;
         FD_ZERO(&readfds);
         FD_SET(stdoutFD,&readfds);
         FD_SET(stderrFD,&readfds); if(stderrFD>maxfd) maxfd=stderrFD;
-		if (rootFD!=-1) { FD_SET(rootFD,&readfds); if(rootFD>maxfd) maxfd=rootFD; }
+		if (rootFD!=-1) {
+			validRootFD = rootFD; // we copy it as to not run into threading problems when it is changed while we're in the middle of processing
+			FD_SET(rootFD,&readfds);
+			if(rootFD>maxfd) maxfd=rootFD;
+		}
         selr=select(maxfd+1, &readfds, 0, 0, &timv);
         if (FD_ISSET(stdoutFD, &readfds)) {
 			if (bufFD!=0 && pib>0) {
@@ -460,7 +499,7 @@ static RController* sharedRController;
 				pib=0;
 			}
 		}
-		if (rootFD!=-1 && FD_ISSET(rootFD, &readfds)) {
+		if (validRootFD!=-1 && FD_ISSET(validRootFD, &readfds)) {
 			if (bufFD!=2 && pib>0) {
 				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
@@ -469,7 +508,7 @@ static RController* sharedRController;
 				pib=0;
 			}
 			bufFD=2;
-			while (pib<bufSize && (n=read(rootFD,buf+pib,bufSize-pib))>0)
+			while (pib<bufSize && (n=read(validRootFD,buf+pib,bufSize-pib))>0)
 				pib+=n;
 			if (n==0 || pib>flushMark) { // if we reach the flush mark, dump it
 				@try{
@@ -478,7 +517,7 @@ static RController* sharedRController;
 				}
 				pib=0;
 			}
-			if (n==0) rootFD=-1;
+			if (n==0) rootFD=-1; // we indicate EOF on the rootFD by setting it to -1
 		}
 		if ((forceStdFlush || selr==0) && pib>0) { // dump also if we got a timeout
 			@try{
@@ -866,7 +905,7 @@ extern BOOL isTimeToFinish;
 	if ([self getRootFlag]) {
 		FILE *f;
 		char *argv[3] = { "-c", cmd, 0 };
-		int fd;
+		int res;
  		NSBundle *b = [NSBundle mainBundle];
 		char *sushPath=0;
 		if (b) {
@@ -875,11 +914,21 @@ extern BOOL isTimeToFinish;
 			[sush getCString:sushPath maxLength:[sush cStringLength]];
 		}
 		
-		fd = runRootScript(sushPath?sushPath:"/bin/sh",argv,&f,1);
-		if (!fd && f)
-			[self setRootFD:fileno(f)];
+		res = runRootScript(sushPath?sushPath:"/bin/sh",argv,&f,1);
+		if (!res && f) {		
+			int fd = fileno(f);
+			if (fd != -1) {
+				struct timespec peSleep = { 0, 50000000 }; // 50ms sleep
+				[self setRootFD:fileno(f)];
+			
+				while (rootFD!=-1) { // readThread will reset rootFD to -1 when reaching EOF
+					nanosleep(&peSleep, 0); // sleep at least 50ms between PE calls (they're expensive)
+					Re_ProcessEvents();
+				}
+			}
+		}
 		if (sushPath) free(sushPath);
-		return fd;
+		return res;
 	}
 	
 	pid=fork();
@@ -2095,10 +2144,13 @@ This method calls the showHelpFor method of the Help Manager which opens
 }
 
 - (void) updatePreferences {
+	SLog(@"RController.updatePreferences");
 	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
 	NSFont *newFont = [NSFont userFixedPitchFontOfSize:currentFontSize];
 	if (newFont!=textFont) {
+		SLog(@" - releasing %@", textFont);
 		[textFont release];
+		SLog(@" - using new %@", textFont);
 		textFont = [newFont retain];
 	}
 	
@@ -2117,6 +2169,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		}
 	}
 	[RTextView setNeedsDisplay:YES];
+	SLog(@" - done, preferences updated");
 }
 
 - (NSTextView *)getRTextView{
