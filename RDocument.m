@@ -402,8 +402,9 @@ NSArray *keywordList;
 		RSEXP *x=[[REngine mainEngine] evaluateString:@"tempfile()"];
 		NSString *fn=nil;
 		if (x && (fn=[x string])) {
-			if ([self writeToFile:fn ofType:@"R"])
-				[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")", fn]];
+			if ([self writeToFile:fn ofType:@"R"]) {
+				[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")\nunlink(\"%@\")", fn, fn]];
+			}
 		}
 	} else {
 		NSString *fn=[self fileName];
