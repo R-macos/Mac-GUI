@@ -1,5 +1,9 @@
 NEWS
 
+Last-update: 2005-04-04 [SU]
+*	Some more cleanup in the editor toolbar, added Save item
+*	Added go-to-line (<Cmd><L>) capability in editor
+
 Last-update: 2005-03-31 [SU]
 *	Added editor toolbar
 *	Added help search capability to editor
