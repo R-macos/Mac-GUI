@@ -32,6 +32,9 @@
 #import "../RController.h"
 #import "../Tools/Authorization.h"
 
+#import <unistd.h>
+#import <sys/fcntl.h>
+
 @interface MiscPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
 - (void)setLabel:(NSString *)newLabel;
@@ -44,6 +47,7 @@
 - (id)initWithIdentifier:(NSString *)theIdentifier label:(NSString *)theLabel category:(NSString *)theCategory
 {
 	if (self = [super init]) {
+		[[Preferences sharedPreferences] addDependent:self];
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -59,6 +63,9 @@
 	return self;
 }
 
+- (void) dealloc {
+	[[Preferences sharedPreferences] removeDependent:self];
+}
 
 - (NSString *)identifier
 {
@@ -128,15 +135,8 @@
 // AMPrefPaneProtocol
 - (NSView *)mainView
 {
-	if (!mainView && [NSBundle loadNibNamed:@"MiscPrefPane" owner:self]) {
-		// load the default for RAquaLibPath
-		NSData *theData=[[NSUserDefaults standardUserDefaults] dataForKey:miscRAquaLibPathKey];
-		BOOL flag = !isAdmin(); // the default is YES for users and NO for admins
-		if (theData!=nil)
-			flag=[(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"];
-		[cbRAquaPath setState: flag?NSOnState:NSOffState];
-	}
-	
+	if (!mainView && [NSBundle loadNibNamed:@"MiscPrefPane" owner:self])
+		[self updatePreferences];
 	return mainView;
 }
 
@@ -146,22 +146,48 @@
 	return AMUnselectNow;
 }
 
-- (IBAction) changeEditOrSource:(id)sender {
-	BOOL flag = ([[sender cellAtRow:0 column:0] state] == NSOffState)?NO:YES;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"] forKey:editOrSourceKey];
-	[self setOpenInEditor:flag] ;
-}
-
-- (void) setOpenInEditor:(BOOL)flag {
-	//	NSLog(@"setOpenInEditor called: %d on %@", flag, editOrSource);
-	[editOrSource setState:flag?NSOffState:NSOnState atRow:1 column:0];
-	[editOrSource setState:flag?NSOnState:NSOffState atRow:0 column:0];
-	[[RController getRController] setOpenInEditor: flag];
-}
-
-- (IBAction) changeLibPaths:(id)sender
+- (void) updatePreferences
 {
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:[sender state]?@"YES":@"NO"] forKey:miscRAquaLibPathKey];
+	// load the default for RAquaLibPath
+	// the default is YES for users and NO for admins
+	BOOL flag = [Preferences flagForKey:miscRAquaLibPathKey withDefault: !isAdmin()];
+	[cbRAquaPath setState: flag?NSOnState:NSOffState];
+	flag=[Preferences flagForKey:editOrSourceKey withDefault: YES];
+	[editOrSource setState:flag?NSOnState:NSOffState atRow:0 column:0];
+	[editOrSource setState:flag?NSOffState:NSOnState atRow:1 column:0];
+	[workingDir setStringValue:[Preferences stringForKey:@"initialWorkingDirectoryKey" withDefault:@"~"]];
+}
+
+- (IBAction) changeEditOrSource:(id)sender {
+	int tmp = (int)[sender selectCellAtRow:0 column:0];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:editOrSourceKey withFlag:flag];
+}
+
+- (IBAction) changeLibPaths:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:miscRAquaLibPathKey withFlag:flag];
+}
+
+- (IBAction) changeWorkingDir:(id)sender {
+	NSString *name = ([[sender stringValue] length] == 0)?@"~":[sender stringValue];
+	[Preferences setKey:@"initialWorkingDirectoryKey" withObject:name];
+}
+
+- (IBAction) chooseWorkingDir:(id)sender {
+	NSOpenPanel *op;
+	int answer;
+	
+	op = [NSOpenPanel openPanel];
+	[op setCanChooseDirectories:YES];
+	[op setCanChooseFiles:NO];
+	[op setTitle:@"Choose Initial Working Directory"];
+	
+	answer = [op runModalForDirectory:[workingDir stringValue] file:nil types:[NSArray arrayWithObject:@""]];
+	
+	if(answer == NSOKButton && [op directory] != nil)
+		[Preferences setKey:@"initialWorkingDirectoryKey" withObject:[[op directory] stringByAbbreviatingWithTildeInPath]];
 }
 
 @end

@@ -27,6 +27,43 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+
+/*
+ *  Short examples of intended usage for preferences:
+ *
+ *  "useHighlighting" is time-critical in a sense that it is used every time the 
+ *  user presses a key - therefore the flag "useHighlighting" it's queried very
+ *  often - It could be cached (see below)
+ *
+ *  "openInEditor" isn't time critical, because a file is opened only once in a
+ *  while so it's ok to fetch it directly from Preferences
+ *
+ *  For uncached access, use something like: [Preferences flagForKey: openInEditorKey]
+ * (see method in Prefernces.h for signatures supported
+ *  For cached access, use:
+ *  
+ *  @implementation xxx
+ *  - (void) updatePreferences
+ *  {
+ *    flag = [Preferences flagForKey: xxxKey withDefault:YES];
+ *  }
+ *	
+ *  - (void) awakeFromNib
+ *  {
+ *    [[Preferences sharedPreferences] addDependent: self];
+ *    [self updatePreferences];
+ *    ....
+ *  }
+ *
+ *  - (void) dealloc
+ *  {
+ *    [[Preferences sharedPreferences] removeDependent: self];
+ *    ....
+ *  }
+ *
+ *  For additional examples, see MiscPrefPane.m and EditorPrefPane.m
+ */
+
 #import "Preferences.h"
 
 Preferences *globalPrefs=nil;

@@ -44,6 +44,8 @@
 - (id)initWithIdentifier:(NSString *)theIdentifier label:(NSString *)theLabel category:(NSString *)theCategory
 {
 	if (self = [super init]) {
+//		[[Preferences sharedPreferences] addDependent:self];
+//		[self updatePreferences];
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -57,6 +59,11 @@
 		[self setIcon:theImage];
 	}
 	return self;
+}
+
+- (void) dealloc
+{
+	[[Preferences sharedPreferences] removeDependent: self];
 }
 
 
@@ -128,7 +135,8 @@
 // AMPrefPaneProtocol
 - (NSView *)mainView
 {
-	if (!mainView && [NSBundle loadNibNamed:@"EditorPrefPane" owner:self]);
+	if (!mainView && [NSBundle loadNibNamed:@"EditorPrefPane" owner:self])
+		[self updatePreferences];
 	return mainView;
 }
 
@@ -142,6 +150,93 @@
 
 /* end of std methods implementation */
 
+- (void) awakeFromNib:(id)sender
+{
+	NSLog(@"awakeFromNib called");
+}
+
+- (void) windowControllerDidLoadNib:(NSWindowController *)aController
+{
+	NSLog(@"windowControllerDidLoadNib called");
+}
+
+- (void) didLoadNib:(id)sender
+{
+	NSLog(@"didLoadNib called");
+}
+
+- (void) updatePreferences
+{
+	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	[internalOrExternal setState:(flag?NSOnState:NSOffState) atRow:0 column:0];
+	[internalOrExternal setState:(flag?NSOffState:NSOnState) atRow:0 column:1];
+	[builtInPrefs setHidden:flag?NSOffState:NSOnState];
+	
+	[externalEditorName setStringValue: [Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
+
+	[showSyntaxColoring setState:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]?NSOnState:NSOffState];
+
+	[showBraceHighlighting setState:[Preferences flagForKey:showBraceHighlightingKey withDefault: YES]?NSOnState:NSOffState];
+
+	[highlightInterval setStringValue:[Preferences stringForKey:highlightIntervalKey withDefault: @"0.30"]];
+
+	[showLineNumbers setState:[Preferences flagForKey:showLineNumbersKey withDefault: YES]?NSOnState:NSOffState];
+
+	flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
+	[appOrCommand setState:flag?NSOffState:NSOnState atRow:1 column:0];
+	[appOrCommand setState:flag?NSOnState:NSOffState atRow:0 column:0];
+}
+
+- (IBAction) changeInternalOrExternal:(id)sender
+{
+	int tmp = (int)[sender selectCellAtRow:0 column:0];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:internalOrExternalKey withFlag:flag];
+}
+
+- (void)changeExternalEditorName:(id)sender {
+	NSString *name = ([[sender stringValue] length] == 0)?@"TextEdit":[sender stringValue];
+	[Preferences setKey:externalEditorNameKey withObject:name];
+}
+
+- (IBAction) changeShowSyntaxColoring:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:showSyntaxColoringKey withFlag:flag];
+}
+
+- (IBAction) changeShowBraceHighlighting:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:showBraceHighlightingKey withFlag:flag];
+}
+
+- (IBAction) changeHighlightInterval:(id)sender {
+	NSString *interval = ([[sender stringValue] length] == 0)?@"0.2":[sender stringValue];
+	if ([interval length] == 0) {
+		interval = @"0.2";
+	} else {
+		double value = [interval doubleValue];
+		if (value < 0.1)
+			interval = @"0.1";
+		else if (value > 0.8)
+			interval = @"0.8";
+	}
+	[Preferences setKey:highlightIntervalKey withObject:interval];
+}
+
+- (IBAction) changeShowLineNumbers:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:showLineNumbersKey withFlag:flag];
+}
+
+- (IBAction) changeAppOrCommand:(id)sender {
+	int tmp = (int)[sender selectCellAtRow:0 column:0];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:appOrCommandKey withFlag:flag];
+}
+
 - (IBAction) changeEditor:(id)sender;
 {
 	int answer;
@@ -154,162 +249,8 @@
 		NSString *name = [pathComps objectAtIndex: ([pathComps count] - 1)];
 		pathComps = [name componentsSeparatedByString:@".app"];
 		name = [pathComps objectAtIndex:0];
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject: name] 
-												  forKey:externalEditorNameKey];
-		[self setExternalEditor:name];
+		[Preferences setKey:externalEditorNameKey withObject:name];
 	}
-}
-
-- (IBAction) changeInternalOrExternal:(id)sender
-{
-	BOOL flag = (int)[[sender cellAtRow:0 column:0] state];
-	if (flag==0 || flag==1)
-	{
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"]
-												  forKey:internalOrExternalKey];
-		[self setUseInternalEditor:flag?YES:NO];
-	}
-}
-
-- (NSMatrix *) internalOrExternal;
-{
-	return internalOrExternal;
-}
-
-- (void) setUseInternalEditor:(BOOL)flag 
-{
-	if (!(flag==0 || flag==1)) return;
-//	NSLog(@"setUseExternalEditor %d", flag);
-	[internalOrExternal setState:(flag?NSOnState:NSOffState) atRow:0 column:0];
-	[internalOrExternal setState:(flag?NSOffState:NSOnState) atRow:0 column:1];
-	[externalSettings setHidden:flag?NSOnState:NSOffState]; 
-	[builtInPrefs setHidden:flag?NSOffState:NSOnState];
-	[[RController getRController] setUseInternalEditor: flag];
-}
-
-- (void)changeExternalEditorName:(id)sender {
-	NSString *name = ([[sender stringValue] length] == 0)?@"TextEdit":[sender stringValue];
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject: name] 
-											  forKey:externalEditorNameKey];
-	[self setExternalEditor:name];
-}
-
-- (NSTextField *) externalEditorName;
-{
-	return externalEditorName;
-}
-
-- (void)setExternalEditor:(NSString *)name {
-//	NSLog(@"setExternalEditor %@", name);
-	if (!name) name=@"";
-	[externalEditorName setStringValue: name];
-	[[RController getRController] setExternalEditor:name];
-}
-
-- (IBAction) changeShowSyntaxColoring:(id)sender {
-	int flag = [sender state];
-	if (!(flag==0 || flag==1)) return;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"]
-											  forKey:showSyntaxColoringKey];
-    [self setDoSyntaxColoring:flag];
-}
-
-- (NSButton *) showSyntaxColoring;
-{
-	return showSyntaxColoring;
-}
-
-- (void) setDoSyntaxColoring:(BOOL)flag {
-	if (!(flag==0 || flag==1)) return;
-	[showSyntaxColoring setState:flag?NSOnState:NSOffState];
-	[[RController getRController] setDoSyntaxColoring: flag];
-}
-
-- (IBAction) changeShowBraceHighlighting:(id)sender {
-	int flag = [sender state];
-	if (!(flag==0 || flag==1)) return;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"]
-											  forKey:showBraceHighlightingKey];
-    [self setDoBraceHighlighting:[sender state]];
-}
-
-- (NSButton *) showBraceHighlighting;
-{
-	return showBraceHighlighting;
-}
-
-- (void) setDoBraceHighlighting:(BOOL)flag {
-	if (!(flag==0 || flag==1)) return;
-	[showBraceHighlighting setState:flag?NSOnState:NSOffState];
-	[[RController getRController] setDoBraceHighlighting: flag];
-}
-
-- (IBAction) changeHighlightInterval:(id)sender {
-	NSString *interval = [sender stringValue];
-	if ([[sender stringValue] length] == 0) {
-		interval = @"0.2";
-	} else {
-		double value = [[sender stringValue] doubleValue];
-		if (value < 0.1)
-			interval = @"0.1";
-		else if (value > 0.8)
-			interval = @"0.8";
-	}
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:interval] 
-											  forKey:highlightIntervalKey];
-	[self setCurrentHighlightInterval:interval];
-}
-
-- (NSTextField *) highlightInterval;
-{
-	return highlightInterval;
-}
-
-- (void) setCurrentHighlightInterval:(NSString *)aString {
-	[highlightInterval setStringValue:aString];
-	[[RController getRController] setCurrentHighlightInterval:aString]; 
-}
-
-- (IBAction) changeShowLineNumbers:(id)sender {
-	int flag = [sender state];
-	if (!(flag==0 || flag==1)) return;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"]
-											  forKey:showLineNumbersKey];
-    [self setDoLineNumbers:flag];
-}
-
-- (NSButton *) showLineNumbers;
-{
-	return showLineNumbers;
-}
-
-- (void) setDoLineNumbers:(BOOL)flag {
-	if (!(flag==0 || flag==1)) return;
-	[showLineNumbers setState:flag?NSOnState:NSOffState];
-	[[RController getRController] setDoLineNumbers: flag];
-}
-
-- (IBAction) changeAppOrCommand:(id)sender {
-	BOOL flag = (int)[[sender cellAtRow:0 column:0] state];
-	if (!(flag==0 || flag==1)) return;
-	if (flag==0 || flag==1)
-	{
-		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"]
-												  forKey:appOrCommandKey];
-		[self setEditorIsApp:flag?YES:NO];
-	}
-}
-
-- (NSMatrix *) appOrCommand;
-{
-	return appOrCommand;
-}
-
-- (void) setEditorIsApp:(BOOL)flag {
-	if (!(flag==0 || flag==1)) return;
-	[appOrCommand setState:flag?NSOffState:NSOnState atRow:1 column:0];
-	[appOrCommand setState:flag?NSOnState:NSOffState atRow:0 column:0];
-	[[RController getRController] setEditorIsApp: flag];
 }
 
 @end

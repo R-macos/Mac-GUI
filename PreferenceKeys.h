@@ -37,6 +37,8 @@
 #define promptColorKey @"Prompt Color"
 #define rootColorKey   @"Root Color"
 
+#define initialWorkingDirectoryKey @"Working directory"
+
 #define FontSizeKey    @"Console Font Size"
 #define internalOrExternalKey  @"Use Internal Editor"
 #define showSyntaxColoringKey  @"Show syntax coloring"

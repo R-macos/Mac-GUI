@@ -30,6 +30,7 @@
 
 #import "RDocument.h"
 #import "RController.h"
+#import "Preferences.h"
 #import "REngine/REngine.h"
 
 BOOL defaultsInitialized = NO;
@@ -75,6 +76,7 @@ NSArray *keywordList=nil;
     self = [super init];
     if (self) {
 		updating=NO;
+		[[Preferences sharedPreferences] addDependent:self];
 		execNewlineFlag=NO;
 		if (!defaultsInitialized) {
 			[RDocument setDefaultSyntaxHighlightingColors];
@@ -83,39 +85,16 @@ NSArray *keywordList=nil;
 		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor selectedTextBackgroundColor], NSBackgroundColorAttributeName, nil];
 		initialContents=nil;
 		initialContentsType=nil;
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		NSData *theData=[defaults dataForKey:showSyntaxColoringKey];
-		if(theData != nil){
-			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"]) {
-				useHighlighting=NO;
-			} else {
-				useHighlighting=YES;
-			}
-		} else 
-			useHighlighting=YES;
-		
 		isEditable=YES;
 		isREdit=NO;
-		theData=[defaults dataForKey:showBraceHighlightingKey];
-		if(theData != nil){
-			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])
-				showMatchingBraces = NO;
-			else
-				showMatchingBraces = YES;
-		} else 
-			showMatchingBraces = YES;
-		
-		theData=[defaults dataForKey:highlightIntervalKey];
-		if(theData != nil){
-			braceHighlightInterval = [(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] doubleValue];
-		} else {
-			braceHighlightInterval = 0.2;
-		}	
-		
-		
-		
+		consoleColorsKeys = [[NSArray alloc] initWithObjects:
+			backgColorKey, inputColorKey, outputColorKey, promptColorKey,
+			stderrColorKey, stdoutColorKey, rootColorKey];
+		defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
+			[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
+			[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
+		consoleColors = [defaultConsoleColors mutableCopy];
     }
-	
     return self;
 }
 
@@ -124,6 +103,7 @@ NSArray *keywordList=nil;
 	if (initialContentsType) [initialContentsType release];
 	if (highlightColorAttr) [highlightColorAttr release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[Preferences sharedPreferences] removeDependent:self];
 	[super dealloc];
 }
 
@@ -166,8 +146,29 @@ NSArray *keywordList=nil;
 			   name:NSTextDidChangeNotification
 			 object: textView];
 	[[textView textStorage] setDelegate:self];	
+	[self updatePreferences];
 }
 
+
+- (void) updatePreferences {
+	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
+	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
+	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
+	int i = 0, ccs = [consoleColorsKeys count];
+	while (i<ccs) {
+		NSColor *c = [Preferences unarchivedObjectForKey: [consoleColorsKeys objectAtIndex:i] withDefault: [consoleColors objectAtIndex:i]];
+		if (c != [consoleColors objectAtIndex:i]) {
+			[consoleColors replaceObjectAtIndex:i withObject:c];
+			if (i == iBackgroundColor) {
+				[textView setBackgroundColor:c];
+				[textView display];
+			}
+		}
+		i++;
+	}
+	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
+	[textView setNeedsDisplay:YES];
+}
 
 - (NSData *)dataRepresentationOfType:(NSString *)aType
 {

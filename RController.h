@@ -120,15 +120,6 @@
 	NSArray *consoleColorsKeys;
 	NSArray *defaultConsoleColors;
 		
-	BOOL doSyntaxColoring;
-	BOOL doLineNumbers;
-	BOOL doBraceHighlighting;
-	double currentHighlightInterval;
-	NSString *externalEditor;
-	BOOL editorIsApp;
-	BOOL useInternalEditor;
-	BOOL openInEditor;
-	
 	NSMutableArray *consoleInputQueue;
 	NSString *currentConsoleInput;
 	
@@ -233,25 +224,8 @@
 
 - (void) RConsoleDidResize: (NSNotification *)notification;
 - (void) setOptionWidth:(BOOL)force;
-- (void) setOpenInEditor:(BOOL)flag;
-- (BOOL) openInEditor;
 
 - (IBAction) setDefaultColors:(id)sender;
-
-- (void) setUseInternalEditor:(BOOL)flag;
-- (BOOL) useInternalEditor;
-- (void) setDoSyntaxColoring:(BOOL)flag;
-- (BOOL) doSyntaxColoring;
-- (void) setDoBraceHighlighting:(BOOL)flag;
-- (BOOL) doBraceHighlighting;
-- (void) setCurrentHighlightInterval:(NSString *)aString;
-- (double) currentHighlightInterval;
-- (void) setDoLineNumbers:(BOOL)flag;
-- (BOOL) doLineNumbers;
-- (void) setExternalEditor:(NSString *)name;
-- (NSString *) externalEditor;
-- (void) setEditorIsApp:(BOOL)flag;
-- (BOOL) editorIsApp;
 
 + (RController*) getRController;
 

@@ -250,8 +250,7 @@ static RController* sharedRController;
 	currentSize = [[RTextView textContainer] containerSize].width;
 	//currentFontSize = [[RTextView font] pointSize];
 	currentConsoleWidth = -1;
-	
-	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:@"initialWorkingDirectory" withDefault:@"~"] stringByExpandingTildeInPath]];
+	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:@"initialWorkingDirectoryKey" withDefault:@"~"] stringByExpandingTildeInPath]];
 }
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
@@ -707,7 +706,6 @@ extern BOOL isTimeToFinish;
 		if(wtitle[i]!=nil)
 			[RDocument changeDocumentTitle: document Title: [NSString stringWithCString:wtitle]];
 		[document setEditable: NO];
-		[document setHighlighting: NO];
     }
 	return 1;
 }
@@ -1614,16 +1612,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 	}
 }
 
-- (void) setOpenInEditor: (BOOL) flag
-{
-	openInEditor = flag;
-}
-
-- (BOOL) openInEditor
-{
-	return openInEditor;
-}
-
 -(IBAction) checkForUpdates:(id)sender{
 	[[REngine mainEngine] executeString: @"Rapp.updates()"];
 }
@@ -1637,14 +1625,13 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 -(IBAction) resetWorkingDir:(id)sender
 {
-	chdir(R_ExpandFileName("~/"));
+	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:@"initialWorkingDirectoryKey" withDefault:@"~"] stringByExpandingTildeInPath]];
+	[self showWorkingDir:sender];
 }
 
 -(IBAction) setWorkingDir:(id)sender
 {
 	NSOpenPanel *op;
-	char	buf[301];
-	getcwd(buf, 300);
 	int answer;
 	
 	op = [NSOpenPanel openPanel];
@@ -1652,26 +1639,17 @@ This method calls the showHelpFor method of the Help Manager which opens
 	[op setCanChooseFiles:NO];
 	[op setTitle:@"Choose New Working Directory"];
 	
-	answer = [op runModalForDirectory:[NSString stringWithCString:buf] file:nil types:[NSArray arrayWithObject:@""]];
-	[op setCanChooseDirectories:YES];
-	[op setCanChooseFiles:NO];
+	answer = [op runModalForDirectory:[[NSFileManager defaultManager] currentDirectoryPath] file:nil types:[NSArray arrayWithObject:@""]];
 	
-	if(answer == NSOKButton) {
-		if([op directory] != nil){
-			CFStringGetCString((CFStringRef)[op directory], buf, 300,  kCFStringEncodingMacRoman); 
-			chdir(buf);
-		}
-	}
+	if(answer == NSOKButton && [op directory] != nil)
+		[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[op directory] stringByExpandingTildeInPath]];
+	[self showWorkingDir:sender];
 }
 
 - (IBAction) showWorkingDir:(id)sender
 {
-	char	buf[301];
-    
-	getcwd(buf, 300);
-	
 	[WDirView setEditable:YES];
-	[WDirView setStringValue: [NSString stringWithCString:buf]];
+	[WDirView setStringValue: [[[NSFileManager defaultManager] currentDirectoryPath] stringByAbbreviatingWithTildeInPath]];
 	[WDirView setEditable:NO];
 }
 
@@ -1840,75 +1818,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
 	[printOp runOperation];
-}
-
-- (void) setUseInternalEditor:(BOOL)flag 
-{
-	useInternalEditor = flag;
-}
-
-- (BOOL) useInternalEditor
-{
-	return useInternalEditor;
-}
-
-- (void) setDoSyntaxColoring: (BOOL) flag
-{
-	doSyntaxColoring = flag;
-}
-
-- (BOOL) doSyntaxColoring
-{
-	return doSyntaxColoring;
-}
-
-- (void) setDoBraceHighlighting: (BOOL) flag
-{
-	doBraceHighlighting = flag;
-}
-
-- (BOOL) doBraceHighlighting
-{
-	return doBraceHighlighting;
-}
-
-- (void) setCurrentHighlightInterval: (NSString *) aString
-{
-	currentHighlightInterval = [aString doubleValue];
-}
-
-- (double) currentHighlightInterval
-{
-	return currentHighlightInterval;
-}
-
-- (void) setDoLineNumbers: (BOOL) flag
-{
-	doLineNumbers = flag;
-}
-
-- (BOOL) doLineNumbers
-{
-	return doLineNumbers;
-}
-
-- (void) setExternalEditor: (NSString *) name
-{
-	externalEditor = name;
-}
-
-- (NSString *) externalEditor
-{
-	return externalEditor;
-}
-
-- (void) setEditorIsApp:(BOOL)flag {
-	editorIsApp = flag;
-}
-
-- (BOOL) editorIsApp
-{
-	return editorIsApp;
 }
 
 - (IBAction) setDefaultColors:(id)sender {

@@ -30,9 +30,10 @@
 
 #import <Foundation/Foundation.h>
 #import "../AMPrefs/AMPrefPaneProtocol.h"
+#import "Preferences.h"
 
 
-@interface MiscPrefPane : NSObject <AMPrefPaneProtocol> {
+@interface MiscPrefPane : NSObject <AMPrefPaneProtocol,  PreferencesDependent> {
 	NSString *identifier;
 	NSString *label;
 	NSString *category;
@@ -41,6 +42,7 @@
 	IBOutlet NSView *mainView;
 	IBOutlet NSMatrix *editOrSource;
 	IBOutlet NSButton *cbRAquaPath;
+	IBOutlet NSTextField *workingDir;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -58,11 +60,10 @@
 // Other methods
 
 - (IBAction) changeEditOrSource:(id)sender;
-- (void) setOpenInEditor: (BOOL) flag;
-
 - (IBAction) changeLibPaths:(id)sender;
+- (IBAction) changeWorkingDir: (id)sender;
+- (IBAction) chooseWorkingDir:(id)sender;
 
-//- (NSMatrix *) editOrSource;
-
+- (void) updatePreferences;
 
 @end

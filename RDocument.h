@@ -29,6 +29,15 @@
 
 
 #import <Cocoa/Cocoa.h>
+#import "Preferences.h"
+
+#define iBackgroundColor 0
+#define iInputColor      1
+#define iOutputColor     2
+#define iPromptColor     3
+#define iStderrColor     4
+#define iStdoutColor     5
+#define iRootColor       6
 
 extern NSColor *shColorNormal;
 extern NSColor *shColorString;
@@ -37,7 +46,7 @@ extern NSColor *shColorKeyword;
 extern NSColor *shColorComment;
 extern NSColor *shColorIdentifier;
 
-@interface RDocument : NSDocument
+@interface RDocument : NSDocument <PreferencesDependent>
 {
 	IBOutlet	NSTextView *textView;
 	
@@ -55,13 +64,16 @@ extern NSColor *shColorIdentifier;
 	
 	BOOL updating; // this flag is set while syntax coloring is changed to prevent recursive changes
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
+
+	NSMutableArray *consoleColors;
+	NSArray *consoleColorsKeys;
+	NSArray *defaultConsoleColors;
 }
 
 + (void) setDefaultSyntaxHighlightingColors;
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
 
-- (void) setHighlighting: (BOOL) use;
 - (void) setEditable: (BOOL) editable;
 - (void) setREditFlag: (BOOL) flag;
 - (BOOL) hasREditFlag;
@@ -72,5 +84,8 @@ extern NSColor *shColorIdentifier;
 
 - (IBAction)executeSelection:(id)sender;
 - (IBAction)sourceCurrentDocument:(id)sender;
+
+- (void) setHighlighting: (BOOL) use;
+- (void)updatePreferences;
 
 @end

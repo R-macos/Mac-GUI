@@ -28,8 +28,10 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#import "RController.h"
 #import "RDocumentController.h"
+#import "RController.h"
+#import "Preferences.h"
+#import "PreferenceKeys.h"
 
 #define defaultDocumentType @"Rsource"
 
@@ -73,21 +75,26 @@
 	in MiscPrefPane, an existing file is sourced into R. A new file opens a new document.
 */
 
+
 - (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
 {
+	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
+	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"SubEthaEdit"];
+	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
-	if ([aFile isEqualToString:@""] || [[RController getRController] openInEditor]) {
-		if ([aFile isEqualToString:@""] && [[RController getRController] useInternalEditor])
+	if ([aFile isEqualToString:@""] || openInEditor) {
+		if ([aFile isEqualToString:@""] && useInternalEditor)
 			return [super openUntitledDocumentOfType:defaultDocumentType display:YES];
 		else
-			if ([[RController getRController] useInternalEditor]) 
+			if (useInternalEditor) 
 				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
-		if ([[RController getRController] editorIsApp]) {
-			cmd = [@"open -a " stringByAppendingString:[[[RController getRController] externalEditor] stringByAppendingString:@".app"]];
+		if (editorIsApp) {
+			cmd = [@"open -a " stringByAppendingString:[externalEditor stringByAppendingString:@".app"]];
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
 		} else {
-			cmd = [[RController getRController] externalEditor]; 
+			cmd = externalEditor; 
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 		}
@@ -107,16 +114,19 @@
 
 - (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
 {
+	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"SubEthaEdit"];
+	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
-	if ([[RController getRController] useInternalEditor])
+	if (useInternalEditor)
 		return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
 	else {
-		if ([[RController getRController] editorIsApp]) {
-			cmd = [@"open -a " stringByAppendingString:[[[RController getRController] externalEditor] stringByAppendingString:@".app"]];
+		if (editorIsApp) {
+			cmd = [@"open -a " stringByAppendingString:[externalEditor stringByAppendingString:@".app"]];
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
 		} else {
-			cmd = [[RController getRController] externalEditor]; 
+			cmd = externalEditor; 
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 		}

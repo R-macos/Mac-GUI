@@ -1,8 +1,14 @@
 NEWS
 
-** IMPORTANT WARNING ** THIS RELEASE IS WORK IN PROGRESS! [SU]
-SOME FEATURES DON'T WORK EVEN IF THEY WORKED BEFORE!
-PLEASE WAIT FOR THIS WARNINIG TO DISAPPEAR BEFORE REPORTING BUGS!!
+Last update: 2004-12-07 [RG, SU]
+*	changed showing and changing of working directory to
+	abbreviate paths using ~ where possible [SU]
+*	fixed path handling to use NSString and NSFileManager -
+	this fixes issues with non-ASCII paths [SU]
+*	minor cleanup in preference panes (code+NIBs) [SU]
+*	added initial working directory setup in misc PP [RG]
+*	added support for the new preference system in all PPs
+	(fixes things broken in the last commit) [RG]
 
 Last update: 2004-12-05 [SU]
 *	fixed casting issues in AMPrefs

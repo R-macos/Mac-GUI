@@ -9,8 +9,11 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>*</string>
 				<string>*.R</string>
+				<string>*.r</string>
+				<string>*.S</string>
+				<string>*.s</string>
+				<string>*</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Rsource</string>

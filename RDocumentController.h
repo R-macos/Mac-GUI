@@ -30,6 +30,7 @@
 /* RDocumentController */
 
 #import <Cocoa/Cocoa.h>
+#import "Preferences.h"
 
 @interface RDocumentController : NSDocumentController
 {

@@ -30,9 +30,10 @@
 
 #import <Foundation/Foundation.h>
 #import "../AMPrefs/AMPrefPaneProtocol.h"
+#import "Preferences.h"
 
 
-@interface EditorPrefPane : NSObject <AMPrefPaneProtocol> {
+@interface EditorPrefPane : NSObject <AMPrefPaneProtocol, PreferencesDependent> {
 	NSString *identifier;
 	NSString *label;
 	NSString *category;
@@ -49,6 +50,14 @@
 	IBOutlet NSTextField *externalEditorName;
 	IBOutlet NSMatrix *appOrCommand;
 	IBOutlet NSButton *changeEditor;
+
+	BOOL doSyntaxColoring;
+	BOOL doLineNumbers;
+	BOOL doBraceHighlighting;
+	double currentHighlightInterval;
+	NSString *externalEditor;
+	BOOL editorIsApp;
+	BOOL useInternalEditor;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -67,25 +76,13 @@
 
 - (IBAction) changeEditor:(id)sender;
 - (IBAction) changeInternalOrExternal:(id)sender;
-- (NSMatrix *) internalOrExternal;
-- (void)  setUseInternalEditor:(BOOL)flag;
 - (IBAction) changeExternalEditorName:(id)sender;
-- (NSTextField *) externalEditorName;
-- (void) setExternalEditor:(NSString *)name;
 - (IBAction) changeShowSyntaxColoring:(id)sender;
-- (NSButton *) showSyntaxColoring;
-- (void) setDoSyntaxColoring:(BOOL)flag;
 - (IBAction) changeShowBraceHighlighting:(id)sender;
-- (NSButton *) showBraceHighlighting;
-- (void) setDoBraceHighlighting:(BOOL)flag;
 - (IBAction) changeHighlightInterval:(id)sender;
-- (NSTextField *) highlightInterval;
-- (void) setCurrentHighlightInterval:(NSString *)aString;
 - (IBAction) changeShowLineNumbers:(id)sender;
-- (NSButton *) showLineNumbers;
-- (void) setDoLineNumbers:(BOOL)flag;
 - (IBAction) changeAppOrCommand:(id)sender;
-- (NSMatrix *) appOrCommand;
-- (void) setEditorIsApp:(BOOL)flag;
+
+- (void) updatePreferences;
 
 @end
