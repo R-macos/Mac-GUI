@@ -836,12 +836,7 @@ extern BOOL isTimeToFinish;
 
 - (int) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) title;
 {
-	int result;
-	SelectList *list = [SelectList sharedController];
-	[list updateListItems:count withNames:name status:stat multiple: multiple title:title];
-	result=[list runSelectList];
-	[list runFinished];
-	return result;
+	return [[SelectList sharedController] selectList:count withNames:name status:stat multiple: multiple title:title];
 }
 
 - (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title

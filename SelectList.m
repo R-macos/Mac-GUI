@@ -45,7 +45,7 @@ BOOL IsSelectList;
 		totalItems = 0;
 		listItem = 0;
 		result = -1;
-		itemStatus = 0;
+		title = nil;
 		running = NO;
     }
 	
@@ -58,7 +58,6 @@ BOOL IsSelectList;
 }
 
 - (void)dealloc {
-	[self resetListItems];
 	[super dealloc];
 }
 
@@ -99,17 +98,18 @@ BOOL IsSelectList;
 	totalItems=0;
 }
 
-- (void) updateListItems: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) ttl
+- (int) selectList: (int) count withNames: (char**) item status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) ttl
 {
-	int i=0;
+	NSAutoreleasePool *pool = nil;
+	int i=0, k=0;
 	title = ttl;
 	result = -1;
-	itemStatus = stat;
+	
 	[listDataSource setAllowsMultipleSelection: multiple];
 
 	if (totalItems) [self resetListItems];
 	if (count<1)
-		return;	
+		return 0;	
 	
 	listItem = (NSString**) malloc(sizeof(NSString*) * count);
 	while (i<count) {
@@ -117,6 +117,44 @@ BOOL IsSelectList;
 		i++;
 	}
 	totalItems = count;
+
+	pool = [[NSAutoreleasePool alloc] init];	
+	
+	[listDataSource deselectAll:self];
+	if (stat)
+		for(i=0; i<totalItems; i++){
+			if(stat[i]){
+				k++;
+				[listDataSource selectRowIndexes:[NSIndexSet indexSetWithIndex:i] 
+							byExtendingSelection:(k!=1)?YES:NO];
+			}
+		};
+	
+	[[self window] setTitle:title];
+	[self show];
+	running = YES;
+	[NSApp runModalForWindow:[self window]];
+	
+	if (result == 1) {
+		NSIndexSet *rows =  [listDataSource selectedRowIndexes];			
+		unsigned current_index = [rows firstIndex];
+		
+		if(current_index == NSNotFound)
+			return 0;
+		
+		if (stat) {
+			memset(stat, 0, sizeof(BOOL)*count);
+			while (current_index != NSNotFound) {
+				stat[current_index] = YES;
+				current_index = [rows indexGreaterThanIndex: current_index];
+			}
+		}
+	}
+	
+	[pool release];
+	[self resetListItems];
+	
+	return result;
 }
 
 - (int) count
@@ -133,20 +171,6 @@ BOOL IsSelectList;
 
 - (IBAction)returnSelected:(id)sender
 {
-	NSIndexSet *rows =  [listDataSource selectedRowIndexes];			
-	unsigned current_index = [rows firstIndex];
-
-	if(current_index == NSNotFound)
-		return;
-	
-	if (itemStatus) {
-		memset(itemStatus, 0, sizeof(BOOL)*totalItems);
-		while (current_index != NSNotFound) {
-			itemStatus[current_index] = YES;
-			current_index = [rows indexGreaterThanIndex: current_index];
-		}
-	}
-
 	result = 1;
 	
 	[[self window] performClose: sender];
@@ -167,35 +191,6 @@ BOOL IsSelectList;
 	result = 0;
 
 	[[self window] performClose: sender];
-}
-
-- (int) runSelectList
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
-	int i,k=0;
-	[listDataSource deselectAll:self];
-	if (itemStatus)
-		for(i=0; i<totalItems; i++){
-			if(itemStatus[i]){
-				k++;
-				[listDataSource selectRowIndexes:[NSIndexSet indexSetWithIndex:i] 
-							byExtendingSelection:(k!=1)?YES:NO];
-			}
-		};
-			
-	[[self window] setTitle:title];
-	[self show];
-	running = YES;
-	[NSApp runModalForWindow:[self window]];
-	
-	[pool release];
-	
-	return result;
-}
-
-- (void) runFinished
-{
-	itemStatus = 0;
 }
 
 @end
