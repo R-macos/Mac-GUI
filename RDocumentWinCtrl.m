@@ -34,6 +34,7 @@
 #import "RController.h"
 #import "REngine.h"
 #import "REditorTextStorage.h"
+#import "RRulerView.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -78,6 +79,8 @@ NSArray *keywordList=nil;
     return self;
 }
 
+
+
 - (void)dealloc {
 	if (highlightColorAttr) [highlightColorAttr release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -110,38 +113,69 @@ NSArray *keywordList=nil;
 	return [textView string];
 }	
 
+- (NSTextView *) textView {
+	return textView;
+}
+
 - (void) windowDidLoad
 {
+    if (self) {
+		document=nil;
+		updating=NO;
+		[[Preferences sharedPreferences] addDependent:self];
+		execNewlineFlag=NO;
+		if (!defaultsInitialized) {
+			[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
+			defaultsInitialized=YES;
+		}
+		// For now replaced selectedTextBackgroundColor by redColor
+		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
+    }
+	NSSize contentSize = [scrollView contentSize]; 
+	textView = [[NSTextView alloc] initWithFrame: NSMakeRect(0, 0, contentSize.width, contentSize.height)];
+	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
+	if (showLineNos) {
+		// This should probably get loaded from NSUserDefaults.
+		NSFont *font = [NSFont fontWithName:@"Monaco" size: 10];
+		
+		// Make sure that we don't wrap lines.
+		[scrollView setHasHorizontalScroller: YES];
+		[textView setHorizontallyResizable: YES]; 
+		NSSize layoutSize = [textView maxSize];
+		layoutSize.width = layoutSize.height;
+		[textView setMaxSize: layoutSize];
+		[[textView textContainer] setWidthTracksTextView: NO];
+		[[textView textContainer] setHeightTracksTextView: NO];
+		[[textView textContainer] setContainerSize: layoutSize];
+		
+		// Create and install our line numbers
+		if (theRulerView) [theRulerView release];
+		theRulerView = [[RRulerView alloc] initWithScrollView: scrollView orientation: NSVerticalRuler showLineNumbers: showLineNos textView:textView];
+		
+		[scrollView setHasHorizontalRuler: NO];
+		[scrollView setHasVerticalRuler: YES];
+		[scrollView setVerticalRulerView: theRulerView];
+		[scrollView setRulersVisible: YES];    
+		[scrollView setLineScroll: [font pointSize]];
+		
+		// Add a small pad to the textViews
+		[[textView textContainer] setLineFragmentPadding: 10.0];
+		
+		[textView setUsesRuler: YES];
+		[textView setFont: font];
+		
+	}
+	[scrollView setDocumentView:textView];		
+    [textView setDelegate: self];
+	
 	document=(RDocument*) [self document];
-
-	/*
-	NSRect cFrame = [[scrollView contentView] frame];
-	
-	REditorTextStorage * textStorage = [[REditorTextStorage alloc] init];
-	NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
-	[textStorage addLayoutManager:layoutManager];
-	[layoutManager release];
-	
-	NSTextContainer *container = [[NSTextContainer alloc] initWithContainerSize:cFrame.size];
-	[layoutManager addTextContainer:container];
-	[container setTextView:textView];
-	[container release];
-	
-	textView = [[NSTextView alloc] initWithFrame:cFrame textContainer:container];
-	[scrollView setDocumentView:textView];
-	[scrollView setAutohidesScrollers:YES];
-	[scrollView setHasHorizontalScroller:YES];
-	[scrollView setHasVerticalScroller:YES];
-	 [textView setDelegate:self];
-	*/
-	//[textView release];
 	
 	// instead of building the whole text storage network, we just replace the text storage - but ti's not trivial since ts is actually the root of the network
-
+	
 	NSLayoutManager *lm = [[textView layoutManager] retain];
 	NSTextStorage *origTS = [[textView textStorage] retain];
 	REditorTextStorage * textStorage = [[REditorTextStorage alloc] init];
-	 [origTS removeLayoutManager:lm];
+	[origTS removeLayoutManager:lm];
 	[textStorage addLayoutManager:lm];
 	[lm release];
 	[origTS release];
@@ -161,8 +195,19 @@ NSArray *keywordList=nil;
 		   selector:@selector(textDidChange:)
 			   name:NSTextDidChangeNotification
 			 object: textView];
+/*
+	[[NSNotificationCenter defaultCenter] 
+		addObserver:self
+		   selector:@selector(windowDidBecomeKey:)
+			   name:NSWindowDidBecomeKeyNotification
+			 object:theRulerView];
+*/
 	[[textView textStorage] setDelegate:self];	
 	[self updatePreferences];
+}
+
+- (void)windowDidBecomeKey:(NSNotification *)aNotification {
+	[theRulerView updateView];
 }
 
 - (NSUndoManager*) windowWillReturnUndoManager: (NSWindow*) sender
@@ -174,7 +219,7 @@ NSArray *keywordList=nil;
 	NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
 	if (c && c!=[[self window] backgroundColor]) {
 		[[self window] setBackgroundColor:c];
-		[[self window] display];
+//		[[self window] display];
 	}
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
@@ -238,9 +283,9 @@ NSArray *keywordList=nil;
 	BOOL foundItem=NO;
 	
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
+//	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
 	if (updating || !useHighlighting) return;
-
+	
 	updating=YES;
 	
 	[ts beginEditing];
@@ -375,7 +420,7 @@ NSArray *keywordList=nil;
 			unichar c = [completeString characterAtIndex:cursorLocation];
 			if (c == openingChar) {
 				if (!skipMatchingBrace) {
-					[[textView layoutManager] addTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(cursorLocation, 1)];
+					[[textView layoutManager] setTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(cursorLocation, 1)];
 					[self performSelector:@selector(resetBackgroundColor:) withObject:NSStringFromRange(NSMakeRange(cursorLocation, 1)) afterDelay:braceHighlightInterval];
 					return;
 				} else
@@ -425,6 +470,9 @@ NSArray *keywordList=nil;
 	
 	//NSLog(@"line range %d:%d (original was %d:%d)", lr.location, lr.length, er.location, er.length);
 	[self updateSyntaxHighlightingForRange:lr];
+	if (!deleteBackward) 
+		if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
+	deleteBackward = NO;
 }
 
 - (BOOL)textView:(NSTextView *)textViewSrc doCommandBySelector:(SEL)commandSelector {
@@ -442,7 +490,8 @@ NSArray *keywordList=nil;
 		NSString *s = [ts string];
 		NSRange csr = [textView selectedRange];
 		NSRange ssr = NSMakeRange(csr.location, 0);
-		NSRange lr = [s lineRangeForRange:ssr]; // line on which enter was pressed - this will be taken as guide
+		NSRange lr = [s lineRangeForRange:ssr]; 
+		// line on which enter was pressed - this will be taken as guide
 		if (csr.location>0) {
 			int i=lr.location;
 			int last=csr.location;
@@ -452,7 +501,9 @@ NSArray *keywordList=nil;
 			while (i<last) {
 				unichar c=[s characterAtIndex:i];
 				if (initial) {
-					if (c=='\t' || c==' ') whiteSpaces++;
+					if (c=='\t' || c==' ') {
+						whiteSpaces++;
+					}
 					else initial=NO;
 				}
 				if (c=='{') addShift++;
@@ -470,21 +521,26 @@ NSArray *keywordList=nil;
 			[textView insertText:wss];
 			return YES;
 		}
-		}
+	}
     if (showMatchingBraces) {
+		if (commandSelector == @selector(deleteBackward:)) {
+//			[self highlightBracesWithShift: -1 andWarn:NO];
+			deleteBackward = YES;
+		}
+		//		if (commandSelector == @selector(deleteBackwardByDecomposingPreviousCharacter:))
+		//			[self highlightBracesWithShift: -1 andWarn:NO];
 		if (commandSelector == @selector(moveLeft:))
-			[self highlightBracesWithShift: -2 andWarn:NO];
+			[self highlightBracesWithShift: -1 andWarn:NO];
 		if(commandSelector == @selector(moveRight:))
 			[self highlightBracesWithShift: 0 andWarn:NO];
-	}
-	
+	}	
 	return retval;
 }
 
-/*
-Here we only break the modal loop for the R_Edit call. Wether a window
-is to be saved on exit or no, is up to Cocoa
-*/ 
+	/*
+	 Here we only break the modal loop for the R_Edit call. Wether a window
+	 is to be saved on exit or no, is up to Cocoa
+	 */ 
 - (BOOL)windowShouldClose:(id)sende
 {	
 	if([[self document] hasREditFlag]) {

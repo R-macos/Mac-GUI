@@ -1,5 +1,12 @@
 NEWS
 
+Last update: 2005-02-03 [RG]
+*	Added simple line number support in source editor.
+*	Fixed some issues around deleteBackward in editor
+*	Brace highlighting in editor re-enabled
+*	Fixed some minor issues on repositioning and resizing of Quartz
+    windows.
+
 Last update: 2005-02-01 [SU]
 *	Added forward/back buttons in help browser window
 *	Added update.localization script for automated update of

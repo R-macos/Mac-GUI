@@ -46,6 +46,6 @@
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
 - (NSString *)whoAmI;	
-
+- (NSTextView *)textView;
 
 @end

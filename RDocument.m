@@ -53,10 +53,14 @@
 	[super dealloc];
 }
 
+- (NSTextView *)textView {
+	return [myWinCtrl textView];
+}
+
 - (void) makeWindowControllers {
 	// create RDocumentWinCtr which is a window controller - it loads the corresponding NIB and sets up the window
-	RDocumentWinCtrl *cc = [[RDocumentWinCtrl alloc] initWithWindowNibName:@"RDocument"];
-	[self addWindowController:cc];
+	myWinCtrl = [[RDocumentWinCtrl alloc] initWithWindowNibName:@"RDocument"];
+	[self addWindowController:myWinCtrl];
 }
 
 - (void) loadInitialContents

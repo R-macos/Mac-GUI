@@ -32,6 +32,9 @@
 #import <Cocoa/Cocoa.h>
 #import "Preferences.h"
 #import "RDocument.h"
+//#import "RRulerView.h"
+
+@class RRulerView;
 
 extern NSColor *shColorNormal;
 extern NSColor *shColorString;
@@ -42,12 +45,15 @@ extern NSColor *shColorIdentifier;
 
 @interface RDocumentWinCtrl : NSWindowController <PreferencesDependent>
 {
-    IBOutlet NSTextView *textView;
+	IBOutlet NSScrollView *scrollView;
+    NSTextView *textView;
+    RRulerView *theRulerView;
 
 	RDocument *document;
 	
 	BOOL useHighlighting; // if set to YES syntax highlighting is used
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted
+	BOOL deleteBackward;
 	
 	double braceHighlightInterval; // interval to flash brace highlighting for
 	NSDictionary *highlightColorAttr; // attributes set while braces matching
@@ -75,5 +81,6 @@ extern NSColor *shColorIdentifier;
 - (NSData*) contentsAsRtf;
 - (NSString*) contentsAsString;
 
+- (NSTextView *) textView;
 
 @end

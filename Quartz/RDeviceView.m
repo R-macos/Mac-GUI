@@ -130,6 +130,7 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 	[[RController getRController] handleBusy: NO];
 
     // could do something here if needed
+	[[RController getRController] updatePreferences];
 }
 
 - (void)drawRect:(NSRect)aRect

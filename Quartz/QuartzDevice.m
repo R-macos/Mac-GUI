@@ -102,6 +102,7 @@ typedef struct {
     int		where;
 	int		QuartzPos;		 /* Window Pos: TopRight=1, BottomRight, BottomLeft, TopLeft=4 */
 	RQuartz *QuartzDoc;
+	NSPoint topLeftPoint;
 	RDeviceView *DevView;
 	NSWindow *DevWindow;
 	NSTextStorage *DevTextStorage;
@@ -292,6 +293,7 @@ Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 	[xd->DevTextContainer setLineFragmentPadding:0.0];
 	[xd->DevView setDevNum: xd->DevNum];
 	[xd->DevView setPDFDrawing: FALSE];
+	xd->topLeftPoint = NSMakePoint(0, 0);
     return 1;
 
 }
@@ -345,6 +347,9 @@ static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
 
  
 	[RQuartz changeDocumentTitle: newDocument Title:@"New Quartz Device"];
+//	xd->topLeftPoint = computeTopLeftCornerForDevNum(0);
+//	[[newDocument getDeviceWindow] setFrame:
+//		NSMakeRect(xd->topLeftPoint.x, xd->topLeftPoint.y, xd->windowWidth, xd->windowHeight) display:NO];
 	[[newDocument getDeviceWindow] setContentSize:NSMakeSize(xd->windowWidth, xd->windowHeight) ];
 	[[newDocument getDeviceWindow] orderFrontRegardless];
 	
@@ -372,24 +377,40 @@ static void 	RQuartz_Close(NewDevDesc *dd)
 
 static void 	RQuartz_Activate(NewDevDesc *dd)
 {
+	int devnum = devNumber((DevDesc *)dd);
+	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
+	xd->DevNum = devnum;
+	[xd->DevView setDevNum: devnum];
+	NSRect rect = [xd->DevWindow frame];
 	NSScreen *screen = [NSScreen mainScreen];
 	NSDictionary *screenDict = [screen deviceDescription];
 	NSSize resolution = [[screenDict objectForKey:NSDeviceResolution] sizeValue];
 	// NSSize screenSize = [[screenDict objectForKey:NSDeviceSize] sizeValue];
 	// NSLog(@"Resolution: %f %f", resolution.width, resolution.height);
 	// NSLog(@"Screen size: %f %f", screenSize.width, screenSize.height);
-	int 		devnum = devNumber((DevDesc *)dd);
-	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
-	xd->DevNum = devnum;
-	[xd->DevView setDevNum: devnum];
-	NSRect rect = [xd->DevWindow frame];
 	float width = [[Preferences stringForKey:quartzPrefPaneWidthKey withDefault:@"4.5"] floatValue];
 	float height = [[Preferences stringForKey:quartzPrefPaneHeightKey withDefault:@"4.5"] floatValue];
 	float fwidth = width * resolution.width;
 	float fheight = height * resolution.height + 22.0;
-	if (fwidth==rect.size.width && fheight==rect.size.height) {
-		NSPoint topLeftCorner = computeTopLeftCornerForDevNum(devnum-1);
-		[xd->DevWindow setFrameTopLeftPoint:topLeftCorner];	
+	
+/*	
+	Not great. Would have preferred to set window position in RQuartz_Open but cannot as devnum
+	is not known at that point in time. Here I move the window to the right location the 1st time
+	around and if it has not been moved or resized. xd->topLeftPoint contains the tLP coordinates
+	as computed by computeTopLeftCornerForDevNum(devnum-1) and rect the actuals.
+	Note also that after resizing, updatePreferences is called in RQuartz.m.
+	Unfortunately the needed call to setContentSize in RQuartz_Open generates the initial flicker
+	on opening a new window. Have not found a way around that (e.g. setFrame:display does not work).
+*/
+	
+//	NSLog(@"fheight: %f ", fheight);
+//	NSLog(@"topLeftPoint: %f %f", xd->topLeftPoint.x, xd->topLeftPoint.y);
+//	NSLog(@"rect: %f %f", rect.origin.x, rect.origin.y + fheight);
+	if (xd->topLeftPoint.x < 5.0 ||
+		fwidth==rect.size.width && fheight==rect.size.height &&
+		xd->topLeftPoint.x == rect.origin.x && xd->topLeftPoint.y == rect.origin.y + fheight) {
+		xd->topLeftPoint = computeTopLeftCornerForDevNum(devnum-1);
+		[xd->DevWindow setFrameTopLeftPoint:xd->topLeftPoint];	
 	}
 	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:@"Quartz (%d) - Active",devnum+1]];
 

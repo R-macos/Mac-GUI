@@ -25,36 +25,23 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  Added by Rob Goedman on 2/3/05 based on an example by
+ *  Carl Sziebert on Thu May 13 2004
+ *  inspired by LineNumbering example authored by Koen van der Drift.
  */
 
-
 #import <Cocoa/Cocoa.h>
-#import "Preferences.h"
-//#import "RDocumentWinCtrl.h"
 
-@class RDocumentWinCtrl;
-
-@interface RDocument : NSDocument
+@interface RRulerView : NSRulerView 
 {
-	// since contents can be loaded in "-init", when NIB is not loaded yet, we need to store the contents until NIB is loaded.
-	NSData *initialContents;
-	NSString *initialContentsType;
-	
-	BOOL isEditable; // determines whether this document can be edited
-	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
-	
-	RDocumentWinCtrl *myWinCtrl;
+    unsigned fontSize;
+    NSMutableDictionary *marginAttributes;
+	NSTextView *myTextView;
+	BOOL showLineNos;
 }
 
-+ (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
-
-- (void) loadInitialContents;
-
-- (void) setEditable: (BOOL) editable;
-- (BOOL) editable;
-- (void) setREditFlag: (BOOL) flag;
-- (BOOL) hasREditFlag;
-
-- (NSTextView *)textView;
+- (id)initWithScrollView:(NSScrollView *)aScrollView orientation:(NSRulerOrientation)orientation showLineNumbers:(BOOL) use textView:(NSTextView *)tv;
+- (void)updateView;
 
 @end

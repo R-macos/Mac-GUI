@@ -51,6 +51,11 @@
 	return deviceWindow;
 }
 
+- (NSTextView *)textView {
+	return nil;
+}
+
+
 - (BOOL)windowShouldClose:(id)sender{
 	KillDevice(GetDevice([deviceView getDevNum]));
 	return YES;

@@ -14,9 +14,15 @@
             SUPERCLASS = NSDocument; 
         }, 
         {
+            ACTIONS = {
+                executeSelection = id; 
+                printDocument = id; 
+                resetBackgroundColor = id; 
+                sourceCurrentDocument = id; 
+            }; 
             CLASS = RDocumentWinCtrl; 
             LANGUAGE = ObjC; 
-            OUTLETS = {textView = NSTextView; }; 
+            OUTLETS = {scrollView = NSScrollView; textView = NSTextView; }; 
             SUPERCLASS = NSWindowController; 
         }
     ); 

@@ -2369,6 +2369,8 @@
 		};
 		687B4E400794165600074042 = {
 			children = (
+				D490C1EA07B400870034B42F,
+				D490C1EB07B400870034B42F,
 				687B4F9507944B8000074042,
 				687B4F9607944B8000074042,
 				163B0CA306CE528400A380BE,
@@ -2609,6 +2611,7 @@
 				687B4F9707944B8000074042,
 				687B503B07945D4C00074042,
 				68E2B9F20796C9D200E31F29,
+				D490C1EC07B400870034B42F,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2733,6 +2736,7 @@
 				687B4F9807944B8000074042,
 				687B503C07945D4C00074042,
 				68E2B9F30796C9D200E31F29,
+				D490C1ED07B400870034B42F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2865,6 +2869,34 @@
 		};
 		D41DED5A073B3FF700B900F2 = {
 			fileRef = D41DED58073B3FF700B900F2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D490C1EA07B400870034B42F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = RRulerView.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D490C1EB07B400870034B42F = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = RRulerView.m;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		D490C1EC07B400870034B42F = {
+			fileRef = D490C1EA07B400870034B42F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		D490C1ED07B400870034B42F = {
+			fileRef = D490C1EB07B400870034B42F;
 			isa = PBXBuildFile;
 			settings = {
 			};
