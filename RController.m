@@ -124,6 +124,7 @@ static RController* sharedRController;
 	writeBufferPos = writeBuffer = (char*) malloc(writeBufferLen);
 	readConsTransBufferSize = 1024; // initial size - will grow as needed
 	readConsTransBuffer = (char*) malloc(readConsTransBufferSize);
+	textViewSync = [[NSString alloc] initWithString:@"consoleTextViewSemahphore"];
 	
 	consoleColorsKeys = [[NSArray alloc] initWithObjects:
 		backgColorKey, inputColorKey, outputColorKey, promptColorKey,
@@ -289,10 +290,15 @@ static RController* sharedRController;
 	if (!RLtimer)
 		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
 												   target:self
-												 selector:@selector(runRELP:)
+												 selector:@selector(kickstart:)
 												 userInfo:0
 												  repeats:NO];
 	
+	[self runREPL:nil];
+}
+
+- (void) kickstart:(id) sender {
+	//kill(getpid(),SIGINT);
 }
 
 -(void) addConnectionLog
@@ -319,7 +325,7 @@ static RController* sharedRController;
     NSConnection *connectionToController;
 	RController *rc;
 	unsigned int bufSize=2048;
-    char *buf=(char*) malloc(bufSize);
+    char *buf=(char*) malloc(bufSize+16);
     int n=0, pib=0, flushMark=bufSize-(bufSize>>2);
 	int bufFD=0;
     fd_set readfds;
@@ -343,18 +349,20 @@ static RController* sharedRController;
         selr=select(maxfd+1, &readfds, 0, 0, &timv);
         if (FD_ISSET(stdoutFD, &readfds)) {
 			if (bufFD!=0 && pib>0) {
-				[rc writeLogsWithBytes:buf length:pib type:bufFD];
+				@try{
+					[rc writeLogsWithBytes:buf length:pib type:bufFD];
+				} @catch(NSException *ex) {
+				}
 				pib=0;
 			}
 			bufFD=0;
             while (pib<bufSize && (n=read(stdoutFD,buf+pib,bufSize-pib))>0)
 				pib+=n;
 			if (pib>flushMark) { // if we reach the flush mark, dump it
-				NS_DURING
+				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
-				NS_HANDLER
-					;
-				NS_ENDHANDLER
+				} @catch(NSException *ex) {
+				}
 				pib=0;
             }
         } 
@@ -367,38 +375,38 @@ static RController* sharedRController;
 			while (pib<bufSize && (n=read(stderrFD,buf+pib,bufSize-pib))>0)
 				pib+=n;
 			if (pib>flushMark) { // if we reach the flush mark, dump it
-				NS_DURING
+				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
-				NS_HANDLER
-					;
-				NS_ENDHANDLER
+				} @catch(NSException *ex) {
+				}
 				pib=0;
 			}
 		}
 		if (rootFD!=-1 && FD_ISSET(rootFD, &readfds)) {
 			if (bufFD!=2 && pib>0) {
-				[rc writeLogsWithBytes:buf length:pib type:bufFD];
+				@try{
+					[rc writeLogsWithBytes:buf length:pib type:bufFD];
+				} @catch(NSException *ex) {
+				}
 				pib=0;
 			}
 			bufFD=2;
 			while (pib<bufSize && (n=read(rootFD,buf+pib,bufSize-pib))>0)
 				pib+=n;
 			if (n==0 || pib>flushMark) { // if we reach the flush mark, dump it
-				NS_DURING
+				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
-				NS_HANDLER
-					;
-				NS_ENDHANDLER
+				} @catch(NSException *ex) {
+				}
 				pib=0;
 			}
 			if (n==0) rootFD=-1;
 		}
 		if ((forceStdFlush || selr==0) && pib>0) { // dump also if we got a timeout
-			NS_DURING
+			@try{
 				[rc writeLogsWithBytes:buf length:pib type:bufFD];
-			NS_HANDLER
-				;
-			NS_ENDHANDLER
+			} @catch(NSException *ex) {
+			}
 			pib=0;
 		}
     }
@@ -503,6 +511,9 @@ extern BOOL isTimeToFinish;
 	[defaultConsoleColors release];
 	[consoleColors release];
 	[consoleColorsKeys release];
+#ifdef DEBUG_RGUI
+	[[NSExceptionHandler defaultExceptionHandler] setDelegate:nil];
+#endif
 	[super dealloc];
 }
 
@@ -558,62 +569,70 @@ extern BOOL isTimeToFinish;
 
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */
 - (void) writeConsoleDirectly: (NSString*) txt withColor: (NSColor*) color{
-	NSRange origSel = [RTextView selectedRange];
-	NSRange insPt = NSMakeRange(outputPosition, 0);
-	unsigned tl = [txt length];
-	if (tl>0) {
-		unsigned oldCL=committedLength;
-		/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
-		origSel.length, outputPosition, tl, promptPosition, committedLength); */
-		committedLength=0;
-		[RTextView setSelectedRange:insPt];
-		[RTextView insertText:txt];
-		insPt.length=tl;
-		[RTextView setTextColor:color range:insPt];
-		if (outputPosition<=promptPosition) promptPosition+=tl;
-		committedLength=oldCL;
-		if (outputPosition<=committedLength) committedLength+=tl;
-		if (outputPosition<=origSel.location) origSel.location+=tl;
-		outputPosition+=tl;
-		[RTextView setSelectedRange:origSel];
+	@synchronized(textViewSync) {
+		NSRange origSel = [RTextView selectedRange];
+		NSRange insPt = NSMakeRange(outputPosition, 0);
+		unsigned tl = [txt length];
+		if (tl>0) {
+			unsigned oldCL=committedLength;
+			/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
+			origSel.length, outputPosition, tl, promptPosition, committedLength); */
+			committedLength=0;
+			[RTextView setSelectedRange:insPt];
+			[RTextView insertText:txt];
+			insPt.length=tl;
+			[RTextView setTextColor:color range:insPt];
+			if (outputPosition<=promptPosition) promptPosition+=tl;
+			committedLength=oldCL;
+			if (outputPosition<=committedLength) committedLength+=tl;
+			if (outputPosition<=origSel.location) origSel.location+=tl;
+			outputPosition+=tl;
+			[RTextView setSelectedRange:origSel];
+		}
 	}
 }
 
 /* Just writes the prompt in a different color */
 - (void)handleWritePrompt: (NSString*) prompt {
     [self handleFlushConsole];
-	unsigned textLength = [[RTextView textStorage] length];
-    int promptLength=[prompt length];
-	NSRange lr = [[[RTextView textStorage] string] lineRangeForRange:NSMakeRange(textLength,0)];
-    promptPosition=textLength;
-	if (lr.location!=textLength) { // the prompt must be on the beginning of the line
-        [RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-		[RTextView insertText: @"\n"];
-		textLength = [[RTextView textStorage] length];
+	@synchronized(textViewSync) {
+		unsigned textLength = [[RTextView textStorage] length];
+		int promptLength=[prompt length];
+		NSRange lr = [[[RTextView textStorage] string] lineRangeForRange:NSMakeRange(textLength,0)];
+		promptPosition=textLength;
+		if (lr.location!=textLength) { // the prompt must be on the beginning of the line
+			[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
+			[RTextView insertText: @"\n"];
+			textLength = [[RTextView textStorage] length];
 		promptLength++;
-	}
-	
-    if (promptLength>0) {
-        [RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-        [RTextView insertText:prompt];
-        [RTextView setTextColor:[consoleColors objectAtIndex:iPromptColor] range:NSMakeRange(promptPosition, promptLength)];
-		if (promptLength>1) // this is a trick to make sure that the insertion color doesn't change at the prompt
-			[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
+		}
+		
+		if (promptLength>0) {
+			[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
+			[RTextView insertText:prompt];
+			[RTextView setTextColor:[consoleColors objectAtIndex:iPromptColor] range:NSMakeRange(promptPosition, promptLength)];
+			if (promptLength>1) // this is a trick to make sure that the insertion color doesn't change at the prompt
+				[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
         committedLength=promptPosition+promptLength;
-    }
-	committedLength=promptPosition+promptLength;
+		}
+		committedLength=promptPosition+promptLength;
+	}
 }
 
 - (void)  handleProcessingInput: (char*) cmd
 {
 	NSString *s = [[NSString alloc] initWithUTF8String:cmd];
-	unsigned textLength = [[RTextView textStorage] length];
 	
-	[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
-	[RTextView insertText:s];
-	textLength = [[RTextView textStorage] length];
-	[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
-	outputPosition=committedLength=textLength;
+	@synchronized(textViewSync) {
+		unsigned textLength = [[RTextView textStorage] length];
+		
+		[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
+		[RTextView insertText:s];
+		textLength = [[RTextView textStorage] length];
+		[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
+		outputPosition=committedLength=textLength;
+	}
+	
 	[s release];
 	
 	if((*cmd == '?') || (!strncmp("help(",cmd,5))){ 
@@ -945,19 +964,21 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 /* console input - the string passed here is handled as if it was typed on the console */
 - (void) consoleInput: (NSString*) cmd interactive: (BOOL) inter
 {
-	if (!inter) {
-		int textLength = [[RTextView textStorage] length];
-		if (textLength>committedLength)
-			[RTextView replaceCharactersInRange:NSMakeRange(committedLength,textLength-committedLength) withString:@""];
-		[RTextView setSelectedRange:NSMakeRange(committedLength,0)];
-		[RTextView insertText: cmd];
-		textLength = [[RTextView textStorage] length];
-		[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength,textLength-committedLength)];
-	}
-	
-	if (inter) {
-		if ([cmd characterAtIndex:[cmd length]-1]!='\n') cmd=[cmd stringByAppendingString: @"\n"];
-		[consoleInputQueue addObject:[[NSString alloc] initWithString:cmd]];
+	@synchronized(textViewSync) {
+		if (!inter) {
+			int textLength = [[RTextView textStorage] length];
+			if (textLength>committedLength)
+				[RTextView replaceCharactersInRange:NSMakeRange(committedLength,textLength-committedLength) withString:@""];
+			[RTextView setSelectedRange:NSMakeRange(committedLength,0)];
+			[RTextView insertText: cmd];
+			textLength = [[RTextView textStorage] length];
+			[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength,textLength-committedLength)];
+		}
+		
+		if (inter) {
+			if ([cmd characterAtIndex:[cmd length]-1]!='\n') cmd=[cmd stringByAppendingString: @"\n"];
+			[consoleInputQueue addObject:[[NSString alloc] initWithString:cmd]];
+		}
 	}
 }
 
@@ -1146,8 +1167,13 @@ like window resizing, locator, widgets interactions, etc.
 */
 
 
-- (IBAction)runRELP:(id)sender {
-	run_Rmainloop();
+- (IBAction)runREPL:(id)sender {
+	@try {
+		[[REngine mainEngine] runREPL];
+	} @catch(NSException *ex) {
+		NSLog(@"R main loop exception %@", ex);
+	}
+	NSLog(@"runREPL returned");
 }
 
 - (IBAction)flushconsole:(id)sender {
@@ -1647,7 +1673,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 {
 	NSOpenPanel *op;
 	int answer;
-
+	[self bla];
 	op = [NSOpenPanel openPanel];
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];

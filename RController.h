@@ -95,6 +95,8 @@
 	NSToolbar *toolbar;
 	NSToolbarItem *toolbarStopItem;
 	
+	NSString *textViewSync;
+	
     IBOutlet NSStepper *fontSizeStepper;
     IBOutlet NSTextField *fontSizeField;
     IBOutlet NSView *fontSizeView;
@@ -158,7 +160,7 @@
 - (void) consoleInput: (NSString*) cmd interactive: (BOOL) inter;
 
 - (IBAction)otherEventLoops:(id)sender;
-- (IBAction)runRELP:(id)sender;
+- (IBAction)runREPL:(id)sender;
 - (IBAction)flushconsole:(id)sender;
 
 -(IBAction) fontSizeBigger:(id)sender;
@@ -243,6 +245,8 @@
 - (void) handleFlushConsole;
 - (void) handleBusy: (BOOL)i;
 - (int)  handleChooseFile: (char *)buf len:(int)len isNew:(int)isNew;	
+
+- (void) kickstart:(id) sender;
 
 - (NSFont*) currentFont;
 

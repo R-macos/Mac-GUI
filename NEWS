@@ -1,12 +1,23 @@
 NEWS
 
 Last update: 2004-12-27 [SU]
+*	Fixed a potentially dangerous bug in stdout/err thread code
+	(writing one byte off the end of a dynamic buffer)
+*	Fixed improper R loop start
 *	Added new target "Debug" - it should be used for deployed
-	binaries that should contain debug information. The
+	binaries that will contain debug information. The
 	development target uses zero-link which makes it unusable
 	for any deployment.
 *	Added exception debugging code - exceptions are traced
 	and dumped on the console (Debug/Development only).
+*	Changed R loop start to happen during the AFL notification
+	instead of a timer (experimenal, see note below).
+*	Made most of the console writing code thread-safe.
+
+NOTE: there seems to be a serious issue: R's SETJMP interferes
+	with Obj-C exception handling (or vice-versa). There is now
+	some experimental code in this commit that tries to explore
+	the possibilities, but it's not a final solution yet.
 
 Last update: 2004-12-10 [RG]
 *	Quartz window location and size preferences
