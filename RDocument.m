@@ -19,7 +19,7 @@ NSColor *shColorKeyword;
 NSColor *shColorComment;
 NSColor *shColorIdentifier;
 
-NSArray *keywordList;
+NSArray *keywordList=nil;
 
 @implementation RDocument
 
@@ -32,7 +32,7 @@ NSArray *keywordList;
 	shColorComment=[NSColor colorWithDeviceRed:0.6 green:0.4 blue:0.4 alpha:1.0];
 	shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.4 alpha:1.0];
 	
-	keywordList = [NSArray arrayWithObjects: @"for", @"if", @"else", @"TRUE", @"FALSE", @"while",
+	keywordList = [[NSArray alloc] initWithObjects: @"for", @"if", @"else", @"TRUE", @"FALSE", @"while",
 		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
 }
 
@@ -74,6 +74,7 @@ NSArray *keywordList;
 - (void)dealloc {
 	if (initialContents) [initialContents release];
 	if (initialContentsType) [initialContentsType release];
+	if (highlightColorAttr) [highlightColorAttr release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
 }
@@ -239,7 +240,8 @@ create the UI for the document.
 	int bb = i;
 	int last = i+range.length;
 	BOOL foundItem=NO;
-	
+
+	if (!keywordList) [RDocument setDefaultSyntaxHighlightingColors];
 	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
 	if (updating || !useHighlighting) return;
 	
@@ -307,12 +309,15 @@ create the UI for the document.
 			while (i<last && ((c=[s characterAtIndex:i])=='_' || c=='.' || (c>='a' && c<='z') || (c>='A' && c<='Z'))) i++;
 			fr=NSMakeRange(ss,i-ss);
 			
-			if ([keywordList containsObject:[s substringWithRange:fr]]) {
-				[ts addAttribute:@"shType" value:@"keyword" range:fr];
-				[ts addAttribute:@"NSColor" value:shColorKeyword range:fr];
-			} else {
-				[ts addAttribute:@"shType" value:@"id" range:fr];
-				[ts addAttribute:@"NSColor" value:shColorIdentifier range:fr];
+			{
+				NSString *word = [s substringWithRange:fr];
+				if (word && keywordList && [keywordList containsObject:word]) {
+					[ts addAttribute:@"shType" value:@"keyword" range:fr];
+					[ts addAttribute:@"NSColor" value:shColorKeyword range:fr];
+				} else {
+					[ts addAttribute:@"shType" value:@"id" range:fr];
+					[ts addAttribute:@"NSColor" value:shColorIdentifier range:fr];
+				}
 			}
 			bb=i;
 			if (i==last) break;
