@@ -31,6 +31,10 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Authorisiert R, Befehle als 'root' Administrator auszuführen";
 
+/* From: HelpManager.m (showHelpFor)
+   From: HelpManager.m (runHelpSearch) */
+"Can't find help for topic" = "Das Hilfethema kann nicht gefunden werden";
+
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Abbrechen";
 
@@ -45,6 +49,9 @@
 
 /* From: RController.m (doLoadHistory) */
 "Choose history File" = "Wählen Sie die History-Datei";
+
+/* From: PrefPanes/MiscPrefPane.m (chooseWorkingDir) */
+"Choose Initial Working Directory" = "Wählen Sie Voreinstellung für das Arbeitsverzeichnis";
 
 /* From: RController.m (handleChooseFile) */
 "Choose New File Name" = "Wählen Sie einen Dateinamen";
@@ -85,6 +92,9 @@
 /* From: RController.m (toolbar) */
 "New Document" = "Neues Dokument";
 
+/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+"New Quartz Device" = "New Quartz Device";
+
 /* Global string @ */
 "No" = "Nein";
 
@@ -114,6 +124,12 @@
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
+
+/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+"Quartz (%d) - Active" = "Quartz (%d) - aktiv";
+
+/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+"Quartz (%d) - Inactive" = "Quartz (%d) - nicht aktiv";
 
 /* From: RController.m (toolbar) */
 "Quit" = "Beenden";
@@ -169,11 +185,17 @@
 /* From: REditor.m (toolbar) */
 "Removes selected rows" = "Ausgewählte Zeilen entfernen";
 
+/* From: Quartz/RDeviceView.m (drawRect) */
+"Resizing to %g x %g" = "Größe wird zu %1$g x %2$g geändert";
+
 /* Global string @ */
 "Save" = "Speichern";
 
 /* From: RController.m (toolbar) */
 "Save Console Window" = "Konsole-Inhalt speichern";
+
+/* From: Quartz/RQuartz.m (saveDocument) */
+"Save Content of Quartz Device to PDF file" = "Inhalt des Quartz-Fensters in eine PDF Datei speichern";
 
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Verlauf-Datei speichern";
@@ -186,6 +208,9 @@
 
 /* From: RController.m (didCloseAll) */
 "Save workspace image?" = "Soll das Workspace gespeichert werden?";
+
+/* From: PrefPanes/EditorPrefPane.m (changeEditor) */
+"Select editor application" = "Wählen Sie einen externen Editor";
 
 /* From: PackageInstaller.m (installSelected) */
 "Select Installation Directory" = "Wählen Sie das Installationsverzeichnis";
@@ -228,6 +253,9 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Dieses Package ist nicht installiert.";
+
+/* From: HelpManager.m (runHelpSearch) */
+"Topic: " = "Hilfethema: ";
 
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "R kann nicht gestartet werden: %@";
