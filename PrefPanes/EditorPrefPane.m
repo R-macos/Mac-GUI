@@ -44,8 +44,7 @@
 - (id)initWithIdentifier:(NSString *)theIdentifier label:(NSString *)theLabel category:(NSString *)theCategory
 {
 	if (self = [super init]) {
-//		[[Preferences sharedPreferences] addDependent:self];
-//		[self updatePreferences];
+		[[Preferences sharedPreferences] addDependent:self];
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -150,19 +149,9 @@
 
 /* end of std methods implementation */
 
-- (void) awakeFromNib:(id)sender
+- (void) awakeFromNib
 {
-	NSLog(@"awakeFromNib called");
-}
-
-- (void) windowControllerDidLoadNib:(NSWindowController *)aController
-{
-	NSLog(@"windowControllerDidLoadNib called");
-}
-
-- (void) didLoadNib:(id)sender
-{
-	NSLog(@"didLoadNib called");
+	[self updatePreferences];
 }
 
 - (void) updatePreferences

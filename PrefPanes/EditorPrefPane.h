@@ -50,14 +50,6 @@
 	IBOutlet NSTextField *externalEditorName;
 	IBOutlet NSMatrix *appOrCommand;
 	IBOutlet NSButton *changeEditor;
-
-	BOOL doSyntaxColoring;
-	BOOL doLineNumbers;
-	BOOL doBraceHighlighting;
-	double currentHighlightInterval;
-	NSString *externalEditor;
-	BOOL editorIsApp;
-	BOOL useInternalEditor;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
