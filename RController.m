@@ -655,10 +655,14 @@ extern BOOL isTimeToFinish;
 
 - (int) handleEdit: (char*) file
 {
-	if(!R_FileExists(file))
-		return(0);
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSString *fn = [[NSString stringWithUTF8String:file] stringByExpandingTildeInPath];
+	if (![[NSFileManager defaultManager] isReadableFileAtPath:fn]) {
+		[pool release];
+		return 0;
+	}
 	
-	RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: [NSString stringWithCString:R_ExpandFileName(file)] display:true];
+	RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: fn display:YES];
 	[document setREditFlag: YES];
 	
 	NSEnumerator *e = [[document windowControllers] objectEnumerator];
@@ -672,6 +676,7 @@ extern BOOL isTimeToFinish;
 		[NSApp endModalSession:session];
 	}
 	
+	[pool release];
 	return(0);
 }
 

@@ -25,7 +25,13 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {runHelpSearch = id; showMainHelp = id; showRFAQ = id; whatsNew = id; }; 
+            ACTIONS = {
+                printDocument = id; 
+                runHelpSearch = id; 
+                showMainHelp = id; 
+                showRFAQ = id; 
+                whatsNew = id; 
+            }; 
             CLASS = HelpManager; 
             LANGUAGE = ObjC; 
             OUTLETS = {

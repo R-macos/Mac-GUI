@@ -44,6 +44,11 @@ NSColor *shColorIdentifier;
 
 NSArray *keywordList=nil;
 
+#define numConsoleColors 7
+static NSString *consoleColorsKeys[7] = {
+	backgColorKey, inputColorKey, outputColorKey, promptColorKey,
+	stderrColorKey, stdoutColorKey, rootColorKey };
+
 @implementation RDocument
 
 + (void) setDefaultSyntaxHighlightingColors
@@ -87,9 +92,6 @@ NSArray *keywordList=nil;
 		initialContentsType=nil;
 		isEditable=YES;
 		isREdit=NO;
-		consoleColorsKeys = [[NSArray alloc] initWithObjects:
-			backgColorKey, inputColorKey, outputColorKey, promptColorKey,
-			stderrColorKey, stdoutColorKey, rootColorKey];
 		defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
 			[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
 			[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
@@ -154,9 +156,9 @@ NSArray *keywordList=nil;
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
 	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
-	int i = 0, ccs = [consoleColorsKeys count];
-	while (i<ccs) {
-		NSColor *c = [Preferences unarchivedObjectForKey: [consoleColorsKeys objectAtIndex:i] withDefault: [consoleColors objectAtIndex:i]];
+	int i = 0;
+	while (i<numConsoleColors) {
+		NSColor *c = [Preferences unarchivedObjectForKey: consoleColorsKeys[i] withDefault: [consoleColors objectAtIndex:i]];
 		if (c != [consoleColors objectAtIndex:i]) {
 			[consoleColors replaceObjectAtIndex:i withObject:c];
 			if (i == iBackgroundColor) {
@@ -195,14 +197,16 @@ NSArray *keywordList=nil;
 		sharedDict];
 	
 	printInfo = [[NSPrintInfo alloc] initWithDictionary: printInfoDict];
-	[printInfo setHorizontalPagination: NSAutoPagination];
+	[printInfo setHorizontalPagination: NSFitPagination];
 	[printInfo setVerticalPagination: NSAutoPagination];
 	[printInfo setVerticallyCentered:NO];
 	
+	[textView setBackgroundColor:[NSColor whiteColor]];
 	printOp = [NSPrintOperation printOperationWithView:textView 
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
 	[printOp runOperation];
+	[self updatePreferences];
 }
 
 /* This method is implemented to allow image data file to be loaded into R using open

@@ -142,7 +142,7 @@ for quartz. This method is called by RController -> activateQuartz
 		sharedDict];
 
 	printInfo = [[NSPrintInfo alloc] initWithDictionary: printInfoDict];
-	[printInfo setHorizontalPagination: NSAutoPagination];
+	[printInfo setHorizontalPagination: NSFitPagination];
 	[printInfo setVerticalPagination: NSAutoPagination];
 	[printInfo setVerticallyCentered:NO];
 	

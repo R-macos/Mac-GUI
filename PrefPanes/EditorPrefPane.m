@@ -159,9 +159,16 @@
 	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
 	[internalOrExternal setState:(flag?NSOnState:NSOffState) atRow:0 column:0];
 	[internalOrExternal setState:(flag?NSOffState:NSOnState) atRow:0 column:1];
-	[builtInPrefs setHidden:flag?NSOffState:NSOnState];
+//	[builtInPrefs setHidden:flag?NSOffState:NSOnState];
+	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
+	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
+	[highlightInterval setEnabled:flag?NSOnState:NSOffState];
 	
-	[externalEditorName setStringValue: [Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
+	NSArray *pathComps = [[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"] componentsSeparatedByString:@"/"];
+	NSString *name = [pathComps objectAtIndex: ([pathComps count] - 1)];
+	pathComps = [name componentsSeparatedByString:@".app"];
+	name = [pathComps objectAtIndex:0];
+	[externalEditorName setStringValue:name];
 
 	[showSyntaxColoring setState:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]?NSOnState:NSOffState];
 
@@ -234,11 +241,7 @@
 	[sp setTitle:@"Select editor application"];
 	answer = [sp runModalForDirectory:@"/Applications" file:nil types:nil];
 	if(answer == NSOKButton) {
-		NSArray *pathComps = [[sp filename] componentsSeparatedByString:@"/"];
-		NSString *name = [pathComps objectAtIndex: ([pathComps count] - 1)];
-		pathComps = [name componentsSeparatedByString:@".app"];
-		name = [pathComps objectAtIndex:0];
-		[Preferences setKey:externalEditorNameKey withObject:name];
+		[Preferences setKey:externalEditorNameKey withObject:[sp filename]];
 	}
 }
 

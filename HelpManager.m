@@ -122,8 +122,11 @@ static id sharedHMController;
 {
 	REngine *re = [REngine mainEngine];	
 	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(%@, htmlhelp=TRUE))",topic]];
-	if(x==nil)
+	if ((x==nil) || ([x string]==NULL)) {
+		NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:topic];
+		NSRunInformationalAlertPanel(@"Can't find help for topic", topicString, @"OK", nil, nil);
 		return;
+	}
 	
 	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
 	
@@ -137,5 +140,28 @@ static id sharedHMController;
 	return sharedHMController;
 }
 
+- (IBAction)printDocument:(id)sender
+{
+	NSPrintInfo *printInfo;
+	NSPrintInfo *sharedInfo;
+	NSPrintOperation *printOp;
+	NSMutableDictionary *printInfoDict;
+	NSMutableDictionary *sharedDict;
+	
+	sharedInfo = [NSPrintInfo sharedPrintInfo];
+	sharedDict = [sharedInfo dictionary];
+	printInfoDict = [NSMutableDictionary dictionaryWithDictionary:
+		sharedDict];
+	
+	printInfo = [[NSPrintInfo alloc] initWithDictionary: printInfoDict];
+	[printInfo setHorizontalPagination: NSFitPagination];
+	[printInfo setVerticalPagination: NSAutoPagination];
+	[printInfo setVerticallyCentered:NO];
+	
+	printOp = [NSPrintOperation printOperationWithView:[[[HelpView mainFrame] frameView] documentView] 
+											 printInfo:printInfo];
+	[printOp setShowPanels:YES];
+	[printOp runOperation];
+}
 
 @end

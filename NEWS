@@ -1,5 +1,14 @@
 NEWS
 
+Last update: 2004-12-08 [RG]
+*	(re-)enabled printing of docs in editor,
+	for now, clears and restores background color
+	before printing
+*	changed horizontalPagination from Auto to Fit
+*	enabled printing help pages with print button
+*	kept full path for editor app or script
+*	informational panel if help topic is not found
+
 Last update: 2004-12-07 [RG, SU]
 *	changed showing and changing of working directory to
 	abbreviate paths using ~ where possible [SU]

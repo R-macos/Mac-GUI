@@ -66,7 +66,6 @@ extern NSColor *shColorIdentifier;
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
 
 	NSMutableArray *consoleColors;
-	NSArray *consoleColorsKeys;
 	NSArray *defaultConsoleColors;
 }
 
@@ -87,5 +86,6 @@ extern NSColor *shColorIdentifier;
 
 - (void) setHighlighting: (BOOL) use;
 - (void)updatePreferences;
+- (IBAction)printDocument:(id)sender;
 
 @end

@@ -80,7 +80,7 @@
 {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
 	BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
-	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"SubEthaEdit"];
+	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
 	if ([aFile isEqualToString:@""] || openInEditor) {
@@ -90,7 +90,7 @@
 			if (useInternalEditor) 
 				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
 		if (editorIsApp) {
-			cmd = [@"open -a " stringByAppendingString:[externalEditor stringByAppendingString:@".app"]];
+			cmd = [@"open -a " stringByAppendingString:externalEditor];
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
 		} else {
@@ -98,7 +98,7 @@
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 		}
-		system([cmd cString]);		
+		system([cmd UTF8String]);		
 	} else 
 		[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")",aFile]];
 	return 0;
@@ -117,12 +117,13 @@
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
 	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"SubEthaEdit"];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
-	NSString *cmd;
+
 	if (useInternalEditor)
-		return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
+		return [super openDocumentWithContentsOfFile:aFile display:flag];		
 	else {
+		NSString *cmd;
 		if (editorIsApp) {
-			cmd = [@"open -a " stringByAppendingString:[externalEditor stringByAppendingString:@".app"]];
+			cmd = [@"open -a " stringByAppendingString:externalEditor];
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
 		} else {
@@ -130,7 +131,7 @@
 			if (![aFile isEqualToString:@""])
 				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 		}
-		system([cmd cString]);
+		system([cmd UTF8String]);
 		return 0;
 	}
 }

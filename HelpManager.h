@@ -53,5 +53,6 @@
 - (void)showHelpFor:(NSString *)topic;
 
 + (id) sharedController;
+- (IBAction)printDocument:(id)sender;
 
 @end
