@@ -167,4 +167,12 @@ static id sharedHMController;
 	[printOp runOperation];
 }
 
+- (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame {
+}
+
+- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
+	[back setEnabled: [sender canGoBack]];
+	[forward setEnabled: [sender canGoForward]];
+}
+
 @end

@@ -36,7 +36,9 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 HelpView = WebView; 
+                back = NSButton; 
                 faqButton = NSButton; 
+                forward = NSButton; 
                 helpWindow = NSWindow; 
                 mainButton = NSButton; 
                 matchRadio = NSMatrix; 

@@ -44,6 +44,8 @@
     IBOutlet NSMatrix *matchRadio;
     IBOutlet NSSearchField *searchField;
 	IBOutlet NSWindow *helpWindow;
+	IBOutlet NSButton *forward;
+	IBOutlet NSButton *back;
 }
 
 - (IBAction)runHelpSearch:(id)sender;
@@ -54,5 +56,7 @@
 
 + (id) sharedController;
 - (IBAction)printDocument:(id)sender;
+
+- (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
 
 @end
