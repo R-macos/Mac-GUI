@@ -608,7 +608,7 @@ extern BOOL isTimeToFinish;
 
 - (void)  handleProcessingInput: (char*) cmd
 {
-	NSString *s = [NSString stringWithCString:cmd];
+	NSString *s = [[NSString alloc] initWithUTF8String:cmd];
 	unsigned textLength = [[RTextView textStorage] length];
 	
 	[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
@@ -616,6 +616,7 @@ extern BOOL isTimeToFinish;
 	textLength = [[RTextView textStorage] length];
 	[RTextView setTextColor:inputColor range:NSMakeRange(committedLength, textLength-committedLength)];
 	outputPosition=committedLength=textLength;
+	[s release];
 	
 	if((*cmd == '?') || (!strncmp("help(",cmd,5))){ 
 		[self openHelpFor: cmd];
@@ -922,10 +923,12 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (void) writeLogsWithBytes: (char*) buf length: (int) len type: (int) outputType
 {
 	NSColor *color=(outputType==0)?stdoutColor:((outputType==1)?stderrColor:[NSColor purpleColor]);
-	
+	buf[len]=0; /* this MAY be dangerous ... */
+	NSString *s = [[NSString alloc] initWithUTF8String:buf];
 	[self flushROutput];
-	[self writeConsoleDirectly:[NSString stringWithCString:buf length:len] withColor:color];
-}    
+	[self writeConsoleDirectly:s withColor:color];
+	[s release];
+}
 
 + (id) getRController{
 	return sharedRController;
