@@ -34,5 +34,6 @@
     
 }
 + (NSString*) complete: (NSString*) part;
++ (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix;
 
 @end
