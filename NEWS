@@ -12,7 +12,8 @@ Last update: 2004-10-22 [SI]
 	Source/Load button in the R Console Window toolbar.
 *	added readFromFile method in RDocument to allow data loading with binary files. It allows
 	also for drag and drop of image data on the R Icon
-	
+*	removed button from workspace browser window, added corresponding toolbar icon/button
+
 Last update: 2004-10-21 [SI]
 *	in data editor: the runModalForSession has been replaced by a modalForWindow
 	to remove the problem with high CPU consuming (thanks to Byron Ellys for the fix)
