@@ -1,5 +1,8 @@
 NEWS
 
+Last update: 2005-02-13 [SU]
+*	Fixed crash in console after output w/o EOL
+
 Last update: 2005-02-12 [RG]
 *	Separated prefpanes for General and Editor
 *	Enabled line wrapping in editor

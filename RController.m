@@ -661,14 +661,12 @@ extern BOOL isTimeToFinish;
 		[textStorage beginEditing];
 		promptPosition=textLength;
 		if (lr.location!=textLength) { // the prompt must be on the beginning of the line
-			[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
 			[textStorage insertText: @"\n" atIndex: textLength withColor:[consoleColors objectAtIndex:iPromptColor]];
 			textLength = [textStorage length];
 			promptLength++;
 		}
 		
 		if (promptLength>0) {
-			[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
 			[textStorage insertText:prompt atIndex: textLength withColor:[consoleColors objectAtIndex:iPromptColor]];
 			if (promptLength>1) // this is a trick to make sure that the insertion color doesn't change at the prompt
 				[textStorage addAttribute:@"NSColor" value:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
