@@ -49,6 +49,7 @@ extern NSColor *shColorIdentifier;
 @interface RDocument : NSDocument <PreferencesDependent>
 {
 	IBOutlet	NSTextView *textView;
+	IBOutlet    NSWindow *window;
 	
 	// since contents can be loaded in "-init", when NIB is not loaded yet, we need to store the contents until NIB is loaded.
 	NSData *initialContents;

@@ -294,6 +294,7 @@ static RController* sharedRController;
 												 userInfo:0
 												  repeats:NO];
 	
+	[RConsoleWindow makeKeyAndOrderFront:self];
 	[self runREPL:nil];
 }
 

@@ -127,7 +127,18 @@ NSArray *keywordList=nil;
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
-		
+
+	{ // HACK HACK: for some (unknown) reason "window" is not set by the NIB, so we need to do it ourselves (assuming that we have 1 window only)
+		NSEnumerator *e = [[self windowControllers] objectEnumerator];
+		NSWindowController *wc = nil;
+		while (wc = [e nextObject]) { window = [wc window];	}
+	}
+	
+	[window setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
+	[textView setDrawsBackground:NO];
+	[[textView enclosingScrollView] setDrawsBackground:NO];
+	[self updatePreferences];
+	
 	[textView setFont:[[RController getRController] currentFont]];
 	[textView setContinuousSpellCheckingEnabled:NO]; // by default no continuous spell checking
 	[textView setAllowsUndo: YES];
@@ -144,6 +155,11 @@ NSArray *keywordList=nil;
 
 
 - (void) updatePreferences {
+	NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
+	if (c && c!=[window backgroundColor]) {
+		[window setBackgroundColor:c];
+		[window display];
+	}
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
 	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
@@ -222,8 +238,8 @@ create the UI for the document.
 		NSWindowController *wc = nil;
 		
 		while (wc = [e nextObject]) {
-			NSWindow *window = [wc window];
-			[window setTitle: title];
+			NSWindow *dw = [wc window];
+			[dw setTitle: title];
 		}
 }
 

@@ -1,5 +1,13 @@
 NEWS
 
+Last update: 2004-12-30 [SU]
+*	Fixed bug in color preferences causing an exception to be
+	thrown when chenging transparency of a pure white bg
+*	Added support for transparent background to editor windows
+*	Fixed bug in RDocument (window could not be identified)
+*	Make console window key after setting up R
+*	Some Quartz cleanup [RG]
+
 Last update: 2004-12-29 [SU]
 *	Removed superfluous and wrong color handling code - should
 	fix crashes related to new documents.

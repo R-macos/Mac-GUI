@@ -196,7 +196,7 @@
 }
 
 - (IBAction)changeBackGColor:(id)sender {
-	NSColor *well = [backgColorWell color];
+	NSColor *well = [[backgColorWell color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 	NSColor *bgc = [NSColor colorWithCalibratedRed: [well redComponent] green:[well greenComponent] blue:[well blueComponent] alpha:[alphaStepper floatValue]];
 	[Preferences setKey:backgColorKey withArchivedObject:bgc];
 }
