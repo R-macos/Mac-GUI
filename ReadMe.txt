@@ -23,7 +23,16 @@ There are several tricks I did and there are several things to take into account
 
 	it works! On the contrary AquaTclTk doesn't work at all, or at least is works as badly as it was for the Carbon RAqua.
 
-Note: to build the R for Mac OS XFaq use the following command form the shell
+=== Note to developers ===
+If you intend to work on the source code of R.app, please adjust your editor to use tabs. Each indentation level
+should be exactly one tab. The preferred setting in Xcode is (in Preferences -> TextEditing)
+  [X] Editor uses tabs
+  Tab width: [4] Indent width: [4]
+This will give you the proper indenting behavior and fairly well readable code. You can replace the "4" in both fields by
+any positive value you find pleasant, just make sure both entries are identical. Use Xcode-style indentation whenever possible.
+The strict use of tabs as indentation marks makes it possible for everyone to view the code with the spacing s/he prefers.
+
+Note: to build the R for Mac OS XFaq manually use the following command from the shell
 	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
 
 For everything else read the NEWS file 
@@ -31,5 +40,3 @@ For everything else read the NEWS file
 stefano
 
 Milan and Augsburg, 2004-10-10
-
-
