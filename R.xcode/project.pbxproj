@@ -1559,6 +1559,20 @@
 			settings = {
 			};
 		};
+		16DB0E89072E5CFA00380720 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = text;
+			path = COPYRIGHTS;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		16DB0E8A072E5CFA00380720 = {
+			fileRef = 16DB0E89072E5CFA00380720;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		16E4F1FA06F1191B009DB2A8 = {
 			fileEncoding = 30;
 			isa = PBXFileReference;
@@ -1894,6 +1908,7 @@
 				29B97323FDCFA39411CA2CEA,
 				19C28FACFE9D520D11CA2CBB,
 				1601EFBC06CBBD2000BF60D4,
+				16DB0E89072E5CFA00380720,
 				1601EFCF06CBBEC700BF60D4,
 				1601F04606CBC0EF00BF60D4,
 				1601F00C06CBBF9F00BF60D4,
@@ -2186,6 +2201,7 @@
 				16A25FEF072AB2940047E009,
 				16A2602B072AB6360047E009,
 				16A2604C072AB7D80047E009,
+				16DB0E8A072E5CFA00380720,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
