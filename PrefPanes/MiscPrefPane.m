@@ -159,9 +159,8 @@
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
-	int tmp = [[sender cellAtRow:0 column:0] state];
-	BOOL flag = tmp?YES:NO;
-	[Preferences setKey:editOrSourceKey withFlag:flag];
+	BOOL flag=[Preferences flagForKey:editOrSourceKey withDefault: YES];
+	[Preferences setKey:editOrSourceKey withFlag:!flag];
 }
 
 - (IBAction) changeLibPaths:(id)sender {

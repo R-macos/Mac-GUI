@@ -84,11 +84,14 @@
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
 	if ([aFile isEqualToString:@""] || openInEditor) {
-		if ([aFile isEqualToString:@""] && useInternalEditor)
-			return [super openUntitledDocumentOfType:defaultDocumentType display:YES];
+		if ([aFile isEqualToString:@""] && useInternalEditor) {
+			return [super openUntitledDocumentOfType:defaultDocumentType display:YES];			
+		}
 		else
-			if (useInternalEditor) 
-				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];
+			if (useInternalEditor) {
+//				NSLog(@" "); 	// Weirdness - crashes if not here on clicking .R file
+				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];				
+			}
 		if (editorIsApp) {
 			cmd = [@"open -a " stringByAppendingString:externalEditor];
 			if (![aFile isEqualToString:@""])
@@ -119,7 +122,7 @@
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 
 	if (useInternalEditor) {
-		NSLog(@" ");	// Weirdness - crashes in CFRetain if not here
+//		NSLog(@" ");	// Weirdness - crashes in CFRetain if not here
 		return [super openDocumentWithContentsOfFile:aFile display:flag];		
 	} else {
 		NSString *cmd;

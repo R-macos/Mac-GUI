@@ -1,5 +1,17 @@
 NEWS
 
+Last update: 2004-12-29 [RG]
+*   Fixed 'Open With' R (opening a file from Finder with R)
+*   Fixed opening many 'New Document' windows
+*   Removed dummy NSLog statements in RDocumentController
+    (likely all 3 issues above were caused by defaultColor
+	 initialization in RDocument)
+*	Fixed RQuartz window zoom and deminiaturize (now redisplays)
+*   Improved RQuartz window location handling
+*   Fixed handling of radio buttons in Editor and Misc
+    PrefPanes (behaviour changed between OSX 10.3.6 and
+	10.3.7?) 
+
 Last update: 2004-12-27 [SU]
 *	Fixed a potentially dangerous bug in stdout/err thread code
 	(writing one byte off the end of a dynamic buffer)

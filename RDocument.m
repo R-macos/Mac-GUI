@@ -92,10 +92,12 @@ static NSString *consoleColorsKeys[7] = {
 		initialContentsType=nil;
 		isEditable=YES;
 		isREdit=NO;
-		defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
-			[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
-			[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
-		consoleColors = [defaultConsoleColors mutableCopy];
+		if (!defaultConsoleColors==nil)
+			defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
+				[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
+				[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
+		if (!consoleColors==nil)
+			consoleColors = [defaultConsoleColors mutableCopy];
     }
     return self;
 }

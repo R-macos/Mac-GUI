@@ -57,15 +57,16 @@
 	return YES;
 }
 
-
-
 - (id)init
 {
     self = [super init];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:) name:NSWindowDidResizeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidDeminiaturize:) name:NSWindowDidDeminiaturizeNotification object:nil];
     return self;
 }
 
 - (void) dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[super dealloc];
 }
 
@@ -74,18 +75,38 @@
 	return @"RQuartz";
 }
 
-
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
 	[deviceWindow setInitialFirstResponder: deviceView]; 
+	[deviceWindow setDelegate:self];
+}
+
+- (NSRect)windowWillUseStandardFrame:(NSWindow *)sender defaultFrame:(NSRect)defaultFrame {
+//	NSLog(@"windowWillUseStandardFrame called");
+	return defaultFrame;
+}
+
+- (void)windowWillClose:(NSNotification *)aNotification {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 }
 
 
+- (void)windowDidResize:(NSNotification *)aNotification {
+//	NSLog(@"windowDidResize called");
+	[deviceView setPDFDrawing:YES];
+	[deviceView drawRect:[deviceView frame]];
+}
+
+- (void)windowDidDeminiaturize:(NSNotification *)aNotification {
+//	NSLog(@"windowDidDeminiaturize called");
+	[deviceView setPDFDrawing:YES];
+	[deviceView drawRect:[deviceView frame]];
+}
 
 - (void)deminiaturize:(id)sender
 {
-	//NSLog(@"dem:%d",sender);
+//	NSLog(@"dem:%d",sender);
 }
 
 

@@ -189,9 +189,8 @@
 
 - (IBAction) changeInternalOrExternal:(id)sender
 {
-	int tmp = [[sender cellAtRow:0 column:0] state];
-	BOOL flag = tmp?YES:NO;
-	[Preferences setKey:internalOrExternalKey withFlag:flag];
+	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	[Preferences setKey:internalOrExternalKey withFlag:!flag];
 }
 
 - (void)changeExternalEditorName:(id)sender {
@@ -232,9 +231,8 @@
 }
 
 - (IBAction) changeAppOrCommand:(id)sender {
-	int tmp = [[sender cellAtRow:0 column:0] state];
-	BOOL flag = tmp?YES:NO;
-	[Preferences setKey:appOrCommandKey withFlag:flag];
+	BOOL flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
+	[Preferences setKey:appOrCommandKey withFlag:!flag];
 }
 
 - (IBAction) changeEditor:(id)sender;
