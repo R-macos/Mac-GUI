@@ -21,7 +21,9 @@ env variable. Proceed as follows:
 * Select the "R" executable
 * choose "Info"
 * Click the "variables" tab and set 
-	R_HOME  to   /Library/Frameworks/R.framework/Resources
+	R_HOME  
+	to   
+	/Library/Frameworks/R.framework/Resources
 
 
 
