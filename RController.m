@@ -1517,7 +1517,7 @@ No error message or warning are raised.
 
 - (IBAction)saveWorkSpaceFile:(id)sender
 {
-	[[REngine mainEngine] executeString: @"save.image(file=file.choose())"];
+	[[REngine mainEngine] executeString: @"save.image(file=file.choose(TRUE))"];
 }
 
 - (IBAction)showWorkSpace:(id)sender{
