@@ -149,8 +149,11 @@
 
 - (RSEXP*) attr: (NSString*) name
 {
-	// ToDo: have to run now ... argh ...
-	return nil;
+	SEXP rx;
+	if (!xp) return nil;
+	rx=getAttrib(xp, install([name UTF8String]));
+	if (!rx || rx==R_NilValue) return nil;
+	return [[RSEXP alloc] initWithSEXP: rx];
 }
 
 - (RSEXP*) listHead

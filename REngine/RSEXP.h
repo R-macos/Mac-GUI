@@ -30,6 +30,8 @@
  *
  */
 
+/* important note: unlike other Obj-C classes, if the result of a function is a RSEXP copy, then it's allocated and NOT auto-released! The reason for this is that we need to force early release to keep in sync with R. This removes overhead necessary for full-blown retention on R side and auto-releasing. However it breaks the principle of you-release-what-you-allocate, so please, be aware of this exception. */
+
 #import <Cocoa/Cocoa.h>
 
 #import <Foundation/Foundation.h>
@@ -49,7 +51,10 @@
 /** main methods */
 - (int) type;
 - (int) length;
-- (RSEXP*) attributes;
+
+- (RSEXP*) attributes; // this one shouldn't be used directly - it's for low-level access only
+
+- (RSEXP*) attr: (NSString*) name;
 
 /** direct access (avoid if possible) */
 - (void) protect;
