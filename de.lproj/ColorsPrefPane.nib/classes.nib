@@ -1,0 +1,32 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                changeAlphaColor = id; 
+                changeBackGColor = id; 
+                changeInputColor = id; 
+                changeOutputColor = id; 
+                changePromptColor = id; 
+                changeStderrColor = id; 
+                changeStdoutColor = id; 
+                setDefaultColors = id; 
+            }; 
+            CLASS = ColorsPrefPane; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                alphaStepper = NSSlider; 
+                backgColorWell = NSColorWell; 
+                defaultColorsButton = NSButton; 
+                inputColorWell = NSColorWell; 
+                mainView = NSView; 
+                outputColorWell = NSColorWell; 
+                promptColorWell = NSColorWell; 
+                stderrColorWell = NSColorWell; 
+                stdoutColorWell = NSColorWell; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
