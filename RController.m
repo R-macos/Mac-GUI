@@ -320,6 +320,9 @@ static RController* sharedRController;
 		exit(-1);
 	}
 	
+	// force html-help, because that's the only format we can handle ATM
+	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
+	
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
 	[self flushROutput];
@@ -703,10 +706,13 @@ extern BOOL isTimeToFinish;
 	
 	[s release];
 	
+// the ?/help hack is no longer needed in 2.1
+#if (R_VERSION < R_Version(2,1,0))
 	if((*cmd == '?') || (!strncmp("help(",cmd,5))){ 
 		[self openHelpFor: cmd];
 		cmd[0] = '\n'; cmd[1] = 0;
 	}
+#endif
 }
 
 - (char*) handleReadConsole: (int) addtohist
@@ -885,6 +891,20 @@ extern BOOL isTimeToFinish;
 	[[RController getRController] rmChildProcess: pid];
 	return cstat;
 }	
+
+- (int) handleCustomPrint: (char*) type withObject: (RSEXP*) obj
+{
+	//NSLog(@"CustomPrint \"%s\", %@ (att=%@)\n", type, obj, [[obj attributes] listHead]);
+
+	if (!strcmp(type, "help-files")) {
+		if ([obj type]==STRSXP && [obj length]>0) 
+			[[HelpManager sharedController] showHelpUsingFile: [obj string]];
+		else
+			NSBeginAlertSheet(NLS(@"Help topic not found"),NLS(@"OK"),nil,nil,[RTextView window],self,nil,NULL,NULL,NLS(@"Specified help topic was not found."));
+	}
+	
+	return 0;
+}
 
 //==========
 

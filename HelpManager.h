@@ -52,7 +52,9 @@
 - (IBAction)showMainHelp:(id)sender;
 - (IBAction)showRFAQ:(id)sender;
 - (IBAction)whatsNew:(id)sender;
-- (void)showHelpFor:(NSString *)topic;
+
+- (void)showHelpUsingFile: (NSString *)file; // displays results only, used by help() in 2.1 and later
+- (void)showHelpFor:(NSString *)topic; // runs a search
 
 + (id) sharedController;
 - (IBAction)printDocument:(id)sender;

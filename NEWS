@@ -1,5 +1,9 @@
 NEWS
 
+Last update: 2005-02-23 [SU]
+*	Changed help file handling to use customized print method
+	(apples to R-devel only and requires change in R itself!)
+
 Last update: 2005-02-18 [SI]
 *	added French localization; changed credits
 
