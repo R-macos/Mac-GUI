@@ -31,7 +31,7 @@
 #import "RController.h"
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
-#import "REngine.h"
+#import "REngine/REngine.h"
 
 static PackageManager *sharedController = nil;
 

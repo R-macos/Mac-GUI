@@ -66,9 +66,9 @@
 + (id <REPLHandler>) mainHandler;
 + (id <CocoaHandler>) cocoaHandler;
 
-- (REngine*) init;
-- (REngine*) initWithHandler: (id <REPLHandler>) hand;
-- (REngine*) initWithHandler: (id <REPLHandler>) hand arguments: (char**) args;
+- (id) init;
+- (id) initWithHandler: (id <REPLHandler>) hand;
+- (id) initWithHandler: (id <REPLHandler>) hand arguments: (char**) args;
 - (BOOL) activate;
 
 - (BOOL) isLoopRunning;

@@ -29,7 +29,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "AMPrefPaneProtocol.h"
+#import "../AMPrefs/AMPrefPaneProtocol.h"
 
 
 @interface MiscPrefPane : NSObject <AMPrefPaneProtocol> {

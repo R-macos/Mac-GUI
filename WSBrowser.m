@@ -29,7 +29,7 @@
 
 #import "WSBrowser.h"
 #import "RController.h"
-#import "REngine.h"
+#import "REngine/REngine.h"
 
 #include <R.h>
 #include <R_ext/Boolean.h>

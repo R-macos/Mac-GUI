@@ -30,7 +30,7 @@
 
 #import "RDocument.h"
 #import "RController.h"
-#import "REngine.h"
+#import "REngine/REngine.h"
 
 BOOL defaultsInitialized = NO;
 

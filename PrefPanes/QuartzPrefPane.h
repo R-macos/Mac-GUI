@@ -35,7 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AMPrefPaneProtocol.h"
+#import "../AMPrefs/AMPrefPaneProtocol.h"
 
 
 @interface QuartzPrefPane : NSObject <AMPrefPaneProtocol> {

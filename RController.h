@@ -31,8 +31,8 @@
 
 #include <R.h>
 #include <Rinternals.h>
-#include "Rinit.h"
-#include "Rcallbacks.h"
+//#include "Rinit.h"
+#include "REngine/Rcallbacks.h"
 #include "IOStuff.h"
 //#include <R_ext/Parse.h>
 //#include <Parse.h>
@@ -40,9 +40,9 @@
 #import <sys/types.h>
 
 #import <Cocoa/Cocoa.h>
-#import "History.h"
-#import "ConnectionCache.h"
-#import "PrefWindowController.h"
+#import "Tools/History.h"
+#import "Tools/ConnectionCache.h"
+#import "PrefPanes/PrefWindowController.h"
 
 #define RToolbarIdentifier                       @"R Toolbar Identifier"
 #define FontSizeToolbarItemIdentifier            @"Font Size Item Identifier"
@@ -58,7 +58,7 @@
 #define	X11ToolbarItemIdentifier 	             @"X11 Item Identifier"
 #define	SetColorsToolbarItemIdentifier 	         @"SetColors Item Identifier"
 
-#import "AMPreferenceWindowController.h"
+#import "AMPrefs/AMPreferenceWindowController.h"
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 

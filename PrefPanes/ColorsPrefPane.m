@@ -35,7 +35,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
-#import "RController.h"
+#import "../RController.h"
 #import "ColorsPrefPane.h"
 
 

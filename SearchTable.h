@@ -32,7 +32,7 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
-#import "SortableDataSource.h"
+#import "Tools/SortableDataSource.h"
 
 @interface SearchTable : NSObject
 {

@@ -31,6 +31,8 @@
 #import "RController.h"
 #import "RDocumentController.h"
 
+#define defaultDocumentType @"Rsource"
+
 @implementation RDocumentController
 
 - (id)init {
@@ -76,7 +78,7 @@
 	NSString *cmd;
 	if ([aFile isEqualToString:@""] || [[RController getRController] openInEditor]) {
 		if ([aFile isEqualToString:@""] && [[RController getRController] useInternalEditor])
-			return [super newDocument:nil];
+			return [super openUntitledDocumentOfType:defaultDocumentType display:YES];
 		else
 			if ([[RController getRController] useInternalEditor]) 
 				return [super openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag];

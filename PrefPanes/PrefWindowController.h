@@ -1,7 +1,7 @@
 /* PrefWindowController */
 
 #import <Cocoa/Cocoa.h>
-#import "AMPreferenceWindowController.h"
+#import "../AMPrefs/AMPreferenceWindowController.h"
 #import "QuartzPrefPane.h"
 #import "MiscPrefPane.h"
 #import "ColorsPrefPane.h"

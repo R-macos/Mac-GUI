@@ -45,14 +45,6 @@
 #include <R_ext/eventloop.h>
 
 #import "REngine.h"
-#import "RController.h"
-#import "RDocument.h"
-#import "PackageManager.h"
-#import "DataManager.h"
-#import "PackageInstaller.h"
-#import "WSBrowser.h"
-#import "SearchTable.h"
-#import "REditor.h"
 
 /* from Defn.h */
 extern Rboolean R_Interactive;   /* TRUE during interactive use*/
@@ -436,6 +428,9 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 }
 
 //==================================================== the following callbacks need to be moved!!! (TODO)
+
+#import "../WSBrowser.h"
+#import "../REditor.h"
 
 int freeWorkspaceList(int newlen);
 

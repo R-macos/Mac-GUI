@@ -30,8 +30,8 @@
 /* QuartzDevice.m */
 
 
-#import "RSEXP.h"
-#import "REngine.h"
+#import "../REngine/RSEXP.h"
+#import "../REngine/REngine.h"
 
 #include <Defn.h>
 
@@ -43,7 +43,7 @@
 
 #include <R_ext/Parse.h>
 
-#import "RController.h"
+#import "../RController.h"
 #import "RQuartz.h"
 #import "RDeviceView.h"
 #import "QuartzDevice.h"

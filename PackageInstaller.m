@@ -29,9 +29,9 @@
 
 #import "PackageInstaller.h"
 #import "RController.h"
-#import "RCallbacks.h"
-#import "REngine.h"
-#import "Authorization.h"
+#import "REngine/RCallbacks.h"
+#import "REngine/REngine.h"
+#import "Tools/Authorization.h"
 
 #include <unistd.h>
 

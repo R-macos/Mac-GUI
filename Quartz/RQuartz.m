@@ -29,9 +29,9 @@
 
 
 #import "RQuartz.h"
-#import "RController.h"
+#import "../RController.h"
 #import "RDeviceView.h"
-#import "REngine.h"
+#import "../REngine/REngine.h"
 
 #include <Defn.h>
 #include <Graphics.h>

@@ -28,7 +28,7 @@
  */
 
 #import "CodeCompletion.h"
-#import "REngine.h"
+#import "../REngine/REngine.h"
 
 @implementation CodeCompletion
 

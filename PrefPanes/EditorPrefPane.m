@@ -29,8 +29,8 @@
 
 
 #import "EditorPrefPane.h"
-#import "RController.h"
-#import "Authorization.h"
+#import "../RController.h"
+#import "../Tools/Authorization.h"
 
 @interface EditorPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
@@ -162,7 +162,7 @@
 
 - (IBAction) changeInternalOrExternal:(id)sender
 {
-	BOOL flag = (int)[sender selectCellAtRow:0 column:0];
+	BOOL flag = (int)[[sender cellAtRow:0 column:0] state];
 	if (flag==0 || flag==1)
 	{
 		[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"]
@@ -290,7 +290,7 @@
 }
 
 - (IBAction) changeAppOrCommand:(id)sender {
-	BOOL flag = (int)[sender selectCellAtRow:0 column:0];
+	BOOL flag = (int)[[sender cellAtRow:0 column:0] state];
 	if (!(flag==0 || flag==1)) return;
 	if (flag==0 || flag==1)
 	{

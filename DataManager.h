@@ -30,7 +30,7 @@
 /* DataManager */
 
 #import <Cocoa/Cocoa.h>
-#import "SortableDataSource.h"
+#import "Tools/SortableDataSource.h"
 
 @interface DataManager : NSObject
 {

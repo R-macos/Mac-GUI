@@ -29,7 +29,7 @@
 
 #import "RDeviceView.h"
 #import "RQuartz.h"
-#import "RController.h"
+#import "../RController.h"
 
 #include <Defn.h>
 

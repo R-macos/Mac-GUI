@@ -29,8 +29,8 @@
 
 
 #import "MiscPrefPane.h"
-#import "RController.h"
-#import "Authorization.h"
+#import "../RController.h"
+#import "../Tools/Authorization.h"
 
 @interface MiscPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
@@ -147,7 +147,7 @@
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
-	BOOL flag = ([sender selectCellAtRow:0 column:0] == NSOffState)?NO:YES;
+	BOOL flag = ([[sender cellAtRow:0 column:0] state] == NSOffState)?NO:YES;
 	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"] forKey:editOrSourceKey];
 	[self setOpenInEditor:flag] ;
 }

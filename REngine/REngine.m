@@ -32,7 +32,6 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
-#import "RController.h"
 #import "REngine.h"
 
 static REngine* mainRengine=nil;
@@ -56,18 +55,18 @@ static REngine* mainRengine=nil;
 	return [mainRengine cocoaHandler];
 }
 
-- (REngine*) init
+- (id) init
 {
     return [self initWithHandler:nil];
 }
 
-- (REngine*) initWithHandler: (id <REPLHandler>) hand
+- (id) initWithHandler: (id <REPLHandler>) hand
 {
     char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	return [self initWithHandler: hand arguments: args];
 }
 
-- (REngine*) initWithHandler: (id <REPLHandler>) hand arguments: (char**) args
+- (id) initWithHandler: (id <REPLHandler>) hand arguments: (char**) args
 {
 	int i=0;
 	argc=0;

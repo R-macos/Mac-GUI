@@ -29,7 +29,7 @@
 
 #import "HelpManager.h"
 #import "RController.h"
-#import "REngine.h"
+#import "REngine/REngine.h"
 
 static id sharedHMController;
 

@@ -37,10 +37,10 @@
 #import <sys/wait.h>
 #import <signal.h>
 #import <unistd.h>
-#import "Rcallbacks.h"
-#import "Rengine.h"
+#import "REngine/Rcallbacks.h"
+#import "REngine/Rengine.h"
 
-#import "Authorization.h"
+#import "Tools/Authorization.h"
 #import "Preferences.h"
 #import "SearchTable.h"
 
@@ -71,15 +71,15 @@ extern void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel); // from 
 extern int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplState *state);
 
 #import "RController.h"
-#import "CodeCompletion.h"
-#import "FileCompletion.h"
+#import "Tools/CodeCompletion.h"
+#import "Tools/FileCompletion.h"
 #import "RDocument.h"
 #import "PackageManager.h"
 #import "DataManager.h"
 #import "PackageInstaller.h"
 #import "WSBrowser.h"
 #import "HelpManager.h"
-#import "RQuartz.h"
+#import "Quartz/RQuartz.h"
 #import "RDocumentController.h"
 
 #import <unistd.h>

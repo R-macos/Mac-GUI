@@ -28,8 +28,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AMPrefPaneProtocol.h"
-#import "Preferences.h"
+#import "../AMPrefs/AMPrefPaneProtocol.h"
+#import "../Preferences.h"
 
 @interface ColorsPrefPane : NSObject <AMPrefPaneProtocol, PreferencesDependent> {
 	IBOutlet NSView *mainView;
