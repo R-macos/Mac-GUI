@@ -167,10 +167,5 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 	return devTextContainer;
 }
 
-- (void) zoom:(id)sender {
-	NSLog(@"Zoom caled: %@", sender);
-}
-
-
- @end
+@end
 

@@ -60,8 +60,8 @@
 - (id)init
 {
     self = [super init];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:) name:NSWindowDidResizeNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidDeminiaturize:) name:NSWindowDidDeminiaturizeNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize:) name:NSWindowDidResizeNotification object:deviceWindow];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidDeminiaturize:) name:NSWindowDidDeminiaturizeNotification object:deviceWindow];
     return self;
 }
 
@@ -93,15 +93,20 @@
 
 
 - (void)windowDidResize:(NSNotification *)aNotification {
-//	NSLog(@"windowDidResize called");
-	[deviceView setPDFDrawing:YES];
-	[deviceView drawRect:[deviceView frame]];
+//	NSLog(@"windowDidResize called %@", aNotification);
+//	NSLog(@"window %@", deviceWindow);
+	if ([aNotification object] == deviceWindow) {
+		[deviceView setPDFDrawing:YES];
+		[deviceView drawRect:[deviceView frame]];		
+	}
 }
 
 - (void)windowDidDeminiaturize:(NSNotification *)aNotification {
 //	NSLog(@"windowDidDeminiaturize called");
-	[deviceView setPDFDrawing:YES];
-	[deviceView drawRect:[deviceView frame]];
+	if ([aNotification object] == deviceWindow) {
+		[deviceView setPDFDrawing:YES];
+		[deviceView drawRect:[deviceView frame]];		
+	}
 }
 
 - (void)deminiaturize:(id)sender
