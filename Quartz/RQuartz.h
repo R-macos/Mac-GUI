@@ -20,7 +20,7 @@
 
 - (RDeviceView *)getDeviceView;
 - (NSWindow *)getDeviceWindow;
-- (void)activateDev;
+- (IBAction) activateQuartzDevice: (id) sender;
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
 - (NSString *)whoAmI;	

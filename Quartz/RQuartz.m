@@ -78,10 +78,8 @@
 		}
 }
 
-/* This method is only invoked from the GUI to activate the device 
-with CMD+SHIFT+A and essentially called in RController -> activateQuartzDevice
-*/
-- (void)activateDev{
+/* This method is only invoked from the GUI to activate the device with CMD+SHIFT+A */
+- (IBAction) activateQuartzDevice: (id) sender {
 	selectDevice([deviceView getDevNum]);
 }
 
