@@ -231,8 +231,10 @@ static RController* sharedRController;
 				if (ls && [ls length]>0 && ![ls isEqualToString:@"English"]) {
 					strncpy(lbuf, [ls UTF8String],48);
 					lbuf[48]=0;
-					/* FIXME: for some reason R doesn't like en.UTF-8 - as we have no region info (only 10.4+ has that) R needs en_.UTF-8 */
-					strcat(lbuf,"_.UTF-8");
+					/* FIXME: for some reason R doesn't like en.UTF-8 - as we have no region info (only 10.4+ has that) R needs en_.UTF-8
+						secondly, we need to fall-back to en_US.UTF-8 in case R doesn't know the locale, otherwise we'll get no UTF-8
+					    all this needs some more testing as R-devel stabilizes */
+					strcat(lbuf,"_.UTF-8:en_US.UTF-8");
 				}
 			}
 			setenv("LANG", lbuf, 1);
