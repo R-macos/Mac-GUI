@@ -40,4 +40,13 @@
 #define NLS(S) NSLocalizedString(S,@"")
 #define NLSC(S,C) NSLocalizedString(S,C)
 
+/* macros for debug messages */
+#ifndef SLog
+#if defined DEBUG_RGUI && defined PLAIN_STDERR
+#define SLog(X,...) NSLog(X, ## __VA_ARGS__)
+#else
+#define SLog(X,...)
+#endif
+#endif
+
 #endif
