@@ -7,11 +7,13 @@ User requests/bug reports:
 * selecting a directory via dialog is broken: one should enter the directory, if no subdir exists
   it can be selected
 * drag and drop don't work correctly should try to load data and eventually source the file. At the
-  moment the file is loaded in R editor.
+  moment the file is loaded in R editor. [SI; Simon don't agree (yet). Let's try by setting this user
+  configurable)].
 * add import/export functionality to read and write old_style history files
 * change everywhere buttons with toolbar whenever possible
 * is possible to crop long output? A-la mathematica using the cocoa browser as in the workspace browser? 
   What really does ESS ? Simon?
+* add arrows to the html browsers for navigation, as it is now it's too limited  
 
 Internal feedback:
 * metric info in quartz device is broken [SI]
