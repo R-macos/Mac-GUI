@@ -6,12 +6,14 @@
 #import "MiscPrefPane.h"
 #import "ColorsPrefPane.h"
 #import "EditorPrefPane.h"
+#import "SyntaxColorsPrefPane.h"
 
 @interface PrefWindowController : AMPreferenceWindowController
 {
 	QuartzPrefPane  *quartzPrefPane;
 	MiscPrefPane    *miscPrefPane;
 	ColorsPrefPane  *colorsPrefPane;
+	SyntaxColorsPrefPane  *syntaxColorsPrefPane;
 	EditorPrefPane *editorPrefPane;	
 }
 

@@ -31,8 +31,8 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Authorize R to run system commands as root";
 
-/* From: HelpManager.m (showHelpFor)
-   From: HelpManager.m (runHelpSearch) */
+/* From: HelpManager.m (runHelpSearch)
+   From: HelpManager.m (showHelpFor) */
 "Can't find help for topic" = "Can't find help for topic";
 
 /* From: RController.m (didCloseAll) */
@@ -92,7 +92,7 @@
 /* From: RController.m (toolbar) */
 "New Document" = "New Document";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "New Quartz Device" = "New Quartz Device";
 
 /* Global string @ */
@@ -110,11 +110,11 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Open In Editor";
 
-/* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Package installer";
-
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Package Installer";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Package installer";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Please, specify a valid URL first.";
@@ -126,7 +126,7 @@
 "PrefG-Views" = "Views";
 
 /* Colors preference pane */
-"PrefP-Colors" = "Colors";
+"PrefP-Colors" = "Console\nColors";
 
 /* Editor preference pane */
 "PrefP-Editor" = "Editor";
@@ -137,16 +137,19 @@
 /* Startup preference pane */
 "PrefP-Startup" = "Startup";
 
+/* Syntax colors preference pane */
+"PrefP-Syntax" = "Syntax\nColors";
+
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Print this document";
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "Quartz (%d) - Active" = "Quartz (%d) - Active";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "Quartz (%d) - Inactive" = "Quartz (%d) - Inactive";
 
 /* From: RController.m (toolbar) */

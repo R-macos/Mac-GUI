@@ -52,14 +52,34 @@ NSArray *keywordList=nil;
 
 + (void) setDefaultSyntaxHighlightingColors
 {
-	shColorNormal=[NSColor blackColor]; [shColorNormal retain];
-	shColorString=[NSColor colorWithDeviceRed:0.35 green:0.0 blue:0.0 alpha:1.0]; [shColorString retain];
-	shColorNumber=[NSColor blueColor]; [shColorNumber retain];
-	shColorKeyword=[NSColor colorWithDeviceRed:0.7 green:0.6 blue:0.0 alpha:1.0]; [shColorKeyword retain];
-	shColorComment=[NSColor colorWithDeviceRed:0.6 green:0.4 blue:0.4 alpha:1.0]; [shColorComment retain];
-	shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.4 alpha:1.0]; [shColorIdentifier retain];
+	NSColor *c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
+	if (c) shColorNormal = c;
+	else shColorNormal=[NSColor colorWithDeviceRed:0.025 green:0.085 blue:0.600 alpha:1.0];
+	[shColorNormal retain];
+	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
+	if (c) shColorString = c;
+	else shColorString=[NSColor colorWithDeviceRed:0.690 green:0.075 blue:0.000 alpha:1.0];
+	[shColorString retain];	
+	c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];
+	if (c) shColorNumber = c;
+	else shColorNumber=[NSColor colorWithDeviceRed:0.020 green:0.320 blue:0.095 alpha:1.0];
+	[shColorNumber retain];
+	c=[Preferences unarchivedObjectForKey:keywordSyntaxColorKey withDefault:nil];
+	if (c) shColorKeyword = c;
+	else shColorKeyword=[NSColor colorWithDeviceRed:0.765 green:0.535 blue:0.035 alpha:1.0];
+	[shColorKeyword retain];
+	c=[Preferences unarchivedObjectForKey:commentSyntaxColorKey withDefault:nil];
+	if (c) shColorComment = c;
+	else shColorComment=[NSColor colorWithDeviceRed:0.312 green:0.309 blue:0.309 alpha:1.0];
+	[shColorComment retain];
+	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
+	if (c) shColorIdentifier = c;
+	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+	[shColorIdentifier retain]; 
+	//	NSLog(@"shColorIdentifier %f %f %f %f", [c redComponent], [c greenComponent], [c blueComponent], [c alphaComponent]);
 	
-	keywordList = [[NSArray alloc] initWithObjects: @"for", @"if", @"else", @"function", @"TRUE", @"FALSE", @"while",
+	keywordList = [[NSArray alloc] initWithObjects: 
+		@"for", @"if", @"else", @"function", @"TRUE", @"FALSE", @"while",
 		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
 }
 
@@ -194,13 +214,13 @@ NSArray *keywordList=nil;
 		   selector:@selector(textDidChange:)
 			   name:NSTextDidChangeNotification
 			 object: textView];
-/*
-	[[NSNotificationCenter defaultCenter] 
+	/*
+	 [[NSNotificationCenter defaultCenter] 
 		addObserver:self
 		   selector:@selector(windowDidBecomeKey:)
 			   name:NSWindowDidBecomeKeyNotification
 			 object:theRulerView];
-*/
+	 */
 	[[textView textStorage] setDelegate:self];	
 	[self updatePreferences];
 }
@@ -218,8 +238,21 @@ NSArray *keywordList=nil;
 	NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
 	if (c && c!=[[self window] backgroundColor]) {
 		[[self window] setBackgroundColor:c];
-//		[[self window] display];
+		//		[[self window] display];
 	}
+	c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
+	if (c) shColorNormal = c;
+	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
+	if (c) shColorString = c;
+	c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];
+	if (c) shColorNumber = c;
+	c=[Preferences unarchivedObjectForKey:keywordSyntaxColorKey withDefault:nil];
+	if (c) shColorKeyword = c;
+	c=[Preferences unarchivedObjectForKey:commentSyntaxColorKey withDefault:nil];
+	if (c) shColorComment = c;
+	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
+	if (c) shColorIdentifier = c;
+	
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
 	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
@@ -282,7 +315,7 @@ NSArray *keywordList=nil;
 	BOOL foundItem=NO;
 	
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-//	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
+	//	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
 	if (updating || !useHighlighting) return;
 	
 	updating=YES;
@@ -520,10 +553,10 @@ NSArray *keywordList=nil;
 			[textView insertText:wss];
 			return YES;
 		}
-	}
+		}
     if (showMatchingBraces) {
 		if (commandSelector == @selector(deleteBackward:)) {
-//			[self highlightBracesWithShift: -1 andWarn:NO];
+			//			[self highlightBracesWithShift: -1 andWarn:NO];
 			deleteBackward = YES;
 		}
 		//		if (commandSelector == @selector(deleteBackwardByDecomposingPreviousCharacter:))
@@ -534,7 +567,7 @@ NSArray *keywordList=nil;
 			[self highlightBracesWithShift: 0 andWarn:NO];
 	}	
 	return retval;
-}
+	}
 
 	/*
 	 Here we only break the modal loop for the R_Edit call. Wether a window

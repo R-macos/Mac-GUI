@@ -37,6 +37,13 @@
 #define promptColorKey @"Prompt Color"
 #define rootColorKey   @"Root Color"
 
+#define normalSyntaxColorKey @"Normal Syntax Color"
+#define stringSyntaxColorKey @"String Syntax Color"
+#define numberSyntaxColorKey @"Number Syntax Color"
+#define keywordSyntaxColorKey @"Keyword Syntax Color"
+#define commentSyntaxColorKey @"Comment Syntax Color"
+#define identifierSyntaxColorKey @"Identifier Syntax Color"
+
 #define initialWorkingDirectoryKey @"Working directory"
 
 #define FontSizeKey    @"Console Font Size"

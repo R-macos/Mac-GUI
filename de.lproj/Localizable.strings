@@ -31,8 +31,8 @@
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Authorisiert R, Befehle als 'root' Administrator auszuführen";
 
-/* From: HelpManager.m (showHelpFor)
-   From: HelpManager.m (runHelpSearch) */
+/* From: HelpManager.m (runHelpSearch)
+   From: HelpManager.m (showHelpFor) */
 "Can't find help for topic" = "Das Hilfethema kann nicht gefunden werden";
 
 /* From: RController.m (didCloseAll) */
@@ -92,7 +92,7 @@
 /* From: RController.m (toolbar) */
 "New Document" = "Neues Dokument";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "New Quartz Device" = "New Quartz Device";
 
 /* Global string @ */
@@ -110,11 +110,11 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Im Editor öffnen";
 
-/* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Package installer";
-
 /* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Package Installer";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Package installer";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Bitte wählen Sie zuerst eine gültige URL.";
@@ -137,16 +137,19 @@
 /* Startup preference pane */
 "PrefP-Startup" = "Starteinstellungen";
 
+/* Syntax colors preference pane */
+"PrefP-Syntax" = "Syntax-\nFarben";
+
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Dokumemnt drucken";
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "Quartz (%d) - Active" = "Quartz (%d) - aktiv";
 
-/* From: Quartz/QuartzDevice.m (changeQuartzPrefPaneDefaults) */
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "Quartz (%d) - Inactive" = "Quartz (%d) - nicht aktiv";
 
 /* From: RController.m (toolbar) */
