@@ -160,12 +160,12 @@
 		[editOrSource selectCellAtRow:1 column:0];
 	[workingDir setStringValue:[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"]];
 	
+	flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
+	[enforceInitialWorkingDirectory setState: flag?NSOnState:NSOffState];
 	flag = [Preferences flagForKey:importOnStartupKey withDefault:YES];
 	[importOnStartup setState: flag?NSOnState:NSOffState];
 
-	[rAppHistoryFileNamePath setStringValue:[Preferences stringForKey:rAppHistoryFileNamePathKey withDefault:[[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByAppendingString:@"/Rhistory.history"]]];
-	
-	[historyFileNamePath setStringValue:[Preferences stringForKey:historyFileNamePathKey withDefault:@"~/.Rhistory"]];	
+	[historyFileNamePath setStringValue:[Preferences stringForKey:historyFileNamePathKey withDefault:@".Rhistory"]];	
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
@@ -204,27 +204,25 @@
 		[Preferences setKey:initialWorkingDirectoryKey withObject:[[op directory] stringByAbbreviatingWithTildeInPath]];
 }
 
+- (IBAction) changeEnforceInitialWorkingDirectory:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:enforceInitialWorkingDirectoryKey withFlag:flag];
+}
+
+
 - (IBAction) changeImportOnStartup:(id)sender {
 	int tmp = (int)[sender state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:importOnStartupKey withFlag:flag];
 }
 
-- (IBAction) changeRAppHistoryFileNamePathToDefault: (id)sender {
-	[Preferences setKey:rAppHistoryFileNamePathKey withObject:[[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByAppendingString:@"/Rhistory.history"]];
-}
-
 - (IBAction) changeHistoryFileNamePathToDefault: (id)sender {
-	[Preferences setKey:historyFileNamePathKey withObject:@"~/.Rhistory"];	
-}
-
-- (IBAction) changeRAppHistoryFileNamePath:(id)sender {
-	NSString *name = ([[sender stringValue] length] == 0)?@"~/.Rhistory":[sender stringValue];
-	[Preferences setKey:rAppHistoryFileNamePathKey withObject:[name stringByAbbreviatingWithTildeInPath]];
+	[Preferences setKey:historyFileNamePathKey withObject:@".Rhistory"];	
 }
 
 - (IBAction) changeHistoryFileNamePath:(id)sender {
-	NSString *name = ([[sender stringValue] length] == 0)?[Preferences stringForKey:rAppHistoryFileNamePathKey withDefault:[[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByAppendingString:@"/Rhistory.history"]]:[sender stringValue];
+	NSString *name = ([[sender stringValue] length] == 0)?[Preferences stringForKey:historyFileNamePathKey withDefault:@".Rhistory"]:[sender stringValue];
 	[Preferences setKey:historyFileNamePathKey withObject:[name stringByAbbreviatingWithTildeInPath]];
 }
 

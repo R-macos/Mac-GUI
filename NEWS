@@ -1,8 +1,19 @@
 NEWS
 
+Last update: 2005-02-28 [RG]
+*	Made all history files R compatible
+*	Updated relevant prefpanes
+*	Enabled double clicking on a file or dropping a file on
+	the R icon to set the working dir during start-up of R
+
+Last update: 2005-02-25 [RG]
+*	Enabled dropping dirs on the R icon to set the working dir
+*	Note: It is possible to 'open -a R.app .', which will open
+	R in the directory in which the open command is executed.
+
 Last update: 2005-02-23 [SU]
 *	Changed help file handling to use customized print method
-	(apples to R-devel only and requires change in R itself!)
+	(applies to R-devel only and requires change in R itself!)
 
 Last update: 2005-02-18 [SI]
 *	added French localization; changed credits

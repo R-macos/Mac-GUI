@@ -84,31 +84,27 @@
 - (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
 {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
 	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
-	if ([aFile isEqualToString:@""] || openInEditor) {
-		if ([aFile isEqualToString:@""] && useInternalEditor) {
-			return [super openUntitledDocumentOfType:defaultDocumentType display:YES];			
+	if ([aFile isEqualToString:@""] && useInternalEditor) {
+		return [super openUntitledDocumentOfType:defaultDocumentType display:YES];			
+	}
+	else
+		if (useInternalEditor) {
+			NSString *fname = [aFile stringByExpandingTildeInPath];
+			return [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];				
 		}
-		else
-			if (useInternalEditor) {
-				NSString *fname = [aFile stringByExpandingTildeInPath];
-				return [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];				
-			}
-		if (editorIsApp) {
-			cmd = [@"open -a " stringByAppendingString:externalEditor];
-			if (![aFile isEqualToString:@""])
-				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
-		} else {
-			cmd = externalEditor; 
-			if (![aFile isEqualToString:@""])
-				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
-		}
-		system([cmd UTF8String]);		
-	} else 
-		[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")",aFile]];
+	if (editorIsApp) {
+		cmd = [@"open -a " stringByAppendingString:externalEditor];
+		if (![aFile isEqualToString:@""])
+			cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
+	} else {
+		cmd = externalEditor; 
+		if (![aFile isEqualToString:@""])
+			cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
+	}
+	system([cmd UTF8String]);		
 	return 0;
 }
 

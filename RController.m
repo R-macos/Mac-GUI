@@ -135,6 +135,7 @@ static RController* sharedRController;
 	childPID = 0;
 	RLtimer = nil;
 	busyRFlag = YES;
+	appLaunched = NO;
 	outputPosition = promptPosition = committedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
@@ -307,9 +308,9 @@ static RController* sharedRController;
 	currentSize = [[RTextView textContainer] containerSize].width;
 	//currentFontSize = [[RTextView font] pointSize];
 	currentConsoleWidth = -1;
-	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:@"initialWorkingDirectoryKey" withDefault:@"~"] stringByExpandingTildeInPath]];
+	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByExpandingTildeInPath]];
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
-		[self autoLoadHistory:nil];
+		[self doLoadHistory:nil];
 	}
 }
 
@@ -356,7 +357,16 @@ static RController* sharedRController;
 												   target:self
 												 selector:@selector(kickstart:)
 												 userInfo:0
-												  repeats:NO];	
+												  repeats:NO];
+	appLaunched = YES;
+/*
+	RSEXP *x=[[REngine mainEngine] evaluateString:@"getwd()"];
+	NSString *dirn=nil;
+	if (x && (dirn=[x string])) 
+		NSLog(@"R thinks: %@", dirn);
+	NSLog(@"R.app thinks: %@", [[NSFileManager defaultManager] currentDirectoryPath]);
+	NSLog(@"Prefs think: %@", [Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"]);
+*/
 }
 
 - (void) kickstart:(id) sender {
@@ -918,8 +928,7 @@ extern BOOL isTimeToFinish;
 }	
 	
 - (void)didCloseAll:(id)sender {
-	if ([Preferences flagForKey:importOnStartupKey withDefault:YES])
-		[self autoSaveHistory:nil];
+	[self doSaveHistory:nil];
 	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
 }
 
@@ -975,87 +984,134 @@ The input replaces what the user is currently typing.
 	[historyView reloadData];
 }
 
-/*  Loads the content of the history of a file. The default extension .history
-This file is not compatible with unix history files as it could be multiline.
-This rountien cannot load standard unix history files.
-FIXME: We can probably import standard unix history files
-*/
-
 - (IBAction)doLoadHistory:(id)sender
 {
-	NSOpenPanel *op;
-	int answer;
-	
-	op = [NSOpenPanel openPanel];
-	[op setDirectory:[[Preferences stringForKey:initialWorkingDirectoryKey
-									withDefault: @"~"] stringByExpandingTildeInPath]];
-	[op setTitle:NLS(@"Choose history File")];
-	
-	answer = [op runModalForTypes: [NSArray arrayWithObject:@"history"]];
-	
-	if(answer == NSOKButton) {
-		if([op filename] != nil){
-			[hist resetAll];
-			[hist setHist: [NSUnarchiver unarchiveObjectWithFile: [op filename]]];
-			[historyView scrollRowToVisible:[historyView numberOfRows]];
-			[historyView reloadData];
-		}
+	[self doClearHistory:nil];
+	NSString *fname;
+	if (sender) {
+		NSOpenPanel *op = [NSOpenPanel openPanel];
+		[op setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
+		[op setTitle:NLS(@"Choose history File")];
+		if([op runModalForTypes: [NSArray arrayWithObject:@"history"]] == NSOKButton)
+			fname = [op filename];
+	} else
+		fname = [[Preferences stringForKey:historyFileNamePathKey
+							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
+	if(fname != nil){
+		[hist resetAll];
+		FILE *rhist; char c[1000]; NSString *entryString; NSString *tmpString;
+		int cc; int i; int j; int k; BOOL done;
+		if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
+			rhist = fopen([fname cString], "r");
+			if (rhist==NULL) {
+				NSLog(NLS(@"Can't open history file %2"), fname);
+			} else {
+				cc = fgetc(rhist);
+				while( cc != EOF ) {
+					entryString = @""; done = FALSE; k = 0;
+					for (i=0 ; i<1000 && !done && cc!=EOF ; i++) {
+						c[i] = cc;
+						if (cc == '\n' || i==999) {
+							if (i==0) {								// Empty line
+								cc = fgetc(rhist);
+								done = TRUE;
+							} else {
+								if (c[i-1] == '#') {				// Line part of multiline
+									c[i-1] = 0;
+									tmpString = [[NSString alloc] initWithCString:&c[k]];
+									entryString = [entryString stringByAppendingString: tmpString];			
+								} else {
+									c[i]=0;							// Don't want a newline
+									tmpString = [[NSString alloc] initWithCString:&c[k]];
+									entryString = [entryString stringByAppendingString: tmpString];			
+									j = [entryString length];
+									entryString = [entryString substringWithRange: NSMakeRange(0, j)];
+									if ((j-1) > 0 && [entryString characterAtIndex:0] == '\n') 
+										entryString = [entryString substringWithRange: NSMakeRange(1, j-1)];
+									[hist commit:entryString];
+									done = TRUE;									
+								}
+								k = i;
+								cc = fgetc(rhist);
+							}
+						} else {									// Keep collecting chars
+							cc = fgetc(rhist);
+							if (cc == EOF) {
+								if (i>0) {
+									c[i+1]=0;						// Don't want a newline
+									tmpString = [[NSString alloc] initWithCString:&c[k]];
+									entryString = [entryString stringByAppendingString: tmpString];	
+									j = [entryString length];
+									entryString = [entryString substringWithRange: NSMakeRange(0, j)];
+									[hist commit:entryString];
+									k = i;
+								}
+								done=TRUE;
+							}						
+						}
+					}
+				}
+			}
+		}		
+		[historyView scrollRowToVisible:[historyView numberOfRows]];
+		[historyView reloadData];
 	}
 }
-
-- (void)autoLoadHistory:(id)sender
-{
-	NSString *fname = [[[Preferences stringForKey:initialWorkingDirectoryKey
-									  withDefault: @"~"] stringByExpandingTildeInPath]
-										stringByAppendingString:@"/Rhistory.history"]; 
-	[hist resetAll];
-	[hist setHist: [NSUnarchiver unarchiveObjectWithFile: fname]];
-	[historyView scrollRowToVisible:[historyView numberOfRows]];
-	[historyView reloadData];
-}
-
-/*  Saves the content of the history of a file. The default extension .history
-This file is not compatible with unix history files as it could be multiline.
-FIXME: we can probably allow for exporting as single line
-*/
 
 - (void)doSaveHistory:(id)sender {
-	int answer;
-	NSSavePanel *sp;
-	sp = [NSSavePanel savePanel];
-	[sp setDirectory:[[Preferences stringForKey:initialWorkingDirectoryKey
-									withDefault: @"~"] stringByExpandingTildeInPath]];
-	[sp setRequiredFileType:@"history"];
-	[sp setTitle:NLS(@"Save history File")];
-	answer = [sp runModal];
-	if(answer == NSOKButton) {
-		[NSArchiver archiveRootObject: [hist entries]
-							   toFile: [sp filename]];
+	NSString *fname;
+	if (sender) {
+		NSSavePanel *sp = [NSSavePanel savePanel];
+		[sp setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
+		[sp setRequiredFileType:@"history"];
+		[sp setTitle:NLS(@"Save history File")];
+		if([sp runModal] == NSOKButton) fname = [sp filename];		
+	} else 
+		fname = [[Preferences stringForKey:historyFileNamePathKey
+							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
+	NSString *entryString; NSString *lineString = @""; NSString *tmpString; FILE *rhist;
+	NSMutableArray *histEntries;
+	histEntries = [[NSMutableArray alloc] initWithCapacity: 16];
+	[histEntries addObjectsFromArray:[hist entries]];
+	rhist = fopen([fname cString], "w");
+	if (rhist==NULL) {
+		NSLog(NLS(@"Can't open history file %2"), fname);
+	} else {
+		int ac = [histEntries count];
+		rhist = fopen([fname cString], "w");
+		int i; int j; int l; int k; int cnt;
+		for (i=0 ; i < ac ; i++) {
+			cnt = 0;
+			entryString = [histEntries objectAtIndex:i];
+			l = [entryString length];
+			for (j=0 ; j < l ; j++) {
+				if ([entryString characterAtIndex:j] == '\n') 
+					cnt++;				
+			}
+			if (cnt == 0)
+				fprintf(rhist, "%s\n", [entryString cString]);
+			else {
+				k = 0;
+				for (j=0 ; j < l ; j++)
+					if ([entryString characterAtIndex:j] == '\n') {
+						tmpString = [entryString substringWithRange: NSMakeRange(k, j-k)];
+						j++;
+						lineString = [tmpString stringByAppendingString:@"#"];
+						fprintf(rhist, "%s\n", [lineString cString]);
+						k = j;
+					}
+						if ([entryString length] > 1) {	
+							if ([entryString characterAtIndex:k-1] == '\n')
+								tmpString = [entryString substringWithRange: NSMakeRange(k, l-k)];
+							else
+								tmpString = [entryString substringWithRange: NSMakeRange(k-1, l-k+1)];
+							fprintf(rhist, "%s\n", [tmpString cString]);	
+						}
+			}
+		}
+		fclose(rhist);	
 	}
-}
-
-- (void)autoSaveHistory:(id)sender
-{
-	NSString *fname = [[[Preferences stringForKey:initialWorkingDirectoryKey
-									  withDefault: @"~"] stringByExpandingTildeInPath]
-										stringByAppendingString:@"/Rhistory.history"]; 
-	[NSArchiver archiveRootObject: [hist entries] toFile: fname];
-}
-
-- (IBAction)doImportHistory:(id)sender {
-	[hist importHistory];
-	[historyView scrollRowToVisible:[historyView numberOfRows]];
-	[historyView reloadData];
-}
-
-- (IBAction)doExportHistory:(id)sender {
-	[hist exportHistory];
-}
-
-- (IBAction)doEditHistory:(id)sender {
-	[hist editHistory];
-	[historyView scrollRowToVisible:[historyView numberOfRows]];
-	[historyView reloadData];
+	[histEntries release];
 }
 
 /*  On double-click on items of the History TableView, the item is pasted into the console
@@ -1360,7 +1416,32 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
-	[[RDocumentController sharedDocumentController] openDocumentWithContentsOfFile: filename display:YES];
+	BOOL isDir;
+	BOOL flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
+	NSFileManager *manager = [NSFileManager defaultManager];
+	if ([manager fileExistsAtPath:filename isDirectory:&isDir] && isDir){
+		if (!flag && !appLaunched) {
+			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
+			[self showWorkingDir:nil];				
+		}
+	} else {
+		if (!flag && !appLaunched) {
+			int i; int j;
+			for (i=[filename length]-1 ; i>=0 ; i--) {
+				if ([filename characterAtIndex:i] == '/') {
+					j = i; i = -1;
+				};
+			}
+			NSString *dirname = [filename substringWithRange: NSMakeRange(0, j+1)];
+			[manager changeCurrentDirectoryPath:[dirname stringByExpandingTildeInPath]];
+			[self showWorkingDir:nil];					
+		}
+		BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
+		if (openInEditor || appLaunched)
+			[[RDocumentController sharedDocumentController] openDocumentWithContentsOfFile: filename display:YES];
+		else
+			[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[filename stringByExpandingTildeInPath]]];
+	}
 	return YES;
 }
 

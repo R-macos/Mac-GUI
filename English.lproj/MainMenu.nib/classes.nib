@@ -89,14 +89,13 @@
         }, 
         {
             ACTIONS = {
+                autoLoadHistory = id; 
+                autoSaveHistory = id; 
                 breakR = id; 
                 changeFontSize = id; 
                 checkForUpdates = id; 
                 clearWorkSpace = id; 
                 doClearHistory = id; 
-                doEditHistory = id; 
-                doExportHistory = id; 
-                doImportHistory = id; 
                 doLoadHistory = id; 
                 doSaveHistory = id; 
                 flushconsole = id; 
@@ -144,14 +143,11 @@
                 RTextView = NSTextView; 
                 WDirView = NSTextField; 
                 clearHistory = NSButton; 
-                editHistory = NSButton; 
-                exportHistory = NSButton; 
                 fontSizeField = NSTextField; 
                 fontSizeStepper = NSStepper; 
                 fontSizeView = NSView; 
                 helpSearch = NSSearchField; 
                 historyView = NSTableView; 
-                importHistory = NSButton; 
                 loadHistory = NSButton; 
                 prefsCtrl = PrefWindowController; 
                 progressWheel = NSProgressIndicator; 

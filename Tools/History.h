@@ -52,8 +52,4 @@
 - (void) encodeWithCoder:(NSCoder *)coder;
 - (id) initWithCoder:(NSCoder *)coder;
 
-- (void) exportHistory;
-- (void) importHistory;
-- (void) editHistory;
-
 @end
