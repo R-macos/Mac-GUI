@@ -8,7 +8,12 @@
             SUPERCLASS = NSObject; 
         }, 
         {
-            ACTIONS = {activateQuartzDevice = id; executeSelection = id; sourceFile = id; }; 
+            ACTIONS = {
+                activateQuartzDevice = id; 
+                executeSelection = id; 
+                sourceCurrentDocument = id; 
+                sourceFile = id; 
+            }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 
