@@ -95,7 +95,7 @@ int runRootScript(const char* script, char** args, FILE **fptr, int keepAuthoriz
 // checks whether the current user is a member of the "admin" group
 int isAdmin()
 {
-	int ng,i;
+	int ng,i=0;
 	gid_t gids[64], admin_gid;
 	struct group *gri;
 	
