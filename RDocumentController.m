@@ -61,12 +61,12 @@
 		theData=[defaults dataForKey:appOrCommandKey];
 		if(theData != nil){
 			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-				cmd = [@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]];
+				cmd = [@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app"]];
 			} else {
 				cmd = editor;
 			}
 		} else 
-			cmd = [@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]];
+			cmd = [@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app"]];
 		system([cmd cString]);
 	}
 }
@@ -96,22 +96,23 @@
 		int i = [files count];
 		int j;
 		for (j=0;j<i;j++) {
+			//			NSLog(@"openDocument: %@:", [NSString stringWithString: [files objectAtIndex:j]]);
 			theData=[defaults dataForKey:appOrCommandKey];
 			if(theData != nil){
 				if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-					cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: [NSString stringWithString: [files objectAtIndex:j]]];
+					cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app \""]] stringByAppendingString: [[NSString stringWithString: [files objectAtIndex:j]] stringByAppendingString:@"\""]];
 				} else {
-					cmd = [[editor stringByAppendingString:@" -c "]stringByAppendingString: [NSString stringWithString: [files objectAtIndex:j]]];
+					cmd = [[editor stringByAppendingString:@" \""] stringByAppendingString: [[NSString stringWithString: [files objectAtIndex:j]] stringByAppendingString:@"\""]];
 				}
 			} else 
-				cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: [NSString stringWithString: [files objectAtIndex:j]]];
+				cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app \""]] stringByAppendingString: [[NSString stringWithString: [files objectAtIndex:j]] stringByAppendingString:@"\""]];
 			system([cmd cString]);
 		}
 	}
 }
 
 - (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag {
-//	NSLog(@"openDocumentWith: %@:", aFile);
+	//	NSLog(@"openDocumentWith: %@:", aFile);
 	int res = [[RController getRController] isImageData: (char *)[aFile cString]];
 	if (res == -1)
 		NSLog(@"Can't open file %@", aFile);
@@ -123,7 +124,7 @@
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		NSData *theData=[defaults dataForKey:editOrSourceKey];
 		if(theData != nil && ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"NO"])){
-//			NSLog(@"Source the file!");
+			//			NSLog(@"Source the file!");
 			[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")",aFile]];
 		} else {
 			if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
@@ -147,12 +148,12 @@
 					theData=[defaults dataForKey:appOrCommandKey];
 					if(theData != nil){
 						if ([(NSString *)[NSUnarchiver unarchiveObjectWithData:theData] isEqualToString: @"YES"]) {
-							cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: aFile];
+							cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: [NSString stringWithFormat:@"\"%@\"", aFile]];
 						} else {
-							cmd = [[editor stringByAppendingString:@" -c "]stringByAppendingString: [NSString stringWithString: aFile]];
+							cmd = [[editor stringByAppendingString:@" "] stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@"\"%@\"", aFile]]];
 						}
 					} else 
-						cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: aFile];
+						cmd = [[@"open -a " stringByAppendingString:[editor stringByAppendingString:@".app "]] stringByAppendingString: [NSString stringWithFormat:@"\"%@\"", aFile]];
 					system([cmd cString]);
 				}
 			}		
@@ -162,7 +163,7 @@
 }
 
 - (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag {
-//	NSLog(@"openRDocumentWith: %@", aFile);
+	//	NSLog(@"openRDocumentWith: %@", aFile);
 	NSString *editor;
 	NSString *cmd;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
