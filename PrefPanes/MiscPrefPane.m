@@ -147,11 +147,13 @@
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
-	[self setOpenInEditor: ([sender selectCellAtRow:0 column:0] == NSOffState)?NO:YES];
+	BOOL flag = ([sender selectCellAtRow:0 column:0] == NSOffState)?NO:YES;
+	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"] forKey:editOrSourceKey];
+	[self setOpenInEditor:flag] ;
 }
 
 - (void) setOpenInEditor:(BOOL)flag {
-	[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:flag?@"YES":@"NO"] forKey:editOrSourceKey];
+	//	NSLog(@"setOpenInEditor called: %d on %@", flag, editOrSource);
 	[editOrSource setState:flag?NSOffState:NSOnState atRow:1 column:0];
 	[editOrSource setState:flag?NSOnState:NSOffState atRow:0 column:0];
 	[[RController getRController] setOpenInEditor: flag];
