@@ -4,8 +4,6 @@ User requests/bug reports:
 * edit object menu disabled
 * multiple packages installation crashes package manager (a couple of users report this)
 * preferences panel for initial working directory and quartz device settings
-* selecting a directory via dialog is broken: one should enter the directory, if no subdir exists
-  it can be selected
 * drag and drop don't work correctly should try to load data and eventually source the file. At the
   moment the file is loaded in R editor. [SI; Simon don't agree (yet). Let's try by setting this user
   configurable)].
@@ -18,7 +16,7 @@ User requests/bug reports:
   arrow keys
 * for Bioconductor packages installation: allow for an option that uses getBioc script  
 * add an option to package installer to "update" all packages that either: of new version, or built
-  for a different verison of R
+  for a different version of R
   
   
 Internal feedback:
