@@ -7,6 +7,7 @@
 //
 
 #import "MiscPrefPane.h"
+#import "RController.h"
 
 
 @interface MiscPrefPane (Private)
@@ -132,5 +133,14 @@
 - (void)didUnselect
 {}
 
+	/* end of std methods implementation */
+
+- (IBAction) changeEditOrSource:(id)sender {
+    [[RController getRController] changeEditOrSource:sender];
+}
+
+- (NSMatrix *) editOrSource {
+	return editOrSource;
+}
 
 @end

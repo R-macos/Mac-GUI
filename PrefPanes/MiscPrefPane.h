@@ -11,11 +11,13 @@
 
 
 @interface MiscPrefPane : NSObject <AMPrefPaneProtocol> {
-	IBOutlet NSView *mainView;
 	NSString *identifier;
 	NSString *label;
 	NSString *category;
 	NSImage *icon;
+
+	IBOutlet NSView *mainView;
+	IBOutlet NSMatrix *editOrSource;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -35,5 +37,11 @@
 	// should be NSPreferencePaneUnselectReply
 - (void)willUnselect;
 - (void)didUnselect;
+
+// Other methods
+
+- (IBAction) changeEditOrSource:(id)sender;
+- (NSMatrix *) editOrSource;
+
 
 @end
