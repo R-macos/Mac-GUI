@@ -1429,8 +1429,8 @@ No error message or warning are raised.
 	[op setTitle:@"Choose New Working Directory"];
 
 	answer = [op runModalForDirectory:[NSString stringWithCString:buf] file:nil types:[NSArray arrayWithObject:@""]];
-	[op setCanChooseDirectories:NO];
-	[op setCanChooseFiles:YES];
+	[op setCanChooseDirectories:YES];
+	[op setCanChooseFiles:NO];
 
 	if(answer == NSOKButton) {
 		if([op directory] != nil){
