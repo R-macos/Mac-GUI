@@ -427,6 +427,36 @@ NSArray *keywordList=nil;
 	[self updatePreferences];
 }
 
+
+- (IBAction)goToLine:(id)sender
+{
+	[NSApp beginSheet: goToLineSheet modalForWindow: [self window] modalDelegate: goToLineSheet didEndSelector: @selector(orderOut:) contextInfo: nil];
+}
+
+- (IBAction)goToLineCloseSheet:(id)sender
+{
+	if ([((NSButton*) sender) tag] == 1) { // OK
+		NSString *s = [[textView textStorage] string];
+		int l = [goToLineField intValue];
+		// I know of no simple way to determine line #s, so let's just count them
+		int i=0, cl=1, tl = [s length];
+		if (l<1) l=1;
+		if (tl>0) {		
+			if (cl!=l) while (i<tl) {
+				if ([s characterAtIndex:i]=='\n') { // we could use indexOf, but ...
+					cl++;
+					if (cl==l) break;
+				}
+				i++;
+			};
+			if (l>1) i++; // get past the detected newline
+			if (i>=tl) i=tl-1; // make sure the range is valid
+			[textView setSelectedRange:NSMakeRange(i,0)];
+		}
+	}
+    [NSApp endSheet:goToLineSheet];
+}
+
 - (void) setHighlighting: (BOOL) use
 {
 	useHighlighting=use;

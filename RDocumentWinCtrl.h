@@ -59,6 +59,9 @@ extern NSColor *shColorIdentifier;
 	IBOutlet NSDrawer *helpDrawer;
 	IBOutlet WebView *helpWebView;
 	
+	IBOutlet NSPanel *goToLineSheet;
+	IBOutlet NSTextField *goToLineField;
+	
     RRulerView *theRulerView;
 
 	RDocument *document;
@@ -90,6 +93,8 @@ extern NSColor *shColorIdentifier;
 - (IBAction)executeSelection:(id)sender;
 - (IBAction)sourceCurrentDocument:(id)sender;
 - (IBAction)printDocument:(id)sender;
+- (IBAction)goToLine:(id)sender;
+- (IBAction)goToLineCloseSheet:(id)sender;
 
 - (IBAction)setHelpSearchType:(id)sender;
 - (IBAction)goHelpSearch:(id)sender;
