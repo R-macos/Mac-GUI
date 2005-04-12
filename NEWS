@@ -1,5 +1,11 @@
 NEWS
 
+Last-update: 2005-04-12 [SU]
+*	Fixed a bug in the code completion (uncaught exception when
+	completion of the complete was attempted)
+*	Fixed R engine to use --gui=aqua (necessary for R 2.1.0)
+*	Display FAQ distributed with R.app (was: fw version of it)
+
 Last-update: 2005-04-04 [SU]
 *	Some more cleanup in the editor toolbar, added Save item
 *	Added go-to-line (<Cmd><L>) capability in editor

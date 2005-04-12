@@ -129,17 +129,22 @@ static id sharedHMController;
 
 - (IBAction)showRFAQ:(id)sender
 {
-	 REngine *re = [REngine mainEngine];	
-	 RSEXP *x= [re evaluateString:@"file.path(R.home(),\"RMacOSX-FAQ.html\")"];
-	 if(x==nil)
-		return;
-		
-	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
+	NSString *url = [[NSBundle mainBundle] resourcePath];
+	if (!url) {
+		REngine *re = [REngine mainEngine];	
+		RSEXP *x= [re evaluateString:@"file.path(R.home(),\"RMacOSX-FAQ.html\")"];
+		if(x==nil)
+			return;
+		url = [x string];
+		[x release];
+		if (url) url = [NSString stringWithFormat:@"file://%@", url];
+	} else
+		url = [NSString stringWithFormat:@"file://%@/RMacOSX-FAQ.html", url];
 
-	if(url != nil)
+	if(url != nil) {
 	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-	[helpWindow makeKeyAndOrderFront:self];
-	[x release];
+		[helpWindow makeKeyAndOrderFront:self];
+	}
 }
 
 - (IBAction)whatsNew:(id)sender
