@@ -126,8 +126,10 @@
                         [common release];
                         common=cpref;
                     }
-					[ca addObject: [sx substringFromIndex:prefix]];
-                    matches++;
+					if (prefix<[sx length]) {
+						[ca addObject: [sx substringFromIndex:prefix]];
+						matches++;
+					}
                 }
                 i++;
             }
