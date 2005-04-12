@@ -65,7 +65,7 @@ static REngine* mainRengine=nil;
 
 - (id) initWithHandler: (id <REPLHandler>) hand
 {
-    char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
+    char *args[4]={ "R", "--no-save", "--gui=aqua", 0 };
 	return [self initWithHandler: hand arguments: args];
 }
 

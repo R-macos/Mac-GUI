@@ -190,7 +190,7 @@ static RController* sharedRController;
 }
 
 - (void) awakeFromNib {
-	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
+	char *args[4]={ "R", "--no-save", "--gui=aqua", 0 };
 	SLog(@"RController.awakeFromNib");
 	
 #ifdef DEBUG_RGUI
