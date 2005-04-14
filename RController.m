@@ -25,6 +25,8 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  $Id$
  */
 
 #import "RGUI.h"
@@ -56,6 +58,7 @@
 #import "RConsoleTextStorage.h"
 
 #import "Tools/Authorization.h"
+
 #import "Preferences.h"
 #import "SearchTable.h"
 
@@ -192,11 +195,7 @@ static RController* sharedRController;
 - (void) awakeFromNib {
 	char *args[4]={ "R", "--no-save", "--gui=aqua", 0 };
 	SLog(@"RController.awakeFromNib");
-	
-#ifdef DEBUG_RGUI
-	[[NSExceptionHandler defaultExceptionHandler] setDelegate:self];
-#endif
-	
+		
 	sharedRController = self;
 	
 	NSLayoutManager *lm = [[RTextView layoutManager] retain];
@@ -628,9 +627,6 @@ extern BOOL isTimeToFinish;
 	[defaultConsoleColors release];
 	[consoleColors release];
 	[consoleColorsKeys release];
-#ifdef DEBUG_RGUI
-	[[NSExceptionHandler defaultExceptionHandler] setDelegate:nil];
-#endif
 	[super dealloc];
 }
 
@@ -2179,57 +2175,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (NSWindow *)getRConsoleWindow{
 	return RConsoleWindow;
 }
-
-#ifdef DEBUG_RGUI
-- (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldLogException:(NSException *)exception mask:(unsigned int)aMask	// mask is NSLog<exception type>Mask, exception's userInfo has stack trace for key NSStackTraceKey
-{
-	NSString *stack = [[exception userInfo] objectForKey:NSStackTraceKey];
-	NSTask *ls=[[NSTask alloc] init];
-	NSString *pid = [[NSNumber numberWithInt:getpid()] stringValue];
-	NSMutableArray *args = [NSMutableArray arrayWithCapacity:20];
-	
-	NSLog(@"Logged exception %@ with trace %@", exception, stack);
-	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/bin/atos"]) {
-		NSPipe *sop = [[NSPipe alloc] init];
-		NSFileHandle *soh = [sop fileHandleForReading];
-		NSLog(@"Calling atos to retrieve symbols, please wait!");
-		[args addObject:@"-p"];
-		[args addObject:pid];
-		[args addObjectsFromArray:[stack componentsSeparatedByString:@" "]];
-	
-		[ls setLaunchPath:@"/usr/bin/atos"];
-		[ls setArguments:args];
-		[ls setStandardOutput:sop];
-		[ls launch];
-		while ([ls isRunning]) {
-			NSData *data = [soh availableData];
-			if (data && [data length]>0) { /* remove empty lines in the trace */
-				const char *c = [data bytes], *d=c;
-				while (*d) {
-					if (*d=='\n' && d[1]=='\n') {
-						int l=d-c;
-						while (*d=='\n') d++;
-						fwrite(c, 1, l+1, stderr);
-						c=d;
-					} else d++;
-				}
-				if (*c && d-c)
-					fwrite(c, 1, d-c, stderr);
-			}
-		}
-		[ls release];
-		[sop release];
-	} else
-		NSLog(@"Unable to find atos - symbols can't be dumped!");
-	return NO;
-}
-
-- (BOOL)exceptionHandler:(NSExceptionHandler *)sender shouldHandleException:(NSException *)exception mask:(unsigned int)aMask	// mask is NSHandle<exception type>Mask, exception's userInfo has stack trace for key
-{
-	return NO;
-}
-
-#endif
 
 @end
 

@@ -68,10 +68,12 @@
     if (ac==0 || ![[hist objectAtIndex: ac-1] isEqualToString:entry]) {
 		len = [entry length]; 		
 		if ([Preferences flagForKey:stripCommentsFromHistoryEntriesKey withDefault:NO]) {
-			int i; int j; int k;
+			int i = 0, j = 0, k = 0;
 			NSString *newEntry = [[NSString alloc] initWithString:entry];
-			NSString *restString; BOOL firstTime = YES; BOOL done; BOOL found = NO;
-			k = 0;
+			NSString *restString;
+			BOOL firstTime = YES;
+			BOOL done = NO;
+			BOOL found = NO;
 			for (i = 0 ; i < len ; i++) {
 				if ([entry characterAtIndex:i] == '#') {
 					found = YES;
