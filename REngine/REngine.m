@@ -37,6 +37,15 @@
 #include <R_ext/Parse.h>
 #import "REngine.h"
 
+/* this is also provided in RGUI.h, but we want to be independent */
+#ifndef SLog
+#if defined DEBUG_RGUI && defined PLAIN_STDERR
+#define SLog(X,...) NSLog(X, ## __VA_ARGS__)
+#else
+#define SLog(X,...)
+#endif
+#endif
+
 static REngine* mainRengine=nil;
 
 @implementation REngine
@@ -97,6 +106,7 @@ static REngine* mainRengine=nil;
 
 - (BOOL) activate
 {
+	SLog(@"REngine.activate: starting R ...");
 	RENGINE_BEGIN;
 	{
 		int res = initR(argc, argv);
@@ -105,8 +115,9 @@ static REngine* mainRengine=nil;
 	RENGINE_END;
 	if (lastInitRError) {
 		if (lastError) [lastError release];
-		lastError = [[NSString alloc] initWithCString:lastInitRError];
+		lastError = [[NSString alloc] initWithUTF8String:lastInitRError];
 	} else lastError=nil;
+	SLog(@"REngine.activate: %@", (lastError)?lastError:@"R started with no error");
     return active;
 }
 
@@ -210,24 +221,28 @@ static REngine* mainRengine=nil;
 - (RSEXP*) evaluateString: (NSString*) str
 {
     RSEXP *ps, *xr;
+	SLog(@"REngine.evaluateString:\"%@\"", str);
 	if (!active) return nil;
     ps=[self parse: str];
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
     xr=[self evaluateExpressions: ps];
 	[ps release];
+	SLog(@" - result: %@", xr);
 	return xr;
 }
 
 - (RSEXP*) evaluateString: (NSString*) str withParts: (int) count
 {
     RSEXP *ps, *xr;
+	SLog(@"REngine.evaluateString:\"%@\" withParts:%d", str, count);
 	if (!active) return nil;
     ps=[self parse: str withParts: count];
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
     xr=[self evaluateExpressions: ps];
 	[ps release];
+	SLog(@" - result: %@", xr);
 	return xr;
 }
 
@@ -235,6 +250,7 @@ static REngine* mainRengine=nil;
 {
     RSEXP *ps, *xr;
 	BOOL success=NO;
+	SLog(@"REngine.executeString:\"%@\"", str);
 	if (!active) return NO;
     ps=[self parse: str];
     if (ps==nil) return NO;
@@ -242,6 +258,7 @@ static REngine* mainRengine=nil;
 	[ps release];
 	if (xr!=nil) success=YES;
 	if (xr) [xr release];
+	SLog(@" - success: %@", success?@"YES":@"NO");
 	return success;
 }
 
