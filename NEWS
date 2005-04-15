@@ -1,6 +1,7 @@
 NEWS
 
 Last-update: 2005-04-15 [SU]
+*	Fixed bug in AMPrefs causing an attempt to release a system font
 *	Added progress indicator to package installer
 *	Fixed package installer to work with R 2.1 (it did not unless CRAN
 	mirror was set manually before)

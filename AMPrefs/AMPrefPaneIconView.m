@@ -52,9 +52,9 @@
 		[self setIcons:theIcons];
 		[self setColumns:numColumns];
 		//[self setSortByCategory:YES];
-		NSFont *labelFont = [[NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]] autorelease];
+		NSFont *labelFont = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]];
 		_am_iconLabelAttributes = [[NSDictionary dictionaryWithObject:labelFont forKey:NSFontAttributeName] retain];
-		NSFont *captionFont = [[NSFont boldSystemFontOfSize:[NSFont systemFontSize]] autorelease];
+		NSFont *captionFont = [NSFont boldSystemFontOfSize:[NSFont systemFontSize]];
 		_am_captionAttributes = [[NSDictionary dictionaryWithObject:captionFont forKey:NSFontAttributeName] retain];
 	}
 	return self;
