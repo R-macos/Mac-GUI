@@ -37,16 +37,28 @@
 
 static id sharedController;
 
-char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
-	"~/Library/R/library"};
+NSString *location[2] = {
+	@"/Library/Frameworks/R.framework/Resources/library/",
+	@"~/Library/R/library"
+};
 
 @implementation PackageInstaller
 
+- (void) busy: (BOOL) really
+{
+	if (really) {
+		SLog(@"PackageInstaller: I'm getting busy");
+		[busyIndicator startAnimation:self];
+	} else {
+		SLog(@"PackageInstaller: Stopped being busy");
+		[busyIndicator stopAnimation:self];
+	}
+}
 
 - (IBAction)installSelected:(id)sender
 {
-	
-	char tmp[301];
+	NSString *targetLocation = nil;
+
 	if(pkgInst == kOtherLocation){
 		NSOpenPanel *op;
 		int answer;
@@ -59,37 +71,29 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 		answer = [op runModalForDirectory:nil file:nil types:[NSArray arrayWithObject:@""]];
 		[op setCanChooseDirectories:NO];
 		[op setCanChooseFiles:YES];
-		if(answer == NSOKButton) {
-			if([op directory] != nil)
-				CFStringGetCString((CFStringRef)[op directory], tmp, 300,  kCFStringEncodingMacRoman); 
-		} else return;
-		
-		
+		if(answer == NSOKButton)
+			targetLocation = [op directory];
+		else
+			return;
 	} else
-		strcpy(tmp, location[pkgInst]);
+		targetLocation = location[pkgInst];
 	
+	[self busy:YES];
+
 	{
-		char *c;
-		FILE *f;
-		NSString * s = [NSString stringWithCString:tmp];
-		
-		s = [s stringByExpandingTildeInPath];
-		[s getCString:tmp maxLength:300];
-		c = tmp+strlen(tmp);
-		
-		strcat(tmp, "/.aqua.test");
-		f=fopen(tmp, "w");
-		if (f) {
-			fclose(f);
-			unlink(tmp);
-		} else {
+		NSString *testFile;
+		targetLocation = [targetLocation stringByExpandingTildeInPath];
+		testFile = [targetLocation stringByAppendingString:@"/.aqua.test"];
+		if ([[NSFileManager defaultManager] createFileAtPath:testFile contents:[NSData dataWithBytes:"foo" length:4] attributes:nil])
+			[[NSFileManager defaultManager] removeFileAtPath:testFile handler:nil];
+		else {
 			if (requestRootAuthorization(0)) {
+				[self busy: NO];
 				NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"The package has not been installed."),NLS(@"OK"),nil,nil);	
 				return;
 			} else
 				[[RController getRController] setRootFlag:YES];
 		}
-		*c=0;
 	}
 	
 	if( (pkgUrl == kLocalBin) || (pkgUrl == kLocalSrc) || (pkgUrl == kLocalDir) ){
@@ -114,8 +118,10 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 	} else {
 		NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];			
 		unsigned current_index = [rows firstIndex];
-		if(current_index == NSNotFound)
+		if(current_index == NSNotFound) {
+			[self busy: NO];
 			return;
+		}
 		
 		NSMutableString *packagesToInstall = nil;
 		
@@ -134,40 +140,40 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 			
 			case kCRANBin:
 				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%s\",CRAN=getOption(\"CRAN\"))",
-						packagesToInstall,tmp]					
+					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",CRAN=getOption(\"CRAN\"))",
+						packagesToInstall, targetLocation]					
 					];
 				
 				break;
 				
 			case kCRANSrc:
 				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.packages(%@,lib=\"%s\",CRAN=getOption(\"CRAN\"))",
-						packagesToInstall,tmp]];
+					[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",CRAN=getOption(\"CRAN\"))",
+						packagesToInstall, targetLocation]];
 				
 				break;
 				
 			case kBIOCBin:
 				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%s\",CRAN=getOption(\"BIOC\"))",
-						packagesToInstall,tmp]];
+					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",CRAN=getOption(\"BIOC\"))",
+						packagesToInstall, targetLocation]];
 				break;
 				
 			case kBIOCSrc:
 				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.packages(%@,lib=\"%s\",CRAN=getOption(\"BIOC\"))",
-						packagesToInstall,tmp]];
+					[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",CRAN=getOption(\"BIOC\"))",
+						packagesToInstall, targetLocation]];
 				break;
 				
 			case kOTHER:
 				if(pkgFormat == kSource)
 					[[REngine mainEngine] executeString: 
-						[NSString stringWithFormat:@"install.packages(%@,lib=\"%s\",contriburl=\"%@\")",
-							packagesToInstall,tmp,[urlTextField stringValue]]];
+						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=\"%@\")",
+							packagesToInstall, targetLocation, [urlTextField stringValue]]];
 			else
 				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%s\",contriburl=\"%@\")",
-						packagesToInstall,tmp,[urlTextField stringValue]]];
+					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",contriburl=\"%@\")",
+						packagesToInstall, targetLocation, [urlTextField stringValue]]];
 			break;
 
 			default:
@@ -176,12 +182,15 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 
 		[packagesToInstall release];
 	}
+	
+	[self busy:NO];
 }
 
 
 - (IBAction)reloadURL:(id)sender
 {
 	//	NSLog(@"pkgUrl=%d, pkgInst=%d, pkgFormat:%d",pkgUrl, pkgInst, pkgFormat);
+	[self busy: YES];
 	
 	[pkgDataSource deselectAll:self];
 	[pkgDataSource setHidden:YES];
@@ -212,6 +221,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 			}
 		}
 		if (!x || ![x string]) { // CRAN is still not set - bail otu with an error
+			[self busy:NO];
 			NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
 			return;
 		}
@@ -244,6 +254,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 			
 		case kOTHER:
 			if( [[urlTextField stringValue] isEqual:@""]){
+				[self busy:NO];
 				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
 				return;
 			}
@@ -256,6 +267,8 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 			break;
 			
 	}
+	
+	[self busy:NO];
 }
 
 - (IBAction)setURL:(id)sender
@@ -339,6 +352,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 	[repositoryButton setTag:pkgUrl];
 	[locationMatrix setTag:pkgInst];
 	[locationMatrix selectCellWithTag:pkgInst];
+	[busyIndicator setUsesThreadedAnimation:YES];
 }
 
 - (id)init

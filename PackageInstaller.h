@@ -63,6 +63,10 @@ typedef struct pkgInstallerEntry {
 	IBOutlet NSButton *formatCheckBox;
     IBOutlet NSMatrix *locationMatrix;
     IBOutlet NSTextField *urlTextField;
+	
+	IBOutlet NSScrollView *pkgScrollView;
+	IBOutlet NSProgressIndicator *busyIndicator;
+	
 	int pkgUrl;
 	int pkgInst;
 	int pkgFormat;

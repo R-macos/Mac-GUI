@@ -61,10 +61,12 @@
             CLASS = PackageInstaller; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                busyIndicator = NSProgressIndicator; 
                 formatCheckBox = NSButton; 
                 getListButton = NSButton; 
                 locationMatrix = NSMatrix; 
                 pkgDataSource = NSTableView; 
+                pkgScrollView = NSScrollView; 
                 pkgWindow = id; 
                 repositoryButton = NSPopUpButton; 
                 urlTextField = NSTextField; 

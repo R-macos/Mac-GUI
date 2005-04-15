@@ -1,8 +1,13 @@
 NEWS
 
-Last-update: 2005-04-13 [SU, RG]
+Last-update: 2005-04-15 [SU]
+*	Added progress indicator to package installer
 *	Fixed package installer to work with R 2.1 (it did not unless CRAN
-	mirror was set manually before) [SU]
+	mirror was set manually before)
+*	Reverted REngine back to --gui=cocoa in order to not break compatibility
+	with R 2.0 (corresponding change was made in R 2.1)
+
+Last-update: 2005-04-13 [RG]
 *	Fixed a bug in drawing on a miniaturized active Quartz window [RG]
 
 Last-update: 2005-04-12 [SU]
