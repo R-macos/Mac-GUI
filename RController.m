@@ -236,9 +236,14 @@ static RController* sharedRController;
 	SLog(@" - set R home");
 	if (!getenv("R_HOME")) {
 		NSBundle *rfb = [NSBundle bundleWithIdentifier:@"org.r-project.R-framework"];
-		if (!rfb)
+		if (!rfb) {
 			SLog(@" * problem: R_HOME is not set and I can't find the framework bundle");
-		else {
+			if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/R.framework/Resources/bin/R"]) {
+				SLog(@" * I'm being desperate and I found R at /Library/Frameworks/R.framework - so I'll use it, wish me luck");
+				setenv("R_HOME", "/Library/Frameworks/R.framework/Resources", 1);
+			} else
+				SLog(@" * I didn't even found R framework in the default location, I'm giving up - you're on your own");
+		} else {
 			SLog(@"   %s", [[rfb resourcePath] UTF8String]);
 			setenv("R_HOME", [[rfb resourcePath] UTF8String], 1);
 		}
