@@ -452,8 +452,10 @@ static void 	RQuartz_NewPage(R_GE_gcontext *gc, NewDevDesc *dd)
 {
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 
+	if ([xd->DevWindow isMiniaturized])
+		[xd->DevWindow deminiaturize:nil];
 	
-		[xd->DevView lockFocus];
+	[xd->DevView lockFocus];
 	ClipArea = [xd->DevView bounds];
 	NSRectClip(ClipArea);
 	
