@@ -32,7 +32,7 @@
 #import "REngine/RCallbacks.h"
 #import "REngine/REngine.h"
 #import "Tools/Authorization.h"
-
+#import <Rversion.h>
 #include <unistd.h>
 
 static id sharedController;
@@ -186,6 +186,40 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
 	[pkgDataSource deselectAll:self];
 	[pkgDataSource setHidden:YES];
 	
+#if (R_VERSION >= R_Version(2,1,0))
+	// in 2.1 the proxy functions were not updated to accomodate for changes in
+	// package installation - so we need to set options for backward compati-
+	// bility
+	if (!optionsChecked) {
+		RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+		if (!x || ![x string]) { // CRAN is not set - let's try the repos
+			SLog(@"PackageInstaller.reloadURL: checking options - CRAN is not set!");
+			if (x) [x release];
+			x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
+			if (!x || ![x string] || [[x string] isEqualToString:@"@CRAN@"]) { // repos is not set
+				if (x) [x release];
+				SLog(@" - ['repos']['CRAN'] is not set, either. Launching mirror selector.");
+				[[REngine mainEngine] executeString:@"chooseCRANmirror()"];
+				x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
+			}
+			if (x && [x string] && ![[x string] isEqualToString:@"@CRAN@"]) { // repos is set now - push it to CRAN
+				[x release];
+				[[REngine mainEngine] evaluateString:@"options(CRAN=getOption('repos')['CRAN'])"];
+				x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+			} else {
+				if (x) [x release]; // set x to nil - we need that in case x is @CRAN@
+				x=nil;
+			}
+		}
+		if (!x || ![x string]) { // CRAN is still not set - bail otu with an error
+			NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
+			return;
+		}
+		if (x) [x release];
+		optionsChecked = YES;
+	}
+#endif
+	
 	switch(pkgUrl){
 		
 		case kCRANBin:
@@ -313,6 +347,7 @@ char *location[2] = {"/Library/Frameworks/R.framework/Resources/library/",
     if (self) {
 		sharedController = self;
 		[pkgDataSource setTarget: self];
+		optionsChecked = NO;
 		packages = 0;
     }
 	

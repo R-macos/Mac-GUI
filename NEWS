@@ -1,5 +1,10 @@
 NEWS
 
+Last-update: 2005-04-13 [SU, RG]
+*	Fixed package installer to work with R 2.1 (it did not unless CRAN
+	mirror was set manually before) [SU]
+*	Fixed a bug in drawing on a miniaturized active Quartz window [RG]
+
 Last-update: 2005-04-12 [SU]
 *	Fixed a bug in the code completion (uncaught exception when
 	completion of the complete was attempted)

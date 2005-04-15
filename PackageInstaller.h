@@ -70,6 +70,8 @@ typedef struct pkgInstallerEntry {
 	int packages;
 	s_pkgInstallerEntry *package;
 	NSString *repositoryLabel;
+	
+	BOOL optionsChecked;
 }
 
 - (IBAction)installSelected:(id)sender;
