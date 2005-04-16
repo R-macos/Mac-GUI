@@ -88,12 +88,13 @@ Rob J. Goedman                   @*
 @menu
 * Introduction::                    
 * Building R from sources::
+* Internationalization of the R.app::
 * Command line version of R::                     
-* R with Aqua GUI::                     
+* R.app::                     
 * How to install packages::                     
 * R and external applications::                 
-* The near future of the Aqua GUI::               
-* Aqua GUI Bugs::       
+* The near future of the R.app::               
+* R.app Bugs::       
 * Quartz device::               
 * TclTk issues::               
 * Additional resources::
@@ -107,8 +108,10 @@ This R for Mac OS X FAQ is rather incomplete at the moment and requires contribu
 Anything specific to the R language can be found in the official R-FAQ (see  @uref{http://cran.r-project.org/doc/FAQ/R-FAQ.html}).
 Please send any requests/questions you would like answers on to the maintainers.
 
+In this document @R{} refers to the core, command line based @R{} system while R.app refers to the GUI based Mac OS application that controls the underlying @R{}.
+
 This document contains information on how to build @R{} from sources, how to install and run it.
-It also contains a user guide to the Aqua GUI version of @R{}.
+It also contains a user guide to the R.app version of @R{}.
 @menu
 * How many versions of R for Mac OS X?::                  
 * What machines does R for Mac OS X run on?::  
@@ -120,7 +123,7 @@ It also contains a user guide to the Aqua GUI version of @R{}.
 
 There is currently only one version of R for Mac OS X.
 But R on Mac OS X can be used as a command-line application (@pxref{Command line version of R}), like on any
-other unix-like system, or via the Aqua GUI (@pxref{R with Aqua GUI}). This second approach in using R
+other Unix-like system, or via the R.app (@pxref{R.app}). This second approach in using R
 for Mac OS X is mostly preferred by "traditional" Macintosh users.
 
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
@@ -132,13 +135,13 @@ always preferable though. We do not support Mac OS X version 10.1.
 @node How can R for Mac OS X be obtained and installed?, , What machines does R for Mac OS X run on?, Introduction
 @section How can R for Mac OS X be obtained and installed?
 
-@node Building R from sources, Command line version of R, Introduction, Top
+@node Building R from sources, Internationalization of the R.app, Introduction, Top
 @chapter Building R from sources
 @menu
 * What is needed to build R::
 * How to configure and build R::
 * How to install R::
-* How to build and install the Aqua GUI::
+* How to build and install the R.app::
 @end menu
 
 @node What is needed to build R, How to configure and build R, , Building R from sources
@@ -155,6 +158,7 @@ always preferable though. We do not support Mac OS X version 10.1.
 
 @node the C/C++ compiler gcc 3.3
 @subsection the C/C++ compiler gcc 3.3
+
 If you have Mac OS X 10.3 (aka Panther) you just need to install the software from the Xcode Tools CD 
 (which is CD number 4). This is only true if you bought Panther. If your computer came with pre-installed version of OS X, look into /Applications/Installers. Recent installations feature "Xcode Tools" folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Panther is version 1.5).
 
@@ -168,7 +172,8 @@ gcc --version
 
 @node the Fortran compiler g77 for gcc 3.3
 @subsection the Fortran compiler g77 for gcc 3.3
-Unfortunately the Xcode tools don' tinclude a fortran compiler. You need to install a version of the g77 Fortran compiler 3.3 or later which is built for Mac OS X. The following instructions apply to binaries coming from  HPC for Mac OS X page @uref{http://hpc.sourceforge.net}. Please take care: there are two versions of the g77 binaries, one for Jaguar and one for Panther. 
+
+Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version of the g77 Fortran compiler 3.3 or later which is built for Mac OS X. The following instructions apply to binaries coming from  HPC for Mac OS X page @uref{http://hpc.sourceforge.net}. Please note: there are two versions of the g77 binaries, one for Jaguar (Mac OS X 10.2.x) and one for Panther (Mac OS X 10.3.x). 
 Use the appropriate one.
 
 Once you have the binaries, please do the following (you'll be asked for a root password):
@@ -204,10 +209,10 @@ These instructions apply to both Jaguar and Panther.
 If you have Panther, you probably have the X11 Window server already installed on your system. If it's not installed, you can re-install it using the original Panther installtion CD/DVD. This is what you need to run a version of R with the capability of using the X11 device, but it isn't sufficient if you want to build it.
 You need to install the additional X11 SDK package from the Xcode Tools CD. 
 Please note: the installer on the Xcode Tools CD does not install the X11 SDK by default: 
-you need to celet it during the installation (custom install) or look inside the Xcode Tools CD and install manually the X11 SDK.
+you need to select it during the installation (custom install) or look inside the Xcode Tools CD and install the X11 SDK manually.
 
 If you have Jaguar, you'll need to install both the X11 Window server and the X11 SDK package from 
-the XFree86 web page.  Apple site only supports the latest version of his OS (at the moment Panther).
+the XFree86 web page.  The Apple site only supports the latest version of the OS (at the moment Panther).
 Users report that other version of X11 Window Servers (other than the one distributed by Apple) work as well.
 
 @node the X11 TclTk headers and libraries (optional)
@@ -275,7 +280,7 @@ with something like
 and the final destination of the @emph{R.framework} will be @emph{FOO/R.framework}, which means that you 
 don't have to specify the @emph{R.framework} text in the path. 
 
-@node How to install R, How to build and install the Aqua GUI, How to configure and build R, Building R from sources
+@node How to install R, How to build and install the R.app, How to configure and build R, Building R from sources
 @section How to install R
 A standard installation of R requires you have built it as a Framework. At this point just type (a root 
 password will be required):
@@ -290,9 +295,9 @@ sudo make prefix=/where/you/want/R.framework/to/go install
 @end smallexample
 As in the above, you don't need to specify the name @emph{R.framework} in the path.
 
-@node  How to build and install the Aqua GUI,  ,How to install R, Building R from sources
-@section How to build and install the Aqua GUI
-At the moment, there is nothing special to  do to build the Aqua GUI.
+@node  How to build and install the R.app,  ,How to install R, Building R from sources
+@section How to build and install the R.app
+At the moment, there is nothing special to  do to build the R.app.
 You just need to install it using
 @example
 make install-aqua
@@ -300,14 +305,17 @@ make install-aqua
 and it will install the @emph{R.app} application in the @emph{Applications} folder on your system.
 The install procedure fails if the @file{R.framework} has not been installed first.
 
+@node Internationalization of the R.app, Command line version of R, Building R from sources, Top
+@chapter Internationalization of the R.app
+TBP.
 
-@node Command line version of R, R with Aqua GUI, Building R from sources, Top
+@node Command line version of R, R.app, Internationalization of the R.app, Top
 @chapter Command line version of R
 The command line version of @R{} is nothing but a classic unix-like implementation of @R{}. So general 
 documentation for @R{} applies to this version as well.
 On each release (and patched-release) ready to use binaries are distributed through @CRAN{}.
-These binaries come with a common installer used by R with Aqua GUI so please read
-the related notes (@pxref{How to get R with Aqua GUI}).
+These binaries come with a common installer used by R.app so please read
+the related notes (@pxref{How to get R.app}).
 To use @R{} you probably need to add a symbolic link on your System as the @R{} binary is 
 located inside the framework.
 Suppose you have the @emph{/usr/local/bin} directory on your System, than you should just 
@@ -319,46 +327,45 @@ Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment var
 on your System just by typing @emph{R}.
 In this way, when you install a new version of the @emph{R.framework} this link will point to the latest R binary.
 
-@node R with Aqua GUI
-@chapter R with Aqua GUI
+@node R.app
+@chapter R.app
 @menu
-* How to get R with Aqua GUI::
-* How to install the Aqua GUI::
+* How to get R.app::
+* How to install the R.app::
 * The R Console::
 * General Features::
 * The Menus::
 * Preferences::
-* The near future of the Aqua GUI::
-* Aqua GUI Bugs::
+* The near future of the R.app::
+* R.app Bugs::
 @end menu
 
-@node How to get R with Aqua GUI
-@section How to get R with Aqua GUI
+@node How to get R.app
+@section How to get R.app
 The @file{bin/macosx} directory of a @CRAN{} site contains a standard
 Apple installer package named @file{R.dmg.sit} compressed in Aladdin
 Stuffit format.  Once downloaded, uncompressed and executed, the
-installer will install the current non-developer release of R.  R  is
-a native Mac OS X Darwin version of R with an Aqua GUI. 
+installer will install the current non-developer release of R.app.  R.app  is
+a native, GUI based Mac OS X Darwin version of R. 
 Inside
 @file{bin/macosx/@var{x}.@var{y}} there are prebuilt binary packages to
 be used with R corresponding to the ``@var{x}.@var{y}'' release of
 R. The installation of these packages is available through the
-``Package'' menu of the Aqua GUI (@pxref{Packages Menu}). 
+``Package'' menu of the R.app (@pxref{Packages Menu}). 
 
-@node How to install the Aqua GUI
-@section How to install the Aqua GUI
+@node How to install the R.app
+@section How to install the R.app
 
 @node The R Console
 @section The R Console
-In this section you'll find general informations on the Aqua GUI. For specific @R{} tasks that
-can be done via the Aqua GUI using menus you should read below (@pxref{The Menus}). 
+In this section you'll find general information on the R.app. For specific @R{} tasks that
+can be done via the R.app using menus you should read below (@pxref{The Menus}). 
 @menu 
 * The Input and the Output::
-* Internationalization::
 * Copy and Paste::
 * The current and startup working directories::
 * Resizing the R Console::
-* Input and Output text colors::
+* R Console text colors::
 @end menu
 
 
@@ -366,24 +373,19 @@ can be done via the Aqua GUI using menus you should read below (@pxref{The Menus
 @subsection The Input and the Output
 The current design of the R Console is to have a single frame for input (user) and output (R).
 
-@node Internationalization
-@subsection Internationalization
-TBD.
-
 @node Copy and Paste
 @subsection  Copy and Paste
 Copy and paste works in R as in any other Macintosh application.
-But when two selection are active: one in the output frame and one in the input frame, the output frame takes precedence 
-when copying to the clipboard.
-You can also copy from the @emph{quartz()} graphic device (@pxref{Quartz device}) to the clipboard. In this case a bitmap image is
-created. If you want high resolution graphic exports, you should better save the image using the @emph{File/Save as} menu item (@pxref{Quartz device}).
+
+If you want high resolution graphic exports, you can save the PDF format using the @emph{File/Save as} menu item (@pxref{Quartz device}). Or you can use supported formats in R through pdf(), jpeg() etc (type ?capabilities 
+to get more details).
 
 
 @node The current and startup working directories
 @subsection The current and startup working directories
 If not otherwise specified in the Preferences (@pxref{Preferences}), or if the specified path is no longer available, then
 the default working directory at startup is the user home.
-The working directory can be changed using the @emph{setwd} R command or using the @emph{Tools} menu item @emph{Change working directory}.
+The working directory can be changed using the @emph{setwd} R command or using the @emph{Misc} menu item @emph{Change working directory}.
 The current working directory is displayed on the main bar of the R Console window.
 
 @noindent
@@ -400,8 +402,8 @@ output will fit the window size. This behavior can be inhibited using the Prefer
 On closing the R application, the position and the size of the R Console window are saved in the Preferences and reused
 next time you launch R. You can inhibit R to do this using the appropriate Preferences settings.
 
-@node Input and Output text colors
-@subsection Input and Output text colors
+@node R Console text colors
+@subsection R Console text colors
 Text windows and frames are divided in Read-Only and Read and Write ones. Text colors can be set separately
 for the two kinds of windows. This happens as well for their respective backgrounds. Use the Preferences window to set these 
 colors (@pxref{Preferences}).
@@ -411,7 +413,7 @@ colors (@pxref{Preferences}).
 @menu
 * Editor undo and line numbers::
 * Editor function list::
-* Editor completion::
+* Editor text completion::
 * Editor syntax coloring::
 * Editor help::
 * Editor (internal and external)::
@@ -424,16 +426,16 @@ colors (@pxref{Preferences}).
 
 @node Editor undo and line numbers
 @subsection Editor undo and line numbers
-The editor now supports undo/redo operations on an appropriate level of granularity (used to
+The editor supports undo/redo operations on an appropriate level of granularity (used to
 be all or nothing). The editor has an optional facility to show line numbers. These help with
 locating error messages. The editor also responds to the 'Go to Line' Edit menu function. The
-associated Preference Pane allows enabling/disabling the line numbers, as well as setting line
+associated Preference Pane allows enabling/disabling of the line numbers, as well as setting line
 number gutter width and text margin width. Note: Right now the line number system is fairly crude
 and makes the editor really slow on large files (1000s of lines). It will help to disable it
 for such large files.
 					
-@node Editor completion
-@subsection Editor completion
+@node Editor text completion
+@subsection Editor text completion
 Completion of typed input in the editor is available through the Edit menu 'Complete' or by 
 typing fn-tab.
 
@@ -443,7 +445,7 @@ The editor provides a popup function list for functions defined in the script be
 
 @node Editor syntax coloring
 @subsection Editor  syntax coloring
-It is now possible to change the syntax highlighting colors using the Syntax Color Preference
+It is possible to change the syntax highlighting colors using the Syntax Color Preference
 Pane (see below)
 		
 @node Editor (internal and external)
@@ -453,7 +455,7 @@ relatively simple multi-document editor that supports the features listed above.
 two powerful commands are available to source the file being edited in its entirety (Command-E)
 or to source the current selection to R (Command-Return). Using R's edit() function, allows
 editing of R objects or files while R is kept waiting for the edit session to finish.
-It is possible to 'redirect' all R requests to open an editor to an external editor, which runs
+It is possible to 'redirect' all R requests to an external editor, which runs
 outside R.app. In that case, it is not possible to keep R waiting if edit() is used. Using
 AppleScript it is easy to implement Command-E and Command-Return like functionality.
 
@@ -477,17 +479,18 @@ file is opened in the editor.
  
 @node Help system
 @subsection Help system
-The Help screen now allows a user to go back or forward to previous help pages.
-It is now possible to print help pages. If a help topic is not found, a pop-up window allows
+The Help screen allows a user to go back or forward to previous help pages.
+It is possible to print help pages. If a help topic is not found, a pop-up window allows
 to exit the help search or expand the search to a fuzzy/approximate search.  
 		
 @node History
 @subsection History
-R.app now uses history files that are compatible with history files created by R. Multiline
+R.app uses history files that are (superset) compatible with history files created by R. Multiline
 support remains available from inside R.app. Multiline is particularly useful when using the
 Command Return feature while editing an R script. Import and export allows storing and importing
 history from files visible in the Mac OS Finder. Multiline is preserved. This can be set through
-the StartUp Preference Panel. Default value is 250. A variety of history entry cleanup is possible.
+the StartUp Preference Panel. Default number of kept history entries is 250. A variety of history
+entry cleanup modes is possible.
 At a minimum I would suggest to select "Cleanup history entries". It's optional to select removal
 of duplicate entries and strip comments.
 
@@ -511,7 +514,8 @@ Several aditional preference panes have been implemented (see below).
 @subsubsection Startup
 The Drag & drop section defines drag & drop behaviour during R start-up. Options are to open
 file in an editor or to source file. Default is to source the file.
-The Default Library Paths section enables, on next start-up of R, to add ~/R/Library to the
+The Default Library Paths section enables, on next start-up of R, to add a directory, e.g.
+~/R/Library, to the
 library search/install path. The initial working directory section can be used to enforce
 the initial working directory. If no directory is specified, this directory is used as the
 default. The Change button allows to select a new directory. The Always apply selection will
@@ -520,7 +524,7 @@ the history file on startup. If selected, R will read history file on start-up.
 The R history file field is used to read and store history from/to. This field can be edited
 to allow selecting files starting with a period (e.g. .Rhistory). If you want the same history
 file regardless of your selected working directory, specify a fixec path (e.g. ~/.Rhistory).
-The Default button will reset the history file to its default value. The History handling 
+The Default button will reset the history file name to its default value. The History handling 
 area allows setting of the max number of entries to be kept in history, to remove duplicate
 entries, to cleanup history entries (this is very useful to remove blank lines when submitting
 multiple lines using Command-Return) and the strip comments before the entry is added to the
@@ -557,7 +561,7 @@ The Font section is not implemented. Restore defaults resets to default values.
 * Application Menu::
 * File Menu::
 * Edit Menu::
-* Tools Menu::
+* Misc Menu::
 * Workspace Menu::
 * Packages Menu::
 * The Help Menu::
@@ -565,8 +569,7 @@ The Font section is not implemented. Restore defaults resets to default values.
 
 @node Application Menu
 @subsection Application Menu
-The Application menu is the first one after the main Apple Menu. In Mac OS X 10.3 it reports the name R.bin under Mac OS X 10.2 it is just R (as it should be).
-We are not able to fix this behavior at the moment.
+The Application menu is the first one after the main Apple Menu.
 
 With this menu you can access three items: 1. the About box, which tells you which version of R is currently in use, 2. Check for updates, which search on @CRAN{} if a new version
 of the binary distribution of @R{} for Mac OS X is available (you need an internet connection), 3. you can access the Preferences (@pxref{Preferences}). 
@@ -578,12 +581,12 @@ The @emph{open} command is associated to the action  @emph{Source @R{} code}, wh
 in @R{}. This is a interface to the @R{} source command @command{source}.
 
 @node Edit Menu
-@subsection Tools Menu
+@subsection Misc Menu
 Apart for standard functionalities, the only relevant item in this menu is the @emph{Edito Object} which is an interface to
 the  @R{} @command{edit} function.
 
-@node Tools Menu
-@subsection Tools Menu
+@node Misc Menu
+@subsection Misc Menu
 With this menu you can load and save the history of commands typed in the @R{} Console or view what's currently inside.
 You can also change the current working directory, let @R{} show you the current working directory or set it back to the
 startup directory. From release 1.9.0 of @R{} the current working directory is also shown on the main window bar.
@@ -686,23 +689,23 @@ application which you can find on every Mac OS X installation inside the directo
 You can also set the startup working directory. This is very useful for having different sessions in different
 directories (see @ref{The current and startup working directories} and @ref{How can I have a per session .Rprofile?}).
 
-@node The near future of the Aqua GUI
-@section The near future of the Aqua GUI
-Jointly with Simon Urbanek we are currently working to replace the current Aqua GUI, which is Carbon-based,
-with a pure Cocoa GUI. This will allow for a better integration of R with Mac OS X and
-a fully Aqua-compliant GUI.
-A preview of the Cocoa GUI for Darwin R can be obtained after the official
+@node The near future of the R.app
+@section The near future of the R.app
+Jointly with Simon Urbanek we are currently working to replace the current R.app, which is Carbon-based,
+with a pure R.app. This will allow for a better integration of R with Mac OS X and
+a fully Cocoa-compliant GUI.
+A preview of the R.app for Darwin R can be obtained after the official
 release of R 1.9.0 is out from @uref{http://www.economia.unimi.it/R}.
 
-@node Aqua GUI Bugs, ,The near future of the Aqua GUI, R with Aqua GUI
-@section Aqua GUI Bugs
+@node R.app Bugs, ,The near future of the R.app, R.app
+@section R.app Bugs
 On Unix systems a bug report can be generated using the function
 @code{bug.report()}.  This automatically includes the version
 information and sends the bug to the correct address.  Alternatively the
 bug report can be emailed to @email{R-bugs@@R-project.org} or submitted
 to the Web page at @uref{http://bugs.R-project.org/}.
 
-You can also send specific Aqua GUI bugs directly to @email{stefano.iacus@@unimi.it}
+You can also send specific R.app bugs directly to @email{stefano.iacus@@unimi.it}
 
 In any circumstances, in case of a crash, please report the 
 crash.log for the @emph{R.bin} application. You can get this
@@ -804,8 +807,8 @@ version of the above command
 @end example
 
 @noindent 
-If you have a version of @file{RAqua.app} installed on your system, it is likely that you have all the
-packages installed in @file{~/Library/RAqua/library}. You can add this library of packages in the @command{.libPaths()}
+If you have a version of @file{R.app} installed on your system, it is likely that you have all the
+packages installed in @file{~/Library/R/library}. You can add this library of packages in the @command{.libPaths()}
 but most of them will probably not work as they were built for release 1.8.x of @R{}.
 
 
@@ -938,7 +941,7 @@ The printing function is not yet implemented.
 @node TclTk issues, Additional resources, Quartz device, Top
 @chapter TclTk issues
 Each binary distribution of @R{} available through @CRAN{} is built to use the X11 implementation of TclTk.
-Of course a X windows server has to be started first. If you are not using the Aqua GUI you need to also
+Of course a X windows server has to be started first. If you are not using the R.app you need to also
 define the environment variable DISPLAY before attempting to use X11 from inside @R{}. You can do this as follows
 @example
 Sys.putenv("DISPLAY"=":0")
