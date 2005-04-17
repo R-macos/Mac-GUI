@@ -496,7 +496,7 @@ Several aditional preference panes have been implemented (see below).
 
 @menu
 * Startup::
-* Editor::
+* Editor Preferences::
 * Syntax Colors::
 * Console Colors::
 * Quartz window::
@@ -522,8 +522,8 @@ entries, to cleanup history entries (this is very useful to remove blank lines w
 multiple lines using Command-Return) and the strip comments before the entry is added to the
 history.
 
-@node Editor
-@subsubsection Editor
+@node Editor Preferences
+@subsubsection Editor Preferences
 If Built-in editor is selected, allows enable/disable of syntax coloring, brace highlighting
 and the showing of line numbers. If External editor is selected, allows specifying which
 external editor. That editor will be used for all editing functions. It runs as a separate
