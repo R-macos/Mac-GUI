@@ -129,7 +129,7 @@ for Mac OS X is mostly preferred by "traditional" Macintosh users.
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
 @section What machines does R for Mac OS X run on?
 
-R for Mac OS X requires Mac OS X version 10.2 or higher to run. The latest version of the system is
+R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.app GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is
 always preferable though. We do not support Mac OS X version 10.1.
 
 @node How can R for Mac OS X be obtained and installed?, , What machines does R for Mac OS X run on?, Introduction
@@ -147,34 +147,33 @@ always preferable though. We do not support Mac OS X version 10.1.
 @node What is needed to build R, How to configure and build R, , Building R from sources
 @section What is needed to build R
 @menu
-* the C/C++ compiler gcc 3.3::
-* the Fortran compiler g77 for gcc 3.3::
-* the libreadline 4.3 or higher (optional)::
-* the X11 window server (optional)::
-* the X11 TclTk headers and libraries (optional)::
-* the Aqua TclTk headers and libraries (optional)::
-* a TeX suite of tools for documentation (optional)::
+* C/C++ compiler (gcc 3.3 or later)::
+* Fortran compiler (g77 3.3 or later)::
+* libreadline 4.3 or higher (optional)::
+* X11 window server (optional)::
+* X11 TclTk headers and libraries (optional)::
+* Aqua TclTk headers and libraries (optional)::
+* TeX suite of tools for documentation (optional)::
 @end menu
 
-@node the C/C++ compiler gcc 3.3
-@subsection the C/C++ compiler gcc 3.3
+@node C/C++ compiler (gcc 3.3 or later)
+@subsection C/C++ compiler (gcc 3.3 or later)
 
-If you have Mac OS X 10.3 (aka Panther) you just need to install the software from the Xcode Tools CD 
-(which is CD number 4). This is only true if you bought Panther. If your computer came with pre-installed version of OS X, look into /Applications/Installers. Recent installations feature "Xcode Tools" folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Panther is version 1.5).
+If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD 
+(which is CD number 4). This is only true if you bought Panther. If your computer came with pre-installed version of OS X, look into /Applications/Installers. Recent installations feature "Xcode Tools" folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Panther is version 1.5). During the installation, don't forget to setect X11 SDK if you plan to use X11.
 
 If you are using Mac OS X 10.2 (aka Jaguar) then you should download and install the 
 Apple Developers Tools Dec 2002 including the latest updates which dates August 2003. Either it comes 
 on a separate CD with your Mac or you can download these from the Apple Developer Connection site (@pxref{Apple Developer Connection})
-In either cases be sure you have gcc version 3.3 just by typing in a Terminal window 
+In either cases be sure you have gcc version 3.3 or later - you can check the version by typing the following in a Terminal window:
 @example
 gcc --version
 @end example
 
-@node the Fortran compiler g77 for gcc 3.3
-@subsection the Fortran compiler g77 for gcc 3.3
+@node Fortran compiler (g77 3.3 or later)
+@subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version of the g77 Fortran compiler 3.3 or later which is built for Mac OS X. The following instructions apply to binaries coming from  HPC for Mac OS X page @uref{http://hpc.sourceforge.net}. Please note: there are two versions of the g77 binaries, one for Jaguar (Mac OS X 10.2.x) and one for Panther (Mac OS X 10.3.x). 
-Use the appropriate one.
+Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. The following instructions apply to binaries coming from HPC for Mac OS X page @uref{http://hpc.sourceforge.net}. Please note: there are multiple versions of the Fortran binaries, depending on the system you use - pick the appropriate one.
 
 Once you have the binaries, please do the following (you'll be asked for a root password):
 cd to the download folder and type
@@ -185,12 +184,13 @@ rehash
 It installs everything in @emph{/usr/local}. The name of the .tar.gz archive can be different, see the related web page.
 
 
-@node the libreadline 4.3 or higher (optional)
-@subsection the libreadline 4.3 or higher (optional)
-This library is optional. 
-You need this library to be able to retrieve history using use arrow keys or for tab completion of filenames
-when you run R as a command line tool. The original source archive is located at GNU Org web page @uref{ftp://www.gnu.org}. 
-You need to modify the original file @emph{shlib/Makefile.in} in order to make it
+@node libreadline 4.3 or higher (optional)
+@subsection libreadline 4.3 or higher (optional)
+The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with readline support, so you can skip this step.
+
+Readline is necessary if you want to be able to retrieve history using use arrow keys or for tab completion of filenames
+when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
+If using readline 4.3, you need to modify the original file @emph{shlib/Makefile.in} in order to make it
 work under Mac OS X 10.2.x and later (this is because libreadline needs to be linked against
 @emph{-lncurses -lcc_dynamic}). If you can do better at configure time working on the original archive 
 let me know. I suggest you to download my patched version from @uref{http://www.economia.unimi.it/R}. 
@@ -204,19 +204,18 @@ sudo make install
 It installs everything in @emph{/usr/local}.
 These instructions apply to both Jaguar and Panther.
 
-@node the X11 window server (optional)
-@subsection the X11 window server (optional)
-If you have Panther, you probably have the X11 Window server already installed on your system. If it's not installed, you can re-install it using the original Panther installtion CD/DVD. This is what you need to run a version of R with the capability of using the X11 device, but it isn't sufficient if you want to build it.
-You need to install the additional X11 SDK package from the Xcode Tools CD. 
-Please note: the installer on the Xcode Tools CD does not install the X11 SDK by default: 
-you need to select it during the installation (custom install) or look inside the Xcode Tools CD and install the X11 SDK manually.
+@node X11 window server (optional)
+@subsection X11 window server (optional)
+X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
+Mac OS X 10.3 (Panther) and later include X11 on the installation CD/DVD, however it is not selected by default. If it is not installed, you can re-install it using the original installtion CD/DVD. The corresponding package is either visible directly, or you can select the multi-package of bundled software, control-click on it, select "Show Original" - in the same directory that it will warp you to there is the X11 installer, labeled "X11User.pkg".
 
-If you have Jaguar, you'll need to install both the X11 Window server and the X11 SDK package from 
-the XFree86 web page.  The Apple site only supports the latest version of the OS (at the moment Panther).
-Users report that other version of X11 Window Servers (other than the one distributed by Apple) work as well.
+In addition to the user part, you need to install the X11 SDK package from the Xcode Tools CD. Again, it is not selected by default, so make sure you select it during the installation of Xcode Tools.
 
-@node the X11 TclTk headers and libraries (optional)
-@subsection the X11 TclTk headers and libraries (optional)
+Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two options to obtain X11 for Jagure: Apple released X11 beta for Jaguar which is still around, although not officially supported. It features the Quartz mwindow manager that integrates nicely into the system. If you are unable to find Apple's X11 beta, you will need to install both the X11 Window server and the X11 SDK package from 
+the XFree86 web page. Other versions such as using fink are available, too.
+
+@node X11 TclTk headers and libraries (optional)
+@subsection X11 TclTk headers and libraries (optional)
 If you plan to use tcltk package for R, you need to download the sources of the Tcl and Tk 8.4.x packages to build yourself the sources. 
 The original sources can be found on the official TclTk web page @uref{http://www.tcl.tk/software/tcltk/8.4.html}.
 Please do the following respecting the sequence (you'll be asked for a root password). These are examples for version 8.4.4
@@ -243,9 +242,9 @@ make
 sudo make install
 @end example
 
-@node the Aqua TclTk headers and libraries (optional)
-@subsection the Aqua TclTk headers and libraries (optional)
-Once you have installed the AquaTclTk libraries and headers files you should configure @R{} using this additional
+@node Aqua TclTk headers and libraries (optional)
+@subsection Aqua TclTk headers and libraries (optional)
+Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries and those will be detected automatically. For older versions of OS X you need to obtain those separately. Once you have installed the AquaTclTk libraries and headers files, you should configure @R{} using this additional
 arguments
 @example
 --with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh 
@@ -254,8 +253,8 @@ TCLTK_LIBS='-framework Tcl -framework Tk'
 TCLTK_CPPFLAGS='-I/Library/Frameworks/Tcl.Framework/Headers -I/Library/Frameworks/Tk.Framework/Headers'
 @end example
 
-@node a TeX suite of tools for documentation (optional)
-@subsection a TeX suite of tools for documentation (optional)
+@node TeX suite of tools for documentation (optional)
+@subsection TeX suite of tools for documentation (optional)
 There is a nice installer, called the i-installer II, that allows you to install a complete 
 teTeX distribution. You can find details on the i-installer at @uref{http://www.rna.nl/ii.html}. 
 The teTeX is one of the i-Packages.
@@ -297,13 +296,13 @@ As in the above, you don't need to specify the name @emph{R.framework} in the pa
 
 @node  How to build and install the R.app,  ,How to install R, Building R from sources
 @section How to build and install the R.app
-At the moment, there is nothing special to  do to build the R.app.
-You just need to install it using
+The sources for the R.app GUI are currently not included in the global R source distribution. They are available in the form of a Xcode project on the R for Mac OS X pages as well as the SVN repository. Before compiling R.app make sure R is installed as @emph{/Library/Frameworks/R.framework} and working.
+
+Using Xcode load the @emph{R.xcode} project, select @emph{R} target (which is the default), set @emph{Deployment} building style and build. The same effect can be achieved on the command line in the @emph{Mac-GUI} directory by typing:
 @example
-make install-aqua
+xcodebuild -target R -buildstyle Deployment
 @end example
-and it will install the @emph{R.app} application in the @emph{Applications} folder on your system.
-The install procedure fails if the @file{R.framework} has not been installed first.
+The build includes both R.app and the this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
 
 @node Internationalization of the R.app, Command line version of R, Building R from sources, Top
 @chapter Internationalization of the R.app
@@ -311,21 +310,18 @@ TBP.
 
 @node Command line version of R, R.app, Internationalization of the R.app, Top
 @chapter Command line version of R
-The command line version of @R{} is nothing but a classic unix-like implementation of @R{}. So general 
+The command line version of @R{} is identical to @R{} as used on other unix operating systems. Therefore general 
 documentation for @R{} applies to this version as well.
 On each release (and patched-release) ready to use binaries are distributed through @CRAN{}.
 These binaries come with a common installer used by R.app so please read
 the related notes (@pxref{How to get R.app}).
-To use @R{} you probably need to add a symbolic link on your System as the @R{} binary is 
+To use @R{} you probably need to add a symbolic link on your system as the @R{} binary is 
 located inside the framework.
-Suppose you have the @emph{/usr/local/bin} directory on your System, than you should just 
-type in your Terminal (a root password is required)
+Suppose you have the @emph{/usr/local/bin} directory on your system (if you don't have one ayou can use @emph{/usr/bin} instead) you should just type in your Terminal (a root password is required)
 @smallexample
 sudo ln -s /Library/Frameworks/R.framework/Resources/R /usr/local/bin/R
 @end smallexample
-Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment variable, you'll be able to launch R from any location
-on your System just by typing @emph{R}.
-In this way, when you install a new version of the @emph{R.framework} this link will point to the latest R binary.
+Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment variable, you'll be able to launch R from any location on your system just by typing @emph{R}. In this way, when you install a new version of the @emph{R.framework} this link will point to the latest R binary.
 
 @node R.app
 @chapter R.app
@@ -342,19 +338,13 @@ In this way, when you install a new version of the @emph{R.framework} this link 
 
 @node How to get R.app
 @section How to get R.app
-The @file{bin/macosx} directory of a @CRAN{} site contains a standard
-Apple installer package named @file{R.dmg.sit} compressed in Aladdin
-Stuffit format.  Once downloaded, uncompressed and executed, the
-installer will install the current non-developer release of R.app.  R.app  is
-a native, GUI based Mac OS X Darwin version of R. 
-Inside
-@file{bin/macosx/@var{x}.@var{y}} there are prebuilt binary packages to
-be used with R corresponding to the ``@var{x}.@var{y}'' release of
-R. The installation of these packages is available through the
-``Package'' menu of the R.app (@pxref{Packages Menu}). 
+R.app is part of the binary distribution of R for Mac OS X available from @CRAN{}. That distribution consists of one disk image containing multiple packages including R framework and R.app.
+
+Development versions of R.app are made available on daily basis in the form of a disk image containing the R.app itself. See the Mac OS X pages on @CRAN{} for detail how to obtain such images.
 
 @node How to install the R.app
 @section How to install the R.app
+R.app is installed the same way as the R framework, namely using binary package provided on @CRAN{}. The @file{bin/macosx} directory of a @CRAN{} site contains a standard Apple installer package inside a disk image named @file{R.dmg} (optinally containing version number). Download and double-click the image. New window will appear with a package icon representing the installer. Double-click that icon and it will install the current non-developer release of R, including R.app.
 
 @node The R Console
 @section The R Console
@@ -411,6 +401,7 @@ colors (@pxref{Preferences}).
 @node General Features
 @section General Features
 @menu
+* Editor::
 * Editor undo and line numbers::
 * Editor function list::
 * Editor text completion::
@@ -424,6 +415,10 @@ colors (@pxref{Preferences}).
 * Preference Panes::
 @end menu
 
+@node Editor
+@subsection Editor
+R.app provides an integrated editor for editing of R code. It sports a number of features designed to help developing code inside R. The probably most often used function is the ability to execute code directly from the editor by pressing Command+Return. Other features include syntax highlighting, brace-matching, code completion and function indexing.
+
 @node Editor undo and line numbers
 @subsection Editor undo and line numbers
 The editor supports undo/redo operations on an appropriate level of granularity (used to
@@ -433,20 +428,18 @@ associated Preference Pane allows enabling/disabling of the line numbers, as wel
 number gutter width and text margin width. Note: Right now the line number system is fairly crude
 and makes the editor really slow on large files (1000s of lines). It will help to disable it
 for such large files.
-					
+
 @node Editor text completion
 @subsection Editor text completion
-Completion of typed input in the editor is available through the Edit menu 'Complete' or by 
-typing fn-tab.
+Completion of typed input (both file names and R code) in the editor is available through the Edit menu 'Complete' or by typing fn-tab. It uses the same facilities as the console window.
 
 @node Editor function list
 @subsection Editor function list
-The editor provides a popup function list for functions defined in the script being edited.
+The editor maintains a popup list of functions defined in the edited document. The list is available in the toolbar and is updated as you type. Selecting a function from that list causes the cursor to jump to the beginning of the function.
 
 @node Editor syntax coloring
 @subsection Editor  syntax coloring
-It is possible to change the syntax highlighting colors using the Syntax Color Preference
-Pane (see below)
+The editor supports syntax-highlighting for R code. It is possible to change the syntax highlighting colors using the Syntax Color Preference Pane (see below)
 		
 @node Editor (internal and external)
 @subsection Editor (internal and external)
@@ -461,8 +454,7 @@ AppleScript it is easy to implement Command-E and Command-Return like functional
 
 @node Editor help
 @subsection Editor help
-The editor contains a light-weight help system, either using an exact search or an approximate
-search.
+The editor contains a light-weight help system in form of a search filed placed inside the toolbar. It is possible to use either an exact or approximate search.
 		
 @node Drag & drop
 @subsection Drag & drop
@@ -946,7 +938,7 @@ define the environment variable DISPLAY before attempting to use X11 from inside
 @example
 Sys.putenv("DISPLAY"=":0")
 @end example
-If you don't like the X11 GUI you would probably want to build R using the Aqua version of TclTk (@pxref{the Aqua TclTk headers and libraries (optional)}).
+If you don't like the X11 GUI you would probably want to build R using the Aqua version of TclTk (@pxref{Aqua TclTk headers and libraries (optional)}).
 After installing the R.framework you should do the following to have the quartz device working under Aqua TclTk. Open a
 Terminal window and move inside the @file{Resources/bin} directory of the @file{R.framework}
 (usually @file{/Library/Frameworks/R.framework}), then type the following
