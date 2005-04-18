@@ -191,8 +191,7 @@ It installs everything in @file{/usr/local}. The name of the .tar.gz archive can
 @subsection libreadline 4.3 or higher (optional)
 The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with readline support, so you can skip this step.
 
-Readline is necessary if you want to be able to retrieve history using use arrow keys or for tab completion of filenames
-when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
+Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
 If using readline 4.3, you need to modify the original file @file{shlib/Makefile.in} in order to make it
 work under Mac OS X 10.2.x and later (this is because libreadline needs to be linked against
 @code{-lncurses -lcc_dynamic}). If you can do better at configure time working on the original archive 
@@ -247,7 +246,7 @@ sudo make install
 
 @node Aqua TclTk headers and libraries (optional), TeX suite of tools for documentation (optional), X11 TclTk headers and libraries (optional), What is needed to build R
 @subsection Aqua TclTk headers and libraries (optional)
-Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries and those will be detected automatically. For older versions of OS X you need to obtain those separately. Once you have installed the AquaTclTk libraries and headers files, you should configure @R{} using this additional
+Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries and those will be detected automatically - no special parameters needed. For older versions of OS X you need to obtain Aqua TclTk separately. Once you have installed the AquaTclTk libraries and headers files, you can configure @R{} using these additional
 arguments
 @example
 --with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh 
@@ -258,9 +257,11 @@ TCLTK_CPPFLAGS='-I/Library/Frameworks/Tcl.Framework/Headers -I/Library/Framework
 
 @node TeX suite of tools for documentation (optional),  , Aqua TclTk headers and libraries (optional), What is needed to build R
 @subsection TeX suite of tools for documentation (optional)
-There is a nice installer, called the i-installer II, that allows you to install a complete 
-teTeX distribution. You can find details on the i-installer at @uref{http://www.rna.nl/ii.html}. 
-The teTeX is one of the i-Packages.
+There is a nice installer, called the @emph{i-Installer II}, that allows you to install a complete 
+te@TeX{} distribution. You can find details on the i-Installer at @uref{http://www.rna.nl/ii.html}. 
+The te@TeX{} is one of the i-Packages.
+
+Note: You may also want to install @TeX{}Shop (@uref{http://www.uoregon.edu/~koch/texshop/texshop.html}). Beside wonderful GUI for editing @TeX{} files that page also provides many useful links for @TeX{} on Mac OS X.
 
 @node How to configure and build R, How to install R, What is needed to build R, Building R from sources
 @section How to configure and build R
@@ -273,7 +274,7 @@ make
 @end example
 This will configure R to be built as a Framework to be installed inside your @emph{/Library/Frameworks} directory with the name 
 @emph{R.framework}. You can change the default location of the @emph{R.framework} 
-installation at configure time by specifying the flag @emph{--enable-R-framework[=DIR]}, i.e. 
+installation at configure time by specifying the flag @code{--enable-R-framework[=DIR]}, i.e. 
 with something like
 @example
 ./configure --with-blas='-framework vecLib' --with-lapack 
@@ -301,13 +302,13 @@ As in the above, you don't need to specify the name @emph{R.framework} in the pa
 @section How to build and install the R.app
 The sources for the R.app GUI are currently not included in the global R source distribution. They are available in the form of a Xcode project on the R for Mac OS X pages as well as the SVN repository. Before compiling R.app make sure R is installed as @emph{/Library/Frameworks/R.framework} and working.
 
-Using Xcode load the @emph{R.xcode} project, select @emph{R} target (which is the default), set @emph{Deployment} building style and build. The same effect can be achieved on the command line in the @emph{Mac-GUI} directory by typing:
+Using Xcode load the @emph{R.xcode} project, select @emph{R} target (which is the default), set @emph{Deployment} building style and build. The same effect can be achieved on the command line in the @file{Mac-GUI} directory by typing:
 @example
 xcodebuild -target R -buildstyle Deployment
 @end example
-The build includes both R.app and the this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
+The build includes both R.app and this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
 
-R.app does not need to be installed in any specific way. Building R.app results in the R.app bundle which appears as one R icon. This application bundle can be run from anywhere and it is customary to place it in the @emph{Applications} folder.
+R.app does not need to be installed in any specific way. Building R.app results in the R.app bundle which appears as one R icon. This application bundle can be run anywhere and it is customary to place it in the @emph{Applications} folder.
 
 @node Command line version of R, R.app, Building R from sources, Top
 @chapter Command line version of R
@@ -351,7 +352,7 @@ Development versions of R.app are made available on daily basis in the form of a
 
 @node How to install the R.app, The R Console, How to get R.app, R.app
 @section How to install the R.app
-R.app is installed the same way as the R framework, namely using binary package provided on @CRAN{}. The @file{bin/macosx} directory of a @CRAN{} site contains a standard Apple installer package inside a disk image named @file{R.dmg} (optinally containing version number). Download and double-click the image. New window will appear with a package icon representing the installer. Double-click that icon and it will install the current non-developer release of R, including R.app.
+R.app is installed the same way as the R framework, namely using binary package provided on @CRAN{}. The @file{bin/macosx} directory of a @CRAN{} site contains a standard Apple installer package inside a disk image named @file{R.dmg} (optinally containing the version number). Download and double-click the image. New window will appear with a package icon representing the installer. Double-click that icon and it will install the current non-developer release of R, including R.app.
 
 @node The R Console, General Features, How to install the R.app, R.app
 @section The R Console
@@ -374,22 +375,18 @@ The current design of the R Console is to have a single frame for input (user) a
 @subsection  Copy and Paste
 Copy and paste works in R as in any other Macintosh application.
 
-If you want high resolution graphic exports, you can save the PDF format using the @emph{File/Save as} menu item (@pxref{Quartz device}). Or you can use supported formats in R through pdf(), jpeg() etc (type ?capabilities 
-to get more details).
+If you want high resolution graphic exports, you can save the PDF format using the @emph{File/Save as} menu item (@pxref{Quartz device}). Or you can use supported formats in R through @code{pdf()}, @code{jpeg()} etc. (type @code{?capabilities} to get more details).
 
 
 @node The current and startup working directories, Resizing the R Console, Copy and Paste, The R Console
 @subsection The current and startup working directories
-If not otherwise specified in the Preferences (@pxref{Preferences}), or if the specified path is no longer available, then
-the default working directory at startup is the user home.
-The working directory can be changed using the @emph{setwd} R command or using the @emph{Misc} menu item @emph{Change working directory}.
-The current working directory is displayed on the main bar of the R Console window.
+If not otherwise specified in the Preferences (@pxref{Preferences}), or if the specified path is no longer available, then the default working directory at startup is the user home.
+The working directory can be changed using the @emph{setwd} R command or using the @emph{Misc} menu item @emph{Change working directory}. Finally it is possible to use a specific directory for a single @R{} session by dragging a folder onto the R.app icon. If R.app is not runnig, this will cause R.app to be started in the directory corresponding to the folder dragged. The same can be achieved on the command line - for example @code{open -a R .} causes R.app to be started using the current directory as the startup working directory.
 
 @noindent
 This feature is useful if you want different startup procedures defined by the @file{.Rprofile}; you can 
 edit a @file{.Rprofile} (containing you personal initialization @R{} commands) in a particular directory and use
-the Preferences to change the startup directory. Next time you launch @file{R.app} the @file{.Rprofile} is read and executed
-by @R{} at startup. This is the equivalent on Unix (or the command line) to launch @R{} from different directories.
+the Preferences (or any other method mentioned above) to change the startup directory. Next time you launch @file{R.app} the @file{.Rprofile} is read and executed by @R{} at startup. This is the equivalent on Unix (or the command line) to launch @R{} from different directories.
 
  
 @node Resizing the R Console, R Console text colors, The current and startup working directories, The R Console
@@ -910,8 +907,8 @@ any other interactive device. For its PDF nature it is also resolution independe
 @node Interactive mode, Saving the image, Quartz device, Quartz device
 @section Interactive mode
 The quartz device allows for interaction. You can use both @command{identify} and @command{locator} functions.
-To break the sequence you should press the ESC key on your keyboard as Apple's mouse have ever had only one
-button.
+To break the sequence you should press the @key{ESC} key on your keyboard as Apple's mouse have ever had only one
+button. If you happen to have a multi-button mouse, you can use any of the additional buttons to break the loop, unless you re-defined the function of the buttons.
 
 @node Saving the image, Copying the image into the clipboard, Interactive mode, Quartz device
 @section Saving the image
@@ -1008,20 +1005,15 @@ yet running it will be launched.
 
 @node How can I interrupt lengthy operations or output?, I don't see a thing when installing packages!, What happens if I drag a file on the R icon?, Sparse questions
 @section How can I interrupt lengthy operations or output?
-You can now use the standard Macintosh control break sequence, that is you should press
-"Cmd option" and "." (dot). This will interrupt any @R{} loops. The "Esc" key gives you the same result. 
+In R.app you can use the standard Macintosh control break sequence, that is you should press @kbd{@key{Cmd}-.}. This will interrupt any @R{} loops. The @key{ESC} key gives you the same result.
+
+For the command line version the same is achieved by pressing @kbd{@key{Ctrl}-c}. Both applications honor the @code{INT} signal if you know what that means.
 
 @node I don't see a thing when installing packages!,  , How can I interrupt lengthy operations or output?, Sparse questions
 @section I don't see a thing when installing packages!
-Well, this is not a question but the answer is that you are not looking at the right place.
-Every input and output which is not @R{} specific (i.e. the output of standard commands) is generally sent to
-the standard output (stdout) or standard error (stderr) depending on its nature. In particular every call to the
-@command{system} function, executes outside @R{} in a Mac OS X shell. The package installation is done via
-the @command{system} facility. 
-You have to use the Preferences to redirect the stderr and/or the stdout to the @R{} Console (see @ref{Misc tab})
-or you can look at the @emph{Console} application inside @file{/Applications/Utilities} on your system.
-This applies to every GUI application on Mac OS X so, as a general rule, if an application behaves strangely or quits,
-please have a look to the @emph{Console} application.
+The output is not produced continuously during the package installation. Unlike previous GUIs R.app does its best to display the output as soon as possible, but for example the documentation script does not produce anything until done.
+
+Also note that the development build of R.app sends output to the error console instead of the screen. You may want to check the @emph{Console} application in that case.
 
 @bye
 
