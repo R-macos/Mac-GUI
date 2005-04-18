@@ -125,18 +125,23 @@ It also contains a user guide to the R.app version of @R{}.
 @section How many versions of R for Mac OS X?
 
 There is currently only one version of R for Mac OS X.
-But R on Mac OS X can be used as a command-line application (@pxref{Command line version of R}), like on any
-other Unix-like system, or via the R.app (@pxref{R.app}). This second approach in using R
-for Mac OS X is mostly preferred by "traditional" Macintosh users.
+However, @R{} on Mac OS X can be used either on the command-line (@pxref{Command line version of R}) like on other Unix systems, or via the R.app GUI (@pxref{R.app}). The second approach is mostly preferred by Macintosh users.
 
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
 @section What machines does R for Mac OS X run on?
 
-R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.app GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is
-always preferable though. We do not support Mac OS X version 10.1.
+R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.app GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is always preferable, though. We do not support Mac OS X version 10.1 and earlier.
+
+@R{} can be compiled from sources as a pure 64-bit application on PowerMac G5 machines, but currently the R.app GUI does not support such setup.
 
 @node How can R for Mac OS X be obtained and installed?,  , What machines does R for Mac OS X run on?, Introduction
 @section How can R for Mac OS X be obtained and installed?
+
+@R{} for Mac OS X is available on @CRAN{} in the form of a disk image containing a multi-package consisting of the R framework, the R.app GUI and optional libraries. The image is usually named @file{R.dmg} with optional version number.
+
+The installation is done by double-clicking on the disk image, which opens a new Finder window with the installer package, followed by double-clicking on that package installer. The installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the installer will require password or login of an administrator. The installation can be customized, but the default (installing R framework and R.app) is suitable for most users.
+
+If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes.
 
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
@@ -173,6 +178,8 @@ In either cases be sure you have gcc version 3.3 or later - you can check the ve
 gcc --version
 @end example
 
+Note that for advanced optimization specifically for PowerMac G5 machines you will need gcc version 4.0 or higher.
+
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
@@ -186,6 +193,7 @@ rehash
 @end example
 It installs everything in @file{/usr/local}. The name of the .tar.gz archive can be different, see the related web page.
 
+Please note that it is important that the version of the Fortran compiler matches the version of your C compiler! The build will likely fail if that is not the case. It is also highly recommended to use compiler with static supporting libraries. Especially for gfortran 4.0 it is highly recommended to remove any dynamic libraries such as @code{libgfortran.dylib}. Failing to do so will produce binaries that fail all checks (see @emph{R-admin} documentation for details - this issue is not Mac-specific).
 
 @node libreadline 4.3 or higher (optional), X11 window server (optional), Fortran compiler (g77 3.3 or later), What is needed to build R
 @subsection libreadline 4.3 or higher (optional)
@@ -209,7 +217,7 @@ These instructions apply to both Jaguar and Panther.
 @node X11 window server (optional), X11 TclTk headers and libraries (optional), libreadline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
-Mac OS X 10.3 (Panther) and later include X11 on the installation CD/DVD, however it is not selected by default. If it is not installed, you can re-install it using the original installtion CD/DVD. The corresponding package is either visible directly, or you can select the multi-package of bundled software, control-click on it, select "Show Original" - in the same directory that it will warp you to there is the X11 installer, labeled "X11User.pkg".
+Mac OS X 10.3 (Panther) and later include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installtion CD/DVD. The corresponding package is either visible directly, or you can select the multi-package of bundled software, control-click on it, select @samp{Show Original} - in the same directory that it will warp you to there is the X11 installer, labeled @samp{X11User.pkg}.
 
 In addition to the user part, you need to install the X11 SDK package from the Xcode Tools CD. Again, it is not selected by default, so make sure you select it during the installation of Xcode Tools.
 
@@ -952,7 +960,7 @@ sudo /Developer/Tools/Rez -t APPL Carbon.r -o R.bin
 @chapter Internationalization of the R.app
 In R 2.1 both R and the R.app GUI introduced support for internationalization. Among other things this means that both messages and GUI elements can be translated into various languages. R.app automatically detects user's settings in the @emph{International} section of the System Preferences and uses that information to offer translated messages and GUI if available. Please note that both @emph{Language} and @emph{Formats} information is used so they should be set up consistently.
 
-Another change from previous versions (R 2.0 and R.app 1.01) is the support for UTF-8 character encoding. By default R.app uses UTF-8 for newly created docuemnts and for the console. When opening new documents R.app assumes UTF-8 and only if the document violates UTF-8 rules, it will try to fallback to legacy encoding, usually Mac Roman.
+Another change from previous versions (R 2.0 and R.app 1.01) is the support for UTF-8 character encoding. By default R.app uses UTF-8 for newly created documents and for the console. When opening new documents R.app assumes UTF-8 and only if the document violates UTF-8 rules, it will try to fallback to legacy encoding, usually Mac Roman.
 
 If you are interested in translating R.app GUI into other languages, please read the developer documentation @uref{http://developer.r-project.org/Translations.html} for details.
 
@@ -1005,7 +1013,7 @@ yet running it will be launched.
 
 @node How can I interrupt lengthy operations or output?, I don't see a thing when installing packages!, What happens if I drag a file on the R icon?, Sparse questions
 @section How can I interrupt lengthy operations or output?
-In R.app you can use the standard Macintosh control break sequence, that is you should press @kbd{@key{Cmd}-.}. This will interrupt any @R{} loops. The @key{ESC} key gives you the same result.
+In R.app you can use the standard Macintosh control break sequence, that is you should press @kbd{@key{Cmd}-.} (dot). This will interrupt any @R{} loops. The @key{ESC} key gives you the same result.
 
 For the command line version the same is achieved by pressing @kbd{@key{Ctrl}-c}. Both applications honor the @code{INT} signal if you know what that means.
 
