@@ -3,8 +3,16 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
+                changeCleanupHistoryEntries = id; 
                 changeEditOrSource = id; 
+                changeEnforceInitialWorkingDirectory = id; 
+                changeHistoryFileNamePath = id; 
+                changeHistoryFileNamePathToDefault = id; 
+                changeImportOnStartup = id; 
                 changeLibPaths = id; 
+                changeMaxHistoryEntries = id; 
+                changeRemoveDuplicateHistoryEntries = id; 
+                changeStripCommentsFromHistoryEntries = id; 
                 changeWorkingDir = id; 
                 chooseWorkingDir = id; 
             }; 
@@ -12,8 +20,17 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 cbRAquaPath = NSButton; 
+                cleanupHistoryEntries = NSButton; 
                 editOrSource = NSMatrix; 
+                enforceInitialWorkingDirectory = NSButton; 
+                historyFileNamePath = NSTextField; 
+                historyFileNamePathText = NSTextField; 
+                importOnStartup = NSButton; 
                 mainView = NSView; 
+                maxHistoryEntries = NSTextField; 
+                removeDuplicateHistoryEntries = NSButton; 
+                setToDefault = NSButton; 
+                stripCommentsFromHistoryEntries = NSButton; 
                 workingDir = NSTextField; 
             }; 
             SUPERCLASS = NSObject; 

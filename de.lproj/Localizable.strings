@@ -32,10 +32,10 @@
 "Authorize R to run system commands as root" = "Authorisiert R, Befehle als 'root' Administrator auszuführen";
 
 /* From: HelpManager.m (showHelpFor) */
-"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+"Can't find help for topic, would you like to expand the search?" = "Das Hilfethema konnte nicht gefunden werden. Wollen Sie die Suche ausweiten?";
 
-/* From: Tools/History.m (exportHistory)
-   From: Tools/History.m (importHistory) */
+/* From: RController.m (doLoadHistory)
+   From: RController.m (doSaveHistory) */
 "Can't open history file %2" = "Die Verlauf-Datei %2 konnte nicht gefunden werden";
 
 /* From: RController.m (didCloseAll) */
@@ -102,10 +102,13 @@
 "New Document" = "Neues Dokument";
 
 /* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"New Quartz Device" = "New Quartz Device";
+"New Quartz Device" = "Neue Quartz-Fenster";
 
 /* Global string @ */
 "No" = "Nein";
+
+/* From: PackageInstaller.m (reloadURL) */
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Es wurde kein gültiger CRAN Server ausgewählt.\nEs können keine Packete installiert werden, bis ein gültiger Server ausgewählt wird.";
 
 /* Global string @ */
 "OK" = "OK";
@@ -120,9 +123,10 @@
 "Open In Editor" = "Im Editor öffnen";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Package installer";
+"Package installer" = "Package Installer";
 
-/* From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (reloadURL)
+   From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Package Installer";
 
 /* From: PackageInstaller.m (reloadURL) */
@@ -201,7 +205,7 @@
 "Remove Object" = "Objekt entfernen";
 
 /* From: WSBrowser.m (remObject) */
-"Remove Object from Workspace" = "Object aus dem Arbeitsbereich entfernen";
+"Remove Object from Workspace" = "Objekt aus dem Arbeitsbereich entfernen";
 
 /* Remove row - label for a toolbar, keep short! */
 "Remove Row" = "- Zeile";
@@ -230,6 +234,9 @@
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Inhalt des Quartz-Fensters in eine PDF Datei speichern";
 
+/* From: REditorToolbar.m (toolbar) */
+"Save current document" = "Save current document";
+
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Verlauf-Datei speichern";
 
@@ -247,6 +254,12 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "Select Installation Directory" = "Wählen Sie das Installationsverzeichnis";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one" = "Wählen Sie einen Eintrag";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one or more" = "Wählen Sie einen oder mehrere Einträge";
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Wählen Sie das Package-Verzeichnis";
