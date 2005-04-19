@@ -1,5 +1,10 @@
 NEWS
 
+Last-update: 2005-04-18 [SU]
+*	Updated NIB localization script. The operation must be specified
+	on the command line, deliberately there is no default anymore
+*	Updated FAQ
+
 Last-update: 2005-04-15 [SU]
 *	Fixed bug in AMPrefs causing an attempt to release a system font
 *	Added progress indicator to package installer

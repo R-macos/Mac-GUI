@@ -8,16 +8,35 @@ LANGUAGES=`cat LANGUAGES`
 # Get all (non-backup) NIBs in English.lproj assuming that this is where we do active development
 NIBS=`ls -d English.lproj/*.nib | grep -v \~ | awk -F / '{print substr($2,1,length($2)-4)}'`
 
-if [ "$1" == "-h" ]; then
-	echo " Usage $0 [-t]"
+if [[ "x$1" == "x-h" || "x$1" == "x" ]]; then
 	echo " "
-	echo " When -t is used, translation files are not generated, but assumed to exist already."
-	echo " Otherwise files in Translation.strings are overwritten."
+	echo " Usage: $0 -g       - generates translation string files"
+	echo "        $0 -t [-c]  - translates NIBs using translation"
+	echo "                      string files"
+	echo " "
+	echo " Either -g or -t has to be specified in any case."
+	echo " Options: -c  cleanup: results in a more aggressive handling"
+	echo "              of NIBs by discarding all information from the"
+	echo "              localized version of each NIB."
+	echo " "
+	echo " The usual process is to use $0 -g, translate"
+	echo " string files and run $0 -t"
 	echo " "
 	exit 0
 fi
 
 mkdir Translated.strings 2> /dev/null
+
+echo "-----------------------------------------------------------------"
+if [[ "x$1" == "x-t" || "x$2" == "x-t" ]]; then
+	echo "*** Using translated string for localization"
+else
+	echo "*** Generating translated strings"
+fi
+if [[ "x$1" == "x-c" || "x$2" == "x-c" ]]; then
+	echo "*** Cleanup requested - discarding layout in localized files."
+fi
+echo "-----------------------------------------------------------------"
 
 # for each languange ...
 for LANG in $LANGUAGES; do
@@ -26,21 +45,28 @@ for LANG in $LANGUAGES; do
 	for NIB in $NIBS; do
 		if [ -e "$LANG.lproj/$NIB.nib" ]; then
 			# create a strings file with all translations
-			if [ "$1" != "-t" ]; then
+			if [[ "x$1" != "x-t" && "x$2" != "x-t" ]]; then
 				nibtool -8 -I "$LANG.lproj/$NIB.nib" -L "English.lproj/$NIB.nib" > "Translated.strings/$NIB.$LANG.strings"
 			fi
 			if [ ! -e "Translated.strings/$NIB.$LANG.strings" ]; then
 				echo "   $NIB .. ERROR: Can't find translation strings"
 			else
 				rm -rf "$LANG.lproj/temp.nib" "$LANG.lproj/temp~.nib"
-				# merge the changes taking modifications into account
-				nibtool -8 -I "$LANG.lproj/$NIB.nib" -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
-				if [ -e "$LANG.lproj/temp.nib/classes.nib" ]; then
-					cp "$LANG.lproj/temp.nib/"* "$LANG.lproj/$NIB.nib/"
-					rm -rf "$LANG.lproj/temp.nib" "$LANG.lproj/temp~.nib"
-					echo "   $NIB .. OK"
-				else
-					echo "ERROR for language \"$LANG\" and NIB \"$NIB\": Localized nib was not created. Check for nibtool errors."
+				if [[ "x$1" != "x-g" && "x$1" != "x-g" ]]; then
+					if [[ "x$1" == "x-c" || "x$2" == "x-c" ]]; then
+						# "clean" merge - i.e. don't use localized NIB for source
+						nibtool -8  -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
+					else
+						# merge the changes taking modifications into account
+						 nibtool -8 -I "$LANG.lproj/$NIB.nib" -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
+					fi
+					if [ -e "$LANG.lproj/temp.nib/classes.nib" ]; then
+						cp "$LANG.lproj/temp.nib/"* "$LANG.lproj/$NIB.nib/"
+						rm -rf "$LANG.lproj/temp.nib" "$LANG.lproj/temp~.nib"
+						echo "   $NIB .. OK"
+					else
+						echo "ERROR for language \"$LANG\" and NIB \"$NIB\": Localized nib was not created. Check for nibtool errors."
+					fi
 				fi
 			fi
 		else
