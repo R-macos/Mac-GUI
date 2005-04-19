@@ -34,8 +34,8 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
 
-/* From: Tools/History.m (exportHistory)
-   From: Tools/History.m (importHistory) */
+/* From: RController.m (doLoadHistory)
+   From: RController.m (doSaveHistory) */
 "Can't open history file %2" = "Can't open history file %2";
 
 /* From: RController.m (didCloseAll) */
@@ -107,6 +107,9 @@
 /* Global string @ */
 "No" = "No";
 
+/* From: PackageInstaller.m (reloadURL) */
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL.";
+
 /* Global string @ */
 "OK" = "OK";
 
@@ -122,7 +125,8 @@
 /* From: PackageInstaller.m (reloadURL) */
 "Package installer" = "Package installer";
 
-/* From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (reloadURL)
+   From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Package Installer";
 
 /* From: PackageInstaller.m (reloadURL) */
@@ -230,6 +234,9 @@
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Save Content of Quartz Device to PDF file";
 
+/* From: REditorToolbar.m (toolbar) */
+"Save current document" = "Save current document";
+
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Save history File";
 
@@ -247,6 +254,12 @@
 
 /* From: PackageInstaller.m (installSelected) */
 "Select Installation Directory" = "Select Installation Directory";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one" = "Select one";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one or more" = "Select one or more";
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Select Package Directory";
