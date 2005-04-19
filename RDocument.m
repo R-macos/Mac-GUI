@@ -64,6 +64,10 @@
 	[self addWindowController:myWinCtrl];
 }
 
+- (BOOL)writeToFile:(NSString *)fileName ofType:(NSString *)docType {
+	return [super writeToFile:fileName ofType:docType];
+}
+
 - (void) loadInitialContents
 {
 	if (!initialContents) return;
