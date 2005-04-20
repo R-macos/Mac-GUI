@@ -31,6 +31,8 @@
 #import "MiscPrefPane.h"
 #import "../RController.h"
 #import "../Tools/Authorization.h"
+#import "../REngine/REngine.h"
+#import "../REngine/RSEXP.h"
 
 #import <unistd.h>
 #import <sys/fcntl.h>
@@ -154,6 +156,8 @@
 	BOOL flag = [Preferences flagForKey:miscRAquaLibPathKey withDefault: !isAdmin()];
 	[cbRAquaPath setState: flag?NSOnState:NSOffState];
 	
+	[defaultMirror setStringValue:[Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""]];
+	
 	flag=[Preferences flagForKey:editOrSourceKey withDefault: YES];
 	if (flag)
 		[editOrSource selectCellAtRow:0 column:0];
@@ -266,5 +270,25 @@
 	[Preferences setKey:stripCommentsFromHistoryEntriesKey withFlag:flag];
 }
 
+- (IBAction) changeMirrorURL:(id)sender {
+	NSString *url = [defaultMirror stringValue];
+	[Preferences setKey:defaultCRANmirrorURLKey withObject:url];
+	if ([url isEqualToString:@""]) url=@"@CRAN@";
+	[[REngine mainEngine] executeString:[NSString stringWithFormat:@"try({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r, CRAN=getOption('repos')['CRAN']) },silent=TRUE)", url]];
+}
+
+- (IBAction) selectMirror:(id)sender {
+	[[REngine mainEngine] executeString:@"try(chooseCRANmirror(graphics=TRUE),silent=TRUE)"];
+	{
+		RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
+		if (x) {
+			if ([x string] && ![[x string] isEqualToString:@"@CRAN@"]) {
+				[defaultMirror setStringValue:[x string]];
+				[self changeMirrorURL:self];
+			}
+			[x release];
+		}
+	}
+}
 
 @end

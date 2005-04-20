@@ -357,7 +357,14 @@ static RController* sharedRController;
 	SLog(@" - set R options");
 	// force html-help, because that's the only format we can handle ATM
 	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
-	
+
+	SLog(@" - set default CRAN mirror");
+	{
+		NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
+		if (![url isEqualToString:@""])
+			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"try({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) },silent=TRUE)", url]];
+	}
+				
 	SLog(@" - clean up and flush console");
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];

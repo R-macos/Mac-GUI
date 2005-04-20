@@ -66,6 +66,8 @@
 #define removeDuplicateHistoryEntriesKey @"Remove duplicate history entries"
 #define cleanupHistoryEntriesKey @"Cleanup history entries"
 #define stripCommentsFromHistoryEntriesKey @"Strip comment history entries"
+#define defaultCRANmirrorURLKey @"default.CRAN.mirror.URL"
+#define stopAskingAboutDefaultMirrorSavingKey @"default.CRAN.mirror.save.dontask"
 
 #define useQuartzPrefPaneSettingsKey @"Use QuartzPrefPane values"
 #define quartzPrefPaneWidthKey @"QuartzPrefPane width"

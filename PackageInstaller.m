@@ -32,6 +32,7 @@
 #import "REngine/RCallbacks.h"
 #import "REngine/REngine.h"
 #import "Tools/Authorization.h"
+#import "Preferences.h"
 #import <Rversion.h>
 #include <unistd.h>
 
@@ -202,6 +203,7 @@ NSString *location[2] = {
 	if (!optionsChecked) {
 		RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
 		if (!x || ![x string]) { // CRAN is not set - let's try the repos
+			BOOL hadToChoose=NO;
 			SLog(@"PackageInstaller.reloadURL: checking options - CRAN is not set!");
 			if (x) [x release];
 			x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
@@ -209,18 +211,21 @@ NSString *location[2] = {
 				if (x) [x release];
 				SLog(@" - ['repos']['CRAN'] is not set, either. Launching mirror selector.");
 				[[REngine mainEngine] executeString:@"chooseCRANmirror()"];
+				hadToChoose=YES;
 				x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
 			}
 			if (x && [x string] && ![[x string] isEqualToString:@"@CRAN@"]) { // repos is set now - push it to CRAN
 				[x release];
 				[[REngine mainEngine] evaluateString:@"options(CRAN=getOption('repos')['CRAN'])"];
 				x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+				if (hadToChoose && ![Preferences flagForKey:stopAskingAboutDefaultMirrorSavingKey withDefault:NO])
+					NSBeginAlertSheet(NLS(@"Set as default?"), NLS(@"Yes"), NLS(@"Never"), NLS(@"No"), [self window], self, @selector(mirrorSaveAskSheetDidEnd:returnCode:contextInfo:), NULL, NULL, NLS(@"Do you want me to remember the mirror you selected for future sessions?"));
 			} else {
 				if (x) [x release]; // set x to nil - we need that in case x is @CRAN@
 				x=nil;
 			}
 		}
-		if (!x || ![x string]) { // CRAN is still not set - bail otu with an error
+		if (!x || ![x string]) { // CRAN is still not set - bail out with an error
 			[self busy:NO];
 			NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
 			return;
@@ -269,6 +274,30 @@ NSString *location[2] = {
 	}
 	
 	[self busy:NO];
+}
+
+- (void) mirrorSaveAskSheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	switch(returnCode) {
+		case NSAlertDefaultReturn: // Yes
+			SLog(@"mirrorSaveAskSheetDidEnd: YES, Save");
+		{
+			RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+			if (x) {
+				NSString *url = [x string];
+				[x release];
+				if (url && ![url isEqualToString:@"@CRAN@"])
+					[Preferences setKey:defaultCRANmirrorURLKey withObject:url];
+			}
+			break;
+		}
+		case NSAlertAlternateReturn: // Never
+			SLog(@"mirrorSaveAskSheetDidEnd: NEVER!");
+			[Preferences setKey:stopAskingAboutDefaultMirrorSavingKey withFlag:YES];
+			break;
+		default:
+			SLog(@"mirrorSaveAskSheetDidEnd: NO, Don't Save");
+	}
 }
 
 - (IBAction)setURL:(id)sender

@@ -65,6 +65,7 @@
  */
 
 #import "Preferences.h"
+#import "RGUI.h"
 
 Preferences *globalPrefs=nil;
 
@@ -153,6 +154,7 @@ Preferences *globalPrefs=nil;
 
 - (void) setKey: (NSString*) key withObject: (id) value
 {
+	SLog(@"Preferences.setKey:\"%@\" withObject:\"%@\"", key, value);
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if (defaults) {
 		[defaults setObject:value forKey:key];
