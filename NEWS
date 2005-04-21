@@ -1,5 +1,11 @@
 NEWS
 
+Last-update: 2005-04-20 [SU]
+*	Added support for default CRAN mirror (preference and check
+	in Package Installer)
+*	Fixed brace highlighting bugs that caused exceptions and crashes
+	int the editor
+
 Last-update: 2005-04-18 [SU, RG]
 *	Updated NIB localization script. The operation must be specified
 	on the command line, deliberately there is no default anymore

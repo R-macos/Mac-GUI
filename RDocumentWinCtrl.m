@@ -89,24 +89,7 @@ NSArray *keywordList=nil;
 		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
 }
 
-- (id)init // NOTE: init is *not* used! put any initialization in windowDidLoad
-{
-    self = [super init];
-    if (self) {
-		document = nil;
-		editorToolbar = nil;
-		hsType = hsTypeExact;
-		updating  = NO;
-		[[Preferences sharedPreferences] addDependent:self];
-		execNewlineFlag = NO;
-		if (!defaultsInitialized) {
-			[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-			defaultsInitialized=YES;
-		}
-		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor selectedTextBackgroundColor], NSBackgroundColorAttributeName, nil];
-    }
-    return self;
-}
+//- (id)init // NOTE: init is *not* used! put any initialization in windowDidLoad
 
 - (void)dealloc {
 	if (highlightColorAttr) [highlightColorAttr release];
@@ -149,6 +132,7 @@ NSArray *keywordList=nil;
 {
     if (self) {
 		hsType=1;
+		currentHighlight=-1;
 		document=nil;
 		updating=NO;
 		helpTempFile=nil;
@@ -495,6 +479,7 @@ NSArray *keywordList=nil;
 	
 	updating=YES;
 	
+	//[self resetHighlights]; // firt make sure we don't mess with temporary attrs
 	[ts beginEditing];
 	while (i < last) {
 		foundItem=NO;
@@ -618,6 +603,7 @@ NSArray *keywordList=nil;
 	characterToCheck = [completeString characterAtIndex:cursorLocation];
 	int skipMatchingBrace = 0;
 	
+	[(REditorTextStorage*)[textView textStorage] resetHighlights];
 	if (characterToCheck == ')') openingChar='(';
 	else if (characterToCheck == ']') openingChar='[';
 	else if (characterToCheck == '}') openingChar='{';
@@ -628,8 +614,7 @@ NSArray *keywordList=nil;
 			unichar c = [completeString characterAtIndex:cursorLocation];
 			if (c == openingChar) {
 				if (!skipMatchingBrace) {
-					[[textView layoutManager] setTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(cursorLocation, 1)];
-					[self performSelector:@selector(resetBackgroundColor:) withObject:NSStringFromRange(NSMakeRange(cursorLocation, 1)) afterDelay:braceHighlightInterval];
+					[(REditorTextStorage*)[textView textStorage] highlightCharacter:cursorLocation];
 					return;
 				} else
 					skipMatchingBrace--;
@@ -648,8 +633,7 @@ NSArray *keywordList=nil;
 				unichar c = [completeString characterAtIndex:cursorLocation];
 				if (c == openingChar) {
 					if (!skipMatchingBrace) {
-						[[textView layoutManager] addTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(cursorLocation, 1)];
-						[self performSelector:@selector(resetBackgroundColor:) withObject:NSStringFromRange(NSMakeRange(cursorLocation, 1)) afterDelay:braceHighlightInterval];
+						[(REditorTextStorage*)[textView textStorage] highlightCharacter:cursorLocation];
 						return;
 					} else
 						skipMatchingBrace--;
@@ -658,12 +642,6 @@ NSArray *keywordList=nil;
 			}
 		}
 	}
-}
-
--(void)resetBackgroundColor:(id)sender
-{
-	// we need to clear the whole BG because the text may have changed in between and we have the old position and not NSRangeFromString(sender)
-	[[textView layoutManager] removeTemporaryAttribute:NSBackgroundColorAttributeName forCharacterRange:NSMakeRange(0,[[[textView textStorage] string] length])];
 }
 
 - (void)textStorageDidProcessEditing:(NSNotification *)aNotification {

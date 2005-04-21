@@ -81,6 +81,8 @@ extern NSColor *shColorIdentifier;
 	id editorToolbar; // toolbar proxy object
 	
 	NSString *helpTempFile; // path to temporary file used for help
+	
+	int currentHighlight; // currently highlighted character
 }
 
 - (void) replaceContentsWithString: (NSString*) strContents;
@@ -88,7 +90,6 @@ extern NSColor *shColorIdentifier;
 
 - (void) updateSyntaxHighlightingForRange: (NSRange) range;
 - (void) highlightBracesWithShift: (int) shift andWarn: (BOOL) warn;
-- (void) resetBackgroundColor: (id)sender; // end of highlighting
 
 - (IBAction)executeSelection:(id)sender;
 - (IBAction)sourceCurrentDocument:(id)sender;

@@ -30,9 +30,22 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "Preferences.h"
 
-@interface REditorTextStorage : NSTextStorage {
-	NSMutableAttributedString* cont;
+@interface REditorTextStorage : NSTextStorage <PreferencesDependent> {
+	NSTextStorage* cont;
+	int currentHighlight;
+	BOOL showMatchingBraces; // if YES mathing braces are highlighted
+	double braceHighlightInterval; // interval to flash brace highlighting for
+	NSDictionary *highlightColorAttr; // attributes set while braces matching
+	BOOL insideReplaceEdited; // this flag is set if 'edited' is being called from within replaceCharacters
+	int pendingHilite; // set to hilite position if hilite is pending that couldn't be performed inside 'edited'
 }
+
+- (NSLayoutManager*) layoutManager;
+- (void) resetHighlights;
+- (void) highlightCharacter: (int) pos;
+- (void) resetBackgroundColor: (id)sender;
+- (void) updatePreferences;
 
 @end
