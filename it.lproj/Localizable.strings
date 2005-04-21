@@ -32,11 +32,11 @@
 "Authorize R to run system commands as root" = "Autorizza R a eseguire comandi di sistema come root";
 
 /* From: HelpManager.m (showHelpFor) */
-"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+"Can't find help for topic, would you like to expand the search?" = "Impossibile trovare help sull'argomento, vuoi estendere la ricerca?";
 
 /* From: Tools/History.m (exportHistory)
    From: Tools/History.m (importHistory) */
-"Can't open history file %2" = "Can't open history file %2";
+"Can't open history file %2" = "Impossibile aprire file history %2";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annulla";
@@ -87,10 +87,10 @@
 "Font Size" = "Dimensione Font";
 
 /* From: RController.m (handleCustomPrint) */
-"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
+"Help for the topic \"%@\" was not found." = "Aiuto per l'argomento \"%@\" non trovato.";
 
 /* From: RController.m (handleCustomPrint) */
-"Help topic not found" = "Help topic not found";
+"Help topic not found" = "Help argomento non trovato";
 
 /* From: RController.m (toolbar) */
 "History" = "History";
@@ -129,7 +129,7 @@
 "Please, specify a valid URL first." = "Specificare una URL valida.";
 
 /* Editor preference group */
-"PrefG-Editor" = "Source Editor";
+"PrefG-Editor" = "Editor Sorgenti";
 
 /* General preference group */
 "PrefG-General" = "Generale";
@@ -210,7 +210,7 @@
 "Remove Rows" = "Elimina Righe";
 
 /* From: REditor.m (toolbar) */
-"Remove selected columns" = "Elimina colonne selzionate";
+"Remove selected columns" = "Elimina colonne selezionate";
 
 /* From: WSBrowser.m (toolbar) */
 "Remove Selected Object" = "Elimina Oggetto Selezionato";
@@ -225,22 +225,22 @@
 "Save" = "Salva";
 
 /* From: RController.m (toolbar) */
-"Save Console Window" = "Salve Contenuto Finestra Console";
+"Save Console Window" = "Salva Contenuto Finestra Console";
 
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Salva contenuto finestra grafica Quartz come file PDF";
 
 /* From: RController.m (doSaveHistory) */
-"Save history File" = "Salva file history";
+"Save history File" = "Registra file history";
 
 /* From: RController.m (saveDocumentAs) */
-"Save R Console To File" = "Salva R Console su File";
+"Save R Console To File" = "Registra R Console su File";
 
 /* From: RController.m (toolbar) */
-"Save R console window" = "Salva R console window";
+"Save R console window" = "Registra R console window";
 
 /* From: RController.m (didCloseAll) */
-"Save workspace image?" = "Salvare un'immagine del workspace?";
+"Save workspace image?" = "Registro un'immagine del workspace?";
 
 /* From: PrefPanes/EditorPrefPane.m (changeEditor) */
 "Select editor application" = "Seleziona applicazione editor";
@@ -267,13 +267,13 @@
 "Show/Hide R command history" = "Mostra/Nascondi R command history";
 
 /* From: RController.m (toolbar) */
-"Source or Load in R" = "Processa o Carica in R";
+"Source or Load in R" = "Elabora o Carica in R";
 
 /* From: RController.m (toolbar) */
-"Source script or load data in R" = "Processa script o carica dati in R";
+"Source script or load data in R" = "Elabora script o carica dati in R";
 
 /* From: RController.m (toolbar) */
-"Source/Load" = "Processa/Carica";
+"Source/Load" = "Elabora/Carica";
 
 /* From: RController.m (toolbar) */
 "Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Lancia il server X11 per permettere ad R di usare il device X11 e Tcl/Tk";
