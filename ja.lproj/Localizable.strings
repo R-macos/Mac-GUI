@@ -34,8 +34,8 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "ヘルプが見つかりませんでした。検索対象を拡大しますか？";
 
-/* From: Tools/History.m (exportHistory)
-   From: Tools/History.m (importHistory) */
+/* From: RController.m (doLoadHistory)
+   From: RController.m (doSaveHistory) */
 "Can't open history file %2" = "履歴ファイル %2 を開けません";
 
 /* From: RController.m (didCloseAll) */
@@ -71,6 +71,9 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "新しい空ファイルをエディタで開く";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Do you want me to remember the mirror you selected for future sessions?" = "Do you want me to remember the mirror you selected for future sessions?";
+
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "保存しない";
 
@@ -87,16 +90,19 @@
 "Font Size" = "フォントサイズ";
 
 /* From: RController.m (handleCustomPrint) */
-"Help for the topic ¥ was not found." = "Help for the topic ¥ was not found.";
+"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
 
 /* From: RController.m (handleCustomPrint) */
-"Help topic not found" = "Help topic not found";
+"Help topic not found" = "ヘルプトピックが見つかりません";
 
 /* From: RController.m (toolbar) */
 "History" = "履歴";
 
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "実行中の処理を中断";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Never" = "Never";
 
 /* From: RController.m (toolbar) */
 "New Document" = "新規文書";
@@ -106,6 +112,9 @@
 
 /* Global string @ */
 "No" = "いいえ";
+
+/* From: PackageInstaller.m (reloadURL) */
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL.";
 
 /* Global string @ */
 "OK" = "OK";
@@ -122,7 +131,8 @@
 /* From: PackageInstaller.m (reloadURL) */
 "Package installer" = "パッケージインストーラ";
 
-/* From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (reloadURL) */
 "Package Installer" = "パッケージインストーラ";
 
 /* From: PackageInstaller.m (reloadURL) */
@@ -219,7 +229,7 @@
 "Removes selected rows" = "選択された行を削除";
 
 /* From: Quartz/RDeviceView.m (drawRect) */
-"Resizing to %g x %g" = "%1$g x %2$g　にリサイズ";
+"Resizing to %g x %g" = "%g x %g　にリサイズ";
 
 /* Global string @ */
 "Save" = "保存";
@@ -228,7 +238,10 @@
 "Save Console Window" = "コンソールウィンドウを保存";
 
 /* From: Quartz/RQuartz.m (saveDocument) */
-"Save Content of Quartz Device to PDF file" = "Quartzデバイスの表示内容をPDFファイルとして保存";
+"Save Content of Quartz Device to PDF file" = "Quartzデバイスの内容をPDFとして保存";
+
+/* From: REditorToolbar.m (toolbar) */
+"Save current document" = "Save current document";
 
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "履歴ファイルの保存";
@@ -248,8 +261,17 @@
 /* From: PackageInstaller.m (installSelected) */
 "Select Installation Directory" = "インストールディレクトリを選択";
 
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one" = "Select one";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one or more" = "Select one or more";
+
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "パッケージディレクトリを選択";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Set as default?" = "Set as default?";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "色を設定";
