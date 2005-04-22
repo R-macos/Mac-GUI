@@ -72,7 +72,7 @@
 "Create a new, empty document in the editor" = "新しい空ファイルをエディタで開く";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Do you want me to remember the mirror you selected for future sessions?" = "Do you want me to remember the mirror you selected for future sessions?";
+"Do you want me to remember the mirror you selected for future sessions?" = "以後のセッションのために選択されたミラーを記憶しますか?";
 
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "保存しない";
@@ -90,7 +90,7 @@
 "Font Size" = "フォントサイズ";
 
 /* From: RController.m (handleCustomPrint) */
-"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
+"Help for the topic \"%@\" was not found." = "トピック \"%@\" に関するヘルプは見つかりません.";
 
 /* From: RController.m (handleCustomPrint) */
 "Help topic not found" = "ヘルプトピックが見つかりません";
@@ -102,7 +102,7 @@
 "Interrupt current R computation" = "実行中の処理を中断";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Never" = "Never";
+"Never" = "決してしない";
 
 /* From: RController.m (toolbar) */
 "New Document" = "新規文書";
@@ -114,7 +114,7 @@
 "No" = "いいえ";
 
 /* From: PackageInstaller.m (reloadURL) */
-"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL.";
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "正しいCRANミラーが選択されていません.\nCRANオプションを正しいミラー先URLに設定しなければ, CRANパッケージをインストールすることはできません.";
 
 /* Global string @ */
 "OK" = "OK";
@@ -241,7 +241,7 @@
 "Save Content of Quartz Device to PDF file" = "Quartzデバイスの内容をPDFとして保存";
 
 /* From: REditorToolbar.m (toolbar) */
-"Save current document" = "Save current document";
+"Save current document" = "現在の文書を保存";
 
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "履歴ファイルの保存";
@@ -262,16 +262,16 @@
 "Select Installation Directory" = "インストールディレクトリを選択";
 
 /* From: REngine/Rcallbacks.m (validateToolbarItem) */
-"Select one" = "Select one";
+"Select one" = "１つ選択";
 
 /* From: REngine/Rcallbacks.m (validateToolbarItem) */
-"Select one or more" = "Select one or more";
+"Select one or more" = "１つ以上を選択";
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "パッケージディレクトリを選択";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Set as default?" = "Set as default?";
+"Set as default?" = "デフォルトに設定しますか?";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "色を設定";

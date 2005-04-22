@@ -881,7 +881,7 @@
 				<integer>55</integer>
 			</dict>
 		</dict>
-		<string>Drag &amp; drop action during R start-up</string>
+		<string>R起動中のドラッグ&amp;ドロップ動作</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1644,7 +1644,7 @@
 				<integer>77</integer>
 			</dict>
 		</dict>
-		<string>Directory:</string>
+		<string>ディレクトリ:</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1867,7 +1867,7 @@
 				<integer>77</integer>
 			</dict>
 		</dict>
-		<string>Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag &amp; drop of a file or a directory on the R icon or using 'open -a R.app &lt;dir-or-file&gt;' will override this setting if not enforced.</string>
+		<string>注: '常に適用'を選択するとこの値が常に強制されます. そうでない場合は, R.app の起動時に明示的に指定されていない場合(RアプリアイコンをダブルクリックしてRを起動した場合など)にこの値が使われます. すなわち, Rアプリアイコンにファイルやディレクトリをドラッグ&amp;ドロップして起動したり, 'open -a R.app &lt;ディレクトリやファイル&gt;'としてRを起動した場合はこの値は使われません. </string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1947,7 +1947,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Always apply</string>
+		<string>常に適用</string>
 		<string>{{2, 2}, {469, 116}}</string>
 		<string>{{17, 342}, {473, 133}}</string>
 		<string>{0, 0}</string>
@@ -1982,7 +1982,7 @@
 				<integer>122</integer>
 			</dict>
 		</dict>
-		<string>Initial working directory</string>
+		<string>初期作業ディレクトリ</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2533,7 +2533,7 @@
 				<integer>77</integer>
 			</dict>
 		</dict>
-		<string>Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory</string>
+		<string>注: 常に同じ履歴ファイルを使いたい場合は, 固定パスを指定して下さい. ( ~/.Rhistory など )</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2613,7 +2613,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Remove duplicate entries in history</string>
+		<string>履歴中の重複を除去</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2680,7 +2680,7 @@
 				<integer>77</integer>
 			</dict>
 		</dict>
-		<string>Max number of entries in history:</string>
+		<string>履歴の最大数:</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2829,7 +2829,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Cleanup history entries</string>
+		<string>履歴を消去</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -2909,7 +2909,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Strip comments in history entries</string>
+		<string>履歴中のコメントを除去</string>
 		<string>{{2, 2}, {469, 221}}</string>
 		<string>{{17, 17}, {473, 238}}</string>
 		<string>{0, 0}</string>
@@ -3289,7 +3289,7 @@
 				<integer>21</integer>
 			</dict>
 		</dict>
-		<string>Select</string>
+		<string>選択</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -3333,7 +3333,7 @@
 				<integer>197</integer>
 			</dict>
 		</dict>
-		<string>Default CRAN mirror</string>
+		<string>デフォルトのCRANミラー</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -4011,7 +4011,7 @@
 			</dict>
 		</dict>
 		<string>NSToolTipHelpKey</string>
-		<string>URL for the default CRAN URL. If left empty, the user will be prompted.</string>
+		<string>デフォルトのCRAN URL. 空白にした場合はユーザに問い合わせます.</string>
 		<dict>
 			<key>$classes</key>
 			<array>
