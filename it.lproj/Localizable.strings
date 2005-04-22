@@ -34,8 +34,8 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Impossibile trovare help sull'argomento, vuoi estendere la ricerca?";
 
-/* From: Tools/History.m (exportHistory)
-   From: Tools/History.m (importHistory) */
+/* From: RController.m (doLoadHistory)
+   From: RController.m (doSaveHistory) */
 "Can't open history file %2" = "Impossibile aprire file history %2";
 
 /* From: RController.m (didCloseAll) */
@@ -71,6 +71,9 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Crea un nuovo documento nell'editor";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Do you want me to remember the mirror you selected for future sessions?" = "Vuoi usare lo stesso mirror per le sessioni future?";
+
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "Non Salvare";
 
@@ -98,6 +101,9 @@
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Interrompe i calcoli di R";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Never" = "Never";
+
 /* From: RController.m (toolbar) */
 "New Document" = "Nuovo Documento";
 
@@ -106,6 +112,9 @@
 
 /* Global string @ */
 "No" = "No";
+
+/* From: PackageInstaller.m (reloadURL) */
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Nessun mirror CRAN valido selezionato.\nNon sarà possibile installare i pacchetti del CRAN a meno di non specificare una URL valida come opzione CRAN.";
 
 /* Global string @ */
 "OK" = "OK";
@@ -122,7 +131,8 @@
 /* From: PackageInstaller.m (reloadURL) */
 "Package installer" = "Installatore Pacchetti";
 
-/* From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (reloadURL) */
 "Package Installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (reloadURL) */
@@ -230,6 +240,9 @@
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Salva contenuto finestra grafica Quartz come file PDF";
 
+/* From: REditorToolbar.m (toolbar) */
+"Save current document" = "Save current document";
+
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Registra file history";
 
@@ -248,8 +261,17 @@
 /* From: PackageInstaller.m (installSelected) */
 "Select Installation Directory" = "Scegliere Directory di Installazione";
 
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one" = "Select one";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one or more" = "Select one or more";
+
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Seleziona Directory Pacchetto";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Set as default?" = "Set as default?";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "Aggiusta Colori";
