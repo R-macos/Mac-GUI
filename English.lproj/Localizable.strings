@@ -71,6 +71,9 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Create a new, empty document in the editor";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Do you want me to remember the mirror you selected for future sessions?" = "Do you want me to remember the mirror you selected for future sessions?";
+
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "Don't Save";
 
@@ -97,6 +100,9 @@
 
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Interrupt current R computation";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Never" = "Never";
 
 /* From: RController.m (toolbar) */
 "New Document" = "New Document";
@@ -125,8 +131,8 @@
 /* From: PackageInstaller.m (reloadURL) */
 "Package installer" = "Package installer";
 
-/* From: PackageInstaller.m (reloadURL)
-   From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (reloadURL) */
 "Package Installer" = "Package Installer";
 
 /* From: PackageInstaller.m (reloadURL) */
@@ -263,6 +269,9 @@
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Select Package Directory";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Set as default?" = "Set as default?";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "Set Colors";
