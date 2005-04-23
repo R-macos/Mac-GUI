@@ -26,17 +26,17 @@
 "Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "Êtes vous sûr de vouloir supprimer l'objet '%@' de l'espace de travail? Vous ne pourrez pas annuler cette action!";
 
 /* From: RController.m (toolbar) */
-"Authentication" = "Authentification";
+"Authentication" = "Autentification";
 
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Autorise R d'effectuer des commandes système en super-utilisateur (root)";
 
 /* From: HelpManager.m (showHelpFor) */
-"Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
+"Can't find help for topic, would you like to expand the search?" = "Ne peut trouver d'aide sur le sujet, voulez vous étendre la recherche?";
 
-/* From: Tools/History.m (exportHistory)
-   From: Tools/History.m (importHistory) */
-"Can't open history file %2" = "Can't open history file %2";
+/* From: RController.m (doLoadHistory)
+   From: RController.m (doSaveHistory) */
+"Can't open history file %2" = "Ne peut ouvrir le fichier historique %2";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annuler";
@@ -71,6 +71,9 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Crée un nouveau document vide dans l'editeur";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Do you want me to remember the mirror you selected for future sessions?" = "Aimeriez vous que je me souvienne de site mirror pour des sessions futures?";
+
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "Ne pas sauver";
 
@@ -87,16 +90,19 @@
 "Font Size" = "Taille Police";
 
 /* From: RController.m (handleCustomPrint) */
-"Help for the topic \"%@\" was not found." = "Help for the topic \"%@\" was not found.";
+"Help for the topic \"%@\" was not found." = "L'aide sur le sujet \"%@\" n'as pas été trouvé.";
 
 /* From: RController.m (handleCustomPrint) */
-"Help topic not found" = "Help topic not found";
+"Help topic not found" = "L'aide sur le sujet est introuvable";
 
 /* From: RController.m (toolbar) */
 "History" = "Historique";
 
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Interrompre le calcul courant de R";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Never" = "Jamais";
 
 /* From: RController.m (toolbar) */
 "New Document" = "Nouveau Document";
@@ -106,6 +112,9 @@
 
 /* Global string @ */
 "No" = "Non";
+
+/* From: PackageInstaller.m (reloadURL) */
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Pas de mirror CRAN valide sélectionné.\nVous serez incapable d'installer des CRAN packages tant que vous ne sélectionnerez pas une site CRAN valide.";
 
 /* Global string @ */
 "OK" = "OK";
@@ -122,7 +131,8 @@
 /* From: PackageInstaller.m (reloadURL) */
 "Package installer" = "Installateur de Package";
 
-/* From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (reloadURL) */
 "Package Installer" = "Installateur de Package";
 
 /* From: PackageInstaller.m (reloadURL) */
@@ -230,6 +240,9 @@
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Sauver le contenu de la fenêtre Quartz dans un fichier PDF";
 
+/* From: REditorToolbar.m (toolbar) */
+"Save current document" = "Sauver le document courant";
+
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Sauver le Fichier historique";
 
@@ -248,8 +261,17 @@
 /* From: PackageInstaller.m (installSelected) */
 "Select Installation Directory" = "Sélectionner le répertoire d'installation";
 
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one" = "Selectionnez en un";
+
+/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+"Select one or more" = "Selectionnez en un ou plus";
+
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Sélectionner le répertoire de Package";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Set as default?" = "Set as default?";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "Choisir Couleurs";

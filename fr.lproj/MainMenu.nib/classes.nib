@@ -17,6 +17,7 @@
             ACTIONS = {
                 activateQuartzDevice = id; 
                 executeSelection = id; 
+                goToLine = id; 
                 sourceCurrentDocument = id; 
                 sourceFile = id; 
             }; 
@@ -60,10 +61,12 @@
             CLASS = PackageInstaller; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                busyIndicator = NSProgressIndicator; 
                 formatCheckBox = NSButton; 
                 getListButton = NSButton; 
                 locationMatrix = NSMatrix; 
                 pkgDataSource = NSTableView; 
+                pkgScrollView = NSScrollView; 
                 pkgWindow = id; 
                 repositoryButton = NSPopUpButton; 
                 urlTextField = NSTextField; 
@@ -100,10 +103,12 @@
                 fontSizeBigger = id; 
                 fontSizeSmaller = id; 
                 getWorkingDir = id; 
+                historyDeleteEntry = id; 
                 historyDoubleClick = id; 
                 installFromBinary = id; 
                 installFromDir = id; 
                 installFromSource = id; 
+                kickstart = id; 
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
                 makeConsoleKey = id; 
@@ -140,6 +145,7 @@
                 RTextView = NSTextView; 
                 WDirView = NSTextField; 
                 clearHistory = NSButton; 
+                deleteEntry = NSButton; 
                 fontSizeField = NSTextField; 
                 fontSizeStepper = NSStepper; 
                 fontSizeView = NSView; 
@@ -174,6 +180,18 @@
             CLASS = SearchTable; 
             LANGUAGE = ObjC; 
             OUTLETS = {TopicHelpView = id; searchTableWindow = id; topicsDataSource = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {cancelSelection = id; returnSelected = id; }; 
+            CLASS = SelectList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                SelectListWindow = id; 
+                cancelButton = NSButton; 
+                listDataSource = NSTableView; 
+                okButton = NSButton; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {
