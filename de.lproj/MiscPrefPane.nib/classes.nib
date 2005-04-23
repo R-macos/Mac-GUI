@@ -1,6 +1,11 @@
 {
     IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
         {
             ACTIONS = {
                 changeCleanupHistoryEntries = id; 
@@ -11,16 +16,19 @@
                 changeImportOnStartup = id; 
                 changeLibPaths = id; 
                 changeMaxHistoryEntries = id; 
+                changeMirrorURL = id; 
                 changeRemoveDuplicateHistoryEntries = id; 
                 changeStripCommentsFromHistoryEntries = id; 
                 changeWorkingDir = id; 
                 chooseWorkingDir = id; 
+                selectMirror = id; 
             }; 
             CLASS = MiscPrefPane; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 cbRAquaPath = NSButton; 
                 cleanupHistoryEntries = NSButton; 
+                defaultMirror = NSTextField; 
                 editOrSource = NSMatrix; 
                 enforceInitialWorkingDirectory = NSButton; 
                 historyFileNamePath = NSTextField; 
