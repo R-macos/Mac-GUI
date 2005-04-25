@@ -150,7 +150,7 @@ static id sharedHMController;
 - (IBAction)whatsNew:(id)sender
 {
 	 REngine *re = [REngine mainEngine];	
-	 RSEXP *x= [re evaluateString:@"file.show(file.path(R.home(),\"NEWS.aqua\"))"];
+	 RSEXP *x= [re evaluateString:@"file.show(file.path(R.home(),\"NEWS\"))"];
 	 if(x==nil)
 		return;
 	[x release];
