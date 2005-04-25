@@ -41,6 +41,7 @@
     NSMutableDictionary *marginAttributes;
 	NSTextView *myTextView;
 	BOOL showLineNos;
+	float gutterThickness;
 }
 
 - (id)initWithScrollView:(NSScrollView *)aScrollView orientation:(NSRulerOrientation)orientation showLineNumbers:(BOOL) use textView:(NSTextView *)tv;

@@ -32,6 +32,7 @@
  */
 
 #import "RRulerView.h"
+#import "RGUI.h"
 
 @interface RRulerView (PrivateMethods)
 
@@ -44,6 +45,7 @@
 @implementation RRulerView
 
 - (id)initWithScrollView:(NSScrollView *)aScrollView orientation:(NSRulerOrientation)orientation showLineNumbers:(BOOL) use textView:(NSTextView *) tv {
+	SLog(@"RRulerView.initWithScrollView setting up line No ruler");
 	showLineNos = use;
     if (self = [super initWithScrollView: aScrollView orientation: orientation]) 
     {
@@ -53,7 +55,10 @@
         } else {
             fontSize = 9.0;
         }
-        
+     
+		[[Preferences sharedPreferences] addDependent:self];
+		[self updatePreferences];
+		
         marginAttributes = [[NSMutableDictionary alloc] init];
         [marginAttributes setObject:[NSFont boldSystemFontOfSize: fontSize] forKey: NSFontAttributeName];
         [marginAttributes setObject:[NSColor disabledControlTextColor] forKey: NSForegroundColorAttributeName];
@@ -67,11 +72,13 @@
         [nc addObserver:self selector:@selector(windowDidUpdate:) name: NSWindowDidUpdateNotification object: myTextView];
     }
 	myTextView = tv;
+	SLog(@" - line No ruler is done");
     return self;
 }
 
 - (void)dealloc
 {
+	[[Preferences sharedPreferences] removeDependent:self];
     [[NSNotificationCenter defaultCenter] removeObserver: self];
     [marginAttributes release];
     [super dealloc];
@@ -88,6 +95,7 @@
 	[self setNeedsDisplay: YES];
 }
 
+// Ruler callback to actually draw
 - (void)drawHashMarksAndLabelsInRect:(NSRect)aRect
 {
 	[self drawEmptyMargin: aRect];        
@@ -96,9 +104,6 @@
 
 -(void)drawEmptyMargin:(NSRect)aRect
 {
-	float gutterThickness;
-	gutterThickness = [[Preferences stringForKey:lineNumberGutterWidthKey
-					withDefault: @"16.0"] floatValue];
     [self setRuleThickness: gutterThickness];
     
     [[NSColor controlHighlightColor] set];
@@ -119,7 +124,8 @@
     NSLayoutManager	*lm;
     NSRect              docRect, lineRect, numRect;
 	BOOL displayNextLineNumber;
-    
+
+    SLog(@"RRulerView.drawNumbersInMargin: %f:%f %f:%f", aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height);
     docRect = [[self scrollView] documentVisibleRect];
     id textView = [[[NSDocumentController sharedDocumentController] currentDocument] textView];
     
@@ -136,28 +142,34 @@
 		// This offsets the margin of our rulerView so that it scrolls with the textView properly.
 		lineRect = NSOffsetRect(lineRect, -docRect.origin.x, -docRect.origin.y);
 		numRect = NSMakeRect(aRect.origin.x, lineRect.origin.y, aRect.size.width, lineRect.size.height);
-        index = NSMaxRange( lineRange );
+		index = NSMaxRange( lineRange );
+		//SLog(@" - draw rect %f:%f %f:%f", numRect.origin.x, numRect.origin.y, numRect.size.width, numRect.size.height);
 		c = [s characterAtIndex:lineRange.location + lineRange.length - 1];
-		if (displayNextLineNumber) {
-			[self drawOneNumberInMargin: rLineNumber inRect: numRect];
-			rLineNumber++;
-			if (!(c=='\n')) {
-				displayNextLineNumber = NO;	
-			} 
-		} else {
-			[self drawOneNumberInMargin: 0 inRect: numRect];
-			if (c=='\n') {
-				displayNextLineNumber = YES;			
+		{
+			BOOL drawIt = lineRect.origin.y+lineRect.size.height>=aRect.origin.y && lineRect.origin.y<=aRect.origin.y+aRect.size.height;
+			if (displayNextLineNumber) {
+				if (drawIt) [self drawOneNumberInMargin: rLineNumber inRect: numRect];
+				rLineNumber++;
+				if (!(c=='\n')) {
+					displayNextLineNumber = NO;	
+				} 
 			} else {
-				displayNextLineNumber = NO;
-			}			
+				if (drawIt) [self drawOneNumberInMargin: 0 inRect: numRect];
+				if (c=='\n') {
+					displayNextLineNumber = YES;			
+				} else {
+					displayNextLineNumber = NO;
+				}			
+			}
 		}
     }
     lineRect = [lm extraLineFragmentRect];
 	// This offsets the margin of our rulerView so that it scrolls with the textView properly.
     lineRect = NSOffsetRect(lineRect, -docRect.origin.x, -docRect.origin.y);
     numRect = NSMakeRect(aRect.origin.x, lineRect.origin.y, aRect.size.width, lineRect.size.height);
-    [self drawOneNumberInMargin: rLineNumber inRect: numRect];
+	if (lineRect.origin.y+lineRect.size.height>=aRect.origin.y && lineRect.origin.y<=aRect.origin.y+aRect.size.height)
+		[self drawOneNumberInMargin: rLineNumber inRect: numRect];
+	SLog(@" - done drawing numbers");
 }
 
 -(void)drawOneNumberInMargin:(unsigned) aNumber inRect:(NSRect)r
@@ -174,7 +186,8 @@
     [s drawInRect: NSMakeRect(r.origin.x, r.origin.y + ((r.size.height / 2) - (stringSize.height / 2)), [self ruleThickness] - 2, r.size.height) withAttributes: marginAttributes];
 }
 
-- (void) updatePreferences {	
+- (void) updatePreferences {
+	gutterThickness = [[Preferences stringForKey:lineNumberGutterWidthKey withDefault: @"16.0"] floatValue];
 }
 
 
