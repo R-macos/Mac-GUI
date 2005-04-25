@@ -1,10 +1,26 @@
 NEWS
 
+Last-update: 2005-04-25 [SU]
+*	Bumped up version to 1.10 (pre) - getting ready for the release
+*	Don't use syntax highlighting for show.files documents
+*	Optimized line number rendering (huge speed-up for large files)
+*	Fixed encoding in saved filed (was UTF-16 instead of UTF-8)
+*	Fixed syntax highlighting for newly opened files
+
+Last-update: 2005-04-25 [RG]
+*	Fixes in the editor preference pane
+*	Fixed document closing behavior
+*	Show R NEWS file when asked "What's new?"
+
 Last-update: 2005-04-20 [SU]
 *	Added support for default CRAN mirror (preference and check
 	in Package Installer)
 *	Fixed brace highlighting bugs that caused exceptions and crashes
-	int the editor
+	in the editor (note to developers: NSTextField is very unhappy
+	when something changes contents inside the "edited:" callback - if
+	you wish to make changes, you must do it synchronously *after* the
+	edited:	callback is done. Our NSTextStorage subclass allows this).
+*	Use more efficient backend for editor documents
 
 Last-update: 2005-04-18 [SU, RG]
 *	Updated NIB localization script. The operation must be specified
