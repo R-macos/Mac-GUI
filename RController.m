@@ -871,11 +871,19 @@ extern BOOL isTimeToFinish;
 	
     for (i = 0; i < nfile; i++){
 		NSString *fn = [[NSString stringWithUTF8String:file[i]] stringByExpandingTildeInPath];
-		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
+		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:NO];
+		// don't dsiplay - we need to prevent the window controller from using highlighting
 		if (document) {
+			NSArray *wcs = [document windowControllers];
+			if (wcs && [wcs count]>0) {
+				SLog(@" - Disabling syntax highlighting for this document");
+				[(RDocumentWinCtrl*) [wcs objectAtIndex:0] setPlain:YES];
+			}
 			if(wtitle[i]!=nil)
 				[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
 			[document setEditable: NO];
+			SLog(@" - finally show the document window");
+			[document showWindows];
 		}
     }
 	return 1;
