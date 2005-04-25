@@ -237,13 +237,14 @@ NSArray *keywordList=nil;
 
 - (void) functionReset
 {
+	SLog(@"RDocumentWinCtrl.functionReset");
 	if (fnListBox) {
 		NSMenuItem *fmi = [[NSMenuItem alloc] initWithTitle:@"<functions>" action:nil keyEquivalent:@""];
 		[fmi setTag:-1];
 		[fnListBox removeAllItems];
 		[[fnListBox menu] addItem:fmi];
 	}
-		
+	SLog(@" - reset done");
 }
 
 - (void) functionAdd: (NSString*) fn atPosition: (int) pos
@@ -360,6 +361,7 @@ NSArray *keywordList=nil;
 		[self functionReset];
 	else
 		[fnListBox selectItemAtIndex:sit];
+	SLog(@" - rescan finished (%d functions)", fnf);
 }
 
 - (void) updatePreferences {
@@ -471,12 +473,14 @@ NSArray *keywordList=nil;
 	int last = i+range.length;
 	BOOL foundItem=NO;
 	
-	SLog(@"RDocumentWinCtrl.updateSyntaxHL: %d:%d", range.location, range.length);
+	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d", self, range.location, range.length);
 
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 	//	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
-	if (range.length<1 || updating || !useHighlighting) return;
-	
+	if (range.length<1 || updating || !useHighlighting) {
+		SLog(@" - no need to update, skipping.");
+		return;
+	}
 	updating=YES;
 	
 	//[self resetHighlights]; // firt make sure we don't mess with temporary attrs
@@ -582,9 +586,11 @@ NSArray *keywordList=nil;
 		[ts addAttribute:@"shType" value:@"none" range:fr];
 		[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
 	}
+	SLog(@" - sh done, rescan and finish");
 	[self functionRescan];
 	[ts endEditing];
 	updating=NO;
+	SLog(@" - finished syntax hilite, whew ..");
 }
 
 - (void) highlightBracesWithShift: (int) shift andWarn: (BOOL) warn

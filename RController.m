@@ -56,6 +56,7 @@
 #import "REngine/Rcallbacks.h"
 #import "REngine/Rengine.h"
 #import "RConsoleTextStorage.h"
+#import "RDocumentWinCtrl.h"
 
 #import "Tools/Authorization.h"
 
@@ -815,6 +816,8 @@ extern BOOL isTimeToFinish;
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSString *fn = [[NSString stringWithUTF8String:file] stringByExpandingTildeInPath];
+	SLog(@"RController.handleEdit: %s", file);
+	
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:fn]) {
 		[pool release];
 		return 0;
@@ -842,6 +845,7 @@ extern BOOL isTimeToFinish;
 {
 	int    	i;
     
+	SLog(@"RController.handleEditFiles (%d of them, pager %s)", nfile, pager);
     if (nfile <=0) return 1;
 	
     for (i = 0; i < nfile; i++) {
@@ -863,13 +867,16 @@ extern BOOL isTimeToFinish;
 	int    	i;
     
     if (nfile <=0) return 1;
+	SLog(@"RController.handleShowFiles (%d of them, title %s, pager %s)", nfile, wtitle, pages);
 	
     for (i = 0; i < nfile; i++){
 		NSString *fn = [[NSString stringWithUTF8String:file[i]] stringByExpandingTildeInPath];
 		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
-		if(wtitle[i]!=nil)
-			[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
-		[document setEditable: NO];
+		if (document) {
+			if(wtitle[i]!=nil)
+				[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
+			[document setEditable: NO];
+		}
     }
 	return 1;
 }
