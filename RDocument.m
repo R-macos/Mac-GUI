@@ -44,6 +44,7 @@
 		initialContentsType=nil;
 		isEditable=YES;
 		isREdit=NO;
+		myWinCtrl=nil;
     }
     return self;
 }
@@ -51,36 +52,54 @@
 - (void)dealloc {
 	if (initialContents) [initialContents release];
 	if (initialContentsType) [initialContentsType release];
+	if (myWinCtrl) {
+		[self removeWindowController:myWinCtrl];
+		[myWinCtrl release];
+		myWinCtrl=nil;
+	}
 	[super dealloc];
 }
 
+// FIXME: I don't like this - we should use common text storage instead; conceptually textView is NOT the storage part
 - (NSTextView *)textView {
 	return [myWinCtrl textView];
 }
 
 - (void) makeWindowControllers {
-	// create RDocumentWinCtr which is a window controller - it loads the corresponding NIB and sets up the window
+	SLog(@"RDocument.makeWindowControllers: creating RDocumentWinCtrl");
+	if (myWinCtrl) {
+		SLog(@"*** RDocument.makeWindowControllers: my assumption is that I have only one win controller, but I already have %@! I'll autorelease the first one but won't detach it - don't blame me if this crashes...", myWinCtrl);
+		[myWinCtrl autorelease];
+	}
+	// create RDocumentWinCtrl which is a window controller - it loads the corresponding NIB and sets up the window
 	myWinCtrl = [[RDocumentWinCtrl alloc] initWithWindowNibName:@"RDocument"];
 	[self addWindowController:myWinCtrl];
 }
 
 - (BOOL)writeToFile:(NSString *)fileName ofType:(NSString *)docType {
+	SLog(@"RDocument.writeToFile: %@ ofType: %@", fileName, docType);
 	return [super writeToFile:fileName ofType:docType];
 }
 
 - (void) loadInitialContents
 {
-	if (!initialContents) return;
+	if (!initialContents) {
+		SLog(@"RDocument.loadInitialContents: empty contents, skipping");
+		return;
+	}
+	
+	SLog(@"RDocument.loadInitialContents: loading");
 	NSEnumerator *e = [[self windowControllers] objectEnumerator];
 	RDocumentWinCtrl *wc = nil;
 	while (wc = (RDocumentWinCtrl*)[e nextObject]) { 
-		if ([initialContentsType isEqual:@"rtf"])
+		if ([initialContentsType isEqual:@"rtf"]) {
+			SLog(@" - new RTF contents (%d bytes) for window controller %@", [initialContents length], wc);
 			[wc replaceContentsWithRtf: initialContents];
-		else {
+		} else {
 			NSString * cs = [NSString stringWithUTF8String:[initialContents bytes]];
 			if (!cs) cs = [NSString stringWithCString:[initialContents bytes] length:[initialContents length]];
 			if (cs) {
-				SLog(@"new contents:\"%@\"", cs);
+				SLog(@" - new string contents (%d chars) for window controller %@", [cs length], wc);
 				[wc replaceContentsWithString: cs];
 			}
 		}
@@ -127,13 +146,13 @@ create the UI for the document.
 	{ // terminate the data so it can be loaded as 0ts
 		int tl = [data length]+4;
 		void *buf = (void*) malloc(tl);
-		SLog(@"RDocument.loadDataRepresentation loading from %@, %d bytes of data", data, [data length]);
+		SLog(@"RDocument.loadDataRepresentation loading %d bytes of data", [data length]);
 		memcpy(buf, [data bytes], [data length]);
 		memset(buf+tl-4, 0, 4); // set trailing 4 bytes to 0 to make sure the termination is safe
 		
 		// for performance resons we leave it to the NSData to take over the ownership, no need to copy anything.
 		initialContents = [[NSData alloc] initWithBytesNoCopy:buf length:tl freeWhenDone:YES];
-		SLog(@" - resulting ic = %@", initialContents);
+		SLog(@" - resulting ic has %d bytes", [initialContents length]);
 	}
 
 	[self loadInitialContents];
