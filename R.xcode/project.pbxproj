@@ -724,6 +724,7 @@
 				686967BF079814E0002A1932,
 				16B66A5607B6EB260053EDB2,
 				161034F707D2232400677899,
+				681D40BE081D653B0019CB4C,
 			);
 			isa = PBXVariantGroup;
 			name = Credits.rtf;
@@ -2445,6 +2446,14 @@
 			lastKnownFileType = wrapper.nib;
 			name = de;
 			path = de.lproj/EditorPrefPane.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		681D40BE081D653B0019CB4C = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
+			name = fr;
+			path = fr.lproj/Credits.rtf;
 			refType = 4;
 			sourceTree = "<group>";
 		};
