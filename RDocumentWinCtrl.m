@@ -485,8 +485,8 @@ NSArray *keywordList=nil;
 
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 
-	if ([self document] == nil || [self document ] != [[RDocumentController sharedDocumentController] currentDocument]) {
-		SLog(@" - wrong or no document, skipping.");
+	if ([self document] == nil) {
+		SLog(@" - no document, skipping.");
 		return;
 	}
 
