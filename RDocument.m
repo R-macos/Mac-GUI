@@ -116,7 +116,7 @@
 		if([aType isEqual:@"rtf"])
 			return [wc contentsAsRtf];
 		else
-			return (NSData*) [wc contentsAsString];
+			return [[wc contentsAsString] dataUsingEncoding: NSUTF8StringEncoding];
 	}
 	return nil;
 }
