@@ -63,8 +63,6 @@ extern NSColor *shColorIdentifier;
 	IBOutlet NSTextField *goToLineField;
 	
     RRulerView *theRulerView;
-
-	RDocument *document;
 	
 	BOOL useHighlighting; // if set to YES syntax highlighting is used
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted

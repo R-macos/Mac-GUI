@@ -33,6 +33,7 @@
 #import "RDocumentWinCtrl.h"
 #import "PreferenceKeys.h"
 #import "RController.h"
+#import "RDocumentController.h"
 #import "REngine.h"
 #import "REditorTextStorage.h"
 #import "RRulerView.h"
@@ -130,10 +131,10 @@ NSArray *keywordList=nil;
 
 - (void) windowDidLoad
 {
+	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
     if (self) {
 		hsType=1;
 		currentHighlight=-1;
-		document=nil;
 		updating=NO;
 		helpTempFile=nil;
 		[[Preferences sharedPreferences] addDependent:self];
@@ -148,6 +149,7 @@ NSArray *keywordList=nil;
 	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
 	BOOL lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
 	if (showLineNos) {
+		SLog(@" - line numbers requested");
 		// This should probably get loaded from NSUserDefaults.
 		NSFont *font = [NSFont fontWithName:@"Monaco" size: 10];
 		
@@ -189,13 +191,12 @@ NSArray *keywordList=nil;
 		[textView setFont: font];
 		
 	}
+	SLog(@" - setup views");
 	[scrollView setDocumentView:textView];		
     [textView setDelegate: self];
-	
-	document=(RDocument*) [self document];
-	
+		
 	// instead of building the whole text storage network, we just replace the text storage - but ti's not trivial since ts is actually the root of the network
-	
+	SLog(@" - replace back-end with REditorTextStorage");
 	NSLayoutManager *lm = [[textView layoutManager] retain];
 	NSTextStorage *origTS = [[textView textStorage] retain];
 	REditorTextStorage * textStorage = [[REditorTextStorage alloc] init];
@@ -204,26 +205,31 @@ NSArray *keywordList=nil;
 	[lm release];
 	[origTS release];
 	
+	SLog(@" - setup window, preferences and widgets");
 	[[self window] setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
 	[textView setDrawsBackground:NO];
 	[[textView enclosingScrollView] setDrawsBackground:NO];
-	[self updatePreferences];
 	
 	[textView setFont:[[RController getRController] currentFont]];
 	[textView setContinuousSpellCheckingEnabled:NO]; // by default no continuous spell checking
 	[textView setAllowsUndo: YES];
-	[document loadInitialContents];
-	[textView setEditable: [document editable]];
+
+	SLog(@" - load document contents into textView");
+	[(RDocument*)[self document] loadInitialContents];
+	[textView setEditable: [[self document] editable]];
 	[[NSNotificationCenter defaultCenter] 
 		addObserver:self
 		   selector:@selector(textDidChange:)
 			   name:NSTextDidChangeNotification
 			 object: textView];
-	[[textView textStorage] setDelegate:self];	
+	[[textView textStorage] setDelegate:self];
 	[self updatePreferences];
 	
+	SLog(@" - setup editor toolbar");
 	editorToolbar = [[REditorToolbar alloc] initWithEditor:self];
+	SLog(@" - scan document for functions");
 	[self functionRescan];
+	SLog(@" - windowDidLoad is done");
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)aNotification {
@@ -365,6 +371,7 @@ NSArray *keywordList=nil;
 }
 
 - (void) updatePreferences {
+	SLog(@"RDocumentWinCtrl.updatePreferences");
 	NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
 	if (c && c!=[[self window] backgroundColor]) {
 		[[self window] setBackgroundColor:c];
@@ -388,6 +395,7 @@ NSArray *keywordList=nil;
 	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
 	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
 	[textView setNeedsDisplay:YES];
+	SLog(@" - preferences updated");
 }
 
 - (IBAction)printDocument:(id)sender
@@ -476,14 +484,18 @@ NSArray *keywordList=nil;
 	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d", self, range.location, range.length);
 
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-	//	if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
+
+	if ([self document] == nil || [self document ] != [[RDocumentController sharedDocumentController] currentDocument]) {
+		SLog(@" - wrong or no document, skipping.");
+		return;
+	}
+
 	if (range.length<1 || updating || !useHighlighting) {
 		SLog(@" - no need to update, skipping.");
 		return;
 	}
 	updating=YES;
 	
-	//[self resetHighlights]; // firt make sure we don't mess with temporary attrs
 	[ts beginEditing];
 	while (i < last) {
 		foundItem=NO;
@@ -730,12 +742,14 @@ NSArray *keywordList=nil;
 	 Here we only break the modal loop for the R_Edit call. Wether a window
 	 is to be saved on exit or no, is up to Cocoa
 	 */ 
-- (BOOL)windowShouldClose:(id)sende
+
+- (BOOL)windowShouldClose:(id)sender
 {	
 	if([[self document] hasREditFlag]) {
 		[NSApp stopModal];
-		[document setREditFlag: NO];
+		[(RDocument*)[self document] setREditFlag: NO];
 	}
+	[[[RDocumentController sharedDocumentController] currentDocument] close];
 	return YES;
 }
 
