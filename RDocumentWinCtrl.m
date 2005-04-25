@@ -129,23 +129,50 @@ NSArray *keywordList=nil;
 	return textView;
 }
 
-- (void) windowDidLoad
+- (void) setPlain: (BOOL) plain
 {
-	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
-    if (self) {
+	plainFile=plain;
+	if (plain && useHighlighting && textView)
+		[textView setTextColor:[NSColor blackColor] range:NSMakeRange(0,[[textView textStorage] length])];
+	else if (!plain && useHighlighting && textView)
+		[self setHighlighting:YES];
+}
+
+- (BOOL) plain
+{
+	return plainFile;
+}
+
+- (id) initWithWindowNibName:(NSString*) nib
+{
+	self = [super initWithWindowNibName:nib];
+	SLog(@"RDocumentWinCtrl.initWithNibName:%@", nib);
+	if (self) {
+		plainFile=NO;
 		hsType=1;
 		currentHighlight=-1;
 		updating=NO;
 		helpTempFile=nil;
-		[[Preferences sharedPreferences] addDependent:self];
 		execNewlineFlag=NO;
-		if (!defaultsInitialized) {
-			[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-			defaultsInitialized=YES;
-		}
+	}
+	return self;
+}
+
+// we don't need this one, because the default implementation automatically calls the one w/o owner
+// - (id) initWithWindowNibName:(NSString*) nib owner: (id) owner
+
+- (void) windowDidLoad
+{
+	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
+	
+	[[Preferences sharedPreferences] addDependent:self];
+	if (!defaultsInitialized) {
+		[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
+		defaultsInitialized=YES;
+	}
 		// For now replaced selectedTextBackgroundColor by redColor
-		highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
-    }
+	highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
+
 	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
 	BOOL lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
 	if (showLineNos) {
@@ -481,7 +508,7 @@ NSArray *keywordList=nil;
 	int last = i+range.length;
 	BOOL foundItem=NO;
 	
-	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d", self, range.location, range.length);
+	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d (%d/%d)", self, range.location, range.length, (int)useHighlighting, (int)plainFile);
 
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 
@@ -490,7 +517,7 @@ NSArray *keywordList=nil;
 		return;
 	}
 
-	if (range.length<1 || updating || !useHighlighting) {
+	if (range.length<1 || updating || !useHighlighting || plainFile) {
 		SLog(@" - no need to update, skipping.");
 		return;
 	}

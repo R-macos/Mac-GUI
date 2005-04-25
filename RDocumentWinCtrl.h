@@ -67,6 +67,7 @@ extern NSColor *shColorIdentifier;
 	BOOL useHighlighting; // if set to YES syntax highlighting is used
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted
 	BOOL deleteBackward;
+	BOOL plainFile; // overriders preferences - if YES syntax HL is disabled
 	
 	int hsType; // help search type
 	
@@ -99,6 +100,9 @@ extern NSColor *shColorIdentifier;
 - (IBAction)goHelpSearch:(id)sender;
 
 - (void) setEditable: (BOOL) editable;
+
+- (void) setPlain: (BOOL) plain; // plain = don't use highlighting even if preferences say so
+- (BOOL) plain;
 
 - (void) setHighlighting: (BOOL) use;
 - (void) updatePreferences;
