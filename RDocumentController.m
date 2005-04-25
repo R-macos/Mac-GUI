@@ -69,8 +69,8 @@
 		if (res == 0 )
 			[[RController getRController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
 	else 
-		[self openNamedFile: aFile display:flag];
-	return 0;
+		return [self openNamedFile: aFile display:flag];
+	return nil;
 }
 
 /* 
@@ -137,7 +137,7 @@
 				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 		}
 		system([cmd UTF8String]);
-		return 0;
+		return nil;
 	}
 }
 
