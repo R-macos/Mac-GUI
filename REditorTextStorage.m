@@ -74,7 +74,7 @@
 - (void) replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString
 {
 	int origLen = [self length];
-	[self resetHighlights];
+	if (currentHighlight>-1) [self resetHighlights];
 	[cont replaceCharactersInRange:aRange withString:aString];
 	insideReplaceEdited = YES;
 	[super ensureAttributesAreFixedInRange:NSMakeRange(aRange.location,[aString length])];
