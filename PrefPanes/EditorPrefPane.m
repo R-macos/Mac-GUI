@@ -157,12 +157,16 @@
 
 - (void) updatePreferences
 {
-	BOOL flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	BOOL flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
 	if (flag)
 		[appOrCommand selectCellAtRow:0 column:0];
 	else
-		[appOrCommand selectCellAtRow:0 column:1];
-	
+		[appOrCommand selectCellAtRow:1 column:0];
+	flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	if (flag)
+		[internalOrExternal selectCellAtRow:0 column:0];
+	else
+		[internalOrExternal selectCellAtRow:0 column:1];
 	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[showLineNumbers setEnabled:flag?NSOnState:NSOffState];
@@ -222,11 +226,6 @@
 	
 	[fragmentPaddingWidth setStringValue:[Preferences stringForKey:lineFragmentPaddingWidthKey withDefault: @"6.0"]];
 	
-	flag=[Preferences flagForKey:appOrCommandKey withDefault: YES];
-	if (flag)
-		[appOrCommand selectCellAtRow:1 column:0];
-	else
-		[appOrCommand selectCellAtRow:0 column:0];
 }
 
 - (IBAction) changeInternalOrExternal:(id)sender
