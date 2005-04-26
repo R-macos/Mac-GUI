@@ -57,6 +57,8 @@
 - (void) setKey: (NSString*) key withFlag: (BOOL) value; // note: set doesn't recognize UNKNOWN!
 - (void) setKey: (NSString*) key withArchivedObject: (id) value;
 
+- (void) commit;
+
 // global actions
 + (void) setKey: (NSString*) key withObject: (id) value;
 + (void) setKey: (NSString*) key withFlag: (BOOL) value;
@@ -70,6 +72,7 @@
 + (BOOL) flagForKey: (NSString*) key; // returns UNKNOWN if there is no such entry
 + (id) objectForKey: (NSString*) key withDefault: (id) defaultObj;
 + (id) unarchivedObjectForKey: (NSString*) key withDefault: (id) defaultObj;
++ (void) commit;
 
 + (Preferences*) sharedPreferences;
 

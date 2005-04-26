@@ -87,6 +87,24 @@ Preferences *globalPrefs=nil;
 	return self;
 }
 
+- (void) dealloc
+{
+	[self commit];
+	[super dealloc];
+}
+
+- (void) commit
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults)
+		[defaults synchronize];	
+}
+
++ (void) commit
+{
+	[[Preferences sharedPreferences] commit];
+}
+
 - (void) addDependent: (id<PreferencesDependent>) dep
 {
 	[dependents addObject:dep];
