@@ -92,8 +92,23 @@ NSString *location[2] = {
 				[self busy: NO];
 				NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"The package has not been installed."),NLS(@"OK"),nil,nil);	
 				return;
-			} else
+			} else {
 				[[RController getRController] setRootFlag:YES];
+				// we need to make sure that the tempdir is root-writable
+				SLog(@" - installing as root, we need to make sure tempdir() is writable");
+				RSEXP *x = [[REngine mainEngine] evaluateString:@"tempdir()"];
+				if (x) {
+					NSString *td = [x string];
+					if (td) {
+						NSDictionary *fa = [NSDictionary dictionaryWithObjectsAndKeys: @"wheel", NSFileGroupOwnerAccountName, [NSNumber numberWithInt: 0770], NSFilePosixPermissions, nil];
+						if (fa) {
+							BOOL succ = [[NSFileManager defaultManager] changeFileAttributes:fa atPath:td];
+							SLog(@" - changed group to wheel and permissions to 0770 (%s)", succ?"success":"FAILED!");
+						} else SLog(@" * cannot create file attributes dictionary!");
+					} else SLog(@" * cannot retrieve tempdir! (got NULL string) Installation is likely to fail ...");
+					[x release];					
+				} else SLog(@" * cannot retrieve tempdir! (RSEXP is nil) Installation is likely to fail ...");
+			}
 		}
 	}
 	
@@ -140,6 +155,10 @@ NSString *location[2] = {
 		switch(pkgUrl){
 			
 			case kCRANBin:
+				if([[RController getRController] getRootFlag]) {
+					NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
+					break;
+				}
 				[[REngine mainEngine] executeString: 
 					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",CRAN=getOption(\"CRAN\"))",
 						packagesToInstall, targetLocation]					
