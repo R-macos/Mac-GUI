@@ -1361,7 +1361,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 /* Allow changes only for uncommitted text */
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString {
-	if (affectedCharRange.location < committedLength) { /* if the insertion is outside editable scope, append at the end */
+	if (replacementString && /* on font change we get nil replacementString which is ok to pass through */
+		affectedCharRange.location < committedLength) { /* if the insertion is outside editable scope, append at the end */
 		[textView setSelectedRange:NSMakeRange([[textView textStorage] length],0)];
 		[textView insertText:replacementString];
 		return NO;
