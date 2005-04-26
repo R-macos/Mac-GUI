@@ -60,7 +60,9 @@
 	<key>CFBundleSignature</key>
 	<string>0FFF</string>
 	<key>CFBundleVersion</key>
-	<string>1.10-pre build %SVN%</string>
+	<string>1.10</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.3.0</string>
 	<key>LSEnvironment</key>
 	<dict>
 		<key>DYLD_FALLBACK_LIBRARY_PATH</key>
