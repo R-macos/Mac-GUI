@@ -71,6 +71,12 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Öffnet ein neues, leeres Dokunent im Editor";
 
+/* From: PackageInstaller.m (installSelected) */
+"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Es ist zur Zeit leider nicht möglich binäre Packete vom Internet als 'root' zu installieren.\nFalls Sie die binäre CRAN Version von R verwenden, dann können Sie als Administrator Packete installieren, ohne 'root' zu werden. Alternativ können Sie binäre Packete selbst herunterladen und als Dateien installieren.";
+
+/* From: PackageInstaller.m (reloadURL) */
+"Do you want me to remember the mirror you selected for future sessions?" = "Wollen Sie Ihre CRAN-Wahl für die Zukunft speichern?";
+
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "Nicht speichern";
 
@@ -98,6 +104,9 @@
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Bricht die aktuelle Berechnung ab";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Never" = "Never";
+
 /* From: RController.m (toolbar) */
 "New Document" = "Neues Dokument";
 
@@ -122,12 +131,13 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Im Editor öffnen";
 
-/* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Package Installer";
-
-/* From: PackageInstaller.m (reloadURL)
-   From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (reloadURL) */
 "Package Installer" = "Package Installer";
+
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (reloadURL) */
+"Package installer" = "Package Installer";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please, specify a valid URL first." = "Bitte wählen Sie zuerst eine gültige URL.";
@@ -157,7 +167,7 @@
 "PrefP-Syntax" = "Syntax-\nFarben";
 
 /* From: RController.m (toolbarWillAddItem) */
-"Print this document" = "Dokumemnt drucken";
+"Print this document" = "Dokument drucken";
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
@@ -229,13 +239,13 @@
 "Save" = "Speichern";
 
 /* From: RController.m (toolbar) */
-"Save Console Window" = "Konsole-Inhalt speichern";
+"Save Console Window" = "Konsoleninhalt speichern";
 
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Inhalt des Quartz-Fensters in eine PDF Datei speichern";
 
 /* From: REditorToolbar.m (toolbar) */
-"Save current document" = "Save current document";
+"Save current document" = "Aktuelles Dokument speichern";
 
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Verlauf-Datei speichern";
@@ -264,6 +274,9 @@
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Wählen Sie das Package-Verzeichnis";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Set as default?" = "Als Voreinstellung verwenden?";
+
 /* From: RController.m (toolbar) */
 "Set Colors" = "Farben";
 
@@ -289,7 +302,7 @@
 "Source/Load" = "Ausführen/Laden";
 
 /* From: RController.m (toolbar) */
-"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Startet X11 window server, damit X11 und Tcl/Tk verwendet werden können";
+"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Startet X11 windows Server, damit X11 und Tcl/Tk verwendet werden können";
 
 /* From: RController.m (toolbar) */
 "Start X11" = "Starte X11";
@@ -301,7 +314,7 @@
 "Stop" = "Stop";
 
 /* From: PackageInstaller.m (installSelected) */
-"The package has not been installed." = "Dieses Package ist nicht installiert.";
+"The package has not been installed." = "Dieses Packet ist nicht installiert.";
 
 /* From: RController.m (applicationDidFinishLaunching) */
 "Unable to start R: %@" = "R kann nicht gestartet werden: %@";
