@@ -253,7 +253,17 @@ static RController* sharedRController;
 	/* setup LANG variable to match the system locale based on user's CFLocale */
 #if (R_VERSION >= R_Version(2,1,0))
 	SLog(@" - set locale");
-	{
+	if ([Preferences stringForKey:@"force.LANG"]) {
+		const char *ls = [[Preferences stringForKey:@"force.LANG"] UTF8String];
+		if (*ls) {
+			setenv("LANG", ls, 1);
+			SLog(@" - force.LANG present, setting LANG to \"%s\"", ls);
+		} else
+			SLog(@" - force.LANG present, but empty. LANG won't be set at all.");
+	} else if ([Preferences flagForKey:@"ignore.system.locale"]==YES) {
+		setenv("LANG", "en_US.UTF-8", 1);
+		SLog(@" - ignore.system.locale is set to YES, using en_US.UTF-8");
+	} else {
 		char cloc[64];
 		char *c = getenv("LANG");
 		cloc[63]=0;
