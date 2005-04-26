@@ -1,5 +1,17 @@
 NEWS
 
+Last-update: 2005-04-26 [SU]
+*	Changed version to 1.10 - release!
+*	Make sure preferences are saved before R quits
+*	Fixed crash/exception on font change in the console
+*	Added force.LANG and ignore.system.locale preference entries.
+	There is no GUI for those, but they can be set using "defaults".
+	ignore.system.locale is boolean and sets locale to en_US.UTF-8.
+	force.LANG is a string that replaces the LANG seting. If present,
+	but empty, LANG is not touched. force.LANG has higher precedence.
+	These are useful to override system's locale settings for one reason
+	or another.
+
 Last-update: 2005-04-25 [SU]
 *	Bumped up version to 1.10 (pre) - getting ready for the release
 *	Don't use syntax highlighting for show.files documents
