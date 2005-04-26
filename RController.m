@@ -1017,12 +1017,14 @@ extern BOOL isTimeToFinish;
 }	
 	
 - (void)didCloseAll:(id)sender {
+	[Preferences commit];
 	[self doSaveHistory:nil];
 	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
 }
 
 /* this gets called by the "wanna save?" sheet on window close */
 - (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
+	[Preferences commit];
     if (returnCode==NSAlertDefaultReturn)
 		[[REngine mainEngine] executeString:@"quit(\"yes\")"];
     if (returnCode==NSAlertAlternateReturn)
