@@ -238,7 +238,7 @@ if (!item) { \
 	toolbar = [[[NSToolbar alloc] initWithIdentifier: WorkSpaceBrowserToolbarIdentifier] autorelease];
     
     // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
-    [toolbar setAllowsUserCustomization: NO];
+    [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];
     [toolbar setDisplayMode: NSToolbarDisplayModeIconOnly];
     
