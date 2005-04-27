@@ -40,6 +40,7 @@
 {
     self = [super init];
     if (self) {
+		SLog(@"RDocument(%@) init", self);
 		initialContents=nil;
 		initialContentsType=nil;
 		isEditable=YES;
