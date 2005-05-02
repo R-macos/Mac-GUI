@@ -1,5 +1,10 @@
 NEWS
 
+Last-update: 2005-05-02 [SU]
+*	Updated syntax highlighting to recognize identifiers containing numbers
+*	Optimized syntax highlighting - scans only one line unless quotes
+	change multi-line strings. Should yied huge speedup for large files.
+
 -- Release Version 1.10 - this revision is supplied with R 2.1.0 --
 
 Last-update: 2005-04-26 [SU]
