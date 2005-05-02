@@ -503,9 +503,10 @@ NSArray *keywordList=nil;
 	NSTextStorage *ts = [textView textStorage];
 	NSString *s = [ts string];
 	
-	int i = range.location;
-	int bb = i;
-	int last = i+range.length;
+	int i = range.location;    // index in the string
+	int bb = i;                // index of the beginning of the currently detected segment
+	int last = i+range.length; // proposed stop - index behind the last character (must be <=hardStop)
+	int hardStop = last;       // hard-stop; it is ok to look beyond last when necessary, but not ok to look beyond hardStop
 	BOOL foundItem=NO;
 	
 	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d (%d/%d)", self, range.location, range.length, (int)useHighlighting, (int)plainFile);
@@ -522,8 +523,30 @@ NSArray *keywordList=nil;
 		return;
 	}
 	updating=YES;
+
+	
+	NSDictionary *trailAttr = nil;
+	int trailPos = 0;
+	
+	if (last>0 && last<[s length]) {
+		int sl = [s length];
+		unichar c;
+
+		trailPos=last+1;
+		while (trailPos<sl && ((c = [s characterAtIndex:trailPos])==' ' || c=='\n' || c=='\r' || c=='\t')) trailPos++;
+		if (trailPos>=[s length]) {
+			hardStop = last = [s length]; trailPos=0;
+		} else {
+			NSRange efr;
+			last = trailPos--;
+			hardStop = [s length]; // feel free to go up to the end if necessary (in fact max(last+64,[s length]) should be sufficient, but it shouldn't matter)
+			trailAttr = [ts attributesAtIndex:trailPos effectiveRange:&efr];
+			//SLog(@"trailDict: %@, last was %d and is now %d", trailAttr, last, trailPos);
+		}
+	}
 	
 	[ts beginEditing];
+reHilite:
 	while (i < last) {
 		foundItem=NO;
 		unichar c = [s characterAtIndex:i];
@@ -535,12 +558,6 @@ NSArray *keywordList=nil;
 				fr=NSMakeRange(bb,i-bb);
 				[ts addAttribute:@"shType" value:@"none" range:fr];
 				[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
-				
-				/*
-				 NSRange drr;
-				 NSDictionary *dict = [ts attributesAtIndex:fr.location effectiveRange:&drr];
-				 NSLog(@"dict: %@", dict);
-				 */
 			}
 			i++;
 			while (i<last && (c=[s characterAtIndex:i])!=lc) {
@@ -582,7 +599,8 @@ NSArray *keywordList=nil;
 				[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
 			}
 			i++;
-			while (i<last && ((c=[s characterAtIndex:i])=='_' || c=='.' || (c>='a' && c<='z') || (c>='A' && c<='Z'))) i++;
+			// unlike all others id/keyword use hardStop, because keywords cannot be determined until the entire string is known
+			while (i<hardStop && ((c=[s characterAtIndex:i])=='_' || c=='.' || (c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9'))) i++;
 			fr=NSMakeRange(ss,i-ss);
 			
 			{
@@ -596,7 +614,7 @@ NSArray *keywordList=nil;
 				}
 			}
 			bb=i;
-			if (i==last) break;
+			if (i>=last) break;
 			c=[s characterAtIndex:i];	
 			foundItem=YES;
 		}
@@ -624,6 +642,20 @@ NSArray *keywordList=nil;
 		NSRange fr=NSMakeRange(bb,i-bb);
 		[ts addAttribute:@"shType" value:@"none" range:fr];
 		[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
+	}
+
+	if (trailAttr) { // it's partial update and there is trailing contents - let's check whether we need to go beyond the required scope
+		NSRange efr;
+		NSDictionary *newAttr = [ts attributesAtIndex:trailPos effectiveRange:&efr];
+		NSString *oldA = (NSString*) [trailAttr objectForKey:@"shType"];
+		NSString *newA = (NSString*) [newAttr objectForKey:@"shType"];
+		if (oldA && newA && ![oldA isEqual:newA]) {  // trailing contents must be changed, too
+			SLog(@" - syntaxHL: old [%@] new [%@] at %d - need to re-process to the end of the file", oldA, newA, trailPos);
+			trailAttr=nil;
+			last=[s length];
+			bb = i = range.location; // the HL code doesn't support continuation out of the loop, because of the inner loops, so we just re-do it all ...
+			goto reHilite;
+		}
 	}
 	SLog(@" - sh done, rescan and finish");
 	[self functionRescan];
@@ -697,9 +729,9 @@ NSArray *keywordList=nil;
 	/* get all lines that span the range that was affected. this impementation updates only lines containing the change, not beyond */
 	NSRange lr = [s lineRangeForRange:er];
 	
-	lr.length = [ts length]-lr.location; // change everything up to the end of the document ...
+	//lr.length = [ts length]-lr.location; // change everything up to the end of the document ...
 	
-	//NSLog(@"line range %d:%d (original was %d:%d)", lr.location, lr.length, er.location, er.length);
+	SLog(@"line range %d:%d (original was %d:%d)", lr.location, lr.length, er.location, er.length);
 	[self updateSyntaxHighlightingForRange:lr];
 	if (!deleteBackward) 
 		if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
