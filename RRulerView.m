@@ -56,8 +56,8 @@
             fontSize = 9.0;
         }
      
-		[[Preferences sharedPreferences] addDependent:self];
 		[self updatePreferences];
+		[[Preferences sharedPreferences] addDependent:self];
 		
         marginAttributes = [[NSMutableDictionary alloc] init];
         [marginAttributes setObject:[NSFont boldSystemFontOfSize: fontSize] forKey: NSFontAttributeName];
@@ -125,7 +125,7 @@
     NSRect              docRect, lineRect, numRect;
 	BOOL displayNextLineNumber;
 
-    SLog(@"RRulerView.drawNumbersInMargin: %f:%f %f:%f", aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height);
+    //SLog(@"RRulerView.drawNumbersInMargin: %f:%f %f:%f", aRect.origin.x, aRect.origin.y, aRect.size.width, aRect.size.height);
     docRect = [[self scrollView] documentVisibleRect];
     id textView = [[[NSDocumentController sharedDocumentController] currentDocument] textView];
     
@@ -169,7 +169,7 @@
     numRect = NSMakeRect(aRect.origin.x, lineRect.origin.y, aRect.size.width, lineRect.size.height);
 	if (lineRect.origin.y+lineRect.size.height>=aRect.origin.y && lineRect.origin.y<=aRect.origin.y+aRect.size.height)
 		[self drawOneNumberInMargin: rLineNumber inRect: numRect];
-	SLog(@" - done drawing numbers");
+	//SLog(@" - done drawing numbers");
 }
 
 -(void)drawOneNumberInMargin:(unsigned) aNumber inRect:(NSRect)r

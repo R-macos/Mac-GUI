@@ -44,7 +44,6 @@
 - (id)initWithIdentifier:(NSString *)theIdentifier label:(NSString *)theLabel category:(NSString *)theCategory
 {
 	if (self = [super init]) {
-		[[Preferences sharedPreferences] addDependent:self];
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -153,6 +152,7 @@
 - (void) awakeFromNib
 {
 	[self updatePreferences];
+	[[Preferences sharedPreferences] addDependent:self];
 }
 
 - (void) updatePreferences

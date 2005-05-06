@@ -165,7 +165,6 @@ NSArray *keywordList=nil;
 {
 	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
 	
-	[[Preferences sharedPreferences] addDependent:self];
 	if (!defaultsInitialized) {
 		[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 		defaultsInitialized=YES;
@@ -251,6 +250,7 @@ NSArray *keywordList=nil;
 			 object: textView];
 	[[textView textStorage] setDelegate:self];
 	[self updatePreferences];
+	[[Preferences sharedPreferences] addDependent:self];
 	
 	SLog(@" - setup editor toolbar");
 	editorToolbar = [[REditorToolbar alloc] initWithEditor:self];

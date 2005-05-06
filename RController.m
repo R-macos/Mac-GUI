@@ -213,8 +213,8 @@ static RController* sharedRController;
 	[[RTextView enclosingScrollView] setDrawsBackground:NO];
 	
 	SLog(@" - load preferences");
+	[self updatePreferences]; // first update, then add self
 	[[Preferences sharedPreferences] addDependent: self];
-	[self updatePreferences];
 	
 	SLog(@" - init R_LIBS");	
 	{ // first initialize R_LIBS if necessary

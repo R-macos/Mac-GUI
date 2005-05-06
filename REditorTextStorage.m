@@ -44,8 +44,8 @@
 		currentHighlight = -1;
 		pendingHilite = -1;
 		insideReplaceEdited = NO;
-		[[Preferences sharedPreferences] addDependent:self];
 		[self updatePreferences];
+		[[Preferences sharedPreferences] addDependent:self];
 	}
 	return self;
 }

@@ -53,8 +53,8 @@
 
 - (void) windowDidLoad
 {
-	[[Preferences sharedPreferences] addDependent:self];
 	[self updatePreferences];
+	[[Preferences sharedPreferences] addDependent:self];
 	
 	outputPosition = promptPosition = committedLength = 0;
 	
