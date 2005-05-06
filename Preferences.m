@@ -83,6 +83,7 @@ Preferences *globalPrefs=nil;
 	batch = NO;
 	changed = NO;
 	writeDefaults = YES;
+	insideNotify = NO;
 	
 	return self;
 }
@@ -118,12 +119,17 @@ Preferences *globalPrefs=nil;
 - (void) notifyDependents
 {
 	if (!batch) {
-		NSEnumerator *enumerator = [dependents objectEnumerator];	
-		id<PreferencesDependent> dep;
-		while (dep = (id<PreferencesDependent>) [enumerator nextObject]) {
-			[dep updatePreferences];
-		}
-		changed = NO;
+		if (!insideNotify) {
+			NSEnumerator *enumerator = [dependents objectEnumerator];	
+			id<PreferencesDependent> dep;
+			while (dep = (id<PreferencesDependent>) [enumerator nextObject]) {
+				insideNotify = dep;
+				[dep updatePreferences];
+			}
+			insideNotify = nil;
+			changed = NO;
+		} else
+			SLog(@"Preferences.notifyDependents: WARNING, cascaded notify attempted while %@ is being notified! Notify request cancelled.", insideNotify);
 	}
 }
 

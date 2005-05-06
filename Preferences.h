@@ -45,6 +45,7 @@
 	NSMutableArray *dependents;
 	BOOL batch, changed; // batch-operation related flags
 	BOOL writeDefaults; // if YES then any pref retrival fn with non-nil default will write the default if the key is empty. this means that the apps should be aware that fetching a key may result in an update due to an implicit write
+	id<PreferencesDependent> insideNotify;   // contains the reference to the currently updated dependent or nil if no update is running atm
 }
 
 - (void) beginBatch;
