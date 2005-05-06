@@ -1071,6 +1071,7 @@ The input replaces what the user is currently typing.
 
 - (IBAction)doClearHistory:(id)sender
 {
+	SLog(@"RController.doClearHistory");
 	[hist resetAll];
 	[historyView reloadData];
 }
@@ -1078,6 +1079,7 @@ The input replaces what the user is currently typing.
 - (IBAction)doLoadHistory:(id)sender
 {
 	NSString *fname=nil;
+	SLog(@"RController.doLoadHistory");
 	if (sender) {
 		NSOpenPanel *op = [NSOpenPanel openPanel];
 		[op setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
@@ -1087,60 +1089,39 @@ The input replaces what the user is currently typing.
 	} else
 		fname = [[Preferences stringForKey:historyFileNamePathKey
 							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
+	SLog(@" - history file to load: %@", fname);
 	if(fname != nil){
+		fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@", fname]];
 		[self doClearHistory:nil];
-		FILE *rhist; char c[1000]; NSString *entryString; NSString *tmpString;
-		int cc; int i; int j; int k; BOOL done;
+		
+		SLog(@" - cleared history, reload with: %@", fname);
 		if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
-			rhist = fopen([fname cString], "r");
-			if (rhist==NULL) {
+			FILE *rhist = fopen([fname UTF8String], "r");
+			if (!rhist) {
 				NSLog(NLS(@"Can't open history file %2"), fname);
 			} else {
-				cc = fgetc(rhist);
-				while( cc != EOF ) {
-					entryString = @""; done = FALSE; k = 0;
-					for (i=0 ; i<1000 && !done && cc!=EOF ; i++) {
-						c[i] = cc;
-						if (cc == '\n' || i==999) {
-							if (i==0) {								// Empty line
-								cc = fgetc(rhist);
-								done = TRUE;
-							} else {
-								if (c[i-1] == '#') {				// Line part of multiline
-									c[i-1] = 0;
-									tmpString = [[NSString alloc] initWithCString:&c[k]];
-									entryString = [entryString stringByAppendingString: tmpString];			
-								} else {
-									c[i]=0;							// Don't want a newline
-									tmpString = [[NSString alloc] initWithCString:&c[k]];
-									entryString = [entryString stringByAppendingString: tmpString];			
-									j = [entryString length];
-									entryString = [entryString substringWithRange: NSMakeRange(0, j)];
-									if ((j-1) > 0 && [entryString characterAtIndex:0] == '\n') 
-										entryString = [entryString substringWithRange: NSMakeRange(1, j-1)];
-									[hist commit:entryString];
-									done = TRUE;									
-								}
-								k = i;
-								cc = fgetc(rhist);
-							}
-						} else {									// Keep collecting chars
-							cc = fgetc(rhist);
-							if (cc == EOF) {
-								if (i>0) {
-									c[i+1]=0;						// Don't want a newline
-									tmpString = [[NSString alloc] initWithCString:&c[k]];
-									entryString = [entryString stringByAppendingString: tmpString];	
-									j = [entryString length];
-									entryString = [entryString substringWithRange: NSMakeRange(0, j)];
-									[hist commit:entryString];
-									k = i;
-								}
-								done=TRUE;
-							}						
-						}
+				NSString *entry = nil;
+				char c[1024];
+				
+				c[1023]=0;
+				while(fgets(c, 1023, rhist) && *c) {
+					int i = strlen(c);
+					BOOL multiline = NO;
+
+					while (i>0 && (c[i-1]=='\n' || c[i-1]=='\r')) c[--i]=0; // just in case someone has PC history we strip \r too
+					if (!*c) continue; // skip blank lines (is that intended? what about "foo#\n\nbla\n"?)
+					if (multiline=(c[i-1]=='#')) c[i-1]='\n';
+					if (entry)
+						entry = [entry stringByAppendingString:[NSString stringWithUTF8String:c]];
+					else
+						entry = [NSString stringWithUTF8String:c];
+					if (!multiline) {
+						[hist commit:entry];
+						entry=nil;
 					}
 				}
+				if (entry) [hist commit:entry]; // just being paranoid if someone edited the file manually
+				fclose(rhist);
 			}
 		}		
 		[historyView scrollRowToVisible:[historyView numberOfRows]];
@@ -1150,6 +1131,8 @@ The input replaces what the user is currently typing.
 
 - (void)doSaveHistory:(id)sender {
 	NSString *fname = nil;
+	FILE *rhist;
+	
 	if (sender) {
 		NSSavePanel *sp = [NSSavePanel savePanel];
 		[sp setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
@@ -1159,49 +1142,26 @@ The input replaces what the user is currently typing.
 	} else 
 		fname = [[Preferences stringForKey:historyFileNamePathKey
 							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
-	NSString *entryString; NSString *lineString = @""; NSString *tmpString; FILE *rhist;
-	NSMutableArray *histEntries;
-	histEntries = [[NSMutableArray alloc] initWithCapacity: 16];
-	[histEntries addObjectsFromArray:[hist entries]];
-	rhist = fopen([fname cString], "w");
-	if (rhist==NULL) {
+
+	SLog(@"RController.doSaveHistory (file %@)", fname);
+	rhist = fopen([fname UTF8String], "w");
+	if (!rhist) {
 		NSLog(NLS(@"Can't open history file %2"), fname);
 	} else {
-		int ac = [histEntries count];
-		rhist = fopen([fname cString], "w");
-		int i; int j; int l; int k; int cnt;
-		for (i=0 ; i < ac ; i++) {
-			cnt = 0;
-			entryString = [histEntries objectAtIndex:i];
-			l = [entryString length];
-			for (j=0 ; j < l ; j++) {
-				if ([entryString characterAtIndex:j] == '\n') 
-					cnt++;				
+		NSEnumerator *enumerator = [[hist entries] objectEnumerator];
+		NSString *entry;
+        
+		while (entry = [enumerator nextObject]) {
+			if ([entry rangeOfString:@"\n" options:NSLiteralSearch].location!=NSNotFound) { // add # before \n for multi-line strings
+				entry = [entry mutableCopy];
+				[(NSMutableString*)entry replaceOccurrencesOfString:@"\n" withString:@"#\n" options:NSLiteralSearch range:NSMakeRange(0,[entry length])];
 			}
-			if (cnt == 0)
-				fprintf(rhist, "%s\n", [entryString cString]);
-			else {
-				k = 0;
-				for (j=0 ; j < l ; j++)
-					if ([entryString characterAtIndex:j] == '\n') {
-						tmpString = [entryString substringWithRange: NSMakeRange(k, j-k)];
-						j++;
-						lineString = [tmpString stringByAppendingString:@"#"];
-						fprintf(rhist, "%s\n", [lineString cString]);
-						k = j;
-					}
-						if ([entryString length] > 1) {	
-							if ([entryString characterAtIndex:k-1] == '\n')
-								tmpString = [entryString substringWithRange: NSMakeRange(k, l-k)];
-							else
-								tmpString = [entryString substringWithRange: NSMakeRange(k-1, l-k+1)];
-							fprintf(rhist, "%s\n", [tmpString cString]);	
-						}
-			}
+			fputs([entry UTF8String], rhist); // not 100% safe
+			fputc('\n', rhist); // trailing \n
 		}
+
 		fclose(rhist);	
 	}
-	[histEntries release];
 }
 
 /*  On double-click on items of the History TableView, the item is pasted into the console
@@ -1452,7 +1412,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (void)  handleShowMessage: (char*) msg
 {
-	NSRunAlertPanel(NLS(@"R Message"),[NSString stringWithCString:msg],NLS(@"OK"),nil,nil);
+	NSRunAlertPanel(NLS(@"R Message"),[NSString stringWithUTF8String:msg],NLS(@"OK"),nil,nil);
 }
 
 - (IBAction)flushconsole:(id)sender {
@@ -1514,6 +1474,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
+	SLog(@" - application:openFile:%@ called", (NSString *)filename);
+	NSString *dirname = @"";
 	BOOL isDir;
 	BOOL flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
 	NSFileManager *manager = [NSFileManager defaultManager];
@@ -1521,6 +1483,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		if (!flag && !appLaunched) {
 			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
 			[self showWorkingDir:nil];				
+			[self doClearHistory:nil];
+			[self doLoadHistory:nil];
 		}
 	} else {
 		if (!flag && !appLaunched) {
@@ -1530,16 +1494,19 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 					j = i; i = -1;
 				};
 			}
-			NSString *dirname = [filename substringWithRange: NSMakeRange(0, j+1)];
+			dirname = [filename substringWithRange: NSMakeRange(0, j+1)];
 			[manager changeCurrentDirectoryPath:[dirname stringByExpandingTildeInPath]];
 			[self showWorkingDir:nil];					
 		}
+		[self doClearHistory:nil];
+		[self doLoadHistory:nil];
 		BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
 		if (openInEditor || appLaunched)
 			[[RDocumentController sharedDocumentController] openDocumentWithContentsOfFile: filename display:YES];
 		else
 			[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[filename stringByExpandingTildeInPath]]];
 	}
+	SLog(@" - application:openFile:%@ with wd: <%@> done", (NSString *)filename, dirname);
 	return YES;
 }
 
@@ -1589,7 +1556,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		
 		if(answer == NSOKButton) {
 			if([sp filename] != nil){
-				CFStringGetCString((CFStringRef)[sp filename], buf, len-1,  kCFStringEncodingMacRoman); 
+				CFStringGetCString((CFStringRef)[sp filename], buf, len-1,  kCFStringEncodingUTF8); 
 				buf[len] = '\0';
 			}
 		}
@@ -1600,14 +1567,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		
 		if(answer == NSOKButton) {
 			if([op filename] != nil){
-				CFStringGetCString((CFStringRef)[op filename], buf, len-1,  kCFStringEncodingMacRoman); 
+				CFStringGetCString((CFStringRef)[op filename], buf, len-1,  kCFStringEncodingUTF8 ); 
 				buf[len] = '\0';
 			}
 		}
-	}	
-	return strlen(buf);
-	
-}	
+	}
+	return strlen(buf); // is is used? it's potentially incorrect...
+}
 
 - (void) loadFile:(NSString *)fname
 {
