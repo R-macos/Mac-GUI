@@ -225,6 +225,10 @@ static RController* sharedRController;
 		if (flag) {
 			char *cRLIBS = getenv("R_LIBS");
 			NSString *addPath = [@"~/Library/R/library" stringByExpandingTildeInPath];
+			if (![[NSFileManager defaultManager] fileExistsAtPath:addPath]) { // make sure the directory exists
+				[[NSFileManager defaultManager] createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
+				[[NSFileManager defaultManager] createDirectoryAtPath:addPath attributes:nil];
+			}
 			if (cRLIBS && *cRLIBS)
 				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
 			setenv("R_LIBS", [addPath UTF8String], 1);
