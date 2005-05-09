@@ -983,13 +983,15 @@ extern BOOL isTimeToFinish;
 		//exit(WEXITSTATUS(sr));
 	}
 	if (pid==-1) return -1;
-	
-	[[RController getRController] addChildProcess: pid];
-	
-	while (1) {
-		pid_t w = waitpid(pid, &cstat, WNOHANG);
-		if (w!=0) break;
-		Re_ProcessEvents();
+		
+	{
+		struct timespec peSleep = { 0, 50000000 }; // 50ms sleep
+		while (1) {
+			pid_t w = waitpid(pid, &cstat, WNOHANG);
+			if (w!=0) break;
+			nanosleep(&peSleep, 0); // sleep at least 50ms between PE calls (they're expensive)
+			Re_ProcessEvents();
+		}
 	}
 	[[RController getRController] rmChildProcess: pid];
 	return cstat;
