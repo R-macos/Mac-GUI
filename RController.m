@@ -253,6 +253,23 @@ static RController* sharedRController;
 			setenv("R_HOME", [[rfb resourcePath] UTF8String], 1);
 		}
 	}
+
+#if (R_VERSION >= R_Version(2,2,0))
+	 if (!getenv("RGUI_NOWARN_RDEVEL"))
+	 NSRunAlertPanel(@"Using R-devel (unstable!)",@"You are using R-devel (to become 2.2.0)\n\nSeveral properites that I rely on are changing in R-devel. I will take a wild guess as of how they change, but that guess can be completely wrong. Most importantly you have to use the default build settings. Proceed at your own risk.\n\n(Set RGUI_NOWARN_RDEVEL to get rid of this message)",NLS(@"OK"),nil,nil);
+	 {
+		 char tp[1024];
+		 if (!getenv("R_INCLUDE_DIR")) {
+			 strcpy(tp, getenv("R_HOME")); strcat(tp, "/include"); setenv("R_INCLUDE_DIR", tp, 1);
+		 }
+		 if (!getenv("R_SHARE_DIR")) {
+			 strcpy(tp, getenv("R_HOME")); strcat(tp, "/share"); setenv("R_SHARE_DIR", tp, 1);
+		 }
+		 if (!getenv("R_DOC_DIR")) {
+			 strcpy(tp, getenv("R_HOME")); strcat(tp, "/doc"); setenv("R_DOC_DIR", tp, 1);
+		 }
+	 }
+#endif
 	
 	/* setup LANG variable to match the system locale based on user's CFLocale */
 #if (R_VERSION >= R_Version(2,1,0))
@@ -985,7 +1002,7 @@ extern BOOL isTimeToFinish;
 	if (pid==-1) return -1;
 		
 	{
-		struct timespec peSleep = { 0, 50000000 }; // 50ms sleep
+		struct timespec peSleep = { 0, 100000000 }; // 100ms sleep
 		while (1) {
 			pid_t w = waitpid(pid, &cstat, WNOHANG);
 			if (w!=0) break;
