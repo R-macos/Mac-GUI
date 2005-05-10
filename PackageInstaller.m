@@ -50,9 +50,15 @@ NSString *location[2] = {
 	if (really) {
 		SLog(@"PackageInstaller: I'm getting busy");
 		[busyIndicator startAnimation:self];
+		[updateAllButton setEnabled:NO];
+		[installButton setEnabled:NO];
+		[getListButton setEnabled:NO];
 	} else {
 		SLog(@"PackageInstaller: Stopped being busy");
 		[busyIndicator stopAnimation:self];
+		[updateAllButton setEnabled:!(pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)];
+		[installButton setEnabled:YES];
+		[getListButton setEnabled:YES];
 	}
 }
 
@@ -132,19 +138,20 @@ NSString *location[2] = {
 		}
 		
 	} else {
+		NSMutableString *packagesToInstall = nil;
 		NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];			
 		unsigned current_index = [rows firstIndex];
 		if(current_index == NSNotFound) {
 			[self busy: NO];
 			return;
 		}
-		
-		NSMutableString *packagesToInstall = nil;
-		
+
 		packagesToInstall = [[NSMutableString alloc] initWithString: @"c("];
 		
 		while (current_index != NSNotFound) {
-			[packagesToInstall appendFormat:@"\"%@\"",package[current_index].name];
+			int cix = current_index;
+			if (filter) cix=filter[cix];
+			[packagesToInstall appendFormat:@"\"%@\"",package[cix].name];
 			current_index = [rows indexGreaterThanIndex: current_index];
 			if(current_index != NSNotFound)
 				[packagesToInstall appendString:@","];
@@ -188,14 +195,14 @@ NSString *location[2] = {
 			case kOTHER:
 				if(pkgFormat == kSource)
 					[[REngine mainEngine] executeString: 
-						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=\"%@\")",
+						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=\"%@\",type=\"source\")",
 							packagesToInstall, targetLocation, [urlTextField stringValue]]];
-			else
-				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",contriburl=\"%@\")",
-						packagesToInstall, targetLocation, [urlTextField stringValue]]];
+				else
+					[[REngine mainEngine] executeString: 
+						[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",contriburl=\"%@\")",
+							packagesToInstall, targetLocation, [urlTextField stringValue]]];
 			break;
-
+				
 			default:
 				break;
 		}
@@ -204,17 +211,12 @@ NSString *location[2] = {
 	}
 	
 	[self busy:NO];
+	
+	[self reloadURL:self];
 }
 
-
-- (IBAction)reloadURL:(id)sender
+- (void) checkOptions
 {
-	//	NSLog(@"pkgUrl=%d, pkgInst=%d, pkgFormat:%d",pkgUrl, pkgInst, pkgFormat);
-	[self busy: YES];
-	
-	[pkgDataSource deselectAll:self];
-	[pkgDataSource setHidden:YES];
-	
 #if (R_VERSION >= R_Version(2,1,0))
 	// in 2.1 the proxy functions were not updated to accomodate for changes in
 	// package installation - so we need to set options for backward compati-
@@ -253,7 +255,15 @@ NSString *location[2] = {
 		optionsChecked = YES;
 	}
 #endif
+}
+
+- (IBAction)reloadURL:(id)sender
+{
+	//	NSLog(@"pkgUrl=%d, pkgInst=%d, pkgFormat:%d",pkgUrl, pkgInst, pkgFormat);
+	[self busy: YES];
 	
+	[self checkOptions];
+
 	switch(pkgUrl){
 		
 		case kCRANBin:
@@ -283,6 +293,7 @@ NSString *location[2] = {
 				return;
 			}
 			
+			[Preferences setKey:@"pkgInstaller.customURL" withObject:[urlTextField stringValue]];
 			[[REngine mainEngine] executeString: 
 				[NSString stringWithFormat:@"browse.pkgs(contriburl=\"%@\")",[urlTextField stringValue]]];
 			break;
@@ -291,6 +302,8 @@ NSString *location[2] = {
 			break;
 			
 	}
+	loadedPkgUrl=pkgUrl; // whether successful or not doesn't mattter - but the load was attempted
+	if ([pkgDataSource numberOfRows]>0) [installButton setEnabled:YES];
 	
 	[self busy:NO];
 }
@@ -322,7 +335,8 @@ NSString *location[2] = {
 - (IBAction)setURL:(id)sender
 {
 	pkgUrl = [[ sender selectedCell] tag];
-	[pkgDataSource setHidden:YES];
+	[pkgDataSource setHidden:(loadedPkgUrl!=pkgUrl)]; // hide if it's not the loaded one 
+	[installButton setEnabled:(loadedPkgUrl==pkgUrl)];
 	
 	switch(pkgUrl){
 		
@@ -332,8 +346,9 @@ NSString *location[2] = {
 			pkgFormat = kBinary;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:NO];
-			[urlTextField setEnabled:NO];
+			[urlTextField setHidden:YES];
 			[getListButton setEnabled:YES];
+			[updateAllButton setEnabled:YES];
 			break;
 			
 		case kCRANSrc:
@@ -341,37 +356,45 @@ NSString *location[2] = {
 			pkgFormat = kSource;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:NO];
-			[urlTextField setEnabled:NO];
+			[urlTextField setHidden:YES];
 			[getListButton setEnabled:YES];
+			[updateAllButton setEnabled:YES];
 			break;
 			
 		case kOTHER:
 			pkgFormat = kSource;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:YES];
-			[urlTextField setEnabled:YES];
+			[urlTextField setHidden:NO];
 			[getListButton setEnabled:YES];
+			[updateAllButton setEnabled:YES];
 			break;
 			
 		case kLocalBin:
 			pkgFormat = kBinary;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:NO];
+			[urlTextField setHidden:YES];
 			[getListButton setEnabled:NO];
+			[updateAllButton setEnabled:NO];
 			break;
 			
 		case kLocalSrc:
 			pkgFormat = kSource;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:NO];
+			[urlTextField setHidden:YES];
 			[getListButton setEnabled:NO];
+			[updateAllButton setEnabled:NO];
 			break;
 			
 		case kLocalDir:
 			pkgFormat = kSource;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:NO];
+			[urlTextField setHidden:YES];
 			[getListButton setEnabled:NO];
+			[updateAllButton setEnabled:NO];
 			break;
 			
 		default:
@@ -391,8 +414,11 @@ NSString *location[2] = {
 
 - (void)awakeFromNib
 {
+	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL"];
 	[formatCheckBox setEnabled:NO];
-	[urlTextField setEnabled:NO];
+	if (cURL) [urlTextField setStringValue:cURL];
+	[urlTextField setHidden:YES];
+	[installButton setEnabled:NO];
 	pkgInst = isAdmin()?kSystemLevel:kUserLevel;
 	pkgUrl = kCRANBin;
 	pkgFormat = kBinary;
@@ -410,7 +436,11 @@ NSString *location[2] = {
 		sharedController = self;
 		[pkgDataSource setTarget: self];
 		optionsChecked = NO;
+		loadedPkgUrl = -1;
 		packages = 0;
+		filter = 0;
+		filterlen = 0;
+		filterString = nil;
     }
 	
     return self;
@@ -432,23 +462,30 @@ NSString *location[2] = {
 		i++;
 	}
 	free(package);
+	if (filter) free(filter);
+	filterlen=0;
 	packages=0;
 }
 
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
-	return packages;
+	return (filter)?filterlen:packages;
 }
 
 - (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
 {
-	if (row>=packages) return nil;
+	int lrow = row;
+	if (filter) {
+		if (row>=filterlen) return nil;
+		lrow = filter[row];
+	}
+	if (lrow>=packages) return nil;
 	if([[tableColumn identifier] isEqualToString:@"package"])
-		return package[row].name;
+		return package[lrow].name;
 	else if([[tableColumn identifier] isEqualToString:@"instVer"])
-		return package[row].iver;
+		return package[lrow].iver;
 	else if([[tableColumn identifier] isEqualToString:@"repVer"])
-		return package[row].rver;
+		return package[lrow].rver;
 	return nil;				
 }
 
@@ -489,19 +526,146 @@ NSString *location[2] = {
 		return;
 	}
 
-	if (label) repositoryLabel = [NSString stringWithCString: label];
+	if (label) repositoryLabel = [NSString stringWithUTF8String: label];
 	
 	package = malloc(sizeof(*package)*count);
 	while (i<count) {
-		package[i].name=[[NSString alloc] initWithCString: name[i]];
-		package[i].iver=[[NSString alloc] initWithCString: iver[i]];
-		package[i].rver=[[NSString alloc] initWithCString: rver[i]];
+		package[i].name=[[NSString alloc] initWithUTF8String: name[i]];
+		package[i].iver=[[NSString alloc] initWithUTF8String: iver[i]];
+		package[i].rver=[[NSString alloc] initWithUTF8String: rver[i]];
 		package[i].status=stat[i];
 		i++;
 	}
 	packages=count;
 	
 	[self show];
+}
+
+- (IBAction)updateAll:(id)sender
+{
+	NSString *targetLocation = nil;
+	NSString *repos = nil;
+	NSString *type = @"mac.binary";
+	
+	if(pkgInst == kOtherLocation){
+		NSOpenPanel *op;
+		int answer;
+		
+		op = [NSOpenPanel openPanel];
+		[op setCanChooseDirectories:YES];
+		[op setCanChooseFiles:NO];
+		[op setTitle:NLS(@"Select Installation Directory")];
+		
+		answer = [op runModalForDirectory:nil file:nil types:[NSArray arrayWithObject:@""]];
+		[op setCanChooseDirectories:NO];
+		[op setCanChooseFiles:YES];
+		if(answer == NSOKButton)
+			targetLocation = [op directory];
+		else
+			return;
+	} else
+		targetLocation = location[pkgInst];
+	
+	[self busy:YES];
+
+	[self checkOptions];
+	
+	switch(pkgUrl){
+		case kCRANBin:
+			if([[RController getRController] getRootFlag]) {
+				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
+				break;
+			}
+			repos=@"getOption(\"CRAN\")";
+			break;
+			
+		case kCRANSrc:
+			repos=@"getOption(\"CRAN\")";
+			type =@"source";
+			break;
+			
+		case kBIOCBin:
+			repos=@"getOption(\"BIOC\")";
+			break;
+			
+		case kBIOCSrc:
+			repos=@"getOption(\"BIOC\")";
+			type =@"source";
+			break;
+			
+		case kOTHER:
+			repos=[NSString stringWithFormat:@"\"%@\"", [urlTextField stringValue]];
+			if(pkgFormat == kSource) type =@"source";
+	}
+	[[REngine mainEngine] executeString: 
+		[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',CRAN=%@,type='%@')",
+			targetLocation, repos, type]
+		];
+	
+	[self reloadURL:self];
+	[self busy:NO];
+}
+
+- (void) reRunFilter
+{
+	SLog(@"PackageInstaller.reRunFilter");
+
+	NSIndexSet *preIx = [pkgDataSource selectedRowIndexes];
+	NSMutableIndexSet *postIx = [[NSMutableIndexSet alloc] init];
+	NSMutableIndexSet *absSelIx = [[NSMutableIndexSet alloc] init];
+	int i=0;
+		
+	if ([preIx count]>0) { // save selection in absolute index positions
+		i = [preIx firstIndex];
+		do {
+			if (!filter || i<filterlen)
+				[absSelIx addIndex:filter?filter[i]:i];
+			i = [preIx indexGreaterThanIndex:i];
+		} while (i!=NSNotFound);
+		i=0;
+	}
+	
+	if (filter) {
+		filterlen=0;
+		if (filter) free(filter);
+		filter=0;
+	}
+	
+	if (filterString && [filterString length]>0) {
+		filterlen=0;
+		while (i<packages) {
+			if ([package[i++].name rangeOfString:filterString options:NSCaseInsensitiveSearch].location!=NSNotFound) filterlen++;
+		}
+		SLog(@" - found %d matches", filterlen);
+		filter=(int*)malloc(sizeof(int)*(filterlen+1));
+		i=0; filterlen=0;
+		while (i<packages) {
+			if ([package[i].name rangeOfString:filterString options:NSCaseInsensitiveSearch].location!=NSNotFound) {
+				if ([absSelIx containsIndex:i])
+					[postIx addIndex:filterlen];
+				filter[filterlen++]=i;
+			}
+			i++;
+		}
+	} else [postIx addIndexes:absSelIx];
+
+	[pkgDataSource reloadData];
+	[pkgDataSource selectRowIndexes:postIx byExtendingSelection:NO];
+	[absSelIx release];
+	[postIx release];
+}
+
+- (IBAction)runPkgSearch:(id)sender
+{
+	NSString *ss = [sender stringValue];
+	if (filterString) [filterString release];
+	if (!ss || [ss length]==0)
+		filterString=nil;
+	else {
+		filterString = ss;
+		[filterString retain];
+	}
+	[self reRunFilter];
 }
 
 @end

@@ -54,9 +54,11 @@
                 installSelected = id; 
                 reloadPIData = id; 
                 reloadURL = id; 
+                runPkgSearch = id; 
                 setFormat = id; 
                 setLocation = id; 
                 setURL = id; 
+                updateAll = id; 
             }; 
             CLASS = PackageInstaller; 
             LANGUAGE = ObjC; 
@@ -64,11 +66,13 @@
                 busyIndicator = NSProgressIndicator; 
                 formatCheckBox = NSButton; 
                 getListButton = NSButton; 
+                installButton = NSButton; 
                 locationMatrix = NSMatrix; 
                 pkgDataSource = NSTableView; 
                 pkgScrollView = NSScrollView; 
                 pkgWindow = id; 
                 repositoryButton = NSPopUpButton; 
+                updateAllButton = NSButton; 
                 urlTextField = NSTextField; 
             }; 
             SUPERCLASS = NSObject; 

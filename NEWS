@@ -1,5 +1,20 @@
 NEWS
 
+Last-update: 2005-05-10 [SU]
+*	Added package search/filter to package isntaller
+*	Cleanup of the package installer interface - buttons are grayed
+	when busy and the list doesn't just disappear
+*	Added "Update All" functionality to the package installer (supports
+	internet repositories including custom one)
+*	Fixed custom repository source install (used binary in R 2.1 patched)
+*	Remember custom URL across sessions. Show the field only when relevant.
+*	Reload package list after instalaltion so the newly installed versions
+	are reflected in the list
+
+Last-update: 2005-05-09 [SU]
+*	Fixed CPU hogging while waiting for system() to finish.
+	Calling PE too often slowed down source package installation a lot.
+
 Last-update: 2005-05-06 [SU]
 *	Fixed history handling to work with UTF-8 paths
 *	Fixed race condition in preference notification

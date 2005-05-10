@@ -63,17 +63,23 @@ typedef struct pkgInstallerEntry {
 	IBOutlet NSButton *formatCheckBox;
     IBOutlet NSMatrix *locationMatrix;
     IBOutlet NSTextField *urlTextField;
+	IBOutlet NSButton *installButton;
+	IBOutlet NSButton *updateAllButton;
 	
 	IBOutlet NSScrollView *pkgScrollView;
 	IBOutlet NSProgressIndicator *busyIndicator;
 	
 	int pkgUrl;
+	int loadedPkgUrl;
 	int pkgInst;
 	int pkgFormat;
 	
 	int packages;
 	s_pkgInstallerEntry *package;
 	NSString *repositoryLabel;
+	int *filter;
+	int filterlen;
+	NSString *filterString;
 	
 	BOOL optionsChecked;
 }
@@ -85,6 +91,9 @@ typedef struct pkgInstallerEntry {
 - (IBAction)setURL:(id)sender;
 - (IBAction)setLocation:(id)sender;
 - (IBAction)setFormat:(id)sender;
+
+- (IBAction)updateAll:(id)sender;
+- (IBAction)runPkgSearch:(id)sender;
 
 - (id) window;
 - (void) reloadData;
