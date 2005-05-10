@@ -59,10 +59,10 @@ static id sharedHMController;
 	NSCharacterSet *charSet;
 	charSet = [NSCharacterSet characterSetWithCharactersInString:@"'\""];
 	searchString = [[sender stringValue] stringByTrimmingCharactersInSet:charSet];
-	NSLog(@"runHelpSearch: <%@>", searchString);
+	SLog(@"runHelpSearch: <%@>", searchString);
 	
 	//		[self sendInput:[NSString stringWithFormat:@"help(\"%@\")", searchString]];
-	if([[ matchRadio selectedCell] tag] == kFuzzyMatch){
+	if(searchType == kFuzzyMatch){
 		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", searchString]];
 			[sender setStringValue:@""];
 	} else {
@@ -182,6 +182,28 @@ static id sharedHMController;
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
 	[printOp runOperation];
+}
+
+- (void) setSearchType:(int) type
+{
+	if (type==kFuzzyMatch || type==kExactMatch) {
+		NSMenu *m = [(NSSearchFieldCell*)searchField searchMenuTemplate];
+		
+		searchType = type;
+		[[m itemWithTag:kFuzzyMatch] setState:(searchType==kFuzzyMatch)?NSOnState:NSOffState];
+		[[m itemWithTag:kExactMatch] setState:(searchType==kExactMatch)?NSOnState:NSOffState];
+		[(NSSearchFieldCell*)searchField setSearchMenuTemplate:m];
+	}
+}
+
+- (void) awakeFromNib
+{
+	[self setSearchType:kExactMatch];
+}
+
+- (IBAction)changeSearchType:(id)sender
+{
+	[self setSearchType:[sender tag]];
 }
 
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame {

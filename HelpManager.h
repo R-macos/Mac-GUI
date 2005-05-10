@@ -33,25 +33,25 @@
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
 
-#define kExactMatch 0
-#define kFuzzyMatch 1
+#define kExactMatch 10
+#define kFuzzyMatch 11
 
 @interface HelpManager : NSObject
 {
-    IBOutlet NSButton *faqButton;
     IBOutlet WebView *HelpView;
-    IBOutlet NSButton *mainButton;
-    IBOutlet NSMatrix *matchRadio;
     IBOutlet NSSearchField *searchField;
 	IBOutlet NSWindow *helpWindow;
 	IBOutlet NSButton *forward;
 	IBOutlet NSButton *back;
+	
+	int searchType;
 }
 
 - (IBAction)runHelpSearch:(id)sender;
 - (IBAction)showMainHelp:(id)sender;
 - (IBAction)showRFAQ:(id)sender;
 - (IBAction)whatsNew:(id)sender;
+- (IBAction)changeSearchType:(id)sender;
 
 - (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic; // displays results only, used by help() in 2.1 and later
 - (void)showHelpFor:(NSString *)topic; // runs a search

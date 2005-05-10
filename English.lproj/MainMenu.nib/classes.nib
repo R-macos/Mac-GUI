@@ -27,6 +27,7 @@
         }, 
         {
             ACTIONS = {
+                changeSearchType = id; 
                 printDocument = id; 
                 runHelpSearch = id; 
                 showMainHelp = id; 
@@ -38,11 +39,8 @@
             OUTLETS = {
                 HelpView = WebView; 
                 back = NSButton; 
-                faqButton = NSButton; 
                 forward = NSButton; 
                 helpWindow = NSWindow; 
-                mainButton = NSButton; 
-                matchRadio = NSMatrix; 
                 searchField = NSSearchField; 
             }; 
             SUPERCLASS = NSObject; 
