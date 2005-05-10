@@ -43,6 +43,48 @@ NSString *location[2] = {
 	@"~/Library/R/library"
 };
 
+@interface PackageEntry (PrivateMethods)
+- (NSString*) name;
+- (NSString*) iver;
+- (NSString*) rver;
+- (BOOL) status;
+
+// this one allows us to run sortUsingSelector: on the enclosing array - the actual reason why I replaced the C structure
+- (NSComparisonResult)caseInsensitiveCompare:(PackageEntry *)anEntry;
+@end
+
+@implementation PackageEntry
+
+- (id) initWithName: (const char*) cName iVer: (const char*) iV rVer: (const char*) rV status: (BOOL) st
+{
+	self = [super init];
+	if (self) {
+		name=[[NSString alloc] initWithUTF8String: cName];
+		iver=[[NSString alloc] initWithUTF8String: iV];
+		rver=[[NSString alloc] initWithUTF8String: rV];
+		status=st;
+	}
+	return self;
+}
+
+- (void) dealloc {
+	[name release];
+	[iver release];
+	[rver release];
+	[super dealloc];
+}
+
+- (NSString*) name { return name; };
+- (NSString*) iver { return iver; };
+- (NSString*) rver { return rver; };
+- (BOOL) status { return status; };
+
+- (NSComparisonResult)caseInsensitiveCompare:(PackageEntry *)anEntry
+{
+	return [name caseInsensitiveCompare:[anEntry name]];
+}
+@end
+
 @implementation PackageInstaller
 
 - (void) busy: (BOOL) really
@@ -151,7 +193,7 @@ NSString *location[2] = {
 			while (current_index != NSNotFound) {
 				int cix = current_index;
 				if (filter) cix=filter[cix];
-				[packagesToInstall appendFormat:@"\"%@\"",package[cix].name];
+				[packagesToInstall appendFormat:@"\"%@\"",[[packages objectAtIndex:cix] name]];
 				current_index = [rows indexGreaterThanIndex: current_index];
 				if(current_index != NSNotFound)
 					[packagesToInstall appendString:@","];
@@ -288,12 +330,10 @@ NSString *location[2] = {
 				[NSString stringWithFormat:@"browse.pkgs(contriburl=\"%@\")",[urlTextField stringValue]]];
 			break;
 			
-		default:
-			break;
-			
 	}
 	loadedPkgUrl=pkgUrl; // whether successful or not doesn't mattter - but the load was attempted
 	if ([pkgDataSource numberOfRows]>0) [installButton setEnabled:YES];
+	[self reRunFilter];
 	
 	[self busy:NO];
 }
@@ -427,10 +467,11 @@ NSString *location[2] = {
 		[pkgDataSource setTarget: self];
 		optionsChecked = NO;
 		loadedPkgUrl = -1;
-		packages = 0;
+		packages = [[NSMutableArray alloc] init];
 		filter = 0;
 		filterlen = 0;
 		filterString = nil;
+		installedOnly = NO;
     }
 	
     return self;
@@ -443,39 +484,31 @@ NSString *location[2] = {
 
 - (void) resetPackages
 {
-	if (!packages) return;
-	int i=0;
-	while (i<packages) {
-		[package[i].name release];
-		[package[i].iver release];
-		[package[i].rver release];
-		i++;
-	}
-	free(package);
+	[packages removeAllObjects];
 	if (filter) free(filter);
 	filterlen=0;
-	packages=0;
 }
 
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
-	return (filter)?filterlen:packages;
+	return (filter)?filterlen:[packages count];
 }
 
 - (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
 {
 	int lrow = row;
+	if (!packages) return nil;
 	if (filter) {
 		if (row>=filterlen) return nil;
 		lrow = filter[row];
 	}
-	if (lrow>=packages) return nil;
+	if (lrow>=[packages count]) return nil;
 	if([[tableColumn identifier] isEqualToString:@"package"])
-		return package[lrow].name;
+		return [[packages objectAtIndex:lrow] name];
 	else if([[tableColumn identifier] isEqualToString:@"instVer"])
-		return package[lrow].iver;
+		return [[packages objectAtIndex:lrow] iver];
 	else if([[tableColumn identifier] isEqualToString:@"repVer"])
-		return package[lrow].rver;
+		return [[packages objectAtIndex:lrow] rver];
 	return nil;				
 }
 
@@ -510,23 +543,21 @@ NSString *location[2] = {
 {
 	int i=0;
 	
-	if (packages) [self resetPackages];
+	if ([packages count]>0) [self resetPackages];
 	if (count<1) {
 		[self show];
 		return;
 	}
 	
 	if (label) repositoryLabel = [NSString stringWithUTF8String: label];
-	
-	package = malloc(sizeof(*package)*count);
+
 	while (i<count) {
-		package[i].name=[[NSString alloc] initWithUTF8String: name[i]];
-		package[i].iver=[[NSString alloc] initWithUTF8String: iver[i]];
-		package[i].rver=[[NSString alloc] initWithUTF8String: rver[i]];
-		package[i].status=stat[i];
+		PackageEntry *pe = [[PackageEntry alloc] initWithName:name[i] iVer:iver[i] rVer:rver[i] status:stat[i]];
+		[packages addObject:pe];
+		[pe release]; // the array retained it
 		i++;
 	}
-	packages=count;
+	[packages sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	
 	[self show];
 }
@@ -624,16 +655,19 @@ NSString *location[2] = {
 		filter=0;
 	}
 	
-	if (filterString && [filterString length]>0) {
+	if (installedOnly || (filterString && [filterString length]>0)) {
 		filterlen=0;
-		while (i<packages) {
-			if ([package[i++].name rangeOfString:filterString options:NSCaseInsensitiveSearch].location!=NSNotFound) filterlen++;
+		while (i<[packages count]) {
+			BOOL isCand = !installedOnly || [[[packages objectAtIndex:i] iver] length]>0;
+			if (isCand && (!filterString || [[[packages objectAtIndex:i] name] rangeOfString:filterString options:NSCaseInsensitiveSearch].location!=NSNotFound)) filterlen++;
+			i++;
 		}
 		SLog(@" - found %d matches", filterlen);
 		filter=(int*)malloc(sizeof(int)*(filterlen+1));
 		i=0; filterlen=0;
-		while (i<packages) {
-			if ([package[i].name rangeOfString:filterString options:NSCaseInsensitiveSearch].location!=NSNotFound) {
+		while (i<[packages count]) {
+			BOOL isCand = !installedOnly || [[[packages objectAtIndex:i] iver] length]>0;
+			if (isCand && (!filterString || [[[packages objectAtIndex:i] name] rangeOfString:filterString options:NSCaseInsensitiveSearch].location!=NSNotFound)) {
 				if ([absSelIx containsIndex:i])
 					[postIx addIndex:filterlen];
 				filter[filterlen++]=i;
@@ -658,6 +692,13 @@ NSString *location[2] = {
 		filterString = ss;
 		[filterString retain];
 	}
+	[self reRunFilter];
+}
+
+- (IBAction)toggleShowInstalled:(id)sender
+{
+	installedOnly = !installedOnly;
+	[(NSMenuItem*) sender setTitle:installedOnly?NLS(@"Show All"):NLS(@"Show Installed Only")];
 	[self reRunFilter];
 }
 

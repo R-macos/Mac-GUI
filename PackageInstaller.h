@@ -47,12 +47,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef struct pkgInstallerEntry {
+@interface PackageEntry : NSObject {
 	NSString *name;
 	NSString *iver;
 	NSString *rver;
 	BOOL status;
-} s_pkgInstallerEntry;
+}
+
+- (id) initWithName: (const char*) cName iVer: (const char*) iV rVer: (const char*) rV status: (BOOL) st;
+@end
 
 @interface PackageInstaller : NSObject
 {
@@ -74,14 +77,14 @@ typedef struct pkgInstallerEntry {
 	int pkgInst;
 	int pkgFormat;
 	
-	int packages;
-	s_pkgInstallerEntry *package;
+	NSMutableArray *packages;
 	NSString *repositoryLabel;
 	int *filter;
 	int filterlen;
 	NSString *filterString;
 	
 	BOOL optionsChecked;
+	BOOL installedOnly;
 }
 
 - (IBAction)installSelected:(id)sender;
@@ -95,9 +98,12 @@ typedef struct pkgInstallerEntry {
 - (IBAction)updateAll:(id)sender;
 - (IBAction)runPkgSearch:(id)sender;
 
+- (IBAction)toggleShowInstalled:(id)sender;
+
 - (id) window;
 - (void) reloadData;
 - (void) resetPackages;
+- (void) reRunFilter;
 
 - (void) show;
 - (void) updateInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label;

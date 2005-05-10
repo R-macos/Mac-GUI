@@ -58,6 +58,7 @@
                 setFormat = id; 
                 setLocation = id; 
                 setURL = id; 
+                toggleShowInstalled = id; 
                 updateAll = id; 
             }; 
             CLASS = PackageInstaller; 

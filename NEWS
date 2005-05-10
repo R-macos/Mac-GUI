@@ -1,7 +1,9 @@
 NEWS
 
 Last-update: 2005-05-10 [SU]
-*	Added package search/filter to package isntaller
+*	Sort packages in package installer by name (case-insensitively)
+*	Added package search/filter to package installer (with recent search
+	menu and the option to show installed packages only)
 *	Cleanup of the package installer interface - buttons are grayed
 	when busy and the list doesn't just disappear
 *	Added "Update All" functionality to the package installer (supports
@@ -10,6 +12,9 @@ Last-update: 2005-05-10 [SU]
 *	Remember custom URL across sessions. Show the field only when relevant.
 *	Reload package list after instalaltion so the newly installed versions
 	are reflected in the list
+*	Change package installer to use contriburl and type parameters (to
+	make it compatible with R 2.2 - the CRAN parameter is deprecatred)
+*	Fixed bug in single-item select.list() calculating wrong list height
 
 Last-update: 2005-05-09 [SU]
 *	Fixed CPU hogging while waiting for system() to finish.
