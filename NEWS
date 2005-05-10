@@ -1,6 +1,7 @@
 NEWS
 
 Last-update: 2005-05-10 [SU]
+*	Re-designed help browser - added support for search field history
 *	Sort packages in package installer by name (case-insensitively)
 *	Added package search/filter to package installer (with recent search
 	menu and the option to show installed packages only)
