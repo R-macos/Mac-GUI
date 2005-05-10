@@ -142,6 +142,8 @@ BOOL IsSelectList;
 		float nonTableH = rw.size.height - rf.size.height;
 		float showCount = ((float)((count>20)?20:count));
 		
+		if (count==1) rl.origin.y = rr.origin.y + rr.size.height + 1.0; // rl will be bogus if there is just 1 entry, so we need to fake it
+		
 		rw.size.height = nonTableH + rr.origin.y + (rl.origin.y-rr.origin.y)*showCount - 1.0;
 
 		[[self window] setFrame:rw display:YES];
