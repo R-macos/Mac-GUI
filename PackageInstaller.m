@@ -65,7 +65,8 @@ NSString *location[2] = {
 - (IBAction)installSelected:(id)sender
 {
 	NSString *targetLocation = nil;
-
+	BOOL success = YES;
+	
 	if(pkgInst == kOtherLocation){
 		NSOpenPanel *op;
 		int answer;
@@ -86,7 +87,7 @@ NSString *location[2] = {
 		targetLocation = location[pkgInst];
 	
 	[self busy:YES];
-
+	
 	{
 		NSString *testFile;
 		targetLocation = [targetLocation stringByExpandingTildeInPath];
@@ -118,97 +119,86 @@ NSString *location[2] = {
 		}
 	}
 	
-	if( (pkgUrl == kLocalBin) || (pkgUrl == kLocalSrc) || (pkgUrl == kLocalDir) ){
-		
-		switch(pkgUrl){
-			case kLocalBin:
-				[[RController getRController] installFromBinary:self];
-				break;
-				
-			case kLocalSrc:
-				[[RController getRController] installFromSource:self];
-				break;
-				
-			case kLocalDir:
-				[[RController getRController] installFromDir:self];
-				break;
-				
-			default:
-				break;
-		}
-		
-	} else {
-		NSMutableString *packagesToInstall = nil;
-		NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];			
-		unsigned current_index = [rows firstIndex];
-		if(current_index == NSNotFound) {
-			[self busy: NO];
-			return;
-		}
-
-		packagesToInstall = [[NSMutableString alloc] initWithString: @"c("];
-		
-		while (current_index != NSNotFound) {
-			int cix = current_index;
-			if (filter) cix=filter[cix];
-			[packagesToInstall appendFormat:@"\"%@\"",package[cix].name];
-			current_index = [rows indexGreaterThanIndex: current_index];
-			if(current_index != NSNotFound)
-				[packagesToInstall appendString:@","];
-		}
-		
-		[packagesToInstall appendString:@")"];
-		
-		switch(pkgUrl){
-			
-			case kCRANBin:
-				if([[RController getRController] getRootFlag]) {
-					NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
-					break;
-				}
-				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",CRAN=getOption(\"CRAN\"))",
-						packagesToInstall, targetLocation]					
-					];
-				
-				break;
-				
-			case kCRANSrc:
-				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",CRAN=getOption(\"CRAN\"))",
-						packagesToInstall, targetLocation]];
-				
-				break;
-				
-			case kBIOCBin:
-				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",CRAN=getOption(\"BIOC\"))",
-						packagesToInstall, targetLocation]];
-				break;
-				
-			case kBIOCSrc:
-				[[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",CRAN=getOption(\"BIOC\"))",
-						packagesToInstall, targetLocation]];
-				break;
-				
-			case kOTHER:
-				if(pkgFormat == kSource)
-					[[REngine mainEngine] executeString: 
-						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=\"%@\",type=\"source\")",
-							packagesToInstall, targetLocation, [urlTextField stringValue]]];
-				else
-					[[REngine mainEngine] executeString: 
-						[NSString stringWithFormat:@"install.binaries(%@,lib=\"%@\",contriburl=\"%@\")",
-							packagesToInstall, targetLocation, [urlTextField stringValue]]];
+	switch(pkgUrl) {
+		case kLocalBin:
+			[[RController getRController] installFromBinary:self];
 			break;
-				
-			default:
+			
+		case kLocalSrc:
+			[[RController getRController] installFromSource:self];
+			break;
+			
+		case kLocalDir:
+			[[RController getRController] installFromDir:self];
+			break;
+			
+		default:
+		{
+			NSMutableString *packagesToInstall = nil;
+			NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];
+			NSString *repos = @"getOption(\"CRAN\")";
+			NSString *type  = @"mac.binary";
+			unsigned current_index = [rows firstIndex];
+			
+			if(current_index == NSNotFound) {
+				[self busy: NO];
+				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"No packages selected, nothing to do."));
 				break;
+			}
+			
+			packagesToInstall = [[NSMutableString alloc] initWithString: @"c("];
+			
+			while (current_index != NSNotFound) {
+				int cix = current_index;
+				if (filter) cix=filter[cix];
+				[packagesToInstall appendFormat:@"\"%@\"",package[cix].name];
+				current_index = [rows indexGreaterThanIndex: current_index];
+				if(current_index != NSNotFound)
+					[packagesToInstall appendString:@","];
+			}
+			
+			[packagesToInstall appendString:@")"];
+			
+			switch(pkgUrl) {
+				
+				case kCRANBin:
+					if([[RController getRController] getRootFlag]) {
+						NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
+						break;
+					}
+					
+					break;
+					
+				case kCRANSrc:
+					type = @"source";
+					break;
+					
+				case kBIOCBin:
+					repos=@"getOption(\"BIOC\"))";
+					break;
+					
+				case kBIOCSrc:
+					repos=@"getOption(\"BIOC\"))";
+					type=@"source";
+					break;
+					
+				case kOTHER:
+					if (pkgFormat == kSource) type=@"source";
+					repos = [NSString stringWithFormat:@"\"%@\"", [urlTextField stringValue]];
+					break;
+			}
+			
+			if (repos && type)
+				success = [[REngine mainEngine] executeString: 
+					[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=contrib.url(%@,'%@'),type='%@')",
+						packagesToInstall, targetLocation, repos, type, type]
+					];
+			
+			[packagesToInstall release];
 		}
-
-		[packagesToInstall release];
 	}
+
+	if (!success) NSBeginAlertSheet(NLS(@"Package installation failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Package installation was not successful. Please see the R Console for details."));
 	
 	[self busy:NO];
 	
@@ -218,7 +208,7 @@ NSString *location[2] = {
 - (void) checkOptions
 {
 #if (R_VERSION >= R_Version(2,1,0))
-	// in 2.1 the proxy functions were not updated to accomodate for changes in
+	// in 2.1.0 release the proxy functions were not updated to accomodate for changes in
 	// package installation - so we need to set options for backward compati-
 	// bility
 	if (!optionsChecked) {
@@ -263,7 +253,7 @@ NSString *location[2] = {
 	[self busy: YES];
 	
 	[self checkOptions];
-
+	
 	switch(pkgUrl){
 		
 		case kCRANBin:
@@ -313,22 +303,22 @@ NSString *location[2] = {
 	switch(returnCode) {
 		case NSAlertDefaultReturn: // Yes
 			SLog(@"mirrorSaveAskSheetDidEnd: YES, Save");
-		{
-			RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
-			if (x) {
-				NSString *url = [x string];
-				[x release];
-				if (url && ![url isEqualToString:@"@CRAN@"])
-					[Preferences setKey:defaultCRANmirrorURLKey withObject:url];
+			{
+				RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+				if (x) {
+					NSString *url = [x string];
+					[x release];
+					if (url && ![url isEqualToString:@"@CRAN@"])
+						[Preferences setKey:defaultCRANmirrorURLKey withObject:url];
+				}
+				break;
 			}
-			break;
-		}
-		case NSAlertAlternateReturn: // Never
-			SLog(@"mirrorSaveAskSheetDidEnd: NEVER!");
-			[Preferences setKey:stopAskingAboutDefaultMirrorSavingKey withFlag:YES];
-			break;
-		default:
-			SLog(@"mirrorSaveAskSheetDidEnd: NO, Don't Save");
+			case NSAlertAlternateReturn: // Never
+				SLog(@"mirrorSaveAskSheetDidEnd: NEVER!");
+				[Preferences setKey:stopAskingAboutDefaultMirrorSavingKey withFlag:YES];
+				break;
+			default:
+				SLog(@"mirrorSaveAskSheetDidEnd: NO, Don't Save");
 	}
 }
 
@@ -525,7 +515,7 @@ NSString *location[2] = {
 		[self show];
 		return;
 	}
-
+	
 	if (label) repositoryLabel = [NSString stringWithUTF8String: label];
 	
 	package = malloc(sizeof(*package)*count);
@@ -546,6 +536,7 @@ NSString *location[2] = {
 	NSString *targetLocation = nil;
 	NSString *repos = nil;
 	NSString *type = @"mac.binary";
+	BOOL success = NO;
 	
 	if(pkgInst == kOtherLocation){
 		NSOpenPanel *op;
@@ -567,7 +558,7 @@ NSString *location[2] = {
 		targetLocation = location[pkgInst];
 	
 	[self busy:YES];
-
+	
 	[self checkOptions];
 	
 	switch(pkgUrl){
@@ -597,10 +588,12 @@ NSString *location[2] = {
 			repos=[NSString stringWithFormat:@"\"%@\"", [urlTextField stringValue]];
 			if(pkgFormat == kSource) type =@"source";
 	}
-	[[REngine mainEngine] executeString: 
-		[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',CRAN=%@,type='%@')",
-			targetLocation, repos, type]
+	success = [[REngine mainEngine] executeString: 
+		[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',contriburl=contrib.url(%@,'%@'),type='%@')",
+			targetLocation, repos, type, type]
 		];
+	
+	if (!success) NSBeginAlertSheet(NLS(@"Package update failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Package update was not successful. Please see the R Console for details."));
 	
 	[self reloadURL:self];
 	[self busy:NO];
@@ -608,13 +601,13 @@ NSString *location[2] = {
 
 - (void) reRunFilter
 {
-	SLog(@"PackageInstaller.reRunFilter");
-
+	SLog(@"PackageInstaller.reRunFilter (search string is %@)",filterString?filterString:@"<none>");
+	
 	NSIndexSet *preIx = [pkgDataSource selectedRowIndexes];
 	NSMutableIndexSet *postIx = [[NSMutableIndexSet alloc] init];
 	NSMutableIndexSet *absSelIx = [[NSMutableIndexSet alloc] init];
 	int i=0;
-		
+	
 	if ([preIx count]>0) { // save selection in absolute index positions
 		i = [preIx firstIndex];
 		do {
@@ -648,7 +641,7 @@ NSString *location[2] = {
 			i++;
 		}
 	} else [postIx addIndexes:absSelIx];
-
+	
 	[pkgDataSource reloadData];
 	[pkgDataSource selectRowIndexes:postIx byExtendingSelection:NO];
 	[absSelIx release];
