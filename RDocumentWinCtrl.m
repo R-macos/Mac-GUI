@@ -236,7 +236,7 @@ NSArray *keywordList=nil;
 	[textView setDrawsBackground:NO];
 	[[textView enclosingScrollView] setDrawsBackground:NO];
 	
-	[textView setFont:[[RController getRController] currentFont]];
+	[textView setFont:[[RController sharedController] currentFont]];
 	[textView setContinuousSpellCheckingEnabled:NO]; // by default no continuous spell checking
 	[textView setAllowsUndo: YES];
 
@@ -841,7 +841,7 @@ reHilite:
 	NSRange sr = [textView selectedRange];
 	if (sr.length>0) {
 		NSString *stx = [[[textView textStorage] string] substringWithRange:sr];
-		[[RController getRController] sendInput:stx];
+		[[RController sharedController] sendInput:stx];
 	}
 	execNewlineFlag=YES;
 }
@@ -853,13 +853,13 @@ reHilite:
 		NSString *fn=nil;
 		if (x && (fn=[x string])) {
 			if ([[self document] writeToFile:fn ofType:@"R"]) {
-				[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")\nunlink(\"%@\")", fn, fn]];
+				[[RController sharedController] sendInput:[NSString stringWithFormat:@"source(\"%@\")\nunlink(\"%@\")", fn, fn]];
 			}
 		}
 	} else {
 		NSString *fn=[[self document] fileName];
 		if (fn) {
-			[[RController getRController] sendInput:[NSString stringWithFormat:@"source(\"%@\")", fn]];
+			[[RController sharedController] sendInput:[NSString stringWithFormat:@"source(\"%@\")", fn]];
 		}
 	}
 }

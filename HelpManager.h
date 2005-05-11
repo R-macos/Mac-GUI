@@ -58,6 +58,7 @@
 
 + (id) sharedController;
 - (IBAction)printDocument:(id)sender;
+- (NSWindow*) window;
 
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
 

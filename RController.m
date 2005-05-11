@@ -123,7 +123,7 @@ static RController* sharedRController;
     NSString *cmd = [args objectForKey:@""];
     if (!cmd || [cmd isEqualToString:@""])
         return [NSNumber numberWithBool:NO];
-	[[RController getRController] sendInput: cmd];
+	[[RController sharedController] sendInput: cmd];
 	return [NSNumber numberWithBool:YES];
 }
 @end
@@ -879,7 +879,7 @@ extern BOOL isTimeToFinish;
 		if([[NSFileManager defaultManager] fileExistsAtPath:fn])
 			[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
 		else
-			[[NSDocumentController sharedDocumentController] newDocument: [RController getRController]];
+			[[NSDocumentController sharedDocumentController] newDocument: [RController sharedController]];
 		
 		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
 		if(wtitle[i]!=nil)
@@ -1005,7 +1005,7 @@ extern BOOL isTimeToFinish;
 			Re_ProcessEvents();
 		}
 	}
-	[[RController getRController] rmChildProcess: pid];
+	[[RController sharedController] rmChildProcess: pid];
 	return cstat;
 }	
 
@@ -1019,6 +1019,8 @@ extern BOOL isTimeToFinish;
 		[x release];
 		if ([obj type]==STRSXP && [obj length]>0) {
 			[[HelpManager sharedController] showHelpUsingFile: [obj string] topic: topic];
+			[[self window] makeKeyWindow];
+			[[[HelpManager sharedController] window] makeKeyAndOrderFront:self];
 		} else
 			NSBeginAlertSheet(NLS(@"Help topic not found"),NLS(@"OK"),nil,nil,[RTextView window],self,nil,NULL,NULL,[NSString stringWithFormat: NLS(@"Help for the topic \"%@\" was not found."), topic]);
 	}
@@ -1223,7 +1225,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	[s release];
 }
 
-+ (RController*) getRController{
++ (RController*) sharedController{
 	return sharedRController;
 }
 
@@ -1639,7 +1641,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (void) loadFile:(NSString *)fname
 {
-	int res = [[RController getRController] isImageData:fname];
+	int res = [[RController sharedController] isImageData:fname];
 	
 	switch(res){
 		case -1:
@@ -2235,6 +2237,10 @@ This method calls the showHelpFor method of the Help Manager which opens
 	}
 	[RTextView setNeedsDisplay:YES];
 	SLog(@" - done, preferences updated");
+}
+
+- (NSWindow*) window {
+	return RConsoleWindow;
 }
 
 - (NSTextView *)getRTextView{

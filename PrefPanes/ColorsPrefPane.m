@@ -207,7 +207,7 @@
 }
 
 - (IBAction) setDefaultColors:(id)sender {
-    [[RController getRController] setDefaultColors:sender];
+    [[RController sharedController] setDefaultColors:sender];
 }
 
 - (void) updatePreferences

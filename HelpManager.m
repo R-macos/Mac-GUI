@@ -99,8 +99,14 @@ static id sharedHMController;
 	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
 	if(url != nil)
 	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+	
 	[helpWindow makeKeyAndOrderFront:self];
 	[x release];
+}
+
+- (NSWindow*) window
+{
+	return helpWindow;
 }
 
 - (IBAction)showMainHelp:(id)sender

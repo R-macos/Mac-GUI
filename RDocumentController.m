@@ -62,12 +62,12 @@
 
 - (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
 {
-	int res = [[RController getRController] isImageData: aFile];
+	int res = [[RController sharedController] isImageData: aFile];
 	if (res == -1)
 		NSLog(@"File format: %@ not recognized by isImageData", aFile);
 	else 
 		if (res == 0 )
-			[[RController getRController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
+			[[RController sharedController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
 	else 
 		return [self openNamedFile: aFile display:flag];
 	return nil;

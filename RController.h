@@ -230,7 +230,7 @@
 
 - (IBAction) setDefaultColors:(id)sender;
 
-+ (RController*) getRController;
++ (RController*) sharedController;
 
 - (void) flushROutput;
 - (void) flushTimerHook: (NSTimer*) source; // hook for flush timer
@@ -247,6 +247,8 @@
 - (BOOL) hintForFunction: (NSString*) fn;
 
 - (NSFont*) currentFont;
+
+- (NSWindow*) window;
 
 - (NSTextView *)getRTextView;
 - (NSWindow *)getRConsoleWindow;

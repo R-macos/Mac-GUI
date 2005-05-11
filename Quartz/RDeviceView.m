@@ -123,15 +123,15 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 - (void)viewDidEndLiveResize
 {
     [super viewDidEndLiveResize];
-	[[RController getRController] handleBusy: YES];
+	[[RController sharedController] handleBusy: YES];
 	[self lockFocus];
  	RQuartz_DiplayGList(self);
 	[deviceWindow flushWindow];
 	[self unlockFocus];
-	[[RController getRController] handleBusy: NO];
+	[[RController sharedController] handleBusy: NO];
 
     // could do something here if needed
-	[[RController getRController] updatePreferences];
+	[[RController sharedController] updatePreferences];
 }
 
 - (void)drawRect:(NSRect)aRect

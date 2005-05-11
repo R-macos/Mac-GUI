@@ -142,7 +142,7 @@ NSString *location[2] = {
 				NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"The package has not been installed."),NLS(@"OK"),nil,nil);	
 				return;
 			} else {
-				[[RController getRController] setRootFlag:YES];
+				[[RController sharedController] setRootFlag:YES];
 				// we need to make sure that the tempdir is root-writable
 				SLog(@" - installing as root, we need to make sure tempdir() is writable");
 				RSEXP *x = [[REngine mainEngine] evaluateString:@"tempdir()"];
@@ -163,15 +163,15 @@ NSString *location[2] = {
 	
 	switch(pkgUrl) {
 		case kLocalBin:
-			[[RController getRController] installFromBinary:self];
+			[[RController sharedController] installFromBinary:self];
 			break;
 			
 		case kLocalSrc:
-			[[RController getRController] installFromSource:self];
+			[[RController sharedController] installFromSource:self];
 			break;
 			
 		case kLocalDir:
-			[[RController getRController] installFromDir:self];
+			[[RController sharedController] installFromDir:self];
 			break;
 			
 		default:
@@ -204,7 +204,7 @@ NSString *location[2] = {
 			switch(pkgUrl) {
 				
 				case kCRANBin:
-					if([[RController getRController] getRootFlag]) {
+					if([[RController sharedController] getRootFlag]) {
 						NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
 						break;
 					}
@@ -523,7 +523,7 @@ NSString *location[2] = {
 
 - (IBAction) reloadPIData:(id)sender
 {
-	//	[[RController getRController] sendInput:@"package.manager()"];
+	//	[[RController sharedController] sendInput:@"package.manager()"];
 	[pkgDataSource reloadData];
 }
 
@@ -599,7 +599,7 @@ NSString *location[2] = {
 	
 	switch(pkgUrl){
 		case kCRANBin:
-			if([[RController getRController] getRootFlag]) {
+			if([[RController sharedController] getRootFlag]) {
 				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
 				break;
 			}

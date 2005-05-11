@@ -1,7 +1,6 @@
 TO-DO/BUGS LIST
 
 User requests/bug reports:
-*	cursor color shouold match text color (important for white-on-black ppl!!)
 *	test BioC! the installation doesn't quite work AFAICT! (check prerequisities?)
 *	edit object menu disabled
 *	multiple packages installation crashes package manager (a couple of users report this)
@@ -10,11 +9,7 @@ User requests/bug reports:
 *	is possible to crop long output? A-la mathematica using the cocoa browser as in the workspace browser? 
 	What really does ESS ? Simon?
 *	add arrows to the html browsers for navigation, as it is now it's too limited  
-*	when help window is selected, the html content should have the focus to allow direct scrolling with 
-	arrow keys
 *	for Bioconductor packages installation: allow for an option that uses getBioc script  
-*	add an option to package installer to "update" all packages that either: of new version, or built
-	for a different version of R
 *	we need to set a global option for "verbose" output. Some user want to have feedback on
 	R commands sent via the GUI, do we ? [SI]
 *	the mouse cursor should be spinning on long operations like package manager, help.search etc
@@ -26,7 +21,6 @@ Other: (quick ideas - relevant or not ...) [SU]
 *	save/restore list of packages; upgrade (i.e. install according to previous version)
 *	check for dev-tools and fortran compiler before allowing source installation
 *	check for X11 before allowing to launch it
-
 
 Internal feedback:
 *	growing up the window in quartz device does not refresh the drawing [SI]
@@ -40,12 +34,8 @@ Internal feedback:
 	update packages, and non updated ones.
 *	REngine should wait R to finish. It would be nice to add a flag to evaluateString method 
 	like "wait" set to YES by default. The reason is that calling multiple times REngine
-	can crash R [[SU: this is a more general problem, we need synchronization of R activity...]]
-
-Done:
-*	move the refresh button in databrowse into the toolbar [SI]   
-*	preference pane: startup dir, install dir?
-
+	can crash R [[SU: this is a more general problem, we need synchronization of R activity...
+	Is this still relevant or fixed?]]
 
 - general issues:
 	- font size handling is a mess - we need a global way to change font type and size for
@@ -64,7 +54,6 @@ Done:
 	- editing fully NA objects causes problems (try m<-matrix(,5,5))
 - code editor:
 	- use code completion
-	- use fixed font by default
 - data manager
 	- rename to Data Browser
 	- add "search" field
@@ -74,9 +63,3 @@ Done:
 	
 RController.m:
 	- isImageData: - check whether compressed images are recognized (I doubt it..)
-
-Design issues and notes:
-*	Cocoa exception handling is incomplatible with the setjmp and longjmp mechanism:
-	they are not allowed to occur while exception-handled code is run. I suspect we
-	cannot guarantee this.
-*	Define glogal settings for exceptions (NSExceptionHangingMask)
