@@ -280,7 +280,7 @@ NSString *location[2] = {
 		}
 		if (!x || ![x string]) { // CRAN is still not set - bail out with an error
 			[self busy:NO];
-			NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
+			NSRunAlertPanel(NLS(@"No CRAN Mirror Found"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
 			return;
 		}
 		if (x) [x release];
@@ -321,7 +321,7 @@ NSString *location[2] = {
 		case kOTHER:
 			if( [[urlTextField stringValue] isEqual:@""]){
 				[self busy:NO];
-				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
+				NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
 				return;
 			}
 			
@@ -568,7 +568,12 @@ NSString *location[2] = {
 	NSString *repos = nil;
 	NSString *type = @"mac.binary";
 	BOOL success = NO;
-	
+
+	if(pkgUrl == kOTHER && [[urlTextField stringValue] isEqual:@""]) {
+		NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
+		return;
+	}
+
 	if(pkgInst == kOtherLocation){
 		NSOpenPanel *op;
 		int answer;
