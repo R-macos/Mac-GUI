@@ -172,6 +172,7 @@
             OUTLETS = {dataWindow = NSWindow; editorSource = NSTableView; }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = RTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
             CLASS = RToolbar; 
             LANGUAGE = ObjC; 
