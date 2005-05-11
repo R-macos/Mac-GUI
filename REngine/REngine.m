@@ -37,6 +37,13 @@
 #include <R_ext/Parse.h>
 #import "REngine.h"
 
+/* we should move this to another callback at some point ... it's a bad, bad hack for now */
+#ifndef RENG_STAND_ALONE
+#import "RController.h"
+#define DO_RENG_EVAL_STATUS(S) NSString *lsl = [[RController sharedController] statusLineText]; [[RController sharedController] setStatusLineText:[NSString stringWithFormat:@"executing: %@", S]];
+#define DONE_RENG_EVAL_STATUS() [[RController sharedController] setStatusLineText: lsl];
+#endif
+
 /* this is also provided in RGUI.h, but we want to be independent */
 #ifndef SLog
 #if defined DEBUG_RGUI && defined PLAIN_STDERR
@@ -226,7 +233,9 @@ static REngine* mainRengine=nil;
     ps=[self parse: str];
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
+	DO_RENG_EVAL_STATUS(str);
     xr=[self evaluateExpressions: ps];
+	DONE_RENG_EVAL_STATUS();
 	[ps release];
 	SLog(@" - result: %@", xr);
 	return xr;
@@ -240,7 +249,9 @@ static REngine* mainRengine=nil;
     ps=[self parse: str withParts: count];
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
+	DO_RENG_EVAL_STATUS(str);
     xr=[self evaluateExpressions: ps];
+	DONE_RENG_EVAL_STATUS();
 	[ps release];
 	SLog(@" - result: %@", xr);
 	return xr;
@@ -254,7 +265,9 @@ static REngine* mainRengine=nil;
 	if (!active) return NO;
     ps=[self parse: str];
     if (ps==nil) return NO;
+	DO_RENG_EVAL_STATUS(str);
     xr=[self evaluateExpressions: ps];
+	DONE_RENG_EVAL_STATUS();
 	[ps release];
 	if (xr!=nil) success=YES;
 	if (xr) [xr release];
