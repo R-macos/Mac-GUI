@@ -579,7 +579,7 @@ NSString *location[2] = {
 	BOOL success = NO;
 
 	if(pkgUrl == kOTHER && [[urlTextField stringValue] isEqual:@""]) {
-		NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
+		NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please specify a valid URL first."));
 		return;
 	}
 

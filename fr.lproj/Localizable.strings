@@ -1,3 +1,7 @@
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(arguments lookup is disabled while R is busy)";
+
 /* From: SearchTable.m (show) */
 "<unknown>" = "<inconnu>";
 
@@ -71,7 +75,11 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Crée un nouveau document vide dans l'editeur";
 
-/* From: PackageInstaller.m (reloadURL) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (updateAll) */
+"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files.";
+
+/* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Aimeriez vous que je me souvienne de site mirror pour des sessions futures?";
 
 /* From: RController.m (didCloseAll) */
@@ -86,6 +94,9 @@
 /* From: WSBrowser.m (toolbar) */
 "Edit the selected object" = "Éditer l'objet sélectionné";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Fetching Package List Failed" = "Fetching Package List Failed";
+
 /* From: RController.m (toolbar) */
 "Font Size" = "Taille Police";
 
@@ -98,10 +109,20 @@
 /* From: RController.m (toolbar) */
 "History" = "Historique";
 
+/* From: PackageInstaller.m (setURL) */
+"Install Selected" = "Install Selected";
+
+/* From: PackageInstaller.m (setURL) */
+"Install…" = "Install…";
+
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Interrompre le calcul courant de R";
 
-/* From: PackageInstaller.m (reloadURL) */
+/* From: PackageInstaller.m (reloadURL)
+   From: PackageInstaller.m (updateAll) */
+"Invalid Repository URL" = "Invalid Repository URL";
+
+/* From: PackageInstaller.m (checkOptions) */
 "Never" = "Jamais";
 
 /* From: RController.m (toolbar) */
@@ -113,7 +134,13 @@
 /* Global string @ */
 "No" = "Non";
 
-/* From: PackageInstaller.m (reloadURL) */
+/* From: PackageInstaller.m (checkOptions) */
+"No CRAN Mirror Found" = "No CRAN Mirror Found";
+
+/* From: PackageInstaller.m (installSelected) */
+"No packages selected, nothing to do." = "No packages selected, nothing to do.";
+
+/* From: PackageInstaller.m (checkOptions) */
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Pas de mirror CRAN valide sélectionné.\nVous serez incapable d'installer des CRAN packages tant que vous ne sélectionnerez pas une site CRAN valide.";
 
 /* Global string @ */
@@ -128,15 +155,31 @@
 /* From: RController.m (toolbar) */
 "Open In Editor" = "Ouvrir dans Éditeur";
 
-/* From: PackageInstaller.m (reloadURL) */
-"Package installer" = "Installateur de Package";
+/* From: PackageInstaller.m (installSelected) */
+"Package installation failed" = "Package installation failed";
+
+/* From: PackageInstaller.m (installSelected) */
+"Package installation was not successful. Please see the R Console for details." = "Package installation was not successful. Please see the R Console for details.";
 
 /* From: PackageInstaller.m (installSelected)
-   From: PackageInstaller.m (reloadURL) */
+   From: PackageInstaller.m (updateAll) */
+"Package installer" = "Installateur de Package";
+
+/* From: PackageInstaller.m (installSelected) */
 "Package Installer" = "Installateur de Package";
 
+/* From: PackageInstaller.m (updateAll) */
+"Package update failed" = "Package update failed";
+
+/* From: PackageInstaller.m (updateAll) */
+"Package update was not successful. Please see the R Console for details." = "Package update was not successful. Please see the R Console for details.";
+
 /* From: PackageInstaller.m (reloadURL) */
-"Please, specify a valid URL first." = "S'il vous plait, spécifiez d'abord une adresse URL valide.";
+"Please consult  R Console output for details." = "Please consult  R Console output for details.";
+
+/* From: PackageInstaller.m (reloadURL)
+   From: PackageInstaller.m (updateAll) */
+"Please specify a valid URL first." = "S'il vous plait, spécifiez d'abord une adresse URL valide.";
 
 /* Editor preference group */
 "PrefG-Editor" = "PrefG-Editeur";
@@ -258,7 +301,8 @@
 /* From: PrefPanes/EditorPrefPane.m (changeEditor) */
 "Select editor application" = "Sélectionner un éditeur";
 
-/* From: PackageInstaller.m (installSelected) */
+/* From: PackageInstaller.m (installSelected)
+   From: PackageInstaller.m (updateAll) */
 "Select Installation Directory" = "Sélectionner le répertoire d'installation";
 
 /* From: REngine/Rcallbacks.m (validateToolbarItem) */
@@ -270,7 +314,7 @@
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Sélectionner le répertoire de Package";
 
-/* From: PackageInstaller.m (reloadURL) */
+/* From: PackageInstaller.m (checkOptions) */
 "Set as default?" = "Set as default?";
 
 /* From: RController.m (toolbar) */
@@ -282,8 +326,12 @@
 /* From: RController.m (toolbar) */
 "Set R console colors" = "Choisir couleurs de console R";
 
-/* From: AMPrefs/AMPreferenceWindowController.m (toolbar) */
+/* From: PackageInstaller.m (toggleShowInstalled)
+   From: AMPrefs/AMPreferenceWindowController.m (toolbar) */
 "Show All" = "Afficher Tout";
+
+/* From: PackageInstaller.m (toggleShowInstalled) */
+"Show Installed Only" = "Show Installed Only";
 
 /* From: RController.m (toolbar) */
 "Show/Hide R command history" = "Afficher/Cacher l'historique R";
