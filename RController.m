@@ -2231,6 +2231,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 			}
 			i++;
 		}
+		[RTextView setInsertionPointColor:[consoleColors objectAtIndex:iInputColor]];
 	}
 	[RTextView setNeedsDisplay:YES];
 	SLog(@" - done, preferences updated");

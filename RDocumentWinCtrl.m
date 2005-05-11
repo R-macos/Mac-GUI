@@ -405,7 +405,7 @@ NSArray *keywordList=nil;
 		//		[[self window] display];
 	}
 	c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
-	if (c) shColorNormal = c;
+	if (c) { shColorNormal = c; [textView setInsertionPointColor:c]; }
 	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
 	if (c) shColorString = c;
 	c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];

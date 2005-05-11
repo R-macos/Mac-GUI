@@ -4,6 +4,7 @@ Last-update: 2005-05-11 [SU]
 *	Added support for function arguments lookup in the console
 *	Added status line to the console (only used for the args lookup so far)
 *	Added better warnings in package installer and cleaned up previous
+*	Set cursor color to match the input/normal text
 
 Last-update: 2005-05-10 [SU]
 *	Added help search history to search field in editor, fixed menu issues
