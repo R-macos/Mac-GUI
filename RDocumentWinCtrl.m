@@ -39,6 +39,8 @@
 #import "RRulerView.h"
 #import "REditorToolbar.h"
 #import "REngine.h"
+#import "FileCompletion.h"
+#import "CodeCompletion.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -814,12 +816,77 @@ reHilite:
 			[self highlightBracesWithShift: 0 andWarn:NO];
 	}	
 	return retval;
+}
+
+- (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
+{
+	NSRange sr=[textView selectedRange];
+	NSTextStorage * ts = [textView textStorage];
+	NSString * s = [ts string];
+	NSRange lr = [s lineRangeForRange:sr];
+	NSLog(@"completion attempt; cursor at %d, complRange: %d-%d", sr.location, charRange.location, charRange.location+charRange.length);
+
+	NSString *rep=nil;
+	NSRange er = NSMakeRange(lr.location,sr.location-lr.location);
+	NSString *text = [[textView attributedSubstringFromRange:er] string];
+			
+	// first we need to find out whether we're in a text part or code part
+	unichar c;
+	int tl = [text length], tp=0, quotes=0, dquotes=0, lastQuote=-1;
+	while (tp<tl) {
+		c=[text characterAtIndex:tp];
+		if (c=='\\') tp++; // skip the next char after a backslash (we don't have to worry about \023 and friends)
+		else {
+			if (dquotes==0 && c=='\'') {
+				quotes^=1;
+				if (quotes) lastQuote=tp;
+			}
+			if (quotes==0 && c=='"') {
+				dquotes^=1;
+				if (dquotes) lastQuote=tp;
+			}
+		}
+		tp++;
+	}
+	
+	if (quotes+dquotes>0) { // if we're inside any quotes, use file completion
+							//rep=[FileCompletion complete:[text substringFromIndex:lastQuote+1]];
+		er.location+=lastQuote+1;
+		er.length-=lastQuote+1;
+		return [FileCompletion completeAll:[text substringFromIndex:lastQuote+1] cutPrefix:0];
+	} else { // otherwise use code completion
+		int s = [text length]-1;
+		c = [text characterAtIndex:s];
+		while (((c>='a')&&(c<='z'))||((c>='A')&&(c<='Z'))||((c>='0')&&(c<='9'))||c=='.') {
+			s--;
+			if (s==-1) break;
+			c = [text characterAtIndex:s];
+		}
+		s++;
+		er.location+=s; er.length-=s;
+		//rep=[CodeCompletion complete:[text substringFromIndex:s]];
+		*index=0;
+		{
+			NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
+			//if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[[ca objectAtIndex:0] length]-1]];
+			return ca;
+		}
+	}
+	
+	// ok, by now we should get "rep" if completion is possible and "er" modified to match the proper part
+	if (rep!=nil) {
+		*index=0;
+		return [NSArray arrayWithObjects: rep, @"dummy", nil];
+		//[textView replaceCharactersInRange:er withString:rep];
 	}
 
-	/*
-	 Here we only break the modal loop for the R_Edit call. Wether a window
-	 is to be saved on exit or no, is up to Cocoa
-	 */ 
+	return nil;
+}
+
+/*
+ Here we only break the modal loop for the R_Edit call. Wether a window
+ is to be saved on exit or no, is up to Cocoa
+ */ 
 
 - (BOOL)windowShouldClose:(id)sender
 {	
