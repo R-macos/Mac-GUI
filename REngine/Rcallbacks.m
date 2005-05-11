@@ -65,6 +65,8 @@
 #endif
 #define _(A) (A)
 
+int insideR = 0;
+
 /* from Defn.h */
 extern Rboolean R_Interactive;   /* TRUE during interactive use*/
 
@@ -93,8 +95,10 @@ extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
 void Re_WritePrompt(char *prompt)
 {
 	NSString *s = [[NSString alloc] initWithUTF8String: prompt];
+	insideR--;
     [[REngine mainHandler] handleWritePrompt:s];
 	[s release];
+	insideR++;
 }
 
 void Re_ProcessEvents(void){
@@ -106,11 +110,15 @@ static char *readconsPos=0;
 
 int Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory)
 {
+	insideR--;
 	Re_WritePrompt(prompt);
 
 	if (!readconsBuffer) {
 	    char *newc = [[REngine mainHandler] handleReadConsole: addtohistory];
-	    if (!newc) return 0;
+	    if (!newc) {
+			insideR++;
+			return 0;
+		}
 		readconsPos=readconsBuffer=newc;
 	}
 		
@@ -132,6 +140,7 @@ int Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory)
 		else
 			readconsPos=readconsBuffer=0;
 		[[REngine mainHandler] handleProcessingInput: (char*) buf];
+insideR=YES;
 		return 1;
 	}
 
@@ -140,7 +149,9 @@ int Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory)
 
 void Re_RBusy(int which)
 {
+	insideR--;
     [[REngine mainHandler] handleBusy: (which==0)?NO:YES];
+	insideR++;
 }
 
 
@@ -166,7 +177,9 @@ void Re_ResetConsole()
 /* Stdio support to ensure the console file buffer is flushed */
 void Re_FlushConsole()
 {
+	insideR--;
 	[[REngine mainHandler] handleFlushConsole];	
+	insideR++;
 }
 
 /* Reset stdin if the user types EOF on the console. */
@@ -176,32 +189,52 @@ void Re_ClearerrConsole()
 
 int Re_ChooseFile(int new, char *buf, int len)
 {
-	return [[REngine mainHandler] handleChooseFile: buf len:len isNew:new];	
+	int r;
+	insideR--;
+	r=[[REngine mainHandler] handleChooseFile: buf len:len isNew:new];
+	insideR++;
+	return r;
 }
 
 void Re_ShowMessage(char *buf)
 {
+	insideR--;
 	[[REngine mainHandler] handleShowMessage: buf];
+	insideR++;
 }
 
 int  Re_Edit(char *file){
-	return [[REngine mainHandler] handleEdit: file];
+	int r;
+	insideR--;
+	r=[[REngine mainHandler] handleEdit: file];
+	insideR++;
+	return r;
 }
 
 int  Re_EditFiles(int nfile, char **file, char **wtitle, char *pager){
-	return [[REngine mainHandler] handleEditFiles: nfile withNames: file titles: wtitle pager: pager];
+	int r;
+	insideR--;
+	r = [[REngine mainHandler] handleEditFiles: nfile withNames: file titles: wtitle pager: pager];
+	insideR++;
+	return r;
 }
 
 int Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean del, char *pager)
 {
-	return [[REngine mainHandler] handleShowFiles: nfile withNames: file headers: headers windowTitle: wtitle pager: pager andDelete: del];
+	int r;
+	insideR--;
+	r = [[REngine mainHandler] handleShowFiles: nfile withNames: file headers: headers windowTitle: wtitle pager: pager andDelete: del];
+	insideR++;
+	return r;
 }
 
 //==================================================== the following callbacks are Cocoa-specific callbacks (see CocoaHandler)
 
 int Re_system(char *cmd) {
+	int r;
+	insideR--;
 	if ([REngine cocoaHandler])
-		return [[REngine cocoaHandler] handleSystemCommand: cmd];
+		r = [[REngine cocoaHandler] handleSystemCommand: cmd];
 	else { // fallback in case there's no handler
 		   // reset signal handlers
 		signal(SIGINT, SIG_DFL);
@@ -209,18 +242,23 @@ int Re_system(char *cmd) {
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGALRM, SIG_DFL);
 		signal(SIGCHLD, SIG_DFL);
-		return system(cmd);
-	}		
+		r = system(cmd);
+	}
+	insideR++;
+	return r;
 }
 
 int  Re_CustomPrint(char *type, SEXP obj)
 {
+	insideR--;
 	if ([REngine cocoaHandler]) {
 		RSEXP *par = [[RSEXP alloc] initWithSEXP: obj];
 		int res = [[REngine cocoaHandler] handleCustomPrint: type withObject: par];
 		[par release];
+		insideR++;
 		return res;
 	}
+	insideR++;
 	return -1;
 }
 
@@ -252,7 +290,9 @@ SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 		errorcall(call, "invalid arguments (length mismatch)");
 
 	if (len==0) {
+		insideR--;
 		[[REngine cocoaHandler] handlePackages: 0 withNames: 0 descriptions: 0 URLs: 0 status: 0];
+		insideR++;
 		vmaxset(vm);
 		return pkgstatus;
 	}
@@ -270,7 +310,9 @@ SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 		bStat[i] = (BOOL)LOGICAL(pkgstatus)[i];
 		i++;
 	}
+	insideR--;
 	[[REngine cocoaHandler] handlePackages: len withNames: sName descriptions: sDesc URLs: sURL status: bStat];
+	insideR++;
 	free(sName); free(sDesc); free(sURL);
 	
 	PROTECT(ans = NEW_LOGICAL(len));
@@ -308,7 +350,9 @@ SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
 	  errorcall(call, "invalid arguments (length mismatch)");
 	  
   if (len==0) {
+	  insideR--;
 	  [[REngine cocoaHandler] handleDatasets: 0 withNames: 0 descriptions: 0 packages: 0 URLs: 0];
+	  insideR++;
 	  vmaxset(vm);
 	  return R_NilValue;
   }
@@ -327,7 +371,9 @@ SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
 	  i++;
   }
 
+  insideR--;
   res = [[REngine cocoaHandler] handleDatasets: len withNames: sName descriptions: sDesc packages: sPkg URLs: sURL];
+  insideR++;
   
   free(sName); free(sDesc); free(sPkg); free(sURL);
   
@@ -376,7 +422,9 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
 	  errorcall(call, "invalid arguments (length mismatch)");
 	  
   if (len==0) {
+	  insideR--;
 	  [[REngine cocoaHandler] handleInstalledPackages: 0 withNames: 0 installedVersions: 0 repositoryVersions: 0 update: 0 label: 0];
+	  insideR++;
 	  vmaxset(vm);
 	  return R_NilValue;
   }
@@ -395,7 +443,9 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
 	  i++;
   }
   
+  insideR--;
   [[REngine cocoaHandler] handleInstalledPackages: len withNames: sName installedVersions: sIVer repositoryVersions: sRVer update: bStat label:CHAR(STRING_ELT(wwwhere,0))];
+  insideR++;
   free(sName); free(sIVer); free(sRVer); free(bStat);
     
   vmaxset(vm);
@@ -427,7 +477,9 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 		errorcall(call, "invalid arguments (length mismatch)");
 	
 	if (len==0) {
+		insideR--;
 		[[REngine cocoaHandler] handleHelpSearch: 0 withTopics: 0 packages: 0 descriptions: 0 urls: 0 title: 0];
+		insideR++;
 		vmaxset(vm);
 		return R_NilValue;
 	}
@@ -446,7 +498,9 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 		i++;
 	}
 	
+	insideR--;
 	[[REngine cocoaHandler] handleHelpSearch: len withTopics: sTopic packages: sPkg descriptions: sDesc urls: sURL title:CHAR(STRING_ELT(h_wtitle,0))];
+	insideR++;
 	free(sTopic); free(sDesc); free(sPkg); free(sURL);
 	
 	PROTECT(ans = NEW_LOGICAL(len));
@@ -498,6 +552,7 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 				};
     }
 	
+	insideR--;
 	if (n==0)
 		selectListDone = [[REngine cocoaHandler] handleListItems: 0 withNames: 0 status: 0 multiple: 0 title: @""];
 	else
@@ -505,6 +560,7 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 														   title: haveTitle
 			?[NSString stringWithUTF8String: CHAR(STRING_ELT(CADDDR(args), 0))]
 			:(multiple ? NLS(@"Select one or more") : NLS(@"Select one")) ];
+	insideR++;
 	
 	if (selectListDone == 1) { /* Finish */
 		for(i = 0; i < n; i++)  if(itemStatus[i]) nsel++;
@@ -516,8 +572,8 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 		PROTECT(ans = allocVector(STRSXP, 0));
 	}
 
-UNPROTECT(1);
-return ans;
+    UNPROTECT(1);
+    return ans;
 }
 
 
@@ -617,7 +673,9 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 
   vmaxset(vm);
 
-   [WSBrowser toggleWorkspaceBrowser];
+	insideR--;
+	[WSBrowser toggleWorkspaceBrowser];
+	insideR++;
 
   return R_NilValue;
 }
@@ -777,7 +835,9 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
     /* start up the window, more initializing in here */
 
 	IsDataEntry = YES;
+	insideR--;
 	[REditor startDataEntry];
+	insideR++;
 	IsDataEntry = NO;
 
 	/* drop out unused columns */

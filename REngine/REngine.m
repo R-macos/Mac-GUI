@@ -55,6 +55,10 @@
 
 static REngine* mainRengine=nil;
 
+// this flag causes some parts of the code to not use REngine if that would cause re-entrance
+// it is meant for the user-level code, not for REngine itself - such that the UI can react and display appropriate warnings
+BOOL preventReentrance = NO;
+
 @implementation REngine
 
 + (REngine*) mainEngine
@@ -104,6 +108,7 @@ static REngine* mainRengine=nil;
     mainRengine=self;
     loopRunning=NO;
 	active=NO;
+	insideR=0;
 	
     //setenv("R_HOME","/Library/Frameworks/R.framework/Resources",1);
     //setenv("DYLD_LIBRARY_PATH","/Library/Frameworks/R.framework/Resources/lib",1);
@@ -140,7 +145,9 @@ static REngine* mainRengine=nil;
 {
 	if (!active) return;
 	loopRunning=YES;
+	insideR++;
     run_REngineRmainloop(0);
+	insideR--;
 	loopRunning=NO;	
 }
 
@@ -148,7 +155,9 @@ static REngine* mainRengine=nil;
 {
 	if (!active) return;
 	loopRunning=YES;
+	insideR++;
     run_REngineRmainloop(1);
+	insideR--;
 	/* in fact loopRunning is not determinable, because later longjmp may have re-started the loop, so we just keep it at YES */
 }
 
@@ -171,11 +180,15 @@ static REngine* mainRengine=nil;
 {
 	// FIXME: we should set a lock here
 	[replHandler handleBusy:YES];
+	if (insideR) SLog(@"***********> REngine.begin: expected insideR to be 0, but it's %d", insideR);
+	insideR++;
 }
 
 - (void) end
 {
 	// FIXME: we should release a lock here
+	insideR--;
+	if (insideR) SLog(@"***********> REngine.end: expected insideR to be 0, but it's %d", insideR);
 	[replHandler handleBusy:NO];
 }
 

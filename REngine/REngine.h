@@ -45,6 +45,9 @@
 #define RENGINE_BEGIN [self begin]
 #define RENGINE_END   [self end]
 
+extern int insideR;
+extern BOOL preventReentrance;
+
 @interface REngine : NSObject {
 	/* the object handling all regular R callbacks - the Rcallback.h for the protocol definition - this one must be provided */
     id <REPLHandler> replHandler;
