@@ -2253,12 +2253,11 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (void) setStatusLineText: (NSString*) text {
 	SLog(@"RController.setStatusLine: \"%@\"", text);
-//	[statusLine setSelectable:YES];
-//	[statusLine setEditable:YES];
 	[statusLine setStringValue:text?text:@""];
-//	[statusLine setEditable:NO];
-//	[statusLine setSelectable:NO];
-//	[statusLine display];
+}
+
+- (NSString*) statusLineText {
+	return [statusLine stringValue];
 }
 
 @end

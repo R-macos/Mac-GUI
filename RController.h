@@ -244,6 +244,8 @@
 
 - (void) kickstart:(id) sender;
 - (void) setStatusLineText: (NSString*) text;
+- (NSString*) statusLineText;
+
 - (BOOL) hintForFunction: (NSString*) fn;
 
 - (NSFont*) currentFont;
