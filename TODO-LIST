@@ -1,6 +1,8 @@
 TO-DO/BUGS LIST
 
 User requests/bug reports:
+*	cursor color shouold match text color (important for white-on-black ppl!!)
+*	test BioC! the installation doesn't quite work AFAICT! (check prerequisities?)
 *	edit object menu disabled
 *	multiple packages installation crashes package manager (a couple of users report this)
 *	add import/export functionality to read and write old_style history files
@@ -17,13 +19,15 @@ User requests/bug reports:
 	R commands sent via the GUI, do we ? [SI]
 *	the mouse cursor should be spinning on long operations like package manager, help.search etc
 	R_busy is not good for that as we want the gui to be responsive.
+*	Aqua Tcl/Tk - can we do something about the loop?
 	
-Done:
-*	preferences panel for initial working directory and quartz device settings
-*	drag and drop should eventually source the file. At the moment the file is loaded in R editor. 
-	[we agreed on setting a global option for this]
+Other: (quick ideas - relevant or not ...) [SU]
+*	sync of preferences, installed packages, local packages via .Mac
+*	save/restore list of packages; upgrade (i.e. install according to previous version)
+*	check for dev-tools and fortran compiler before allowing source installation
+*	check for X11 before allowing to launch it
 
-  	
+
 Internal feedback:
 *	growing up the window in quartz device does not refresh the drawing [SI]
 *	we need to assume Latin1Econdig for displaying text in quartz (see example(text))[SI]
