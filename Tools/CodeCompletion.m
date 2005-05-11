@@ -29,10 +29,15 @@
 
 #import "CodeCompletion.h"
 #import "../REngine/REngine.h"
+#import "RGUI.h"
 
 @implementation CodeCompletion
 
 + (NSString*) complete: (NSString*) part {
+	if (preventReentrance && insideR>0) {
+		SLog(@"CodeCompletion.complete: returning nil completion to prevent R re-entrance [***]");
+		return nil;
+	}
     REngine *re = [REngine mainEngine];
     // first get the length of the search path so we can go environment by environment
     RSEXP *x = [re evaluateString:@"length(search())"];
@@ -86,6 +91,10 @@
 }
 
 + (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix {
+	if (preventReentrance && insideR>0) {
+		SLog(@"CodeCompletion.completeAll: returning nil completion to prevent R re-entrance [***]");
+		return nil;
+	}
     REngine *re = [REngine mainEngine];
     // first get the length of the search path so we can go environment by environment
     RSEXP *x = [re evaluateString:@"length(search())"];

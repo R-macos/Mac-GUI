@@ -303,6 +303,9 @@ static RController* sharedRController;
 		SLog(@" - setting LANG=%s", getenv("LANG"));
 	}
 #endif
+
+	BOOL noReenter = [Preferences flagForKey:@"REngine prevent reentrance"];
+	if (noReenter == YES) preventReentrance = YES;
 	
 	SLog(@" - init R");
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
@@ -1367,6 +1370,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (BOOL) hintForFunction: (NSString*) fn
 {
 	BOOL success = NO;
+	if (insideR>0) {
+		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
+		return NO;
+	}
 	RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(gsub('\\\\s+',' ',paste(capture.output(print(args(%@))),collapse='')),silent=TRUE)", fn]];
 	if (x) {
 		NSString *res = [x string];
@@ -1395,7 +1402,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
 {
 	NSRange sr=[textView selectedRange];
-	//NSLog(@"completion attempt; cursor at %d, complRange: %d-%d, commit: %d", sr.location, charRange.location, charRange.location+charRange.length, committedLength);
+	SLog(@"completion attempt; cursor at %d, complRange: %d-%d, commit: %d", sr.location, charRange.location, charRange.location+charRange.length, committedLength);
 	//sr=charRange;
 	int bow=sr.location;
 	if (bow>committedLength) {

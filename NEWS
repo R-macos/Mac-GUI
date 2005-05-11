@@ -7,6 +7,15 @@ Last-update: 2005-05-11 [SU]
 *	Set cursor color to match the input/normal text
 *	Make sure the help window is key after runnig help from the console
 *	Use status line for all commands executed by REngine
+*	Added code/file completion to the editor
+*	Added global code/file completion shortcut <Ctr><.> (as in Xcode)
+	<Tab> still works in the console, but obviously not in the editor
+*	Added status line and arguments lookup in the editor
+*	Added re-entrance tracking to the REngine. Currently CodeCompletion
+	and editor's argument lookup honor the preventReentrance flag.
+	It is disabled by default but can be enabled by:
+	defaults write org.R-project.R "REngine prevent reentrance" YES
+	We need some testing to see if reentrance at a wrong time can crash R
 
 Last-update: 2005-05-10 [SU]
 *	Added help search history to search field in editor, fixed menu issues
