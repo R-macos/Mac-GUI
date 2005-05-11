@@ -323,6 +323,7 @@ static RController* sharedRController;
 		[md release];
 	}
 	[RTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
+	[[RTextView textStorage] setDelegate:self];
 		
 	//	[RTextView changeColor: inputColor];
 	[RTextView display];
@@ -436,14 +437,7 @@ static RController* sharedRController;
 												 userInfo:0
 												  repeats:NO];
 	appLaunched = YES;
-/*
-	RSEXP *x=[[REngine mainEngine] evaluateString:@"getwd()"];
-	NSString *dirn=nil;
-	if (x && (dirn=[x string])) 
-		NSLog(@"R thinks: %@", dirn);
-	NSLog(@"R.app thinks: %@", [[NSFileManager defaultManager] currentDirectoryPath]);
-	NSLog(@"Prefs think: %@", [Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"]);
-*/
+
 	SLog(@" - done, ready to go");
 }
 
@@ -453,6 +447,7 @@ static RController* sharedRController;
 
 - (void) kickstart:(id) sender {
 	//kill(getpid(),SIGINT);
+	[self setStatusLineText:@""];
 	[[REngine mainEngine] runREPL];
 }
 
@@ -1249,6 +1244,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		if (inter) {
 			if ([cmd characterAtIndex:[cmd length]-1]!='\n') cmd=[cmd stringByAppendingString: @"\n"];
 			[consoleInputQueue addObject:[[NSString alloc] initWithString:cmd]];
+			[self setStatusLineText:@""];
 		}
 	}
 }
@@ -1344,6 +1340,45 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return retval;
 }
 
+- (void)textStorageDidProcessEditing:(NSNotification *)aNotification {
+	NSTextStorage *ts = [aNotification object];
+	NSString *s = [ts string];
+	NSRange sr = [RTextView selectedRange];
+
+	// check for a typed (
+	if (sr.location>committedLength && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
+		int i = sr.location-1;
+		unichar c = [s characterAtIndex:i];
+		BOOL hasLit = NO;
+		while ((c>='0' && c<='9') || (c>='a' && c<='z') || (c>='A' && c<='Z') || c=='.' || c=='_') {
+			if (!hasLit && ((c>='a' && c<='z') || (c>='A' && c<='Z'))) hasLit=YES;
+			i--;
+			if (i<0) break;
+			c = [s characterAtIndex:i];
+		}
+		i++;
+		if (hasLit && sr.location>i)
+			[self hintForFunction: [s substringWithRange:NSMakeRange(i,sr.location-i)]];
+	}
+}
+
+- (BOOL) hintForFunction: (NSString*) fn
+{
+	BOOL success = NO;
+	RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(gsub('\\\\s+',' ',paste(capture.output(print(args(%@))),collapse='')),silent=TRUE)", fn]];
+	if (x) {
+		NSString *res = [x string];
+		if (res && [res length]>10 && [res hasPrefix:@"function"]) {
+			if ([res hasSuffix:@" NULL"]) res=[res substringToIndex:[res length]-5];
+			res = [fn stringByAppendingString:[res substringFromIndex:9]];
+			success = YES;
+			[self setStatusLineText:res];
+		}
+		[x release];
+	}
+	return success;
+}
+
 /* Allow changes only for uncommitted text */
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString {
 	if (replacementString && /* on font change we get nil replacementString which is ok to pass through */
@@ -1404,7 +1439,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				er.location+=s; er.length-=s;
 				//rep=[CodeCompletion complete:[text substringFromIndex:s]];
 				*index=0;
-				return [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
+				{
+					NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
+					if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[[ca objectAtIndex:0] length]-1]];
+					return ca;
+				}
 			}
 			
 			// ok, by now we should get "rep" if completion is possible and "er" modified to match the proper part
@@ -2203,6 +2242,16 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (NSWindow *)getRConsoleWindow{
 	return RConsoleWindow;
+}
+
+- (void) setStatusLineText: (NSString*) text {
+	SLog(@"RController.setStatusLine: \"%@\"", text);
+//	[statusLine setSelectable:YES];
+//	[statusLine setEditable:YES];
+	[statusLine setStringValue:text?text:@""];
+//	[statusLine setEditable:NO];
+//	[statusLine setSelectable:NO];
+//	[statusLine display];
 }
 
 @end

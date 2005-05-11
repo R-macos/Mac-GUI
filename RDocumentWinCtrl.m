@@ -731,11 +731,30 @@ reHilite:
 	
 	//lr.length = [ts length]-lr.location; // change everything up to the end of the document ...
 	
-	SLog(@"line range %d:%d (original was %d:%d)", lr.location, lr.length, er.location, er.length);
+	SLog(@"line range %d:%d (original was %d:%d), cil=%d", lr.location, lr.length, er.location, er.length, [ts changeInLength]);
 	[self updateSyntaxHighlightingForRange:lr];
-	if (!deleteBackward) 
+	if (!deleteBackward) {
+		NSRange sr = [textView selectedRange];
 		if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
+		if (sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
+			int i = sr.location-1;
+			unichar c = [s characterAtIndex:i];
+			BOOL hasLit = NO;
+			while ((c>='0' && c<='9') || (c>='a' && c<='z') || (c>='A' && c<='Z') || c=='.' || c=='_') {
+				if (!hasLit && ((c>='a' && c<='z') || (c>='A' && c<='Z'))) hasLit=YES;
+				i--;
+				if (i<0) break;
+				c = [s characterAtIndex:i];
+			}
+			i++;
+			if (hasLit && sr.location>i) {
+				NSString *fn = [s substringWithRange:NSMakeRange(i,sr.location-i)];
+				SLog(@"go for args of '%@' at %d", fn, sr.location);
+			}
+		}
+	}
 	deleteBackward = NO;
+	
 }
 
 - (BOOL)textView:(NSTextView *)textViewSrc doCommandBySelector:(SEL)commandSelector {

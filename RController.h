@@ -78,6 +78,8 @@
 	IBOutlet NSButton *deleteEntry;
     IBOutlet NSDrawer *HistoryDrawer;	
 	IBOutlet NSWindow *RConsoleWindow;
+	IBOutlet NSTextField *statusLine;
+	
 	NSTimer *timer;
 	NSTimer *RLtimer;
 	NSTimer *Flushtimer;
@@ -241,6 +243,8 @@
 - (int)  handleChooseFile: (char *)buf len:(int)len isNew:(int)isNew;	
 
 - (void) kickstart:(id) sender;
+- (void) setStatusLineText: (NSString*) text;
+- (BOOL) hintForFunction: (NSString*) fn;
 
 - (NSFont*) currentFont;
 
