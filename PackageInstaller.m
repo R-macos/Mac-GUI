@@ -100,7 +100,7 @@ NSString *location[2] = {
 		[busyIndicator stopAnimation:self];
 		[updateAllButton setEnabled:!(pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)];
 		[installButton setEnabled:YES];
-		[getListButton setEnabled:YES];
+		[getListButton setEnabled:!(pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)];
 	}
 }
 
@@ -291,6 +291,7 @@ NSString *location[2] = {
 
 - (IBAction)reloadURL:(id)sender
 {
+	BOOL success = NO;
 	//	NSLog(@"pkgUrl=%d, pkgInst=%d, pkgFormat:%d",pkgUrl, pkgInst, pkgFormat);
 	[self busy: YES];
 	
@@ -299,34 +300,34 @@ NSString *location[2] = {
 	switch(pkgUrl){
 		
 		case kCRANBin:
-			[[REngine mainEngine] executeString: 
+			success = [[REngine mainEngine] executeString: 
 				@"browse.pkgs(\"CRAN\",\"binary\")"];
 			break;
 			
 		case kCRANSrc:
-			[[REngine mainEngine] executeString: 
+			success = [[REngine mainEngine] executeString: 
 				@"browse.pkgs(\"CRAN\",\"source\")"];
 			break;
 			
 		case kBIOCBin:
-			[[REngine mainEngine] executeString: 
+			success = [[REngine mainEngine] executeString: 
 				@"browse.pkgs(\"BIOC\",\"binary\")"];
 			break;
 			
 		case kBIOCSrc:
-			[[REngine mainEngine] executeString: 
+			success = [[REngine mainEngine] executeString: 
 				@"browse.pkgs(\"BIOC\",\"source\")"];
 			break;
 			
 		case kOTHER:
 			if( [[urlTextField stringValue] isEqual:@""]){
 				[self busy:NO];
-				NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please, specify a valid URL first."));
+				NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please specify a valid URL first."));
 				return;
 			}
 			
 			[Preferences setKey:@"pkgInstaller.customURL" withObject:[urlTextField stringValue]];
-			[[REngine mainEngine] executeString: 
+			success = [[REngine mainEngine] executeString: 
 				[NSString stringWithFormat:@"browse.pkgs(contriburl=\"%@\")",[urlTextField stringValue]]];
 			break;
 			
@@ -334,6 +335,8 @@ NSString *location[2] = {
 	loadedPkgUrl=pkgUrl; // whether successful or not doesn't mattter - but the load was attempted
 	if ([pkgDataSource numberOfRows]>0) [installButton setEnabled:YES];
 	[self reRunFilter];
+	
+	if (!success) NSBeginAlertSheet(NLS(@"Fetching Package List Failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please consult  R Console output for details."));
 	
 	[self busy:NO];
 }
@@ -366,7 +369,13 @@ NSString *location[2] = {
 {
 	pkgUrl = [[ sender selectedCell] tag];
 	[pkgDataSource setHidden:(loadedPkgUrl!=pkgUrl)]; // hide if it's not the loaded one 
-	[installButton setEnabled:(loadedPkgUrl==pkgUrl)];
+	[installButton setEnabled:(loadedPkgUrl==pkgUrl || pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)];
+	
+	if (pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)
+		[installButton setTitle:NLS(@"Install…")];
+	else
+		[installButton setTitle:NLS(@"Install Selected")];
+			
 	
 	switch(pkgUrl){
 		

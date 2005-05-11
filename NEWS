@@ -11,6 +11,7 @@ Last-update: 2005-05-11 [SU]
 *	Added global code/file completion shortcut <Ctr><.> (as in Xcode)
 	<Tab> still works in the console, but obviously not in the editor
 *	Added status line and arguments lookup in the editor
+*	Fixed buttons availability in package installer
 *	Added re-entrance tracking to the REngine. Currently CodeCompletion
 	and editor's argument lookup honor the preventReentrance flag.
 	It is disabled by default but can be enabled by:
