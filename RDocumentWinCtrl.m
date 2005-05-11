@@ -848,14 +848,17 @@ reHilite:
 - (IBAction)setHelpSearchType:(id)sender
 {
 	NSMenuItem *mi = (NSMenuItem*) sender;
-	NSMenu *m = [mi menu];
+	NSMenu *m = [(NSSearchFieldCell*) searchToolbarField searchMenuTemplate];
 	int hst = [mi tag];
 	if (mi && m && hst!=hsType) {
 		SLog(@"setHelpSearchType: old=%d, new=%d", hsType, hst);
 		NSMenuItem *cmi = [m itemWithTag:hsType];
 		if (cmi) [cmi setState:NSOffState];
 		hsType = hst;
-		[mi setState:NSOnState];
+		cmi = (NSMenuItem*) [m itemWithTag:hsType];
+		if (cmi) [cmi setState:NSOnState];
+		// sounds weird, but we have to re-set the tempate to force sf to update the real menu
+		[(NSSearchFieldCell*) searchToolbarField setSearchMenuTemplate:m];
 	}
 }
 
