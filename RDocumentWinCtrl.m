@@ -270,6 +270,37 @@ NSArray *keywordList=nil;
 	return [[self document] undoManager];
 }
 
+- (void) setStatusLineText: (NSString*) text
+{
+	[statusLine setStringValue:text?text:@""];
+}
+
+- (BOOL) hintForFunction: (NSString*) fn
+{
+	BOOL success = NO;
+	if (preventReentrance && insideR>0) {
+		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
+		return NO;
+	}
+	RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(gsub('\\\\s+',' ',paste(capture.output(print(args(%@))),collapse='')),silent=TRUE)", fn]];
+	if (x) {
+		NSString *res = [x string];
+		if (res && [res length]>10 && [res hasPrefix:@"function"]) {
+			if ([res hasSuffix:@" NULL"]) res=[res substringToIndex:[res length]-5];
+			res = [fn stringByAppendingString:[res substringFromIndex:9]];
+			success = YES;
+			[self setStatusLineText:res];
+		}
+		[x release];
+	}
+	return success;
+}
+
+- (NSString*) statusLineText
+{
+	return [statusLine stringValue];
+}
+
 - (void) functionReset
 {
 	SLog(@"RDocumentWinCtrl.functionReset");
@@ -738,6 +769,7 @@ reHilite:
 	if (!deleteBackward) {
 		NSRange sr = [textView selectedRange];
 		if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
+		// check for a typed (
 		if (sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
 			int i = sr.location-1;
 			unichar c = [s characterAtIndex:i];
@@ -749,10 +781,8 @@ reHilite:
 				c = [s characterAtIndex:i];
 			}
 			i++;
-			if (hasLit && sr.location>i) {
-				NSString *fn = [s substringWithRange:NSMakeRange(i,sr.location-i)];
-				SLog(@"go for args of '%@' at %d", fn, sr.location);
-			}
+			if (hasLit && sr.location>i)
+				[self hintForFunction: [s substringWithRange:NSMakeRange(i,sr.location-i)]];
 		}
 	}
 	deleteBackward = NO;
@@ -774,7 +804,8 @@ reHilite:
 		NSString *s = [ts string];
 		NSRange csr = [textView selectedRange];
 		NSRange ssr = NSMakeRange(csr.location, 0);
-		NSRange lr = [s lineRangeForRange:ssr]; 
+		NSRange lr = [s lineRangeForRange:ssr];
+		if ([[self statusLineText] length]>0) [self setStatusLineText:@""];
 		// line on which enter was pressed - this will be taken as guide
 		if (csr.location>0) {
 			int i=lr.location;
@@ -818,17 +849,17 @@ reHilite:
 	return retval;
 }
 
-- (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
+- (NSArray *)textView:(NSTextView *)aTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
 {
-	NSRange sr=[textView selectedRange];
-	NSTextStorage * ts = [textView textStorage];
+	NSRange sr=[aTextView selectedRange];
+	NSTextStorage * ts = [aTextView textStorage];
 	NSString * s = [ts string];
 	NSRange lr = [s lineRangeForRange:sr];
-	NSLog(@"completion attempt; cursor at %d, complRange: %d-%d", sr.location, charRange.location, charRange.location+charRange.length);
+	SLog(@"completion attempt; cursor at %d, complRange: %d-%d", sr.location, charRange.location, charRange.location+charRange.length);
 
 	NSString *rep=nil;
 	NSRange er = NSMakeRange(lr.location,sr.location-lr.location);
-	NSString *text = [[textView attributedSubstringFromRange:er] string];
+	NSString *text = [[aTextView attributedSubstringFromRange:er] string];
 			
 	// first we need to find out whether we're in a text part or code part
 	unichar c;
@@ -868,7 +899,7 @@ reHilite:
 		*index=0;
 		{
 			NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
-			//if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[[ca objectAtIndex:0] length]-1]];
+			if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[[ca objectAtIndex:0] length]-1]];
 			return ca;
 		}
 	}
@@ -877,7 +908,7 @@ reHilite:
 	if (rep!=nil) {
 		*index=0;
 		return [NSArray arrayWithObjects: rep, @"dummy", nil];
-		//[textView replaceCharactersInRange:er withString:rep];
+		//[aTextView replaceCharactersInRange:er withString:rep];
 	}
 
 	return nil;

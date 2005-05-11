@@ -61,6 +61,8 @@ extern NSColor *shColorIdentifier;
 	
 	IBOutlet NSPanel *goToLineSheet;
 	IBOutlet NSTextField *goToLineField;
+
+	IBOutlet NSTextField *statusLine;
 	
     RRulerView *theRulerView;
 	
@@ -100,6 +102,10 @@ extern NSColor *shColorIdentifier;
 - (IBAction)goHelpSearch:(id)sender;
 
 - (void) setEditable: (BOOL) editable;
+
+- (void) setStatusLineText: (NSString*) text;
+- (NSString*) statusLineText;
+- (BOOL) hintForFunction: (NSString*) fn; // same as in RConstroller - we should unify this ...
 
 - (void) setPlain: (BOOL) plain; // plain = don't use highlighting even if preferences say so
 - (BOOL) plain;
