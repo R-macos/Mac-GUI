@@ -183,7 +183,7 @@ Note that for advanced optimization specifically for PowerMac G5 machines you wi
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. The following instructions apply to binaries coming from HPC for Mac OS X page @uref{http://hpc.sourceforge.net}. Please note: there are multiple versions of the Fortran binaries, depending on the system you use - pick the appropriate one. If you use CRAN binareies, you @emph{have to} use g77 3.x, you cannot use gfortran 4.x! The major version of the fortran compiler and the C compiler must match.
+Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. The following instructions apply to binaries coming from HPC for Mac OS X page @uref{http://hpc.sourceforge.net}. Please note: there are multiple versions of the Fortran binaries, depending on the system you use - pick the appropriate one. If you use CRAN binaries, you @emph{have to} use g77 3.x, you cannot use gfortran 4.x! The major version of the fortran compiler and the C compiler must match.
 
 Once you have the binaries, please do the following (you'll be asked for a root password):
 cd to the download folder and type
@@ -737,7 +737,7 @@ You can choose to install packages from source if they are located on @CRAN{}, o
 Usually it's much faster and easier to install binary packages, because they are immeditely ready to use. On the other hand only packages that pass all tests are available in binary form. If your desired package is not available in binary form, you will need to use its source form. Source packages have to be compiled first before they can be used. If you want to install a source package, you will need the same working setup for building R itself (see @pxref{Building R from sources}), including Apple Xcode Tools and a working @FORTRAN{} compiler (if the package requires it).
 
 @noindent
-If you decide to install packages you should use the @emph{Packages & Data} menu of the GUI, in particular the sub-item @emph{Package Installer}. Select the repository, package tyep (bionary or soruce) and press @emph{Get List}. This will connect to the repository through the Internet and a list all packages available for installation. This is list tells you if a package is already installed on your system, the version of the package available on @CRAN{} and the version of the same package if already installed. 
+If you decide to install packages you should use the @emph{Packages & Data} menu of the GUI, in particular the sub-item @emph{Package Installer}. Select the repository, package tyep (bionary or source) and press @emph{Get List}. This will connect to the repository through the Internet and a list all packages available for installation. This is list tells you if a package is already installed on your system, the version of the package available on @CRAN{} and the version of the same package if already installed. 
 
 @noindent
 You can use the search field to narrow the list of package to those matching your search criteria. Additionally you can use the search list menu to list only packages that are already installed on your system which is useful for comparing versions of available and installed packages.
@@ -750,6 +750,9 @@ If you want to update all packages to the latest version, select the repository 
 
 @noindent
 You can also download any other package from the Internet yourself and decide to install it from source. In such case select one of the local entries in the top left list.
+
+@noindent
+Note that currently the Package Installer assumes that custom repositories maintain proper hierarchy for both source and binary packages the same way CRAN does. If your custom repository is flat, you will need to use @code{install.packages} manually or update the repository format.
 
 @node Can I install packages built for other platforms?, Where are the packages I've installed?, Installation of packages, How to install packages
 @section Can I install packages built for other platforms?
