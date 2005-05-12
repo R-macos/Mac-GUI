@@ -21,7 +21,6 @@
                 goToLine = id; 
                 goToLineCloseSheet = id; 
                 printDocument = id; 
-                resetBackgroundColor = id; 
                 setHelpSearchType = id; 
                 sourceCurrentDocument = id; 
             }; 
@@ -37,10 +36,12 @@
                 scrollView = NSScrollView; 
                 searchToolbarField = NSSearchField; 
                 searchToolbarView = NSView; 
+                statusLine = NSTextField; 
                 textView = NSTextView; 
             }; 
             SUPERCLASS = NSWindowController; 
-        }
+        }, 
+        {CLASS = RTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }
     ); 
     IBVersion = 1; 
 }

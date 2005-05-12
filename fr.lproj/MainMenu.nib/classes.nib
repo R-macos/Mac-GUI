@@ -27,6 +27,7 @@
         }, 
         {
             ACTIONS = {
+                changeSearchType = id; 
                 printDocument = id; 
                 runHelpSearch = id; 
                 showMainHelp = id; 
@@ -38,11 +39,8 @@
             OUTLETS = {
                 HelpView = WebView; 
                 back = NSButton; 
-                faqButton = NSButton; 
                 forward = NSButton; 
                 helpWindow = NSWindow; 
-                mainButton = NSButton; 
-                matchRadio = NSMatrix; 
                 searchField = NSSearchField; 
             }; 
             SUPERCLASS = NSObject; 
@@ -54,9 +52,12 @@
                 installSelected = id; 
                 reloadPIData = id; 
                 reloadURL = id; 
+                runPkgSearch = id; 
                 setFormat = id; 
                 setLocation = id; 
                 setURL = id; 
+                toggleShowInstalled = id; 
+                updateAll = id; 
             }; 
             CLASS = PackageInstaller; 
             LANGUAGE = ObjC; 
@@ -64,11 +65,13 @@
                 busyIndicator = NSProgressIndicator; 
                 formatCheckBox = NSButton; 
                 getListButton = NSButton; 
+                installButton = NSButton; 
                 locationMatrix = NSMatrix; 
                 pkgDataSource = NSTableView; 
                 pkgScrollView = NSScrollView; 
                 pkgWindow = id; 
                 repositoryButton = NSPopUpButton; 
+                updateAllButton = NSButton; 
                 urlTextField = NSTextField; 
             }; 
             SUPERCLASS = NSObject; 
@@ -120,7 +123,6 @@
                 performHelpSearch = id; 
                 quitR = id; 
                 resetWorkingDir = id; 
-                runRELP = id; 
                 runX11 = id; 
                 saveWorkSpace = id; 
                 saveWorkSpaceFile = id; 
@@ -155,6 +157,7 @@
                 prefsCtrl = PrefWindowController; 
                 progressWheel = NSProgressIndicator; 
                 saveHistory = NSButton; 
+                statusLine = NSTextField; 
             }; 
             SUPERCLASS = NSObject; 
         }, 
@@ -169,6 +172,7 @@
             OUTLETS = {dataWindow = NSWindow; editorSource = NSTableView; }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = RTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
         {
             CLASS = RToolbar; 
             LANGUAGE = ObjC; 
