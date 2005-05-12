@@ -328,7 +328,7 @@ NSString *location[2] = {
 			
 			[Preferences setKey:@"pkgInstaller.customURL" withObject:[urlTextField stringValue]];
 			success = [[REngine mainEngine] executeString: 
-				[NSString stringWithFormat:@"browse.pkgs(contriburl=\"%@\")",[urlTextField stringValue]]];
+				[NSString stringWithFormat:@"browse.pkgs(contriburl=contrib.url(\"%@\",\"%@\"))",[urlTextField stringValue], (pkgFormat == kSource)?@"source":@"mac.binary"]];
 			break;
 			
 	}
