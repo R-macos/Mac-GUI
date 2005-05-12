@@ -429,7 +429,7 @@ colors (@pxref{Preferences}).
 
 @node Editor, Editor undo and line numbers, General Features, General Features
 @subsection Editor
-R.app provides an integrated editor for editing of R code. It sports a number of features designed to help developing code inside R. The probably most often used function is the ability to execute code directly from the editor by pressing @kbd{@key{Command}+@key{Return}}. Other features include syntax highlighting, brace-matching, code completion and function indexing.
+R.app provides an integrated editor for editing of R code. It sports a number of features designed to help developing code inside R. The probably most often used function is the ability to execute code directly from the editor by pressing @kbd{@key{Command}-@key{Return}}. Other features include syntax highlighting, brace-matching, code completion and function indexing.
 
 @node Editor undo and line numbers, Editor text completion, Editor, General Features
 @subsection Editor undo and line numbers
@@ -437,13 +437,11 @@ The editor supports undo/redo operations on an appropriate level of granularity 
 be all or nothing). The editor has an optional facility to show line numbers. These help with
 locating error messages. The editor also responds to the 'Go to Line' Edit menu function. The
 associated Preference Pane allows enabling/disabling of the line numbers, as well as setting line
-number gutter width and text margin width. Note: Right now the line number system is fairly crude
-and makes the editor really slow on large files (1000s of lines). It will help to disable it
-for such large files.
+number gutter width and text margin width.
 
 @node Editor text completion, Editor function list, Editor undo and line numbers, General Features
 @subsection Editor text completion
-Completion of typed input (both file names and R code) in the editor is available through the Edit menu 'Complete' or by typing @kbd{fn-tab}. It uses the same facilities as the console window.
+Completion of typed input (both file names and R code) in the editor is available through the Edit menu 'Complete' or by typing @kbd{@key{Control}-@key{.}} (same as is Xcode). It uses the same facilities as the console window (for compatibility the console responds to both @key{Tab} and @kbd{@key{Control}-@key{.}}).
 
 @node Editor function list, Editor syntax coloring, Editor text completion, General Features
 @subsection Editor function list
@@ -451,8 +449,8 @@ The editor maintains a popup list of functions defined in the edited document. T
 
 @node Editor syntax coloring, Editor (internal and external), Editor function list, General Features
 @subsection Editor  syntax coloring
-The editor supports syntax-highlighting for R code. It is possible to change the syntax highlighting colors using the Syntax Color Preference Pane (see below)
-		
+The editor supports syntax-highlighting for R code. It is possible to change the syntax highlighting colors using the Syntax Color Preference Pane (see below).
+
 @node Editor (internal and external), Editor help, Editor syntax coloring, General Features
 @subsection Editor (internal and external)
 By default, the editor used is incorporated into R.app, the Mac OS X GUI for R. It is a
@@ -491,7 +489,7 @@ to exit the help search or expand the search to a fuzzy/approximate search.
 @subsection History
 R.app uses history files that are (superset) compatible with history files created by R. Multiline
 support remains available from inside R.app. Multiline is particularly useful when using the
-Command Return feature while editing an R script. Import and export allows storing and importing
+@kbd{@key{Command}-@key{Return}} feature while editing an R script. Import and export allows storing and importing
 history from files visible in the Mac OS Finder. Multiline is preserved. This can be set through
 the StartUp Preference Panel. Default number of kept history entries is 250. A variety of history
 entry cleanup modes is possible.
@@ -500,8 +498,10 @@ of duplicate entries and strip comments.
 
 @node Authentication and .libPath, Preference Panes, History, General Features
 @subsection Authentication and .libPath
-TBD
-				
+The official CRAN binaries come pre-packaged in such a way that administrator have sufficient privileges to update R and install packages system-wide. However, the default unix build requires root-authentication for package instllation and other administrative tasks. As it is not feasible to run the GUI as root, we provide the possibility to authenticate system commands issued from the GUI. The authentication requires an administrator login and causes all subsequent system commands to be executed as root. Use with care!
+
+In order to allow non-administrators to maintain their own set of packages, R.app optionally adds @code{~/Library/R/library} to the @code{.libPaths} (see start-up preferences). It is possible to use the Package Installer to install packages either globally (admin users only) or for the current user only. Note that user-local packages are only used when the corresponding preference option is enabled. The default for admin users is to use system-wide directorie, for non-admin users local packages will be used.
+
 @node Preference Panes,  , Authentication and .libPath, General Features
 @subsection Preference Panes
 Several aditional preference panes have been implemented (see below).
@@ -720,56 +720,38 @@ You have several options for installing new packages on your system. We discuss 
 
 @menu
 * Which kind of packages can I install using the GUI?::  
-* Installation of packages from source::  
-* Installation of pre-built binary packages::  
+* Installation of packages::    
 * Can I install packages built for other platforms?::  
 * Where are the packages I've installed?::  
 @end menu
 
-@node Which kind of packages can I install using the GUI?, Installation of packages from source, How to install packages, How to install packages
+@node Which kind of packages can I install using the GUI?, Installation of packages, How to install packages, How to install packages
 @section Which kind of packages can I install using the GUI?
-At the moment the GUI menus only provide direct access/download/installation of packages located on @CRAN{} or in the
-Bioconductor repository. You can also install packages from local files, either binary of source packages, as explained
-below. Otherwise you can use the appropriate @R{} commands to install packages from a specific location other than the above mentioned ones.
+At the moment the GUI provide direct access/download/installation of packages located on @CRAN{}, the Bioconductor repository or a custom repository. You can also install packages from local files, either binary of source packages, as explained below. Otherwise you can use the appropriate @R{} commands to install packages from a specific location other than the above mentioned ones.
 
-
-@node Installation of packages from source, Installation of pre-built binary packages, Which kind of packages can I install using the GUI?, How to install packages
-@section Installation of packages from source
-You can choose to install packages from source if they are located on @CRAN{}, on the BioConductor repository and
-on your local disk. In any case, in order to be able to build packages from source, you need to have the same working
-setup for building @R{} itself (@pxref{Building R from sources}). In same cases you can still build packages without all
-the tools installed, but surely not for all the packages containing C/C++ or Fortran source code.
+@node Installation of packages, Can I install packages built for other platforms?, Which kind of packages can I install using the GUI?, How to install packages
+@section Installation of packages
+You can choose to install packages from source if they are located on @CRAN{}, on the BioConductor repository and on your local disk. Further you can either install packages from sources or use pre-built binary packages. Only packages that pass all tests are provided in the binary form.
 
 @noindent
-If you decide to install packages from @CRAN{} you should use the @emph{Packages} menu of the GUI. In particular the sub-item @emph{Get CRAN packages.../Source}.
-This will connect to @CRAN{} through the Internet and a list of available packages will be shown.
-This is list tells you if a package is already installed on your system, the version of the package available on @CRAN{} and the version
-of the same package if already installed.
-You can make multiple selection of packages you intend to install using the checkboxes (one per package).
-When you close this window, you'll be asked if you really want to download the selected packages and the process of installation
-begins. If you don't select any package, nothing happens.
-@R{} will not respond on the Console until you  close this window.
-The same applies for packages in the BioConductor repository. You have also several other options specific to the
-BioConductor way of managing repositories of packages.
+Usually it's much faster and easier to install binary packages, because they are immeditely ready to use. On the other hand only packages that pass all tests are available in binary form. If your desired package is not available in binary form, you will need to use its source form. Source packages have to be compiled first before they can be used. If you want to install a source package, you will need the same working setup for building R itself (see @pxref{Building R from sources}), including Apple Xcode Tools and a working @FORTRAN{} compiler (if the package requires it).
 
 @noindent
-You can also download any other package from the Internet yourself and decide to install it from source.
-You have to use @emph{Packages/->Install form local file} submenus. Where you can choose a standard @file{package.tar.gz}
-tarball or the directory containing your package if you have the package in expanded form.
-
-
-
-@node Installation of pre-built binary packages, Can I install packages built for other platforms?, Installation of packages from source, How to install packages
-@section Installation of pre-built binary packages
-Same considerations of above apply with two minor differences. The first one is that se only distribute pre-built
-version of packages which pass all the test/checks on Mac OS X. So you'll see that some of the packages are missing with respect to the huge list
-of source packages available on @CRAN{}.
+If you decide to install packages you should use the @emph{Packages & Data} menu of the GUI, in particular the sub-item @emph{Package Installer}. Select the repository, package tyep (bionary or soruce) and press @emph{Get List}. This will connect to the repository through the Internet and a list all packages available for installation. This is list tells you if a package is already installed on your system, the version of the package available on @CRAN{} and the version of the same package if already installed. 
 
 @noindent
-The second difference is that, when you install packages from local file, it is assumed that the binary package is named
-as @file{package.tgz}. This is to distinguish among source and binary archives.
+You can use the search field to narrow the list of package to those matching your search criteria. Additionally you can use the search list menu to list only packages that are already installed on your system which is useful for comparing versions of available and installed packages.
 
-@node Can I install packages built for other platforms?, Where are the packages I've installed?, Installation of pre-built binary packages, How to install packages
+@noindent
+Select any package you want to install and press the @emph{Install} button. You can follow the progress of the instllation in the R Console. Once the required packages are installed, the list is re-loaded to reflect the versions of newly installed packages.
+
+@noindent
+If you want to update all packages to the latest version, select the repository to use for the packages and press @emph{Update All}. @R{} will automatically determine the list of packages that can be updated and present you with a selection of packages to update.
+
+@noindent
+You can also download any other package from the Internet yourself and decide to install it from source. In such case select one of the local entries in the top left list.
+
+@node Can I install packages built for other platforms?, Where are the packages I've installed?, Installation of packages, How to install packages
 @section Can I install packages built for other platforms?
 As a general rule the answer is @emph{yes} if the package does not contain any C/C++/Fortran code in the sources, otherwise
 the answer is negative. Another caution should be taken, that is, the package and the installed version of @R{} should be 
@@ -781,38 +763,23 @@ A Mac OS X specific requirements, is that a prebuilt package is assumed to be na
 compressed) as @file{package_name.tgz}.
 On Windows, for example, packages come in a zipped format.
 
-
 @node Where are the packages I've installed?,  , Can I install packages built for other platforms?, How to install packages
 @section Where are the packages I've installed?
 The main library of packages is the one located inside the R.framework. This library contains the packages (base and
-recommended ones) distributed along with @R{}. At the moment you cannot use the GUI Console to install packages 
-in this location because of authentication problems, you can surely do this from the command line with an admin
-password, with something like
+recommended ones) distributed along with @R{}. Only administrators are allowed to install packages in this system-wide directory.
+Optionally users can install private packages in their @code{~/Library/R/library} directory.
+
+@noindent
+The Package Installer performs installation to either place depending on teh installation target setting. The default fro admin users is to install packages system-wide, whereas the default for regular users is their private place.
+
+@noindent
+If you happen to use @code{install.packages} @R{} function instead of the Package Installer, the regular unix behavior applies (see help pages for details). For default setup this means that the packages are installed according to the startup preference setting. You can check the current defaults by issuing
 @example
-sudo R CMD INSTALL pkg_ver.tar.gz
+.libPaths()
 @end example
 
 @noindent
-By default, the user of @file{R.app} installs packages inside the @file{Library/R/library} directory 
-in his home directory, i.e. @file{~/Library/R/library}.
-If you install a package using the @file{R.app} interfaces and you then use @R{} from the command line,
-you won't see or have access to these packages unless you add the @file{~/Library/R/library} to the
-list of libraries locations. You can do the following from inside @R{}
-@example
-.libPaths("~/Library/R/library")
-@end example
-or write this command in the @file{.Rprofile} file in your startup directory.
-On some version of OS X the @file{~} symbol is not correctly expanded. You should preferably use this
-version of the above command
-@example
-.libPaths(path.expand("~/Library/R/library"))
-@end example
-
-@noindent 
-If you have a version of @file{R.app} installed on your system, it is likely that you have all the
-packages installed in @file{~/Library/R/library}. You can add this library of packages in the @command{.libPaths()}
-but most of them will probably not work as they were built for release 1.8.x of @R{}.
-
+When upgrading to a next major release of @R{}, users should delete their @code{~/Library/R/library} directory, because packages are incompatible across major @R{} versions.
 
 @node R and external applications, Quartz device, How to install packages, Top
 @chapter R and external applications
@@ -1000,6 +967,8 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * How can I interrupt lengthy operations or output?::  
 * I don't see a thing when installing packages!::  
 @end menu
+
+
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
 @section How can I have a per session .Rprofile?
