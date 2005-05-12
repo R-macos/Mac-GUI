@@ -4,7 +4,7 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2005
-@set FAQ-VERSION 2.1-0 @value{FAQ-YEAR}-04-18
+@set FAQ-VERSION 2.1-0 @value{FAQ-YEAR}-05-12
 @set REL-VERSION 2.1.0
 @documentlanguage en
 @documentencoding ISO-8859-1
@@ -81,7 +81,7 @@ Rob J. Goedman                   @*
 @ifhtml
 @html
 <h2>Frequently Asked Questions on R for Mac OS X</h2>
-<h2>Version @value{FAQ-VERSION}</h2>
+<h2>Version @value{FAQ-VERSION}, R.app 1.11</h2>
 <address>Stefano M. Iacus</address>
 <address>Simon Urbanek</address>
 <address>Rob J. Goedman</address>
