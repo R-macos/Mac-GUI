@@ -1,5 +1,10 @@
 NEWS
 
+-- Release Version 1.11 - supplied with R 2.1.0 Patched (2005-05-12) --
+
+Last-update: 2005-05-12 [SU]
+*	Fixed crash in PI when filter (search) was on and installation failed
+
 Last-update: 2005-05-11 [SU]
 *	Added support for function arguments lookup in the console
 *	Added status line to the console (only used for the args lookup so far)
