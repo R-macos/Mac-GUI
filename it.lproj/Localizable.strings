@@ -1,6 +1,6 @@
-/* From: RController.m (hintForFunction)
-   From: RDocumentWinCtrl.m (hintForFunction) */
-"(arguments lookup is disabled while R is busy)" = "(arguments lookup is disabled while R is busy)";
+/* From: RDocumentWinCtrl.m (hintForFunction)
+   From: RController.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(ricerca argomenti è disabilitata quando R sta elaborando)";
 
 /* From: SearchTable.m (show) */
 "<unknown>" = "<sconosciuto>";
@@ -77,7 +77,7 @@
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files.";
+"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Al momento non è possibile installare pacchetti binari da un archivio remoto come root.\nUtilizzare i pacchetti binari di CRAN per installare come utente admin i pacchetti di R a livello sistema senza privilegi root. Alternativamente installare i pacchetti dalla linea di comando come root o installare pacchetti da file locali.";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Vuoi usare lo stesso mirror per le sessioni future?";
@@ -95,7 +95,7 @@
 "Edit the selected object" = "Modifica l'oggetto selezionato";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Fetching Package List Failed" = "Fetching Package List Failed";
+"Fetching Package List Failed" = "Impossibile scarica lista dei pacchetti";
 
 /* From: RController.m (toolbar) */
 "Font Size" = "Dimensione Font";
@@ -104,13 +104,13 @@
 "Help for the topic \"%@\" was not found." = "Aiuto per l'argomento \"%@\" non trovato.";
 
 /* From: RController.m (handleCustomPrint) */
-"Help topic not found" = "Help argomento non trovato";
+"Help topic not found" = "Aiuto su argomento non trovato";
 
 /* From: RController.m (toolbar) */
 "History" = "History";
 
 /* From: PackageInstaller.m (setURL) */
-"Install Selected" = "Install Selected";
+"Install Selected" = "Installa Selezionati";
 
 /* From: PackageInstaller.m (setURL) */
 "Install…" = "Install…";
@@ -120,10 +120,10 @@
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
-"Invalid Repository URL" = "Invalid Repository URL";
+"Invalid Repository URL" = "URL Archivio non valida";
 
 /* From: PackageInstaller.m (checkOptions) */
-"Never" = "Never";
+"Never" = "Mai";
 
 /* From: RController.m (toolbar) */
 "New Document" = "Nuovo Documento";
@@ -135,10 +135,10 @@
 "No" = "No";
 
 /* From: PackageInstaller.m (checkOptions) */
-"No CRAN Mirror Found" = "No CRAN Mirror Found";
+"No CRAN Mirror Found" = "Mirror CRAN non trovato";
 
 /* From: PackageInstaller.m (installSelected) */
-"No packages selected, nothing to do." = "No packages selected, nothing to do.";
+"No packages selected, nothing to do." = "Nessun pacchetto selezionato, non ho nulla da eseguire.";
 
 /* From: PackageInstaller.m (checkOptions) */
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Nessun mirror CRAN valido selezionato.\nNon sarà possibile installare i pacchetti del CRAN a meno di non specificare una URL valida come opzione CRAN.";
@@ -156,26 +156,26 @@
 "Open In Editor" = "Apri nell'Editor";
 
 /* From: PackageInstaller.m (installSelected) */
-"Package installation failed" = "Package installation failed";
+"Package installation failed" = "Installazione pacchetto non riuscita";
 
 /* From: PackageInstaller.m (installSelected) */
-"Package installation was not successful. Please see the R Console for details." = "Package installation was not successful. Please see the R Console for details.";
+"Package installation was not successful. Please see the R Console for details." = "L'installazione del pacchetto non è riuscita. Controllare la Console di R per ulteriori dettagli.";
+
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Package installer" = "Installatore Pacchetti";
 
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "Installatore Pacchetti";
+/* From: PackageInstaller.m (updateAll) */
+"Package update failed" = "Aggiornamento pacchetto non riuscito";
 
 /* From: PackageInstaller.m (updateAll) */
-"Package update failed" = "Package update failed";
-
-/* From: PackageInstaller.m (updateAll) */
-"Package update was not successful. Please see the R Console for details." = "Package update was not successful. Please see the R Console for details.";
+"Package update was not successful. Please see the R Console for details." = "Aggiornamento pacchetto non riuscito.Controllare la Console di R per ulteriori dettagli.";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Please consult  R Console output for details." = "Please consult  R Console output for details.";
+"Please consult  R Console output for details." = "Controllare la Console di R per i dettagli.";
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
@@ -227,10 +227,10 @@
 "R Console" = "R Console";
 
 /* From: RController.m (sourceFile) */
-"R File to Source" = "File R da processare";
+"R File to Source" = "File R da elaborare";
 
 /* From: RController.m (sourceOrLoadFile) */
-"R File to Source/Load" = "File R da processare/caricare";
+"R File to Source/Load" = "File R da elaborare/caricare";
 
 /* From: RController.m (handleShowMessage) */
 "R Message" = "Messaggio di R";
@@ -284,7 +284,7 @@
 "Save Content of Quartz Device to PDF file" = "Salva contenuto finestra grafica Quartz come file PDF";
 
 /* From: REditorToolbar.m (toolbar) */
-"Save current document" = "Save current document";
+"Save current document" = "Registra documento attuale";
 
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Registra file history";
@@ -309,13 +309,13 @@
 "Select one" = "Select one";
 
 /* From: REngine/Rcallbacks.m (validateToolbarItem) */
-"Select one or more" = "Select one or more";
+"Select one or more" = "Selezionarne uno o più";
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Seleziona Directory Pacchetto";
 
 /* From: PackageInstaller.m (checkOptions) */
-"Set as default?" = "Set as default?";
+"Set as default?" = "Uso come predefinito?";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "Aggiusta Colori";
@@ -331,7 +331,7 @@
 "Show All" = "Mostra tutti";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
-"Show Installed Only" = "Show Installed Only";
+"Show Installed Only" = "Mostra solo installati";
 
 /* From: RController.m (toolbar) */
 "Show/Hide R command history" = "Mostra/Nascondi R command history";
@@ -346,13 +346,13 @@
 "Source/Load" = "Elabora/Carica";
 
 /* From: RController.m (toolbar) */
-"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Lancia il server X11 per permettere ad R di usare il device X11 e Tcl/Tk";
+"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Avvia il server X11 per permettere ad R di usare il device X11 e Tcl/Tk";
 
 /* From: RController.m (toolbar) */
-"Start X11" = "Lancia X11";
+"Start X11" = "Avvia X11";
 
 /* From: RController.m (toolbar) */
-"Start X11 Server" = "Lancia Server X11";
+"Start X11 Server" = "Avvia Server X11";
 
 /* From: RController.m (toolbar) */
 "Stop" = "Stop";
@@ -361,7 +361,7 @@
 "The package has not been installed." = "Il pacchetto non è stato installato.";
 
 /* From: RController.m (applicationDidFinishLaunching) */
-"Unable to start R: %@" = "Non è stato possibile lanciare R: %@";
+"Unable to start R: %@" = "Non è stato possibile avviare R: %@";
 
 /* Global string @ */
 "Yes" = "Si";
