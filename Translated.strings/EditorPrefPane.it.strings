@@ -1,0 +1,67 @@
+/* NSTextField ((Valid range is between 0.1 and 0.8 sec.)) : <title:(Valid range is between 0.1 and 0.8 sec.)> (oid:103) */
+"(Valid range is between 0.1 and 0.8 sec.)" = "(Range accettabile tra 0.1 e 0.8 sec.)";
+
+/* NSTextField ((Wrapping and padding for new windows only)) : <title:(Wrapping and padding for new windows only)> (oid:117) */
+"(Wrapping and padding for new windows only)" = "(Si applica a nuove finestre)";
+
+/* NSTextField (0.2) : <title:0.2> (oid:44) */
+"0.2" = "0.2";
+
+/* NSTextField (16.0) : <title:16.0> (oid:124) */
+"16.0" = "16.0";
+
+/* NSTextField (5.0) : <title:5.0> (oid:127) */
+"5.0" = "5.0";
+
+/* NSButtonCell (Application) : <title:Application> (oid:49) */
+"Application" = "Applicazione";
+
+/* NSButtonCell (Built-in editor) : <title:Built-in editor> (oid:96) */
+"Built-in editor" = "Editor interno";
+
+/* NSBox : <title:Built-in editor preferences> (oid:35) */
+"Built-in editor preferences" = "Preferenze editor interno";
+
+/* NSButtonCell (Command) : <title:Command> (oid:47) */
+"Command" = "Comandi";
+
+/* NSTextField (Editor:) : <title:Editor:
+> (oid:46) */
+"Editor:\n" = "Editor:\n";
+
+/* NSButtonCell (External Editor) : <title:External Editor> (oid:97) */
+"External Editor" = "Editor esterno";
+
+/* NSBox : <title:External editor settings> (oid:37) */
+"External editor settings" = "Preferenze editor esterno";
+
+/* NSTextField (Highlight interval:) : <title:Highlight interval:> (oid:43) */
+"Highlight interval:" = "Intervallo evidenziatore:";
+
+/* NSTextField (Margin width:) : <title:Margin width:> (oid:125) */
+"Margin width:" = "Larghezza margini:";
+
+/* NSButton (New editor) : <title:New editor> (oid:105) */
+"New editor" = "Nuovo editor";
+
+/* NSTextField (Note: Command is executed in a shell) : <title:Note: Command is executed in a shell> (oid:104) */
+"Note: Command is executed in a shell" = "Nota: i comandi sono eseguiti nella shell";
+
+/* NSButton (Show brace highlighting) : <title:Show brace highlighting> (oid:40) */
+"Show brace highlighting" = "Mostra evidenziatore parentesi";
+
+/* NSButton (Show line numbers) : <title:Show line numbers> (oid:42) */
+"Show line numbers" = "Mostra numeri linea";
+
+/* NSButton (Show syntax coloring) : <title:Show syntax coloring> (oid:39) */
+"Show syntax coloring" = "Mostra colorazione sintassi";
+
+/* NSTextField (SubEthaEdit) : <title:SubEthaEdit> (oid:115) */
+"SubEthaEdit" = "SubEthaEdit";
+
+/* NSTextField (Text padding:) : <title:Text padding:> (oid:126) */
+"Text padding:" = "Text padding:";
+
+/* NSButton (Wrap lines) : <title:Wrap lines> (oid:123) */
+"Wrap lines" = "Adatta linee";
+

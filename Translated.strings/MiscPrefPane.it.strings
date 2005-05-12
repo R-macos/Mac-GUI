@@ -1,0 +1,84 @@
+/* NSTextField ((was default in RAqua)) : <title:(was default in RAqua)> (oid:29) */
+"(was default in RAqua)" = "(di default in RAqua)";
+
+/* NSTextField (.Rhistory) : <title:.Rhistory> (oid:63) */
+".Rhistory" = ".Rhistory";
+
+/* NSTextField (250) : <title:250> (oid:95) */
+"250" = "250";
+
+/* NSButton (Add $HOME/R/Library) : <title:Add $HOME/R/Library> (oid:25) */
+"Add $HOME/R/Library" = "Aggiungi $HOME/R/Library";
+
+/* NSButton (Always apply) : <title:Always apply> (oid:88) */
+"Always apply" = "Applica sempre";
+
+/* NSButton (Change) : <title:Change> (oid:37) */
+"Change" = "Cambia";
+
+/* NSButton (Cleanup history entries) : <title:Cleanup history entries> (oid:96) */
+"Cleanup history entries" = "Cancella history";
+
+/* NSButton (Default) : <title:Default> (oid:52) */
+"Default" = "Default";
+
+/* NSBox : <title:Default CRAN mirror> (oid:106) */
+"Default CRAN mirror" = "Mirror CRAN predefinito";
+
+/* NSBox : <title:Default Library Paths> (oid:23) */
+"Default Library Paths" = "Percorso Standard della Libreria";
+
+/* NSTextField (Directory:) : <title:Directory:> (oid:36) */
+"Directory:" = "Directory:";
+
+/* NSBox : <title:Drag & drop action during R start-up> (oid:17) */
+"Drag & drop action during R start-up" = "Comportamento Drag & drop all'avvio di R";
+
+/* NSBox : <title:History> (oid:44) */
+"History" = "History";
+
+/* NSBox : <title:Initial working directory> (oid:34) */
+"Initial working directory" = "Directory di lavoro iniziale";
+
+/* NSTextField (Max number of entries in history:) : <title:Max number of entries in history:> (oid:94) */
+"Max number of entries in history:" = "Numero massimo di elementi di history:";
+
+/* NSTextField (Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.) : <title:Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.> (oid:86) */
+"Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Nota: Rafforza selezionando 'Applica sempre'. Altrimenti utilizzato per impostare la directory di lavoro se non specificata all'avvio di R.app, e.g. dopppio click sull'icona di R. Trascinare un file o una directory sull'icona di R o usare 'open -a R.app <dir-o-file>' avrà priorità su questa impostazione se non si rafforza.";
+
+/* NSTextField (Note: This change is effective only after a restart of R.app) : <title:Note: This change is effective only after a restart of R.app> (oid:32) */
+"Note: This change is effective only after a restart of R.app" = "Nota: Questo cambiamento avrà effetto la prossima volta che usi R.app";
+
+/* NSTextField (Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory) : <title:Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory> (oid:87) */
+"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Nota: Usare un percorso fisso per utilizzare sempre la stessa history, e.g. ~/.Rhistory";
+
+/* NSButtonCell (Open file in editor) : <title:Open file in editor> (oid:18) */
+"Open file in editor" = "Apri file nell'editor";
+
+/* NSTextField (R history file:) : <title:R history file:> (oid:46) */
+"R history file:" = "File history R:";
+
+/* NSButton (Read history file on startup) : <title:Read history file on startup> (oid:82) */
+"Read history file on startup" = "Leggi file history all'avvio";
+
+/* NSButton (Remove duplicate entries in history) : <title:Remove duplicate entries in history> (oid:93) */
+"Remove duplicate entries in history" = "Elimina doppioni nella history";
+
+/* NSButton (Select) : <title:Select> (oid:110) */
+"Select" = "Seleziona";
+
+/* NSButtonCell (Source input file) : <title:Source input file> (oid:19) */
+"Source input file" = "Elabora file di input";
+
+/* NSButton (Strip comments in history entries) : <title:Strip comments in history entries> (oid:97) */
+"Strip comments in history entries" = "Elimina commenti dagli elementi history";
+
+/* NSIBHelpConnector : <title:URL for the default CRAN URL. If left empty, the user will be prompted.> (oid:114) */
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
+
+/* NSTextField (URL:) : <title:URL:> (oid:109) */
+"URL:" = "URL:";
+
+/* NSTextField (~) : <title:~> (oid:41) */
+"~" = "~";
+
