@@ -244,7 +244,7 @@ NSString *location[2] = {
 	
 	[self busy:NO];
 	
-	[self reloadURL:self];
+	if (!(pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)) [self reloadURL:self];
 }
 
 - (void) checkOptions
