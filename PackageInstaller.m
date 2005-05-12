@@ -494,7 +494,10 @@ NSString *location[2] = {
 - (void) resetPackages
 {
 	[packages removeAllObjects];
-	if (filter) free(filter);
+	if (filter) {
+		free(filter);
+		filter=0;
+	}
 	filterlen=0;
 }
 
