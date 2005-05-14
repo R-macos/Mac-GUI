@@ -60,7 +60,7 @@
 	<key>CFBundleSignature</key>
 	<string>0FFF</string>
 	<key>CFBundleVersion</key>
-	<string>1.11</string>
+	<string>%SVN%</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.3.0</string>
 	<key>LSEnvironment</key>
