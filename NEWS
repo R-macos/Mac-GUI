@@ -1,5 +1,10 @@
 NEWS
 
+Last-update: 2005-05-19 [SU]
+*	Don't run system events if ProcessEvents is called too frequently
+	(calls to the system loop will be at least 150ms apart)
+	Solves speed issues where loops were slower in the GUI than on cmd line
+
 -- Release Version 1.11 - supplied with R 2.1.0 Patched (2005-05-12) --
 
 Last-update: 2005-05-12 [SU]

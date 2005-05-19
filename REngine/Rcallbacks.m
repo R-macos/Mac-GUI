@@ -49,6 +49,9 @@
 
 #import "REngine.h"
 
+/* any subsequent calls of ProcessEvents within the following time slice are ignored (in ms) */
+#define MIN_DELAY_BETWEEN_EVENTS_MS   150
+
 /* localization - we don't want to include GUI specific includes, so we define it manually */
 #ifdef NLS
 #undef NLS
@@ -101,8 +104,17 @@ void Re_WritePrompt(char *prompt)
 	insideR++;
 }
 
+static long lastProcessEvents=0;
+
 void Re_ProcessEvents(void){
+	struct timeval rv;
+	if (!gettimeofday(&rv,0)) {
+		long curTime = (rv.tv_usec/1000)+(rv.tv_sec&0x1fffff)*1000;
+		if (curTime - lastProcessEvents < MIN_DELAY_BETWEEN_EVENTS_MS) return;
+	}
 	[[REngine mainHandler] handleProcessEvents];
+	if (!gettimeofday(&rv,0)) // use the exit time for the measurement of next events - handleProcessEvents may take long
+		lastProcessEvents = (rv.tv_usec/1000)+(rv.tv_sec&0x1fffff)*1000;
 }
 
 static char *readconsBuffer=0;
