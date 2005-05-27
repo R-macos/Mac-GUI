@@ -52,11 +52,6 @@ extern void RQuartz_DiplayGList(RDeviceView * devView);
 {
 	if ((self = [super initWithFrame:frameRect]) != nil) {
 		// Add initialization code here
-		devTextStorage = [[NSTextStorage alloc] initWithString:@"text"];
-		devLayoutManager = [[NSLayoutManager alloc] init];
-		devTextContainer = [[NSTextContainer alloc] init];
-		[devLayoutManager addTextContainer:devTextContainer];
-		[devTextStorage addLayoutManager:devLayoutManager];
 	}
 	return self;
 }
@@ -85,9 +80,6 @@ extern void RQuartz_DiplayGList(RDeviceView * devView);
 
 - (void) dealloc
 {
-	[devLayoutManager release];
-	[devTextStorage release];
-	[devTextContainer release];
 	[super dealloc];
 }
 
@@ -150,21 +142,6 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 		RQuartz_DiplayGList(self);
 		PDFDrawing = NO;
 	}
-}
-
-- (NSTextStorage *)getDevTextStorage
-{
-	return devTextStorage;
-}
-
-- (NSLayoutManager *)getDevLayoutManager
-{
-	return devLayoutManager;
-}
-
-- (NSTextContainer *)getDevTextContainer
-{
-	return devTextContainer;
 }
 
 @end

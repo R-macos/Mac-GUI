@@ -291,10 +291,6 @@ Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 
 	xd->DevView = [xd->QuartzDoc getDeviceView];
 	xd->DevWindow = [xd->QuartzDoc getDeviceWindow];
-	xd->DevTextStorage = [xd->DevView getDevTextStorage];
-	xd->DevLayoutManager = [xd->DevView getDevLayoutManager];
-	xd->DevTextContainer = [xd->DevView getDevTextContainer];	
-	[xd->DevTextContainer setLineFragmentPadding:0.0];
 	[xd->DevView setDevNum: xd->DevNum];
 	[xd->DevView setPDFDrawing: FALSE];
 	xd->topLeftPoint = NSMakePoint(0, 0);
@@ -502,28 +498,24 @@ static double 	RQuartz_StrWidth(char *str,
 				R_GE_gcontext *gc,
 				NewDevDesc *dd)
 {
-	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
-
+	NSString *text;
+	
+	if(gc->fontface==5  || strcmp(gc->fontfamily,"symbol")==0)
+	    text = [[NSString alloc] initWithBytes:str length:strlen(str) encoding:NSSymbolStringEncoding];
+	else 
+		text = [[NSString stringWithUTF8String:str] retain];
+	
+	if (!text) return 0.0;
+	
 	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
 		RQuartz_Font(gc, dd), NSFontAttributeName,
 		NULL];
 		
-		
-	NSAttributedString *attrStr;
-	if(gc->fontface==5  || strcmp(gc->fontfamily,"symbol")==0){
-	    NSString *tmp = [[NSString alloc] initWithBytes:str length:strlen(str) encoding:NSSymbolStringEncoding];
-		attrStr = [[[NSAttributedString alloc] initWithString:tmp 
-										attributes:attr] autorelease];
-	} else {
-	 attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithCString:str] 
-										attributes:attr] autorelease];
-	}
-		
-	[xd->DevTextStorage replaceCharactersInRange:NSMakeRange(0,[xd->DevTextStorage length])
-						 withAttributedString:attrStr];
-	[xd->DevLayoutManager glyphRangeForTextContainer:xd->DevTextContainer];
-
-	return [xd->DevLayoutManager usedRectForTextContainer:xd->DevTextContainer].size.width;
+	NSSize bbox = [text sizeWithAttributes:attr];
+	
+	[text release];
+	
+	return bbox.width;
 }
 
 static void 	RQuartz_Text(double x, double y, char *str,
@@ -531,45 +523,43 @@ static void 	RQuartz_Text(double x, double y, char *str,
 			    R_GE_gcontext *gc,
 			    NewDevDesc *dd)
 {
+	NSString *text = nil;
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
-	NSColor* clr       = [NSColor colorWithCalibratedRed:(float)R_RED(gc->col)/255.0
-		 green:(float)R_GREEN(gc->col)/255.0
-		 blue:(float)R_BLUE(gc->col)/255.0
-		 alpha:(float)R_ALPHA(gc->col)/255.0];
-	
-	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
-		RQuartz_Font(gc,  dd), NSFontAttributeName,
-		clr, NSForegroundColorAttributeName,
-		NULL];
-		NSAttributedString *attrStr;
-	if(gc->fontface==5  || strcmp(gc->fontfamily,"symbol")==0){
-	    NSString *tmp = [[NSString alloc] initWithBytes:str length:strlen(str) encoding:NSSymbolStringEncoding];
-		attrStr = [[[NSAttributedString alloc] initWithString:tmp 
-										attributes:attr] autorelease];
-	} else {
-	 attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithUTF8String:str] 
-										attributes:attr] autorelease];
-	}
-	
-	[xd->DevTextStorage replaceCharactersInRange:NSMakeRange(0,[xd->DevTextStorage length])
-						 withAttributedString:attrStr];
-	[xd->DevLayoutManager glyphRangeForTextContainer:xd->DevTextContainer];
-	NSRange glyphRange = [xd->DevLayoutManager glyphRangeForTextContainer: xd->DevTextContainer];
 
+	if(gc->fontface==5  || strcmp(gc->fontfamily,"symbol")==0)
+	    text = [[NSString alloc] initWithBytes:str length:strlen(str) encoding:NSSymbolStringEncoding];
+	else 
+		text = [[NSString stringWithUTF8String:str] retain];
 	
-		[xd->DevView lockFocus];
+	if (!text) return; /* if for some reason the decoding didn't work, just get out, nothing to see */
+	
+	NSColor* clr       = [NSColor colorWithCalibratedRed:(float)R_RED(gc->col)/255.0
+												   green:(float)R_GREEN(gc->col)/255.0
+													blue:(float)R_BLUE(gc->col)/255.0
+												   alpha:(float)R_ALPHA(gc->col)/255.0];
+	
+	NSFont *font = RQuartz_Font(gc,  dd);
+	NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
+		font, NSFontAttributeName,
+		clr, NSForegroundColorAttributeName,
+		nil];
+
+	[xd->DevView lockFocus];
 	NSRectClip(ClipArea);
-	double h = [xd->DevLayoutManager usedRectForTextContainer:xd->DevTextContainer].size.height;
-	
+	//NSSize bbox = [text sizeWithAttributes:attr];
+		
 	NSAffineTransform *tns = [NSAffineTransform transform];	
 	[tns translateXBy:x yBy:y];
 	[tns rotateByDegrees:-rot];
-	[tns translateXBy:0 yBy:-h];	// Adjust a bit, why?
+	// in theory it should be sufficient to shift by the ascender, but obviously R is providing the wrong coordinates ...
+	[tns translateXBy:0 yBy:-[font ascender]+[font descender]];	
+	//[tns translateXBy:0 yBy:-bbox.height];
 	[tns concat];
 
-	[xd->DevLayoutManager drawGlyphsForGlyphRange: glyphRange atPoint: NSMakePoint(0,0)];
+	[text drawAtPoint:NSMakePoint(0,0) withAttributes:attr];
+	[text release];
 	
-		[xd->DevView unlockFocus];
+	[xd->DevView unlockFocus];
 }
 
 static void 	RQuartz_Rect(double x0, double y0, double x1, double y1,
@@ -851,46 +841,34 @@ static void 	RQuartz_MetricInfo(int c,
 				  double* width,
 				  NewDevDesc *dd)
 {
-	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
+	//QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 	NSFont* font= RQuartz_Font(gc,dd);
-	NSRect rect,rect2;
 	unichar uc = (unichar)c;
 	char str[2];
+
 	str[1] = '\0';	
 	str[0] = (char)c;
-	
-	if(c==0){
-		rect = [font boundingRectForFont];
-	 } else {
 
-		 NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
+	*ascent = [font ascender];
+	*descent = [font descender];
+	*width = [font maximumAdvancement].width;
+	if (c) {
+		NSDictionary* attr = [NSDictionary dictionaryWithObjectsAndKeys:
 			font, NSFontAttributeName,
-			NULL];
+			nil];
 		
-		 NSAttributedString *attrStr;
+		NSString *text = nil;
 		
-		if(gc->fontface==5  ||strcmp(gc->fontfamily,"symbol")==0){
-			NSString *tmp = [[NSString alloc] initWithBytes:str length:1 encoding:NSSymbolStringEncoding];
-			attrStr = [[[NSAttributedString alloc] initWithString:tmp 
-										attributes:attr] autorelease];
-		} else {
-			attrStr = [[[NSAttributedString alloc] initWithString:[NSString stringWithCharacters:&uc length:1] 
-										attributes:attr] autorelease];
-		}
-		
-		[xd->DevTextStorage replaceCharactersInRange:NSMakeRange(0, [xd->DevTextStorage length])
-						 withAttributedString:attrStr];
-		[xd->DevLayoutManager glyphRangeForTextContainer:xd->DevTextContainer];
-		//NSLog(@"glyphs=%d",  [xd->DevLayoutManager numberOfGlyphs] );
-		rect = [xd->DevLayoutManager usedRectForTextContainer:xd->DevTextContainer];
-		rect2 = [font boundingRectForGlyph: [xd->DevLayoutManager glyphAtIndex:0]];
-	 }    
-    
-
-	*ascent  =  NSMaxY(rect);
-	*descent = -NSMinY(rect);
-	*width   = NSWidth(rect);
+		if(gc->fontface==5  ||strcmp(gc->fontfamily,"symbol")==0)
+			text = [[NSString alloc] initWithBytes:str length:1 encoding:NSSymbolStringEncoding];
+		else
+			text = [[NSString stringWithCharacters:&uc length:1] retain];
 	
+		*width = [text sizeWithAttributes: attr].width;
+		
+		[text release];
+	}
+    
 	//fprintf(stderr,"c=%c,ascent=%f, descent=%f,width=%f,width2=%f,width3=%f\n",c,*ascent , *descent, *width, *width+rect2.origin.x,NSWidth(rect));
 
 //	NSLog(@"x=%f,y=%f,width=%f,height=%f",rect.origin.x, rect.origin.y,rect.size.width,rect.size.height);

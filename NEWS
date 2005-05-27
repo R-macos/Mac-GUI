@@ -1,5 +1,9 @@
 NEWS
 
+Last-update: 2005-05-27 [SU]
+*	Re-write of the Quartz text handling; should fix some exceptions and
+	fix problmes with font metrics (the previous one provided bogus values)
+
 Last-update: 2005-05-19 [SU]
 *	Don't run system events if ProcessEvents is called too frequently
 	(calls to the system loop will be at least 150ms apart)

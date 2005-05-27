@@ -36,9 +36,6 @@
 	NSWindow	*deviceWindow;
 	int         deviceNum;
 	IBOutlet id delegate;
-	NSTextStorage *devTextStorage;
-	NSLayoutManager *devLayoutManager;
-	NSTextContainer *devTextContainer;
 	BOOL PDFDrawing;  
 }
 
@@ -46,9 +43,6 @@
 			   It is used for clipboard PDF pasting and shuld be also used for saving to PDF
 */
 
-- (NSTextStorage *)getDevTextStorage;
-- (NSLayoutManager *)getDevLayoutManager;
-- (NSTextContainer *)getDevTextContainer;
 - (void) setDevNum: (int)dnum;
 - (int) getDevNum;
 - (void) setPDFDrawing: (BOOL)flag;
