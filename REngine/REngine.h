@@ -59,10 +59,15 @@ extern BOOL preventReentrance;
 
 	/* set to YES if R REPL is running */
 	BOOL loopRunning;
+
+	BOOL protectedMode;
 	
 	/* last error string */
 	NSString* lastError;
 	
+	/* if >0 ProcessEvents doesn't call the event handler */
+	int maskEvents;
+
 	/* initial arguments used by activate to initialize R */
 	int  argc;
 	char **argv;
@@ -84,6 +89,11 @@ extern BOOL preventReentrance;
 
 - (void) begin;
 - (void) end;
+
+- (BOOL) allowEvents;
+
+- (BOOL) beginProtected;
+- (void) endProtected;
 
 // eval mode
 - (RSEXP*) parse: (NSString*) str;

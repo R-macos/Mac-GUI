@@ -282,6 +282,10 @@ NSArray *keywordList=nil;
 		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
 		return NO;
 	}
+	if (![[REngine mainEngine] beginProtected]) {
+		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
+		return NO;		
+	}
 	RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(gsub('\\\\s+',' ',paste(capture.output(print(args(%@))),collapse='')),silent=TRUE)", fn]];
 	if (x) {
 		NSString *res = [x string];
@@ -293,6 +297,7 @@ NSArray *keywordList=nil;
 		}
 		[x release];
 	}
+	[[REngine mainEngine] endProtected];
 	return success;
 }
 

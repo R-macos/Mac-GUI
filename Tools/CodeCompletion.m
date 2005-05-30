@@ -39,11 +39,14 @@
 		return nil;
 	}
     REngine *re = [REngine mainEngine];
+	if (![re beginProtected]) {
+		SLog(@"CodeCompletion.complete: returning nil completion because protected REngine entry failed [***]");
+		return nil;
+	}
     // first get the length of the search path so we can go environment by environment
     RSEXP *x = [re evaluateString:@"length(search())"];
     int pos=1, maxpos;
-    if (x==nil) return nil;
-    if ((maxpos = [x integer])==0) return nil;    
+    if (x==nil || ((maxpos = [x integer])==0)) { [re endProtected]; return nil; }
 
     // ok, we got the search path length; search in each environment and if something matches, get it, otherwise go to the next one
     while (pos<=maxpos) {
@@ -51,11 +54,14 @@
         NSString *ls=[NSString stringWithFormat:@"ls(pos=%d, all.names=TRUE, pattern=\"^%@.*\")", pos, part];
         RSEXP *x = [re evaluateString:ls];
         //NSLog(@"attepmting to find %@ via %@", part, ls);
-        if (x==nil)
+        if (x==nil) {
+			[re endProtected];
             return nil;
+		}
         NSArray *a = [x array];
         if (a == nil) {
             [x release];
+			[re endProtected];
             return nil;
         }
         
@@ -79,6 +85,7 @@
             }
             if (common!=nil) { // attempt to get class of the object - it will fail if that's just a partial object, but who cares..
                 x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
+				[re endProtected];
                 if (x!=nil && [x string]!=nil && [[x string] isEqualToString:@"function"])
                     return [[common autorelease] stringByAppendingString:@"("];
                 else
@@ -87,6 +94,7 @@
         }
         pos++;
     }
+	[re endProtected];
     return nil;
 }
 
@@ -95,15 +103,20 @@
 		SLog(@"CodeCompletion.completeAll: returning nil completion to prevent R re-entrance [***]");
 		return nil;
 	}
+	
     REngine *re = [REngine mainEngine];
+	if (![re beginProtected]) {
+		SLog(@"CodeCompletion.completeAll: returning nil completion because protected REngine entry failed [***]");
+		return nil;
+	}
+	
     // first get the length of the search path so we can go environment by environment
     RSEXP *x = [re evaluateString:@"length(search())"];
     int pos=1, maxpos, matches=0;
 	NSMutableArray *ca = nil;
 	NSString *common=nil;
 
-    if (x==nil) return nil;
-    if ((maxpos = [x integer])==0) return nil;    
+    if (x==nil || ((maxpos = [x integer])==0)) { [re endProtected]; return nil; }
 	
 	ca = [[NSMutableArray alloc] initWithCapacity: 8];
 	
@@ -113,12 +126,16 @@
         NSString *ls=[NSString stringWithFormat:@"ls(pos=%d, all.names=TRUE, pattern=\"^%@.*\")", pos, part];
         RSEXP *x = [re evaluateString:ls];
         //NSLog(@"attepmting to find %@ via %@", part, ls);
-        if (x==nil)
+        if (x==nil) {
+			[re endProtected];
             return nil;
+		}
+		
         NSArray *a = [x array];
 		
         if (a == nil) {
             [x release];
+			[re endProtected];
             return nil;
         }
         
@@ -151,15 +168,19 @@
 			x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
 			[ca release];
 			if (x!=nil && [x string]!=nil && [[x string] isEqualToString:@"function"]) {
+				[re endProtected];
 				return [NSArray arrayWithObject: [[[common autorelease] stringByAppendingString:@"("] substringFromIndex:prefix]];
 			} else {
+				[re endProtected];
 				return [NSArray arrayWithObject: [[common autorelease] substringFromIndex:prefix]];
 			}
 		} else {
 			[common release];
+			[re endProtected];
 			return ca;
 		}
 	}
+	[re endProtected];
 	[ca release];
     return nil;
 }

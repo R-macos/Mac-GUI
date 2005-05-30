@@ -1,5 +1,11 @@
 NEWS
 
+Last-update: 2005-05-30 [SU]
+*	Added "protected mode" to REngine which disables events for the
+	duration of short, atomic operations like arguments lookup or
+	code completion. This should fix recent crashes caused by longer
+	lookups.
+
 Last-update: 2005-05-27 [SU]
 *	Re-write of the Quartz text handling; should fix some exceptions and
 	fix problmes with font metrics (the previous one provided bogus values)

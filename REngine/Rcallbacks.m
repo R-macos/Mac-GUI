@@ -112,7 +112,8 @@ void Re_ProcessEvents(void){
 		long curTime = (rv.tv_usec/1000)+(rv.tv_sec&0x1fffff)*1000;
 		if (curTime - lastProcessEvents < MIN_DELAY_BETWEEN_EVENTS_MS) return;
 	}
-	[[REngine mainHandler] handleProcessEvents];
+	if ([[REngine mainEngine] allowEvents]) // if events are masked, we won't call the handler. we may re-think what we do about the timer, though ...
+		[[REngine mainHandler] handleProcessEvents];
 	if (!gettimeofday(&rv,0)) // use the exit time for the measurement of next events - handleProcessEvents may take long
 		lastProcessEvents = (rv.tv_usec/1000)+(rv.tv_sec&0x1fffff)*1000;
 }

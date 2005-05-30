@@ -1374,6 +1374,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
 		return NO;
 	}
+	if (![[REngine mainEngine] beginProtected]) {
+		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
+		return NO;		
+	}
 	RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(gsub('\\\\s+',' ',paste(capture.output(print(args(%@))),collapse='')),silent=TRUE)", fn]];
 	if (x) {
 		NSString *res = [x string];
@@ -1385,6 +1389,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		}
 		[x release];
 	}
+	[[REngine mainEngine] endProtected];
 	return success;
 }
 

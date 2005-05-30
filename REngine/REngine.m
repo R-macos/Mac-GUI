@@ -109,6 +109,7 @@ BOOL preventReentrance = NO;
     loopRunning=NO;
 	active=NO;
 	insideR=0;
+	maskEvents=0;
 	
     //setenv("R_HOME","/Library/Frameworks/R.framework/Resources",1);
     //setenv("DYLD_LIBRARY_PATH","/Library/Frameworks/R.framework/Resources/lib",1);
@@ -140,6 +141,22 @@ BOOL preventReentrance = NO;
 
 - (BOOL) isActive { return active; }
 - (BOOL) isLoopRunning { return loopRunning; }
+
+- (BOOL) allowEvents { return (maskEvents==0); }
+
+- (BOOL) beginProtected {
+	SLog(@"REngine.beginProtected, maskEvents=%d, protectedMode=%d", maskEvents, (int)protectedMode);
+	if (protectedMode) return NO;
+	maskEvents++;
+	protectedMode=YES;
+	return YES;
+}
+
+- (void) endProtected {
+	SLog(@"REngine.endProtected, maskEvents=%d, protectedMode=%d", maskEvents, (int)protectedMode);
+	maskEvents--;
+	protectedMode=NO;
+}
 
 - (void) runREPL
 {
