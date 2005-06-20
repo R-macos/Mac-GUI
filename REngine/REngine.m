@@ -178,7 +178,7 @@ BOOL preventReentrance = NO;
 	/* in fact loopRunning is not determinable, because later longjmp may have re-started the loop, so we just keep it at YES */
 }
 
-- (id) handler
+- (id <REPLHandler>) handler
 {
     return replHandler;
 }
