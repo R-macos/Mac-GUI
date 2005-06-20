@@ -10,6 +10,7 @@
                 changeHighlightInterval = id; 
                 changeInternalOrExternal = id; 
                 changeLineNumberGutterWidth = id; 
+                changeShowArgsHints = id; 
                 changeShowBraceHighlighting = id; 
                 changeShowLineNumbers = id; 
                 changeShowSyntaxColoring = id; 
@@ -34,6 +35,7 @@
                 lineNumberGutterWidth = NSTextField; 
                 lineNumberGutterWidthText = NSTextField; 
                 mainView = NSView; 
+                showArgsHints = NSButton; 
                 showBraceHighlighting = NSButton; 
                 showLineNumbers = NSButton; 
                 showLineNumbersText = NSTextField; 
