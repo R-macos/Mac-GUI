@@ -216,11 +216,11 @@ NSString *location[2] = {
 					break;
 					
 				case kBIOCBin:
-					repos=@"getOption(\"BIOC\"))";
+					repos=@"getOption(\"BIOC\")";
 					break;
 					
 				case kBIOCSrc:
-					repos=@"getOption(\"BIOC\"))";
+					repos=@"getOption(\"BIOC\")";
 					type=@"source";
 					break;
 					
