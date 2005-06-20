@@ -162,6 +162,7 @@
 		[appOrCommand selectCellAtRow:0 column:0];
 	else
 		[appOrCommand selectCellAtRow:1 column:0];
+
 	flag=[Preferences flagForKey:internalOrExternalKey withDefault: YES];
 	if (flag)
 		[internalOrExternal selectCellAtRow:0 column:0];
@@ -204,6 +205,8 @@
 	pathComps = [name componentsSeparatedByString:@".app"];
 	name = [pathComps objectAtIndex:0];
 	[externalEditorName setStringValue:name];
+
+	[showArgsHints setState:[Preferences flagForKey:prefShowArgsHints withDefault:YES]?NSOnState:NSOffState];
 
 	[showSyntaxColoring setState:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]?NSOnState:NSOffState];
 
@@ -254,6 +257,12 @@
 	int tmp = (int)[sender state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:showBraceHighlightingKey withFlag:flag];
+}
+
+- (IBAction) changeShowArgsHints:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:prefShowArgsHints withFlag:flag];
 }
 
 - (IBAction) changeHighlightInterval:(id)sender {

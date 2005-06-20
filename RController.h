@@ -111,6 +111,7 @@
     BOOL runSystemAsRoot;
 	BOOL busyRFlag;
 	BOOL appLaunched;
+	BOOL argsHints;
 	
 	float currentSize;
 	float currentFontSize;

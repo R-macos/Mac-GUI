@@ -45,6 +45,7 @@
 	IBOutlet NSBox *externalSettings;
 	IBOutlet NSButton *showSyntaxColoring;
 	IBOutlet NSButton *showBraceHighlighting;
+	IBOutlet NSButton *showArgsHints;
 	IBOutlet NSTextField *highlightInterval;
 	IBOutlet NSButton *showLineNumbers;
 	IBOutlet NSTextField *externalEditorName;
@@ -87,6 +88,7 @@
 - (IBAction) changeEnableLineWrapping:(id)sender;
 - (IBAction) changeLineNumberGutterWidth:(id)sender;
 - (IBAction) changeFragmentPaddingWidth:(id)sender;
+- (IBAction) changeShowArgsHints:(id)sender;
 
 - (void) updatePreferences;
 

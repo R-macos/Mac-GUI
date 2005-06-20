@@ -1351,7 +1351,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	NSRange sr = [RTextView selectedRange];
 
 	// check for a typed (
-	if (sr.location>committedLength && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
+	if (argsHints && sr.location>committedLength && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
 		int i = sr.location-1;
 		unichar c = [s characterAtIndex:i];
 		BOOL hasLit = NO;
@@ -2231,7 +2231,9 @@ This method calls the showHelpFor method of the Help Manager which opens
 		SLog(@" - using new %@", textFont);
 		textFont = [newFont retain];
 	}
-	
+
+	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
+
 	{
 		int i = 0, ccs = [consoleColorsKeys count];
 		while (i<ccs) {

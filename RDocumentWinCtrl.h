@@ -70,6 +70,7 @@ extern NSColor *shColorIdentifier;
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted
 	BOOL deleteBackward;
 	BOOL plainFile; // overriders preferences - if YES syntax HL is disabled
+	BOOL argsHints; // fn args hinting
 	
 	int hsType; // help search type
 	

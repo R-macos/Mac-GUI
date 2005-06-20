@@ -454,6 +454,8 @@ NSArray *keywordList=nil;
 	if (c) shColorComment = c;
 	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
 	if (c) shColorIdentifier = c;
+
+	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
 	
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
@@ -775,7 +777,7 @@ reHilite:
 		NSRange sr = [textView selectedRange];
 		if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
 		// check for a typed (
-		if (sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
+		if (argsHints && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
 			int i = sr.location-1;
 			unichar c = [s characterAtIndex:i];
 			BOOL hasLit = NO;

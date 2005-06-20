@@ -1,5 +1,9 @@
 NEWS
 
+Last-update: 2005-06-20 [SU]
+*	Add preference to disable function arguments hints (applies to both
+	console and editor)
+
 Last-update: 2005-05-30 [SU]
 *	Added "protected mode" to REngine which disables events for the
 	duration of short, atomic operations like arguments lookup or

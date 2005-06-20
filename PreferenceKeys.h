@@ -77,6 +77,8 @@
 #define quartzPrefPaneFontKey @"QuartzPrefPane font"
 #define quartzPrefPaneFontSizeKey @"QuartzPrefPane fontsize"
 
+#define prefShowArgsHints @"Show function args hints"
+
 // other constants
 
 #define iBackgroundColor 0
