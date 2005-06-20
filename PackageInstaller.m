@@ -311,12 +311,12 @@ NSString *location[2] = {
 			
 		case kBIOCBin:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(\"BIOC\",\"binary\")"];
+				@"browse.pkgs(contriburl=contrib.url(getOption(\"BIOC\"),\"mac.binary\"))"];
 			break;
 			
 		case kBIOCSrc:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(\"BIOC\",\"source\")"];
+				@"browse.pkgs(contriburl=contrib.url(getOption(\"BIOC\"),\"source\"))"];
 			break;
 			
 		case kOTHER:
