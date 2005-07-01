@@ -121,9 +121,6 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 	[deviceWindow flushWindow];
 	[self unlockFocus];
 	[[RController sharedController] handleBusy: NO];
-
-    // could do something here if needed
-	[[RController sharedController] updatePreferences];
 }
 
 - (void)drawRect:(NSRect)aRect
@@ -132,9 +129,11 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
  
     if ([self inLiveResize])
     {
+		[self lockFocus];
         NSString *str = [NSString stringWithFormat: NLS(@"Resizing to %g x %g"),
                                                     frame.size.width, frame.size.height];
         drawStringInRect(frame, str, 20);
+		[self unlockFocus];
         return;
     }
 	
