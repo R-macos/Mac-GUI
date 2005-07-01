@@ -1,6 +1,6 @@
 /* Localized versions of Info.plist keys */
 
 CFBundleName = "R";
-CFBundleShortVersionString = "1.12-pre";
-CFBundleGetInfoString = "R Cocoa GUI 1.12-pre (experimental build %SVN%), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
-NSHumanReadableCopyright = "R Cocoa GUI 1.12-pre, S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
+CFBundleShortVersionString = "1.12";
+CFBundleGetInfoString = "R Cocoa GUI 1.12 (1622), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
+NSHumanReadableCopyright = "R Cocoa GUI 1.12 (1622), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";

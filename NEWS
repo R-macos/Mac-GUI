@@ -1,6 +1,13 @@
 NEWS
 
+-- Release Version 1.12 (1622) - supplied with 2.1.1 --
+
+Last-update: 2005-07-01 [SU]
+*	Fixed Quartz live-resize bug
+*	Updated FAQ for 2.1.1
+
 Last-update: 2005-06-20 [SU]
+*	Fixed package installer to handle Bioconductor repository properly
 *	Added Xcode 2.1 project
 *	Added preference to disable function arguments hints (applies to both
 	console and editor)
