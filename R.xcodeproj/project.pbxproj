@@ -878,6 +878,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 68BEF8CE0867221B009B4C4A /* Build configuration list for PBXNativeTarget "R" */;
 			buildPhases = (
+				68416AA0088D9A5000756EE2 /* ShellScript */,
 				8D1107270486CEB800E47090 /* Headers */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -1039,6 +1040,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# shell script goes here\ncd docs\nmakeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
+		};
+		68416AA0088D9A5000756EE2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				Info.src.plist,
+				English.lproj/InfoPlist.src.strings,
+			);
+			outputPaths = (
+				Info.plist,
+				English.lproj/InfoPlist.strings,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ./updateSVN;
 		};
 /* End PBXShellScriptBuildPhase section */
 

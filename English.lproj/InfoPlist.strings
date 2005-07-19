@@ -1,6 +1,10 @@
 /* Localized versions of Info.plist keys */
 
+/* WARNING: InfoPlist.strings is automatically generated
+   from InfoPlist.src.string! Edit the later only, otherwise
+   you will lose your changes! */
+
 CFBundleName = "R";
-CFBundleShortVersionString = "1.12";
-CFBundleGetInfoString = "R Cocoa GUI 1.12 (1622), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
-NSHumanReadableCopyright = "R Cocoa GUI 1.12 (1622), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
+CFBundleShortVersionString = "1.13-experimental";
+CFBundleGetInfoString = "R Cocoa GUI 1.13-experimental (1662), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
+NSHumanReadableCopyright = "R Cocoa GUI 1.13-experimental (1662), S.M.Iacus & S.Urbanek, © R Foundation for Statistical Computing, 2005";
