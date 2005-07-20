@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo `pwd`
+SVNREV=`sed -n 's/.*revision="\(.*\)".*/\1/p' .svn/entries`
+echo "Revision: $SVNREV"
+
+if [ -z "$SVNREV" ]; then
+    echo "Cannot determine SVN revision."
+    exit 1
+fi
+
+if [ ! -e English.lproj/InfoPlist.src.strings ]; then
+    echo "Cannot find English.lproj/InfoPlist.src.strings"
+    exit 2;
+fi
+if [ ! -e Info.src.plist ]; then
+    echo "Cannot find Info.src.plist"
+    exit 3;
+fi
+
+sed "s/%SVN%/$SVNREV/g" English.lproj/InfoPlist.src.strings > English.lproj/InfoPlist.strings
+sed "s/%SVN%/$SVNREV/g" Info.src.plist > Info.plist
+
