@@ -960,3 +960,69 @@ NSPoint computeTopLeftCornerForDevNum(int devnum, int quartzpos, int width, int 
 	return topLeftCorner;
 }
 
+/* my own hack */
+
+SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
+	int dev = asInteger(nr)-1;
+    int ds = NumDevices();
+	char *fts;
+	BOOL bitmap = YES;
+	NSBitmapImageFileType ftype = NSPNGFileType;
+	
+	if (!isString(fn) || LENGTH(fn)<1) error("Filename must be a string.");
+	if (!isString(type) || LENGTH(type)<1) error("Filename must be a string.");
+	fts =  CHAR(STRING_ELT(type,0));
+    if (dev<0 || dev>=ds) error("Device nr out of range.");
+	if (!strcmp(fts,"png")) ftype=NSPNGFileType;
+	else if (!strcmp(fts,"tif") || !strcmp(fts,"tiff")) ftype=NSTIFFFileType;
+	else if (!strcmp(fts,"jpg") || !strcmp(fts,"jpeg")) ftype=NSJPEGFileType;
+	else if (!strcmp(fts,"gif")) ftype=NSGIFFileType;
+	else if (!strcmp(fts,"bmp")) ftype=NSBMPFileType;
+	else if (!strcmp(fts,"pdf")) bitmap=NO;
+	else error("Invalid file type. Supported types are: png, tiff, jpeg, gif, bmp and pdf.");
+	
+    {
+        GEDevDesc *gd=(GEDevDesc*)GetDevice(dev);
+        if (!gd) error("Can't get device descriptor.");
+		else {
+			NewDevDesc *dd=gd->dev;
+			if (!dd) error("Can't get device data descriptor.");
+			else {
+				QuartzDesc *xd = (QuartzDesc *) dd-> deviceSpecific;
+				if (bitmap)
+					[xd->DevView saveAsBitmap: [NSString stringWithUTF8String:CHAR(STRING_ELT(fn, 0))] usingType:ftype];
+				else
+					[xd->DevView saveAsPDF: [NSString stringWithUTF8String:CHAR(STRING_ELT(fn, 0))]];
+			}
+		}
+	}
+	return R_NilValue;
+}
+
+/*-- now, this is ugly, we use internals of Rdynload to squeeze our functions into base load table --*/
+
+#define HAVE_WCHAR_H 1
+#include <Rdynpriv.h>
+
+DllInfo *getBaseDllInfo();
+
+void R_addCallRoutine(DllInfo *info, const R_CallMethodDef * const croutine, Rf_DotCallSymbol *sym);
+
+static void registerCall(DllInfo *info, const R_CallMethodDef * const callRoutines) {
+	int oldnum = info->numCallSymbols;
+	int num, i;
+	for(num=0; callRoutines[num].name != NULL; num++) {;}
+	info->CallSymbols =	(Rf_DotCallSymbol*)realloc(info->CallSymbols, (num+oldnum)*sizeof(Rf_DotCallSymbol));
+	info->numCallSymbols = num+oldnum;
+	for(i = 0; i < num; i++)
+		R_addCallRoutine(info, callRoutines+i, info->CallSymbols + i + oldnum);
+}
+
+void QuartzRegisterSymbols() {
+	R_CallMethodDef callMethods[]  = {
+	{"QuartzSaveContents", (DL_FUNC) &QuartzSaveContents, 4},
+	{NULL, NULL, 0}
+	};
+	/* we add those to the base as we have no specific entry (yet?) */
+	registerCall(getBaseDllInfo(), callMethods);
+}

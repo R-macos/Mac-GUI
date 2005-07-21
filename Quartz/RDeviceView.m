@@ -143,5 +143,26 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 	}
 }
 
-@end
+- (void) saveAsBitmap: (NSString*) fname usingType: (NSBitmapImageFileType) ftype {
+	[self lockFocus];
+	NSBitmapImageRep* bitmap = [ [NSBitmapImageRep alloc]
+			initWithFocusedViewRect: [self bounds] ];
+	[self unlockFocus];
+	
+	NSData* data1 = [bitmap representationUsingType:ftype properties:nil];
+	[[NSFileManager defaultManager] createFileAtPath:fname contents:data1 attributes:nil];
+	
+	[bitmap release];	
+}
 
+- (void) saveAsPDF: (NSString*) fname {
+	[self setPDFDrawing:YES];
+	[self lockFocus];
+	NSData *data = [self dataWithPDFInsideRect:[self bounds]];
+	[self unlockFocus];
+	[self setPDFDrawing:NO];
+	
+	[data writeToFile:fname atomically:YES];
+}
+
+@end

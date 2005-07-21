@@ -43,3 +43,5 @@
 #define kOnFilePICT	2
 #define kOnClipboard 	3
 #define kOnPrinter	4
+
+void QuartzRegisterSymbols();

@@ -57,6 +57,7 @@
 #import "REngine/Rengine.h"
 #import "RConsoleTextStorage.h"
 #import "RDocumentWinCtrl.h"
+#import "Quartz/QuartzDevice.h"
 
 #import "Tools/Authorization.h"
 
@@ -389,7 +390,12 @@ static RController* sharedRController;
 		NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
 		exit(-1);
 	}
-	
+
+	/* register Quartz symbols */
+	QuartzRegisterSymbols();
+	/* create quartz.save function in tools:quartz */
+	[[REngine mainEngine] executeString:@"try(assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),attach(NULL,name=\"tools:quartz\")))"];
+
 	SLog(@" - set R options");
 	// force html-help, because that's the only format we can handle ATM
 	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];

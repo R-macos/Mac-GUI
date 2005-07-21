@@ -47,4 +47,8 @@
 - (int) getDevNum;
 - (void) setPDFDrawing: (BOOL)flag;
 - (BOOL) isPDFDrawing;
+
+- (void) saveAsBitmap: (NSString*) fname usingType: (NSBitmapImageFileType) ftype;
+- (void) saveAsPDF: (NSString*) fname;
+
 @end
