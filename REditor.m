@@ -35,6 +35,7 @@
 #include <R_ext/Rdynload.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
+#include <Rversion.h>
 
 #include "Print.h"
 
@@ -95,7 +96,11 @@ void printelt(SEXP invec, int vrow, char *strp)
     PrintDefaults(R_NilValue);
     if (TYPEOF(invec) == REALSXP) {
 	if (REAL(invec)[vrow] != ssNA_REAL) {
+#if (R_VERSION >= R_Version(2,2,0))
+	    strcpy(strp, EncodeElement(invec, vrow, 0, '.'));
+#else
 	    strcpy(strp, EncodeElement(invec, vrow, 0));
+#endif
 	    return;
 	}
     }
@@ -103,7 +108,11 @@ void printelt(SEXP invec, int vrow, char *strp)
     if(CHAR(STRING_ELT(invec, vrow))){
 	if (!streql(CHAR(STRING_ELT(invec, vrow)),
 		    CHAR(STRING_ELT(ssNA_STRING, 0)))) {
+#if (R_VERSION >= R_Version(2,2,0))
+	    strcpy(strp, EncodeElement(invec, vrow, 0, '.'));
+#else
 	    strcpy(strp, EncodeElement(invec, vrow, 0));
+#endif
 	    return;
 	}
     }
