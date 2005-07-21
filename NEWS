@@ -1,5 +1,11 @@
 NEWS
 
+Last-update: 2005-07-20 [SU]
+*	Fixed RController initialization bug (responsible for random
+	segfaults at stratup)
+*	Added (undocumented) quartz.save function for saving contents
+	of Quartz devices as-is to various formats.
+
 -- Release Version 1.12 (1622) - supplied with 2.1.1 --
 
 Last-update: 2005-07-01 [SU]
