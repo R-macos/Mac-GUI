@@ -40,7 +40,7 @@
 
 /* From: RController.m (doLoadHistory)
    From: RController.m (doSaveHistory) */
-"Can't open history file %2" = "Die Verlauf-Datei %2 konnte nicht gefunden werden";
+"Can't open history file %@" = "Die Verlauf-Datei %@ konnte nicht gefunden werden";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Abbrechen";

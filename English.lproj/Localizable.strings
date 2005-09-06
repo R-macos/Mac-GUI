@@ -40,7 +40,7 @@
 
 /* From: RController.m (doLoadHistory)
    From: RController.m (doSaveHistory) */
-"Can't open history file %2" = "Can't open history file %2";
+"Can't open history file %@" = "Can't open history file %@";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Cancel";

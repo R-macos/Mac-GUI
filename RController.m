@@ -1121,14 +1121,14 @@ The input replaces what the user is currently typing.
 							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
 	SLog(@" - history file to load: %@", fname);
 	if(fname != nil){
-		fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@", fname]];
+//		fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@", fname]];
 		[self doClearHistory:nil];
 		
 		SLog(@" - cleared history, reload with: %@", fname);
 		if ([[NSFileManager defaultManager] fileExistsAtPath: fname]) {
 			FILE *rhist = fopen([fname UTF8String], "r");
 			if (!rhist) {
-				NSLog(NLS(@"Can't open history file %2"), fname);
+				NSLog(NLS(@"Can't open history file %@"), fname);
 			} else {
 				NSString *entry = nil;
 				char c[1024];

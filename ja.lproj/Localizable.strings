@@ -40,7 +40,7 @@
 
 /* From: RController.m (doLoadHistory)
    From: RController.m (doSaveHistory) */
-"Can't open history file %2" = "履歴ファイル %2 を開けません";
+"Can't open history file %@" = "履歴ファイル %@ を開けません";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "キャンセル";
