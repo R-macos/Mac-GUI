@@ -1,5 +1,8 @@
 NEWS
 
+Last-update: 2005-09-06 [RG]
+*	Fixed history file name.
+
 Last-update: 2005-07-20 [SU]
 *	Fixed RController initialization bug (responsible for random
 	segfaults at stratup)
