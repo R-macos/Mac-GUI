@@ -43,6 +43,20 @@ This will give you the proper indenting behavior and fairly well readable code. 
 any positive value you find pleasant, just make sure both entries are identical. Use Xcode-style indentation whenever possible.
 The strict use of tabs as indentation marks makes it possible for everyone to view the code with the spacing s/he prefers.
 
+For Emacs users the setting is (setq c-basic-offset 4 tab-width 4
+indent-tabs-mode t)
+
+Other important notes:
+ * never edit or commit Info.plist and English.lproj/InfoPlist.strings
+   Both files are generated automatically from Info.src.plist and
+   English.lproj/InfoPlist.src.strings by the updateSVN script.
+   Committing the generated files will inevitably cause a confilict in
+   the SVN, because the local copy always changed.
+
+ * always commit NIB files individually and remove and .svn directories
+   before adding new NIB files: when IB copies NIBs it also copies .svn
+   directories, thus screwing up the SVN.
+
  About Localization - Quick Overview
 -------------------------------------
 We have added new (experimental) support for localization of the GUI. Although this is great news for the users, this requires cooperation of the developer and some extra work. Please read "Localizing Obj-C code" amd "NIB localization" below!
