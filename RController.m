@@ -54,7 +54,7 @@
 #import <unistd.h>
 #import "RController.h"
 #import "REngine/Rcallbacks.h"
-#import "REngine/Rengine.h"
+#import "REngine/REngine.h"
 #import "RConsoleTextStorage.h"
 #import "RDocumentWinCtrl.h"
 #import "Quartz/QuartzDevice.h"
@@ -237,8 +237,10 @@ static RController* sharedRController;
 			SLog(@" - setting R_LIBS=%s", [addPath UTF8String]);
 		}
 	}
-	SLog(@" - set APP VERSION");
+	SLog(@" - set APP VERSION (%s) and REVISION (%@)", R_GUI_VERSION_STR,
+		 [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]);
 	setenv("R_GUI_APP_VERSION", R_GUI_VERSION_STR, 1);
+	setenv("R_GUI_APP_REVISION", [(NSString*)[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] UTF8String], 1);
 	
 	SLog(@" - set R home");
 	if (!getenv("R_HOME")) {
@@ -257,20 +259,24 @@ static RController* sharedRController;
 	}
 
 #if (R_VERSION >= R_Version(2,2,0))
-	 if (!getenv("RGUI_NOWARN_RDEVEL"))
-	 NSRunAlertPanel(@"Using R-devel (unstable!)",@"You are using R-devel (to become 2.2.0)\n\nSeveral properites that I rely on are changing in R-devel. I will take a wild guess as of how they change, but that guess can be completely wrong. Most importantly you have to use the default build settings. Proceed at your own risk.\n\n(Set RGUI_NOWARN_RDEVEL to get rid of this message)",NLS(@"OK"),nil,nil);
-	 {
-		 char tp[1024];
-		 if (!getenv("R_INCLUDE_DIR")) {
-			 strcpy(tp, getenv("R_HOME")); strcat(tp, "/include"); setenv("R_INCLUDE_DIR", tp, 1);
-		 }
-		 if (!getenv("R_SHARE_DIR")) {
-			 strcpy(tp, getenv("R_HOME")); strcat(tp, "/share"); setenv("R_SHARE_DIR", tp, 1);
-		 }
-		 if (!getenv("R_DOC_DIR")) {
-			 strcpy(tp, getenv("R_HOME")); strcat(tp, "/doc"); setenv("R_DOC_DIR", tp, 1);
-		 }
-	 }
+	/* 2.2.0 is now alpha, so it should be ok by now - keep this for 2.3 in case wee need it
+	if (!getenv("RGUI_NOWARN_RDEVEL"))
+		NSRunAlertPanel(@"Using R-devel (unstable!)",@"You are using R-devel (to become 2.2.0)\n\nSeveral properites that I rely on are changing in R-devel. I will take a wild guess as of how they change, but that guess can be completely wrong. Most importantly you have to use the default build settings. Proceed at your own risk.\n\n(Set RGUI_NOWARN_RDEVEL to get rid of this message)",NLS(@"OK"),nil,nil);
+	 */
+	{
+		char tp[1024];
+		/* since 2.2.0 those are set in the R shell script, so we need to set them as well */
+		/* FIXME: possible buffer-overflow attack by over-long R_HOME */
+		if (!getenv("R_INCLUDE_DIR")) {
+			strcpy(tp, getenv("R_HOME")); strcat(tp, "/include"); setenv("R_INCLUDE_DIR", tp, 1);
+		}
+		if (!getenv("R_SHARE_DIR")) {
+			strcpy(tp, getenv("R_HOME")); strcat(tp, "/share"); setenv("R_SHARE_DIR", tp, 1);
+		}
+		if (!getenv("R_DOC_DIR")) {
+			strcpy(tp, getenv("R_HOME")); strcat(tp, "/doc"); setenv("R_DOC_DIR", tp, 1);
+		}
+	}
 #endif
 	
 	/* setup LANG variable to match the system locale based on user's CFLocale */
@@ -336,8 +342,6 @@ static RController* sharedRController;
 
 	[ RConsoleWindow setDocumentEdited:YES];
 	
-    //NSLog(@"RController: awake: done");
-
 	SLog(@" - setup timer");
 	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
 												 target:self
@@ -1462,7 +1466,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				*index=0;
 				{
 					NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
-					if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[[ca objectAtIndex:0] length]-1]];
+					if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[(NSString*)[ca objectAtIndex:0] length]-1]];
 					return ca;
 				}
 			}
