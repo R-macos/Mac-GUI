@@ -411,6 +411,9 @@ static RController* sharedRController;
 		if (![url isEqualToString:@""])
 			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"try({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) },silent=TRUE)", url]];
 	}
+	
+	SLog(@" - set BioC repositories");
+	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
 				
 	SLog(@" - clean up and flush console");
 	[self setOptionWidth:YES];

@@ -38,6 +38,7 @@
 #define kBIOCBin	2
 #define kBIOCSrc	3
 #define kOTHER		4
+#define kOtherFlat  8
 #define kLocalBin   5
 #define kLocalSrc   6
 #define kLocalDir   7

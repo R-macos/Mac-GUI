@@ -29,7 +29,7 @@
 
 #import "PackageInstaller.h"
 #import "RController.h"
-#import "REngine/RCallbacks.h"
+#import "REngine/Rcallbacks.h"
 #import "REngine/REngine.h"
 #import "Tools/Authorization.h"
 #import "Preferences.h"
@@ -178,7 +178,7 @@ NSString *location[2] = {
 		{
 			NSMutableString *packagesToInstall = nil;
 			NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];
-			NSString *repos = @"getOption(\"CRAN\")";
+			NSString *repos = @"getOption(\"repos\")";
 			NSString *type  = @"mac.binary";
 			unsigned current_index = [rows firstIndex];
 			
@@ -216,30 +216,38 @@ NSString *location[2] = {
 					break;
 					
 				case kBIOCBin:
-					repos=@"getOption(\"BIOC\")";
+					repos=@"getOption(\"BioC.Repos\")";
 					break;
 					
 				case kBIOCSrc:
-					repos=@"getOption(\"BIOC\")";
+					repos=@"getOption(\"BioC.Repos\")";
 					type=@"source";
 					break;
 					
 				case kOTHER:
+				case kOtherFlat:
 					if (pkgFormat == kSource) type=@"source";
 					repos = [NSString stringWithFormat:@"\"%@\"", [urlTextField stringValue]];
 					break;
 			}
 			
-			if (repos && type)
-				success = [[REngine mainEngine] executeString: 
-					[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=contrib.url(%@,'%@'),type='%@')",
-						packagesToInstall, targetLocation, repos, type, type]
-					];
+			if (repos && type) {
+				if (pkgUrl == kOtherFlat)
+					success = [[REngine mainEngine] executeString: 
+						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=%@),type='%@')",
+							packagesToInstall, targetLocation, repos, type]
+						];
+				else
+					success = [[REngine mainEngine] executeString: 
+						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=contrib.url(%@,'%@'),type='%@')",
+							packagesToInstall, targetLocation, repos, type, type]
+						];
+			}
 			
 			[packagesToInstall release];
 		}
 	}
-
+			
 	if (!success) NSBeginAlertSheet(NLS(@"Package installation failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Package installation was not successful. Please see the R Console for details."));
 	
 	[self busy:NO];
@@ -254,11 +262,14 @@ NSString *location[2] = {
 	// package installation - so we need to set options for backward compati-
 	// bility
 	if (!optionsChecked) {
-		RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+		RSEXP *x;
+		BOOL hadToChoose=NO;
+#if (R_VERSION < R_Version(2,2,0))
+		x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
 		if (!x || ![x string]) { // CRAN is not set - let's try the repos
-			BOOL hadToChoose=NO;
 			SLog(@"PackageInstaller.reloadURL: checking options - CRAN is not set!");
 			if (x) [x release];
+#endif
 			x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
 			if (!x || ![x string] || [[x string] isEqualToString:@"@CRAN@"]) { // repos is not set
 				if (x) [x release];
@@ -268,16 +279,20 @@ NSString *location[2] = {
 				x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
 			}
 			if (x && [x string] && ![[x string] isEqualToString:@"@CRAN@"]) { // repos is set now - push it to CRAN
+#if (R_VERSION < R_Version(2,2,0))
 				[x release];
 				[[REngine mainEngine] evaluateString:@"options(CRAN=getOption('repos')['CRAN'])"];
 				x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+#endif
 				if (hadToChoose && ![Preferences flagForKey:stopAskingAboutDefaultMirrorSavingKey withDefault:NO])
 					NSBeginAlertSheet(NLS(@"Set as default?"), NLS(@"Yes"), NLS(@"Never"), NLS(@"No"), [self window], self, @selector(mirrorSaveAskSheetDidEnd:returnCode:contextInfo:), NULL, NULL, NLS(@"Do you want me to remember the mirror you selected for future sessions?"));
 			} else {
 				if (x) [x release]; // set x to nil - we need that in case x is @CRAN@
 				x=nil;
 			}
+#if (R_VERSION < R_Version(2,2,0))
 		}
+#endif
 		if (!x || ![x string]) { // CRAN is still not set - bail out with an error
 			[self busy:NO];
 			NSRunAlertPanel(NLS(@"No CRAN Mirror Found"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
@@ -293,6 +308,7 @@ NSString *location[2] = {
 {
 	BOOL success = NO;
 	//	NSLog(@"pkgUrl=%d, pkgInst=%d, pkgFormat:%d",pkgUrl, pkgInst, pkgFormat);
+	
 	[self busy: YES];
 	
 	[self checkOptions];
@@ -301,25 +317,26 @@ NSString *location[2] = {
 		
 		case kCRANBin:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(\"CRAN\",\"binary\")"];
+				@"browse.pkgs(type=\"mac.binary\")"];
 			break;
 			
 		case kCRANSrc:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(\"CRAN\",\"source\")"];
+				@"browse.pkgs(type=\"source\")"];
 			break;
 			
 		case kBIOCBin:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(contriburl=contrib.url(getOption(\"BIOC\"),\"mac.binary\"))"];
+				@"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"mac.binary\"), type=\"mac.binary\")"];
 			break;
 			
 		case kBIOCSrc:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(contriburl=contrib.url(getOption(\"BIOC\"),\"source\"))"];
+				@"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"source\"), type=\"source\")"];
 			break;
 			
 		case kOTHER:
+		case kOtherFlat:
 			if( [[urlTextField stringValue] isEqual:@""]){
 				[self busy:NO];
 				NSBeginAlertSheet(NLS(@"Invalid Repository URL"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please specify a valid URL first."));
@@ -328,7 +345,9 @@ NSString *location[2] = {
 			
 			[Preferences setKey:@"pkgInstaller.customURL" withObject:[urlTextField stringValue]];
 			success = [[REngine mainEngine] executeString: 
-				[NSString stringWithFormat:@"browse.pkgs(contriburl=contrib.url(\"%@\",\"%@\"))",[urlTextField stringValue], (pkgFormat == kSource)?@"source":@"mac.binary"]];
+				[NSString stringWithFormat:@"browse.pkgs(%@=\"%@\",type=\"%@\"))",
+		                                       (pkgUrl == kOtherFlat)?@"contriburl":@"repos",
+                                               [urlTextField stringValue], (pkgFormat == kSource)?@"source":@"mac.binary"]];
 			break;
 			
 	}
@@ -347,7 +366,7 @@ NSString *location[2] = {
 		case NSAlertDefaultReturn: // Yes
 			SLog(@"mirrorSaveAskSheetDidEnd: YES, Save");
 			{
-				RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
+				RSEXP *x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
 				if (x) {
 					NSString *url = [x string];
 					[x release];
@@ -615,20 +634,20 @@ NSString *location[2] = {
 				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
 				break;
 			}
-			repos=@"getOption(\"CRAN\")";
+			repos=@"getOption(\"repos\")";
 			break;
 			
 		case kCRANSrc:
-			repos=@"getOption(\"CRAN\")";
+			repos=@"getOption(\"repos\")";
 			type =@"source";
 			break;
 			
 		case kBIOCBin:
-			repos=@"getOption(\"BIOC\")";
+			repos=@"getOption(\"BioC.Repos\")";
 			break;
 			
 		case kBIOCSrc:
-			repos=@"getOption(\"BIOC\")";
+			repos=@"getOption(\"BioC.Repos\")";
 			type =@"source";
 			break;
 			
@@ -636,10 +655,16 @@ NSString *location[2] = {
 			repos=[NSString stringWithFormat:@"\"%@\"", [urlTextField stringValue]];
 			if(pkgFormat == kSource) type =@"source";
 	}
-	success = [[REngine mainEngine] executeString: 
-		[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',contriburl=contrib.url(%@,'%@'),type='%@')",
-			targetLocation, repos, type, type]
-		];
+	if (pkgUrl != kOtherFlat)
+		success = [[REngine mainEngine] executeString: 
+			[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',contriburl=contrib.url(%@,'%@'),type='%@')",
+				targetLocation, repos, type, type]
+			];
+	else
+		success = [[REngine mainEngine] executeString: 
+			[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',contriburl='%@',type='%@')",
+				targetLocation, [urlTextField stringValue], type]
+			];
 	
 	if (!success) NSBeginAlertSheet(NLS(@"Package update failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Package update was not successful. Please see the R Console for details."));
 	
