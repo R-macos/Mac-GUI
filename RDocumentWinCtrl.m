@@ -906,7 +906,7 @@ reHilite:
 		*index=0;
 		{
 			NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
-			if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[[ca objectAtIndex:0] length]-1]];
+			if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[(NSString*)[ca objectAtIndex:0] length]-1]];
 			return ca;
 		}
 	}
