@@ -750,7 +750,8 @@ Select any package you want to install and press the @emph{Install} button. You 
 If you want to update all packages to the latest version, select the repository to use for the packages and press @emph{Update All}. @R{} will automatically determine the list of packages that can be updated and present you with a selection of packages to update.
 
 @noindent
-You can also download any other package from the Internet yourself and decide to install it from source. In such case select one of the local entries in the top left list.
+You can also download any other package from the Internet yourself and decide to install it from source. In such case select one of the local entries 
+in the top left list and press the @emph{Install} button (which is now enabled).
 
 @noindent
 Note that currently the Package Installer assumes that custom repositories maintain proper hierarchy for both source and binary packages the same way CRAN does. If your custom repository is flat, you will need to use @code{install.packages} manually or update the repository format.
