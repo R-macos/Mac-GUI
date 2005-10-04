@@ -78,6 +78,7 @@
 		colNames=[[NSMutableArray alloc] init];
 		rows=0;
 		sortMap=invSortMap=0;
+		filter=0; filterLen=0;
     }
     return self;
 }
@@ -102,6 +103,7 @@
 
 - (void) reset
 {
+	[self resetFilter];
     [col removeAllObjects];
     [colNames removeAllObjects];
     rows=0;
@@ -111,7 +113,7 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return rows;
+    return (filter)?filterLen:rows;
 }
 
 - (unsigned) count
@@ -119,7 +121,27 @@
 	return rows;
 }
 
-- (id) objectAtColumn: (NSString*) name row: (int) row
+- (unsigned) rows
+{
+    return (filter)?filterLen:rows;
+}
+
+- (void) setFilter: (int*) f length: (int) fl
+{
+	[self resetFilter];
+	filter = (int*) malloc(sizeof(int)*(fl+1));
+	filterLen=fl;
+	memcpy(filter, f, sizeof(int)*fl);
+}
+
+- (void) resetFilter
+{
+	if (filter) free(filter);
+	filter=0;
+	filterLen=0;
+}
+
+- (id) objectAtColumn: (NSString*) name index: (int) row
 {
     if (row<0 || row>=rows || !name)
 		return nil;
@@ -131,6 +153,13 @@
 			return (!cc)?nil:[cc objectAtIndex: sortMap[row]];
 		}
     }
+}
+
+- (id) objectAtColumn: (NSString*) name row: (int) row
+{
+	return (filter)?
+	((row<filterLen)?[self objectAtColumn: name index: filter[row]]:nil)
+	:[self objectAtColumn: name index: row];
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row

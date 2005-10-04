@@ -34,6 +34,7 @@
     NSMutableArray *colNames;
     int rows;
     int *sortMap, *invSortMap;
+	int *filter, filterLen;
 }
 
 - (void) addColumn: (NSArray*) colCont withName: (NSString*) name;
@@ -41,7 +42,11 @@
 - (void) addColumnOfLength: (int) clen withUTF8Strings: (char**) cstr name: (NSString*) name;
 - (void) reset;
 - (unsigned) count;
-- (id) objectAtColumn: (NSString*) name row: (int) row;
+- (unsigned) rows;
+- (id) objectAtColumn: (NSString*) name row: (int) row; 
+- (id) objectAtColumn: (NSString*) name index: (int) row; // index ignores filter
+- (void) setFilter: (int*) f length: (int) fl;
+- (void) resetFilter;
 
 - (int)  numberOfRowsInTableView:(NSTableView *)tableView;
 - (id)   tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row;
