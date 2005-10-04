@@ -107,6 +107,7 @@ int R_SetOptionWidth(int);
 #import "Quartz/RQuartz.h"
 #import "RDocumentController.h"
 #import "SelectList.h"
+#import "VignettesController.h"
 
 #import <unistd.h>
 #import <sys/fcntl.h>
@@ -135,6 +136,7 @@ static RController* sharedRController;
 	self = [super init];
 	
 	runSystemAsRoot = NO;
+	secondaryNibsLoaded = NO;
 	toolbar = nil;
 	toolbarStopItem = nil;
 	rootFD = -1;
@@ -198,7 +200,9 @@ static RController* sharedRController;
 - (void) awakeFromNib {
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
-		
+	
+	if (secondaryNibsLoaded) return;
+
 	sharedRController = self;
 	
 	NSLayoutManager *lm = [[RTextView layoutManager] retain];
@@ -384,6 +388,7 @@ static RController* sharedRController;
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
 		[self doLoadHistory:nil];
 	}
+		
 	SLog(@" - awake is done");
 }
 
@@ -445,6 +450,12 @@ static RController* sharedRController;
 	[RConsoleWindow makeKeyAndOrderFront:self];
 	//[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
 	//CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
+
+	SLog(@" - loading secondary NIBs");
+	secondaryNibsLoaded=YES;
+	if (![NSBundle loadNibNamed:@"Vignettes" owner:self]) {
+		SLog(@" * unable to load Vignettes.nib!");
+	}
 	
 	SLog(@" - setup REPL trigger timer");
 	if (!RLtimer)
@@ -455,6 +466,7 @@ static RController* sharedRController;
 												  repeats:NO];
 	appLaunched = YES;
 
+	
 	SLog(@" - done, ready to go");
 }
 
@@ -1545,6 +1557,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	} else {
 		[HistoryDrawer open];
 	}
+}
+
+-(IBAction) showVignettes:(id)sender {
+	if ([VignettesController sharedController])
+		[[VignettesController sharedController] showVigenttes];
 }
 
 - (IBAction)toggleAuthentication:(id)sender{

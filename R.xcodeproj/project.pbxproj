@@ -146,6 +146,10 @@
 		1CDD06120763FD2000B8FCA6 /* PreferenceKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CDD06110763FD2000B8FCA6 /* PreferenceKeys.h */; };
 		6807E645080EAE4100A03223 /* GlobalExHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 6807E643080EAE4100A03223 /* GlobalExHandler.h */; };
 		6807E646080EAE4100A03223 /* GlobalExHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6807E644080EAE4100A03223 /* GlobalExHandler.m */; };
+		6809F02008F2438F007E2F79 /* PDFImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6809F01E08F2438F007E2F79 /* PDFImageView.h */; };
+		6809F02108F2438F007E2F79 /* PDFImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6809F01F08F2438F007E2F79 /* PDFImageView.m */; };
+		6809F03908F2474F007E2F79 /* DraggableScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6809F03708F2474F007E2F79 /* DraggableScrollView.h */; };
+		6809F03A08F2474F007E2F79 /* DraggableScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6809F03808F2474F007E2F79 /* DraggableScrollView.m */; };
 		6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6828383807804DFC004617B7 /* ExceptionHandling.framework */; };
 		684D008507BD72BE0047EEF6 /* SyntaxColorsPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 684D008307BD72BE0047EEF6 /* SyntaxColorsPrefPane.h */; };
 		684D008607BD72BE0047EEF6 /* SyntaxColorsPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 684D008407BD72BE0047EEF6 /* SyntaxColorsPrefPane.m */; };
@@ -165,6 +169,9 @@
 		687B4F9807944B8000074042 /* REditorTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B4F9607944B8000074042 /* REditorTextStorage.m */; };
 		687B503B07945D4C00074042 /* RConsoleTextStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 687B503907945D4C00074042 /* RConsoleTextStorage.h */; };
 		687B503C07945D4C00074042 /* RConsoleTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B503A07945D4C00074042 /* RConsoleTextStorage.m */; };
+		68C7CA8408F1D48800E3E5BF /* Vignettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 68C7CA8208F1D48800E3E5BF /* Vignettes.nib */; };
+		68C7CA8B08F1D6E500E3E5BF /* VignettesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 68C7CA8908F1D6E500E3E5BF /* VignettesController.h */; };
+		68C7CA8C08F1D6E500E3E5BF /* VignettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C7CA8A08F1D6E500E3E5BF /* VignettesController.m */; };
 		68DEAEE8083271CA00C5D76C /* RTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68DEAEE6083271CA00C5D76C /* RTextView.h */; };
 		68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DEAEE7083271CA00C5D76C /* RTextView.m */; };
 		68E2B9F20796C9D200E31F29 /* devQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 68E2B9F00796C9D200E31F29 /* devQuartz.h */; };
@@ -389,6 +396,10 @@
 		32CA4F630368D1EE00C91783 /* R_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = R_Prefix.pch; sourceTree = "<group>"; };
 		6807E643080EAE4100A03223 /* GlobalExHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalExHandler.h; sourceTree = "<group>"; };
 		6807E644080EAE4100A03223 /* GlobalExHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalExHandler.m; sourceTree = "<group>"; };
+		6809F01E08F2438F007E2F79 /* PDFImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageView.h; sourceTree = "<group>"; };
+		6809F01F08F2438F007E2F79 /* PDFImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageView.m; sourceTree = "<group>"; };
+		6809F03708F2474F007E2F79 /* DraggableScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableScrollView.h; sourceTree = "<group>"; };
+		6809F03808F2474F007E2F79 /* DraggableScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableScrollView.m; sourceTree = "<group>"; };
 		6812EC9E07BA6A360000B6A8 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
 		681D40BE081D653B0019CB4C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6828383807804DFC004617B7 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = /System/Library/Frameworks/ExceptionHandling.framework; sourceTree = "<absolute>"; };
@@ -422,6 +433,9 @@
 		68C30D3A07B80D510020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		68C30D3D07B80D6C0020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
 		68C30D4007B80D7B0020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
+		68C7CA8308F1D48800E3E5BF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Vignettes.nib; sourceTree = "<group>"; };
+		68C7CA8908F1D6E500E3E5BF /* VignettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VignettesController.h; sourceTree = "<group>"; };
+		68C7CA8A08F1D6E500E3E5BF /* VignettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VignettesController.m; sourceTree = "<group>"; };
 		68DEAEE6083271CA00C5D76C /* RTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTextView.h; sourceTree = "<group>"; };
 		68DEAEE7083271CA00C5D76C /* RTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTextView.m; sourceTree = "<group>"; };
 		68E2B9F00796C9D200E31F29 /* devQuartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devQuartz.h; sourceTree = "<group>"; };
@@ -621,6 +635,10 @@
 		16ABE72706C7512D00815F91 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				6809F03708F2474F007E2F79 /* DraggableScrollView.h */,
+				6809F03808F2474F007E2F79 /* DraggableScrollView.m */,
+				6809F01E08F2438F007E2F79 /* PDFImageView.h */,
+				6809F01F08F2438F007E2F79 /* PDFImageView.m */,
 				1CC7C86507396890005CF3AA /* SortableDataSource.h */,
 				1CC7C86607396890005CF3AA /* SortableDataSource.m */,
 				1C0BD6BD07345B4300D43C33 /* Authorization.h */,
@@ -656,6 +674,8 @@
 				168776EA07D7C62B0064425C /* SelectList.m */,
 				163B2CBA06ED1A990035FFD5 /* WSBrowser.h */,
 				163B2CBB06ED1A990035FFD5 /* WSBrowser.m */,
+				68C7CA8908F1D6E500E3E5BF /* VignettesController.h */,
+				68C7CA8A08F1D6E500E3E5BF /* VignettesController.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -720,6 +740,7 @@
 				687B4E350794130800074042 /* RConsole.nib */,
 				163B0CF706CE58F000A380BE /* RDocument.nib */,
 				1633F03D06E630B900225AA9 /* RQuartz.nib */,
+				68C7CA8208F1D48800E3E5BF /* Vignettes.nib */,
 				6853563B07B0285E00FDAAC3 /* PrefPanes */,
 				162B6A0406CD770C00C0B085 /* images */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -839,6 +860,9 @@
 				68756EDA07FDDAEF0014821A /* REditorToolbar.h in Headers */,
 				6807E645080EAE4100A03223 /* GlobalExHandler.h in Headers */,
 				68DEAEE8083271CA00C5D76C /* RTextView.h in Headers */,
+				68C7CA8B08F1D6E500E3E5BF /* VignettesController.h in Headers */,
+				6809F02008F2438F007E2F79 /* PDFImageView.h in Headers */,
+				6809F03908F2474F007E2F79 /* DraggableScrollView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,6 +1043,7 @@
 				686967DB07981764002A1932 /* Localizable.strings in Resources */,
 				684D008907BD72F10047EEF6 /* SyntaxColorsPrefPane.nib in Resources */,
 				1C5306EE081F54F600ECECD2 /* history.png in Resources */,
+				68C7CA8408F1D48800E3E5BF /* Vignettes.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1119,6 +1144,9 @@
 				68756EDB07FDDAEF0014821A /* REditorToolbar.m in Sources */,
 				6807E646080EAE4100A03223 /* GlobalExHandler.m in Sources */,
 				68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */,
+				68C7CA8C08F1D6E500E3E5BF /* VignettesController.m in Sources */,
+				6809F02108F2438F007E2F79 /* PDFImageView.m in Sources */,
+				6809F03A08F2474F007E2F79 /* DraggableScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1270,6 +1298,14 @@
 				1638AFAD07D2247500BEE02D /* ja */,
 			);
 			name = RConsole.nib;
+			sourceTree = "<group>";
+		};
+		68C7CA8208F1D48800E3E5BF /* Vignettes.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68C7CA8308F1D48800E3E5BF /* English */,
+			);
+			name = Vignettes.nib;
 			sourceTree = "<group>";
 		};
 		D41DED53073B3F8000B900F2 /* EditorPrefPane.nib */ = {

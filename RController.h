@@ -79,7 +79,7 @@
     IBOutlet NSDrawer *HistoryDrawer;	
 	IBOutlet NSWindow *RConsoleWindow;
 	IBOutlet NSTextField *statusLine;
-	
+		
 	NSTimer *timer;
 	NSTimer *RLtimer;
 	NSTimer *Flushtimer;
@@ -128,6 +128,7 @@
 	NSString *currentConsoleInput;
 	
 	BOOL forceStdFlush;
+	BOOL secondaryNibsLoaded;
 	
 	char *writeBuffer;
 	char *writeBufferPos;
@@ -170,6 +171,8 @@
 -(IBAction) runX11:(id)sender;
 -(IBAction) openColors:(id)sender;
 -(IBAction) checkForUpdates:(id)sender;
+
+-(IBAction) showVignettes:(id)sender;
 
 - (int) numberOfRowsInTableView: (NSTableView *)tableView;
 - (id) tableView: (NSTableView *)tableView
