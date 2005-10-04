@@ -264,8 +264,23 @@
         return [NSArray arrayWithObjects: cont count:l];
     }
     return nil;
-}
+}	
 
+// low-level function, should be used only to allow selective creation of arrays (e.g. from matrices)
+// please use -(NSArray*) array; instead
+- (NSString**) strings {
+	if (TYPEOF(xp)==STRSXP) {
+        int i=0, l=LENGTH(xp);
+        NSString **cont=(NSString **) malloc(sizeof(NSString*)*l);
+        while (i<l) {
+            cont[i]=[[NSString alloc] initWithUTF8String: (char*) CHAR(STRING_ELT(xp, i))];
+            i++;
+        }
+		return cont;
+	}
+	return nil;
+}
+		
 - (id) value
 {
     switch (TYPEOF(xp)) {

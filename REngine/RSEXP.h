@@ -78,6 +78,10 @@
 - (NSString*) string; // in fact this is just a shortcut for stringAt: 0
 - (NSString*) stringAt: (int) index;
 
+/** low-level function, should be used only to allow selective creation of arrays (e.g. from matrices)
+	please use -(NSArray*) array; instead */
+- (NSString**) strings;
+	
 - (id) value;
 - (RSEXP*) elementAt: (int) index;
 
