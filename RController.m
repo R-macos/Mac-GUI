@@ -2094,17 +2094,17 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	if(answer == NSOKButton) 
 		if([op directory] != nil)
-			[[REngine mainEngine] executeString: [NSString stringWithFormat:@"install.from.file(pkg=\"%@\")",[op directory]] ];
+			[[REngine mainEngine] executeString: [NSString stringWithFormat:@"install.packages(\"%@\",,NULL,type='source')",[op directory]] ];
 }
 
 - (IBAction)installFromBinary:(id)sender
 {
-	[[REngine mainEngine] executeString: @"install.from.file(binary=TRUE)" ];
+	[[REngine mainEngine] executeString: @"install.packages(file.choose(),,NULL,type='mac.binary')" ];
 }
 
 - (IBAction)installFromSource:(id)sender
 {
-	[[REngine mainEngine] executeString:@"install.from.file(binary=FALSE)" ];
+	[[REngine mainEngine] executeString: @"install.packages(file.choose(),,NULL,type='source')" ];
 }
 
 - (IBAction)togglePackageInstaller:(id)sender
