@@ -5,6 +5,8 @@ Last-update: 2005-10-05 [SU]
 *	<ESC> is now equivalent to break (and the STOP button)
 *	Added support for vignette sources
 *	Double-clicking a vignette opens its PDF
+*	Fix application termination. It should cancel logout/shutdown
+	only if the user requested so (it always cancelled it before).
 
 Last-update: 2005-10-03 [SU]
 *	Added support for vignettes.

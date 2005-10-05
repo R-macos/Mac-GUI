@@ -144,6 +144,7 @@ static RController* sharedRController;
 	RLtimer = nil;
 	busyRFlag = YES;
 	appLaunched = NO;
+	terminating = NO;
 	outputPosition = promptPosition = committedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
@@ -662,8 +663,12 @@ static RController* sharedRController;
 extern BOOL isTimeToFinish;
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)app {
-	if (![self windowShouldClose:self])
+	terminating = YES;
+
+	if (![self windowShouldClose:self]) {
+		terminating = NO;
 		return NSTerminateCancel;
+	}
 	
 	if(timer){
 		[timer invalidate];
@@ -1059,21 +1064,35 @@ extern BOOL isTimeToFinish;
 
 //==========
 
-- (BOOL)windowShouldClose:(id)sender
-{
-	[[RDocumentController sharedDocumentController] closeAllDocumentsWithDelegate:self didCloseAllSelector:@selector(didCloseAll:) contextInfo:nil];	
-	return NO;
-}	
-	
 - (void)didCloseAll:(id)sender {
 	[Preferences commit];
 	[self doSaveHistory:nil];
 	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
 }
 
+- (BOOL)windowShouldClose:(id)sender
+{
+	if (!terminating) {
+		SLog(@"RController.windowShouldClose: initiating app termination");
+		[[NSApplication sharedApplication] terminate:self];
+		SLog(@"RController.windowShouldClose: app termination finished.");
+		return NO;
+	}
+	//[[RDocumentController sharedDocumentController] closeAllDocumentsWithDelegate:self didCloseAllSelector:@selector(didCloseAll:) contextInfo:nil];	
+	//return NO;
+	[self didCloseAll:self];
+	SLog(@"RController.windowShouldClose: running modal");
+	BOOL canClose = (BOOL)[[NSApplication sharedApplication] runModalForWindow:RConsoleWindow];
+	SLog(@"RController.windowShouldClose: returning %@", canClose?@"YES":@"NO");
+	// FWIW: canClose is never YES, because didCloseAll: executes quit(..)
+	return canClose;
+}	
+	
 /* this gets called by the "wanna save?" sheet on window close */
 - (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 	[Preferences commit];
+	// the code specifies whether it's ok for the application to close in response to windowShouldClose:
+	[[NSApplication sharedApplication] stopModalWithCode: (returnCode==NSAlertDefaultReturn || returnCode==NSAlertAlternateReturn)?YES:NO];
     if (returnCode==NSAlertDefaultReturn)
 		[[REngine mainEngine] executeString:@"quit(\"yes\")"];
     if (returnCode==NSAlertAlternateReturn)

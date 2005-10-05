@@ -129,6 +129,7 @@
 	
 	BOOL forceStdFlush;
 	BOOL secondaryNibsLoaded;
+	BOOL terminating;
 	
 	char *writeBuffer;
 	char *writeBufferPos;
