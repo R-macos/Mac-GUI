@@ -182,6 +182,8 @@ static VignettesController *vignettesSharedController = nil;
 	filterlen=0;
 	dataSource=[[SortableDataSource alloc] init];
 	[tableView setDataSource: dataSource];
+	[tableView setDoubleAction:@selector(openVignette:)];
+	[tableView setTarget:self];
 	[self reload];
 	[openButton setEnabled: ([tableView selectedRow]!=-1)];
 	[openSourceButton setEnabled: ([tableView selectedRow]!=-1)];
