@@ -2896,12 +2896,13 @@
 		68AAC9E008F41CA10064CDA1 = {
 			children = (
 				68AAC9E108F41CA10064CDA1,
+				68FC52F508F45C2E0061413F,
 			);
 			isa = PBXVariantGroup;
 			name = Vignettes.nib;
 			path = "";
-			refType = 2;
-			sourceTree = SOURCE_ROOT;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 		68AAC9E108F41CA10064CDA1 = {
 			isa = PBXFileReference;
@@ -3096,6 +3097,14 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		68FC52F508F45C2E0061413F = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = de;
+			path = de.lproj/Vignettes.nib;
+			refType = 4;
+			sourceTree = "<group>";
 		};
 //680
 //681
