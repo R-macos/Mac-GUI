@@ -513,6 +513,9 @@
 /* NSIBHelpConnector : <title:User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  > (oid:585) */
 "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "Das Format der Pakete sollte ausgewählt werden.";
 
+/* NSMenuItem : <title:Vignettes> (oid:1110) */
+"Vignettes" = "Vignetten";
+
 /* NSMenuItem : <title:What's New In This Version?> (oid:333) */
 "What's New In This Version?" = "Neues in dieser Version";
 
