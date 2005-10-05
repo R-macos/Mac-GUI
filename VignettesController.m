@@ -17,11 +17,23 @@ static VignettesController *vignettesSharedController = nil;
 {
 	int sr = [tableView selectedRow];
 	if (sr>=0) {
-		system([[NSString stringWithFormat:@"open %@/%@/doc/%@.pdf",
+		NSString *cmd = [NSString stringWithFormat:@"open \"%@/%@/doc/%@.pdf\"",
 			[dataSource objectAtColumn:@"path" row:sr],
 			[dataSource objectAtColumn:@"package" row:sr],
-			[dataSource objectAtColumn:@"vignette" row:sr]]
-			UTF8String]);
+			[dataSource objectAtColumn:@"vignette" row:sr]];
+		SLog(@"VignettesController.openVignette executing: %@", cmd);
+		system([cmd UTF8String]);
+	}
+}
+
+- (IBAction)openVignetteSource:(id)sender
+{
+	int sr = [tableView selectedRow];
+	if (sr>=0) {
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"edit(vignette(\"%@\", package=\"%@\"))",
+			[dataSource objectAtColumn:@"vignette" row:sr],
+			[dataSource objectAtColumn:@"package" row:sr]
+			]];
 	}
 }
 
@@ -141,13 +153,20 @@ static VignettesController *vignettesSharedController = nil;
 {
 	int sr = [tableView selectedRow];
 	[openButton setEnabled: (sr!=-1)];
+	[openSourceButton setEnabled: (sr!=-1)];
 	if (sr!=-1) {
-		[pdfView loadFromPath: [NSString stringWithFormat:@"%@/%@/doc/%@.pdf",
+		NSString *pdfFile = [NSString stringWithFormat:@"%@/%@/doc/%@.pdf",
 			[dataSource objectAtColumn:@"path" row:sr],
 			[dataSource objectAtColumn:@"package" row:sr],
-			[dataSource objectAtColumn:@"vignette" row:sr]]
-			];
-		[pdfDrawer open];
+			[dataSource objectAtColumn:@"vignette" row:sr]];
+		SLog(@"VignettesController.tableViewSelectionDidChange: previewing %@", pdfFile);
+		if ([[NSFileManager defaultManager] fileExistsAtPath:pdfFile]) {
+			[pdfView loadFromPath: pdfFile];
+			[pdfDrawer open];
+		} else {
+			[pdfDrawer close];
+			[openButton setEnabled:NO];
+		}
 	} else [pdfDrawer close];
 }
 
@@ -165,6 +184,7 @@ static VignettesController *vignettesSharedController = nil;
 	[tableView setDataSource: dataSource];
 	[self reload];
 	[openButton setEnabled: ([tableView selectedRow]!=-1)];
+	[openSourceButton setEnabled: ([tableView selectedRow]!=-1)];
 	vignettesSharedController = self;
 }
 

@@ -3,6 +3,7 @@ NEWS
 Last-update: 2005-10-05 [SU]
 *	Fixed package installation from files/directories
 *	<ESC> is now equivalent to break (and the STOP button)
+*	Add suppoort for vignette sources
 
 Last-update: 2005-10-03 [SU]
 *	Added support for vignettes.

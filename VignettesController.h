@@ -9,6 +9,7 @@
 {
     IBOutlet NSSearchField *filterField;
     IBOutlet NSButton *openButton;
+    IBOutlet NSButton *openSourceButton;
     IBOutlet NSTableView *tableView;
 	IBOutlet NSWindow *window;
 	IBOutlet NSDrawer *pdfDrawer;
@@ -21,6 +22,8 @@
 }
 
 - (IBAction)openVignette:(id)sender;
+- (IBAction)openVignetteSource:(id)sender;
+
 - (IBAction)search:(id)sender;
 
 - (void) showVigenttes;
