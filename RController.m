@@ -1283,7 +1283,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
     BOOL retval = NO;
 	
-	//NSLog(@"RTextView commandSelector: %@\n", NSStringFromSelector(commandSelector));
+	SLog(@"RController.textView doCommandBySelector: %@\n", NSStringFromSelector(commandSelector));
 	
     if (@selector(insertNewline:) == commandSelector) {
         unsigned textLength = [[textView textStorage] length];
@@ -1363,7 +1363,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	
 	// ---- cancel ---
 	
-	if (@selector(cancel:) == commandSelector) {
+	if (@selector(cancel:) == commandSelector || @selector(cancelOperation:) == commandSelector) {
 		[self breakR:self];
 		retval = YES;
 	}
