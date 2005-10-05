@@ -18,9 +18,9 @@ static VignettesController *vignettesSharedController = nil;
 	int sr = [tableView selectedRow];
 	if (sr>=0) {
 		system([[NSString stringWithFormat:@"open %@/%@/doc/%@.pdf",
-			[dataSource objectAtColumn:@"path" index:sr],
-			[dataSource objectAtColumn:@"package" index:sr],
-			[dataSource objectAtColumn:@"vignette" index:sr]]
+			[dataSource objectAtColumn:@"path" row:sr],
+			[dataSource objectAtColumn:@"package" row:sr],
+			[dataSource objectAtColumn:@"vignette" row:sr]]
 			UTF8String]);
 	}
 }
@@ -143,9 +143,9 @@ static VignettesController *vignettesSharedController = nil;
 	[openButton setEnabled: (sr!=-1)];
 	if (sr!=-1) {
 		[pdfView loadFromPath: [NSString stringWithFormat:@"%@/%@/doc/%@.pdf",
-			[dataSource objectAtColumn:@"path" index:sr],
-			[dataSource objectAtColumn:@"package" index:sr],
-			[dataSource objectAtColumn:@"vignette" index:sr]]
+			[dataSource objectAtColumn:@"path" row:sr],
+			[dataSource objectAtColumn:@"package" row:sr],
+			[dataSource objectAtColumn:@"vignette" row:sr]]
 			];
 		[pdfDrawer open];
 	} else [pdfDrawer close];
