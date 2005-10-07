@@ -405,7 +405,7 @@ static RController* sharedRController;
 	/* register Quartz symbols */
 	QuartzRegisterSymbols();
 	/* create quartz.save function in tools:quartz */
-	[[REngine mainEngine] executeString:@"try(assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),attach(NULL,name=\"tools:quartz\")))"];
+	[[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e); assign(\"avaliable.packages\",function(...) available.packages(...),e)}))"];
 
 	SLog(@" - set R options");
 	// force html-help, because that's the only format we can handle ATM
