@@ -4,8 +4,8 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2005
-@set FAQ-VERSION 2.1-1 @value{FAQ-YEAR}-06-20
-@set REL-VERSION 2.1.1
+@set FAQ-VERSION 2.2-1 @value{FAQ-YEAR}-10-06
+@set REL-VERSION 2.2.0
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -81,7 +81,7 @@ Rob J. Goedman                   @*
 @ifhtml
 @html
 <h2>Frequently Asked Questions on R for Mac OS X</h2>
-<h2>Version @value{FAQ-VERSION}, R.app 1.12</h2>
+<h2>Version @value{FAQ-VERSION}, R.app 1.13</h2>
 <address>Stefano M. Iacus</address>
 <address>Simon Urbanek</address>
 <address>Rob J. Goedman</address>
@@ -141,7 +141,7 @@ R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.a
 
 The installation is done by double-clicking on the disk image, which opens a new Finder window with the installer package, followed by double-clicking on that package installer. The installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the installer will require password or login of an administrator. The installation can be customized, but the default (installing R framework and R.app) is suitable for most users.
 
-If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes.
+If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes. Note that the @CRAN{} binary includes R shared library, so there is no need to re-compile @R{} with @code{--enable-R-shlib}.
 
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
@@ -178,20 +178,25 @@ In either cases be sure you have gcc version 3.3 or later - you can check the ve
 gcc --version
 @end example
 
-Note that for advanced optimization specifically for PowerMac G5 machines you will need gcc version 4.0 or higher.
+At the time of writing the use of gcc 4.0 or higher is discouraged, because of issues with Fortran compiler described below.
 
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.1.1 @CRAN{} binary comes with GNU Fortran 77 3.4.2 optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran compiler from the list of packages. The @CRAN{} binaries are configured to use gcc 3.3 and the supplied Fortran compiler.
+Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.2.0 @CRAN{} binary comes with GNU Fortran 77 3.4.2 optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran compiler from the list of packages. The @CRAN{} binaries are configured to use gcc 3.3 and the supplied Fortran compiler.
 
-Please note that it is important that the version of the Fortran compiler matches the version of your C compiler! The build will likely fail if that is not the case. It is also highly recommended to use compiler with static supporting libraries. Especially for gfortran 4.0 it is highly recommended to remove any dynamic libraries such as @code{libgfortran.dylib}. Failing to do so will produce binaries that fail all checks (see @emph{R-admin} documentation for details - this issue is not Mac-specific).
+Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations don't work. It is also highly recommended to use compiler with static supporting libraries. Especially for gfortran 4.0 it is highly recommended to remove any dynamic libraries such as @code{libgfortran.dylib} (or force the use of static libraries by setting @code{FLIBS} correspondingly). Failing to do so will produce binaries that fail all checks (see @emph{R-admin} documentation for details - this issue is not Mac-specific).
+
+At the time of writing the use of gcc 4.x and gfortran 4.x is discouraged, because gfortran is still not stable enough and produces binaries that are slower than g77 and segfaults on some simple examples.
 
 @node libreadline 4.3 or higher (optional), X11 window server (optional), Fortran compiler (g77 3.3 or later), What is needed to build R
 @subsection libreadline 4.3 or higher (optional)
 The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with readline support (more precisely it comes with libedit), so you can skip this step.
 
 Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
+
+Readline 5.0 compiles out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, because the configure script fails to detect that flag.
+
 If using readline 4.3, you need to modify the original file @file{shlib/Makefile.in} in order to make it
 work under Mac OS X 10.2.x and later (this is because libreadline needs to be linked against
 @code{-lncurses -lcc_dynamic}). If you can do better at configure time working on the original archive 
@@ -248,7 +253,13 @@ sudo make install
 
 @node Aqua TclTk headers and libraries (optional), TeX suite of tools for documentation (optional), X11 TclTk headers and libraries (optional), What is needed to build R
 @subsection Aqua TclTk headers and libraries (optional)
-Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries and those will be detected automatically - no special parameters needed. For older versions of OS X you need to obtain Aqua TclTk separately. Once you have installed the AquaTclTk libraries and headers files, you can configure @R{} using these additional
+Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries. If those are not detect automatically, use the following flags with @code{configure}:
+@example
+--with-tcl-config=/System/Library/Frameworks/Tcl.framework/tclConfig.sh 
+--with-tk-config=/System/Library/Frameworks/Tk.framework/tkConfig.sh
+@end example
+
+For older versions of OS X you need to obtain Aqua TclTk separately. Once you have installed the AquaTclTk libraries and headers files, you can configure @R{} using these additional
 arguments
 @example
 --with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh 
@@ -256,6 +267,8 @@ arguments
 TCLTK_LIBS='-framework Tcl -framework Tk'
 TCLTK_CPPFLAGS='-I/Library/Frameworks/Tcl.Framework/Headers -I/Library/Frameworks/Tk.Framework/Headers'
 @end example
+
+Note that currently R.app doesn't support Aqua Tcl/Tk.
 
 @node TeX suite of tools for documentation (optional),  , Aqua TclTk headers and libraries (optional), What is needed to build R
 @subsection TeX suite of tools for documentation (optional)
@@ -271,7 +284,7 @@ Download the latest sources of R from @CRAN{}. Unpack the archive with tar -zxf 
 inside the R sources directory. Then you need to configure R for your system and build R. 
 Just type
 @example
-./configure --with-blas='-framework vecLib' --with-lapack --with-aqua 
+./configure
 make
 @end example
 This will configure R to be built as a Framework to be installed inside your @emph{/Library/Frameworks} directory with the name 
@@ -279,8 +292,7 @@ This will configure R to be built as a Framework to be installed inside your @em
 installation at configure time by specifying the flag @code{--enable-R-framework[=DIR]}, i.e. 
 with something like
 @example
-./configure --with-blas='-framework vecLib' --with-lapack 
-            --with-aqua --enable-R-framework=FOO
+./configure --enable-R-framework=FOO
 @end example
 and the final destination of the @emph{R.framework} will be @emph{FOO/R.framework}, which means that you 
 don't have to specify the @emph{R.framework} text in the path. 
@@ -299,13 +311,6 @@ final destination.
 sudo make prefix=/where/you/want/R.framework/to/go install
 @end smallexample
 As in the above, you don't need to specify the name @emph{R.framework} in the path.
-
-Note: Since R 2.1.1 release CRAN binary packages use an additional versioning symlink "2.1" to allow support of both @R{} versions 2.1.0 and 2.1.1 simultaneously. This symlink is @emph{not} created automatically in the 2.1.0 and 2.1.1 source releases. It is, however, included in the @R{} CRAN binary. In order to create the symink for R 2.1.1 manually, use:
-@example
-cd /Library/Frameworks/R.framework/Versions
-rm -f 2.1
-ln -s 2.1.1 2.1
-@end example
 
 @node  How to build and install the R.app,  , How to install R, Building R from sources
 @section How to build and install the R.app
@@ -385,7 +390,6 @@ The current design of the R Console is to have a single frame for input (user) a
 Copy and paste works in R as in any other Macintosh application.
 
 If you want high resolution graphic exports, you can save the PDF format using the @emph{File/Save as} menu item (@pxref{Quartz device}). Or you can use supported formats in R through @code{pdf()}, @code{jpeg()} etc. (type @code{?capabilities} to get more details).
-
 
 @node The current and startup working directories, Resizing the R Console, Copy and Paste, The R Console
 @subsection The current and startup working directories
@@ -987,7 +991,7 @@ yet running it will be launched.
 
 @node How can I interrupt lengthy operations or output?, I don't see a thing when installing packages!, What happens if I drag a file on the R icon?, Sparse questions
 @section How can I interrupt lengthy operations or output?
-In R.app you can use the standard Macintosh control break sequence, that is you should press @kbd{@key{Cmd}-.} (dot). This will interrupt any @R{} loops. The @key{ESC} key gives you the same result.
+In R.app you can use the the @emph{Stop} toolbar button or the @key{ESC} (escape) key in the console window to interrupt a running calculation or output.
 
 For the command line version the same is achieved by pressing @kbd{@key{Ctrl}-c}. Both applications honor the @code{INT} signal, i.e. you can type the following in a separate Terminal window to cancel all R computations:
 @smallexample
@@ -996,7 +1000,7 @@ killall -INT R
 
 @node I don't see a thing when installing packages!,  , How can I interrupt lengthy operations or output?, Sparse questions
 @section I don't see a thing when installing packages!
-The output is not produced continuously during the package installation. Unlike previous GUIs R.app does its best to display the output as soon as possible, but for example the documentation script does not produce anything until done.
+The output is not produced continuously during the package installation. Unlike previous GUIs R.app does its best to display the output as soon as possible, but for example the documentation script does not print anything until done.
 
 Also note that the development build of R.app sends output to the error console instead of the screen. You may want to check the @emph{Console} application in that case.
 
