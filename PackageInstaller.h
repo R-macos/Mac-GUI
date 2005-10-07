@@ -69,6 +69,8 @@
     IBOutlet NSTextField *urlTextField;
 	IBOutlet NSButton *installButton;
 	IBOutlet NSButton *updateAllButton;
+	IBOutlet NSMenu *pkgSearchMenu;
+	IBOutlet NSSearchField *pkgSearchField;
 	
 	IBOutlet NSScrollView *pkgScrollView;
 	IBOutlet NSProgressIndicator *busyIndicator;
@@ -83,6 +85,8 @@
 	int *filter;
 	int filterlen;
 	NSString *filterString;
+	
+	NSString *oldRPath;
 	
 	BOOL optionsChecked;
 	BOOL installedOnly;
@@ -100,6 +104,7 @@
 - (IBAction)runPkgSearch:(id)sender;
 
 - (IBAction)toggleShowInstalled:(id)sender;
+- (IBAction)selectOldPackages:(id)sender;
 
 - (id) window;
 - (void) reloadData;

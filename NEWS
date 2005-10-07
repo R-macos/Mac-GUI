@@ -1,5 +1,11 @@
 NEWS
 
+Last-update: 2005-10-07 [SU]
+*	Package installer: add search menu option to select packages
+	installed in a previous R version. This allows an easy upgrade
+	from an older R version.
+*	Work-around for a bug in browse.pkg of R 2.2.0 release
+
 Last-update: 2005-10-05 [SU]
 *	Fixed package installation from files/directories
 *	<ESC> is now equivalent to break (and the STOP button)

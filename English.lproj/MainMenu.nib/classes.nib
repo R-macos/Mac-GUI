@@ -47,12 +47,14 @@
         }, 
         {CLASS = MyWebView; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = PackageEntry; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
                 installSelected = id; 
                 reloadPIData = id; 
                 reloadURL = id; 
                 runPkgSearch = id; 
+                selectOldPackages = id; 
                 setFormat = id; 
                 setLocation = id; 
                 setURL = id; 
@@ -69,6 +71,8 @@
                 locationMatrix = NSMatrix; 
                 pkgDataSource = NSTableView; 
                 pkgScrollView = NSScrollView; 
+                pkgSearchField = NSSearchField; 
+                pkgSearchMenu = NSMenu; 
                 pkgWindow = id; 
                 repositoryButton = NSPopUpButton; 
                 updateAllButton = NSButton; 

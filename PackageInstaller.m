@@ -485,6 +485,32 @@ NSString *location[2] = {
 	[locationMatrix setTag:pkgInst];
 	[locationMatrix selectCellWithTag:pkgInst];
 	[busyIndicator setUsesThreadedAnimation:YES];
+	
+	{
+		NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:@"/Library/Frameworks/R.framework/Versions"];
+		int i;
+
+		oldRPath = nil;
+		[[pkgSearchMenu itemWithTag:2] setEnabled:NO];
+		if (a && [a count]>1) {
+			a = [a sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+			i = [a count]-1;
+			while (i>=0) {
+				/* FIXME! hard-coded version. At this point we don't know the R version since R is not running */
+				if ([(NSString*)[a objectAtIndex:i] compare:@"2.2"]<0) break;
+				i--;
+			}
+			if (i>=0) {
+				oldRPath=[[NSString stringWithFormat:@"/Library/Frameworks/R.framework/Versions/%@/Resources", [a objectAtIndex:i]] retain];
+				SLog(@"PackageInstaller.awakeFromNib: found previous R at %@", oldRPath);
+				[[pkgSearchMenu itemWithTag:2] setEnabled:YES];				
+			}
+		}
+	}
+	if (!oldRPath) {
+		SLog(@"PackageInstaller.awakeFromNib: no previous R version found.");
+		[pkgSearchMenu removeItem:[pkgSearchMenu itemWithTag:2]];
+	}
 }
 
 - (id)init
@@ -500,6 +526,7 @@ NSString *location[2] = {
 		filterlen = 0;
 		filterString = nil;
 		installedOnly = NO;
+		oldRPath = nil;
     }
 	
     return self;
@@ -742,6 +769,31 @@ NSString *location[2] = {
 	installedOnly = !installedOnly;
 	[(NSMenuItem*) sender setTitle:installedOnly?NLS(@"Show All"):NLS(@"Show Installed Only")];
 	[self reRunFilter];
+}
+
+- (IBAction)selectOldPackages:(id)sender
+{
+	if (!oldRPath) return;
+	NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:[NSString stringWithFormat:@"%@/library", oldRPath]];
+	if (!a || [a count]<1) return;
+	NSMutableIndexSet *postIx = [[NSMutableIndexSet alloc] init];
+	if (filter) {
+		int i = 0;
+		while (i<filterlen) {
+			if ([a containsObject:[[packages objectAtIndex:filter[i]] name]])
+				[postIx addIndex:i];
+			i++;
+		}
+	} else {
+		int i = 0, n = [packages count];
+		while (i<n) {
+			if ([a containsObject:[[packages objectAtIndex:i] name]])
+				[postIx addIndex:i];
+			i++;
+		}
+	}
+	[pkgDataSource selectRowIndexes:postIx byExtendingSelection:NO];
+	[postIx release];	
 }
 
 @end
