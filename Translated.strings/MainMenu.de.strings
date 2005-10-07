@@ -300,8 +300,11 @@
 /* NSMenu : <title:Open Recent> (oid:125) */
 "Open Recent" = "Benutzte Dokumente";
 
-/* NSMenuItem : <title:Other Repository (specify format)> (oid:544) */
-"Other Repository (specify format)" = "Andere Repository (Format auswählen)";
+/* NSMenuItem : <title:Other Directory URL> (oid:1107) */
+"Other Directory URL" = "Web-Verzeichnis";
+ 
+/* NSMenuItem : <title:Other Repository> (oid:1109) */
+"Other Repository" = "Andere 'Repository'";
 
 /* NSMenu : <title:OtherViews> (oid:543) */
 "OtherViews" = "Andere Ansicht";
@@ -310,7 +313,7 @@
 "Package" = "Paket";
 
 /* NSMenuItem : <title:Package Installer> (oid:559) */
-"Package Installer" = "Pakete-Installer";
+"Package Installer" = "Pakete-Installation";
 
 /* NSMenuItem : <title:Package Manager> (oid:266) */
 "Package Manager" = "Pakete-Verwaltung";
