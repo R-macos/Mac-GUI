@@ -1214,7 +1214,7 @@ The input replaces what the user is currently typing.
 	SLog(@"RController.doSaveHistory (file %@)", fname);
 	rhist = fopen([fname UTF8String], "w");
 	if (!rhist) {
-		NSLog(NLS(@"Can't open history file %2"), fname);
+		SLog(@"* Can't create history file %@", fname);
 	} else {
 		NSEnumerator *enumerator = [[hist entries] objectEnumerator];
 		NSString *entry;
