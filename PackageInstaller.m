@@ -503,7 +503,7 @@ NSString *location[2] = {
 			if (i>=0) {
 				oldRPath=[[NSString stringWithFormat:@"/Library/Frameworks/R.framework/Versions/%@/Resources", [a objectAtIndex:i]] retain];
 				SLog(@"PackageInstaller.awakeFromNib: found previous R at %@", oldRPath);
-				[[pkgSearchMenu itemWithTag:2] setEnabled:YES];				
+				[[pkgSearchMenu itemWithTag:2] setTitle:[NSString stringWithFormat:NLS(@"Select packages from R %@"), [a objectAtIndex:i]]];
 			}
 		}
 	}

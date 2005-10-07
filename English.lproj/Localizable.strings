@@ -38,8 +38,7 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Can't find help for topic, would you like to expand the search?";
 
-/* From: RController.m (doLoadHistory)
-   From: RController.m (doSaveHistory) */
+/* From: RController.m (doLoadHistory) */
 "Can't open history file %@" = "Can't open history file %@";
 
 /* From: RController.m (didCloseAll) */
@@ -313,6 +312,9 @@
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Select Package Directory";
+
+/* From: PackageInstaller.m (awakeFromNib) */
+"Select packages from R %@" = "Select packages from R %@";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Set as default?" = "Set as default?";

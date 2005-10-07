@@ -38,8 +38,7 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Das Hilfethema konnte nicht gefunden werden. Wollen Sie die Suche ausweiten?";
 
-/* From: RController.m (doLoadHistory)
-   From: RController.m (doSaveHistory) */
+/* From: RController.m (doLoadHistory) */
 "Can't open history file %@" = "Die Verlauf-Datei %@ konnte nicht gefunden werden";
 
 /* From: RController.m (didCloseAll) */
@@ -313,6 +312,9 @@
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Wählen Sie das Package-Verzeichnis";
+
+/* From: PackageInstaller.m (awakeFromNib) */
+"Select packages from R %@" = "Pakete der R Version %@ auswählen";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Set as default?" = "Als Voreinstellung verwenden?";
