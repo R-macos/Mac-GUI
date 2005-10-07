@@ -345,7 +345,7 @@ NSString *location[2] = {
 			
 			[Preferences setKey:@"pkgInstaller.customURL" withObject:[urlTextField stringValue]];
 			success = [[REngine mainEngine] executeString: 
-				[NSString stringWithFormat:@"browse.pkgs(%@=\"%@\",type=\"%@\"))",
+				[NSString stringWithFormat:@"browse.pkgs(%@=\"%@\",type=\"%@\")",
 		                                       (pkgUrl == kOtherFlat)?@"contriburl":@"repos",
                                                [urlTextField stringValue], (pkgFormat == kSource)?@"source":@"mac.binary"]];
 			break;
@@ -420,7 +420,8 @@ NSString *location[2] = {
 			break;
 			
 		case kOTHER:
-			pkgFormat = kSource;
+		case kOtherFlat:
+			pkgFormat = kBinary;
 			[formatCheckBox setState:pkgFormat];
 			[formatCheckBox setEnabled:YES];
 			[urlTextField setHidden:NO];
