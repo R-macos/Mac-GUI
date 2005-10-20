@@ -37,7 +37,6 @@
 		1601EFD006CBBEC700BF60D4 /* NEWS in Resources */ = {isa = PBXBuildFile; fileRef = 1601EFCF06CBBEC700BF60D4 /* NEWS */; };
 		1601F00D06CBBF9F00BF60D4 /* TODO-LIST in Resources */ = {isa = PBXBuildFile; fileRef = 1601F00C06CBBF9F00BF60D4 /* TODO-LIST */; };
 		1601F04706CBC0EF00BF60D4 /* INSTALL in Resources */ = {isa = PBXBuildFile; fileRef = 1601F04606CBC0EF00BF60D4 /* INSTALL */; };
-		1602BB300719702800805588 /* RMacOSX-FAQ.html in Resources */ = {isa = PBXBuildFile; fileRef = 1602BB2E0719702800805588 /* RMacOSX-FAQ.html */; };
 		1602BB310719702800805588 /* RMacOSX-FAQ.texi in Resources */ = {isa = PBXBuildFile; fileRef = 1602BB2F0719702800805588 /* RMacOSX-FAQ.texi */; };
 		1611E322070B86850025F66D /* R.scriptSuite in Resources */ = {isa = PBXBuildFile; fileRef = 1611E321070B86850025F66D /* R.scriptSuite */; };
 		1611E324070B86990025F66D /* R.scriptTerminology in Resources */ = {isa = PBXBuildFile; fileRef = 1611E323070B86990025F66D /* R.scriptTerminology */; };
@@ -188,6 +187,7 @@
 		D41DED5A073B3FF700B900F2 /* RDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41DED58073B3FF700B900F2 /* RDocumentController.m */; };
 		D490C1EC07B400870034B42F /* RRulerView.h in Headers */ = {isa = PBXBuildFile; fileRef = D490C1EA07B400870034B42F /* RRulerView.h */; };
 		D490C1ED07B400870034B42F /* RRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D490C1EB07B400870034B42F /* RRulerView.m */; };
+		D4B55F7D08F4716F001DD9E6 /* RMacOSX-FAQ.html in Resources */ = {isa = PBXBuildFile; fileRef = D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */; };
 		F8CE7271071539E600CE40EC /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = F8CE726F071539E600CE40EC /* Preferences.m */; };
 		F8CE7272071539E600CE40EC /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = F8CE7270071539E600CE40EC /* Preferences.h */; };
 		F8E27FF3071F021700BA437C /* emptyDoc.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F8E27FF2071F021700BA437C /* emptyDoc.tiff */; };
@@ -262,7 +262,6 @@
 		1601EFCF06CBBEC700BF60D4 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		1601F00C06CBBF9F00BF60D4 /* TODO-LIST */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "TODO-LIST"; sourceTree = "<group>"; };
 		1601F04606CBC0EF00BF60D4 /* INSTALL */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
-		1602BB2E0719702800805588 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; explicitFileType = text.html.documentation; fileEncoding = 30; name = "RMacOSX-FAQ.html"; path = "docs/RMacOSX-FAQ.html"; sourceTree = "<group>"; };
 		1602BB2F0719702800805588 /* RMacOSX-FAQ.texi */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "RMacOSX-FAQ.texi"; sourceTree = "<group>"; };
 		161034F007D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		161034F107D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -449,6 +448,7 @@
 		D41DED58073B3FF700B900F2 /* RDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RDocumentController.m; sourceTree = "<group>"; };
 		D490C1EA07B400870034B42F /* RRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRulerView.h; sourceTree = "<group>"; };
 		D490C1EB07B400870034B42F /* RRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RRulerView.m; sourceTree = "<group>"; };
+		D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = "RMacOSX-FAQ.html"; path = "../Mac-GUI copy/docs/RMacOSX-FAQ.html"; sourceTree = "<group>"; };
 		F8CE726F071539E600CE40EC /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		F8CE7270071539E600CE40EC /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		F8E27FF2071F021700BA437C /* emptyDoc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = emptyDoc.tiff; path = images/emptyDoc.tiff; sourceTree = "<group>"; };
@@ -713,7 +713,7 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */,
-				1602BB2E0719702800805588 /* RMacOSX-FAQ.html */,
+				D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */,
 				16DB0E89072E5CFA00380720 /* COPYRIGHTS */,
 				1601EFCF06CBBEC700BF60D4 /* NEWS */,
 				1601F04606CBC0EF00BF60D4 /* INSTALL */,
@@ -1021,7 +1021,6 @@
 				1611E322070B86850025F66D /* R.scriptSuite in Resources */,
 				1611E324070B86990025F66D /* R.scriptTerminology in Resources */,
 				1651D9650715EA5D00FB6962 /* colors.tiff in Resources */,
-				1602BB300719702800805588 /* RMacOSX-FAQ.html in Resources */,
 				1602BB310719702800805588 /* RMacOSX-FAQ.texi in Resources */,
 				F8E27FF3071F021700BA437C /* emptyDoc.tiff in Resources */,
 				F8E28001071F030200BA437C /* RDoc.tiff in Resources */,
@@ -1044,6 +1043,7 @@
 				684D008907BD72F10047EEF6 /* SyntaxColorsPrefPane.nib in Resources */,
 				1C5306EE081F54F600ECECD2 /* history.png in Resources */,
 				68C7CA8408F1D48800E3E5BF /* Vignettes.nib in Resources */,
+				D4B55F7D08F4716F001DD9E6 /* RMacOSX-FAQ.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,7 +1052,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		1C54CDAD0719742A00176826 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -1062,9 +1062,9 @@
 			outputPaths = (
 				"docs/RMacOSX-FAQ.html",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "# shell script goes here\ncd docs\nmakeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
+			shellScript = "# shell script goes here\n#cd docs\n#makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
 		};
 		68416AA0088D9A5000756EE2 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

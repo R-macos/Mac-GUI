@@ -84,7 +84,9 @@
 - (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
 {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"];
+	NSString *externalEditor = [[NSString alloc] initWithString:@"\""];
+	externalEditor = [externalEditor stringByAppendingString:[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
+	externalEditor = [externalEditor stringByAppendingString:@"\""];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
 	if ([aFile isEqualToString:@""] && useInternalEditor) {
@@ -119,7 +121,9 @@
 - (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
 {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	NSString *externalEditor = [Preferences stringForKey:externalEditorNameKey withDefault: @"SubEthaEdit"];
+	NSString *externalEditor = [[NSString alloc] initWithString:@"\""];
+	externalEditor = [externalEditor stringByAppendingString:[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
+	externalEditor = [externalEditor stringByAppendingString:@"\""];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 
 	if (useInternalEditor) {

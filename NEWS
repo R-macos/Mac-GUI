@@ -1,5 +1,8 @@
 NEWS
 
+Last-update: 2005-10-19 [RG]
+*	External editor: Enabled names with embedded spaces.
+
 Last-update: 2005-10-07 [SU]
 *	Package installer: add search menu option to select packages
 	installed in a previous R version. This allows an easy upgrade
