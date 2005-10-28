@@ -1,5 +1,11 @@
 NEWS
 
+Last-update: 2005-10-28 [SU]
+*	Fixed encoding bug in REngine parser invocation
+	(fixes Quartz saving bug reported by Denis Chabot)
+*	Added safeguards to WriteConsole callback
+*	Fixed invalid html docs link
+
 Last-update: 2005-10-19 [RG]
 *	External editor: Enabled names with embedded spaces.
 
