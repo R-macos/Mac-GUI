@@ -222,7 +222,7 @@ BOOL preventReentrance = NO;
 	if (!active) return nil;
 	RENGINE_BEGIN;
     PROTECT(cv=allocVector(STRSXP, 1));
-    SET_STRING_ELT(cv, 0, mkChar([str cString]));    
+    SET_STRING_ELT(cv, 0, mkChar([str UTF8String]));    
     pstr=R_ParseVector(cv, count, &ps);
     UNPROTECT(1);
 	RENGINE_END;
