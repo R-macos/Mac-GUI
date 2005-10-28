@@ -448,7 +448,7 @@
 		D41DED58073B3FF700B900F2 /* RDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RDocumentController.m; sourceTree = "<group>"; };
 		D490C1EA07B400870034B42F /* RRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRulerView.h; sourceTree = "<group>"; };
 		D490C1EB07B400870034B42F /* RRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RRulerView.m; sourceTree = "<group>"; };
-		D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = "RMacOSX-FAQ.html"; path = "../Mac-GUI copy/docs/RMacOSX-FAQ.html"; sourceTree = "<group>"; };
+		D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = "RMacOSX-FAQ.html"; path = "docs/RMacOSX-FAQ.html"; sourceTree = SOURCE_ROOT; };
 		F8CE726F071539E600CE40EC /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		F8CE7270071539E600CE40EC /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		F8E27FF2071F021700BA437C /* emptyDoc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = emptyDoc.tiff; path = images/emptyDoc.tiff; sourceTree = "<group>"; };
