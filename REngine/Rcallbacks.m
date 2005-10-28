@@ -62,6 +62,14 @@
 #define NLS(S) NSLocalizedString(S,@"")
 #define NLSC(S,C) NSLocalizedString(S,C)
 
+#ifndef SLog
+#if defined DEBUG_RGUI && defined PLAIN_STDERR
+#define SLog(X,...) NSLog(X, ## __VA_ARGS__)
+#else
+#define SLog(X,...)
+#endif
+#endif
+
 /* we have no access to config.h, so for the moment, let's disable i18n on C level - our files aren't even precessed by R anyway. */
 #ifdef _
 #undef _
@@ -178,8 +186,15 @@ void Re_WriteConsole(char *buf, int len)
 		s = [[NSString alloc] initWithUTF8String:c];
 		free(c);
 	} else s = [[NSString alloc] initWithUTF8String:buf];
-    [[REngine mainHandler] handleWriteConsole: s];
-    [s release];
+    if (!s) {
+		SLog(@"Rcallbacks:Re_WriteConsole: suspicious string of length %d doesn't parse as UTF8. Will use raw cString.", len);
+		s = [[NSString alloc] initWithCString:buf length:len];
+		SLog(@"Rcallbacks:Re_WriteConsole: string parsed as \"%@\"", s);
+	}
+    if (s) {
+		[[REngine mainHandler] handleWriteConsole: s];
+		[s release];
+	}
 }
 
 /* Indicate that input is coming from the console */
