@@ -722,6 +722,7 @@ extern BOOL isTimeToFinish;
 
 /* this writes R output to the Console window, but indirectly by using a buffer */
 - (void) handleWriteConsole: (NSString*) txt {
+	if (!txt) return;
 	const char *s = [txt UTF8String];
 	int sl = strlen(s);
 	int fits = writeBufferLen-(writeBufferPos-writeBuffer)-1;
