@@ -189,26 +189,26 @@ if (!item) { \
 		NSMutableDictionary *item;
 		if(ws_IsRoot[i]){
 		if(ws_IsContainer[i]==0){
-			item = [self itemWithName:[NSString stringWithCString:ws_name[i]] 
-					type:[NSString stringWithCString:ws_type[i]]
-					property: [NSString stringWithCString:ws_size[i]] 
+			item = [self itemWithName:[NSString stringWithUTF8String:ws_name[i]] 
+					type:[NSString stringWithUTF8String:ws_type[i]]
+					property: [NSString stringWithUTF8String:ws_size[i]] 
 					andChildren:nil];
 		} else {
 			NSMutableArray *group = [[NSMutableArray alloc] init];
 			for(j=i+1;j<NumOfWSObjects;j++){
 				if(ws_parID[j] == ws_IDNum[i]){
 					NSMutableDictionary *subitem;			
-					subitem = [self itemWithName:[NSString stringWithCString:ws_name[j]] 
-						type:[NSString stringWithCString:ws_type[j]]
-						property: [NSString stringWithCString:ws_size[j]] 
+					subitem = [self itemWithName:[NSString stringWithUTF8String:ws_name[j]] 
+						type:[NSString stringWithUTF8String:ws_type[j]]
+						property: [NSString stringWithUTF8String:ws_size[j]] 
 						andChildren:nil];
 					[group addObject:subitem];
 					[subitem release];
 				}
 			}
-			item = [self itemWithName:[NSString stringWithCString:ws_name[i]] 
-								type:[NSString stringWithCString:ws_type[i]]
-								property: [NSString stringWithCString:ws_size[i]] 
+			item = [self itemWithName:[NSString stringWithUTF8String:ws_name[i]] 
+								type:[NSString stringWithUTF8String:ws_type[i]]
+								property: [NSString stringWithUTF8String:ws_size[i]] 
 								andChildren:group];
 			[group release];					
 		}

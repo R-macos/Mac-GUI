@@ -1,5 +1,9 @@
 NEWS
 
+Last-update: 2005-10-31 [SU]
+*	Replaced all remaining CStrings with UTF8Strings
+	(fixes help search topic display problem)
+
 Last-update: 2005-10-28 [SU]
 *	Fixed encoding bug in REngine parser invocation
 	(fixes Quartz saving bug reported by Denis Chabot)

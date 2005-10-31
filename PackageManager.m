@@ -146,9 +146,9 @@ static PackageManager *sharedController = nil;
 	
 	package = malloc(sizeof(*package)*count);
 	while (i<count) {
-		package[i].name=[[NSString alloc] initWithCString: name[i]];
-		package[i].desc=[[NSString alloc] initWithCString: desc[i]];
-		package[i].url=[[NSString alloc] initWithCString: url[i]];
+		package[i].name=[[NSString alloc] initWithUTF8String: name[i]];
+		package[i].desc=[[NSString alloc] initWithUTF8String: desc[i]];
+		package[i].url=[[NSString alloc] initWithUTF8String: url[i]];
 		package[i].status=stat[i];
 		i++;
 	}

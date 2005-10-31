@@ -1797,7 +1797,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 //	NSLog(@"openHelpFor: <%@>", [NSString stringWithCString:topic]);
 	if(topic[0] == '?' && (strlen(topic)>2))
 		[[HelpManager sharedController] showHelpFor: 
-			[NSString stringWithCString:topic+1 length:strlen(topic)-2]];
+			[NSString stringWithUTF8String:topic+1]];
 	if(strncmp("help(",topic,5)==0){
 		for(i=5;i<strlen(topic); i++){
 			if(topic[i]==')')
@@ -1805,7 +1805,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 			tmp[i-5] = topic[i];
 		}
 		tmp[i-5] = '\0';
-		[[HelpManager sharedController] showHelpFor: [NSString stringWithCString:tmp]];
+		[[HelpManager sharedController] showHelpFor: [NSString stringWithUTF8String:tmp]];
 	}
 }
 

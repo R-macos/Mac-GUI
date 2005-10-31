@@ -169,7 +169,7 @@ void printelt(SEXP invec, int vrow, char *strp)
  	if (!isNull(tmp)) {
 	 		if(LENGTH(tmp)>row){
 		 			printelt(tmp, row, buf);
-		 			return [NSString stringWithCString:buf];
+		 			return [NSString stringWithUTF8String:buf];
 		 		} else return @"";
 	 	} else return @"";
  
@@ -238,7 +238,7 @@ void printelt(SEXP invec, int vrow, char *strp)
     for (i = 1; i <= xmaxused ; i++) {
 		NSTableColumn *col;
 		col = [[[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]] autorelease];
-		[[col headerCell] setTitle:[NSString stringWithCString:get_col_name(i)]];
+		[[col headerCell] setTitle:[NSString stringWithUTF8String:get_col_name(i)]];
         [col setWidth: 50];
         [col setMaxWidth: 300];
 		[col sizeToFit];

@@ -810,7 +810,7 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
 		fontFamily = Quartz_TranslateFontFamily(gc->fontfamily, gc->fontface,xd->family);	
 		
 		if (fontFamily)
-			[CurrFont setString: [NSString stringWithCString:fontFamily]];
+			[CurrFont setString: [NSString stringWithUTF8String:fontFamily]];
 		else
 			[CurrFont setString: @"Helvetica"];
 	}

@@ -67,10 +67,10 @@ static id sharedController;
 - (void) updateDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url
 {
 	[dataSource reset];
-	[dataSource addColumnOfLength:count withCStrings:name name:@"data"];
-	[dataSource addColumnOfLength:count withCStrings:desc name:@"description"];
-	[dataSource addColumnOfLength:count withCStrings:pkg name:@"package"];
-	[dataSource addColumnOfLength:count withCStrings:url name:@"URL"];
+	[dataSource addColumnOfLength:count withUTF8Strings:name name:@"data"];
+	[dataSource addColumnOfLength:count withUTF8Strings:desc name:@"description"];
+	[dataSource addColumnOfLength:count withUTF8Strings:pkg name:@"package"];
+	[dataSource addColumnOfLength:count withUTF8Strings:url name:@"URL"];
 	[self show];
 }
 

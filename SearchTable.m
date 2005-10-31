@@ -62,12 +62,12 @@ static id sharedHSController;
 - (void) updateHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title
 {
 	[dataSource reset];
-	[dataSource addColumnOfLength:count withCStrings:topics name:@"topic"];
-	[dataSource addColumnOfLength:count withCStrings:pkgs name:@"package"];
-	[dataSource addColumnOfLength:count withCStrings:descs name:@"description"];
-	[dataSource addColumnOfLength:count withCStrings:urls name:@"URL"];
+	[dataSource addColumnOfLength:count withUTF8Strings:topics name:@"topic"];
+	[dataSource addColumnOfLength:count withUTF8Strings:pkgs name:@"package"];
+	[dataSource addColumnOfLength:count withUTF8Strings:descs name:@"description"];
+	[dataSource addColumnOfLength:count withUTF8Strings:urls name:@"URL"];
 	if (windowTitle) [windowTitle release];
-	windowTitle = [[NSString alloc] initWithCString: title];
+	windowTitle = [[NSString alloc] initWithUTF8String: title];
 	[self show];
 }
 
