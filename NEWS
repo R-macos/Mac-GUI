@@ -18,6 +18,8 @@ Last-update: 2005-10-28 [SU]
 Last-update: 2005-10-19 [RG]
 *	External editor: Enabled names with embedded spaces.
 
+-- Release Version 1.13 (1915) - suppplied with R 2.2.0 --
+
 Last-update: 2005-10-07 [SU]
 *	Package installer: add search menu option to select packages
 	installed in a previous R version. This allows an easy upgrade
@@ -45,7 +47,7 @@ Last-update: 2005-07-20 [SU]
 *	Added (undocumented) quartz.save function for saving contents
 	of Quartz devices as-is to various formats.
 
--- Release Version 1.12 (1622) - supplied with 2.1.1 --
+-- Release Version 1.12 (1622) - supplied with R 2.1.1 --
 
 Last-update: 2005-07-01 [SU]
 *	Fixed Quartz live-resize bug
