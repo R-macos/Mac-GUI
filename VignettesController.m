@@ -147,6 +147,7 @@ static VignettesController *vignettesSharedController = nil;
 		}
 		[x release];
 	}
+	needReload = NO;
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification
@@ -172,6 +173,8 @@ static VignettesController *vignettesSharedController = nil;
 
 - (void) showVigenttes
 {
+	if (needReload)
+		[self reload];
 	[window makeKeyAndOrderFront:self];
 }
 
@@ -184,7 +187,9 @@ static VignettesController *vignettesSharedController = nil;
 	[tableView setDataSource: dataSource];
 	[tableView setDoubleAction:@selector(openVignette:)];
 	[tableView setTarget:self];
-	[self reload];
+	// deferred loading of vignettes
+	//[self reload];
+	needReload = YES;
 	[openButton setEnabled: ([tableView selectedRow]!=-1)];
 	[openSourceButton setEnabled: ([tableView selectedRow]!=-1)];
 	vignettesSharedController = self;

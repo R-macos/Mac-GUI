@@ -17,6 +17,8 @@
 	
 	SortableDataSource *dataSource;
 	
+	BOOL needReload;
+	
 	int* filter;
 	int  filterlen;
 }
