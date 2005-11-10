@@ -1,5 +1,8 @@
 NEWS
 
+Last-update: 2005-11-10 [SU]
+*	Fixed a memory leak in the Quartz device (font handling)
+
 Last-update: 2005-11-03 [SU]
 *	Deferred vignettes list retrieval until vignettes
 	are requested to reduce start-up time on slow

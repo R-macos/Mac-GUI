@@ -529,7 +529,7 @@ static void 	RQuartz_Text(double x, double y, char *str,
 	if(gc->fontface==5  || strcmp(gc->fontfamily,"symbol")==0)
 	    text = [[NSString alloc] initWithBytes:str length:strlen(str) encoding:NSSymbolStringEncoding];
 	else 
-		text = [[NSString stringWithUTF8String:str] retain];
+		text = [[NSString alloc] initWithUTF8String:str];
 	
 	if (!text) return; /* if for some reason the decoding didn't work, just get out, nothing to see */
 	
@@ -801,31 +801,29 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
     int size = gc->cex*gc->ps + 0.5;
  	char *fontFamily=0;
 	NSFontTraitMask  traits   = 0;
-	NSMutableString *CurrFont = [[NSMutableString alloc] initWithCapacity:1];
+	NSString *currFont = @"Helvetica";
 	 
 	
 	if((gc->fontface == 5) || (strcmp(gc->fontfamily,"symbol")==0))
-		[CurrFont setString: @"Symbol"];
+		currFont = @"Symbol";
 	else {	
-		fontFamily = Quartz_TranslateFontFamily(gc->fontfamily, gc->fontface,xd->family);	
+		fontFamily = Quartz_TranslateFontFamily(gc->fontfamily, gc->fontface, xd->family);
 		
 		if (fontFamily)
-			[CurrFont setString: [NSString stringWithUTF8String:fontFamily]];
-		else
-			[CurrFont setString: @"Helvetica"];
+			currFont=[NSString stringWithUTF8String:fontFamily];
 	}
 
-	if( ![CurrFont isEqual: @"Symbol"] )
+	if( ![currFont isEqual: @"Symbol"] )
 		traits=
 			((gc->fontface==2||gc->fontface==4)?NSBoldFontMask:0)|
 			((gc->fontface==3||gc->fontface==4)?NSItalicFontMask:0);
 
-	NSRange range = NSMakeRange(0, [CurrFont length]);
-	range = [CurrFont rangeOfString: @"-" options: 0 range: range];
+	NSRange range = NSMakeRange(0, [currFont length]);
+	range = [currFont rangeOfString: @"-" options: 0 range: range];
 	if (range.location != NSNotFound )
-		[CurrFont setString: [CurrFont substringWithRange:NSMakeRange(0, range.location)]];
-			
-    NSFont*  font      = [fm fontWithFamily:CurrFont traits:traits weight:5 size:size];
+		currFont = [currFont substringWithRange:NSMakeRange(0, range.location)];
+	
+	NSFont* font = [fm fontWithFamily:currFont traits:traits weight:5 size:size];
 
 	return font;
 }
@@ -859,7 +857,7 @@ static void 	RQuartz_MetricInfo(int c,
 		
 		NSString *text = nil;
 		
-		if(gc->fontface==5  ||strcmp(gc->fontfamily,"symbol")==0)
+		if(gc->fontface==5 || strcmp(gc->fontfamily,"symbol")==0)
 			text = [[NSString alloc] initWithBytes:str length:1 encoding:NSSymbolStringEncoding];
 		else
 			text = [[NSString stringWithCharacters:&uc length:1] retain];
