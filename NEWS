@@ -1,5 +1,10 @@
 NEWS
 
+Last-update: 2005-12-16 [SU]
+*	Fixed bug in apple script prcessing that required an event
+	to be fired (e.g. moving the mouse) before the command was
+	processed. [Thanks to Jonathan Paisley for the hint]
+
 Last-update: 2005-11-10 [SU]
 *	Fixed a memory leak in the Quartz device (font handling)
 

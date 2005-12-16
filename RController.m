@@ -126,6 +126,11 @@ static RController* sharedRController;
     if (!cmd || [cmd isEqualToString:@""])
         return [NSNumber numberWithBool:NO];
 	[[RController sharedController] sendInput: cmd];
+	/* post an event to wake the event loop in order to process the command */
+	[NSApp postEvent:[NSEvent otherEventWithType: NSApplicationDefined 
+										location: (NSPoint){0,0} modifierFlags: 0 timestamp: 0
+									windowNumber: 0 context: NULL subtype: 0 data1: 0 data2: 0
+		] atStart: YES];
 	return [NSNumber numberWithBool:YES];
 }
 @end
@@ -1105,22 +1110,6 @@ The input replaces what the user is currently typing.
 */
 - (void) sendInput: (NSString*) text {
 	[self consoleInput:text interactive:YES];
-	/*
-	 unsigned textLength = [[RTextView textStorage] length];
-	 [RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-	 NSEvent* event = [NSEvent keyEventWithType:NSKeyDown
-									   location:NSMakePoint(0,0)
-								  modifierFlags:0
-									  timestamp:0
-								   windowNumber:[RConsoleWindow windowNumber]
-										context:nil
-									 characters:@"\n"
-					charactersIgnoringModifiers:nil
-									  isARepeat:NO
-										keyCode:nil
-		 ];
-	 [NSApp postEvent:event atStart:YES];
-	 */
 }
 
 /* These two routines are needed to update the History TableView */
