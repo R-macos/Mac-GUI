@@ -1,5 +1,9 @@
 NEWS
 
+last-update: 2006-01-02 [SU]
+*	Added dutch localization (thanks to Aaike De Wever)
+*	Minor cleanups and RC build
+
 Last-update: 2005-12-16 [SU]
 *	Fixed bug in apple script prcessing that required an event
 	to be fired (e.g. moving the mouse) before the command was
