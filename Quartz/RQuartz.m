@@ -217,10 +217,9 @@ for quartz. This method is called by RController -> activateQuartz
 		[data writeToFile:[sp filename] atomically:NO];		
 		[deviceView setPDFDrawing:NO];
 		*/		
-		NSRect r = [deviceView bounds];
 		RSEXP *x = [[REngine mainEngine] evaluateString:
-			[NSString stringWithFormat:@"dev.copy(device=pdf,file=\"%@\",width=%f,height=%f,version=\"1.4\")",
-				[sp filename], r.size.width/72, r.size.height/72]
+			[NSString stringWithFormat:@"dev.copy(device=pdf,file=\"%@\",width=par()$din[1],height=par()$din[2],version=\"1.4\")",
+				[sp filename]]
 			];
 		if(x)
 			[[REngine mainEngine] executeString:@"dev.off()"];
