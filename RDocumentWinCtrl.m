@@ -254,11 +254,24 @@ NSArray *keywordList=nil;
 	[self updatePreferences];
 	[[Preferences sharedPreferences] addDependent:self];
 	
+	
+	// use textView's undoManager - this is just paranoia to be honest
+	[[self document] setUndoManager:[textView undoManager]];
+	[[self document] setHasUndoManager:YES];
+	
 	SLog(@" - setup editor toolbar");
 	editorToolbar = [[REditorToolbar alloc] initWithEditor:self];
 	SLog(@" - scan document for functions");
 	[self functionRescan];
 	SLog(@" - windowDidLoad is done");
+}
+
+- (void) setUndoBreakpoint
+{
+	if ([[textView undoManager] groupingLevel]>0) {
+		[[textView undoManager] endUndoGrouping];
+		[[textView undoManager] beginUndoGrouping];
+	}	
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)aNotification {
@@ -836,10 +849,7 @@ reHilite:
 				wss = [wss stringByAppendingString:[s substringWithRange:NSMakeRange(lr.location,whiteSpaces)]];
 			while (addShift>0) { wss=[wss stringByAppendingString:@"\t"]; addShift--; }
 			// add an undo checkpoint before actually committing the changes
-			if ([[textView undoManager] groupingLevel]>0) {
-				[[textView undoManager] endUndoGrouping];
-				[[textView undoManager] beginUndoGrouping];
-			}
+			[self setUndoBreakpoint];
 			[textView insertText:wss];
 			return YES;
 		}
