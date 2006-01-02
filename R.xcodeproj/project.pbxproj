@@ -9,7 +9,7 @@
 /* Begin PBXAggregateTarget section */
 		1C54CDAE0719742A00176826 /* Docs */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 68BEF8C90867221B009B4C4A /* Build configuration list for PBXAggregateTarget "Docs" */;
+			buildConfigurationList = 68B62A210969E4EB00355F33 /* Build configuration list for PBXAggregateTarget "Docs" */;
 			buildPhases = (
 				1C54CDAD0719742A00176826 /* ShellScript */,
 			);
@@ -37,6 +37,7 @@
 		1601EFD006CBBEC700BF60D4 /* NEWS in Resources */ = {isa = PBXBuildFile; fileRef = 1601EFCF06CBBEC700BF60D4 /* NEWS */; };
 		1601F00D06CBBF9F00BF60D4 /* TODO-LIST in Resources */ = {isa = PBXBuildFile; fileRef = 1601F00C06CBBF9F00BF60D4 /* TODO-LIST */; };
 		1601F04706CBC0EF00BF60D4 /* INSTALL in Resources */ = {isa = PBXBuildFile; fileRef = 1601F04606CBC0EF00BF60D4 /* INSTALL */; };
+		1602BB300719702800805588 /* RMacOSX-FAQ.html in Resources */ = {isa = PBXBuildFile; fileRef = 1602BB2E0719702800805588 /* RMacOSX-FAQ.html */; };
 		1602BB310719702800805588 /* RMacOSX-FAQ.texi in Resources */ = {isa = PBXBuildFile; fileRef = 1602BB2F0719702800805588 /* RMacOSX-FAQ.texi */; };
 		1611E322070B86850025F66D /* R.scriptSuite in Resources */ = {isa = PBXBuildFile; fileRef = 1611E321070B86850025F66D /* R.scriptSuite */; };
 		1611E324070B86990025F66D /* R.scriptTerminology in Resources */ = {isa = PBXBuildFile; fileRef = 1611E323070B86990025F66D /* R.scriptTerminology */; };
@@ -145,10 +146,6 @@
 		1CDD06120763FD2000B8FCA6 /* PreferenceKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CDD06110763FD2000B8FCA6 /* PreferenceKeys.h */; };
 		6807E645080EAE4100A03223 /* GlobalExHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 6807E643080EAE4100A03223 /* GlobalExHandler.h */; };
 		6807E646080EAE4100A03223 /* GlobalExHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6807E644080EAE4100A03223 /* GlobalExHandler.m */; };
-		6809F02008F2438F007E2F79 /* PDFImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6809F01E08F2438F007E2F79 /* PDFImageView.h */; };
-		6809F02108F2438F007E2F79 /* PDFImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6809F01F08F2438F007E2F79 /* PDFImageView.m */; };
-		6809F03908F2474F007E2F79 /* DraggableScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 6809F03708F2474F007E2F79 /* DraggableScrollView.h */; };
-		6809F03A08F2474F007E2F79 /* DraggableScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6809F03808F2474F007E2F79 /* DraggableScrollView.m */; };
 		6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6828383807804DFC004617B7 /* ExceptionHandling.framework */; };
 		684D008507BD72BE0047EEF6 /* SyntaxColorsPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 684D008307BD72BE0047EEF6 /* SyntaxColorsPrefPane.h */; };
 		684D008607BD72BE0047EEF6 /* SyntaxColorsPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 684D008407BD72BE0047EEF6 /* SyntaxColorsPrefPane.m */; };
@@ -168,9 +165,13 @@
 		687B4F9807944B8000074042 /* REditorTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B4F9607944B8000074042 /* REditorTextStorage.m */; };
 		687B503B07945D4C00074042 /* RConsoleTextStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 687B503907945D4C00074042 /* RConsoleTextStorage.h */; };
 		687B503C07945D4C00074042 /* RConsoleTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B503A07945D4C00074042 /* RConsoleTextStorage.m */; };
-		68C7CA8408F1D48800E3E5BF /* Vignettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 68C7CA8208F1D48800E3E5BF /* Vignettes.nib */; };
-		68C7CA8B08F1D6E500E3E5BF /* VignettesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 68C7CA8908F1D6E500E3E5BF /* VignettesController.h */; };
-		68C7CA8C08F1D6E500E3E5BF /* VignettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68C7CA8A08F1D6E500E3E5BF /* VignettesController.m */; };
+		68AAC9E208F41CA10064CDA1 /* Vignettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 68AAC9E008F41CA10064CDA1 /* Vignettes.nib */; };
+		68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */; };
+		68AAC9E808F41CBB0064CDA1 /* DraggableScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */; };
+		68AAC9E908F41CBB0064CDA1 /* PDFImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9E508F41CBB0064CDA1 /* PDFImageView.h */; };
+		68AAC9EA08F41CBB0064CDA1 /* PDFImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AAC9E608F41CBB0064CDA1 /* PDFImageView.m */; };
+		68AAC9ED08F41CD80064CDA1 /* VignettesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9EB08F41CD80064CDA1 /* VignettesController.h */; };
+		68AAC9EE08F41CD80064CDA1 /* VignettesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AAC9EC08F41CD80064CDA1 /* VignettesController.m */; };
 		68DEAEE8083271CA00C5D76C /* RTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68DEAEE6083271CA00C5D76C /* RTextView.h */; };
 		68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DEAEE7083271CA00C5D76C /* RTextView.m */; };
 		68E2B9F20796C9D200E31F29 /* devQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 68E2B9F00796C9D200E31F29 /* devQuartz.h */; };
@@ -187,7 +188,6 @@
 		D41DED5A073B3FF700B900F2 /* RDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41DED58073B3FF700B900F2 /* RDocumentController.m */; };
 		D490C1EC07B400870034B42F /* RRulerView.h in Headers */ = {isa = PBXBuildFile; fileRef = D490C1EA07B400870034B42F /* RRulerView.h */; };
 		D490C1ED07B400870034B42F /* RRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D490C1EB07B400870034B42F /* RRulerView.m */; };
-		D4B55F7D08F4716F001DD9E6 /* RMacOSX-FAQ.html in Resources */ = {isa = PBXBuildFile; fileRef = D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */; };
 		F8CE7271071539E600CE40EC /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = F8CE726F071539E600CE40EC /* Preferences.m */; };
 		F8CE7272071539E600CE40EC /* Preferences.h in Headers */ = {isa = PBXBuildFile; fileRef = F8CE7270071539E600CE40EC /* Preferences.h */; };
 		F8E27FF3071F021700BA437C /* emptyDoc.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F8E27FF2071F021700BA437C /* emptyDoc.tiff */; };
@@ -262,6 +262,7 @@
 		1601EFCF06CBBEC700BF60D4 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		1601F00C06CBBF9F00BF60D4 /* TODO-LIST */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "TODO-LIST"; sourceTree = "<group>"; };
 		1601F04606CBC0EF00BF60D4 /* INSTALL */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		1602BB2E0719702800805588 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; explicitFileType = text.html.documentation; fileEncoding = 30; name = "RMacOSX-FAQ.html"; path = "docs/RMacOSX-FAQ.html"; sourceTree = "<group>"; };
 		1602BB2F0719702800805588 /* RMacOSX-FAQ.texi */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "RMacOSX-FAQ.texi"; sourceTree = "<group>"; };
 		161034F007D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		161034F107D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -395,10 +396,6 @@
 		32CA4F630368D1EE00C91783 /* R_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = R_Prefix.pch; sourceTree = "<group>"; };
 		6807E643080EAE4100A03223 /* GlobalExHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalExHandler.h; sourceTree = "<group>"; };
 		6807E644080EAE4100A03223 /* GlobalExHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalExHandler.m; sourceTree = "<group>"; };
-		6809F01E08F2438F007E2F79 /* PDFImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageView.h; sourceTree = "<group>"; };
-		6809F01F08F2438F007E2F79 /* PDFImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageView.m; sourceTree = "<group>"; };
-		6809F03708F2474F007E2F79 /* DraggableScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableScrollView.h; sourceTree = "<group>"; };
-		6809F03808F2474F007E2F79 /* DraggableScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableScrollView.m; sourceTree = "<group>"; };
 		6812EC9E07BA6A360000B6A8 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
 		681D40BE081D653B0019CB4C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6828383807804DFC004617B7 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = /System/Library/Frameworks/ExceptionHandling.framework; sourceTree = "<absolute>"; };
@@ -427,18 +424,35 @@
 		687B503907945D4C00074042 /* RConsoleTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RConsoleTextStorage.h; sourceTree = "<group>"; };
 		687B503A07945D4C00074042 /* RConsoleTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RConsoleTextStorage.m; sourceTree = "<group>"; };
 		6880973207AFFB2000F90DB0 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
+		68AAC9E108F41CA10064CDA1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Vignettes.nib; sourceTree = "<group>"; };
+		68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableScrollView.h; sourceTree = "<group>"; };
+		68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableScrollView.m; sourceTree = "<group>"; };
+		68AAC9E508F41CBB0064CDA1 /* PDFImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageView.h; sourceTree = "<group>"; };
+		68AAC9E608F41CBB0064CDA1 /* PDFImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageView.m; sourceTree = "<group>"; };
+		68AAC9EB08F41CD80064CDA1 /* VignettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VignettesController.h; sourceTree = "<group>"; };
+		68AAC9EC08F41CD80064CDA1 /* VignettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VignettesController.m; sourceTree = "<group>"; };
 		68C0CFD307BBDAF000EA34B7 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		68C0CFD407BBDAF300EA34B7 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		68C30D3A07B80D510020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		68C30D3D07B80D6C0020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
 		68C30D4007B80D7B0020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
-		68C7CA8308F1D48800E3E5BF /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Vignettes.nib; sourceTree = "<group>"; };
-		68C7CA8908F1D6E500E3E5BF /* VignettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VignettesController.h; sourceTree = "<group>"; };
-		68C7CA8A08F1D6E500E3E5BF /* VignettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VignettesController.m; sourceTree = "<group>"; };
+		68DDE1D109697A3F00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		68DDE1D409697AAE00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		68DDE1D709697ABE00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/RConsole.nib; sourceTree = "<group>"; };
+		68DDE1DA09697AC600BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/RDocument.nib; sourceTree = "<group>"; };
+		68DDE1DD09697ACC00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/RQuartz.nib; sourceTree = "<group>"; };
+		68DDE1E009697AD300BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/Vignettes.nib; sourceTree = "<group>"; };
+		68DDE1E309697AEA00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
+		68DDE1E609697AF200BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
+		68DDE1E909697AFC00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
+		68DDE1EC09697B0400BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
+		68DDE1EF09697B0C00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
+		68DDE21309697C6100BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nl; path = nl.lproj/Credits.rtf; sourceTree = "<group>"; };
 		68DEAEE6083271CA00C5D76C /* RTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTextView.h; sourceTree = "<group>"; };
 		68DEAEE7083271CA00C5D76C /* RTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTextView.m; sourceTree = "<group>"; };
 		68E2B9F00796C9D200E31F29 /* devQuartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devQuartz.h; sourceTree = "<group>"; };
 		68E2B9F10796C9D200E31F29 /* devQuartz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = devQuartz.c; sourceTree = "<group>"; };
+		68FC52F508F45C2E0061413F /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/Vignettes.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorPrefPane.h; sourceTree = "<group>"; };
@@ -448,7 +462,6 @@
 		D41DED58073B3FF700B900F2 /* RDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RDocumentController.m; sourceTree = "<group>"; };
 		D490C1EA07B400870034B42F /* RRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRulerView.h; sourceTree = "<group>"; };
 		D490C1EB07B400870034B42F /* RRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RRulerView.m; sourceTree = "<group>"; };
-		D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; name = "RMacOSX-FAQ.html"; path = "docs/RMacOSX-FAQ.html"; sourceTree = SOURCE_ROOT; };
 		F8CE726F071539E600CE40EC /* Preferences.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
 		F8CE7270071539E600CE40EC /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
 		F8E27FF2071F021700BA437C /* emptyDoc.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = emptyDoc.tiff; path = images/emptyDoc.tiff; sourceTree = "<group>"; };
@@ -635,22 +648,22 @@
 		16ABE72706C7512D00815F91 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				6809F03708F2474F007E2F79 /* DraggableScrollView.h */,
-				6809F03808F2474F007E2F79 /* DraggableScrollView.m */,
-				6809F01E08F2438F007E2F79 /* PDFImageView.h */,
-				6809F01F08F2438F007E2F79 /* PDFImageView.m */,
-				1CC7C86507396890005CF3AA /* SortableDataSource.h */,
-				1CC7C86607396890005CF3AA /* SortableDataSource.m */,
 				1C0BD6BD07345B4300D43C33 /* Authorization.h */,
 				1C0BD6BE07345B4300D43C33 /* Authorization.c */,
 				16ABE77F06C7538500815F91 /* CodeCompletion.h */,
 				16ABE78006C7538500815F91 /* CodeCompletion.m */,
+				68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */,
+				68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */,
 				16ABE75706C752C600815F91 /* FileCompletion.h */,
 				16ABE75806C752C600815F91 /* FileCompletion.m */,
 				6807E643080EAE4100A03223 /* GlobalExHandler.h */,
 				6807E644080EAE4100A03223 /* GlobalExHandler.m */,
 				16ABE72806C7512D00815F91 /* History.h */,
 				16ABE72906C7512D00815F91 /* History.m */,
+				68AAC9E508F41CBB0064CDA1 /* PDFImageView.h */,
+				68AAC9E608F41CBB0064CDA1 /* PDFImageView.m */,
+				1CC7C86507396890005CF3AA /* SortableDataSource.h */,
+				1CC7C86607396890005CF3AA /* SortableDataSource.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -672,10 +685,10 @@
 				165C0F4706EF05E000994593 /* SearchTable.m */,
 				168776E907D7C62B0064425C /* SelectList.h */,
 				168776EA07D7C62B0064425C /* SelectList.m */,
+				68AAC9EB08F41CD80064CDA1 /* VignettesController.h */,
+				68AAC9EC08F41CD80064CDA1 /* VignettesController.m */,
 				163B2CBA06ED1A990035FFD5 /* WSBrowser.h */,
 				163B2CBB06ED1A990035FFD5 /* WSBrowser.m */,
-				68C7CA8908F1D6E500E3E5BF /* VignettesController.h */,
-				68C7CA8A08F1D6E500E3E5BF /* VignettesController.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -713,7 +726,7 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */,
-				D4B55F7C08F4716F001DD9E6 /* RMacOSX-FAQ.html */,
+				1602BB2E0719702800805588 /* RMacOSX-FAQ.html */,
 				16DB0E89072E5CFA00380720 /* COPYRIGHTS */,
 				1601EFCF06CBBEC700BF60D4 /* NEWS */,
 				1601F04606CBC0EF00BF60D4 /* INSTALL */,
@@ -740,7 +753,7 @@
 				687B4E350794130800074042 /* RConsole.nib */,
 				163B0CF706CE58F000A380BE /* RDocument.nib */,
 				1633F03D06E630B900225AA9 /* RQuartz.nib */,
-				68C7CA8208F1D48800E3E5BF /* Vignettes.nib */,
+				68AAC9E008F41CA10064CDA1 /* Vignettes.nib */,
 				6853563B07B0285E00FDAAC3 /* PrefPanes */,
 				162B6A0406CD770C00C0B085 /* images */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -860,9 +873,9 @@
 				68756EDA07FDDAEF0014821A /* REditorToolbar.h in Headers */,
 				6807E645080EAE4100A03223 /* GlobalExHandler.h in Headers */,
 				68DEAEE8083271CA00C5D76C /* RTextView.h in Headers */,
-				68C7CA8B08F1D6E500E3E5BF /* VignettesController.h in Headers */,
-				6809F02008F2438F007E2F79 /* PDFImageView.h in Headers */,
-				6809F03908F2474F007E2F79 /* DraggableScrollView.h in Headers */,
+				68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */,
+				68AAC9E908F41CBB0064CDA1 /* PDFImageView.h in Headers */,
+				68AAC9ED08F41CD80064CDA1 /* VignettesController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -871,7 +884,7 @@
 /* Begin PBXNativeTarget section */
 		1C34E60F06F9EC7D00211ACC /* sush */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68BEF8C40867221A009B4C4A /* Build configuration list for PBXNativeTarget "sush" */;
+			buildConfigurationList = 68B62A1C0969E4EB00355F33 /* Build configuration list for PBXNativeTarget "sush" */;
 			buildPhases = (
 				1C34E60D06F9EC7D00211ACC /* Sources */,
 				1C34E60E06F9EC7D00211ACC /* Frameworks */,
@@ -900,9 +913,9 @@
 		};
 		8D1107260486CEB800E47090 /* R */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68BEF8CE0867221B009B4C4A /* Build configuration list for PBXNativeTarget "R" */;
+			buildConfigurationList = 68B62A260969E4EB00355F33 /* Build configuration list for PBXNativeTarget "R" */;
 			buildPhases = (
-				68416AA0088D9A5000756EE2 /* ShellScript */,
+				6839A11E0969E82B0084E92F /* ShellScript */,
 				8D1107270486CEB800E47090 /* Headers */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -955,7 +968,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 68BEF8D30867221B009B4C4A /* Build configuration list for PBXProject "R" */;
+			buildConfigurationList = 68B62A2B0969E4EB00355F33 /* Build configuration list for PBXProject "R" */;
 			buildSettings = {
 			};
 			buildStyles = (
@@ -974,6 +987,7 @@
 				fr,
 				jp,
 				ja,
+				nl,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* R */;
 			projectDirPath = "";
@@ -1021,6 +1035,7 @@
 				1611E322070B86850025F66D /* R.scriptSuite in Resources */,
 				1611E324070B86990025F66D /* R.scriptTerminology in Resources */,
 				1651D9650715EA5D00FB6962 /* colors.tiff in Resources */,
+				1602BB300719702800805588 /* RMacOSX-FAQ.html in Resources */,
 				1602BB310719702800805588 /* RMacOSX-FAQ.texi in Resources */,
 				F8E27FF3071F021700BA437C /* emptyDoc.tiff in Resources */,
 				F8E28001071F030200BA437C /* RDoc.tiff in Resources */,
@@ -1042,8 +1057,7 @@
 				686967DB07981764002A1932 /* Localizable.strings in Resources */,
 				684D008907BD72F10047EEF6 /* SyntaxColorsPrefPane.nib in Resources */,
 				1C5306EE081F54F600ECECD2 /* history.png in Resources */,
-				68C7CA8408F1D48800E3E5BF /* Vignettes.nib in Resources */,
-				D4B55F7D08F4716F001DD9E6 /* RMacOSX-FAQ.html in Resources */,
+				68AAC9E208F41CA10064CDA1 /* Vignettes.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1052,7 +1066,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		1C54CDAD0719742A00176826 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
@@ -1062,22 +1076,18 @@
 			outputPaths = (
 				"docs/RMacOSX-FAQ.html",
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# shell script goes here\n#cd docs\n#makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
+			shellScript = "# shell script goes here\ncd docs\nmakeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
 		};
-		68416AA0088D9A5000756EE2 /* ShellScript */ = {
+		6839A11E0969E82B0084E92F /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				Info.src.plist,
-				English.lproj/InfoPlist.src.strings,
 			);
 			outputPaths = (
-				Info.plist,
-				English.lproj/InfoPlist.strings,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1144,9 +1154,9 @@
 				68756EDB07FDDAEF0014821A /* REditorToolbar.m in Sources */,
 				6807E646080EAE4100A03223 /* GlobalExHandler.m in Sources */,
 				68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */,
-				68C7CA8C08F1D6E500E3E5BF /* VignettesController.m in Sources */,
-				6809F02108F2438F007E2F79 /* PDFImageView.m in Sources */,
-				6809F03A08F2474F007E2F79 /* DraggableScrollView.m in Sources */,
+				68AAC9E808F41CBB0064CDA1 /* DraggableScrollView.m in Sources */,
+				68AAC9EA08F41CBB0064CDA1 /* PDFImageView.m in Sources */,
+				68AAC9EE08F41CD80064CDA1 /* VignettesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1195,6 +1205,7 @@
 			children = (
 				1633F03E06E630B900225AA9 /* English */,
 				1638AFAF07D2247500BEE02D /* ja */,
+				68DDE1DD09697ACC00BC6883 /* nl */,
 			);
 			name = RQuartz.nib;
 			sourceTree = "<group>";
@@ -1204,6 +1215,7 @@
 			children = (
 				163B0CF806CE58F000A380BE /* English */,
 				1638AFAE07D2247500BEE02D /* ja */,
+				68DDE1DA09697AC600BC6883 /* nl */,
 			);
 			name = RDocument.nib;
 			sourceTree = "<group>";
@@ -1216,6 +1228,7 @@
 				16B66A5607B6EB260053EDB2 /* it */,
 				161034F707D2232400677899 /* ja */,
 				681D40BE081D653B0019CB4C /* fr */,
+				68DDE21309697C6100BC6883 /* nl */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -1228,6 +1241,7 @@
 				68C0CFD407BBDAF300EA34B7 /* it */,
 				16151A5A07CD2B660018B619 /* fr */,
 				161034F607D2232400677899 /* ja */,
+				68DDE1EF09697B0C00BC6883 /* nl */,
 			);
 			name = QuartzPrefPane.nib;
 			sourceTree = "<group>";
@@ -1240,6 +1254,7 @@
 				68C30D4007B80D7B0020A506 /* it */,
 				16151A5907CD2B5B0018B619 /* fr */,
 				161034F507D2232400677899 /* ja */,
+				68DDE1EC09697B0400BC6883 /* nl */,
 			);
 			name = MiscPrefPane.nib;
 			sourceTree = "<group>";
@@ -1252,6 +1267,7 @@
 				68C30D3D07B80D6C0020A506 /* it */,
 				16151A5707CD2B430018B619 /* fr */,
 				161034F307D2232400677899 /* ja */,
+				68DDE1E609697AF200BC6883 /* nl */,
 			);
 			name = ColorsPrefPane.nib;
 			sourceTree = "<group>";
@@ -1264,6 +1280,7 @@
 				68C30D3A07B80D510020A506 /* it */,
 				16151A5507CD2B2B0018B619 /* fr */,
 				161034F107D2232400677899 /* ja */,
+				68DDE1D409697AAE00BC6883 /* nl */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -1276,6 +1293,7 @@
 				684D008B07BD731D0047EEF6 /* it */,
 				16151A5607CD2B3B0018B619 /* fr */,
 				161034F207D2232400677899 /* ja */,
+				68DDE1E309697AEA00BC6883 /* nl */,
 			);
 			name = SyntaxColorsPrefPane.nib;
 			sourceTree = "<group>";
@@ -1287,6 +1305,7 @@
 				686967E7079818C1002A1932 /* de */,
 				16B66A3107B6E1F10053EDB2 /* it */,
 				161034F007D2232400677899 /* ja */,
+				68DDE1D109697A3F00BC6883 /* nl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1296,14 +1315,17 @@
 			children = (
 				687B4E360794130800074042 /* English */,
 				1638AFAD07D2247500BEE02D /* ja */,
+				68DDE1D709697ABE00BC6883 /* nl */,
 			);
 			name = RConsole.nib;
 			sourceTree = "<group>";
 		};
-		68C7CA8208F1D48800E3E5BF /* Vignettes.nib */ = {
+		68AAC9E008F41CA10064CDA1 /* Vignettes.nib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				68C7CA8308F1D48800E3E5BF /* English */,
+				68AAC9E108F41CA10064CDA1 /* English */,
+				68FC52F508F45C2E0061413F /* de */,
+				68DDE1E009697AD300BC6883 /* nl */,
 			);
 			name = Vignettes.nib;
 			sourceTree = "<group>";
@@ -1316,6 +1338,7 @@
 				1659C15A07BBA5040076DC4F /* it */,
 				16151A5807CD2B500018B619 /* fr */,
 				161034F407D2232400677899 /* ja */,
+				68DDE1E909697AFC00BC6883 /* nl */,
 			);
 			name = EditorPrefPane.nib;
 			sourceTree = "<group>";
@@ -1323,7 +1346,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		68BEF8C50867221A009B4C4A /* Development */ = {
+		68B62A1D0969E4EB00355F33 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1353,7 +1376,7 @@
 			};
 			name = Development;
 		};
-		68BEF8C60867221A009B4C4A /* Deployment */ = {
+		68B62A1E0969E4EB00355F33 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1374,7 +1397,7 @@
 			};
 			name = Deployment;
 		};
-		68BEF8C70867221A009B4C4A /* Debug */ = {
+		68B62A1F0969E4EB00355F33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1393,7 +1416,7 @@
 			};
 			name = Debug;
 		};
-		68BEF8C80867221A009B4C4A /* Default */ = {
+		68B62A200969E4EB00355F33 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -1410,7 +1433,7 @@
 			};
 			name = Default;
 		};
-		68BEF8CA0867221B009B4C4A /* Development */ = {
+		68B62A220969E4EB00355F33 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1439,7 +1462,7 @@
 			};
 			name = Development;
 		};
-		68BEF8CB0867221B009B4C4A /* Deployment */ = {
+		68B62A230969E4EB00355F33 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1459,7 +1482,7 @@
 			};
 			name = Deployment;
 		};
-		68BEF8CC0867221B009B4C4A /* Debug */ = {
+		68B62A240969E4EB00355F33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1477,7 +1500,7 @@
 			};
 			name = Debug;
 		};
-		68BEF8CD0867221B009B4C4A /* Default */ = {
+		68B62A250969E4EB00355F33 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				OTHER_CFLAGS = "";
@@ -1493,7 +1516,7 @@
 			};
 			name = Default;
 		};
-		68BEF8CF0867221B009B4C4A /* Development */ = {
+		68B62A270969E4EB00355F33 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1538,7 +1561,7 @@
 			};
 			name = Development;
 		};
-		68BEF8D00867221B009B4C4A /* Deployment */ = {
+		68B62A280969E4EB00355F33 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1576,7 +1599,7 @@
 			};
 			name = Deployment;
 		};
-		68BEF8D10867221B009B4C4A /* Debug */ = {
+		68B62A290969E4EB00355F33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -1612,7 +1635,7 @@
 			};
 			name = Debug;
 		};
-		68BEF8D20867221B009B4C4A /* Default */ = {
+		68B62A2A0969E4EB00355F33 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -1646,25 +1669,25 @@
 			};
 			name = Default;
 		};
-		68BEF8D40867221B009B4C4A /* Development */ = {
+		68B62A2C0969E4EB00355F33 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Development;
 		};
-		68BEF8D50867221B009B4C4A /* Deployment */ = {
+		68B62A2D0969E4EB00355F33 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Deployment;
 		};
-		68BEF8D60867221B009B4C4A /* Debug */ = {
+		68B62A2E0969E4EB00355F33 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		68BEF8D70867221B009B4C4A /* Default */ = {
+		68B62A2F0969E4EB00355F33 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -1673,46 +1696,46 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		68BEF8C40867221A009B4C4A /* Build configuration list for PBXNativeTarget "sush" */ = {
+		68B62A1C0969E4EB00355F33 /* Build configuration list for PBXNativeTarget "sush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68BEF8C50867221A009B4C4A /* Development */,
-				68BEF8C60867221A009B4C4A /* Deployment */,
-				68BEF8C70867221A009B4C4A /* Debug */,
-				68BEF8C80867221A009B4C4A /* Default */,
+				68B62A1D0969E4EB00355F33 /* Development */,
+				68B62A1E0969E4EB00355F33 /* Deployment */,
+				68B62A1F0969E4EB00355F33 /* Debug */,
+				68B62A200969E4EB00355F33 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		68BEF8C90867221B009B4C4A /* Build configuration list for PBXAggregateTarget "Docs" */ = {
+		68B62A210969E4EB00355F33 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68BEF8CA0867221B009B4C4A /* Development */,
-				68BEF8CB0867221B009B4C4A /* Deployment */,
-				68BEF8CC0867221B009B4C4A /* Debug */,
-				68BEF8CD0867221B009B4C4A /* Default */,
+				68B62A220969E4EB00355F33 /* Development */,
+				68B62A230969E4EB00355F33 /* Deployment */,
+				68B62A240969E4EB00355F33 /* Debug */,
+				68B62A250969E4EB00355F33 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		68BEF8CE0867221B009B4C4A /* Build configuration list for PBXNativeTarget "R" */ = {
+		68B62A260969E4EB00355F33 /* Build configuration list for PBXNativeTarget "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68BEF8CF0867221B009B4C4A /* Development */,
-				68BEF8D00867221B009B4C4A /* Deployment */,
-				68BEF8D10867221B009B4C4A /* Debug */,
-				68BEF8D20867221B009B4C4A /* Default */,
+				68B62A270969E4EB00355F33 /* Development */,
+				68B62A280969E4EB00355F33 /* Deployment */,
+				68B62A290969E4EB00355F33 /* Debug */,
+				68B62A2A0969E4EB00355F33 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		68BEF8D30867221B009B4C4A /* Build configuration list for PBXProject "R" */ = {
+		68B62A2B0969E4EB00355F33 /* Build configuration list for PBXProject "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68BEF8D40867221B009B4C4A /* Development */,
-				68BEF8D50867221B009B4C4A /* Deployment */,
-				68BEF8D60867221B009B4C4A /* Debug */,
-				68BEF8D70867221B009B4C4A /* Default */,
+				68B62A2C0969E4EB00355F33 /* Development */,
+				68B62A2D0969E4EB00355F33 /* Deployment */,
+				68B62A2E0969E4EB00355F33 /* Debug */,
+				68B62A2F0969E4EB00355F33 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
