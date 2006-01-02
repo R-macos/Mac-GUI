@@ -1,0 +1,215 @@
+{
+    IBClasses = (
+        {
+            CLASS = AMPreferenceWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {delegate = id; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {loadRData = id; showHelp = id; }; 
+            CLASS = DataManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {DataManagerWindow = id; RDataSource = NSTableView; dataInfoView = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                activateQuartzDevice = id; 
+                executeSelection = id; 
+                goToLine = id; 
+                sourceCurrentDocument = id; 
+                sourceFile = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                changeSearchType = id; 
+                printDocument = id; 
+                runHelpSearch = id; 
+                showMainHelp = id; 
+                showRFAQ = id; 
+                whatsNew = id; 
+            }; 
+            CLASS = HelpManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                HelpView = WebView; 
+                back = NSButton; 
+                forward = NSButton; 
+                helpWindow = NSWindow; 
+                searchField = NSSearchField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = MyWebView; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = PackageEntry; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                installSelected = id; 
+                reloadPIData = id; 
+                reloadURL = id; 
+                runPkgSearch = id; 
+                selectOldPackages = id; 
+                setFormat = id; 
+                setLocation = id; 
+                setURL = id; 
+                toggleShowInstalled = id; 
+                updateAll = id; 
+            }; 
+            CLASS = PackageInstaller; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                busyIndicator = NSProgressIndicator; 
+                formatCheckBox = NSButton; 
+                getListButton = NSButton; 
+                installButton = NSButton; 
+                locationMatrix = NSMatrix; 
+                pkgDataSource = NSTableView; 
+                pkgScrollView = NSScrollView; 
+                pkgSearchField = NSSearchField; 
+                pkgSearchMenu = NSMenu; 
+                pkgWindow = id; 
+                repositoryButton = NSPopUpButton; 
+                updateAllButton = NSButton; 
+                urlTextField = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {reloadPMData = id; showInfo = id; }; 
+            CLASS = PackageManager; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                PackageInfoView = id; 
+                PackageManagerWindow = id; 
+                packageDataSource = NSTableView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {showPrefsWindow = id; sortByAlphabet = id; sortByCategory = id; }; 
+            CLASS = PrefWindowController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = AMPreferenceWindowController; 
+        }, 
+        {
+            ACTIONS = {
+                breakR = id; 
+                changeFontSize = id; 
+                checkForUpdates = id; 
+                clearWorkSpace = id; 
+                doClearHistory = id; 
+                doLoadHistory = id; 
+                doSaveHistory = id; 
+                flushconsole = id; 
+                fontSizeBigger = id; 
+                fontSizeSmaller = id; 
+                getWorkingDir = id; 
+                historyDeleteEntry = id; 
+                historyDoubleClick = id; 
+                installFromBinary = id; 
+                installFromDir = id; 
+                installFromSource = id; 
+                kickstart = id; 
+                loadWorkSpace = id; 
+                loadWorkSpaceFile = id; 
+                makeConsoleKey = id; 
+                newDocument = id; 
+                newQuartzDevice = id; 
+                openColors = id; 
+                openDocument = id; 
+                otherEventLoops = id; 
+                performHelpSearch = id; 
+                quitR = id; 
+                resetWorkingDir = id; 
+                runX11 = id; 
+                saveWorkSpace = id; 
+                saveWorkSpaceFile = id; 
+                setDefaultColors = id; 
+                setWorkingDir = id; 
+                showVignettes = id; 
+                showWorkSpace = id; 
+                showWorkingDir = id; 
+                sourceFile = id; 
+                sourceOrLoadFile = id; 
+                toggleAuthentication = id; 
+                toggleDataManager = id; 
+                toggleHistory = id; 
+                togglePackageInstaller = id; 
+                togglePackageManager = id; 
+                toggleWSBrowser = id; 
+            }; 
+            CLASS = RController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                HistoryDrawer = NSDrawer; 
+                RConsoleWindow = NSWindow; 
+                RTextView = NSTextView; 
+                WDirView = NSTextField; 
+                clearHistory = NSButton; 
+                deleteEntry = NSButton; 
+                fontSizeField = NSTextField; 
+                fontSizeStepper = NSStepper; 
+                fontSizeView = NSView; 
+                helpSearch = NSSearchField; 
+                historyView = NSTableView; 
+                loadHistory = NSButton; 
+                prefsCtrl = PrefWindowController; 
+                progressWheel = NSProgressIndicator; 
+                saveHistory = NSButton; 
+                statusLine = NSTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = RDocumentController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSDocumentController; 
+        }, 
+        {
+            CLASS = REditor; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dataWindow = NSWindow; editorSource = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = RTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
+        {
+            CLASS = RToolbar; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {ConsoleWindow = NSWindow; RToolbarView = NSView; }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {showInfo = id; }; 
+            CLASS = SearchTable; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {TopicHelpView = id; searchTableWindow = id; topicsDataSource = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {cancelSelection = id; returnSelected = id; }; 
+            CLASS = SelectList; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                SelectListWindow = id; 
+                cancelButton = NSButton; 
+                listDataSource = NSTableView; 
+                okButton = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {reloadWSBData = id; }; 
+            CLASS = WSBrowser; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {WSBDataSource = NSOutlineView; WSBWindow = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

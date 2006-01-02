@@ -1,0 +1,24 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = RConsoleController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {console = NSTextView; }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {
+                executeSelection = id; 
+                printDocument = id; 
+                resetBackgroundColor = id; 
+                sourceCurrentDocument = id; 
+            }; 
+            CLASS = RDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {textView = NSTextView; window = NSWindow; }; 
+            SUPERCLASS = NSDocument; 
+        }
+    ); 
+    IBVersion = 1; 
+}

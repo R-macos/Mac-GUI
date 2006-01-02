@@ -1,0 +1,23 @@
+{
+    IBClasses = (
+        {CLASS = DraggableScrollView; LANGUAGE = ObjC; SUPERCLASS = NSScrollView; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = PDFImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
+        {
+            ACTIONS = {openVignette = id; openVignetteSource = id; search = id; }; 
+            CLASS = VignettesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                filterField = NSSearchField; 
+                openButton = NSButton; 
+                openSourceButton = NSButton; 
+                pdfDrawer = NSDrawer; 
+                pdfView = PDFImageView; 
+                tableView = NSTableView; 
+                window = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
