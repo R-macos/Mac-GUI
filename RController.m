@@ -311,10 +311,11 @@ static RController* sharedRController;
 		else {
 			CFLocaleRef lr = CFLocaleCopyCurrent();
 			CFStringRef ls = CFLocaleGetIdentifier(lr);
+			if (ls) SLog(@"   CFLocaleGetIdentifier=\"%@\"", ls);
 			strncpy(cloc, [((NSString*)ls) UTF8String],63);
 			CFRelease(lr);
 		}
-		
+			
 		if (!strchr(cloc,'.'))
 			strcat(cloc,".UTF-8");
 		setenv("LANG", cloc, 1);
