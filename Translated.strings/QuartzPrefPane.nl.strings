@@ -1,0 +1,62 @@
+/* NSTextField (12) : <title:12> (oid:50) */
+"12" = "12";
+
+/* NSTextField (5.0) : <title:5.0> (oid:28) */
+"5.0" = "5.0";
+
+/* NSMenuItem : <title:Bottom Left> (oid:31) */
+"Bottom Left" = "Linksonder";
+
+/* NSMenuItem : <title:Bottom Right> (oid:32) */
+"Bottom Right" = "Rechtsonder";
+
+/* NSBox (Box) : <title:Box> (oid:45) */
+"Box" = "Vak";
+
+/* NSMenuItem : <title:Centered> (oid:37) */
+"Centered" = "Gecentreerd";
+
+/* NSButton (Change) : <title:Change> (oid:48) */
+"Change" = "Wijzig";
+
+/* NSTextField (Location :) : <title:Location
+:> (oid:38) */
+"Location\n:" = "Locatie\n:";
+
+/* NSTextField (Note: Change and press return) : <title:Note: Change and press return> (oid:71) */
+"Note: Change and press return" = "Opm.: Wijzig en toets enter";
+
+/* NSMenu : <title:OtherViews> (oid:35) */
+"OtherViews" = "Andere weergave";
+
+/* NSButton (Override R Quartz width/height parameters) : <title:Override R Quartz width/height parameters> (oid:22) */
+"Override R Quartz width/height parameters" = "Negeer R Quartz hoogte/breedte-instellingen";
+
+/* NSButton (Restore defaults) : <title:Restore defaults> (oid:51) */
+"Restore defaults" = "Herstel standaardinstellingen";
+
+/* NSTextField (System Font Text) : <title:System Font Text> (oid:49) */
+"System Font Text" = "Systeemletertype";
+
+/* NSMenuItem : <title:Top Left> (oid:36) */
+"Top Left" = "Linksboven";
+
+/* NSMenuItem : <title:Top Right> (oid:34) */
+"Top Right" = "Rechtsboven";
+
+/* NSTextField (font family:) : <title:font family:> (oid:46) */
+"font family:" = "lettertypefamilie:";
+
+/* NSTextField (font point size:  :) : <title:font point size:
+
+:> (oid:47) */
+"font point size:\n\n:" = "lettertypegrootte";
+
+/* NSTextField (height (inches): :) : <title:height (inches):
+:> (oid:30) */
+"height (inches):\n:" = "hoogte (inches):\n:";
+
+/* NSTextField (width (inches): ) : <title:width (inches):
+> (oid:29) */
+"width (inches):\n" = "breedte (inches):\n";
+
