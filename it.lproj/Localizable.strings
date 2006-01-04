@@ -1,5 +1,5 @@
-/* From: RDocumentWinCtrl.m (hintForFunction)
-   From: RController.m (hintForFunction) */
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
 "(arguments lookup is disabled while R is busy)" = "(ricerca argomenti è disabilitata quando R sta elaborando)";
 
 /* From: SearchTable.m (show) */
@@ -38,8 +38,7 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Impossibile trovare help sull'argomento, vuoi estendere la ricerca?";
 
-/* From: RController.m (doLoadHistory)
-   From: RController.m (doSaveHistory) */
+/* From: RController.m (doLoadHistory) */
 "Can't open history file %@" = "Impossibile aprire file history %@";
 
 /* From: RController.m (didCloseAll) */
@@ -161,12 +160,12 @@
 /* From: PackageInstaller.m (installSelected) */
 "Package installation was not successful. Please see the R Console for details." = "L'installazione del pacchetto non è riuscita. Controllare la Console di R per ulteriori dettagli.";
 
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "Installatore Pacchetti";
-
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Package installer" = "Installatore Pacchetti";
+
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (updateAll) */
 "Package update failed" = "Aggiornamento pacchetto non riuscito";
@@ -313,6 +312,9 @@
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "Seleziona Directory Pacchetto";
+
+/* From: PackageInstaller.m (awakeFromNib) */
+"Select packages from R %@" = "Select packages from R %@";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Set as default?" = "Uso come predefinito?";

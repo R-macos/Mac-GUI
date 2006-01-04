@@ -38,8 +38,7 @@
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "ヘルプが見つかりませんでした。検索対象を拡大しますか？";
 
-/* From: RController.m (doLoadHistory)
-   From: RController.m (doSaveHistory) */
+/* From: RController.m (doLoadHistory) */
 "Can't open history file %@" = "履歴ファイル %@ を開けません";
 
 /* From: RController.m (didCloseAll) */
@@ -313,6 +312,9 @@
 
 /* From: RController.m (installFromDir) */
 "Select Package Directory" = "パッケージディレクトリを選択";
+
+/* From: PackageInstaller.m (awakeFromNib) */
+"Select packages from R %@" = "Select packages from R %@";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Set as default?" = "デフォルトに設定しますか?";

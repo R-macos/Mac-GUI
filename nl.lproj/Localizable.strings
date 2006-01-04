@@ -1,6 +1,5 @@
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
-
 "(arguments lookup is disabled while R is busy)" = "(het opzoeken van argumenten kan niet als R bezig is)";
 
 /* From: SearchTable.m (show) */
@@ -77,7 +76,6 @@
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-
 "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Het is momenteel niet mogelijk om binaire paketten van server te installeren als root.\nGelieve de CRAN binaire versie van R te gebruiken om administrators toe te laten systeem-wijde instalaties uit te voeren zonder root te worden. U kan ook de command-line versie van R als root gebruiken of de paketten van lokale files installeren.";
 
 /* From: PackageInstaller.m (checkOptions) */
@@ -121,7 +119,6 @@
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
-
 "Invalid Repository URL" = "Ongeldige Repository URL";
 
 /* From: PackageInstaller.m (checkOptions) */
@@ -165,7 +162,6 @@
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-
 "Package installer" = "Pakket-installatieprogramma";
 
 /* From: PackageInstaller.m (installSelected) */
@@ -182,7 +178,6 @@
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
-
 "Please specify a valid URL first." = "Gelieve een geldige URL op te geven.";
 
 /* Editor preference group */
@@ -307,7 +302,6 @@
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-
 "Select Installation Directory" = "Selecteer installatiemap";
 
 /* From: REngine/Rcallbacks.m (validateToolbarItem) */
@@ -336,7 +330,6 @@
 
 /* From: PackageInstaller.m (toggleShowInstalled)
    From: AMPrefs/AMPreferenceWindowController.m (toolbar) */
-
 "Show All" = "Toon alle";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
@@ -374,3 +367,4 @@
 
 /* Global string @ */
 "Yes" = "Ja";
+

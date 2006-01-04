@@ -4,8 +4,8 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2005
-@set FAQ-VERSION 2.2-1 @value{FAQ-YEAR}-10-06
-@set REL-VERSION 2.2.0
+@set FAQ-VERSION 2.2-1 @value{FAQ-YEAR}-12-20
+@set REL-VERSION 2.2.1
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -81,7 +81,7 @@ Rob J. Goedman                   @*
 @ifhtml
 @html
 <h2>Frequently Asked Questions on R for Mac OS X</h2>
-<h2>Version @value{FAQ-VERSION}, R.app 1.13</h2>
+<h2>Version @value{FAQ-VERSION}, R.app 1.14</h2>
 <address>Stefano M. Iacus</address>
 <address>Simon Urbanek</address>
 <address>Rob J. Goedman</address>
@@ -183,7 +183,7 @@ At the time of writing the use of gcc 4.0 or higher is discouraged, because of i
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.2.0 @CRAN{} binary comes with GNU Fortran 77 3.4.2 optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran compiler from the list of packages. The @CRAN{} binaries are configured to use gcc 3.3 and the supplied Fortran compiler.
+Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.2.1 @CRAN{} binary comes with GNU Fortran 77 3.4.2 optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran compiler from the list of packages. The @CRAN{} binaries are configured to use gcc 3.3 and the supplied Fortran compiler.
 
 Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations don't work. It is also highly recommended to use compiler with static supporting libraries. Especially for gfortran 4.0 it is highly recommended to remove any dynamic libraries such as @code{libgfortran.dylib} (or force the use of static libraries by setting @code{FLIBS} correspondingly). Failing to do so will produce binaries that fail all checks (see @emph{R-admin} documentation for details - this issue is not Mac-specific).
 
