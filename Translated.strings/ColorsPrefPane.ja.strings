@@ -1,0 +1,27 @@
+/* NSTextField (Background) : <title:Background> (oid:36) */
+"Background" = "背景";
+
+/* NSBox (Colors) : <title:Colors> (oid:26) */
+"Colors" = "色";
+
+/* NSButton (Defaults) : <title:Defaults> (oid:34) */
+"Defaults" = "デフォルト";
+
+/* NSTextField (Input) : <title:Input> (oid:30) */
+"Input" = "入力";
+
+/* NSTextField (Output) : <title:Output> (oid:32) */
+"Output" = "出力";
+
+/* NSTextField (Prompt) : <title:Prompt> (oid:22) */
+"Prompt" = "プロンプト";
+
+/* NSTextField (Stderr) : <title:Stderr> (oid:33) */
+"Stderr" = "Stderr";
+
+/* NSTextField (Stdout) : <title:Stdout> (oid:38) */
+"Stdout" = "Stdout";
+
+/* NSTextField (Transparency :) : <title:Transparency :> (oid:24) */
+"Transparency :" = "透明度 :";
+

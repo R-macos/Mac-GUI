@@ -1,0 +1,62 @@
+/* NSTextField (12) : <title:12> (oid:50) */
+"12" = "12";
+
+/* NSTextField (5.0) : <title:5.0> (oid:28) */
+"5.0" = "5.0";
+
+/* NSMenuItem : <title:Bottom Left> (oid:31) */
+"Bottom Left" = "左下";
+
+/* NSMenuItem : <title:Bottom Right> (oid:32) */
+"Bottom Right" = "右下";
+
+/* NSBox (Box) : <title:Box> (oid:45) */
+"Box" = "ボックス";
+
+/* NSMenuItem : <title:Centered> (oid:37) */
+"Centered" = "中央";
+
+/* NSButton (Change) : <title:Change> (oid:48) */
+"Change" = "変更";
+
+/* NSTextField (Location :) : <title:Location
+:> (oid:38) */
+"Location\n:" = "位置\n:";
+
+/* NSTextField (Note: Change and press return) : <title:Note: Change and press return> (oid:71) */
+"Note: Change and press return" = "注: 変更してリターンを押して下さい";
+
+/* NSMenu : <title:OtherViews> (oid:35) */
+"OtherViews" = "他のビュー";
+
+/* NSButton (Override R Quartz width/height parameters) : <title:Override R Quartz width/height parameters> (oid:22) */
+"Override R Quartz width/height parameters" = "R Quartz の幅/高さパラメータよりも優先する";
+
+/* NSButton (Restore defaults) : <title:Restore defaults> (oid:51) */
+"Restore defaults" = "デフォルトに戻す";
+
+/* NSTextField (System Font Text) : <title:System Font Text> (oid:49) */
+"System Font Text" = "システムフォントテキスト";
+
+/* NSMenuItem : <title:Top Left> (oid:36) */
+"Top Left" = "左上";
+
+/* NSMenuItem : <title:Top Right> (oid:34) */
+"Top Right" = "右上";
+
+/* NSTextField (font family:) : <title:font family:> (oid:46) */
+"font family:" = "フォントファミリ:";
+
+/* NSTextField (font point size:  :) : <title:font point size:
+
+:> (oid:47) */
+"font point size:\n\n:" = "サイズ(ポイント):\n\n:";
+
+/* NSTextField (height (inches): :) : <title:height (inches):
+:> (oid:30) */
+"height (inches):\n:" = "高さ (インチ):\n:";
+
+/* NSTextField (width (inches): ) : <title:width (inches):
+> (oid:29) */
+"width (inches):\n" = "幅 (インチ):\n";
+

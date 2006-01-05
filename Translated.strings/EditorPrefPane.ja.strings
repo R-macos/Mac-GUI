@@ -1,0 +1,70 @@
+/* NSTextField ((Valid range is between 0.1 and 0.8 sec.)) : <title:(Valid range is between 0.1 and 0.8 sec.)> (oid:103) */
+"(Valid range is between 0.1 and 0.8 sec.)" = "(有効範囲は0.1-0.8秒です)";
+
+/* NSTextField ((Wrapping and padding for new windows only)) : <title:(Wrapping and padding for new windows only)> (oid:117) */
+"(Wrapping and padding for new windows only)" = "(ラッピング/パディングは新規ウィンドウのみ)";
+
+/* NSTextField (0.2) : <title:0.2> (oid:44) */
+"0.2" = "0.2";
+
+/* NSTextField (16.0) : <title:16.0> (oid:124) */
+"16.0" = "16.0";
+
+/* NSTextField (5.0) : <title:5.0> (oid:127) */
+"5.0" = "5.0";
+
+/* NSButtonCell (Application) : <title:Application> (oid:49) */
+"Application" = "アプリケーション";
+
+/* NSButtonCell (Built-in editor) : <title:Built-in editor> (oid:96) */
+"Built-in editor" = "内蔵エディタ";
+
+/* NSBox (Built-in editor preferences) : <title:Built-in editor preferences> (oid:35) */
+"Built-in editor preferences" = "内蔵エディタの設定";
+
+/* NSButtonCell (Command) : <title:Command> (oid:47) */
+"Command" = "コマンド";
+
+/* NSTextField (Editor: ) : <title:Editor:
+> (oid:46) */
+"Editor:\n" = "Editor:\n";
+
+/* NSButtonCell (External Editor) : <title:External Editor> (oid:97) */
+"External Editor" = "外部エディタ";
+
+/* NSBox (External editor settings) : <title:External editor settings> (oid:37) */
+"External editor settings" = "外部エディタの設定";
+
+/* NSTextField (Highlight interval:) : <title:Highlight interval:> (oid:43) */
+"Highlight interval:" = "ハイライトの間隔:";
+
+/* NSTextField (Margin width:) : <title:Margin width:> (oid:125) */
+"Margin width:" = "マージンの幅:";
+
+/* NSButton (New editor) : <title:New editor> (oid:105) */
+"New editor" = "新規エディタ";
+
+/* NSTextField (Note: Command is executed in a shell) : <title:Note: Command is executed in a shell> (oid:104) */
+"Note: Command is executed in a shell" = "注: コマンドはシェル内で実行されます";
+
+/* NSButton (Show brace highlighting) : <title:Show brace highlighting> (oid:40) */
+"Show brace highlighting" = "対応する括弧をハイライト";
+
+/* NSButton (Show function hints) : <title:Show function hints> (oid:138) */
+"Show function hints" = "関数ヒントを表示";
+
+/* NSButton (Show line numbers) : <title:Show line numbers> (oid:42) */
+"Show line numbers" = "行番号の表示";
+
+/* NSButton (Show syntax coloring) : <title:Show syntax coloring> (oid:39) */
+"Show syntax coloring" = "構文を色分け";
+
+/* NSTextField (SubEthaEdit) : <title:SubEthaEdit> (oid:115) */
+"SubEthaEdit" = "SubEthaEdit";
+
+/* NSTextField (Text padding:) : <title:Text padding:> (oid:126) */
+"Text padding:" = "テキストのパディング:";
+
+/* NSButton (Wrap lines) : <title:Wrap lines> (oid:123) */
+"Wrap lines" = "行をラップする";
+

@@ -1,0 +1,45 @@
+/* NSMenuItem : <title:<functions>> (oid:45) */
+"<functions>" = "<関数>";
+
+/* NSBox (Box) : <title:Box> (oid:87) */
+"Box" = "Box";
+
+/* NSButton (Cancel) : <title:Cancel> (oid:70) */
+"Cancel" = "キャンセル";
+
+/* NSMenuItem : <title:Clear> (oid:83) */
+"Clear" = "消去";
+
+/* NSMenuItem : <title:Empty> (oid:82) */
+"Empty" = "空";
+
+/* NSMenuItem : <title:Exact Search> (oid:59) */
+"Exact Search" = "完全一致";
+
+/* NSMenuItem : <title:Fuzzy Search> (oid:60) */
+"Fuzzy Search" = "部分一致";
+
+/* NSTextField (Go to line:) : <title:Go to line:> (oid:72) */
+"Go to line:" = "指定行へ:";
+
+/* NSSearchField (0) : <title:Help search> (oid:36) */
+"Help search" = "ヘルプ検索";
+
+/* NSMenuItem : <title:Item> (oid:81) */
+"Item" = "項目";
+
+/* NSMenu : <title:Menu> (oid:58) */
+"Menu" = "メニュー";
+
+/* NSButton (OK) : <title:OK> (oid:71) */
+"OK" = "OK";
+
+/* NSMenu : <title:OtherViews> (oid:44) */
+"OtherViews" = "他のビュー";
+
+/* NSPanel (Panel) : <title:Panel> (oid:68) */
+"Panel" = "パネル";
+
+/* NSWindow (Window) : <title:Window> (oid:5) */
+"Window" = "ウィンドウ";
+

@@ -1,6 +1,6 @@
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
-"(arguments lookup is disabled while R is busy)" = "(arguments lookup is disabled while R is busy)";
+"(arguments lookup is disabled while R is busy)" = "(引数検索はRがビジーの間は無効になります)";
 
 /* From: SearchTable.m (show) */
 "<unknown>" = "<不明>";
@@ -76,7 +76,7 @@
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files.";
+"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "現在のところ, リモートリポジトリからroot権限でバイナリパッケージをインストールすることはできません. \n管理者ユーザで, rootにならずにシステム全体向けのパッケージをインストールするためには, CRANのRバイナリを使用して下さい. あるいは, root権限でコマンドライン版のRを使ったり, ローカルファイルからパッケージをインストールする方法もあります. ";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "以後のセッションのために選択されたミラーを記憶しますか?";
@@ -94,7 +94,7 @@
 "Edit the selected object" = "選択されたオブジェクトを編集";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Fetching Package List Failed" = "Fetching Package List Failed";
+"Fetching Package List Failed" = "パッケージ一覧の読み込みに失敗しました";
 
 /* From: RController.m (toolbar) */
 "Font Size" = "フォントサイズ";
@@ -109,17 +109,17 @@
 "History" = "履歴";
 
 /* From: PackageInstaller.m (setURL) */
-"Install Selected" = "Install Selected";
+"Install Selected" = "選択をインストール";
 
 /* From: PackageInstaller.m (setURL) */
-"Install…" = "Install…";
+"Install…" = "インストール...";
 
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "実行中の処理を中断";
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
-"Invalid Repository URL" = "Invalid Repository URL";
+"Invalid Repository URL" = "リポジトリURLが不正です";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Never" = "決してしない";
@@ -134,10 +134,10 @@
 "No" = "いいえ";
 
 /* From: PackageInstaller.m (checkOptions) */
-"No CRAN Mirror Found" = "No CRAN Mirror Found";
+"No CRAN Mirror Found" = "CRANミラーが見つかりません";
 
 /* From: PackageInstaller.m (installSelected) */
-"No packages selected, nothing to do." = "No packages selected, nothing to do.";
+"No packages selected, nothing to do." = "パッケージが選択されていないので, 何も実行しません.";
 
 /* From: PackageInstaller.m (checkOptions) */
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "正しいCRANミラーが選択されていません.\nCRANオプションを正しいミラー先URLに設定しなければ, CRANパッケージをインストールすることはできません.";
@@ -155,10 +155,10 @@
 "Open In Editor" = "エディタで開く";
 
 /* From: PackageInstaller.m (installSelected) */
-"Package installation failed" = "Package installation failed";
+"Package installation failed" = "パッケージのインストールに失敗しました";
 
 /* From: PackageInstaller.m (installSelected) */
-"Package installation was not successful. Please see the R Console for details." = "Package installation was not successful. Please see the R Console for details.";
+"Package installation was not successful. Please see the R Console for details." = "パッケージのインストールに失敗しました. 詳細についてはRコンソールを参照して下さい.";
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
@@ -168,13 +168,13 @@
 "Package Installer" = "パッケージインストーラ";
 
 /* From: PackageInstaller.m (updateAll) */
-"Package update failed" = "Package update failed";
+"Package update failed" = "パッケージのアップデートに失敗しました";
 
 /* From: PackageInstaller.m (updateAll) */
-"Package update was not successful. Please see the R Console for details." = "Package update was not successful. Please see the R Console for details.";
+"Package update was not successful. Please see the R Console for details." = "パッケージのアップデートに失敗しました. 詳細についてはRコンソールを参照して下さい.";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Please consult  R Console output for details." = "Please consult  R Console output for details.";
+"Please consult  R Console output for details." = "詳細についてはRコンソールを参照して下さい.";
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
@@ -314,7 +314,7 @@
 "Select Package Directory" = "パッケージディレクトリを選択";
 
 /* From: PackageInstaller.m (awakeFromNib) */
-"Select packages from R %@" = "Select packages from R %@";
+"Select packages from R %@" = "R %@ からパッケージを選択";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Set as default?" = "デフォルトに設定しますか?";
@@ -333,7 +333,7 @@
 "Show All" = "すべてを表示";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
-"Show Installed Only" = "Show Installed Only";
+"Show Installed Only" = "インストール済みのみを表示";
 
 /* From: RController.m (toolbar) */
 "Show/Hide R command history" = "Rコマンドの履歴を表示/非表示";

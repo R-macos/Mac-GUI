@@ -1,0 +1,560 @@
+/* NSTextField ( ) : <title:
+> (oid:1103) */
+"\n" = "\n";
+
+/* NSTextField (11) : <title:11> (oid:396) */
+"11" = "11";
+
+/* NSButton (<) : <title:<> (oid:988) */
+"<" = "<";
+
+/* NSButton (< Back) : <title:< Back> (oid:982) */
+"< Back" = "< 戻る";
+
+/* NSButton (>) : <title:>> (oid:989) */
+">" = ">";
+
+/* NSMenuItem : <title:About R> (oid:58) */
+"About R" = "Rについて";
+
+/* NSMenuItem : <title:Activate Quartz Device Window> (oid:312) */
+"Activate Quartz Device Window" = "選択したQuartzデバイスをアクティブ化";
+
+/* NSMenuItem : <title:Align Left> (oid:834) */
+"Align Left" = "左揃え";
+
+/* NSMenuItem : <title:Align Right> (oid:858) */
+"Align Right" = "右揃え";
+
+/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
+"At System Level (in R framework)" = "システム (Rフレームワーク内)";
+
+/* NSButtonCell (At User Level) : <title:At User Level> (oid:575) */
+"At User Level" = "ユーザエリア";
+
+/* NSButton (<) : <title:Back> (oid:988) */
+"Back" = "戻る";
+
+/* NSMenuItem : <title:Baseline> (oid:844) */
+"Baseline" = "ベースライン";
+
+/* NSMenuItem : <title:Bigger> (oid:830) */
+"Bigger" = "大きく";
+
+/* NSButton (Binary Format Packages) : <title:Binary Format Packages> (oid:565) */
+"Binary Format Packages" = "バイナリ形式パッケージ";
+
+/* NSMenuItem : <title:BioConductor (binaries)> (oid:542) */
+"BioConductor (binaries)" = "BioConductor (バイナリ)";
+
+/* NSMenuItem : <title:BioConductor (sources)> (oid:563) */
+"BioConductor (sources)" = "BioConductor (ソース)";
+
+/* NSMenuItem : <title:Bold> (oid:849) */
+"Bold" = "ボールド";
+
+/* NSBox (Box) : <title:Box> (oid:966) */
+"Box" = "Box";
+
+/* NSMenuItem : <title:Bring All to Front> (oid:5) */
+"Bring All to Front" = "すべてを手前に移動";
+
+/* NSMenuItem : <title:CRAN (binaries)> (oid:541) */
+"CRAN (binaries)" = "CRAN (バイナリ)";
+
+/* NSMenuItem : <title:CRAN (sources)> (oid:1108) */
+"CRAN (sources)" = "CRAN (ソース)";
+
+/* NSButton (Cancel) : <title:Cancel> (oid:1033) */
+"Cancel" = "キャンセル";
+
+/* NSMenuItem : <title:Center> (oid:829) */
+"Center" = "中央揃え";
+
+/* NSMenuItem : <title:Change Working Directory...> (oid:322) */
+"Change Working Directory..." = "作業ディレクトリの変更...";
+
+/* NSMenuItem : <title:Check For R Updates> (oid:218) */
+"Check For R Updates" = "Rのアップデートを確認";
+
+/* NSMenuItem : <title:Clear> (oid:1076) */
+"Clear" = "消去";
+
+/* NSButton (Clear History) : <title:Clear History> (oid:348) */
+"Clear History" = "履歴の消去";
+
+/* NSMenuItem : <title:Clear Menu> (oid:126) */
+"Clear Menu" = "メニューの消去";
+
+/* NSMenuItem : <title:Clear Workspace> (oid:243) */
+"Clear Workspace" = "ワークスペースを消去";
+
+/* NSMenuItem : <title:Close> (oid:73) */
+"Close" = "閉じる";
+
+/* NSTableColumn : <title:Commands> (oid:342) */
+"Commands" = "コマンド";
+
+/* NSMenuItem : <title:Complete> (oid:1013) */
+"Complete" = "完了";
+
+/* NSMenuItem : <title:Copy> (oid:157) */
+"Copy" = "コピー";
+
+/* NSMenuItem : <title:Copy Ruler> (oid:822) */
+"Copy Ruler" = "ルーラのコピー";
+
+/* NSMenuItem : <title:Copy Style> (oid:859) */
+"Copy Style" = "スタイルのコピー";
+
+/* NSTextField (Current Working Directory) : <title:Current Working Directory> (oid:405) */
+"Current Working Directory" = "現在の作業ディレクトリ";
+
+/* NSTextField (10) : <title:Custom Repository URL> (oid:539) */
+"Custom Repository URL" = "リポジトリのURL";
+
+/* NSMenuItem : <title:Cut> (oid:160) */
+"Cut" = "カット";
+
+/* NSTableColumn : <title:Data> (oid:501) */
+"Data" = "データ";
+
+/* NSMenuItem : <title:Data Manager> (oid:267) */
+"Data Manager" = "データマネージャ";
+
+/* NSMenuItem : <title:Delete> (oid:164) */
+"Delete" = "削除";
+
+/* NSButton (Delete entry) : <title:Delete entry> (oid:1046) */
+"Delete entry" = "エントリを削除";
+
+/* NSTableColumn : <title:Description> (oid:701) */
+"Description" = "説明";
+
+/* NSIBHelpConnector : <title:Double click on one package to load it in the R workspace. > (oid:505) */
+"Double click on one package to load it in the R workspace. " = "パッケージをダブルクリックすると R ワークスペースに読み込まれます. ";
+
+/* NSIBHelpConnector : <title:Downloads Selected Packages And Installs In Selected Location> (oid:580) */
+"Downloads Selected Packages And Installs In Selected Location" = "選択されたパッケージをダウンロードし, 選択された場所にインストールします";
+
+/* NSMenu : <title:Edit> (oid:169) */
+"Edit" = "編集";
+
+/* NSMenuItem : <title:Edit Object…> (oid:221) */
+"Edit Object…" = "オブジェクトの編集...";
+
+/* NSMenuItem : <title:Empty> (oid:1078) */
+"Empty" = "空";
+
+/* NSMenuItem : <title:Exact Search> (oid:1082) */
+"Exact Search" = "完全一致";
+
+/* NSMenuItem : <title:Execute> (oid:890) */
+"Execute" = "実行";
+
+/* NSMenuItem : <title:File> (oid:83) */
+"File" = "ファイル";
+
+/* NSMenuItem : <title:Find> (oid:168) */
+"Find" = "検索";
+
+/* NSMenuItem : <title:Find Next> (oid:167) */
+"Find Next" = "次を検索";
+
+/* NSMenuItem : <title:Find Previous> (oid:162) */
+"Find Previous" = "前を検索";
+
+/* NSMenuItem : <title:Find…> (oid:154) */
+"Find…" = "検索...";
+
+/* NSMenu : <title:Font> (oid:854) */
+"Font" = "フォント";
+
+/* NSTextField (Font Size: ) : <title:Font Size:
+> (oid:394) */
+"Font Size:\n" = "フォントサイズ:\n";
+
+/* NSMenuItem : <title:Format> (oid:833) */
+"Format" = "フォーマット";
+
+/* NSButton (>) : <title:Forward> (oid:989) */
+"Forward" = "進む";
+
+/* NSMenuItem : <title:Fuzzy Search> (oid:1084) */
+"Fuzzy Search" = "部分一致";
+
+/* NSButton (Fwd >) : <title:Fwd >> (oid:984) */
+"Fwd >" = "進む >";
+
+/* NSButton (Get List) : <title:Get List> (oid:545) */
+"Get List" = "一覧を取得";
+
+/* NSMenuItem : <title:Get Working Directory> (oid:317) */
+"Get Working Directory" = "現在の作業ディレクトリを調べる";
+
+/* NSMenuItem : <title:Go To Line> (oid:1049) */
+"Go To Line" = "指定行へ";
+
+/* NSMenu : <title:Help> (oid:106) */
+"Help" = "ヘルプ";
+
+/* NSSearchField (0) : <title:Help Search> (oid:957) */
+"Help Search" = "ヘルプ検索";
+
+/* NSWindow (Help Search Topics) : <title:Help Search Topics> (oid:687) */
+"Help Search Topics" = "ヘルプ検索トピック";
+
+/* NSMenuItem : <title:Hide Others> (oid:145) */
+"Hide Others" = "他を隠す";
+
+/* NSMenuItem : <title:Hide R> (oid:134) */
+"Hide R" = "Rを隠す";
+
+/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:576) */
+"In Other Location (Will Be Asked Upon Installation)" = "他の場所(インストール時に指定)";
+
+/* NSBox (Install Location) : <title:Install Location> (oid:570) */
+"Install Location" = "インストールする場所";
+
+/* NSButton (Install Selected) : <title:Install Selected> (oid:577) */
+"Install Selected" = "選択をインストール";
+
+/* NSTableColumn : <title:Installed Version> (oid:548) */
+"Installed Version" = "導入済みバージョン";
+
+/* NSMenuItem : <title:Italic> (oid:815) */
+"Italic" = "イタリック";
+
+/* NSMenuItem : <title:Item> (oid:1075) */
+"Item" = "項目";
+
+/* NSMenuItem : <title:Jump to Selection> (oid:155) */
+"Jump to Selection" = "選択部分へジャンプ";
+
+/* NSMenuItem : <title:Justify> (oid:838) */
+"Justify" = "両端揃え";
+
+/* NSMenu : <title:Kern> (oid:842) */
+"Kern" = "カーニング";
+
+/* NSMenuItem : <title:Ligature> (oid:848) */
+"Ligature" = "リガチャ";
+
+/* NSMenuItem : <title:Load Default Workspace> (oid:247) */
+"Load Default Workspace" = "ワークスペースの読み込み";
+
+/* NSButton (Load History) : <title:Load History> (oid:346) */
+"Load History" = "履歴の読み込み";
+
+/* NSMenuItem : <title:Load Workspace File…> (oid:250) */
+"Load Workspace File…" = "ファイルからワークスペースを読み込み...";
+
+/* NSTextField (Loading R ...) : <title:Loading R ...> (oid:1104) */
+"Loading R ..." = "R を読み込み中...";
+
+/* NSMenuItem : <title:Local Binary Package> (oid:596) */
+"Local Binary Package" = "このコンピュータ上のバイナリパッケージ";
+
+/* NSMenuItem : <title:Local Package Directory> (oid:595) */
+"Local Package Directory" = "このコンピュータ上のパッケージディレクトリ";
+
+/* NSMenuItem : <title:Local Source Package> (oid:597) */
+"Local Source Package" = "このコンピュータ上のソースパッケージ";
+
+/* NSMenuItem : <title:Loosen> (oid:818) */
+"Loosen" = "ゆるく";
+
+/* NSMenuItem : <title:Lower> (oid:821) */
+"Lower" = "下付き";
+
+/* NSMenuItem : <title:Main R Help Page> (oid:1083) */
+"Main R Help Page" = "Rヘルプ メインページ";
+
+/* NSMenu : <title:MainMenu> (oid:29) */
+"MainMenu" = "メインメニュー";
+
+/* NSMenu : <title:Menu> (oid:1074) */
+"Menu" = "メニュー";
+
+/* NSMenuItem : <title:Minimize> (oid:23) */
+"Minimize" = "しまう";
+
+/* NSMenu : <title:Misc> (oid:319) */
+"Misc" = "その他";
+
+/* NSMenuItem : <title:New Document> (oid:945) */
+"New Document" = "新規文書";
+
+/* NSMenuItem : <title:New Quartz Device Window> (oid:311) */
+"New Quartz Device Window" = "新しいQuartzデバイスを開く";
+
+/* NSTableColumn : <title:Object> (oid:667) */
+"Object" = "オブジェクト";
+
+/* NSButton (Ok) : <title:Ok> (oid:1034) */
+"Ok" = "Ok";
+
+/* NSMenuItem : <title:Open Document...> (oid:220) */
+"Open Document..." = "文書を開く...";
+
+/* NSMenu : <title:Open Recent> (oid:125) */
+"Open Recent" = "最近使った書類";
+
+/* NSMenuItem : <title:Other Directory URL> (oid:1107) */
+"Other Directory URL" = "他のディレクトリのURL";
+
+/* NSMenuItem : <title:Other Repository> (oid:1109) */
+"Other Repository" = "他のリポジトリ";
+
+/* NSMenu : <title:OtherViews> (oid:543) */
+"OtherViews" = "他のビュー";
+
+/* NSTableColumn : <title:Package> (oid:697) */
+"Package" = "パッケージ";
+
+/* NSMenuItem : <title:Package Installer> (oid:559) */
+"Package Installer" = "パッケージインストーラ";
+
+/* NSMenuItem : <title:Package Manager> (oid:266) */
+"Package Manager" = "パッケージマネージャ";
+
+/* NSSearchField (0) : <title:Package Search> (oid:1060) */
+"Package Search" = "パッケージ検索";
+
+/* NSMenu : <title:Packages & Data> (oid:270) */
+"Packages & Data" = "パッケージとデータ";
+
+/* NSBox (Packages Repository) : <title:Packages Repository> (oid:538) */
+"Packages Repository" = "パッケージリポジトリ";
+
+/* NSMenuItem : <title:Page Setup…> (oid:77) */
+"Page Setup…" = "ページ設定...";
+
+/* NSMenuItem : <title:Paste> (oid:171) */
+"Paste" = "ペースト";
+
+/* NSMenuItem : <title:Paste Ruler> (oid:845) */
+"Paste Ruler" = "ルーラのペースト";
+
+/* NSMenuItem : <title:Paste Style> (oid:837) */
+"Paste Style" = "スタイルのペースト";
+
+/* NSMenuItem : <title:Preferences…> (oid:129) */
+"Preferences…" = "環境設定...";
+
+/* NSButton (Print) : <title:Print> (oid:978) */
+"Print" = "プリント";
+
+/* NSMenuItem : <title:Print…> (oid:78) */
+"Print…" = "プリント...";
+
+/* NSMenuItem : <title:Quit R> (oid:136) */
+"Quit R" = "Rを終了";
+
+/* NSMenu : <title:R> (oid:57) */
+"R" = "R";
+
+/* NSWindow (R Console) : <title:R Console> (oid:21) */
+"R Console" = "Rコンソール";
+
+/* NSWindow (R Data Editor) : <title:R Data Editor> (oid:794) */
+"R Data Editor" = "Rデータエディタ";
+
+/* NSWindow (R Data Manager) : <title:R Data Manager> (oid:498) */
+"R Data Manager" = "Rデータマネージャ";
+
+/* NSMenuItem : <title:R For Mac OS X FAQ> (oid:332) */
+"R For Mac OS X FAQ" = "MacOS X版RのFAQ";
+
+/* NSWindow (R Help) : <title:R Help> (oid:728) */
+"R Help" = "Rヘルプ";
+
+/* NSWindow (R Package Installer) : <title:R Package Installer> (oid:525) */
+"R Package Installer" = "Rパッケージインストーラ";
+
+/* NSWindow (R Package Manager) : <title:R Package Manager> (oid:444) */
+"R Package Manager" = "Rパッケージマネージャ";
+
+/* NSWindow (R Workspace Browser) : <title:R Workspace Browser> (oid:662) */
+"R Workspace Browser" = "Rワークスペースブラウザ";
+
+/* NSMenuItem : <title:R for Mac OS X FAQ> (oid:1081) */
+"R for Mac OS X FAQ" = "R for Mac OS X FAQ";
+
+/* NSMenuItem : <title:Raise> (oid:850) */
+"Raise" = "すべてを手前に移動";
+
+/* NSMenuItem : <title:Redo> (oid:173) */
+"Redo" = "やり直し";
+
+/* NSButton (Refresh List) : <title:Refresh List> (oid:493) */
+"Refresh List" = "一覧の更新";
+
+/* NSTableColumn : <title:Repository Version> (oid:550) */
+"Repository Version" = "リポジトリにあるバージョン";
+
+/* NSMenuItem : <title:Reset Working Directory> (oid:316) */
+"Reset Working Directory" = "作業ディレクトリのリセット";
+
+/* NSMenuItem : <title:Revert> (oid:112) */
+"Revert" = "元に戻す";
+
+/* NSMenuItem : <title:Run X11 Server> (oid:658) */
+"Run X11 Server" = "X11サーバの起動";
+
+/* NSMenuItem : <title:Save> (oid:75) */
+"Save" = "保存";
+
+/* NSMenuItem : <title:Save As…> (oid:80) */
+"Save As…" = "別名で保存...";
+
+/* NSMenuItem : <title:Save Default Workspace> (oid:246) */
+"Save Default Workspace" = "ワークスペースを保存";
+
+/* NSButton (Save History) : <title:Save History> (oid:347) */
+"Save History" = "履歴を保存";
+
+/* NSMenuItem : <title:Save Workspace File…> (oid:260) */
+"Save Workspace File…" = "ワークスペースをファイルに保存...";
+
+/* NSMenuItem : <title:Select All> (oid:172) */
+"Select All" = "すべてを選択";
+
+/* NSIBHelpConnector : <title:Select Packages You Want To Install Or Update. Multiple Selections Allowed. > (oid:579) */
+"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "インストール/アップデートしたいパッケージを選択して下さい. 複数選択も可能です. ";
+
+/* NSIBHelpConnector : <title:Select The Appropriate Location. Non-Admin User Should Select "At User Level".> (oid:581) */
+"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "適切なインストール先を指定して下さい. 管理者権限がない場合は「ユーザエリア」を選択して下さい.";
+
+/* NSMenuItem : <title:Select packages from previous R> (oid:1113) */
+"Select packages from previous R" = "以前の R からパッケージを選択";
+
+/* NSMenuItem : <title:Services> (oid:131) */
+"Services" = "サービス";
+
+/* NSMenuItem : <title:Show All> (oid:150) */
+"Show All" = "すべてを表示";
+
+/* NSMenuItem : <title:Show Colors> (oid:819) */
+"Show Colors" = "カラーパネルを表示";
+
+/* NSMenuItem : <title:Show Fonts> (oid:826) */
+"Show Fonts" = "フォントパネルを表示";
+
+/* NSMenuItem : <title:Show Installed Only> (oid:1065) */
+"Show Installed Only" = "インストール済みのみを表示";
+
+/* NSMenuItem : <title:Show Ruler> (oid:843) */
+"Show Ruler" = "ルーラを表示";
+
+/* NSMenuItem : <title:Show Workspace> (oid:412) */
+"Show Workspace" = "ワークスペース内容を表示";
+
+/* NSMenuItem : <title:Smaller> (oid:855) */
+"Smaller" = "小さく";
+
+/* NSMenuItem : <title:Source Document> (oid:970) */
+"Source Document" = "ソースとして読み込む";
+
+/* NSMenuItem : <title:Source File...> (oid:72) */
+"Source File..." = "ソースを読み込む...";
+
+/* NSTableColumn : <title:Status> (oid:451) */
+"Status" = "状態";
+
+/* NSTableColumn : <title:Structure> (oid:664) */
+"Structure" = "構造";
+
+/* NSMenuItem : <title:Subscript> (oid:852) */
+"Subscript" = "下付き";
+
+/* NSMenuItem : <title:Superscript> (oid:827) */
+"Superscript" = "上付き";
+
+/* NSMenuItem : <title:Switch to Console Window> (oid:942) */
+"Switch to Console Window" = "コンソールウィンドウに切り替え";
+
+/* NSMenu : <title:Text> (oid:832) */
+"Text" = "テキスト";
+
+/* NSIBHelpConnector : <title:The Package Installer Requires An Internet Connection> (oid:560) */
+"The Package Installer Requires An Internet Connection" = "パッケージインストーラの実行にはインターネット接続が必要です";
+
+/* NSMenuItem : <title:Tighten> (oid:841) */
+"Tighten" = "きつく";
+
+/* NSTableColumn : <title:Topic> (oid:699) */
+"Topic" = "トピック";
+
+/* NSIBHelpConnector : <title:Try To Download The List Of Packages From The Specified URL> (oid:584) */
+"Try To Download The List Of Packages From The Specified URL" = "指定されたURLからパッケージの一覧をダウンロードします";
+
+/* NSTableColumn : <title:Type> (oid:668) */
+"Type" = "型";
+
+/* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:582) */
+"URL Of Repository. Must Begin With \"http://\"" = "リポジトリのURL. \"http://\"で始まっていなければなりません.";
+
+/* NSMenuItem : <title:Underline> (oid:835) */
+"Underline" = "アンダーライン";
+
+/* NSMenuItem : <title:Undo> (oid:158) */
+"Undo" = "取り消し";
+
+/* NSButton (Update All) : <title:Update All> (oid:1057) */
+"Update All" = "すべてアップデート";
+
+/* NSMenuItem : <title:Use All> (oid:817) */
+"Use All" = "すべて使用";
+
+/* NSMenuItem : <title:Use Default> (oid:857) */
+"Use Default" = "デフォルト";
+
+/* NSMenuItem : <title:Use None> (oid:851) */
+"Use None" = "使用しない";
+
+/* NSMenuItem : <title:Use Selection for Find> (oid:161) */
+"Use Selection for Find" = "選択部分を用いて検索";
+
+/* NSIBHelpConnector : <title:User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  > (oid:585) */
+"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "デフォルト以外のリポジトリを用いる場合には、パッケージフォーマットを指定する必要があります. 通常、拡張子 \".tar.gz\" のアーカイブは「ソース形式」, 拡張子 \".tgz\" のパッケージは「バイナリ形式」です. ";
+
+/* NSMenuItem : <title:Vignettes> (oid:1110) */
+"Vignettes" = "ビネット";
+
+/* NSMenuItem : <title:What's New In This Version?> (oid:333) */
+"What's New In This Version?" = "このバージョンで新しくなったのは？";
+
+/* NSWindow (Window) : <title:Window> (oid:1027) */
+"Window" = "ウィンドウ";
+
+/* NSMenu : <title:Workspace> (oid:252) */
+"Workspace" = "ワークスペース";
+
+/* NSMenuItem : <title:Workspace Browser> (oid:249) */
+"Workspace Browser" = "ワークスペースブラウザ";
+
+/* NSMenuItem : <title:Zoom> (oid:197) */
+"Zoom" = "拡大／縮小";
+
+/* NSTableColumn : <title:a> (oid:799) */
+"a" = "a";
+
+/* NSTableColumn : <title:b> (oid:797) */
+"b" = "b";
+
+/* NSTableColumn : <title:c> (oid:806) */
+"c" = "c";
+
+/* NSTableColumn : <title:d> (oid:807) */
+"d" = "d";
+
+/* NSTableColumn : <title:e> (oid:808) */
+"e" = "e";
+
+/* NSButtonCell (not loaded) : <title:loaded> (oid:462) */
+"loaded" = "ロード済み";
+
+/* NSButtonCell (not loaded) : <title:not loaded> (oid:462) */
+"not loaded" = "未ロード";
+
