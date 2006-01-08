@@ -76,7 +76,7 @@
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Het is momenteel niet mogelijk om binaire paketten van server te installeren als root.\nGelieve de CRAN binaire versie van R te gebruiken om administrators toe te laten systeem-wijde instalaties uit te voeren zonder root te worden. U kan ook de command-line versie van R als root gebruiken of de paketten van lokale files installeren.";
+"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Het is momenteel niet mogelijk om binaire pakketten van server te installeren als root.\nGelieve de CRAN binaire versie van R te gebruiken om administrators toe te laten systeem-wijde instalaties uit te voeren zonder root te worden. U kan ook de command-line versie van R als root gebruiken of de pakketten van lokale files installeren.";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Wenst u de geselecteerde mirror te onthouden voor gebruik in de toekomst?";
@@ -94,7 +94,7 @@
 "Edit the selected object" = "Bewerk geselecteerd object";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Fetching Package List Failed" = "Het ophalen van de pakettenlijst mislukte";
+"Fetching Package List Failed" = "Het ophalen van de pakkettenlijst mislukte";
 
 /* From: RController.m (toolbar) */
 "Font Size" = "Lettergrootte";
@@ -137,10 +137,10 @@
 "No CRAN Mirror Found" = "Geen CRAN mirror gevonden";
 
 /* From: PackageInstaller.m (installSelected) */
-"No packages selected, nothing to do." = "Geen geselecteerde paketten, niets te doen.";
+"No packages selected, nothing to do." = "Geen geselecteerde pakketten, niets te doen.";
 
 /* From: PackageInstaller.m (checkOptions) */
-"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Er werd geen geldige CRAN mirror geselecteer.\n U zal geen CRAN paketten kunnen installeren zolang u geen geldige URL kiest.";
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Er werd geen geldige CRAN mirror geselecteer.\n U zal geen CRAN pakketten kunnen installeren zolang u geen geldige URL kiest.";
 
 /* Global string @ */
 "OK" = "OK";
