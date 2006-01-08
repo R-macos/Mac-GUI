@@ -17,7 +17,7 @@
 "Change" = "Wijzig";
 
 /* NSButton (Cleanup history entries) : <title:Cleanup history entries> (oid:96) */
-"Cleanup history entries" = "Wis geschiedenis";
+"Cleanup history entries" = "Schoon geschiedenis op (wis lege regels edm.)";
 
 /* NSButton (Default) : <title:Default> (oid:52) */
 "Default" = "Standaard";
@@ -50,7 +50,7 @@
 "Note: This change is effective only after a restart of R.app" = "Opm.: Deze wijziging gaat pas in na het herstarten van R.app";
 
 /* NSTextField (Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory) : <title:Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory> (oid:87) */
-"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Opm.: Gebruik een vast pad naar het geschiedenisbestand, bvb. ~/.Rhistory";
+"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Opm.: Gebruik een vast pad naar het geschiedenisbestand, bvb. ~/.Rhistory om altijd (onafhankelijk van de werkmap) dezelfde geschiedenis te zien";
 
 /* NSButtonCell (Open file in editor) : <title:Open file in editor> (oid:18) */
 "Open file in editor" = "Open bestand in editor";
@@ -71,7 +71,7 @@
 "Source input file" = "Source invoerbestand";
 
 /* NSButton (Strip comments in history entries) : <title:Strip comments in history entries> (oid:97) */
-"Strip comments in history entries" = "Wis opmerkingen uit geschiedenis";
+"Strip comments in history entries" = "Wis commentaar uit geschiedenis";
 
 /* NSIBHelpConnector : <title:URL for the default CRAN URL. If left empty, the user will be prompted.> (oid:114) */
 "URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";

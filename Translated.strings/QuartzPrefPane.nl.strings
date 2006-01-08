@@ -36,7 +36,7 @@
 "Restore defaults" = "Herstel standaardinstellingen";
 
 /* NSTextField (System Font Text) : <title:System Font Text> (oid:49) */
-"System Font Text" = "Systeemletertype";
+"System Font Text" = "Systeemlettertype";
 
 /* NSMenuItem : <title:Top Left> (oid:36) */
 "Top Left" = "Linksboven";
@@ -50,7 +50,7 @@
 /* NSTextField (font point size:  :) : <title:font point size:
 
 :> (oid:47) */
-"font point size:\n\n:" = "lettertypegrootte";
+"font point size:\n\n:" = "lettertypegrootte:";
 
 /* NSTextField (height (inches): :) : <title:height (inches):
 :> (oid:30) */
