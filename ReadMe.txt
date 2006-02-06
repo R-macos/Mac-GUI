@@ -46,13 +46,7 @@ The strict use of tabs as indentation marks makes it possible for everyone to vi
 For Emacs users the setting is (setq c-basic-offset 4 tab-width 4
 indent-tabs-mode t)
 
-Other important notes:
- * never edit or commit Info.plist and English.lproj/InfoPlist.strings
-   Both files are generated automatically from Info.src.plist and
-   English.lproj/InfoPlist.src.strings by the updateSVN script.
-   Committing the generated files will inevitably cause a confilict in
-   the SVN, because the local copy always changed.
-
+Other important note:
  * always commit NIB files individually and remove and .svn directories
    before adding new NIB files: when IB copies NIBs it also copies .svn
    directories, thus screwing up the SVN.
