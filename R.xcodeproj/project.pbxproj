@@ -9,7 +9,7 @@
 /* Begin PBXAggregateTarget section */
 		1C54CDAE0719742A00176826 /* Docs */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 68B62A210969E4EB00355F33 /* Build configuration list for PBXAggregateTarget "Docs" */;
+			buildConfigurationList = 680F0B300997CE66009CDBE8 /* Build configuration list for PBXAggregateTarget "Docs" */;
 			buildPhases = (
 				1C54CDAD0719742A00176826 /* ShellScript */,
 			);
@@ -884,7 +884,7 @@
 /* Begin PBXNativeTarget section */
 		1C34E60F06F9EC7D00211ACC /* sush */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68B62A1C0969E4EB00355F33 /* Build configuration list for PBXNativeTarget "sush" */;
+			buildConfigurationList = 680F0B2B0997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "sush" */;
 			buildPhases = (
 				1C34E60D06F9EC7D00211ACC /* Sources */,
 				1C34E60E06F9EC7D00211ACC /* Frameworks */,
@@ -913,13 +913,13 @@
 		};
 		8D1107260486CEB800E47090 /* R */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68B62A260969E4EB00355F33 /* Build configuration list for PBXNativeTarget "R" */;
+			buildConfigurationList = 680F0B350997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "R" */;
 			buildPhases = (
-				6839A11E0969E82B0084E92F /* ShellScript */,
 				8D1107270486CEB800E47090 /* Headers */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				680F0D4C0997D201009CDBE8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -968,7 +968,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = 68B62A2B0969E4EB00355F33 /* Build configuration list for PBXProject "R" */;
+			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
 			buildSettings = {
 			};
 			buildStyles = (
@@ -1080,7 +1080,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# shell script goes here\ncd docs\nmakeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
 		};
-		6839A11E0969E82B0084E92F /* ShellScript */ = {
+		680F0D4C0997D201009CDBE8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1091,7 +1091,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = ./updateSVN;
+			shellScript = "#!/bin/sh\n\n#echo \"${TARGET_BUILD_DIR}\" > /tmp/1\n#echo \"${SRCROOT}\" >> /tmp/1\n#echo \"${TARGET_BUILD_DIR}\" >> /tmp/1\n#echo \"${BUILT_PRODUCTS_DIR}\" >> /tmp/1\n#echo \"${UNLOCALIZED_RESOURCES_FOLDER_PATH}\" >> /tmp/1\n\nif [ ! -e ${SRCROOT}/updateSVN ]; then\n\techo \"Cannot find ${SRCROOT}/updateSVN script!\" >&2\n\texit 9\nfi\n\n${SRCROOT}/updateSVN \"${SRCROOT}\" \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1346,7 +1346,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		68B62A1D0969E4EB00355F33 /* Development */ = {
+		680F0B2C0997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1376,7 +1376,7 @@
 			};
 			name = Development;
 		};
-		68B62A1E0969E4EB00355F33 /* Deployment */ = {
+		680F0B2D0997CE66009CDBE8 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1397,7 +1397,7 @@
 			};
 			name = Deployment;
 		};
-		68B62A1F0969E4EB00355F33 /* Debug */ = {
+		680F0B2E0997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1416,7 +1416,7 @@
 			};
 			name = Debug;
 		};
-		68B62A200969E4EB00355F33 /* Default */ = {
+		680F0B2F0997CE66009CDBE8 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
@@ -1433,7 +1433,7 @@
 			};
 			name = Default;
 		};
-		68B62A220969E4EB00355F33 /* Development */ = {
+		680F0B310997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -1462,7 +1462,7 @@
 			};
 			name = Development;
 		};
-		68B62A230969E4EB00355F33 /* Deployment */ = {
+		680F0B320997CE66009CDBE8 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1482,7 +1482,7 @@
 			};
 			name = Deployment;
 		};
-		68B62A240969E4EB00355F33 /* Debug */ = {
+		680F0B330997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1500,7 +1500,7 @@
 			};
 			name = Debug;
 		};
-		68B62A250969E4EB00355F33 /* Default */ = {
+		680F0B340997CE66009CDBE8 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				OTHER_CFLAGS = "";
@@ -1516,9 +1516,13 @@
 			};
 			name = Default;
 		};
-		68B62A270969E4EB00355F33 /* Development */ = {
+		680F0B360997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
@@ -1561,9 +1565,13 @@
 			};
 			name = Development;
 		};
-		68B62A280969E4EB00355F33 /* Deployment */ = {
+		680F0B370997CE66009CDBE8 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -1599,9 +1607,13 @@
 			};
 			name = Deployment;
 		};
-		68B62A290969E4EB00355F33 /* Debug */ = {
+		680F0B380997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_TRIGRAPHS = NO;
@@ -1635,9 +1647,13 @@
 			};
 			name = Debug;
 		};
-		68B62A2A0969E4EB00355F33 /* Default */ = {
+		680F0B390997CE66009CDBE8 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -1669,25 +1685,25 @@
 			};
 			name = Default;
 		};
-		68B62A2C0969E4EB00355F33 /* Development */ = {
+		680F0B3B0997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Development;
 		};
-		68B62A2D0969E4EB00355F33 /* Deployment */ = {
+		680F0B3C0997CE66009CDBE8 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Deployment;
 		};
-		68B62A2E0969E4EB00355F33 /* Debug */ = {
+		680F0B3D0997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		68B62A2F0969E4EB00355F33 /* Default */ = {
+		680F0B3E0997CE66009CDBE8 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -1696,46 +1712,46 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		68B62A1C0969E4EB00355F33 /* Build configuration list for PBXNativeTarget "sush" */ = {
+		680F0B2B0997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "sush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68B62A1D0969E4EB00355F33 /* Development */,
-				68B62A1E0969E4EB00355F33 /* Deployment */,
-				68B62A1F0969E4EB00355F33 /* Debug */,
-				68B62A200969E4EB00355F33 /* Default */,
+				680F0B2C0997CE66009CDBE8 /* Development */,
+				680F0B2D0997CE66009CDBE8 /* Deployment */,
+				680F0B2E0997CE66009CDBE8 /* Debug */,
+				680F0B2F0997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		68B62A210969E4EB00355F33 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
+		680F0B300997CE66009CDBE8 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68B62A220969E4EB00355F33 /* Development */,
-				68B62A230969E4EB00355F33 /* Deployment */,
-				68B62A240969E4EB00355F33 /* Debug */,
-				68B62A250969E4EB00355F33 /* Default */,
+				680F0B310997CE66009CDBE8 /* Development */,
+				680F0B320997CE66009CDBE8 /* Deployment */,
+				680F0B330997CE66009CDBE8 /* Debug */,
+				680F0B340997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		68B62A260969E4EB00355F33 /* Build configuration list for PBXNativeTarget "R" */ = {
+		680F0B350997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68B62A270969E4EB00355F33 /* Development */,
-				68B62A280969E4EB00355F33 /* Deployment */,
-				68B62A290969E4EB00355F33 /* Debug */,
-				68B62A2A0969E4EB00355F33 /* Default */,
+				680F0B360997CE66009CDBE8 /* Development */,
+				680F0B370997CE66009CDBE8 /* Deployment */,
+				680F0B380997CE66009CDBE8 /* Debug */,
+				680F0B390997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
 		};
-		68B62A2B0969E4EB00355F33 /* Build configuration list for PBXProject "R" */ = {
+		680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				68B62A2C0969E4EB00355F33 /* Development */,
-				68B62A2D0969E4EB00355F33 /* Deployment */,
-				68B62A2E0969E4EB00355F33 /* Debug */,
-				68B62A2F0969E4EB00355F33 /* Default */,
+				680F0B3B0997CE66009CDBE8 /* Development */,
+				680F0B3C0997CE66009CDBE8 /* Deployment */,
+				680F0B3D0997CE66009CDBE8 /* Debug */,
+				680F0B3E0997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
