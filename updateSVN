@@ -27,6 +27,7 @@ if [ ! -e $1/Info.plist ]; then
 fi
 
 sed "s/%SVN%/$SVNREV/g" $1/English.lproj/InfoPlist.strings > $2/English.lproj/InfoPlist.strings
-sed "s/%SVN%/$SVNREV/g" $1/Info.plist > $2/Info.plist
+# Info.plist is actually one level below resources
+sed "s/%SVN%/$SVNREV/g" $1/Info.plist > $2/../Info.plist
 
 exit 0
