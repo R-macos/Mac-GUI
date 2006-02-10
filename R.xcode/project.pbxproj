@@ -2277,6 +2277,7 @@
 				32CA4F630368D1EE00C91783,
 				6855194007B8FDDF00F3A57C,
 				29B97316FDCFA39411CA2CEA,
+				686C026B098A7B760011CAD2,
 			);
 			isa = PBXGroup;
 			name = "Other Sources";
@@ -2658,6 +2659,20 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		686C026B098A7B760011CAD2 = {
+			fileEncoding = 4;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = privateR.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		686C026C098A7B760011CAD2 = {
+			fileRef = 686C026B098A7B760011CAD2;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		68756ED807FDDAEF0014821A = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -3014,6 +3029,19 @@
 			settings = {
 			};
 		};
+		68BC7698099D0C45006F9880 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			isa = PBXShellScriptBuildPhase;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\nif [ ! -e \"${SRCROOT}/updateSVN\" ]; then\n\techo \\\"Cannot find ${SRCROOT}/updateSVN script!\\\" >&2\n\texit 9\nfi\n\n\"${SRCROOT}/updateSVN\" \"${SRCROOT}\" \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\n";
+		};
 		68C0CFD307BBDAF000EA34B7 = {
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.nib;
@@ -3230,6 +3258,7 @@
 				8D1107290486CEB800E47090,
 				8D11072C0486CEB800E47090,
 				8D11072E0486CEB800E47090,
+				68BC7698099D0C45006F9880,
 			);
 			buildRules = (
 			);
@@ -3319,6 +3348,7 @@
 				68AAC9E708F41CBB0064CDA1,
 				68AAC9E908F41CBB0064CDA1,
 				68AAC9ED08F41CD80064CDA1,
+				686C026C098A7B760011CAD2,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
