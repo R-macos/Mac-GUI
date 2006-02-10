@@ -1,23 +1,23 @@
 INSTALL
 
-configure, build and install R-2.1.0 (2005-04-18) with
+configure, build and install R-2.2.x with
 
-	./configure --with-blas='-framework vecLib' --with-lapack --with-aqua 
+	./configure
 	make
 	sudo make install
 	
-"--with-aqua" is needed also for this Cocoa version. The R.app will init R with argument "--gui=cocoa"
-
 Once you have the R.framework installed in /Library/Frameworks, you can build R.app
-
-Note: for R 2.1.0 it is highly recommended to use "--enable-utf8"
 
 
  Building R.app
 ================
 
-This project has been produced with XCode 1.5 - update your XCode if necessary.
-The project can be built by selecting "R" target and "Build" inside the XCode GUI.
+There are two projects now:
+  "R.xcode" works with Xcode 1.5 - 2.0
+  "R.xcodeproj" work with Xcode 2.1 and higher
+
+Only the latter project supports universal binaries.
+Either project can be built by selecting "R" target and "Build" inside the XCode GUI.
 
 To build the project from the command line in Mac-GUI directory use:
 	xcodebuild -target R -buildstyle Deployment
@@ -28,6 +28,12 @@ or manually in docs folder
 	makeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi
 	
 In any case the resulting html FAQ file can be found in Mac-GUI/docs directory.
+
+If you plan to build R.app on an Intel Mac, you will need patched gcc 4.0.3 in
+/usr/local/gcc4.0 (see http://wiki.urbanek.info/index.cgi?TigerGCC ) and use
+make
+instead of xcodebuild. It uses xcode intenally, but the actual code is re-compiled
+using the 4.0.3 gcc compiler.
 
 NOTE:
 To run R.app from inside the XCode debugger, you have to setup the R_HOME 
