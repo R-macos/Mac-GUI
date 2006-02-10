@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AppKit/NSImage.h>
 
 #define AMPrefPaneIconImageWidth 32
 #define AMPrefPaneIconImageHeight 32

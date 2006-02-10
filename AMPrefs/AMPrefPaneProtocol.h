@@ -6,6 +6,7 @@
 //  Copyright (c) 2003 Andreas Mayer. All rights reserved.
 //
 
+#import <AppKit/NSView.h>
 
 // important keys for bundle's info dictionary
 // from NSPreferencePane:
