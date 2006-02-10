@@ -70,7 +70,7 @@ R.app: R sush build/$(STYLE)/R.app
 	cp R R.app/Contents/MacOS/R
 	cp sush R.app/Contents/Resources/sush
 
-build/$(STYLE)/R.app:
+build/$(STYLE)/R.app: .svn/entries
 	rm -rf build/$(STYLE)
 	mkdir -p build/$(STYLE)
 	xcodebuild -configuration $(STYLE) BUILD_DIR=`pwd`/build
