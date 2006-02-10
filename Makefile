@@ -64,10 +64,11 @@ endif
 
 all: R.app
 
-R.app: R build/$(STYLE)/R.app
+R.app: R sush build/$(STYLE)/R.app
 	rm -rf R.app
 	cp -r build/$(STYLE)/R.app .
 	cp R R.app/Contents/MacOS/R
+	cp sush R.app/Contents/Resources/sush
 
 build/$(STYLE)/R.app:
 	rm -rf build/$(STYLE)
@@ -82,6 +83,14 @@ R: $(SRC)
 	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-arch ppc -g -O2' 'LDFLAGS=-arch ppc' R.ppc
 	$(MAKE) CC=/usr/local/gcc4.0/bin/gcc ARCH=i386 R.i386
 	lipo -create R.ppc R.i386 -o R
+
+sush.$(ARCH): Tools/sush.c
+	$(CC) -o $@ $^ $(CFLAGS)
+
+sush: Tools/sush.c
+	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-arch ppc -g -O2' 'LDFLAGS=-arch ppc' sush.ppc
+	$(MAKE) CC=/usr/local/gcc4.0/bin/gcc ARCH=i386 sush.i386
+	lipo -create sush.ppc sush.i386 -o sush
 
 %.$(ARCH).o: %.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $^
