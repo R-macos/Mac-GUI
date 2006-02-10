@@ -1416,23 +1416,6 @@
 			};
 			name = Debug;
 		};
-		680F0B2F0997CE66009CDBE8 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = sush;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
 		680F0B310997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1500,32 +1483,11 @@
 			};
 			name = Debug;
 		};
-		680F0B340997CE66009CDBE8 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Docs;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
-			name = Default;
-		};
 		680F0B360997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -1537,13 +1499,8 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
-				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
@@ -1568,12 +1525,7 @@
 		680F0B370997CE66009CDBE8 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_TRIGRAPHS = NO;
@@ -1583,13 +1535,8 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
-				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1610,11 +1557,6 @@
 		680F0B380997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -1624,13 +1566,8 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
-				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DDEBUG_RGUI";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1647,67 +1584,40 @@
 			};
 			name = Debug;
 		};
-		680F0B390997CE66009CDBE8 /* Default */ = {
+		680F0B3B0997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = R_Prefix.pch;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					R,
-				);
-				PRODUCT_NAME = R;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
-		680F0B3B0997CE66009CDBE8 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
 			};
 			name = Development;
 		};
 		680F0B3C0997CE66009CDBE8 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Deployment;
 		};
 		680F0B3D0997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
 			};
 			name = Debug;
-		};
-		680F0B3E0997CE66009CDBE8 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Default;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1718,10 +1628,9 @@
 				680F0B2C0997CE66009CDBE8 /* Development */,
 				680F0B2D0997CE66009CDBE8 /* Deployment */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
-				680F0B2F0997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Deployment;
 		};
 		680F0B300997CE66009CDBE8 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
 			isa = XCConfigurationList;
@@ -1729,10 +1638,9 @@
 				680F0B310997CE66009CDBE8 /* Development */,
 				680F0B320997CE66009CDBE8 /* Deployment */,
 				680F0B330997CE66009CDBE8 /* Debug */,
-				680F0B340997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Deployment;
 		};
 		680F0B350997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "R" */ = {
 			isa = XCConfigurationList;
@@ -1740,10 +1648,9 @@
 				680F0B360997CE66009CDBE8 /* Development */,
 				680F0B370997CE66009CDBE8 /* Deployment */,
 				680F0B380997CE66009CDBE8 /* Debug */,
-				680F0B390997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Deployment;
 		};
 		680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */ = {
 			isa = XCConfigurationList;
@@ -1751,10 +1658,9 @@
 				680F0B3B0997CE66009CDBE8 /* Development */,
 				680F0B3C0997CE66009CDBE8 /* Deployment */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
-				680F0B3E0997CE66009CDBE8 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Deployment;
 		};
 /* End XCConfigurationList section */
 	};
