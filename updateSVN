@@ -17,17 +17,17 @@ if [ -z "$SVNREV" ]; then
     exit 2
 fi
 
-if [ ! -e $1/English.lproj/InfoPlist.strings ]; then
+if [ ! -e "$1/English.lproj/InfoPlist.strings" ]; then
     echo "Cannot find $1/English.lproj/InfoPlist.strings"
     exit 2;
 fi
-if [ ! -e $1/Info.plist ]; then
+if [ ! -e "$1/Info.plist" ]; then
     echo "Cannot find Info.plist"
     exit 3;
 fi
 
-sed "s/%SVN%/$SVNREV/g" $1/English.lproj/InfoPlist.strings > $2/English.lproj/InfoPlist.strings
+sed "s/%SVN%/$SVNREV/g" "$1/English.lproj/InfoPlist.strings" > "$2/English.lproj/InfoPlist.strings"
 # Info.plist is actually one level below resources
-sed "s/%SVN%/$SVNREV/g" $1/Info.plist > $2/../Info.plist
+sed "s/%SVN%/$SVNREV/g" "$1/Info.plist" > "$2/../Info.plist"
 
 exit 0
