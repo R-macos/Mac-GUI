@@ -34,13 +34,12 @@
 #import "PreferenceKeys.h"
 #import "RController.h"
 #import "RDocumentController.h"
-#import "REngine.h"
+#import "REngine/REngine.h"
 #import "REditorTextStorage.h"
 #import "RRulerView.h"
 #import "REditorToolbar.h"
-#import "REngine.h"
-#import "FileCompletion.h"
-#import "CodeCompletion.h"
+#import "Tools/FileCompletion.h"
+#import "Tools/CodeCompletion.h"
 
 BOOL defaultsInitialized = NO;
 
