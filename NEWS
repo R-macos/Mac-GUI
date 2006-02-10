@@ -1,5 +1,22 @@
 NEWS 
 
+Last-update: 2006-02-10 [SU]
+*	Updated Xcode 2.0 project to produce correct Info.plist
+*	Updated Xcode 2.2 project: Deployment target is now
+	universal build using 10.4u SDK. You will need to
+	symlink /Library into the SDK before building!
+	All other configs are native.
+*	Fixed Makefile to build sush correctly and re-build
+	R.app if SVN revision changed.
+
+Last-update: 2006-02-08 [SU]
+*	Added Makefile for building universal R.app that actually
+	works. Note that Xcode build for Intel does NOT work due
+	to bugs in gcc. You must use patched gcc 4.0.3 (see
+	http://wiki.urbanek.info/index.cgi?TigerGCC ) but that
+	compiler is not supported by Xcode, that's why we need
+	the Makefile.
+
 Last-update: 2006-02-06 [SU]
 *	Added support for universal build
 *	Changed the way Info.plist and strings are updated,
