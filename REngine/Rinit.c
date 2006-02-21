@@ -255,7 +255,7 @@ static void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel)
     state.buf[state.buflen-1] = '\0'; /* stopgap measure */
     state.bufp = state.buf;
     if(R_Verbose)
-		REprintf(" >R_ReplConsole(): before \"for(;;)\" {main.c}\n");
+		REprintf(" >R_ReplConsole(): before \"for(;;)\" {Rinit.c}\n");
     for(;;) {
 		status = RGUI_ReplIteration(rho, savestack, browselevel, &state);
 		if(status < 0)
