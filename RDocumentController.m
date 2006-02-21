@@ -84,7 +84,7 @@
 - (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
 {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	NSString *externalEditor = [[NSString alloc] initWithString:@"\""];
+	NSString *externalEditor = @"\"";
 	externalEditor = [externalEditor stringByAppendingString:[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
 	externalEditor = [externalEditor stringByAppendingString:@"\""];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
@@ -121,7 +121,7 @@
 - (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
 {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	NSString *externalEditor = [[NSString alloc] initWithString:@"\""];
+	NSString *externalEditor = @"\"";
 	externalEditor = [externalEditor stringByAppendingString:[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
 	externalEditor = [externalEditor stringByAppendingString:@"\""];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
@@ -144,5 +144,11 @@
 		return nil;
 	}
 }
+
+- (void)removeDocument:(NSDocument *)document {
+	SLog(@"RDocumentController(%@).removeDocument: %@\n", self, document);
+	[super removeDocument:document];
+}
+
 
 @end
