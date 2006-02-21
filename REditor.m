@@ -27,9 +27,10 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include "privateR.h"
+// needs Defn.h Print.h
 #import "RGUI.h"
 #import "REditor.h"
-#include "Defn.h"
 #include <R.h>
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>
@@ -37,7 +38,6 @@
 #include <Rinternals.h>
 #include <Rversion.h>
 
-#include "Print.h"
 
 #ifndef max
 #define max(x,y) x<y?y:x;

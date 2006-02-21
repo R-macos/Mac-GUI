@@ -33,6 +33,10 @@
 #import "../REngine/RSEXP.h"
 #import "../REngine/REngine.h"
 
+/* we need this to register QuartzSaveContents */
+#include "privateR.h"
+#include <Rdynpriv.h>
+
 #include <Rversion.h>
 #include <R.h>
 #include <R_ext/Boolean.h>
@@ -569,7 +573,7 @@ static void 	RQuartz_Rect(double x0, double y0, double x1, double y1,
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 
 	NSBezierPath *rPath = [NSBezierPath bezierPath];
-	[rPath appendBezierPathWithRect:NSMakeRect(x0,y0,x1-x0,y1-y0)];
+	[rPath appendBezierPathWithRect:NSMakeRect(round(x0),round(y0),round(x1)-round(x0),round(y1)-round(y0))];
 	
 		[xd->DevView lockFocus];
 	NSRectClip(ClipArea);
@@ -998,9 +1002,6 @@ SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
 }
 
 /*-- now, this is ugly, we use internals of Rdynload to squeeze our functions into base load table --*/
-
-#define HAVE_WCHAR_H 1
-#include <Rdynpriv.h>
 
 DllInfo *getBaseDllInfo();
 

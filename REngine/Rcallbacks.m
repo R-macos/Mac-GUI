@@ -30,7 +30,7 @@
  *
  */
 
-#include <Defn.h>
+#include "privateR.h"
 #include <R.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
@@ -39,8 +39,6 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <stdio.h>
-
-#include "Print.h"
 
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>

@@ -27,9 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
-/* we need to add those manually for OS X, because config.h is NOT supplied with R, but the private includes rely on it
-   FIXME: this is not clean and may bite us at some ppoint - try to get the "real" config.h ... */
-#define HAVE_WCHAR_H 1
+#include "privateR.h"
 
 #include <R.h>
 #include <Rinternals.h>

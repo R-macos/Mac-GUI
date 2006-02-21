@@ -1,5 +1,11 @@
 NEWS 
 
+Last-update: 2006-02-21 [SU]
+*	Fixes for internal header changes in R-devel
+*	Fixed script stage for R target to work with paths
+	that contain spaces (Xc2.2).
+*	Fixed Debug config to not strip debug symbols
+
 Last-update: 2006-02-10 [SU]
 *	Updated Xcode 2.0 project to produce correct Info.plist
 *	Updated Xcode 2.2 project: Deployment target is now

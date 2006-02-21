@@ -40,7 +40,7 @@
 #include <Rinterface.h>
 #else
 // if there is no Rinterface, we need private Defn.h
-#include <Defn.h>
+#include "privateR.h"
 #endif
 #include <langinfo.h>
 #include <locale.h>
@@ -881,29 +881,31 @@ extern BOOL isTimeToFinish;
 
 - (int) handleEdit: (char*) file
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSString *fn = [[NSString stringWithUTF8String:file] stringByExpandingTildeInPath];
 	SLog(@"RController.handleEdit: %s", file);
 	
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:fn]) {
-		[pool release];
+		//[pool release];
 		return 0;
 	}
 	RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: fn display:YES];
 	[document setREditFlag: YES];
 	
-	NSEnumerator *e = [[document windowControllers] objectEnumerator];
-	NSWindowController *wc = nil;
-	while (wc = [e nextObject]) {
-		NSWindow *window = [wc window];
-		NSModalSession session = [NSApp beginModalSessionForWindow:window];
-		while([document hasREditFlag]) {
-			[NSApp runModalSession:session];
+	NSArray *wcs = [document windowControllers];
+	if ([wcs count]<1) {
+		SLog(@"handleEdit: WARNING, no window controllers for newly created document!");
+	} else {
+		NSWindowController *wc = (NSWindowController*)[wcs objectAtIndex:0];
+		NSWindow *win = [wc window];
+		if (win) [NSApp runModalForWindow:win];
+		else { SLog(@"handleEdit: WARNING, window is null!"); };
+		if ([wcs count]>1) {
+			SLog(@"handleEdit: WARNING, there is more than one window controller, ignoring all but the first one.");
 		}
-		[NSApp endModalSession:session];
 	}
 	
-	[pool release];
+	//[pool release];
 	return(0);
 }
 
