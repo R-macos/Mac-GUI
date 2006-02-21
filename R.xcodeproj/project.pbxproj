@@ -176,6 +176,7 @@
 		68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DEAEE7083271CA00C5D76C /* RTextView.m */; };
 		68E2B9F20796C9D200E31F29 /* devQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 68E2B9F00796C9D200E31F29 /* devQuartz.h */; };
 		68E2B9F30796C9D200E31F29 /* devQuartz.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E2B9F10796C9D200E31F29 /* devQuartz.c */; };
+		68F84C6209ABB2BF0098D772 /* privateR.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F84C6109ABB2BF0098D772 /* privateR.h */; };
 		8D1107280486CEB800E47090 /* R_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* R_Prefix.pch */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -452,6 +453,7 @@
 		68DEAEE7083271CA00C5D76C /* RTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTextView.m; sourceTree = "<group>"; };
 		68E2B9F00796C9D200E31F29 /* devQuartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devQuartz.h; sourceTree = "<group>"; };
 		68E2B9F10796C9D200E31F29 /* devQuartz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = devQuartz.c; sourceTree = "<group>"; };
+		68F84C6109ABB2BF0098D772 /* privateR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = privateR.h; sourceTree = SOURCE_ROOT; };
 		68FC52F508F45C2E0061413F /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/Vignettes.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -738,6 +740,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				68F84C6109ABB2BF0098D772 /* privateR.h */,
 				32CA4F630368D1EE00C91783 /* R_Prefix.pch */,
 				6855194007B8FDDF00F3A57C /* RGUI.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -876,6 +879,7 @@
 				68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */,
 				68AAC9E908F41CBB0064CDA1 /* PDFImageView.h in Headers */,
 				68AAC9ED08F41CD80064CDA1 /* VignettesController.h in Headers */,
+				68F84C6209ABB2BF0098D772 /* privateR.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1091,7 +1095,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n#echo \"${TARGET_BUILD_DIR}\" > /tmp/1\n#echo \"${SRCROOT}\" >> /tmp/1\n#echo \"${TARGET_BUILD_DIR}\" >> /tmp/1\n#echo \"${BUILT_PRODUCTS_DIR}\" >> /tmp/1\n#echo \"${UNLOCALIZED_RESOURCES_FOLDER_PATH}\" >> /tmp/1\n\nif [ ! -e ${SRCROOT}/updateSVN ]; then\n\techo \"Cannot find ${SRCROOT}/updateSVN script!\" >&2\n\texit 9\nfi\n\n${SRCROOT}/updateSVN \"${SRCROOT}\" \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\n";
+			shellScript = "#!/bin/sh\n\n#echo \"${TARGET_BUILD_DIR}\" > /tmp/1\n#echo \"${SRCROOT}\" >> /tmp/1\n#echo \"${TARGET_BUILD_DIR}\" >> /tmp/1\n#echo \"${BUILT_PRODUCTS_DIR}\" >> /tmp/1\n#echo \"${UNLOCALIZED_RESOURCES_FOLDER_PATH}\" >> /tmp/1\n\nif [ ! -e \"${SRCROOT}/updateSVN\" ]; then\n\techo \"Cannot find ${SRCROOT}/updateSVN script!\" >&2\n\texit 9\nfi\n\n\"${SRCROOT}/updateSVN\" \"${SRCROOT}\" \"${BUILT_PRODUCTS_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1557,9 +1561,10 @@
 		680F0B380997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = R_Prefix.pch;
@@ -1575,6 +1580,7 @@
 				);
 				PRODUCT_NAME = R;
 				SECTORDER_FLAGS = "";
+				STRIP_INSTALLED_PRODUCT = NO;
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
