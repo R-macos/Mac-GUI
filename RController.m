@@ -141,7 +141,6 @@ static RController* sharedRController;
 	self = [super init];
 	
 	runSystemAsRoot = NO;
-	secondaryNibsLoaded = NO;
 	toolbar = nil;
 	toolbarStopItem = nil;
 	rootFD = -1;
@@ -206,9 +205,7 @@ static RController* sharedRController;
 - (void) awakeFromNib {
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
-	
-	if (secondaryNibsLoaded) return;
-
+		
 	sharedRController = self;
 	
 	NSLayoutManager *lm = [[RTextView layoutManager] retain];
@@ -401,32 +398,7 @@ static RController* sharedRController;
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
 {
-	SLog(@"RController.applicationDidFinishLaunching");
-	SLog(@" - initalizing R");
-	if (![[REngine mainEngine] activate]) {
-		NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
-		exit(-1);
-	}
-
-	/* register Quartz symbols */
-	QuartzRegisterSymbols();
-	/* create quartz.save function in tools:quartz */
-	[[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e); assign(\"avaliable.packages\",function(...) available.packages(...),e)}))"];
-
-	SLog(@" - set R options");
-	// force html-help, because that's the only format we can handle ATM
-	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
-
-	SLog(@" - set default CRAN mirror");
-	{
-		NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
-		if (![url isEqualToString:@""])
-			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"try({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) },silent=TRUE)", url]];
-	}
-	
-	SLog(@" - set BioC repositories");
-	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
-				
+	SLog(@"RController:applicationDidFinishLaunching");
 	SLog(@" - clean up and flush console");
 	[self setOptionWidth:YES];
 	[RTextView setEditable:YES];
@@ -452,39 +424,18 @@ static RController* sharedRController;
 	
 	// once we're ready with the doc transition, the following will actually fire up the cconsole window
 	//[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"Rcommand" display:YES];
-
+	
 	SLog(@" - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
-	//[[REngine mainEngine] runDelayedREPL]; // start delayed REPL
-	//CGPostKeyboardEvent(27, 53, 1); // post <ESC> to cause SIGINT and thus the actual start of REPL
 
-	SLog(@" - loading secondary NIBs");
-	secondaryNibsLoaded=YES;
-	if (![NSBundle loadNibNamed:@"Vignettes" owner:self]) {
-		SLog(@" * unable to load Vignettes.nib!");
-	}
-	
-	SLog(@" - setup REPL trigger timer");
-	if (!RLtimer)
-		RLtimer = [NSTimer scheduledTimerWithTimeInterval:0.001
-												   target:self
-												 selector:@selector(kickstart:)
-												 userInfo:0
-												  repeats:NO];
 	appLaunched = YES;
+	[self setStatusLineText:@""];
 
-	
 	SLog(@" - done, ready to go");
 }
 
 - (BOOL)appLaunched {
 	return appLaunched;
-}
-
-- (void) kickstart:(id) sender {
-	//kill(getpid(),SIGINT);
-	[self setStatusLineText:@""];
-	[[REngine mainEngine] runREPL];
 }
 
 -(void) addConnectionLog

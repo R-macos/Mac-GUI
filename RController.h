@@ -33,11 +33,7 @@
 
 #include <R.h>
 #include <Rinternals.h>
-//#include "Rinit.h"
 #include "REngine/Rcallbacks.h"
-//#include "IOStuff.h"
-//#include <R_ext/Parse.h>
-//#include <Parse.h>
 #include <R_ext/eventloop.h>
 #import <sys/types.h>
 
@@ -128,7 +124,6 @@
 	NSString *currentConsoleInput;
 	
 	BOOL forceStdFlush;
-	BOOL secondaryNibsLoaded;
 	BOOL terminating;
 	
 	char *writeBuffer;
@@ -247,7 +242,6 @@
 - (void) handleBusy: (BOOL)i;
 - (int)  handleChooseFile: (char *)buf len:(int)len isNew:(int)isNew;	
 
-- (void) kickstart:(id) sender;
 - (void) setStatusLineText: (NSString*) text;
 - (NSString*) statusLineText;
 

@@ -31,6 +31,12 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "RGUI.h"
+#import "REngine/REngine.h"
+#import "Preferences.h"
+#import "PreferenceKeys.h"
+#import "Quartz/QuartzDevice.h"
+#import "RController.h"
 
 #ifdef DEBUG_RGUI
 #import <ExceptionHandling/NSExceptionHandler.h>
@@ -39,6 +45,7 @@
 
 int main(int argc, const char *argv[])
 {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 #ifdef DEBUG_RGUI
 	{
 		// add an independent exception handler
@@ -46,5 +53,49 @@ int main(int argc, const char *argv[])
 		[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: NSLogAndHandleEveryExceptionMask]; // log+handle all
 	}
 #endif
-	return(NSApplicationMain(argc, argv));
+	[NSApplication sharedApplication];
+	[NSBundle loadNibNamed:@"MainMenu" owner:NSApp];
+	
+	 SLog(@" - initalizing R");
+	 if (![[REngine mainEngine] activate]) {
+		 NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
+		 exit(-1);
+	 }
+	 
+	 /* register Quartz symbols */
+	 QuartzRegisterSymbols();
+	 /* create quartz.save function in tools:quartz */
+	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e); assign(\"avaliable.packages\",function(...) available.packages(...),e)}))"];
+	 
+	 SLog(@" - set R options");
+	 // force html-help, because that's the only format we can handle ATM
+	 [[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
+	 
+	 SLog(@" - set default CRAN mirror");
+	 {
+		 NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
+		 if (![url isEqualToString:@""])
+			 [[REngine mainEngine] executeString:[NSString stringWithFormat:@"try({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) },silent=TRUE)", url]];
+	 }
+	 
+	 SLog(@" - set BioC repositories");
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
+	 
+	 SLog(@" - loading secondary NIBs");
+	 if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
+		 SLog(@" * unable to load Vignettes.nib!");
+	 }
+
+	 SLog(@"main: finish launching");
+	 [NSApp finishLaunching];
+ 
+	 // ready to rock
+	 SLog(@"main: entering REPL");
+	 [[REngine mainEngine] runREPL];
+	 
+	 SLog(@"main: returned from REPL");
+	 [pool release];
+	 
+	 SLog(@"main: exiting with status 0");
+	 return 0;
 }
