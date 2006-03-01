@@ -1119,17 +1119,21 @@ The input replaces what the user is currently typing.
 				while(fgets(c, 1023, rhist) && *c) {
 					int i = strlen(c);
 					BOOL multiline = NO;
+					NSString *sEntry;
 
 					while (i>0 && (c[i-1]=='\n' || c[i-1]=='\r')) c[--i]=0; // just in case someone has PC history we strip \r too
 					if (!*c) continue; // skip blank lines (is that intended? what about "foo#\n\nbla\n"?)
 					if (multiline=(c[i-1]=='#')) c[i-1]='\n';
-					if (entry)
-						entry = [entry stringByAppendingString:[NSString stringWithUTF8String:c]];
-					else
-						entry = [NSString stringWithUTF8String:c];
-					if (!multiline) {
-						[hist commit:entry];
-						entry=nil;
+					sEntry=[NSString stringWithUTF8String:c];
+					if (eEntry) {
+						if (entry)
+							entry = [entry stringByAppendingString:sEntry];
+						else
+							entry = sEntry;
+						if (!multiline) {
+							[hist commit:entry];
+							entry=nil;
+						}
 					}
 				}
 				if (entry) [hist commit:entry]; // just being paranoid if someone edited the file manually
