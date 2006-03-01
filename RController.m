@@ -833,7 +833,10 @@ extern BOOL isTimeToFinish;
 - (int) handleEdit: (char*) file
 {
 	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSString *fn = [[NSString stringWithUTF8String:file] stringByExpandingTildeInPath];
+	NSString *fn = [NSString stringWithUTF8String:file];
+	if (fn) fn = [fn stringByExpandingTildeInPath];
+	if (!fn) error("Invalid file name.");
+
 	SLog(@"RController.handleEdit: %s", file);
 	
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:fn]) {
@@ -869,15 +872,18 @@ extern BOOL isTimeToFinish;
     if (nfile <=0) return 1;
 	
     for (i = 0; i < nfile; i++) {
-		NSString *fn = [[NSString stringWithUTF8String:file[i]] stringByExpandingTildeInPath];
-		if([[NSFileManager defaultManager] fileExistsAtPath:fn])
-			[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
-		else
-			[[NSDocumentController sharedDocumentController] newDocument: [RController sharedController]];
-		
-		NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
-		if(wtitle[i]!=nil)
-			[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle[i]]];
+		NSString *fn = [NSString stringWithUTF8String:file[i]];
+		if (fn) fn = [fn stringByExpandingTildeInPath];
+		if (!fn) {
+			if([[NSFileManager defaultManager] fileExistsAtPath:fn])
+				[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
+			else
+				[[NSDocumentController sharedDocumentController] newDocument: [RController sharedController]];
+			
+			NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
+			if(wtitle[i]!=nil)
+				[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle[i]]];
+		}
     }
 	return 1;
 }
@@ -890,20 +896,23 @@ extern BOOL isTimeToFinish;
 	SLog(@"RController.handleShowFiles (%d of them, title %s, pager %s)", nfile, wtitle, pages);
 	
     for (i = 0; i < nfile; i++){
-		NSString *fn = [[NSString stringWithUTF8String:file[i]] stringByExpandingTildeInPath];
-		RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:NO];
-		// don't dsiplay - we need to prevent the window controller from using highlighting
-		if (document) {
-			NSArray *wcs = [document windowControllers];
-			if (wcs && [wcs count]>0) {
-				SLog(@" - Disabling syntax highlighting for this document");
-				[(RDocumentWinCtrl*) [wcs objectAtIndex:0] setPlain:YES];
+		NSString *fn = [NSString stringWithUTF8String:file[i]];
+		if (fn) fn =[fn stringByExpandingTildeInPath];
+		if (fn) {
+			RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:NO];
+			// don't dsiplay - we need to prevent the window controller from using highlighting
+			if (document) {
+				NSArray *wcs = [document windowControllers];
+				if (wcs && [wcs count]>0) {
+					SLog(@" - Disabling syntax highlighting for this document");
+					[(RDocumentWinCtrl*) [wcs objectAtIndex:0] setPlain:YES];
+				}
+				if(wtitle[i]!=nil)
+					[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
+				[document setEditable: NO];
+				SLog(@" - finally show the document window");
+				[document showWindows];
 			}
-			if(wtitle[i]!=nil)
-				[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
-			[document setEditable: NO];
-			SLog(@" - finally show the document window");
-			[document showWindows];
 		}
     }
 	return 1;
@@ -1125,7 +1134,7 @@ The input replaces what the user is currently typing.
 					if (!*c) continue; // skip blank lines (is that intended? what about "foo#\n\nbla\n"?)
 					if (multiline=(c[i-1]=='#')) c[i-1]='\n';
 					sEntry=[NSString stringWithUTF8String:c];
-					if (eEntry) {
+					if (sEntry) {
 						if (entry)
 							entry = [entry stringByAppendingString:sEntry];
 						else

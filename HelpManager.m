@@ -72,6 +72,8 @@ static id sharedHMController;
 
 - (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic
 {
+	if (!file) return;
+	if (!topic) topic=@"<unknown>";
 	NSString *url = [NSString stringWithFormat:@"file://%@",file];
 	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
 	if(url != nil)
@@ -83,6 +85,7 @@ static id sharedHMController;
 {
 	NSString *searchString;
 	NSCharacterSet *charSet;
+	if (!topic) return; /* should we issue an error? This happens only if the encoding is wrong */
 	charSet = [NSCharacterSet characterSetWithCharactersInString:@"'\""];
 	searchString = [topic stringByTrimmingCharactersInSet:charSet];
 //	NSLog(@"showHelpFor: <%@>", searchString);

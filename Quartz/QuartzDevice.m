@@ -816,7 +816,8 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
 		if (fontFamily)
 			currFont=[NSString stringWithUTF8String:fontFamily];
 	}
-
+	if (!currFont) currFont = @"Helvetica";
+	
 	if( ![currFont isEqual: @"Symbol"] )
 		traits=
 			((gc->fontface==2||gc->fontface==4)?NSBoldFontMask:0)|
@@ -991,10 +992,12 @@ SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
 			if (!dd) error("Can't get device data descriptor.");
 			else {
 				QuartzDesc *xd = (QuartzDesc *) dd-> deviceSpecific;
+				NSString *sFn = [NSString stringWithUTF8String:CHAR(STRING_ELT(fn, 0))];
+				if (!sFn) error("Invalid file name.");
 				if (bitmap)
-					[xd->DevView saveAsBitmap: [NSString stringWithUTF8String:CHAR(STRING_ELT(fn, 0))] usingType:ftype];
+					[xd->DevView saveAsBitmap: sFn usingType:ftype];
 				else
-					[xd->DevView saveAsPDF: [NSString stringWithUTF8String:CHAR(STRING_ELT(fn, 0))]];
+					[xd->DevView saveAsPDF: sFn];
 			}
 		}
 	}
