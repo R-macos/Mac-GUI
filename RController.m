@@ -284,7 +284,29 @@ static RController* sharedRController;
 			strcpy(tp, getenv("R_HOME")); strcat(tp, "/doc"); setenv("R_DOC_DIR", tp, 1);
 		}
 	}
+
+#if (R_VERSION >= R_Version(2,3,0))
+	/* in 2.3.0 we have to set R_ARCH if appropriate */
+#ifdef __ppc__
+#define arch_lib_nss @"/lib/ppc"
+#define arch_str "ppc"
+#else
+#ifdef __i386__
+#define arch_lib_nss @"/lib/i386"
+#define arch_str "i386"
 #endif
+#endif
+#ifdef arch_lib_nss
+	if (!getenv("R_ARCH")) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString stringWithUTF8String:getenv("R_HOME")] stringByAppendingString: arch_lib_nss]])
+			setenv("R_ARCH", arch_str, 1);
+	}
+#else
+#warning Unknown architecture, R_ARCH won't be set automatically.
+#endif
+
+#endif /* R 2.3.0 */
+#endif /* R 2.2.0 */
 	
 	/* setup LANG variable to match the system locale based on user's CFLocale */
 #if (R_VERSION >= R_Version(2,1,0))

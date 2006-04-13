@@ -1,5 +1,11 @@
 NEWS 
 
+Last-update: 2006-04-13 [SU]
+*	Added support for multi-arch build of R
+
+Last-update: 2006-03-01 [SU]
+*	Fixed crash on invalid history files
+
 Last-update: 2006-02-21 [SU]
 *	Fixes for internal header changes in R-devel
 *	Fixed script stage for R target to work with paths
