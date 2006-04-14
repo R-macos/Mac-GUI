@@ -289,11 +289,11 @@ static RController* sharedRController;
 	/* in 2.3.0 we have to set R_ARCH if appropriate */
 #ifdef __ppc__
 #define arch_lib_nss @"/lib/ppc"
-#define arch_str "ppc"
+#define arch_str "/ppc"
 #else
 #ifdef __i386__
 #define arch_lib_nss @"/lib/i386"
-#define arch_str "i386"
+#define arch_str "/i386"
 #endif
 #endif
 #ifdef arch_lib_nss
