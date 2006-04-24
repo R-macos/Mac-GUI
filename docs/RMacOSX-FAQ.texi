@@ -150,12 +150,13 @@ If you experience problems with @R{}, we highly recommend the use of the @CRAN{}
 * How to configure and build R::  
 * How to install R::            
 * How to build and install the R.app::  
+* How to build universal R::    
 @end menu
 
 @node What is needed to build R, How to configure and build R, Building R from sources, Building R from sources
 @section What is needed to build R
 
-The requirements for building @R{} vary, depending whether the build machine is an Intel-based or PowerPC-based Mac and whether universal build is desired. The following description shows the minimum requirements for building @R{}. The process of building a universal binary is more complex and described in section XXX.
+The requirements for building @R{} vary, depending whether the build machine is an Intel-based or PowerPC-based Mac and whether universal build is desired. The following description shows the minimum requirements for building @R{}. The process of building a universal binary is more complex and described in section @pxref{How to build universal R}.
 
 @menu
 * C/C++ compiler (gcc 3.3 or later)::  
@@ -311,7 +312,7 @@ sudo make prefix=/where/you/want/R.framework/to/go install
 @end smallexample
 As in the above, you don't need to specify the name @emph{R.framework} in the path.
 
-@node  How to build and install the R.app,  , How to install R, Building R from sources
+@node  How to build and install the R.app, How to build universal R, How to install R, Building R from sources
 @section How to build and install the R.app
 The sources for the R.app GUI are currently not included in the global R source distribution. They are available in the form of a Xcode project on the R for Mac OS X pages as well as the SVN repository. Before compiling R.app make sure R is installed as @emph{/Library/Frameworks/R.framework} and working.
 
@@ -329,6 +330,67 @@ For compatibility, the GUI offers an old-style project for Xcode 2.0 named @file
 The build includes both R.app and this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
 
 R.app does not need to be installed in any specific way. Building R.app results in the R.app bundle which appears as one R icon. This application bundle can be run anywhere and it is customary to place it in the @emph{Applications} folder.
+
+@node How to build universal R,  , How to build and install the R.app, Building R from sources
+@section How to build universal R
+Starting with @R{} 2.3.0 it is possible to build @R{} that runs on multiple architectures. One special application of this feature is to build @R{} that runs on both Intel and PowerPC based Macs on Mac OS X 10.4.4 or higher. Such @R{} build is called @emph{universal}.
+
+In order to be able to build universal R, all necessary libraries must be available as @samp{i386} and @samp{ppc} binaries. For system libraries this is the default for Mac OS X on Intel Macs. Other libraries such as readline must be compiled accordingly.
+
+In addition, the compilers must support both architectures as well. For Intel Macs, such compilers are supplied with @R{} 2.3.0 in the @CRAN{} binary package (GNU gcc 4.0.3 with Apple drivers).
+
+The next step is to build a binary for each architecture. This can be either done natively n two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
+
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.3.0.tar.gz} is in the current directory, replace @samp{R-2.3.0} with any other version or name as appropriate):
+@example
+tar fxz R-2.3.0.tar.gz
+mkdir R-ppc
+cd R-ppc
+../R-2.3.0/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
+CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
+FC="gfortran-4.0 -arch ppc"
+make
+make install
+cd ..
+@end example
+
+Depending on your permissions, you may need to run @samp{sudo make install}. The next step is to build and install the Intel binary:
+
+@example
+mkdir R-i386
+cd R-i386
+../R-2.3.0/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
+FC="gfortran-4.0 -arch i386" CPPFLAGS=-msse3
+make
+make install
+cd ..
+@end example
+
+The installation scripts in @R{} are intelligent enough to merge both builds together and create a universal @R{} framework. One crucial requirement for this to work is to use @samp{i386} and @samp{ppc} as the architecture names.
+
+It is possible to use additional flags at configure time. To optimize the build for Intel Core Solo/Duo processors, add the following flags for the Intel build:
+@example
+CFLAGS="-g -O2 -march=pentium-m -mtune=prescott" \
+CXXFLAGS="-g -O2 -march=pentium-m -mtune=prescott" \
+FFLAGS="-g -O2 -march=pentium-m -mtune=prescott" \
+FCFLAGS="-g -O2 -march=pentium-m -mtune=prescott"
+@end example
+
+In addition, @samp{vecLib} currently does not use both cores on Core Duo, so it advisable to use threaded BLAS library such as ATLAS instead. Assuming ATLAS is installed in a standard place, the corresponding configure flag is
+@smallexample
+--with-blas="-lptf77blas -lpthread -latlas"
+@end smallexample
+
+Finally, the standard @R{} shell script uses by default the last installed architecture. This is probably not what you want, because the native architecture is known at run time. Therefore the line
+@smallexample
+: ${R_ARCH=/i386}
+@end smallexample
+can be replaced by
+@smallexample
+: ${R_ARCH=/`arch`}.
+@end smallexample
+to default to the current native architecture. It addition, it may be a good idea to make sure that the @samp{PATH} environment variable contains the path to your universal compiler, otherwise there may be problems with compilation of universal packages.
 
 @node Command line version of R, R.app, Building R from sources, Top
 @chapter Command line version of R
@@ -769,9 +831,9 @@ Note that currently the Package Installer assumes that custom repositories maint
 
 @node Building universal package, Can I install packages built for other platforms?, Installation of packages, How to install packages
 @section Building universal packages::
-Starting with R 2.3.0 the same binary package can be used for both PowerPC and Intel based Macs. Such a package is called @emph{universal}, because it works on either platform. Building universal packages requires special handling. First, @R{} itself must be compiled as universal binary to support universal packages at all. The @CRAN{} binary is built this way, see XXX for details.
+Starting with R 2.3.0 the same binary package can be used for both PowerPC and Intel based Macs. Such a package is called @emph{universal}, because it works on either platform. Building universal packages requires special handling. First, @R{} itself must be compiled as universal binary to support universal packages at all. The @CRAN{} binary is built this way, see @pxref{How to build universal R} for details.
 
-Further, universal binaries can be currently built on Intel Macs only. The main reason is that the default Mac OS X installation on PowerPC based Macs does not include system libraries for Intel Macs (and R building process is unaware of Xcode SDKs). If you happen to have a PowerPC machine with full system libraries it should work. Finally, a compiler supporting both platforms is necessary, see XXX.
+Further, universal binaries can be currently built on Intel Macs only. The main reason is that the default Mac OS X installation on PowerPC based Macs does not include system libraries for Intel Macs (and R building process is unaware of Xcode SDKs). If you happen to have a PowerPC machine with full system libraries it should work. Finally, a compiler supporting both platforms is necessary, see @pxref{How to build universal R}.
 
 Once all tools are in place it is considerably easy to build an universal binary. Assuming that you have a source package called @code{foo_1.0.tar.gz}, it can be installed universally using the following two-step process:
 
