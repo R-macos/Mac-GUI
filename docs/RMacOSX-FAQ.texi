@@ -3,9 +3,9 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2005
-@set FAQ-VERSION 2.2-1 @value{FAQ-YEAR}-12-20
-@set REL-VERSION 2.2.1
+@set FAQ-YEAR 2006
+@set FAQ-VERSION 2.3-1 @value{FAQ-YEAR}-04-23
+@set REL-VERSION 2.3.0
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -81,7 +81,7 @@ Rob J. Goedman                   @*
 @ifhtml
 @html
 <h2>Frequently Asked Questions on R for Mac OS X</h2>
-<h2>Version @value{FAQ-VERSION}, R.app 1.14</h2>
+<h2>Version @value{FAQ-VERSION}, R.app 1.15</h2>
 <address>Stefano M. Iacus</address>
 <address>Simon Urbanek</address>
 <address>Rob J. Goedman</address>
@@ -111,10 +111,10 @@ This R for Mac OS X FAQ is rather incomplete at the moment and requires contribu
 Anything specific to the R language can be found in the official R-FAQ (see @uref{http://cran.r-project.org/doc/FAQ/R-FAQ.html}).
 Please send any requests/questions you would like answers on to the maintainers.
 
-In this document @R{} refers to the core, command line based @R{} system while R.app refers to the GUI based Mac OS application that controls the underlying @R{}.
+In this document @R{} refers to the core, command line based @R{} system while @samp{R.app} refers to the GUI based Mac OS application that controls the underlying @R{}.
 
 This document contains information on how to build @R{} from sources, how to install and run it.
-It also contains a user guide to the R.app version of @R{}.
+It also contains a user guide to the @samp{R.app} version of @R{}.
 @menu
 * How many versions of R for Mac OS X?::  
 * What machines does R for Mac OS X run on?::  
@@ -130,7 +130,7 @@ However, @R{} on Mac OS X can be used either on the command-line (@pxref{Command
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
 @section What machines does R for Mac OS X run on?
 
-R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.app GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is always preferable, though. We do not support Mac OS X version 10.1 and earlier.
+R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.app GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is always preferable, though. We do not support Mac OS X version 10.1 and earlier. The binaries provided on @CRAN{} are universal and require Mac OS X 10.4.4 (Tiger) or higher.
 
 @R{} can be compiled from sources as a pure 64-bit application on PowerMac G5 machines, but currently the R.app GUI does not support such setup.
 
@@ -139,7 +139,7 @@ R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.a
 
 @R{} for Mac OS X is available on @CRAN{} in the form of a disk image containing a multi-package consisting of the R framework, the R.app GUI and optional libraries. The image is usually named @file{R.dmg} with optional version number.
 
-The installation is done by double-clicking on the disk image, which opens a new Finder window with the installer package, followed by double-clicking on that package installer. The installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the installer will require password or login of an administrator. The installation can be customized, but the default (installing R framework and R.app) is suitable for most users.
+The installation is done by double-clicking on the disk image, which opens a new Finder window with the installer package, followed by double-clicking on that package installer. The installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the installer will require password or login of an administrator. The installation can be customized, but the default is suitable for most users.
 
 If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes. Note that the @CRAN{} binary includes R shared library, so there is no need to re-compile @R{} with @code{--enable-R-shlib}.
 
@@ -154,6 +154,9 @@ If you experience problems with @R{}, we highly recommend the use of the @CRAN{}
 
 @node What is needed to build R, How to configure and build R, Building R from sources, Building R from sources
 @section What is needed to build R
+
+The requirements for building @R{} vary, depending whether the build machine is an Intel-based or PowerPC-based Mac and whether universal build is desired. The following description shows the minimum requirements for building @R{}. The process of building a universal binary is more complex and described in section XXX.
+
 @menu
 * C/C++ compiler (gcc 3.3 or later)::  
 * Fortran compiler (g77 3.3 or later)::  
@@ -167,8 +170,7 @@ If you experience problems with @R{}, we highly recommend the use of the @CRAN{}
 @node C/C++ compiler (gcc 3.3 or later), Fortran compiler (g77 3.3 or later), What is needed to build R, What is needed to build R
 @subsection C/C++ compiler (gcc 3.3 or later)
 
-If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD 
-(which is CD number 4). This is only true if you bought Panther. If your computer came with pre-installed version of OS X, look into /Applications/Installers. Recent installations feature "Xcode Tools" folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Panther is version 1.5). During the installation, don't forget to setect X11 SDK if you plan to use X11.
+If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retial version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Tiger is version 2.2.1). During the installation, don't forget to setect X11 SDK if you plan to use X11.
 
 If you are using Mac OS X 10.2 (aka Jaguar) then you should download and install the 
 Apple Developers Tools Dec 2002 including the latest updates which dates August 2003. Either it comes 
@@ -178,24 +180,22 @@ In either cases be sure you have gcc version 3.3 or later - you can check the ve
 gcc --version
 @end example
 
-At the time of writing the use of gcc 4.0 or higher is discouraged, because of issues with Fortran compiler described below.
+Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @gcc{gcc} 3.x is not supported on Intel Macs.
 
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.2.1 @CRAN{} binary comes with GNU Fortran 77 3.4.2 optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran compiler from the list of packages. The @CRAN{} binaries are configured to use gcc 3.3 and the supplied Fortran compiler.
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.3.0 @CRAN{} binary comes with GNU Fortran F95 4.0.3 in the gcc optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU GCC from the list of packages. The @CRAN{} binaries are configured to use gcc 4.0.3 and the supplied Fortran compiler.
 
-Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations don't work. It is also highly recommended to use compiler with static supporting libraries. Especially for gfortran 4.0 it is highly recommended to remove any dynamic libraries such as @code{libgfortran.dylib} (or force the use of static libraries by setting @code{FLIBS} correspondingly). Failing to do so will produce binaries that fail all checks (see @emph{R-admin} documentation for details - this issue is not Mac-specific).
-
-At the time of writing the use of gcc 4.x and gfortran 4.x is discouraged, because gfortran is still not stable enough and produces binaries that are slower than g77 and segfaults on some simple examples.
+Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations don't work.
 
 @node libreadline 4.3 or higher (optional), X11 window server (optional), Fortran compiler (g77 3.3 or later), What is needed to build R
 @subsection libreadline 4.3 or higher (optional)
-The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with readline support (more precisely it comes with libedit), so you can skip this step.
+The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with @samp{libedit} library which emulated readline. Nevertheless, GNU readline has some addiional functionality so it may be worth installing anyway.
 
 Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
 
-Readline 5.0 compiles out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, because the configure script fails to detect that flag.
+Readline 5.0 and later compile out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, because the configure script fails to detect that flag. The use of readline 5.1 with recent patches is recommended due to bugs in earlier versions that can lead to crashes.
 
 If using readline 4.3, you need to modify the original file @file{shlib/Makefile.in} in order to make it
 work under Mac OS X 10.2.x and later (this is because libreadline needs to be linked against
@@ -209,21 +209,19 @@ make
 sudo make install
 @end example
 It installs everything in @file{/usr/local}.
-These instructions apply to both Jaguar and Panther.
 
 @node X11 window server (optional), X11 TclTk headers and libraries (optional), libreadline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
-Mac OS X 10.3 (Panther) and later include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installtion CD/DVD. The corresponding package is either visible directly, or you can select the multi-package of bundled software, control-click on it, select @samp{Show Original} - in the same directory that it will warp you to there is the X11 installer, labeled @samp{X11User.pkg}.
+Mac OS X 10.3 (Panther) and later include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installation CD/DVD. The corresponding package is either visible directly, or you can select the multi-package of bundled software, control-click on it, select @samp{Show Original} - in the same directory that it will warp you to there is the X11 installer, labeled @samp{X11User.pkg}.
 
 In addition to the user part, you need to install the X11 SDK package from the Xcode Tools CD. Again, it is not selected by default, so make sure you select it during the installation of Xcode Tools.
 
-Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two options to obtain X11 for Jagure: Apple released X11 beta for Jaguar which is still around, although not officially supported. It features the Quartz mwindow manager that integrates nicely into the system. If you are unable to find Apple's X11 beta, you will need to install both the X11 Window server and the X11 SDK package from 
-the XFree86 web page. Other versions such as using fink are available, too.
+Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two options to obtain X11: Apple released X11 beta for Jaguar which is still around, although not officially supported. It features the Quartz window manager that integrates nicely into the system. If you are unable to find Apple's X11 beta, you will need to install both the X11 Window server and the X11 SDK package from the XFree86 web page. Other versions such as using fink are available, too.
 
 @node X11 TclTk headers and libraries (optional), Aqua TclTk headers and libraries (optional), X11 window server (optional), What is needed to build R
 @subsection X11 TclTk headers and libraries (optional)
-If you plan to use tcltk package for R, you can either use Tcl/Tk headers and library supplied in the @R{} @CRAN{} binary or compile your own. The @CRAN{} binary includes Tcl/Tk 8.4.10 for X11. This package is optional so you need to select "custom install" during R installation and enable it. This is the recommended procedure becasue it will allow you to use @CRAN{} @R{} package binaries as well.
+If you plan to use tcltk package for @R{}, you can either use Tcl/Tk headers and library supplied in the @R{} @CRAN{} binary or compile your own. The @CRAN{} binary includes universal Tcl/Tk 8.4.12 for X11. This package is optional so you need to select "custom install" during R installation and enable it. This is the recommended procedure because it will allow you to use @CRAN{} @R{} package binaries as well.
 
 Alternatively you need to download the sources of the Tcl and Tk 8.4.x packages to build yourself the sources. 
 The original sources can be found on the official TclTk web page @uref{http://www.tcl.tk/software/tcltk/8.4.html}.
@@ -231,29 +229,30 @@ Please do the following respecting the sequence (you'll be asked for a root pass
 of the Tcl and Tk sources, you'll probably find new version on the web page, thus only the name of the .tar.gz archives
 changes.
 
-
-For Tcl: download the tlc 8.4 sources, cd inside the folder where you have downloaded the archive and
-type:
+The following shell commands will download, compile and install universal Tcl/Tk. Modify the configure part to suit your needs, such as if you don't need all architectures:
 @example
-tar zxf tcl8.4.4-src.tar.gz
-cd tcl8.4.4/unix/
-./configure
+cd /tmp/
+curl -O http://internap.dl.sourceforge.net/sourceforge/tcl/tcl8.4.12-src.tar.gz
+curl -O http://internap.dl.sourceforge.net/sourceforge/tcl/tk8.4.12-src.tar.gz
+tar fxz tcl8.4.12-src.tar.gz
+cd tcl8.4.12/unix
+CFLAGS='-arch i386 -arch ppc -arch ppc64' ./configure --with-x \
+--disable-corefoundation --enable-threads --disable-symbols --disable-aqua
 make
 sudo make install
-@end example
 
-For Tk: download the tk 8.4 sources, cd inside the folder where you have downloaded the archive and type:
-@example
-tar zxf tk8.4.4-src.tar.gz
-cd tk8.4.4/unix/
-./configure
+cd ../..
+tar fxz tk8.4.12-src.tar.gz
+cd tk8.4.12/unix
+CFLAGS='-arch i386 -arch ppc -arch ppc64' ./configure --with-x \
+--disable-corefoundation --enable-threads --disable-symbols --disable-aqua
 make
 sudo make install
 @end example
 
 @node Aqua TclTk headers and libraries (optional), TeX suite of tools for documentation (optional), X11 TclTk headers and libraries (optional), What is needed to build R
 @subsection Aqua TclTk headers and libraries (optional)
-Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries. If those are not detect automatically, use the following flags with @code{configure}:
+Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries. If those are not detected automatically, use the following flags with @code{configure}:
 @example
 --with-tcl-config=/System/Library/Frameworks/Tcl.framework/tclConfig.sh 
 --with-tk-config=/System/Library/Frameworks/Tk.framework/tkConfig.sh
@@ -268,7 +267,7 @@ TCLTK_LIBS='-framework Tcl -framework Tk'
 TCLTK_CPPFLAGS='-I/Library/Frameworks/Tcl.Framework/Headers -I/Library/Frameworks/Tk.Framework/Headers'
 @end example
 
-Note that currently R.app doesn't support Aqua Tcl/Tk.
+Note that currently R.app doesn't support Aqua Tcl/Tk, because of conflicting event loops.
 
 @node TeX suite of tools for documentation (optional),  , Aqua TclTk headers and libraries (optional), What is needed to build R
 @subsection TeX suite of tools for documentation (optional)
@@ -316,10 +315,17 @@ As in the above, you don't need to specify the name @emph{R.framework} in the pa
 @section How to build and install the R.app
 The sources for the R.app GUI are currently not included in the global R source distribution. They are available in the form of a Xcode project on the R for Mac OS X pages as well as the SVN repository. Before compiling R.app make sure R is installed as @emph{/Library/Frameworks/R.framework} and working.
 
-Using Xcode load the @emph{R.xcode} project, select @emph{R} target (which is the default), set @emph{Deployment} building style and build. The same effect can be achieved on the command line in the @file{Mac-GUI} directory by typing:
+Using Xcode load the @emph{R.xcodeproj} project, select @emph{R} target (which is the default), set @emph{Deployment} configuration build. The same effect can be achieved on the command line in the @file{Mac-GUI} directory by typing:
 @example
-xcodebuild -target R -buildstyle Deployment
+xcodebuild -target R -configuration Deployment
 @end example
+
+The current development is done using Xcode 2.2.1. The default build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure R is available inside the SDK by running the following in Terminal:
+@example
+ln -sf /Library /Developer/SDKs/MacOSX10.4u.sdk/Library
+@end example
+For compatibility, the GUI offers an old-style project for Xcode 2.0 named @file{R.xcode} which will build PowerPC binary only. However, this project file is no longer actively maintained.
+
 The build includes both R.app and this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
 
 R.app does not need to be installed in any specific way. Building R.app results in the R.app bundle which appears as one R icon. This application bundle can be run anywhere and it is customary to place it in the @emph{Applications} folder.
@@ -333,11 +339,11 @@ These binaries come with a common installer used by R.app so please read
 the related notes (@pxref{How to get R.app}).
 To use @R{} you probably need to add a symbolic link on your system as the @R{} binary is 
 located inside the framework.
-Suppose you have the @emph{/usr/local/bin} directory on your system (if you don't have one, you can use @emph{/usr/bin} instead) you should just type in your Terminal (a root password is required)
+Suppose you have the @emph{/usr/local/bin} directory on your system (if you do not have one, you can use @emph{/usr/bin} instead) you should just type in your Terminal (a root password is required)
 @smallexample
 sudo ln -s /Library/Frameworks/R.framework/Resources/R /usr/local/bin/R
 @end smallexample
-Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment variable, you'll be able to launch R from any location on your system just by typing @emph{R}. In this way, when you install a new version of the @emph{R.framework} this link will point to the latest R binary.
+Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment variable, you will be able to launch R from any location on your system just by typing @emph{R}. In this way, when you install a new version of the @emph{R.framework} this link will point to the latest R binary.
 
 @node R.app, How to install packages, Command line version of R, Top
 @chapter R.app
@@ -352,11 +358,11 @@ Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment var
 * R.app Bugs::                  
 @end menu
 
-R.app is the name for the new Cocoa-based GUI for Mac OS X that was introduced in R 2.0. It appears as an icon labeled @emph{R}, but to avoid confusion with general @R{}, we prefer to use the name as it appears when using @emph{Get Info} on the GUI: R.app This stands for @emph{R application}.
+R.app is the name for the new Cocoa-based GUI for Mac OS X that was introduced in R 2.0. It appears as an icon labeled @emph{R}, but to avoid confusion with general @R{}, we prefer to use the name as it appears when using @emph{Get Info} on the GUI: @samp{R.app} This stands for @emph{R application}.
 
 Internally R.app is a Cocoa program (hence written in Obj-C) that loads R dynamic library in order to use R facilities.
 
-Historically there were two more GUI for Mac OS X: RAqua and Cocoa GUI bundle. The latter was never officially released and RAqua was retired in R version 2.1, because it used legacy toolkit from the times of Mac OS9.
+Historically there were two more GUI for Mac OS X: @emph{RAqua} and @emph{Cocoa GUI bundle}. The latter was never officially released and RAqua was retired in R version 2.1, because it used legacy toolkit from the times of Mac OS9.
 
 @node How to get R.app, How to install the R.app, R.app, R.app
 @section How to get R.app
@@ -726,6 +732,7 @@ You have several options for installing new packages on your system. We discuss 
 @menu
 * Which kind of packages can I install using the GUI?::  
 * Installation of packages::    
+* Building universal package::  
 * Can I install packages built for other platforms?::  
 * Where are the packages I've installed?::  
 @end menu
@@ -734,12 +741,12 @@ You have several options for installing new packages on your system. We discuss 
 @section Which kind of packages can I install using the GUI?
 At the moment the GUI provide direct access/download/installation of packages located on @CRAN{}, the Bioconductor repository or a custom repository. You can also install packages from local files, either binary of source packages, as explained below. Otherwise you can use the appropriate @R{} commands to install packages from a specific location other than the above mentioned ones.
 
-@node Installation of packages, Can I install packages built for other platforms?, Which kind of packages can I install using the GUI?, How to install packages
+@node Installation of packages, Building universal package, Which kind of packages can I install using the GUI?, How to install packages
 @section Installation of packages
 You can choose to install packages from source if they are located on @CRAN{}, on the BioConductor repository and on your local disk. Further you can either install packages from sources or use pre-built binary packages. Only packages that pass all tests are provided in the binary form.
 
 @noindent
-Usually it's much faster and easier to install binary packages, because they are immeditely ready to use. On the other hand only packages that pass all tests are available in binary form. If your desired package is not available in binary form, you will need to use its source form. Source packages have to be compiled first before they can be used. If you want to install a source package, you will need the same working setup for building R itself (see @pxref{Building R from sources}), including Apple Xcode Tools and a working @FORTRAN{} compiler (if the package requires it).
+Usually it is much faster and easier to install binary packages, because they are immeditely ready to use. On the other hand only packages that pass all tests are available in binary form. If your desired package is not available in binary form, you will need to use its source form. Source packages have to be compiled first before they can be used. If you want to install a source package, you will need the same working setup for building R itself (see @pxref{Building R from sources}), including Apple Xcode Tools and a working @FORTRAN{} compiler (if the package requires it).
 
 @noindent
 If you decide to install packages you should use the @emph{Packages & Data} menu of the GUI, in particular the sub-item @emph{Package Installer}. Select the repository, package tyep (bionary or source) and press @emph{Get List}. This will connect to the repository through the Internet and a list all packages available for installation. This is list tells you if a package is already installed on your system, the version of the package available on @CRAN{} and the version of the same package if already installed. 
@@ -760,7 +767,34 @@ in the top left list and press the @emph{Install} button (which is now enabled).
 @noindent
 Note that currently the Package Installer assumes that custom repositories maintain proper hierarchy for both source and binary packages the same way CRAN does. If your custom repository is flat, you will need to use @code{install.packages} manually or update the repository format.
 
-@node Can I install packages built for other platforms?, Where are the packages I've installed?, Installation of packages, How to install packages
+@node Building universal package, Can I install packages built for other platforms?, Installation of packages, How to install packages
+@section Building universal packages::
+Starting with R 2.3.0 the same binary package can be used for both PowerPC and Intel based Macs. Such a package is called @emph{universal}, because it works on either platform. Building universal packages requires special handling. First, @R{} itself must be compiled as universal binary to support universal packages at all. The @CRAN{} binary is built this way, see XXX for details.
+
+Further, universal binaries can be currently built on Intel Macs only. The main reason is that the default Mac OS X installation on PowerPC based Macs does not include system libraries for Intel Macs (and R building process is unaware of Xcode SDKs). If you happen to have a PowerPC machine with full system libraries it should work. Finally, a compiler supporting both platforms is necessary, see XXX.
+
+Once all tools are in place it is considerably easy to build an universal binary. Assuming that you have a source package called @code{foo_1.0.tar.gz}, it can be installed universally using the following two-step process:
+
+@example
+R_ARCH=/i386 R CMD INSTALL foo_1.0.tar.gz
+R_ARCH=/ppc R CMD INSTALL --libs-only foo_1.0.tar.gz
+@end example
+
+In the first step a full package for the Intel platform is built and installed. In the scond step a package for PowerPC platofrm is built, but only the relevant binary libraries are installed. This way both platforms share the same set of files except for the package library.
+
+@code{R CMD INSTALL --build} does not support universal binaries, because it is not aware of the other platfrom, therefore it is necessary to create the resulting tar-ball manually. This is how the process could be automated (replace first line with the real package name and version):
+
+@example
+pkg=foo_1.0
+rm -rf /tmp/pkg
+mkdir /tmp/pkg
+R_ARCH=/i386 R CMD INSTALL -l /tmp/pkg $pkg.tar.gz
+R_ARCH=/ppc R CMD INSTALL -l /tmp/pkg --libs-only $pkg.tar.gz
+tar fvcz $pkg.tgz -C /tmp/pkg `echo $pkg|awk -F_ '{print $1}'`
+rm -rf /tmp/pkg
+@end example
+
+@node Can I install packages built for other platforms?, Where are the packages I've installed?, Building universal package, How to install packages
 @section Can I install packages built for other platforms?
 As a general rule the answer is @emph{yes} if the package does not contain any C/C++/Fortran code in the sources, otherwise
 the answer is negative. Another caution should be taken, that is, the package and the installed version of @R{} should be 
