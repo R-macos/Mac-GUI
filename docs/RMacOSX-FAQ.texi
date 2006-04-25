@@ -181,7 +181,7 @@ In either cases be sure you have gcc version 3.3 or later - you can check the ve
 gcc --version
 @end example
 
-Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @gcc{gcc} 3.x is not supported on Intel Macs.
+Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{gcc} 3.x is not supported on Intel Macs.
 
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
@@ -384,11 +384,11 @@ In addition, @samp{vecLib} currently does not use both cores on Core Duo, so it 
 
 Finally, the standard @R{} shell script uses by default the last installed architecture. This is probably not what you want, because the native architecture is known at run time. Therefore the line
 @smallexample
-: ${R_ARCH=/i386}
+: $@{R_ARCH=/i386@}
 @end smallexample
 can be replaced by
 @smallexample
-: ${R_ARCH=/`arch`}.
+: $@{R_ARCH=/`arch`@}.
 @end smallexample
 to default to the current native architecture. It addition, it may be a good idea to make sure that the @samp{PATH} environment variable contains the path to your universal compiler, otherwise there may be problems with compilation of universal packages.
 
@@ -852,7 +852,7 @@ rm -rf /tmp/pkg
 mkdir /tmp/pkg
 R_ARCH=/i386 R CMD INSTALL -l /tmp/pkg $pkg.tar.gz
 R_ARCH=/ppc R CMD INSTALL -l /tmp/pkg --libs-only $pkg.tar.gz
-tar fvcz $pkg.tgz -C /tmp/pkg `echo $pkg|awk -F_ '{print $1}'`
+tar fvcz $pkg.tgz -C /tmp/pkg `echo $pkg|awk -F_ '@{print $1@}'`
 rm -rf /tmp/pkg
 @end example
 
