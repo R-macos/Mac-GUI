@@ -61,6 +61,7 @@
 			<array>
 				<string>RData</string>
 				<string>rds</string>
+				<string>rda</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>Rdata.icns</string>
@@ -73,7 +74,7 @@
 			<key>LSIsAppleDefaultForType</key>
 			<true/>
 			<key>NSDocumentClass</key>
-			<string>RConsole</string>
+			<string>RDocument</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
