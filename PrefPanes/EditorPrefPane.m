@@ -47,7 +47,7 @@
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
-		NSImage *theImage = [[NSImage imageNamed:@"RDoc"] copy];
+		NSImage *theImage = [[NSImage imageNamed:@"Rdoc"] copy];
 		[theImage setFlipped:NO];
 		[theImage lockFocus];
 		[[NSColor blackColor] set];
