@@ -32,6 +32,8 @@
 #import <Cocoa/Cocoa.h>
 #import "Preferences.h"
 
+#define defaultDocumentType @"R Source File"
+
 @interface RDocumentController : NSDocumentController
 {
 }

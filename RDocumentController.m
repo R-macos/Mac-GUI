@@ -34,8 +34,6 @@
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 
-#define defaultDocumentType @"Rsource"
-
 @implementation RDocumentController
 
 - (id)init {
@@ -63,6 +61,7 @@
 - (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
 {
 	int res = [[RController sharedController] isImageData: aFile];
+	SLog(@"RDocumentController.openDocumentWithContentsOfFile: %@", aFile);
 	if (res == -1)
 		NSLog(@"File format: %@ not recognized by isImageData", aFile);
 	else 
