@@ -243,8 +243,71 @@ extern void Re_WritePrompt(char *prompt);
 extern char *R_PromptString(int browselevel, int type); /* from main.c */
 extern void Rf_callToplevelHandlers(SEXP expr, SEXP value, Rboolean succeeded, 
 			Rboolean visible);  /* from main.c */
+
+#if (R_VERSION < R_Version(2,3,0))
 extern int Rf_ParseBrowser(SEXP, SEXP);
+#else
+									/* FIXME: Rf_ParseBrowser is no longer exported
+									we will need to update it manually - ugly!
+									This is copy/paste from R 2.3.0 release
+									*/
+static void printwhere(void)
+{
+	RCNTXT *cptr;
+	int lct = 1;
+	
+	for (cptr = R_GlobalContext; cptr; cptr = cptr->nextcontext) {
+		if ((cptr->callflag & (CTXT_FUNCTION | CTXT_BUILTIN)) &&
+			(TYPEOF(cptr->call) == LANGSXP)) {
+				Rprintf("where %d: ", lct++);
+				PrintValue(cptr->call);
+		}
+	}
+	Rprintf("\n");
+}
 									
+static int Rf_ParseBrowser(SEXP CExpr, SEXP rho)
+{
+	int rval = 0;
+	if (isSymbol(CExpr)) {
+		if (!strcmp(CHAR(PRINTNAME(CExpr)), "n")) {
+			SET_DEBUG(rho, 1);
+			rval = 1;
+		}
+		if (!strcmp(CHAR(PRINTNAME(CExpr)), "c")) {
+			rval = 1;
+			SET_DEBUG(rho, 0);
+		}
+		if (!strcmp(CHAR(PRINTNAME(CExpr)), "cont")) {
+			rval = 1;
+			SET_DEBUG(rho, 0);
+		}
+		if (!strcmp(CHAR(PRINTNAME(CExpr)), "Q")) {
+												
+			/* Run onexit/cend code for everything above the target.
+			   The browser context is still on the stack, so any error
+			   will drop us back to the current browser.  Not clear
+			   this is a good thing.  Also not clear this should still
+			   be here now that jump_to_toplevel is used for the
+			   jump. */
+			R_run_onexits(R_ToplevelContext);
+												
+			/* this is really dynamic state that should be managed as such */
+			R_BrowseLevel = 0;
+			SET_DEBUG(rho, 0); /*PR#1721*/
+							
+			jump_to_toplevel();
+		}
+		if (!strcmp(CHAR(PRINTNAME(CExpr)),"where")) {
+			printwhere();
+			/* SET_DEBUG(rho, 1); */
+			rval = 2;
+		}
+	}
+	return rval;
+}
+#endif
+
 
 static void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel)
 {
