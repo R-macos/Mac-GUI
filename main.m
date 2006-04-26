@@ -75,7 +75,7 @@ int main(int argc, const char *argv[])
 	 {
 		 NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
 		 if (![url isEqualToString:@""])
-			 [[REngine mainEngine] executeString:[NSString stringWithFormat:@"try({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) },silent=TRUE)", url]];
+			 [[REngine mainEngine] executeString:[NSString stringWithFormat:@"try(local({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) }),silent=TRUE)", url]];
 	 }
 	 
 	 SLog(@" - set BioC repositories");
