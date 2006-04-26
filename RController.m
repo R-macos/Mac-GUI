@@ -1646,9 +1646,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			dirname = [filename substringWithRange: NSMakeRange(0, j+1)];
 			[manager changeCurrentDirectoryPath:[dirname stringByExpandingTildeInPath]];
 			[self showWorkingDir:nil];					
+			[self doClearHistory:nil];
+			[self doLoadHistory:nil];
 		}
-		[self doClearHistory:nil];
-		[self doLoadHistory:nil];
 		BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
 		if (openInEditor || appLaunched)
 			[[RDocumentController sharedDocumentController] openDocumentWithContentsOfFile: filename display:YES];
@@ -1753,7 +1753,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 {
 	NSFileHandle *fh = [NSFileHandle fileHandleForReadingAtPath:fname];
 	NSData *header;
-	char buf[5];
+	unsigned char buf[5];
 
 	if (!fh)
 		return -1;
@@ -1762,12 +1762,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	[fh closeFile];
 	
 	if (!header || [header length]<4)
-		return -1;
+		return 1; /* if it's less that 4 bytes then it can't be RData */
 
-	memcpy(buf, [header bytes], 4);
+	memcpy((char*)buf, [header bytes], 4);
 	
 	buf[4]=0;
-	if( (strcmp(buf,"RDX2")==0) || ((strcmp(buf,"RDX1")==0)))
+	if( (strcmp((char*)buf,"RDX2")==0) || ((strcmp((char*)buf,"RDX1")==0)) ||
+		(buf[0]==0x1f && buf[1]==0x8b)) /* or gzip signature - packed RData */
 		return(0);
 	return(1);
 }
