@@ -9,42 +9,88 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>*.R</string>
-				<string>*.r</string>
-				<string>*.S</string>
-				<string>*.s</string>
-				<string>*</string>
+				<string>R</string>
+				<string>r</string>
+				<string>Q</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Rdoc.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Rsource</string>
+			<string>R Source File</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>****</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
 			<key>NSDocumentClass</key>
 			<string>RDocument</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>pdf</string>
+			<string>Quartz Graphics</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>NSDocumentClass</key>
 			<string>RQuartz</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>*.Rcommand</string>
+				<string>Rcommand</string>
 			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Rrun.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>Rcommand</string>
+			<string>R Script</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
 			<key>NSDocumentClass</key>
 			<string>RConsole</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>RData</string>
+				<string>rds</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Rdata.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>R Data File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>RConsole</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>S</string>
+				<string>ssc</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>S-PLUS Source File</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>Rdoc.icns</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>RDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -58,11 +104,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>0FFF</string>
+	<string>Rgui</string>
 	<key>CFBundleVersion</key>
 	<string>%SVN%</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.3.0</string>
 	<key>LSEnvironment</key>
 	<dict>
 		<key>DYLD_FALLBACK_LIBRARY_PATH</key>
@@ -72,6 +116,8 @@
 		<key>R_HOME</key>
 		<string>/Library/Frameworks/R.framework/Resources</string>
 	</dict>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.3.0</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSMainNibFile</key>
