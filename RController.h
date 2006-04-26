@@ -128,7 +128,9 @@
 	
 	char *writeBuffer;
 	char *writeBufferPos;
-	int  writeBufferLen;	
+	int  writeBufferLen;
+	
+	NSMutableArray *pendingDocsToOpen; // paths of documents to open once initialized
 }
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */

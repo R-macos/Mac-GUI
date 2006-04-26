@@ -202,12 +202,41 @@ static RController* sharedRController;
 	return textFont;
 }
 
+/* before NSApplication is ready, we need to catch any odoc events that arrive, otherwise we lose them */
+- (void)handleAppleEvent:(NSAppleEventDescriptor *)event 
+		  withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+	int docs = [event numberOfItems];
+	int i = 1;
+	SLog(@"RController.handleAppleEvent:%@ withReplyEvent:%@", event, replyEvent);
+	while (i <= docs) {		
+		NSAppleEventDescriptor *d = [event descriptorAtIndex:i];
+		if (d) {
+			CFURLRef url;
+			d = [d coerceToDescriptorType:typeFSRef];
+			url = CFURLCreateFromFSRef(kCFAllocatorDefault, [[d data] bytes]);
+			if (url) {
+				NSString *pathName = (NSString *)CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+				[pathName autorelease];
+				if (!appLaunched)
+					[pendingDocsToOpen addObject: pathName];
+				else
+					[self application:NSApp openFile:pathName];
+				CFRelease(url);
+			}
+		}
+		i++;
+	}
+}
+
+
 - (void) awakeFromNib {
 	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
 		
 	sharedRController = self;
-	
+	pendingDocsToOpen = [[NSMutableArray alloc] init];
+	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleAppleEvent:withReplyEvent:) forEventClass:kCoreEventClass andEventID:kAEOpenDocuments];
 	NSLayoutManager *lm = [[RTextView layoutManager] retain];
 	NSTextStorage *origTS = [[RTextView textStorage] retain];
 	RConsoleTextStorage * textStorage = [[RConsoleTextStorage alloc] init];
@@ -450,6 +479,16 @@ static RController* sharedRController;
 	SLog(@" - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
 
+	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
+	if ([pendingDocsToOpen count]>0) {
+		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
+		NSString *fileName;
+		SLog(@" - %d documents to open", [pendingDocsToOpen count]);
+		while (fileName = (NSString*) [enumerator nextObject])
+			[self application:NSApp openFile:fileName];
+		[pendingDocsToOpen removeAllObjects];
+	}
+	
 	appLaunched = YES;
 	[self setStatusLineText:@""];
 
@@ -1586,8 +1625,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	NSFileManager *manager = [NSFileManager defaultManager];
 	if ([manager fileExistsAtPath:filename isDirectory:&isDir] && isDir){
 		if (!flag && !appLaunched) {
-			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
-			[self showWorkingDir:nil];				
+			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
+			[[REngine mainEngine] executeString:@"sys.load.image('.RData',FALSE)"];
+			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
 		} else {
