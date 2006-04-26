@@ -1590,6 +1590,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			[self showWorkingDir:nil];				
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
+		} else {
+			[self sendInput:[NSString stringWithFormat:@"setwd(\"%@\")",[filename stringByExpandingTildeInPath]]];
+			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"] isDirectory:&isDir])
+				[self sendInput:@"load('.RData')"];
 		}
 	} else {
 		if (!flag && !appLaunched) {
