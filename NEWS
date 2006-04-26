@@ -1,5 +1,13 @@
 NEWS 
 
+Last-update: 2006-04-24 [SU]
+*	Added icons for R documents, scripts and data
+*	Fixed document types and extensions
+*	Fixed workspace pollution upon startup
+*	Fix drag'n'drop: events sent while R.app was starting
+	were often lost. Loading now implies directory change
+	and all folder drops result in workspace restoration.
+
 Last-update: 2006-04-13 [SU]
 *	Added support for multi-arch build of R
 
