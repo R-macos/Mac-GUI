@@ -341,7 +341,7 @@ static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
     /* Create a new window with the specified size */
 
 	newDocument = [[NSDocumentController sharedDocumentController] 
-						openUntitledDocumentOfType:@"pdf" display:NO];
+						openUntitledDocumentOfType:quartzDocType display:NO];
 	if(newDocument == nil)
      {
          NSLog(@"Could not create new quartz device document");

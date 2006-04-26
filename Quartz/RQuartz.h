@@ -31,6 +31,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define quartzDocType @"Quartz Graphics"
+
 #import "RDeviceView.h"
 
 @interface RQuartz : NSDocument
