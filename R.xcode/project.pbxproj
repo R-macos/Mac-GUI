@@ -349,6 +349,9 @@
 		};
 		162B6A0406CD770C00C0B085 = {
 			children = (
+				688FBF390A0140280076FB12,
+				688FBF3A0A0140280076FB12,
+				688FBF3B0A0140280076FB12,
 				1C5306ED081F54F600ECECD2,
 				163C8F3D072937E800117DC8,
 				F8E2802F071F07FE00BA437C,
@@ -2907,6 +2910,48 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		688FBF390A0140280076FB12 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			name = Rdata.icns;
+			path = images/Rdata.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		688FBF3A0A0140280076FB12 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			name = Rdoc.icns;
+			path = images/Rdoc.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		688FBF3B0A0140280076FB12 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			name = Rrun.icns;
+			path = images/Rrun.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		688FBF3C0A0140280076FB12 = {
+			fileRef = 688FBF390A0140280076FB12;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		688FBF3D0A0140280076FB12 = {
+			fileRef = 688FBF3A0A0140280076FB12;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		688FBF3E0A0140280076FB12 = {
+			fileRef = 688FBF3B0A0140280076FB12;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		689B3D3A07F4B01D006F6F37 = {
 			containerPortal = 29B97313FDCFA39411CA2CEA;
 			isa = PBXContainerItemProxy;
@@ -3416,6 +3461,9 @@
 				684D008907BD72F10047EEF6,
 				1C5306EE081F54F600ECECD2,
 				68AAC9E208F41CA10064CDA1,
+				688FBF3C0A0140280076FB12,
+				688FBF3D0A0140280076FB12,
+				688FBF3E0A0140280076FB12,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
