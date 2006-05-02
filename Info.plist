@@ -108,15 +108,6 @@
 	<string>Rgui</string>
 	<key>CFBundleVersion</key>
 	<string>%SVN%</string>
-	<key>LSEnvironment</key>
-	<dict>
-		<key>DYLD_FALLBACK_LIBRARY_PATH</key>
-		<string>/Library/Frameworks/R.framework/Resources/lib</string>
-		<key>DYLD_LIBRARY_PATH</key>
-		<string>/Library/Frameworks/R.framework/Resources/lib</string>
-		<key>R_HOME</key>
-		<string>/Library/Frameworks/R.framework/Resources</string>
-	</dict>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.3.0</string>
 	<key>NSAppleScriptEnabled</key>
