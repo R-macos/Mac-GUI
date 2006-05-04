@@ -973,6 +973,9 @@ extern BOOL isTimeToFinish;
 				[document setEditable: NO];
 				SLog(@" - finally show the document window");
 				[document showWindows];
+			} else {
+				SLog(@" - can't load the document, assuming encoding problems, will use open instead");
+				system([[NSString stringWithFormat:@"open \"%@\"", fn] UTF8String]);
 			}
 		}
     }

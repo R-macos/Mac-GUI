@@ -2,6 +2,8 @@ NEWS
 
 Last-update: 2006-05-04 [SU]
 *	Fixed extension when saving Quartz Graphics
+*	Fall back to "open" in handleShowFiles: if a document
+	cannot be loaded (e.g. due to invalid encoding)
 
 Last-update: 2006-05-02 [SU]
 *	Fixed problems with incompatible libraries
