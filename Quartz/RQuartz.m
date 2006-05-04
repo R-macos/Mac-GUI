@@ -202,7 +202,7 @@ for quartz. This method is called by RController -> activateQuartz
 	int answer;
 	NSSavePanel *sp;
 	sp = [NSSavePanel savePanel];
-	[sp setRequiredFileType:quartzDocType];
+	[sp setRequiredFileType:@"pdf"]; // this is not really the type - it's the extension
 	[sp setTitle:NLS(@"Save Content of Quartz Device to PDF file")];
 	answer = [sp runModal];
 	if(answer == NSOKButton) {
