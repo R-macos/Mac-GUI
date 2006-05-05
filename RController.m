@@ -1894,7 +1894,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[toolbarItem setLabel: NLS(@"Open In Editor")];
 		[toolbarItem setPaletteLabel: NLS(@"Open In Editor")];
 		[toolbarItem setToolTip: NLS(@"Open document in editor")];
-		[toolbarItem setImage: [NSImage imageNamed: @"RDoc"]];
+		[toolbarItem setImage: [NSImage imageNamed: @"Rdoc"]];
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(openDocument:)];
 		
