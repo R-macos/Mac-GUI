@@ -975,7 +975,7 @@ extern BOOL isTimeToFinish;
 				[document showWindows];
 			} else {
 				SLog(@" - can't load the document, assuming encoding problems, will use open instead");
-				system([[NSString stringWithFormat:@"open \"%@\"", fn] UTF8String]);
+				system([[NSString stringWithFormat:@"open -a TextEdit \"%@\"", fn] UTF8String]);
 			}
 		}
     }

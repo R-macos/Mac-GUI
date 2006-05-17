@@ -79,6 +79,25 @@
 	in MiscPrefPane, an existing file is sourced into R. A new file opens a new document.
 */
 
+- (id)makeDocumentWithContentsOfFile:(NSString *)fileName ofType:(NSString *)docType
+{
+	SLog(@"RDocumentController.makeDocumentWithContentsOfFile:%@ ofType:%@", fileName, docType);
+	return [super makeDocumentWithContentsOfFile:fileName ofType:docType];
+}
+
+- (id)makeDocumentWithContentsOfURL:(NSURL *)aURL ofType:(NSString *)docType
+{
+	SLog(@"RDocumentController.makeDocumentWithContentsOfURL:%@ ofType:%@", aURL, docType);
+	return [super makeDocumentWithContentsOfURL:aURL ofType:docType];
+}
+
+#undef error
+
+- (id)makeDocumentWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
+{
+	SLog(@"RDocumentController.makeDocumentWithContentsOfURL:%@ ofType:%@ error:...", absoluteURL, typeName);
+	return [super makeDocumentWithContentsOfURL:absoluteURL ofType:typeName error:outError];
+}
 
 - (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
 {
@@ -88,14 +107,30 @@
 	externalEditor = [externalEditor stringByAppendingString:@"\""];
 	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
 	NSString *cmd;
+	SLog(@"RDocumentController.openNamedFile: %@, display: %s", aFile, flag?"yes":"no");
 	if ([aFile isEqualToString:@""] && useInternalEditor) {
+		SLog(@" - call openUntitledDocumentOfType: %@",defaultDocumentType);
 		return [super openUntitledDocumentOfType:defaultDocumentType display:YES];			
-	}
-	else
-		if (useInternalEditor) {
-			NSString *fname = [aFile stringByExpandingTildeInPath];
-			return [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];				
+	} else if (useInternalEditor) {
+		NSString *fname = [aFile stringByExpandingTildeInPath];
+		SLog(@" - call super -> openDocumentWithContentsOfFile: %@", fname);
+		NSDocument *doc = [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
+		if (!doc) {
+			SLog(@" - super couldn't open it - assuming that it's a problem with doc type");
+			/* WARNING: this is a hack for cases where the document type cannot be determined.
+			   Since we're replicating Cocoa functionality this may break with future versions of Cococa */
+			doc = [self makeDocumentWithContentsOfFile:fname ofType:defaultDocumentType];
+			if (doc) {
+				SLog(@" - succeeded by calling makeDocument... manually");
+				[self addDocument:doc];
+				[doc makeWindowControllers];
+				if (flag) [doc showWindows];
+			} else {
+				SLog(@" * failed, returning nil");
+			}
+			return doc;
 		}
+	}
 	if (editorIsApp) {
 		cmd = [@"open -a " stringByAppendingString:externalEditor];
 		if (![aFile isEqualToString:@""])
@@ -105,6 +140,7 @@
 		if (![aFile isEqualToString:@""])
 			cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 	}
+	SLog(@" - call external: \"%@\"", cmd);
 	system([cmd UTF8String]);		
 	return 0;
 }
@@ -127,7 +163,8 @@
 
 	if (useInternalEditor) {
 		NSString *fname = [aFile stringByExpandingTildeInPath];
-		return [super openDocumentWithContentsOfFile:fname display:flag];		
+		SLog(@"RDocumentController.openRDocumentWithContentsOfFile: %@ using internal editor", fname);
+		return [self openDocumentWithContentsOfFile:fname display:flag];
 	} else {
 		NSString *cmd;
 		if (editorIsApp) {

@@ -1,5 +1,9 @@
 NEWS 
 
+Last-update: 2006-05-17 [SU]
+*	Fixed 'open' for files without extension (uses native
+	document handling again)
+
 Last-update: 2006-05-04 [SU]
 *	Fixed extension when saving Quartz Graphics
 *	Fall back to "open" in handleShowFiles: if a document
