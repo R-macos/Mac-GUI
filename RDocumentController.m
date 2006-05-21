@@ -128,8 +128,8 @@
 			} else {
 				SLog(@" * failed, returning nil");
 			}
-			return doc;
 		}
+		return doc;
 	}
 	if (editorIsApp) {
 		cmd = [@"open -a " stringByAppendingString:externalEditor];

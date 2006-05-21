@@ -1,5 +1,8 @@
 NEWS 
 
+Lasy-update: 2006-05-21 [SU]
+*	Fixed parallel open for certain files.
+
 Last-update: 2006-05-17 [SU]
 *	Fixed 'open' for files without extension (uses native
 	document handling again)
