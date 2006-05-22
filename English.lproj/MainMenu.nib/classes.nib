@@ -119,6 +119,8 @@
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
                 makeConsoleKey = id; 
+                makeLastEditorKey = id; 
+                makeLastQuartzKey = id; 
                 newDocument = id; 
                 newQuartzDevice = id; 
                 openColors = id; 
