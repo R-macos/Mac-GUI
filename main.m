@@ -37,6 +37,7 @@
 #import "PreferenceKeys.h"
 #import "Quartz/QuartzDevice.h"
 #import "RController.h"
+#import "Rversion.h"
 
 #ifdef DEBUG_RGUI
 #import <ExceptionHandling/NSExceptionHandler.h>
@@ -79,8 +80,11 @@ int main(int argc, const char *argv[])
 	 }
 	 
 	 SLog(@" - set BioC repositories");
+#if (R_VERSION < R_Version(2,3,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
-	 
+#else
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.8/bioc','1.8/data/annotation','1.8/data/experiment'),sep=''))"];
+#endif
 	 SLog(@" - loading secondary NIBs");
 	 if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
 		 SLog(@" * unable to load Vignettes.nib!");
