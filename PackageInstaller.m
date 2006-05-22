@@ -38,9 +38,13 @@
 
 static id sharedController;
 
-NSString *location[2] = {
-	@"/Library/Frameworks/R.framework/Resources/library/",
-	@"~/Library/R/library"
+#define defaultCustomURL @"http://R.research.att.com/"
+
+NSString *location[4] = {
+	@"\"/Library/Frameworks/R.framework/Resources/library/\"",
+	@"\"~/Library/R/library\"",
+	nil, /* other location - choose directory */
+	@".libPaths()[1]"
 };
 
 @interface PackageEntry (PrivateMethods)
@@ -106,10 +110,11 @@ NSString *location[2] = {
 
 - (IBAction)installSelected:(id)sender
 {
-	NSString *targetLocation = nil;
+	NSString *targetLocation = location[pkgInst];
+;
 	BOOL success = YES;
 	
-	if(pkgInst == kOtherLocation){
+	if(!targetLocation){ /* custom location */
 		NSOpenPanel *op;
 		int answer;
 		
@@ -122,18 +127,29 @@ NSString *location[2] = {
 		[op setCanChooseDirectories:NO];
 		[op setCanChooseFiles:YES];
 		if(answer == NSOKButton)
-			targetLocation = [op directory];
+			targetLocation = [NSString stringWithFormat:@"\"%@\"", [op directory]];
 		else
 			return;
 	} else
-		targetLocation = location[pkgInst];
-	
-	[self busy:YES];
-	
+		[self busy:YES];
+
 	{
-		NSString *testFile;
-		targetLocation = [targetLocation stringByExpandingTildeInPath];
-		testFile = [targetLocation stringByAppendingString:@"/.aqua.test"];
+		NSString *testFile, *realLoc=nil;
+		RSEXP *lx = [[REngine mainEngine] evaluateString: targetLocation];
+		if (lx) realLoc = [lx string];
+		if (realLoc) realLoc = [realLoc stringByExpandingTildeInPath];
+		if (lx) [lx release];
+		SLog(@"PackageInstaller.installSelected: real location=%@", realLoc);
+		if (!realLoc || ![[NSFileManager defaultManager] fileExistsAtPath:realLoc]) {
+			if (realLoc && pkgInst==kUserLevel) { // create user-level path if it doesn't exist
+				system([[NSString stringWithFormat:@"mkdir -p %@", realLoc] UTF8String]);
+			} else {
+				[self busy: NO];
+				NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"The installation location doesn't exist."),NLS(@"OK"),nil,nil);				
+				return;
+			}
+		}
+		testFile = [realLoc stringByAppendingString:@"/.aqua.test"];
 		if ([[NSFileManager defaultManager] createFileAtPath:testFile contents:[NSData dataWithBytes:"foo" length:4] attributes:nil])
 			[[NSFileManager defaultManager] removeFileAtPath:testFile handler:nil];
 		else {
@@ -234,13 +250,13 @@ NSString *location[2] = {
 			if (repos && type) {
 				if (pkgUrl == kOtherFlat)
 					success = [[REngine mainEngine] executeString: 
-						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=%@),type='%@')",
-							packagesToInstall, targetLocation, repos, type]
+						[NSString stringWithFormat:@"install.packages(%@,lib=%@,contriburl=%@),type='%@',dependencies=%@)",
+							packagesToInstall, targetLocation, repos, type, ([depsCheckBox state]==NSOnState)?@"TRUE":@"FALSE"]
 						];
 				else
 					success = [[REngine mainEngine] executeString: 
-						[NSString stringWithFormat:@"install.packages(%@,lib=\"%@\",contriburl=contrib.url(%@,'%@'),type='%@')",
-							packagesToInstall, targetLocation, repos, type, type]
+						[NSString stringWithFormat:@"install.packages(%@,lib=%@,contriburl=contrib.url(%@,'%@'),type='%@',dependencies=%@)",
+							packagesToInstall, targetLocation, repos, type, type, ([depsCheckBox state]==NSOnState)?@"TRUE":@"FALSE"]
 						];
 			}
 			
@@ -407,6 +423,7 @@ NSString *location[2] = {
 			[urlTextField setHidden:YES];
 			[getListButton setEnabled:YES];
 			[updateAllButton setEnabled:YES];
+			[depsCheckBox setHidden:NO];
 			break;
 			
 		case kCRANSrc:
@@ -417,6 +434,7 @@ NSString *location[2] = {
 			[urlTextField setHidden:YES];
 			[getListButton setEnabled:YES];
 			[updateAllButton setEnabled:YES];
+			[depsCheckBox setHidden:NO];
 			break;
 			
 		case kOTHER:
@@ -427,6 +445,7 @@ NSString *location[2] = {
 			[urlTextField setHidden:NO];
 			[getListButton setEnabled:YES];
 			[updateAllButton setEnabled:YES];
+			[depsCheckBox setHidden:NO];
 			break;
 			
 		case kLocalBin:
@@ -436,6 +455,7 @@ NSString *location[2] = {
 			[urlTextField setHidden:YES];
 			[getListButton setEnabled:NO];
 			[updateAllButton setEnabled:NO];
+			[depsCheckBox setHidden:YES];
 			break;
 			
 		case kLocalSrc:
@@ -445,6 +465,7 @@ NSString *location[2] = {
 			[urlTextField setHidden:YES];
 			[getListButton setEnabled:NO];
 			[updateAllButton setEnabled:NO];
+			[depsCheckBox setHidden:YES];
 			break;
 			
 		case kLocalDir:
@@ -454,6 +475,7 @@ NSString *location[2] = {
 			[urlTextField setHidden:YES];
 			[getListButton setEnabled:NO];
 			[updateAllButton setEnabled:NO];
+			[depsCheckBox setHidden:YES];
 			break;
 			
 		default:
@@ -473,7 +495,7 @@ NSString *location[2] = {
 
 - (void)awakeFromNib
 {
-	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL"];
+	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL" withDefault:defaultCustomURL];
 	[formatCheckBox setEnabled:NO];
 	if (cURL) [urlTextField setStringValue:cURL];
 	[urlTextField setHidden:YES];

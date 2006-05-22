@@ -1,6 +1,11 @@
 NEWS 
 
-Lasy-update: 2006-05-21 [SU]
+Last-update: 2006-05-22 [SU]
+*	Add options for installing dependen packages in PI
+*	Allow .libPaths()[1] as package installation target
+*	Create user location upon installation if not present
+
+Last-update: 2006-05-21 [SU]
 *	Fixed parallel open for certain files.
 *	Fixed issues with closing documents
 *	Add shortcuts for "Switch to Last Quartz Window" and

@@ -65,6 +65,7 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 busyIndicator = NSProgressIndicator; 
+                depsCheckBox = NSButton; 
                 formatCheckBox = NSButton; 
                 getListButton = NSButton; 
                 installButton = NSButton; 

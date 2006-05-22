@@ -71,7 +71,7 @@
 	IBOutlet NSButton *updateAllButton;
 	IBOutlet NSMenu *pkgSearchMenu;
 	IBOutlet NSSearchField *pkgSearchField;
-	
+	IBOutlet NSButton *depsCheckBox;
 	IBOutlet NSScrollView *pkgScrollView;
 	IBOutlet NSProgressIndicator *busyIndicator;
 	
