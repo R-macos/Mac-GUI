@@ -49,10 +49,10 @@
 			<string>R Script</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
 			<key>LSIsAppleDefaultForType</key>
 			<true/>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>NSDocumentClass</key>
 			<string>RConsole</string>
 		</dict>
@@ -69,10 +69,10 @@
 			<string>R Data File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
 			<key>LSIsAppleDefaultForType</key>
 			<true/>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>NSDocumentClass</key>
 			<string>RDocument</string>
 		</dict>
@@ -82,10 +82,10 @@
 				<string>S</string>
 				<string>ssc</string>
 			</array>
-			<key>CFBundleTypeName</key>
-			<string>S-PLUS Source File</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>Rdoc.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>S-PLUS Source File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>

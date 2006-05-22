@@ -30,6 +30,7 @@
 #import "../RGUI.h"
 #import "RQuartz.h"
 #import "../RController.h"
+#import "../RDocumentController.h"
 #import "RDeviceView.h"
 #import "../REngine/REngine.h"
 
@@ -53,6 +54,20 @@
 
 - (NSTextView *)textView {
 	return nil;
+}
+
+- (void)close {
+	SLog(@"RQuartz.close <%@>", self);
+	NSArray *a = [self windowControllers];
+	if (a && [a count]>0) {
+		NSWindow *w = [(NSWindowController*)[a objectAtIndex:0] window];
+		SLog(@" - window: %@", w);
+		// --- something is broken - winctrl close doesn't work - I have no idea why - this is a horrible hack to cover up
+		if (w) [NSApp removeWindowsItem: w];
+		[[(RDocumentController*)[NSDocumentController sharedDocumentController] walkKeyListBack] makeKeyAndOrderFront:self];
+		// --- end of hack
+	}
+	[super close];
 }
 
 
@@ -142,13 +157,6 @@
 	selectDevice([deviceView getDevNum]);
 }
 
-
-/* this function return the "kind" of document, not just the type which is "pdf
-for quartz. This method is called by RController -> activateQuartz
-*/
-- (NSString *)whoAmI{
-	return @"quartz";
-}
 
 - (BOOL) knowsPageRange: (NSRangePointer) range
 {

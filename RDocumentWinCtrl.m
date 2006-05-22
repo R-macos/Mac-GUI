@@ -94,6 +94,7 @@ NSArray *keywordList=nil;
 //- (id)init // NOTE: init is *not* used! put any initialization in windowDidLoad
 
 - (void)dealloc {
+	SLog(@"RDocumentWinCtrl.dealloc<%@>", self);
 	if (highlightColorAttr) [highlightColorAttr release];
 	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -936,12 +937,14 @@ reHilite:
  */ 
 
 - (BOOL)windowShouldClose:(id)sender
-{	
+{
+	SLog(@"RDocumentWinCtrl%@.windowShouldClose: (doc=%@, win=%@)", self, [self document], [self window]);
 	if([[self document] hasREditFlag]) {
 		[NSApp stopModal];
 		[(RDocument*)[self document] setREditFlag: NO];
 	}
-	[[[RDocumentController sharedDocumentController] currentDocument] close];
+	//[[self document] close];
+	//[[[RDocumentController sharedDocumentController] currentDocument] close];
 	return YES;
 }
 

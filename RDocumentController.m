@@ -34,103 +34,165 @@
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 
+@interface RDocumentController (Private)
+int docListLimit = 128; // limit for the number of transitions stored
+int docListPos = 0; // active position in the list
+NSDocument **docList; // list of activated documents
+NSDocument *mainDoc; // dummy docuemnt representing the main R window in the list
+@end
+
+
 @implementation RDocumentController
 
 - (id)init {
 	self = [super init];
+	SLog(@"RDocumentController%@.init", self);
+	mainDoc = [[NSDocument alloc] init];
+	docList = (NSDocument**) malloc(sizeof(NSDocument*) * docListLimit);
+	memset(docList, 0, sizeof(NSDocument*) * docListLimit);
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotifications:) name:NSWindowDidBecomeKeyNotification object:nil];
 	return self;
 }
 
-- (void)noteNewRecentDocument:(NSDocument *)aDocument {
-	[super noteNewRecentDocument:(NSDocument *)aDocument];
+- (void) dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
+	free(docList);
+	[mainDoc release];
+	[super dealloc];
+}
+
+- (void)windowDidBecomeKeyNotifications:(NSNotification*) aNotification
+{
+	NSWindow *w = [aNotification object];
+	if (w) {
+		SLog(@"RDocumentController%@.windowDidBecomeKeyNotifications:%@", self, w);
+		NSDocument *d = [self documentForWindow:w];
+		if (!d && w == [[RController sharedController] window]) d = mainDoc;
+		if (d) {
+			SLog(@" - document: %@", d);
+			if (docList[docListPos] && docList[docListPos]!=d) {
+				docListPos++;
+				if (docListPos<0 || docListPos>=docListLimit) docListPos=0;			
+			}
+			docList[docListPos]=d;
+		}
+	}
+}
+
+- (NSWindow*) walkKeyListBack
+{
+	docListPos--;
+	if (docListPos<0) {
+		docListPos = docListLimit - 1;
+		while (docListPos>=0 && !docList[docListPos]) docListPos--;
+		if (docListPos<0) docListPos=0;
+	}
+	NSDocument *d = docList[docListPos];
+	NSWindow *w = nil;
+	SLog(@" - walkKeyListBack: doc=%@", d);
+	if (!d || d==mainDoc) return [[RController sharedController] window];
+	NSArray *a = [d windowControllers];
+	if (a && [a count]>0)
+		w = [[a objectAtIndex:0] window];
+	else
+		w = [[RController sharedController] window];
+	return w;
+}
+
+- (NSWindow*) findLastDocType: (NSString*) aType
+{
+	SLog(@"RDocumentController%@.findLastDocType: %@", self, aType);
+	int i=docListPos;
+	while(1) {
+		i--;
+		if (i<0) {
+			i = docListLimit - 1;
+			while (i>=0 && !docList[i]) i--;
+			if (i<0) i=0;
+		}
+		if (i==docListPos) break; // we're in a loop
+		NSString *dt = [docList[i] fileType];
+		if (dt) {
+			SLog(@" * %@ -> %@", docList[i], dt);
+			if ([dt isEqualToString:aType]) break;
+		}
+	}
+	NSDocument *d = docList[i];
+	if (!d || d==mainDoc) return [[RController sharedController] window];
+	NSArray *a = [d windowControllers];
+	if (a && [a count]>0)
+		return [[a objectAtIndex:0] window];
+	return [[RController sharedController] window];
+}
+
+- (NSWindow*) walkKeyListForward
+{
+	docListPos++;
+	if (docListPos >= docListLimit) docListPos=0;
+	NSDocument *d = docList[docListPos];
+	NSWindow *w = nil;
+	if (!d || d==mainDoc) return [[RController sharedController] window];
+	NSArray *a = [d windowControllers];
+	if (a && [a count]>0)
+		w = [[a objectAtIndex:0] window];
+	else
+		w = [[RController sharedController] window];
+	return w;
 }
 
 - (IBAction)newDocument:(id)sender {
-	[self openNamedFile:@"" display:YES];
-}
-
-- (IBAction)openDocument:(id)sender {
-	NSArray *files = [super fileNamesFromRunningOpenPanel];
-	int i = [files count];
-	int j;
-	for (j=0;j<i;j++) {
-		[self openDocumentWithContentsOfFile: [files objectAtIndex:j] display:YES];	
+	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	if (!useInternalEditor) {
+		[self invokeExternalForFile: @""];
+		return;
 	}
+	[super newDocument:sender];
 }
 
 - (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
 {
 	int res = [[RController sharedController] isImageData: aFile];
 	SLog(@"RDocumentController.openDocumentWithContentsOfFile: %@", aFile);
-	if (res == -1)
-		NSLog(@"File format: %@ not recognized by isImageData", aFile);
-	else 
-		if (res == 0 )
-			[[RController sharedController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
-	else 
-		return [self openNamedFile: aFile display:flag];
-	return nil;
-}
-
-/* 
-	Below is the path taken by drag & drop on the R icon, by New Document and by Open
-	Document. If edit is selected in MiscPrefPane, the file is opened in either the
-	internal or external editor (selected in the EditorPrefPane). If source is selected
-	in MiscPrefPane, an existing file is sourced into R. A new file opens a new document.
-*/
-
-- (id)makeDocumentWithContentsOfFile:(NSString *)fileName ofType:(NSString *)docType
-{
-	SLog(@"RDocumentController.makeDocumentWithContentsOfFile:%@ ofType:%@", fileName, docType);
-	return [super makeDocumentWithContentsOfFile:fileName ofType:docType];
-}
-
-- (id)makeDocumentWithContentsOfURL:(NSURL *)aURL ofType:(NSString *)docType
-{
-	SLog(@"RDocumentController.makeDocumentWithContentsOfURL:%@ ofType:%@", aURL, docType);
-	return [super makeDocumentWithContentsOfURL:aURL ofType:docType];
-}
-
-#undef error
-
-- (id)makeDocumentWithContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
-{
-	SLog(@"RDocumentController.makeDocumentWithContentsOfURL:%@ ofType:%@ error:...", absoluteURL, typeName);
-	return [super makeDocumentWithContentsOfURL:absoluteURL ofType:typeName error:outError];
-}
-
-- (id) openNamedFile:(NSString *)aFile display:(BOOL) flag
-{
-	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	NSString *externalEditor = @"\"";
-	externalEditor = [externalEditor stringByAppendingString:[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
-	externalEditor = [externalEditor stringByAppendingString:@"\""];
-	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
-	NSString *cmd;
-	SLog(@"RDocumentController.openNamedFile: %@, display: %s", aFile, flag?"yes":"no");
-	if ([aFile isEqualToString:@""] && useInternalEditor) {
-		SLog(@" - call openUntitledDocumentOfType: %@",defaultDocumentType);
-		return [super openUntitledDocumentOfType:defaultDocumentType display:YES];			
-	} else if (useInternalEditor) {
-		NSString *fname = [aFile stringByExpandingTildeInPath];
-		SLog(@" - call super -> openDocumentWithContentsOfFile: %@", fname);
-		NSDocument *doc = [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
-		if (!doc) {
-			SLog(@" - super couldn't open it - assuming that it's a problem with doc type");
-			/* WARNING: this is a hack for cases where the document type cannot be determined.
-			   Since we're replicating Cocoa functionality this may break with future versions of Cococa */
-			doc = [self makeDocumentWithContentsOfFile:fname ofType:defaultDocumentType];
-			if (doc) {
-				SLog(@" - succeeded by calling makeDocument... manually");
-				[self addDocument:doc];
-				[doc makeWindowControllers];
-				if (flag) [doc showWindows];
-			} else {
-				SLog(@" * failed, returning nil");
-			}
-		}
-		return doc;
+	if (res == 0 ) {
+		SLog(@" - detected save image, invoking load instead of the editor");
+		[[RController sharedController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
+		return nil;
 	}
+
+	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	if (!useInternalEditor) {
+		SLog(@" - external editor is enabled, passing over to invokeExternalForFile");
+		[self invokeExternalForFile:aFile];
+		return nil;
+	}			
+
+	NSString *fname = [aFile stringByExpandingTildeInPath];
+	SLog(@" - call super -> openDocumentWithContentsOfFile: %@", fname);
+	NSDocument *doc = nil;// [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
+	if (!doc) {
+		SLog(@" - super couldn't open it - assuming that it's a problem with doc type, creating manually");
+		/* WARNING: this is a hack for cases where the document type cannot be determined.
+		Since we're replicating Cocoa functionality this may break with future versions of Cococa */
+		doc = [self makeDocumentWithContentsOfFile:fname ofType:defaultDocumentType];
+		if (doc) {
+			SLog(@" - succeeded by calling makeDocument.. ofType: %@",defaultDocumentType);
+			[self addDocument:doc];
+			[doc makeWindowControllers];
+			if (flag && [self shouldCreateUI]) [doc showWindows];
+		} else {
+			SLog(@" * failed, returning nil");
+		}
+	}
+	return doc;
+}
+
+- (void) invokeExternalForFile:(NSString*)aFile
+{
+	NSString *externalEditor = [NSString stringWithFormat:@"\"%@\"", [Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
+	NSString *cmd;
+	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
+
+	if (!aFile) aFile=@"";
 	if (editorIsApp) {
 		cmd = [@"open -a " stringByAppendingString:externalEditor];
 		if (![aFile isEqualToString:@""])
@@ -141,50 +203,26 @@
 			cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
 	}
 	SLog(@" - call external: \"%@\"", cmd);
-	system([cmd UTF8String]);		
-	return 0;
-}
-
-/* 
-	Below is the path taken by callbacks from R like edit(object) or edit(file="/Users/...")
-    If the internal editor is used, R is kept in modal mode and after editing, the file content
-    is returned, e.g. to be assigned as in x = edit(x). If an external editor is selected,
-    the editor is opened and R displays the old content and is ready for input. The selection
-    of source or edit has no influence.
-*/
-
-- (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
-{
-	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
-	NSString *externalEditor = @"\"";
-	externalEditor = [externalEditor stringByAppendingString:[Preferences stringForKey:externalEditorNameKey withDefault: @"TextEdit"]];
-	externalEditor = [externalEditor stringByAppendingString:@"\""];
-	BOOL editorIsApp = [Preferences flagForKey:appOrCommandKey withDefault: YES];
-
-	if (useInternalEditor) {
-		NSString *fname = [aFile stringByExpandingTildeInPath];
-		SLog(@"RDocumentController.openRDocumentWithContentsOfFile: %@ using internal editor", fname);
-		return [self openDocumentWithContentsOfFile:fname display:flag];
-	} else {
-		NSString *cmd;
-		if (editorIsApp) {
-			cmd = [@"open -a " stringByAppendingString:externalEditor];
-			if (![aFile isEqualToString:@""])
-				cmd = [cmd stringByAppendingString: [NSString stringWithFormat:@" \"%@\"", aFile]];
-		} else {
-			cmd = externalEditor; 
-			if (![aFile isEqualToString:@""])
-				cmd = [cmd stringByAppendingString: [NSString stringWithString: [NSString stringWithFormat:@" \"%@\"", aFile]]];
-		}
-		system([cmd UTF8String]);
-		return nil;
-	}
+	system([cmd UTF8String]);	
 }
 
 - (void)removeDocument:(NSDocument *)document {
+	int i=0, j=0, newPos=0;
 	SLog(@"RDocumentController(%@).removeDocument: %@\n", self, document);
+	
+	// remove all references of the document from the doc list
+	while (i<docListLimit) {
+		if (i==docListPos)
+			newPos=(docList[i]==document)?j-1:j; 
+		if (docList[i] != document &&
+			(j==0 || docList[j-1] != document)) { docList[j]=docList[i]; j++; };
+		i++;
+	}
+	if (newPos<0) newPos=0;
+	while (j<docListLimit) docList[j++]=nil;
+	docListPos=newPos;
+	
 	[super removeDocument:document];
 }
-
 
 @end

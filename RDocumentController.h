@@ -32,16 +32,21 @@
 #import <Cocoa/Cocoa.h>
 #import "Preferences.h"
 
-#define defaultDocumentType @"R Source File"
+#define ftRSource @"R Source File"
+#define ftQuartz @"Quartz Graphics"
+
+#define defaultDocumentType ftRSource
 
 @interface RDocumentController : NSDocumentController
 {
 }
 
-- (IBAction)newDocument:(id)sender;
-- (IBAction)openDocument:(id)sender;
-- (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag;
-- (id)openRDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag;
-- (id) openNamedFile:(NSString *)aFile display:(BOOL) flag;
+- (NSWindow*) walkKeyListBack;
+- (NSWindow*) walkKeyListForward;
+- (NSWindow*) findLastDocType: (NSString*) aType;
+
+
+// starts external editor with the specified file (regardless of prefs)
+- (void) invokeExternalForFile:(NSString*)aFile;
 
 @end

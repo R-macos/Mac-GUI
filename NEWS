@@ -2,6 +2,11 @@ NEWS
 
 Lasy-update: 2006-05-21 [SU]
 *	Fixed parallel open for certain files.
+*	Fixed issues with closing documents
+*	Add shortcuts for "Switch to Last Quartz Window" and
+	"Switch to Last Editor Window"
+*	Clean up in the document controller - single path for
+	all R source files
 
 Last-update: 2006-05-17 [SU]
 *	Fixed 'open' for files without extension (uses native

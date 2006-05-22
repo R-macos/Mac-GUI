@@ -904,7 +904,7 @@ extern BOOL isTimeToFinish;
 		//[pool release];
 		return 0;
 	}
-	RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile: fn display:YES];
+	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: fn display:YES];
 	[document setREditFlag: YES];
 	
 	NSArray *wcs = [document windowControllers];
@@ -937,7 +937,7 @@ extern BOOL isTimeToFinish;
 		if (fn) fn = [fn stringByExpandingTildeInPath];
 		if (!fn) {
 			if([[NSFileManager defaultManager] fileExistsAtPath:fn])
-				[[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:true];
+				[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:fn display:true];
 			else
 				[[NSDocumentController sharedDocumentController] newDocument: [RController sharedController]];
 			
@@ -960,7 +960,7 @@ extern BOOL isTimeToFinish;
 		NSString *fn = [NSString stringWithUTF8String:file[i]];
 		if (fn) fn =[fn stringByExpandingTildeInPath];
 		if (fn) {
-			RDocument *document = [[RDocumentController sharedDocumentController] openRDocumentWithContentsOfFile:fn display:NO];
+			RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:fn display:NO];
 			// don't dsiplay - we need to prevent the window controller from using highlighting
 			if (document) {
 				NSArray *wcs = [document windowControllers];
@@ -973,9 +973,6 @@ extern BOOL isTimeToFinish;
 				[document setEditable: NO];
 				SLog(@" - finally show the document window");
 				[document showWindows];
-			} else {
-				SLog(@" - can't load the document, assuming encoding problems, will use open instead");
-				system([[NSString stringWithFormat:@"open -a TextEdit \"%@\"", fn] UTF8String]);
 			}
 		}
     }
@@ -1588,6 +1585,37 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (IBAction)makeConsoleKey:(id)sender
 {
 	[RConsoleWindow makeKeyAndOrderFront:sender];
+}
+
+- (IBAction)makeLastQuartzKey:(id)sender
+{
+	NSWindow *w = [(RDocumentController*)[NSDocumentController sharedDocumentController] findLastDocType:ftQuartz];
+	NSDocument *d = [[NSDocumentController sharedDocumentController] documentForWindow:w];
+	if (!d || ![d fileType] || ![[d fileType] isEqualToString:ftQuartz]) {
+		/* could not find Quartz window - either there is none or it has never
+		been key. That can happen, because new Quartz windows are not made
+		key upon creation to not disturb the workflow (you can't do anything
+													   with them anyway) */
+		d = nil;
+		NSArray *a = [[NSDocumentController sharedDocumentController] documents];
+		int i = 0, ct = [a count];
+		while (i < ct) {
+			NSString *ft = [(NSDocument*)[a objectAtIndex:i] fileType];
+			if (ft && [ft isEqualToString:ftQuartz]) d = (NSDocument*)[a objectAtIndex:i];
+			i++;
+		}
+		if (d) {
+			a = [d windowControllers];
+			if (a && [a count]>0)
+				w = [(NSWindowController*)[a objectAtIndex:0] window];
+		}
+	}
+	[w makeKeyAndOrderFront:self];
+}
+
+- (IBAction)makeLastEditorKey:(id)sender
+{
+	[[(RDocumentController*)[NSDocumentController sharedDocumentController] findLastDocType:ftRSource] makeKeyAndOrderFront:sender];
 }
 
 - (IBAction)toggleHistory:(id)sender{

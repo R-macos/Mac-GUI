@@ -30,6 +30,7 @@
 
 #import "RGUI.h"
 #import "RDocument.h"
+#import "RDocumentController.h"
 #import "RDocumentWinCtrl.h"
 #import "RController.h"
 #import "Preferences.h"
@@ -50,14 +51,29 @@
     return self;
 }
 
-- (void)dealloc {
+- (void)close {
+	SLog(@"RDocument.close <%@> (wctrl=%@)", self, myWinCtrl);
 	if (initialContents) [initialContents release];
+	initialContents=nil;
 	if (initialContentsType) [initialContentsType release];
+	initialContentsType=nil;
 	if (myWinCtrl) {
+		SLog(@" - window: %@", [myWinCtrl window]);
 		[self removeWindowController:myWinCtrl];
+		[myWinCtrl close];
+		// --- something is broken - winctrl close doesn't work - I have no idea why - this is a horrible hack to cover up
+		NSWindow *w = [myWinCtrl window];
+		if (w) [NSApp removeWindowsItem: w];
+		[[(RDocumentController*)[NSDocumentController sharedDocumentController] walkKeyListBack] makeKeyAndOrderFront:self];
+		// --- end of hack
 		[myWinCtrl release];
 		myWinCtrl=nil;
 	}
+	[super close];
+}
+
+- (void)dealloc {
+	if (myWinCtrl) [self close];
 	[super dealloc];
 }
 
@@ -75,6 +91,11 @@
 	// create RDocumentWinCtrl which is a window controller - it loads the corresponding NIB and sets up the window
 	myWinCtrl = [[RDocumentWinCtrl alloc] initWithWindowNibName:@"RDocument"];
 	[self addWindowController:myWinCtrl];
+}
+
+- (NSString*)windowNibName
+{
+	return @"RDocument";
 }
 
 - (BOOL)writeToFile:(NSString *)fileName ofType:(NSString *)docType {

@@ -214,6 +214,8 @@
 - (IBAction)sourceOrLoadFile:(id)sender;
 
 - (IBAction)makeConsoleKey:(id)sender;
+- (IBAction)makeLastQuartzKey:(id)sender;
+- (IBAction)makeLastEditorKey:(id)sender;
 
 - (void) shouldClearWS:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
