@@ -1,9 +1,10 @@
 NEWS 
 
 Last-update: 2006-05-22 [SU]
-*	Add options for installing dependen packages in PI
+*	Add options for installing dependent packages in PI
 *	Allow .libPaths()[1] as package installation target
 *	Create user location upon installation if not present
+*	Fix default BioC repositories location
 
 Last-update: 2006-05-21 [SU]
 *	Fixed parallel open for certain files.
