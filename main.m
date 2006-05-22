@@ -46,7 +46,7 @@
 int main(int argc, const char *argv[])
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-#ifdef DEBUG_RGUI
+#ifdef DEBUG_RGUI00
 	{
 		// add an independent exception handler
 		[[GlobalExHandler alloc] init];
