@@ -83,7 +83,7 @@ int main(int argc, const char *argv[])
 #if (R_VERSION < R_Version(2,3,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
 #else
-	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.8/bioc','1.8/data/annotation','1.8/data/experiment'),sep=''))"];
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.8/bioc','1.8/data/annotation','1.8/data/experiment','1.8/omegahat','1.8/lindsey'),sep=''))"];
 #endif
 	 SLog(@" - loading secondary NIBs");
 	 if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
