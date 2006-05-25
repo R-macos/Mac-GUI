@@ -331,7 +331,7 @@ static RController* sharedRController;
 			setenv("R_ARCH", arch_str, 1);
 	}
 #else
-#warning Unknown architecture, R_ARCH won't be set automatically.
+#warning "Unknown architecture, R_ARCH won't be set automatically."
 #endif
 
 #endif /* R 2.3.0 */
