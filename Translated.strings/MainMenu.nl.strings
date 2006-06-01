@@ -26,6 +26,9 @@
 /* NSMenuItem : <title:Align Right> (oid:858) */
 "Align Right" = "Rechts aligneren";
 
+/* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
+"As defined by .libPaths()" = "Zoals gedefinieerd in .libPaths()";
+
 /* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
 "At System Level (in R framework)" = "Op systeemniveau (in R framework)";
 
@@ -474,6 +477,12 @@
 /* NSMenuItem : <title:Switch to Console Window> (oid:942) */
 "Switch to Console Window" = "Ga naar consolevenster";
 
+/* NSMenuItem : <title:Switch to Last Editor Window> (oid:1117) */
+"Switch to Last Editor Window" = "Voorgaande edit venster";
+
+/* NSMenuItem : <title:Switch to Last Quartz Window> (oid:1118) */
+"Switch to Last Quartz Window" = "Voorgaande Quartz venster";
+
 /* NSMenu : <title:Text> (oid:832) */
 "Text" = "Tekst";
 
@@ -551,6 +560,9 @@
 
 /* NSTableColumn : <title:e> (oid:808) */
 "e" = "e";
+
+/* NSButton (install dependencies) : <title:install dependencies> (oid:1121) */
+"install dependencies" = "Installeer indirekt nodige pakketten";
 
 /* NSButtonCell (not loaded) : <title:loaded> (oid:462) */
 "loaded" = "geladen";
