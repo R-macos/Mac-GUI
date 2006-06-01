@@ -135,7 +135,7 @@
 "Description" = "Beschreibung";
 
 /* NSIBHelpConnector : <title:Double click on one package to load it in the R workspace. > (oid:505) */
-"Double click on one package to load it in the R workspace. " = "Dopleklicken Sie um ein Paket in den aktuellen Arbeitsbereich zu laden.";
+"Double click on one package to load it in the R workspace. " = "Dopleklicken Sie, um ein Paket in den aktuellen Arbeitsbereich zu laden.";
 
 /* NSIBHelpConnector : <title:Downloads Selected Packages And Installs In Selected Location> (oid:580) */
 "Downloads Selected Packages And Installs In Selected Location" = "Lädt ausgewählte Pakete herunter und installiert sie.";
@@ -193,7 +193,7 @@
 "Get List" = "Liste holen";
 
 /* NSMenuItem : <title:Get Working Directory> (oid:317) */
-"Get Working Directory" = "Arbeitsverzeichnis ermitteln";
+"Get Working Directory" = "Arbeitsverzeichnis anzeigen";
 
 /* NSMenuItem : <title:Go To Line> (oid:1049) */
 "Go To Line" = "Zur Zeile springen…";
@@ -289,7 +289,7 @@
 "New Document" = "Neues Dokument";
 
 /* NSMenuItem : <title:New Quartz Device Window> (oid:311) */
-"New Quartz Device Window" = "Neues Quartz-Fenster";
+"New Quartz Device Window" = "Neues Quartz Fenster";
 
 /* NSTableColumn : <title:Object> (oid:667) */
 "Object" = "Objekt";
@@ -316,10 +316,10 @@
 "Package" = "Paket";
 
 /* NSMenuItem : <title:Package Installer> (oid:559) */
-"Package Installer" = "Pakete-Installation";
+"Package Installer" = "Paketinstallation";
 
 /* NSMenuItem : <title:Package Manager> (oid:266) */
-"Package Manager" = "Pakete-Verwaltung";
+"Package Manager" = "Paketverwaltung";
 
 /* NSSearchField (0) : <title:Package Search> (oid:1060) */
 "Package Search" = "Suche";
@@ -328,7 +328,7 @@
 "Packages & Data" = "Pakete und Daten";
 
 /* NSBox (Packages Repository) : <title:Packages Repository> (oid:538) */
-"Packages Repository" = "Pakete-Repository";
+"Packages Repository" = "Paket-Repository";
 
 /* NSMenuItem : <title:Page Setup…> (oid:77) */
 "Page Setup…" = "Papierformat…";
@@ -373,13 +373,13 @@
 "R Help" = "R Hilfe";
 
 /* NSWindow (R Package Installer) : <title:R Package Installer> (oid:525) */
-"R Package Installer" = "R Pakete-Installer";
+"R Package Installer" = "R Paketinstallation";
 
 /* NSWindow (R Package Manager) : <title:R Package Manager> (oid:444) */
-"R Package Manager" = "R Pakete-Verwaltung";
+"R Package Manager" = "R Paketverwaltung";
 
 /* NSWindow (R Workspace Browser) : <title:R Workspace Browser> (oid:662) */
-"R Workspace Browser" = "R Arbeitsbereich-Betrachter";
+"R Workspace Browser" = "R Arbeitsbereich Betrachter";
 
 /* NSMenuItem : <title:R for Mac OS X FAQ> (oid:1081) */
 "R for Mac OS X FAQ" = "R für Mac OS X FAQ";
@@ -475,16 +475,16 @@
 "Switch to Console Window" = "Zur Konsole wechseln";
 
 /* NSMenuItem : <title:Switch to Last Editor Window> (oid:1117) */
-"Switch to Last Editor Window" = "Zum letzten Editorfenster wechseln";
+"Switch to Last Editor Window" = "Zum letzten Editor wechseln";
 
 /* NSMenuItem : <title:Switch to Last Quartz Window> (oid:1118) */
-"Switch to Last Quartz Window" = "Zum letzen Quartz-Fenster wechseln";
+"Switch to Last Quartz Window" = "Zum letzen Quartz Fenster wechseln";
 
 /* NSMenu : <title:Text> (oid:832) */
 "Text" = "Text";
 
 /* NSIBHelpConnector : <title:The Package Installer Requires An Internet Connection> (oid:560) */
-"The Package Installer Requires An Internet Connection" = "Der Pakete-Installer brauch eine Internetverbindung, um Pakete installieren zu können";
+"The Package Installer Requires An Internet Connection" = "Das Paketinstallationsprogramm brauch eine Internetverbindung, um Pakete installieren zu können";
 
 /* NSMenuItem : <title:Tighten> (oid:841) */
 "Tighten" = "Enger";
