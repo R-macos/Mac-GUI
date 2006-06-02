@@ -1,5 +1,7 @@
 NEWS 
 
+-- Release Version 1.16 (3198) - supplied with R 2.3.1 --
+
 Last-update: 2006-05-24 [SU]
 *	Update BioC repositories and add "repos" when installing
 	packages (mainly to fetch dependencies)
