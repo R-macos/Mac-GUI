@@ -26,6 +26,9 @@
 /* NSMenuItem : <title:Align Right> (oid:858) */
 "Align Right" = "Allinea a Destra";
 
+/* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
+"As defined by .libPaths()" = "Come definito in .libPaths()";
+
 /* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
 "At System Level (in R framework)" = "A Livello Sistema (in R framework)";
 
@@ -468,6 +471,12 @@
 /* NSMenuItem : <title:Switch to Console Window> (oid:942) */
 "Switch to Console Window" = "Passa a Finestra Console";
 
+/* NSMenuItem : <title:Switch to Last Editor Window> (oid:1117) */
+"Switch to Last Editor Window" = "Cambia sull'Ultima Finestra dell'Editor";
+
+/* NSMenuItem : <title:Switch to Last Quartz Window> (oid:1118) */
+"Switch to Last Quartz Window" = "Cambia sull'Ultima Finestra Quartz";
+
 /* NSMenu : <title:Text> (oid:832) */
 "Text" = "Testo";
 
@@ -542,6 +551,9 @@
 
 /* NSTableColumn : <title:e> (oid:808) */
 "e" = "e";
+
+/* NSButton (install dependencies) : <title:install dependencies> (oid:1121) */
+"install dependencies" = "installa pacchetti correlati";
 
 /* NSButtonCell (not loaded) : <title:loaded> (oid:462) */
 "loaded" = "caricato";
