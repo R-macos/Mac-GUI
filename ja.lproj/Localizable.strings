@@ -44,7 +44,7 @@
 /* From: RController.m (didCloseAll) */
 "Cancel" = "キャンセル";
 
-/* From: RController.m (applicationDidFinishLaunching) */
+/* From: main.m (webView) */
 "Cannot start R" = "Rを起動できません";
 
 /* From: RController.m (toolbar) */
@@ -160,12 +160,12 @@
 /* From: PackageInstaller.m (installSelected) */
 "Package installation was not successful. Please see the R Console for details." = "パッケージのインストールに失敗しました. 詳細についてはRコンソールを参照して下さい.";
 
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "パッケージインストーラ";
+
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Package installer" = "パッケージインストーラ";
-
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "パッケージインストーラ";
 
 /* From: PackageInstaller.m (updateAll) */
 "Package update failed" = "パッケージのアップデートに失敗しました";
@@ -360,9 +360,12 @@
 "Stop" = "中断";
 
 /* From: PackageInstaller.m (installSelected) */
+"The installation location doesn't exist." = "The installation location doesn't exist.";
+
+/* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "パッケージはインストールされていません。";
 
-/* From: RController.m (applicationDidFinishLaunching) */
+/* From: main.m (webView) */
 "Unable to start R: %@" = "Rを起動できません: %@";
 
 /* Global string @ */

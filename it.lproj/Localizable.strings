@@ -44,7 +44,7 @@
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annulla";
 
-/* From: RController.m (applicationDidFinishLaunching) */
+/* From: main.m (webView) */
 "Cannot start R" = "Impossibile eseguire R";
 
 /* From: RController.m (toolbar) */
@@ -160,12 +160,12 @@
 /* From: PackageInstaller.m (installSelected) */
 "Package installation was not successful. Please see the R Console for details." = "L'installazione del pacchetto non è riuscita. Controllare la Console di R per ulteriori dettagli.";
 
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "Installatore Pacchetti";
+
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Package installer" = "Installatore Pacchetti";
-
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "Installatore Pacchetti";
 
 /* From: PackageInstaller.m (updateAll) */
 "Package update failed" = "Aggiornamento pacchetto non riuscito";
@@ -360,9 +360,12 @@
 "Stop" = "Stop";
 
 /* From: PackageInstaller.m (installSelected) */
+"The installation location doesn't exist." = "La directory di installazione non esiste.";
+
+/* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Il pacchetto non è stato installato.";
 
-/* From: RController.m (applicationDidFinishLaunching) */
+/* From: main.m (webView) */
 "Unable to start R: %@" = "Non è stato possibile avviare R: %@";
 
 /* Global string @ */
