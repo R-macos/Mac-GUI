@@ -74,7 +74,7 @@
 "Strip comments in history entries" = "履歴中のコメントを除去";
 
 /* NSIBHelpConnector : <title:URL for the default CRAN URL. If left empty, the user will be prompted.> (oid:114) */
-"URL for the default CRAN URL. If left empty, the user will be prompted." = "デフォルトで使用するCRANのURL. 空白の場合はユーザに質問します.";
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
 
 /* NSTextField (URL:) : <title:URL:> (oid:109) */
 "URL:" = "URL:";

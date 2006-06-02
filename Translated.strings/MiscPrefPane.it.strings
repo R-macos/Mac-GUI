@@ -22,22 +22,22 @@
 /* NSButton (Default) : <title:Default> (oid:52) */
 "Default" = "Default";
 
-/* NSBox : <title:Default CRAN mirror> (oid:106) */
+/* NSBox (Default CRAN mirror) : <title:Default CRAN mirror> (oid:106) */
 "Default CRAN mirror" = "Mirror CRAN predefinito";
 
-/* NSBox : <title:Default Library Paths> (oid:23) */
+/* NSBox (Default Library Paths) : <title:Default Library Paths> (oid:23) */
 "Default Library Paths" = "Percorso Standard della Libreria";
 
 /* NSTextField (Directory:) : <title:Directory:> (oid:36) */
 "Directory:" = "Directory:";
 
-/* NSBox : <title:Drag & drop action during R start-up> (oid:17) */
+/* NSBox (Drag & drop action during R start-up) : <title:Drag & drop action during R start-up> (oid:17) */
 "Drag & drop action during R start-up" = "Comportamento Drag & drop all'avvio di R";
 
-/* NSBox : <title:History> (oid:44) */
+/* NSBox (History) : <title:History> (oid:44) */
 "History" = "History";
 
-/* NSBox : <title:Initial working directory> (oid:34) */
+/* NSBox (Initial working directory) : <title:Initial working directory> (oid:34) */
 "Initial working directory" = "Directory di lavoro iniziale";
 
 /* NSTextField (Max number of entries in history:) : <title:Max number of entries in history:> (oid:94) */

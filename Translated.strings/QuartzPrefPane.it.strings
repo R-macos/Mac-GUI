@@ -10,7 +10,7 @@
 /* NSMenuItem : <title:Bottom Right> (oid:32) */
 "Bottom Right" = "Destra-Basso";
 
-/* NSBox : <title:Box> (oid:45) */
+/* NSBox (Box) : <title:Box> (oid:45) */
 "Box" = "Box";
 
 /* NSMenuItem : <title:Centered> (oid:37) */
@@ -56,7 +56,7 @@
 :> (oid:30) */
 "height (inches):\n:" = "altezza (pollici):\n:";
 
-/* NSTextField (width (inches):) : <title:width (inches):
+/* NSTextField (width (inches): ) : <title:width (inches):
 > (oid:29) */
 "width (inches):\n" = "larghezza (pollici):\n";
 
