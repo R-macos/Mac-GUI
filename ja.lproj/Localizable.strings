@@ -360,7 +360,7 @@
 "Stop" = "中断";
 
 /* From: PackageInstaller.m (installSelected) */
-"The installation location doesn't exist." = "The installation location doesn't exist.";
+"The installation location doesn't exist." = "インストール場所が存在しません。";
 
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "パッケージはインストールされていません。";
