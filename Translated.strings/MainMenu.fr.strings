@@ -75,7 +75,7 @@
 "Center" = "Centrer";
 
 /* NSMenuItem : <title:Change Working Directory...> (oid:322) */
-"Change Working Directory..." = "Changer de Répertoire de Travail...";
+"Change Working Directory..." = "Changer de Répertoire de Travail…";
 
 /* NSMenuItem : <title:Check For R Updates> (oid:218) */
 "Check For R Updates" = "Mise à jour de R";
@@ -129,28 +129,28 @@
 "Delete" = "Supprimer";
 
 /* NSButton (Delete entry) : <title:Delete entry> (oid:1046) */
-"Delete entry" = "Delete entry";
+"Delete entry" = "Supprimer l'entrée";
 
 /* NSTableColumn : <title:Description> (oid:701) */
 "Description" = "Description";
 
 /* NSIBHelpConnector : <title:Double click on one package to load it in the R workspace. > (oid:505) */
-"Double click on one package to load it in the R workspace. " = "Double click on one package to load it in the R workspace. ";
+"Double click on one package to load it in the R workspace. " = "Double-cliquer sur un paquet pour le charger dans l'espace de travail R.";
 
 /* NSIBHelpConnector : <title:Downloads Selected Packages And Installs In Selected Location> (oid:580) */
-"Downloads Selected Packages And Installs In Selected Location" = "Downloads Selected Packages And Installs In Selected Location";
+"Downloads Selected Packages And Installs In Selected Location" = "Télécharge les paquets sélectionnés et les installe à l'endroit spécifié";
 
 /* NSMenu : <title:Edit> (oid:169) */
 "Edit" = "Editer";
 
 /* NSMenuItem : <title:Edit Object…> (oid:221) */
-"Edit Object…" = "Éditer Objet...";
+"Edit Object…" = "Éditer Objet…";
 
 /* NSMenuItem : <title:Empty> (oid:1078) */
-"Empty" = "Empty";
+"Empty" = "Vide";
 
 /* NSMenuItem : <title:Exact Search> (oid:1082) */
-"Exact Search" = "Exact Search";
+"Exact Search" = "Recherche Exacte";
 
 /* NSMenuItem : <title:Execute> (oid:890) */
 "Execute" = "Exécuter";
@@ -184,7 +184,7 @@
 "Forward" = "Avancer";
 
 /* NSMenuItem : <title:Fuzzy Search> (oid:1084) */
-"Fuzzy Search" = "Fuzzy Search";
+"Fuzzy Search" = "Recherche Floue";
 
 /* NSButton (Fwd >) : <title:Fwd >> (oid:984) */
 "Fwd >" = "Avancer >";
@@ -202,7 +202,7 @@
 "Help" = "Aide";
 
 /* NSSearchField (0) : <title:Help Search> (oid:957) */
-"Help Search" = "Help Search";
+"Help Search" = "Recherche dans l'aide";
 
 /* NSWindow (Help Search Topics) : <title:Help Search Topics> (oid:687) */
 "Help Search Topics" = "Aide en ligne";
@@ -250,10 +250,10 @@
 "Load History" = "Charger Historique";
 
 /* NSMenuItem : <title:Load Workspace File…> (oid:250) */
-"Load Workspace File…" = "Charger fichier d'Espace de Travail...";
+"Load Workspace File…" = "Charger fichier d'Espace de Travail…";
 
 /* NSTextField (Loading R ...) : <title:Loading R ...> (oid:1104) */
-"Loading R ..." = "Loading R ...";
+"Loading R ..." = "Chargement de R …";
 
 /* NSMenuItem : <title:Local Binary Package> (oid:596) */
 "Local Binary Package" = "Package Binaire Local";
@@ -271,7 +271,7 @@
 "Lower" = "Plus Bas";
 
 /* NSMenuItem : <title:Main R Help Page> (oid:1083) */
-"Main R Help Page" = "Main R Help Page";
+"Main R Help Page" = "Page Principale d'aide";
 
 /* NSMenu : <title:MainMenu> (oid:29) */
 "MainMenu" = "Menu Principal";
@@ -298,16 +298,16 @@
 "Ok" = "Ok";
 
 /* NSMenuItem : <title:Open Document...> (oid:220) */
-"Open Document..." = "Ouvrir Document...";
+"Open Document..." = "Ouvrir Document…";
 
 /* NSMenu : <title:Open Recent> (oid:125) */
 "Open Recent" = "Ouvrir Récent";
 
 /* NSMenuItem : <title:Other Directory URL> (oid:1107) */
-"Other Directory URL" = "Other Directory URL";
+"Other Directory URL" = "Adresse d'un autre répertoire";
 
 /* NSMenuItem : <title:Other Repository> (oid:1109) */
-"Other Repository" = "Other Repository";
+"Other Repository" = "Autre Dépôt";
 
 /* NSMenu : <title:OtherViews> (oid:543) */
 "OtherViews" = "AutresVues";
@@ -322,7 +322,7 @@
 "Package Manager" = "Gestionnaire de Package";
 
 /* NSSearchField (0) : <title:Package Search> (oid:1060) */
-"Package Search" = "Package Search";
+"Package Search" = "Recherche de paquet";
 
 /* NSMenu : <title:Packages & Data> (oid:270) */
 "Packages & Data" = "Packages & Données";
@@ -382,7 +382,7 @@
 "R Workspace Browser" = "Explorateur de l'Espace de Travail de R";
 
 /* NSMenuItem : <title:R for Mac OS X FAQ> (oid:1081) */
-"R for Mac OS X FAQ" = "R for Mac OS X FAQ";
+"R for Mac OS X FAQ" = "FAQ R pour Mac OS X";
 
 /* NSMenuItem : <title:Raise> (oid:850) */
 "Raise" = "Élever";
@@ -418,19 +418,19 @@
 "Save History" = "Enregistrer l' Historique";
 
 /* NSMenuItem : <title:Save Workspace File…> (oid:260) */
-"Save Workspace File…" = "Enregistrer le Fichier d'Espace de Travail..";
+"Save Workspace File…" = "Enregistrer le Fichier d'Espace de Travail…";
 
 /* NSMenuItem : <title:Select All> (oid:172) */
 "Select All" = "Sélectionner Tout";
 
 /* NSIBHelpConnector : <title:Select Packages You Want To Install Or Update. Multiple Selections Allowed. > (oid:579) */
-"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Select Packages You Want To Install Or Update. Multiple Selections Allowed. ";
+"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Sélectionner les paquets pour installation ou mise à jour. Sélections multiples autorisées.";
 
 /* NSIBHelpConnector : <title:Select The Appropriate Location. Non-Admin User Should Select "At User Level".> (oid:581) */
-"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\".";
+"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Sélectionner l'endroit approprié. Pour les non-administrateurs sélectionner \"Au Niveau Utilisateur\".";
 
 /* NSMenuItem : <title:Select packages from previous R> (oid:1113) */
-"Select packages from previous R" = "Select packages from previous R";
+"Select packages from previous R" = "Choisir les paquets à partir du R précédent";
 
 /* NSMenuItem : <title:Services> (oid:131) */
 "Services" = "Services";
@@ -445,7 +445,7 @@
 "Show Fonts" = "Montrer Polices";
 
 /* NSMenuItem : <title:Show Installed Only> (oid:1065) */
-"Show Installed Only" = "Show Installed Only";
+"Show Installed Only" = "Montrer seulement les paquets installés";
 
 /* NSMenuItem : <title:Show Ruler> (oid:843) */
 "Show Ruler" = "Montrer Règle";
@@ -460,7 +460,7 @@
 "Source Document" = "Sourcer Document";
 
 /* NSMenuItem : <title:Source File...> (oid:72) */
-"Source File..." = "Sourcer Fichier...";
+"Source File..." = "Sourcer Fichier…";
 
 /* NSTableColumn : <title:Status> (oid:451) */
 "Status" = "Statut";
@@ -487,7 +487,7 @@
 "Text" = "Texte";
 
 /* NSIBHelpConnector : <title:The Package Installer Requires An Internet Connection> (oid:560) */
-"The Package Installer Requires An Internet Connection" = "The Package Installer Requires An Internet Connection";
+"The Package Installer Requires An Internet Connection" = "Le logiciel d'installation des paquets requiert un accès à Internet";
 
 /* NSMenuItem : <title:Tighten> (oid:841) */
 "Tighten" = "Resserrer";
@@ -496,7 +496,7 @@
 "Topic" = "Rubrique";
 
 /* NSIBHelpConnector : <title:Try To Download The List Of Packages From The Specified URL> (oid:584) */
-"Try To Download The List Of Packages From The Specified URL" = "Try To Download The List Of Packages From The Specified URL";
+"Try To Download The List Of Packages From The Specified URL" = "Essaye de télécharger la liste des paquets à partir de l'emplacement spécifié";
 
 /* NSTableColumn : <title:Type> (oid:668) */
 "Type" = "Type";
@@ -511,7 +511,7 @@
 "Undo" = "Annuler";
 
 /* NSButton (Update All) : <title:Update All> (oid:1057) */
-"Update All" = "Update All";
+"Update All" = "Tout Mettre à Jour";
 
 /* NSMenuItem : <title:Use All> (oid:817) */
 "Use All" = "Tout Utiliser";
@@ -526,7 +526,7 @@
 "Use Selection for Find" = "Utiliser la  Sélection pour Recherche";
 
 /* NSIBHelpConnector : <title:User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  > (oid:585) */
-"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  ";
+"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "Il est conseillé de spécifier le format du paquet s'il n'est pas standard. En général les archives avec l'extension \".tar.gz\" sont au \"Format Source\" alors que l'extension \".tgz\" indique un \Format Binaire\".";
 
 /* NSMenuItem : <title:Vignettes> (oid:1110) */
 "Vignettes" = "Vignettes";
