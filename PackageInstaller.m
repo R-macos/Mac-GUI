@@ -707,12 +707,12 @@ NSString *location[4] = {
 	}
 	if (pkgUrl != kOtherFlat)
 		success = [[REngine mainEngine] executeString: 
-			[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',contriburl=contrib.url(%@,'%@'),type='%@')",
+			[NSString stringWithFormat:@"update.packages(lib=%@,ask='graphics',contriburl=contrib.url(%@,'%@'),type='%@')",
 				targetLocation, repos, type, type]
 			];
 	else
 		success = [[REngine mainEngine] executeString: 
-			[NSString stringWithFormat:@"update.packages(lib=\"%@\",ask='graphics',contriburl='%@',type='%@')",
+			[NSString stringWithFormat:@"update.packages(lib=%@,ask='graphics',contriburl='%@',type='%@')",
 				targetLocation, [urlTextField stringValue], type]
 			];
 	
