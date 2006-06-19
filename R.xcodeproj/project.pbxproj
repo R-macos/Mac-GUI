@@ -13,18 +13,6 @@
 			buildPhases = (
 				1C54CDAD0719742A00176826 /* ShellScript */,
 			);
-			buildSettings = {
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Docs;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = Docs;
@@ -198,48 +186,6 @@
 		F8E2800B071F048500BA437C /* sourceR.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F8E2800A071F048500BA437C /* sourceR.tiff */; };
 		F8E28030071F07FE00BA437C /* quartz.tiff in Resources */ = {isa = PBXBuildFile; fileRef = F8E2802F071F07FE00BA437C /* quartz.tiff */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildStyle section */
-		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = (
-					"-DPLAIN_STDERR",
-					"-DDEBUG_RGUI",
-				);
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		6828383307804CC2004617B7 /* Debug */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OTHER_CFLAGS = "-DDEBUG_RGUI";
-			};
-			name = Debug;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXContainerItemProxy section */
 		1CF1108F0719797100121801 /* PBXContainerItemProxy */ = {
@@ -434,6 +380,7 @@
 		68AAC9E608F41CBB0064CDA1 /* PDFImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PDFImageView.m; sourceTree = "<group>"; };
 		68AAC9EB08F41CD80064CDA1 /* VignettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VignettesController.h; sourceTree = "<group>"; };
 		68AAC9EC08F41CD80064CDA1 /* VignettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VignettesController.m; sourceTree = "<group>"; };
+		68B8EB410A46EB0700515847 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		68C0CFD307BBDAF000EA34B7 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		68C0CFD407BBDAF300EA34B7 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		68C11BB909FED6E1004DD95C /* Rdoc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rdoc.icns; path = images/Rdoc.icns; sourceTree = "<group>"; };
@@ -901,19 +848,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = sush;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = sush;
@@ -933,36 +867,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = R_Prefix.pch;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
-				);
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					R,
-				);
-				PRODUCT_NAME = R;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 				1CF110900719797100121801 /* PBXTargetDependency */,
 				689B3D3B07F4B01D006F6F37 /* PBXTargetDependency */,
@@ -979,13 +883,6 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4A9504CCFFE6A4B311CA0CBA /* Development */,
-				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
-				6828383307804CC2004617B7 /* Debug */,
-			);
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -1315,6 +1212,7 @@
 			children = (
 				686967D807981746002A1932 /* English */,
 				686967E7079818C1002A1932 /* de */,
+				68B8EB410A46EB0700515847 /* fr */,
 				16B66A3107B6E1F10053EDB2 /* it */,
 				161034F007D2232400677899 /* ja */,
 				68DDE1D109697A3F00BC6883 /* nl */,
