@@ -145,7 +145,7 @@
 
 		NSEnumerator *e = [[document windowControllers] objectEnumerator];
 		NSWindowController *wc = nil;
-		
+		if (!title || [title length]<1) title=NLS(@"New Quartz Device");
 		while (wc = [e nextObject]) {
 			NSWindow *window = [wc window];
 			[window setTitle: title];
@@ -234,6 +234,16 @@
 
 	}
 	
+}
+
+- (void) setDeviceName: (NSString*) name
+{
+	deviceName = name;
+}
+
+- (NSString*) deviceName
+{
+	return deviceName;
 }
 
 - (IBAction)copy:(id)sender

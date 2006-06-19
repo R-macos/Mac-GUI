@@ -327,7 +327,7 @@ void RQuartz_DiplayGList(RDeviceView * devView)
 static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
 		    double wid, double hgt, int bg)
 {
-//	NSLog(@"RQuartz_Open called");
+	NSString *title = [NSString stringWithUTF8String:dsp];
 	RQuartz         *newDocument;
 
     xd->windowWidth = wid*72;
@@ -348,8 +348,9 @@ static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
 		 return 0;
      }
 
- 
-	[RQuartz changeDocumentTitle: newDocument Title:NLS(@"New Quartz Device")];
+	[newDocument setDeviceName: title];
+	if (!title || [title length]<1) title=@"Quartz";		
+	[RQuartz changeDocumentTitle: newDocument Title:title];
 	xd->topLeftPoint = computeTopLeftCornerForDevNum(0, xd->QuartzPos, xd->windowWidth, xd->windowHeight);
 //	NSLog(@"topLeftPoint: %f %f", xd->topLeftPoint.x, xd->topLeftPoint.y);
 	[[newDocument getDeviceWindow] setFrameOrigin:
@@ -418,7 +419,12 @@ static void 	RQuartz_Activate(NewDevDesc *dd)
 		xd->topLeftPoint = computeTopLeftCornerForDevNum(devnum-1, xd->QuartzPos, xd->windowWidth, xd->windowHeight);
 		[xd->DevWindow setFrameTopLeftPoint:xd->topLeftPoint];	
 	}
-	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:NLS(@"Quartz (%d) - Active"),devnum+1]];
+	{
+		NSString * dt = [xd->QuartzDoc deviceName];
+		if (!dt || [dt length]<1) dt = [NSString stringWithFormat:@"Quartz (%d)", devnum+1];
+		dt = [NSString stringWithFormat:NLS(@"%@ - Active"), dt];
+		[RQuartz changeDocumentTitle: xd->QuartzDoc Title:dt];
+	}
 
 }
 
@@ -426,7 +432,12 @@ static void 	RQuartz_Deactivate(NewDevDesc *dd)
 {
 	int 		devnum = devNumber((DevDesc *)dd);
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
-	[RQuartz changeDocumentTitle: xd->QuartzDoc Title:[NSString stringWithFormat:NLS(@"Quartz (%d) - Inactive"),devnum+1]];
+	{
+		NSString * dt = [xd->QuartzDoc deviceName];
+		if (!dt || [dt length]<1) dt = [NSString stringWithFormat:@"Quartz (%d)", devnum+1];
+		dt = [NSString stringWithFormat:NLS(@"%@ - Inactive"), dt];
+		[RQuartz changeDocumentTitle: xd->QuartzDoc Title:dt];
+	}		
 }
 
 static void 	RQuartz_Size(double *left, double *right,

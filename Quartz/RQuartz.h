@@ -39,6 +39,7 @@
 {
 	IBOutlet	RDeviceView *deviceView;
 	IBOutlet	NSWindow *deviceWindow;
+	NSString *deviceName;
 }
 
 
@@ -48,5 +49,7 @@
 
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
 - (NSTextView *)textView;
+- (void) setDeviceName: (NSString*) name;
+- (NSString*) deviceName;
 
 @end

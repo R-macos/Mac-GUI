@@ -1,3 +1,9 @@
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "%@ - Attivo";
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "%@ - Inattivo";
+
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
 "(arguments lookup is disabled while R is busy)" = "(ricerca argomenti è disabilitata quando R sta elaborando)";
@@ -127,7 +133,7 @@
 /* From: RController.m (toolbar) */
 "New Document" = "Nuovo Documento";
 
-/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+/* From: Quartz/RQuartz.m (changeDocumentTitle) */
 "New Quartz Device" = "Nuova Finestra Grafica Quartz";
 
 /* Global string @ */
@@ -209,12 +215,6 @@
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
-
-/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"Quartz (%d) - Active" = "Quartz (%d) - Attivo";
-
-/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"Quartz (%d) - Inactive" = "Quartz (%d) - Inattivo";
 
 /* From: RController.m (toolbar) */
 "Quit" = "Esci";

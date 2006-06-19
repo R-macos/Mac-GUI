@@ -2,6 +2,7 @@ NEWS
 
 Last-update: 2006-06-19 [SU]
 *	Fixed detection of previous R version for package update
+*	Add support for device name in Quartz
 
 Last-update: 2006-06-17 [SU]
 *	Fixed broken "update all" in package installer

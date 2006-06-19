@@ -1,3 +1,9 @@
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "%@ - アクティブ";
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "%@ - インアクティブ";
+
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
 "(arguments lookup is disabled while R is busy)" = "(引数検索はRがビジーの間は無効になります)";
@@ -127,7 +133,7 @@
 /* From: RController.m (toolbar) */
 "New Document" = "新規文書";
 
-/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+/* From: Quartz/RQuartz.m (changeDocumentTitle) */
 "New Quartz Device" = "新規Quartzデバイス";
 
 /* Global string @ */
@@ -209,12 +215,6 @@
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
-
-/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"Quartz (%d) - Active" = "Quartz (%d) - アクティブ";
-
-/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"Quartz (%d) - Inactive" = "Quartz (%d) - インアクティブ";
 
 /* From: RController.m (toolbar) */
 "Quit" = "終了";
