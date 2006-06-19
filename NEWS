@@ -1,5 +1,11 @@
 NEWS 
 
+Last-update: 2006-06-19 [SU]
+*	Fixed detection of previous R version for package update
+
+Last-update: 2006-06-17 [SU]
+*	Fixed broken "update all" in package installer
+
 -- Release Version 1.16 (3198) - supplied with R 2.3.1 --
 
 Last-update: 2006-05-24 [SU]

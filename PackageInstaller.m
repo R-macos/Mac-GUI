@@ -510,6 +510,8 @@ NSString *location[4] = {
 	[busyIndicator setUsesThreadedAnimation:YES];
 	
 	{
+		/* we take first 3 chars from the version string - this may or may not be correct FIXME */
+		NSString *curRV = [[NSString stringWithCString:R_MAJOR "." R_MINOR] substringToIndex:3];
 		NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:@"/Library/Frameworks/R.framework/Versions"];
 		int i;
 
@@ -519,8 +521,7 @@ NSString *location[4] = {
 			a = [a sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
 			i = [a count]-1;
 			while (i>=0) {
-				/* FIXME! hard-coded version. At this point we don't know the R version since R is not running */
-				if ([(NSString*)[a objectAtIndex:i] compare:@"2.2"]<0) break;
+				if ([(NSString*)[a objectAtIndex:i] compare:curRV]<0) break;
 				i--;
 			}
 			if (i>=0) {
