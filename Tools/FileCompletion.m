@@ -46,7 +46,7 @@
         working=YES;
     dir=working?@".":((ls==0)?@"/":[part substringToIndex:ls]);
     fb=ls; if (fb<tl && [part characterAtIndex:fb]=='/') fb++;
-    fn=(fb<tl)?[part substringFromIndex:fb]:@"";
+    fn=(fb>=0 && fb<tl)?[part substringFromIndex:fb]:@"";
     //NSLog(@"directory to look in: \"%@\" for entry beginning with \"%@\"", dir, fn);
     {
         NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:dir];
@@ -90,7 +90,7 @@
     int tl = [part length];
     int ls = tl-1, fb;
     NSString *dir;
-    BOOL working=NO;
+    BOOL working=NO, voidFn=NO;
     NSString *fn;
 	NSMutableArray *ca = [[NSMutableArray alloc] initWithCapacity: 8];
     
@@ -100,7 +100,8 @@
         working=YES;
     dir=working?@".":((ls==0)?@"/":[part substringToIndex:ls]);
     fb=ls; if (fb<tl && [part characterAtIndex:fb]=='/') fb++;
-    fn=(fb<tl)?[part substringFromIndex:fb]:@"";
+    fn=(fb>=0 && fb<tl)?[part substringFromIndex:fb]:@"";
+	if ([fn length]==0) voidFn=YES;
     //NSLog(@"directory to look in: \"%@\" for entry beginning with \"%@\"", dir, fn);
     {
         NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:dir];
@@ -110,7 +111,7 @@
             NSString *common=nil;
             while (i<[a count]) {
                 NSString *sx = (NSString*) [a objectAtIndex:i];
-                if ([sx hasPrefix: fn]) {
+                if (voidFn || [sx hasPrefix: fn]) {
                     if (matches==0) {
                         firstMatch=i;
                         common=[[NSString alloc] initWithString: sx];
