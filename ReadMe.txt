@@ -66,11 +66,11 @@ Analogously there is a script "update.strings" for automatic merging of newly ad
 * adding new localization
 	- in Xcode, select the NIB, go to Info, click on "Add Localization"
 	  use country's ISO 639 or 3166 code for the localization instead of full name
-	- run update.localization
-	  this will create translation files in Translated.string for all NIBs and languages, including the new one
+	- run update.localization -g
+	  this will create translation files in Translated.strings for all NIBs and languages, including the new one
 	- edit the translation file for the new NIB - right hand side must be translated. IMPORTANT: Before editing, make sure you set the encoding in the editor to UTF-8!! Not doing so will cause the translation to fail silently and you will wonder why nothing works.
 	- run update.localization -t
-	  Don't forget the -t switch! Otherwise the script will overwrite the file you just translated!
+	  this merges any changes made in the Translated.strings to NIBs
 	  
 	*** An important note to those with write SVN access: don't forget to DELETE the .svn FOLDER of the newly created NIB!! This is VERY IMPORTANT!! The .svn folder is copied from the original English NIB, so it will incorrectly point to the English version. If you commit this, you will overwrite the English version with your localized NIB! We definitely don't want that.
 
