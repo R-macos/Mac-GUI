@@ -1,5 +1,13 @@
 NEWS 
 
+Last-update: 2006-07-14 [SU]
+*	Cleanup in initialization code (use Rinterface.h when
+	available)
+*	Add "Disable R signal handlers" preference which allows
+	to disable the new signal handlers introduced in R 2.3.0
+	The valid values are YES and NO. The default for deployment
+	build is NO and for development build is YES.
+
 Last-update: 2006-07-13 [SU]
 *	Added support for save.on.exit preference with possible
 	values yes/no/ask. Currently not settable via UI but e.g.:

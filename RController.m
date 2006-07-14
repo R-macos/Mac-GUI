@@ -379,7 +379,14 @@ static RController* sharedRController;
 
 	/* set save action */
 	[[REngine mainEngine] setSaveAction:[Preferences stringForKey:@"save.on.exit" withDefault:@"ask"]];
-	
+	[[REngine mainEngine] disableRSignalHandlers:[Preferences flagForKey:@"Disable R signal handlers" withDefault:
+#ifdef DEBUG_RGUI
+		YES
+#else
+		NO
+#endif
+		]];
+
 	SLog(@" - font and other widgets");
 	/*
 	[RTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];

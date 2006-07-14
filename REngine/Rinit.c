@@ -27,11 +27,16 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  */
 
+#include <Rversion.h>
+#if (R_VERSION >= R_Version(2,3,0))
+#define R_INTERFACE_PTRS 1
+#define CSTACK_DEFNS 1
+#endif
+
 #include "privateR.h"
 
 #include <R.h>
 #include <Rinternals.h>
-#include <Rversion.h>
 #include "Rinit.h"
 #include "Rcallbacks.h"
 #include "IOStuff.h"
@@ -48,18 +53,27 @@
 #define MAX_R_LINE_SIZE 32767
 #endif
 
-int setup_Rmainloop(void);  /* from src/main.c */
-int end_Rmainloop(void);    /* from src/main.c */
-int Rf_initialize_R(int ac, char **av); /* from src/unix/system.c */
+/*----------- more recent R versions have Rinterface ---------*/
+#if (R_VERSION >= R_Version(2,3,0))
+#include <Rinterface.h>
 
-extern Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
-						   double width,double height,
-						   double pointsize,char*family,
-						   Rboolean antialias,
-						   Rboolean autorefresh,int quartzpos,
-						   int bg);
-extern void getQuartzParameters(double *width, double *height, double *ps, char *family, 
-						 Rboolean *antialias, Rboolean *autorefresh, int *quartzpos);
+/* unfortunately 2.3.0 doesn't export R_CStackLimit */
+#if (R_VERSION < R_Version(2,3,1))
+#if !defined(HAVE_UINTPTR_T) && !defined(uintptr_t)
+typedef unsigned long uintptr_t;
+#endif
+extern uintptr_t R_CStackLimit; /* C stack limit */
+extern uintptr_t R_CStackStart; /* Initial stack address */
+#endif
+
+/* and SaveAction is not officially exported */
+extern SA_TYPE SaveAction;
+
+#else
+
+/*-------- old-style initialization w/o Rinterface.h ---------*/
+
+int setup_Rmainloop(void);  /* from src/main.c */
 
 /*-------------------------------------------------------------------*
  * UNIX initialization (includes Darwin/Mac OS X)                    *
@@ -90,13 +104,27 @@ extern void (*ptr_R_ShowMessage)();
 extern int  (*ptr_R_ReadConsole)(char *, unsigned char *, int, int);
 extern void (*ptr_R_WriteConsole)(char *, int);
 extern void (*ptr_R_ResetConsole)();
-extern void (*ptr_do_flushconsole)();
 extern void (*ptr_R_ClearerrConsole)();
 extern void (*ptr_R_Busy)(int);
 /* extern void (*ptr_R_CleanUp)(SA_TYPE, int, int); */
 extern int  (*ptr_R_ShowFiles)(int, char **, char **, char *, Rboolean, char *);
 extern int  (*ptr_R_EditFiles)(int, char **, char **, char *);
 
+extern int  (*ptr_R_ChooseFile)(int, char *, int);
+extern void (*ptr_R_loadhistory)(SEXP, SEXP, SEXP, SEXP);
+extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
+#endif
+
+/* --- those are not part of the Rinterface --- */
+extern SEXP (*ptr_do_packagemanger)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_datamanger)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_browsepkgs)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
+extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+extern void (*ptr_do_flushconsole)();
+extern void (*ptr_R_ProcessEvents)();
 
 #if (R_VERSION >= R_Version(2,1,0))
 extern int  (*ptr_R_EditFile)(char *); /* in r-devel ptr_Raqua_Edit is no longer used*/
@@ -105,18 +133,11 @@ extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy for he
 #else
 extern int  (*ptr_Raqua_Edit)(char *);
 #endif
-extern int  (*ptr_R_ChooseFile)(int, char *, int);
-extern void (*ptr_R_loadhistory)(SEXP, SEXP, SEXP, SEXP);
-extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
-extern void (*ptr_R_ProcessEvents)();
-extern SEXP (*ptr_do_packagemanger)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_datamanger)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_browsepkgs)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
 
 extern int  (*ptr_CocoaSystem)(char *);
+
+int end_Rmainloop(void);    /* from src/main.c */
+int Rf_initialize_R(int ac, char **av); /* from src/unix/system.c */
 
 extern Rboolean (*ptr_CocoaInnerQuartzDevice)(NewDevDesc *,char *,
 					  double ,double ,
@@ -126,6 +147,15 @@ extern Rboolean (*ptr_CocoaInnerQuartzDevice)(NewDevDesc *,char *,
 					  int );
 extern void (*ptr_CocoaGetQuartzParameters)(double *, double *, double *, 
 		char *, Rboolean *, Rboolean *, int *);
+
+extern Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
+								  double width,double height,
+								  double pointsize,char*family,
+								  Rboolean antialias,
+								  Rboolean autorefresh,int quartzpos,
+								  int bg);
+extern void getQuartzParameters(double *width, double *height, double *ps, char *family, 
+								Rboolean *antialias, Rboolean *autorefresh, int *quartzpos);
 
 /*--- note: the REPL code was modified, R_ReplState is not the same as used internally in R */
 
@@ -147,6 +177,7 @@ static R_ReplState state = {0, 1, 0, (MAX_R_LINE_SIZE+1), NULL, NULL};
 
 char *lastInitRError = 0;
 
+/* Note: R_SignalHandlers are evaluated in setup_Rmainloop which is called inside initR */
 int initR(int argc, char **argv, int save_action) {
     if (!getenv("R_HOME")) {
         lastInitRError = "R_HOME is not set. Please set all required environment variables before running this program.";
@@ -211,6 +242,13 @@ int initR(int argc, char **argv, int save_action) {
 }
 
 static int firstRun=1;
+
+void setRSignalHandlers(int val) {
+#if (R_VERSION >= R_Version(2,3,1))
+	R_SignalHandlers = val;
+#endif
+	/* it's a noop on R <2.3.1 */
+}
 
 void run_REngineRmainloop(int delayed)
 {

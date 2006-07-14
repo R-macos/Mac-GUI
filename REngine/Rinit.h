@@ -40,5 +40,6 @@ void run_REngineRmainloop(int delayed);
 #define Rinit_save_ask 2
 
 int initR(int argc, char **argv, int save_action);
+void setRSignalHandlers(int val);
 
 #endif

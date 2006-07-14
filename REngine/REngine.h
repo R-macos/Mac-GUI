@@ -98,8 +98,10 @@ extern BOOL preventReentrance;
 - (BOOL) beginProtected;
 - (void) endProtected;
 
+// those must be called *before* activate and *after* init
 - (void) setSaveAction: (NSString*) action; // yes/no/ask
 - (NSString*) saveAction;
+- (void) disableRSignalHandlers: (BOOL) disable;
 
 // eval mode
 - (RSEXP*) parse: (NSString*) str;

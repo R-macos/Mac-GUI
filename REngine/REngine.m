@@ -204,6 +204,11 @@ BOOL preventReentrance = NO;
 	return saveAction;
 }
 
+- (void) disableRSignalHandlers: (BOOL) disable
+{
+	setRSignalHandlers(disable?0:1);
+}
+
 - (void) begin
 {
 	// FIXME: we should set a lock here
