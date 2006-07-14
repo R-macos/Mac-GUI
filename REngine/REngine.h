@@ -71,6 +71,9 @@ extern BOOL preventReentrance;
 	/* initial arguments used by activate to initialize R */
 	int  argc;
 	char **argv;
+	
+	/* SaveAction (yes/no/ask - anything else is treated as ask) */
+	NSString *saveAction;
 }
 
 + (REngine*) mainEngine;
@@ -94,6 +97,9 @@ extern BOOL preventReentrance;
 
 - (BOOL) beginProtected;
 - (void) endProtected;
+
+- (void) setSaveAction: (NSString*) action; // yes/no/ask
+- (NSString*) saveAction;
 
 // eval mode
 - (RSEXP*) parse: (NSString*) str;

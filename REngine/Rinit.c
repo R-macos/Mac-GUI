@@ -147,7 +147,7 @@ static R_ReplState state = {0, 1, 0, (MAX_R_LINE_SIZE+1), NULL, NULL};
 
 char *lastInitRError = 0;
 
-int initR(int argc, char **argv) {
+int initR(int argc, char **argv, int save_action) {
     if (!getenv("R_HOME")) {
         lastInitRError = "R_HOME is not set. Please set all required environment variables before running this program.";
         return -1;
@@ -167,7 +167,7 @@ int initR(int argc, char **argv) {
     R_Outputfile = NULL;
     R_Consolefile = NULL;
     R_Interactive = 1;
-    SaveAction = SA_SAVEASK;
+    SaveAction = (save_action==Rinit_save_yes)?SA_SAVE:((save_action==Rinit_save_no)?SA_NOSAVE:SA_SAVEASK);
 
     /* ptr_R_Suicide = Re_Suicide; */
     /* ptr_R_CleanUp = Re_CleanUp; */

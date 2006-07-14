@@ -110,6 +110,7 @@ BOOL preventReentrance = NO;
 	active=NO;
 	insideR=0;
 	maskEvents=0;
+	saveAction=@"ask";
 	
     //setenv("R_HOME","/Library/Frameworks/R.framework/Resources",1);
     //setenv("DYLD_LIBRARY_PATH","/Library/Frameworks/R.framework/Resources/lib",1);
@@ -122,7 +123,7 @@ BOOL preventReentrance = NO;
 	SLog(@"REngine.activate: starting R ...");
 	RENGINE_BEGIN;
 	{
-		int res = initR(argc, argv);
+		int res = initR(argc, argv, [saveAction isEqual:@"yes"]?Rinit_save_yes:([saveAction isEqual:@"no"]?Rinit_save_no:Rinit_save_ask));
 		active = (res==0)?YES:NO;
 	}
 	RENGINE_END;
@@ -191,6 +192,16 @@ BOOL preventReentrance = NO;
 - (void) setCocoaHandler: (id <CocoaHandler>) ch
 {
 	cocoaHandler=ch;
+}
+
+- (void) setSaveAction: (NSString*) action
+{
+	saveAction = action?action:@"ask";
+}
+
+- (NSString*) saveAction
+{
+	return saveAction;
 }
 
 - (void) begin

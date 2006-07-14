@@ -377,6 +377,9 @@ static RController* sharedRController;
 	SLog(@" - init R");
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 
+	/* set save action */
+	[[REngine mainEngine] setSaveAction:[Preferences stringForKey:@"save.on.exit" withDefault:@"ask"]];
+	
 	SLog(@" - font and other widgets");
 	/*
 	[RTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
@@ -1107,6 +1110,13 @@ extern BOOL isTimeToFinish;
 		[[NSApplication sharedApplication] terminate:self];
 		SLog(@"RController.windowShouldClose: app termination finished.");
 		return NO;
+	}
+	NSString *sa = [[REngine mainEngine] saveAction];
+	if ([sa isEqual:@"yes"] || [sa isEqual:@"no"]) {
+		SLog(@"RController.windowShouldClose: save action is %@, calling quit directly.", sa);
+		[Preferences commit];
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quit('%@')", sa]];
+		return YES;
 	}
 	//[[RDocumentController sharedDocumentController] closeAllDocumentsWithDelegate:self didCloseAllSelector:@selector(didCloseAll:) contextInfo:nil];	
 	//return NO;

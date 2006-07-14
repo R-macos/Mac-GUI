@@ -1,5 +1,10 @@
 NEWS 
 
+Last-update: 2006-07-13 [SU]
+*	Added support for save.on.exit preference with possible
+	values yes/no/ask. Currently not settable via UI but e.g.:
+	defaults write org.R-project.R save.on.exit -string no
+
 Last-update: 2006-06-19 [SU]
 *	Fixed detection of previous R version for package update
 *	Add support for device name in Quartz
