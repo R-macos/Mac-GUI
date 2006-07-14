@@ -314,14 +314,18 @@ As in the above, you don't need to specify the name @emph{R.framework} in the pa
 
 @node  How to build and install the R.app, How to build universal R, How to install R, Building R from sources
 @section How to build and install the R.app
-The sources for the R.app GUI are currently not included in the global R source distribution. They are available in the form of a Xcode project on the R for Mac OS X pages as well as the SVN repository. Before compiling R.app make sure R is installed as @emph{/Library/Frameworks/R.framework} and working.
+The sources for the R.app GUI are currently not included in the global R source distribution. They are available in the form of a Xcode project on the R for Mac OS X @CRAN{} pages (released versions) as well as the SVN repository. In order to check out the latest development version, use
+@example
+svn co https://svn.r-project.org/R-packages/trunk/Mac-GUI
+@end example
+Before compiling R.app make sure R is installed in @emph{/Library/Frameworks/R.framework} and working.
 
 Using Xcode load the @emph{R.xcodeproj} project, select @emph{R} target (which is the default), set @emph{Deployment} configuration build. The same effect can be achieved on the command line in the @file{Mac-GUI} directory by typing:
 @example
 xcodebuild -target R -configuration Deployment
 @end example
 
-The current development is done using Xcode 2.2.1. The default build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure R is available inside the SDK by running the following in Terminal:
+The current development is done using Xcode 2.2 or higher. The default build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure R is available inside the SDK by running the following in Terminal:
 @example
 ln -sf /Library /Developer/SDKs/MacOSX10.4u.sdk/Library
 @end example
@@ -835,16 +839,16 @@ Starting with R 2.3.0 the same binary package can be used for both PowerPC and I
 
 Further, universal binaries can be currently built on Intel Macs only. The main reason is that the default Mac OS X installation on PowerPC based Macs does not include system libraries for Intel Macs (and R building process is unaware of Xcode SDKs). If you happen to have a PowerPC machine with full system libraries it should work. Finally, a compiler supporting both platforms is necessary, see @pxref{How to build universal R}.
 
-Once all tools are in place it is considerably easy to build an universal binary. Assuming that you have a source package called @code{foo_1.0.tar.gz}, it can be installed universally using the following two-step process:
+Once all tools are in place it is considerably easy to build an universal binary. If the package doe not contain a @emph{confgiure} script then a regular package installation using either @code{install.packages} or @code{R CMD INSTALL} automatically creates an universal binary. If the package contain a @emph{configure} script then it cannot be compiled in-place for multiple platforms, and the following process should be used. Assuming that you have a source package called @code{foo_1.0.tar.gz} that uses a @emph{configure} script, it can be installed universally using the following two-step process:
 
 @example
 R_ARCH=/i386 R CMD INSTALL foo_1.0.tar.gz
 R_ARCH=/ppc R CMD INSTALL --libs-only foo_1.0.tar.gz
 @end example
 
-In the first step a full package for the Intel platform is built and installed. In the scond step a package for PowerPC platofrm is built, but only the relevant binary libraries are installed. This way both platforms share the same set of files except for the package library.
+In the first step a full package for the Intel platform is built and installed. In the scond step a package for PowerPC platform is built, but only the relevant binary libraries are installed. This way both platforms share the same set of files except for the package library.
 
-@code{R CMD INSTALL --build} does not support universal binaries, because it is not aware of the other platfrom, therefore it is necessary to create the resulting tar-ball manually. This is how the process could be automated (replace first line with the real package name and version):
+@code{R CMD INSTALL --build} does not support universal binaries of packages that contain @emph{configure} scripts for reasons stated above. Therefore it is necessary to create the resulting tar-ball manually. The following is jus tone example how the process could be automated (replace first line with the real package name and version):
 
 @example
 pkg=foo_1.0
