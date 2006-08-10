@@ -1,5 +1,9 @@
 NEWS 
 
+Last-update: 2006-08-10 [RG]
+*	Added check for quartz width/height preferences (missing in
+	newQuartzDevice: in RController.m)
+
 Last-update: 2006-07-14 [SU]
 *	Cleanup in initialization code (use Rinterface.h when
 	available)
