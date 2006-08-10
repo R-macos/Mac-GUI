@@ -1581,10 +1581,18 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 
 - (IBAction)newQuartzDevice:(id)sender {
-	NSString *width = [Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"];
-	NSString *height = [Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"];
-	NSString *cmd = [[[[@"quartz(display=\"\",width=" stringByAppendingString:width]
-		stringByAppendingString:@",height="] stringByAppendingString:height] stringByAppendingString:@")"];
+	NSString *cmd;
+	BOOL flag=[Preferences flagForKey:useQuartzPrefPaneSettingsKey withDefault: NO];
+	if (flag) {
+		NSString *width = [Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"];
+		NSString *height = [Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"];
+		cmd = [[[[@"quartz(display=\"\",width=" stringByAppendingString:width]
+			stringByAppendingString:@",height="] stringByAppendingString:height]
+			stringByAppendingString:@")"];
+	}
+	else
+		cmd = [@"quartz(display=\"\"" stringByAppendingString:@")"];
+	
 	[[REngine mainEngine] executeString:cmd];
 }
 
