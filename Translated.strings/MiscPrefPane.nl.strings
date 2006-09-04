@@ -13,6 +13,9 @@
 /* NSButton (Always apply) : <title:Always apply> (oid:88) */
 "Always apply" = "Altijd toepassen";
 
+/* NSButtonCell (Ask ) : <title:Ask > (oid:123) */
+"Ask " = "Vraag ";
+
 /* NSButton (Change) : <title:Change> (oid:37) */
 "Change" = "Wijzig";
 
@@ -43,6 +46,9 @@
 /* NSTextField (Max number of entries in history:) : <title:Max number of entries in history:> (oid:94) */
 "Max number of entries in history:" = "Maximum aantal lijnen in geschiedenis:";
 
+/* NSButtonCell (No) : <title:No> (oid:124) */
+"No" = "Nee";
+
 /* NSTextField (Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.) : <title:Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.> (oid:86) */
 "Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Opm.: Selecteer 'Altijd toepassen'. Anders zullen andere methodes om de werkmap in te stellen voorrang krijgen, bvb. door op het R-icoon te dubbelklikken. Door een map op het R-icoon te slepen of door  'open -a R.app <dir-or-file>' te gebruiken.";
 
@@ -64,6 +70,9 @@
 /* NSButton (Remove duplicate entries in history) : <title:Remove duplicate entries in history> (oid:93) */
 "Remove duplicate entries in history" = "Verwijder dubbele geschiedenisinvoer";
 
+/* NSBox (Save workspace on exit from R) : <title:Save workspace on exit from R> (oid:115) */
+"Save workspace on exit from R" = "Bewaar werkbestand bij het afsluiten van R";
+
 /* NSButton (Select) : <title:Select> (oid:110) */
 "Select" = "Selecteer";
 
@@ -78,6 +87,9 @@
 
 /* NSTextField (URL:) : <title:URL:> (oid:109) */
 "URL:" = "URL:";
+
+/* NSButtonCell (Yes) : <title:Yes> (oid:125) */
+"Yes" = "Ja";
 
 /* NSTextField (~) : <title:~> (oid:41) */
 "~" = "~";
