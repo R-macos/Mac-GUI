@@ -38,7 +38,7 @@
 int docListLimit = 128; // limit for the number of transitions stored
 int docListPos = 0; // active position in the list
 NSDocument **docList; // list of activated documents
-NSDocument *mainDoc; // dummy docuemnt representing the main R window in the list
+NSDocument *mainDoc; // dummy document representing the main R window in the list
 @end
 
 
@@ -168,7 +168,8 @@ NSDocument *mainDoc; // dummy docuemnt representing the main R window in the lis
 
 	NSString *fname = [aFile stringByExpandingTildeInPath];
 	SLog(@" - call super -> openDocumentWithContentsOfFile: %@", fname);
-	NSDocument *doc = nil;// [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
+//	NSDocument *doc = nil;// [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
+	NSDocument *doc = [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
 	if (!doc) {
 		SLog(@" - super couldn't open it - assuming that it's a problem with doc type, creating manually");
 		/* WARNING: this is a hack for cases where the document type cannot be determined.
