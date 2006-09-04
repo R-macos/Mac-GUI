@@ -53,6 +53,7 @@
 	IBOutlet NSButton *cleanupHistoryEntries;
 	IBOutlet NSButton *stripCommentsFromHistoryEntries;
 	IBOutlet NSTextField *defaultMirror;
+	IBOutlet NSMatrix *saveOnExit;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -81,6 +82,7 @@
 - (IBAction) changeRemoveDuplicateHistoryEntries:(id)sender;
 - (IBAction) changeCleanupHistoryEntries:(id)sender;
 - (IBAction) changeStripCommentsFromHistoryEntries:(id)sender;
+- (IBAction) saveOnExit:(id)sender;
 - (IBAction) changeMirrorURL:(id)sender;
 - (IBAction) selectMirror:(id)sender;
 
