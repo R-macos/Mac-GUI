@@ -29,10 +29,10 @@
 /* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
 "As defined by .libPaths()" = ".libPaths()での指定に従う";
 
-/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
+/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:1122) */
 "At System Level (in R framework)" = "システム (Rフレームワーク内)";
 
-/* NSButtonCell (At User Level) : <title:At User Level> (oid:575) */
+/* NSButtonCell (At User Level) : <title:At User Level> (oid:1123) */
 "At User Level" = "ユーザエリア";
 
 /* NSButton (<) : <title:Back> (oid:988) */
@@ -135,10 +135,10 @@
 "Description" = "説明";
 
 /* NSIBHelpConnector : <title:Double click on one package to load it in the R workspace. > (oid:505) */
-"Double click on one package to load it in the R workspace. " = "パッケージをダブルクリックすると R ワークスペースに読み込まれます. ";
+"Double click on one package to load it in the R workspace. " = "Double click on one package to load it in the R workspace. ";
 
 /* NSIBHelpConnector : <title:Downloads Selected Packages And Installs In Selected Location> (oid:580) */
-"Downloads Selected Packages And Installs In Selected Location" = "選択されたパッケージをダウンロードし, 選択された場所にインストールします";
+"Downloads Selected Packages And Installs In Selected Location" = "Downloads Selected Packages And Installs In Selected Location";
 
 /* NSMenu : <title:Edit> (oid:169) */
 "Edit" = "編集";
@@ -213,7 +213,7 @@
 /* NSMenuItem : <title:Hide R> (oid:134) */
 "Hide R" = "Rを隠す";
 
-/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:576) */
+/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:1124) */
 "In Other Location (Will Be Asked Upon Installation)" = "他の場所(インストール時に指定)";
 
 /* NSBox (Install Location) : <title:Install Location> (oid:570) */
@@ -424,10 +424,10 @@
 "Select All" = "すべてを選択";
 
 /* NSIBHelpConnector : <title:Select Packages You Want To Install Or Update. Multiple Selections Allowed. > (oid:579) */
-"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "インストール/アップデートしたいパッケージを選択して下さい. 複数選択も可能です. ";
+"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Select Packages You Want To Install Or Update. Multiple Selections Allowed. ";
 
 /* NSIBHelpConnector : <title:Select The Appropriate Location. Non-Admin User Should Select "At User Level".> (oid:581) */
-"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "適切なインストール先を指定して下さい. 管理者権限がない場合は「ユーザエリア」を選択して下さい.";
+"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\".";
 
 /* NSMenuItem : <title:Select packages from previous R> (oid:1113) */
 "Select packages from previous R" = "以前の R からパッケージを選択";
@@ -487,7 +487,7 @@
 "Text" = "テキスト";
 
 /* NSIBHelpConnector : <title:The Package Installer Requires An Internet Connection> (oid:560) */
-"The Package Installer Requires An Internet Connection" = "パッケージインストーラの実行にはインターネット接続が必要です";
+"The Package Installer Requires An Internet Connection" = "The Package Installer Requires An Internet Connection";
 
 /* NSMenuItem : <title:Tighten> (oid:841) */
 "Tighten" = "きつく";
@@ -496,13 +496,13 @@
 "Topic" = "トピック";
 
 /* NSIBHelpConnector : <title:Try To Download The List Of Packages From The Specified URL> (oid:584) */
-"Try To Download The List Of Packages From The Specified URL" = "指定されたURLからパッケージの一覧をダウンロードします";
+"Try To Download The List Of Packages From The Specified URL" = "Try To Download The List Of Packages From The Specified URL";
 
 /* NSTableColumn : <title:Type> (oid:668) */
 "Type" = "型";
 
 /* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:582) */
-"URL Of Repository. Must Begin With \"http://\"" = "リポジトリのURL. \"http://\"で始まっていなければなりません.";
+"URL Of Repository. Must Begin With \"http://\"" = "URL Of Repository. Must Begin With \"http://\"";
 
 /* NSMenuItem : <title:Underline> (oid:835) */
 "Underline" = "アンダーライン";
@@ -526,7 +526,7 @@
 "Use Selection for Find" = "選択部分を用いて検索";
 
 /* NSIBHelpConnector : <title:User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  > (oid:585) */
-"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "デフォルト以外のリポジトリを用いる場合には、パッケージフォーマットを指定する必要があります. 通常、拡張子 \".tar.gz\" のアーカイブは「ソース形式」, 拡張子 \".tgz\" のパッケージは「バイナリ形式」です. ";
+"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  ";
 
 /* NSMenuItem : <title:Vignettes> (oid:1110) */
 "Vignettes" = "ビネット";
