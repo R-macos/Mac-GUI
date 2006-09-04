@@ -1,4 +1,4 @@
-/* NSTextField (0) : <title:
+/* NSTextField ( ) : <title:
 > (oid:1103) */
 "\n" = "\n";
 
@@ -29,10 +29,10 @@
 /* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
 "As defined by .libPaths()" = "Come definito in .libPaths()";
 
-/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
+/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:1122) */
 "At System Level (in R framework)" = "A Livello Sistema (in R framework)";
 
-/* NSButtonCell (At User Level) : <title:At User Level> (oid:575) */
+/* NSButtonCell (At User Level) : <title:At User Level> (oid:1123) */
 "At User Level" = "A Livello Utente";
 
 /* NSButton (<) : <title:Back> (oid:988) */
@@ -56,7 +56,7 @@
 /* NSMenuItem : <title:Bold> (oid:849) */
 "Bold" = "Grassetto";
 
-/* NSBox : <title:Box> (oid:966) */
+/* NSBox (Box) : <title:Box> (oid:966) */
 "Box" = "Box";
 
 /* NSMenuItem : <title:Bring All to Front> (oid:5) */
@@ -65,7 +65,7 @@
 /* NSMenuItem : <title:CRAN (binaries)> (oid:541) */
 "CRAN (binaries)" = "CRAN (binari)";
 
-/* NSMenuItem : <title:CRAN (sources)> (oid:562) */
+/* NSMenuItem : <title:CRAN (sources)> (oid:1108) */
 "CRAN (sources)" = "CRAN (sorgenti)";
 
 /* NSButton (Cancel) : <title:Cancel> (oid:1033) */
@@ -173,7 +173,7 @@
 /* NSMenu : <title:Font> (oid:854) */
 "Font" = "Font";
 
-/* NSTextField (Font Size:) : <title:Font Size:
+/* NSTextField (Font Size: ) : <title:Font Size:
 > (oid:394) */
 "Font Size:\n" = "Dimensione Font:\n";
 
@@ -213,10 +213,10 @@
 /* NSMenuItem : <title:Hide R> (oid:134) */
 "Hide R" = "Nascondi R";
 
-/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:576) */
+/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:1124) */
 "In Other Location (Will Be Asked Upon Installation)" = "Percorso differente (Verrà specificato durante installazione)";
 
-/* NSBox : <title:Install Location> (oid:570) */
+/* NSBox (Install Location) : <title:Install Location> (oid:570) */
 "Install Location" = "Percorso Installazione";
 
 /* NSButton (Install Selected) : <title:Install Selected> (oid:577) */
@@ -303,8 +303,11 @@
 /* NSMenu : <title:Open Recent> (oid:125) */
 "Open Recent" = "Apri Recenti";
 
-/* NSMenuItem : <title:Other Repository (specify format)> (oid:544) */
-"Other Repository (specify format)" = "Altro Archivio (specificare formato)";
+/* NSMenuItem : <title:Other Directory URL> (oid:1107) */
+"Other Directory URL" = "Other Directory URL";
+
+/* NSMenuItem : <title:Other Repository> (oid:1109) */
+"Other Repository" = "Other Repository";
 
 /* NSMenu : <title:OtherViews> (oid:543) */
 "OtherViews" = "AltreViste";
@@ -324,7 +327,7 @@
 /* NSMenu : <title:Packages & Data> (oid:270) */
 "Packages & Data" = "Pacchetti & Dati";
 
-/* NSBox : <title:Packages Repository> (oid:538) */
+/* NSBox (Packages Repository) : <title:Packages Repository> (oid:538) */
 "Packages Repository" = "Archivio Pacchetti";
 
 /* NSMenuItem : <title:Page Setup…> (oid:77) */
@@ -426,6 +429,9 @@
 /* NSIBHelpConnector : <title:Select The Appropriate Location. Non-Admin User Should Select "At User Level".> (oid:581) */
 "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\".";
 
+/* NSMenuItem : <title:Select packages from previous R> (oid:1113) */
+"Select packages from previous R" = "Select packages from previous R";
+
 /* NSMenuItem : <title:Services> (oid:131) */
 "Services" = "Servizi";
 
@@ -521,6 +527,9 @@
 
 /* NSIBHelpConnector : <title:User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  > (oid:585) */
 "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  ";
+
+/* NSMenuItem : <title:Vignettes> (oid:1110) */
+"Vignettes" = "Vignettes";
 
 /* NSMenuItem : <title:What's New In This Version?> (oid:333) */
 "What's New In This Version?" = "Novità di questa versione";
