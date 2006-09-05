@@ -13,9 +13,6 @@
 /* NSButton (Always apply) : <title:Always apply> (oid:88) */
 "Always apply" = "常に適用";
 
-/* NSButtonCell (Ask ) : <title:Ask > (oid:123) */
-"Ask " = "Ask ";
-
 /* NSButton (Change) : <title:Change> (oid:37) */
 "Change" = "変更";
 
@@ -46,9 +43,6 @@
 /* NSTextField (Max number of entries in history:) : <title:Max number of entries in history:> (oid:94) */
 "Max number of entries in history:" = "履歴の最大数:";
 
-/* NSButtonCell (No) : <title:No> (oid:124) */
-"No" = "No";
-
 /* NSTextField (Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.) : <title:Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.> (oid:86) */
 "Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "注: '常に適用'を選択するとこの値が常に強制されます. そうでない場合は, R.app の起動時に明示的に指定されていない場合(RアプリアイコンをダブルクリックしてRを起動した場合など)にこの値が使われます. すなわち, Rアプリアイコンにファイルやディレクトリをドラッグ&ドロップして起動したり, 'open -a R.app <ディレクトリやファイル>'としてRを起動した場合はこの値は使われません. ";
 
@@ -70,9 +64,6 @@
 /* NSButton (Remove duplicate entries in history) : <title:Remove duplicate entries in history> (oid:93) */
 "Remove duplicate entries in history" = "履歴中の重複を除去";
 
-/* NSBox (Save workspace on exit from R) : <title:Save workspace on exit from R> (oid:115) */
-"Save workspace on exit from R" = "Save workspace on exit from R";
-
 /* NSButton (Select) : <title:Select> (oid:110) */
 "Select" = "選択";
 
@@ -87,9 +78,6 @@
 
 /* NSTextField (URL:) : <title:URL:> (oid:109) */
 "URL:" = "URL:";
-
-/* NSButtonCell (Yes) : <title:Yes> (oid:125) */
-"Yes" = "Yes";
 
 /* NSTextField (~) : <title:~> (oid:41) */
 "~" = "~";

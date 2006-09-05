@@ -347,7 +347,7 @@
 			<key>$classname</key>
 			<string>NSView</string>
 		</dict>
-		<string>{{0, 0}, {1280, 832}}</string>
+		<string>{{0, 0}, {1920, 1178}}</string>
 		<string>{94, 108}</string>
 		<dict>
 			<key>$classes</key>
@@ -470,15 +470,15 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
+					<integer>17</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>10</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>15</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>17</integer>
 				</dict>
 			</array>
 		</dict>
@@ -501,15 +501,15 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
+					<integer>15</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>2</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>10</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>15</integer>
 				</dict>
 			</array>
 		</dict>
@@ -523,19 +523,19 @@
 			<array>
 				<dict>
 					<key>CF$UID</key>
-					<integer>15</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>2</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>10</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>17</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>15</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>2</integer>
 				</dict>
 			</array>
 		</dict>
@@ -553,21 +553,21 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
+					<integer>14</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
 					<integer>43</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>44</integer>
 				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>14</integer>
-				</dict>
 			</array>
 		</dict>
+		<string>Window</string>
 		<string></string>
 		<string>File's Owner</string>
-		<string>Window</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -594,6 +594,18 @@
 			</dict>
 			<key>NS.objects</key>
 			<array>
+				<dict>
+					<key>CF$UID</key>
+					<integer>15</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>30</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>35</integer>
+				</dict>
 				<dict>
 					<key>CF$UID</key>
 					<integer>10</integer>
@@ -617,18 +629,6 @@
 				<dict>
 					<key>CF$UID</key>
 					<integer>9</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>15</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>30</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
-					<integer>35</integer>
 				</dict>
 			</array>
 		</dict>
@@ -678,15 +678,15 @@
 				</dict>
 			</array>
 		</dict>
+		<integer>6</integer>
+		<integer>25</integer>
+		<integer>30</integer>
 		<integer>5</integer>
 		<integer>29</integer>
 		<integer>1</integer>
 		<integer>28</integer>
 		<integer>24</integer>
 		<integer>18</integer>
-		<integer>6</integer>
-		<integer>25</integer>
-		<integer>30</integer>
 		<dict>
 			<key>$class</key>
 			<dict>

@@ -1,11 +1,5 @@
 NEWS 
 
-Last-update: 2006-08-27 [RG]
-*	Added pref setting for saveOnExitKey to startup prefpane
-*	Prevent loading of .RData from user home dir (if working dir
-	is different)
-*	Show which .RData is loaded on startup
-
 Last-update: 2006-08-10 [RG]
 *	Added check for quartz width/height preferences (missing in
 	newQuartzDevice: in RController.m)

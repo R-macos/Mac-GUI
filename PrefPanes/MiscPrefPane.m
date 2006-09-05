@@ -183,14 +183,6 @@
 	[cleanupHistoryEntries setState: flag?NSOnState:NSOffState];
 	flag = [Preferences flagForKey:stripCommentsFromHistoryEntriesKey withDefault:NO];
 	[stripCommentsFromHistoryEntries setState: flag?NSOnState:NSOffState];
-	NSString *act = [Preferences stringForKey:saveOnExitKey withDefault: @"ask"];
-	SLog(@"MiscPrefPane.updatePreferences: '%@'", act);
-	if ([act isEqualToString:@"ask"])
-		[saveOnExit selectCellAtRow:0 column:0];
-	else if ([act isEqualToString:@"no"])
-		[saveOnExit selectCellAtRow:0 column:1];
-	else
-		[saveOnExit selectCellAtRow:0 column:2];
 }
 
 - (IBAction) changeEditOrSource:(id)sender {
@@ -275,17 +267,6 @@
 	int tmp = (int)[sender state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:cleanupHistoryEntriesKey withFlag:flag];
-}
-
-- (IBAction) saveOnExit:(id)sender {
-	int res = (int)[sender selectedColumn];
-	SLog(@"MiscPrefPane.saveOnExit: '%d'", res);
-	if (res==1)
-		[Preferences setKey:saveOnExitKey withObject:@"no"];	
-	else if (res==2)
-		[Preferences setKey:saveOnExitKey withObject:@"yes"];
-	else
-		[Preferences setKey:saveOnExitKey withObject:@"ask"];
 }
 
 - (IBAction) changeStripCommentsFromHistoryEntries:(id)sender {

@@ -11,10 +11,6 @@
 /* From: SearchTable.m (show) */
 "<unknown>" = "<inconnu>";
 
-/* From: RController.m (applicationDidFinishLaunching)
-   From: RController.m (application) */
-"[Workspace restored from " = "[Workspace restored from ";
-
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "Insérer Col";
 

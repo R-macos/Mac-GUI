@@ -13,9 +13,6 @@
 /* NSButton (Always apply) : <title:Always apply> (oid:88) */
 "Always apply" = "Applica sempre";
 
-/* NSButtonCell (Ask ) : <title:Ask > (oid:123) */
-"Ask " = "Ask ";
-
 /* NSButton (Change) : <title:Change> (oid:37) */
 "Change" = "Cambia";
 
@@ -46,9 +43,6 @@
 /* NSTextField (Max number of entries in history:) : <title:Max number of entries in history:> (oid:94) */
 "Max number of entries in history:" = "Numero massimo di elementi di history:";
 
-/* NSButtonCell (No) : <title:No> (oid:124) */
-"No" = "No";
-
 /* NSTextField (Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.) : <title:Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.> (oid:86) */
 "Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Nota: Rafforza selezionando 'Applica sempre'. Altrimenti utilizzato per impostare la directory di lavoro se non specificata all'avvio di R.app, e.g. dopppio click sull'icona di R. Trascinare un file o una directory sull'icona di R o usare 'open -a R.app <dir-o-file>' avrà priorità su questa impostazione se non si rafforza.";
 
@@ -70,9 +64,6 @@
 /* NSButton (Remove duplicate entries in history) : <title:Remove duplicate entries in history> (oid:93) */
 "Remove duplicate entries in history" = "Elimina doppioni nella history";
 
-/* NSBox (Save workspace on exit from R) : <title:Save workspace on exit from R> (oid:115) */
-"Save workspace on exit from R" = "Save workspace on exit from R";
-
 /* NSButton (Select) : <title:Select> (oid:110) */
 "Select" = "Seleziona";
 
@@ -87,9 +78,6 @@
 
 /* NSTextField (URL:) : <title:URL:> (oid:109) */
 "URL:" = "URL:";
-
-/* NSButtonCell (Yes) : <title:Yes> (oid:125) */
-"Yes" = "Yes";
 
 /* NSTextField (~) : <title:~> (oid:41) */
 "~" = "~";

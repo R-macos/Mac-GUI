@@ -21,7 +21,6 @@
                 changeStripCommentsFromHistoryEntries = id; 
                 changeWorkingDir = id; 
                 chooseWorkingDir = id; 
-                saveOnExit = id; 
                 selectMirror = id; 
             }; 
             CLASS = MiscPrefPane; 
@@ -38,7 +37,6 @@
                 mainView = NSView; 
                 maxHistoryEntries = NSTextField; 
                 removeDuplicateHistoryEntries = NSButton; 
-                saveOnExit = NSMatrix; 
                 setToDefault = NSButton; 
                 stripCommentsFromHistoryEntries = NSButton; 
                 workingDir = NSTextField; 

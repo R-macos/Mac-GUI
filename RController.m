@@ -231,7 +231,7 @@ static RController* sharedRController;
 
 
 - (void) awakeFromNib {
-	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
+	char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
 		
 	sharedRController = self;
@@ -378,7 +378,7 @@ static RController* sharedRController;
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 
 	/* set save action */
-	[[REngine mainEngine] setSaveAction:[Preferences stringForKey:saveOnExitKey withDefault:@"ask"]];
+	[[REngine mainEngine] setSaveAction:[Preferences stringForKey:@"save.on.exit" withDefault:@"ask"]];
 	[[REngine mainEngine] disableRSignalHandlers:[Preferences flagForKey:@"Disable R signal handlers" withDefault:
 #ifdef DEBUG_RGUI
 		YES
@@ -459,7 +459,6 @@ static RController* sharedRController;
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
 {
-	NSString *fname = nil;
 	SLog(@"RController:applicationDidFinishLaunching");
 	SLog(@" - clean up and flush console");
 	[self setOptionWidth:YES];
@@ -487,18 +486,7 @@ static RController* sharedRController;
 	// once we're ready with the doc transition, the following will actually fire up the cconsole window
 	//[[NSDocumentController sharedDocumentController] openUntitledDocumentOfType:@"Rcommand" display:YES];
 	
-	fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
-	if (([pendingDocsToOpen count] == 0) && 
-		([[NSFileManager defaultManager] fileExistsAtPath: fname])) {
-		NSString *cmd;
-		cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
-		cmd = [cmd stringByAppendingString: @"\")"]; 
-		[[REngine mainEngine] executeString:cmd];
-		NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
-		[self handleWriteConsole: msg];
-		SLog(@"RController.applicationDidFinishLaunching - load workspace %@", fname);
-	}
-	SLog(@"RController.applicationDidFinishLaunching - show main window");
+	SLog(@" - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
 
 	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
@@ -1119,15 +1107,7 @@ extern BOOL isTimeToFinish;
 - (void)didCloseAll:(id)sender {
 	[Preferences commit];
 	[self doSaveHistory:nil];
-	NSString *sa = [Preferences stringForKey:@"saveOnExit" withDefault:@"ask"];
-	if ([sa isEqualToString: @"ask"])
-		NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),
-			[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,
-			NLS(@"Save workspace image?"));
-	else {
-		terminating = YES;
-		[self windowShouldClose:self];
-	}
+	NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,NLS(@"Save workspace image?"));
 }
 
 - (BOOL)windowShouldClose:(id)sender
@@ -1138,12 +1118,10 @@ extern BOOL isTimeToFinish;
 		SLog(@"RController.windowShouldClose: app termination finished.");
 		return NO;
 	}
-//	NSString *sa = [[REngine mainEngine] saveAction];
-	NSString *sa = [Preferences stringForKey:saveOnExitKey withDefault:@"ask"];
-	SLog(@"RController.windowShouldClose: save action is %@.", sa);
+	NSString *sa = [[REngine mainEngine] saveAction];
 	if ([sa isEqual:@"yes"] || [sa isEqual:@"no"]) {
+		SLog(@"RController.windowShouldClose: save action is %@, calling quit directly.", sa);
 		[Preferences commit];
-		[self doSaveHistory:nil];
 		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quit('%@')", sa]];
 		return YES;
 	}
@@ -1158,12 +1136,10 @@ extern BOOL isTimeToFinish;
 }	
 	
 /* this gets called by the "wanna save?" sheet on window close */
-- (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode 
-		contextInfo:(void *)contextInfo {
+- (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 	[Preferences commit];
 	// the code specifies whether it's ok for the application to close in response to windowShouldClose:
-	[[NSApplication sharedApplication] stopModalWithCode: 
-		(returnCode==NSAlertDefaultReturn || returnCode==NSAlertAlternateReturn)?YES:NO];
+	[[NSApplication sharedApplication] stopModalWithCode: (returnCode==NSAlertDefaultReturn || returnCode==NSAlertAlternateReturn)?YES:NO];
     if (returnCode==NSAlertDefaultReturn)
 		[[REngine mainEngine] executeString:@"quit(\"yes\")"];
     if (returnCode==NSAlertAlternateReturn)
@@ -1700,37 +1676,20 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
 	SLog(@" - application:openFile:%@ called", (NSString *)filename);
 	NSString *dirname = @"";
-	NSString *fname = nil;
-	NSString *cmd;
 	BOOL isDir;
 	BOOL flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
 	NSFileManager *manager = [NSFileManager defaultManager];
 	if ([manager fileExistsAtPath:filename isDirectory:&isDir] && isDir){
-		[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
 		if (!flag && !appLaunched) {
-//			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
-//			[[REngine mainEngine] executeString:@"sys.load.image('.RData', FALSE)"];
-			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"]]) {
-				fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
-				cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
-				cmd = [cmd stringByAppendingString: @"\")"]; 
-				[[REngine mainEngine] executeString:cmd];
-				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
-				[self handleWriteConsole: msg];
-			}
+			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
+			[[REngine mainEngine] executeString:@"sys.load.image('.RData',FALSE)"];
 			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
 		} else {
 			[self sendInput:[NSString stringWithFormat:@"setwd(\"%@\")",[filename stringByExpandingTildeInPath]]];
-			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"]]) {
-				fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
-				cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
-				cmd = [cmd stringByAppendingString: @"\")"]; 
-				[[REngine mainEngine] executeString:cmd];
-				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
-				[self handleWriteConsole: msg];
-			}
+			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"] isDirectory:&isDir])
+				[self sendInput:@"load('.RData')"];
 		}
 	} else {
 		if (!flag && !appLaunched) {
@@ -1757,13 +1716,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (IBAction)openDocument:(id)sender{
-//	[[NSDocumentController sharedDocumentController] openDocument: sender];
-	[[RDocumentController sharedDocumentController] openDocument: sender];
+	[[NSDocumentController sharedDocumentController] openDocument: sender];
 }
 
 - (IBAction)saveDocumentAs:(id)sender{
-//	NSDocument *cd = [[NSDocumentController sharedDocumentController] currentDocument];
-	NSDocument *cd = [[RDocumentController sharedDocumentController] currentDocument];
+	NSDocument *cd = [[NSDocumentController sharedDocumentController] currentDocument];
 	
 	if (cd)
 		[cd saveDocumentAs:sender];

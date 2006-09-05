@@ -29,10 +29,10 @@
 /* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
 "As defined by .libPaths()" = "Zoals gedefinieerd in .libPaths()";
 
-/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:1122) */
+/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
 "At System Level (in R framework)" = "Op systeemniveau (in R framework)";
 
-/* NSButtonCell (At User Level) : <title:At User Level> (oid:1123) */
+/* NSButtonCell (At User Level) : <title:At User Level> (oid:575) */
 "At User Level" = "Op gebruikersniveau";
 
 /* NSButton (<) : <title:Back> (oid:988) */
@@ -213,7 +213,7 @@
 /* NSMenuItem : <title:Hide R> (oid:134) */
 "Hide R" = "Verberg R";
 
-/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:1124) */
+/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:576) */
 "In Other Location (Will Be Asked Upon Installation)" = "Op andere plaats (wordt gevraagd bij installatie)";
 
 /* NSBox (Install Location) : <title:Install Location> (oid:570) */
