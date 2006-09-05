@@ -1,5 +1,8 @@
 NEWS 
 
+Last-update: 2006-09-05 [SU]
+*	Update R.app to work with current R 2.4.0 alpha and R-devel
+
 Last-update: 2006-08-27 [RG]
 *	Added pref setting for saveOnExitKey to startup prefpane
 *	Prevent loading of .RData from user home dir (if working dir

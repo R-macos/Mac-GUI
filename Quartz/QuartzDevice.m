@@ -1017,9 +1017,13 @@ SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
 
 /*-- now, this is ugly, we use internals of Rdynload to squeeze our functions into base load table --*/
 
-DllInfo *getBaseDllInfo();
-
-void R_addCallRoutine(DllInfo *info, const R_CallMethodDef * const croutine, Rf_DotCallSymbol *sym);
+static void R_addCallRoutine(DllInfo *info, const R_CallMethodDef * const croutine,
+                 Rf_DotCallSymbol *sym)
+{
+    sym->name = strdup(croutine->name);
+    sym->fun = croutine->fun;
+    sym->numArgs = croutine->numArgs > -1 ? croutine->numArgs : -1;
+}
 
 static void registerCall(DllInfo *info, const R_CallMethodDef * const callRoutines) {
 	int oldnum = info->numCallSymbols;
@@ -1037,5 +1041,5 @@ void QuartzRegisterSymbols() {
 	{NULL, NULL, 0}
 	};
 	/* we add those to the base as we have no specific entry (yet?) */
-	registerCall(getBaseDllInfo(), callMethods);
+	registerCall(R_getDllInfo("base"), callMethods);
 }
