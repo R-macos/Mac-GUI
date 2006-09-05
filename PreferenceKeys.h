@@ -79,6 +79,8 @@
 
 #define prefShowArgsHints @"Show function args hints"
 
+#define saveOnExitKey @"Save workspace on exit from R"
+
 // other constants
 
 #define iBackgroundColor 0
