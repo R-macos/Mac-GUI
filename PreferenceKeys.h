@@ -79,7 +79,7 @@
 
 #define prefShowArgsHints @"Show function args hints"
 
-#define saveOnExitKey @"Save workspace on exit from R"
+#define saveOnExitKey @"save.on.exit"
 
 // other constants
 
