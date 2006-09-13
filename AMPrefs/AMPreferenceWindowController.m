@@ -11,6 +11,7 @@
 #import "AMPrefPaneProtocol.h"
 #import "AMPrefPaneIcon.h"
 #import "AMPrefPaneIconView.h"
+#import "../RController.h"
 
 
 @interface NSToolbar (AMPrivate)
@@ -575,6 +576,10 @@
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
+	if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
+		[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
+		SLog(@" RConsole set to key window");
+	}
 	if ([activePane respondsToSelector:@selector(willUnselect)])
 		[(id)activePane willUnselect];
 }

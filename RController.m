@@ -121,15 +121,21 @@ static RController* sharedRController;
 @implementation NSApplication (ScriptingSupport)
 - (id)handleDCMDCommand:(NSScriptCommand*)command
 {
+	if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
+		[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
+		SLog(@" RConsole set to key window");
+	}
     NSDictionary *args = [command evaluatedArguments];
     NSString *cmd = [args objectForKey:@""];
     if (!cmd || [cmd isEqualToString:@""])
         return [NSNumber numberWithBool:NO];
 	[[RController sharedController] sendInput: cmd];
 	/* post an event to wake the event loop in order to process the command */
+	int wn = [[[RController sharedController] getRConsoleWindow] windowNumber];
+//	SLog(@"Key window number %d", wn);
 	[NSApp postEvent:[NSEvent otherEventWithType: NSApplicationDefined 
 										location: (NSPoint){0,0} modifierFlags: 0 timestamp: 0
-									windowNumber: 0 context: NULL subtype: 0 data1: 0 data2: 0
+									windowNumber: wn context: NULL subtype: 0 data1: 0 data2: 0
 		] atStart: YES];
 	return [NSNumber numberWithBool:YES];
 }
@@ -409,7 +415,7 @@ static RController* sharedRController;
 	[RTextView display];
 	[self setupToolbar];
 
-	[ RConsoleWindow setDocumentEdited:YES];
+	[RConsoleWindow setDocumentEdited:YES];
 	
 	SLog(@" - setup timer");
 	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
@@ -926,7 +932,9 @@ extern BOOL isTimeToFinish;
 		//[pool release];
 		return 0;
 	}
-	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile: fn display:YES];
+	NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
+	NSError *theError;
+	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
 	[document setREditFlag: YES];
 	
 	NSArray *wcs = [document windowControllers];
@@ -958,9 +966,11 @@ extern BOOL isTimeToFinish;
 		NSString *fn = [NSString stringWithUTF8String:file[i]];
 		if (fn) fn = [fn stringByExpandingTildeInPath];
 		if (!fn) {
-			if([[NSFileManager defaultManager] fileExistsAtPath:fn])
-				[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:fn display:true];
-			else
+			if([[NSFileManager defaultManager] fileExistsAtPath:fn]) {
+				NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
+				NSError *theError;
+				[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+			} else
 				[[NSDocumentController sharedDocumentController] newDocument: [RController sharedController]];
 			
 			NSDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
@@ -982,8 +992,10 @@ extern BOOL isTimeToFinish;
 		NSString *fn = [NSString stringWithUTF8String:file[i]];
 		if (fn) fn =[fn stringByExpandingTildeInPath];
 		if (fn) {
-			RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfFile:fn display:NO];
-			// don't dsiplay - we need to prevent the window controller from using highlighting
+			NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
+			NSError *theError;
+			RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+			// don't display - we need to prevent the window controller from using highlighting
 			if (document) {
 				NSArray *wcs = [document windowControllers];
 				if (wcs && [wcs count]>0) {
@@ -1747,23 +1759,36 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			[self doLoadHistory:nil];
 		}
 		BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
-		if (openInEditor || appLaunched)
-			[[RDocumentController sharedDocumentController] openDocumentWithContentsOfFile: filename display:YES];
-		else
-			[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[filename stringByExpandingTildeInPath]]];
+		if (openInEditor || appLaunched) {
+			NSURL *url = [[NSURL alloc] initFileURLWithPath:filename];
+			NSError *theError;
+			SLog(@" - application:openFile path of URL: <%@>", [url absoluteString]);
+			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+		} else {
+			int res = [[RController sharedController] isImageData: filename];
+			SLog(@"RDocumentController.openDocumentWithContentsOfFile: %@", filename);
+			if (res == 0 ) {
+				SLog(@" - detected save image, invoking load instead of the editor");
+				[[RController sharedController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", filename]];
+			} else 
+				[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[filename stringByExpandingTildeInPath]]];
+		}
 	}
 	SLog(@" - application:openFile:%@ with wd: <%@> done", (NSString *)filename, dirname);
+
 	return YES;
 }
 
 - (IBAction)openDocument:(id)sender{
-//	[[NSDocumentController sharedDocumentController] openDocument: sender];
-	[[RDocumentController sharedDocumentController] openDocument: sender];
+	SLog(@" - openDocument");
+	char buf[1000];
+	[self handleChooseFile:&buf[0] len:1000 isNew:0];
+	[self application:NSApp openFile:[[NSString alloc] initWithCString:buf encoding:kCFStringEncodingUTF8]];
+//	[[RDocumentController sharedDocumentController] openDocument: sender];
 }
 
 - (IBAction)saveDocumentAs:(id)sender{
-//	NSDocument *cd = [[NSDocumentController sharedDocumentController] currentDocument];
-	NSDocument *cd = [[RDocumentController sharedDocumentController] currentDocument];
+	NSDocument *cd = [[NSDocumentController sharedDocumentController] currentDocument];
 	
 	if (cd)
 		[cd saveDocumentAs:sender];
@@ -1779,6 +1804,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			[[RTextView string] writeToFile:[sp filename] atomically:YES];
 		}
 	}
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)saveDocument:(id)sender{
@@ -1820,6 +1846,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			}
 		}
 	}
+	[RConsoleWindow makeKeyWindow];
 	return strlen(buf); // is is used? it's potentially incorrect...
 }
 
@@ -2209,6 +2236,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	if(answer == NSOKButton && [op directory] != nil)
 		[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[op directory] stringByExpandingTildeInPath]];
 	[self showWorkingDir:sender];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction) showWorkingDir:(id)sender
@@ -2257,8 +2285,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (IBAction)toggleWSBrowser:(id)sender
 {
 	[WSBrowser toggleWorkspaceBrowser];
-	[[REngine mainEngine] executeString:@"browseEnv(html=F)"];
-	
+	[[REngine mainEngine] executeString:@"browseEnv(html=F)"];	
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)loadWorkSpace:(id)sender
@@ -2278,11 +2306,13 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (IBAction)loadWorkSpaceFile:(id)sender
 {
 	[[REngine mainEngine] executeString:@"load(file.choose())"];
+	[RConsoleWindow makeKeyWindow];
 }					
 
 - (IBAction)saveWorkSpaceFile:(id)sender
 {
 	[[REngine mainEngine] executeString: @"save.image(file=file.choose(TRUE))"];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)showWorkSpace:(id)sender{
@@ -2346,6 +2376,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	if (answer==NSOKButton)
 		[self loadFile:[op filename]];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)sourceFile:(id)sender
@@ -2358,6 +2389,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	if (answer==NSOKButton)
 		[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)printDocument:(id)sender

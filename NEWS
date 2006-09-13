@@ -1,5 +1,11 @@
 NEWS 
 
+Last-update: 2006-09-13 [RG]
+*	Switch to openDocumentsToContentsOfURL:display:error
+*	R.app now recognizes a .RData file when opened with d&d
+*	Fixed a bunch of cases where 'dangling' menus occurred after
+	'do cmd', e.g. from AppleScript
+
 Last-update: 2006-09-05 [SU]
 *	Update R.app to work with current R 2.4.0 alpha and R-devel
 

@@ -149,10 +149,10 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	[super newDocument:sender];
 }
 
-- (id)openDocumentWithContentsOfFile:(NSString *)aFile display:(BOOL)flag
-{
+- (id) openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument  error:(NSError **)theError {
+	NSString *aFile = [[absoluteURL path] stringByExpandingTildeInPath];
+	SLog(@"RDocumentController.openDocumentWithContentsOfURL: %@", aFile);
 	int res = [[RController sharedController] isImageData: aFile];
-	SLog(@"RDocumentController.openDocumentWithContentsOfFile: %@", aFile);
 	if (res == 0 ) {
 		SLog(@" - detected save image, invoking load instead of the editor");
 		[[RController sharedController] sendInput: [NSString stringWithFormat:@"load(\"%@\")", aFile]];
@@ -166,20 +166,23 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 		return nil;
 	}			
 
-	NSString *fname = [aFile stringByExpandingTildeInPath];
-	SLog(@" - call super -> openDocumentWithContentsOfFile: %@", fname);
-//	NSDocument *doc = nil;// [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
-	NSDocument *doc = [super openDocumentWithContentsOfFile:fname display:(BOOL)flag];
+	SLog(@" - call super -> openDocumentWithContentsOfURL: %@", aFile);
+	NSDocument *doc = nil;
+//	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
 	if (!doc) {
 		SLog(@" - super couldn't open it - assuming that it's a problem with doc type, creating manually");
-		/* WARNING: this is a hack for cases where the document type cannot be determined.
-		Since we're replicating Cocoa functionality this may break with future versions of Cococa */
-		doc = [self makeDocumentWithContentsOfFile:fname ofType:defaultDocumentType];
+		/* 
+		WARNING: this is a hack for cases where the document type 
+		cannot be determined. Since we're replicating Cocoa functionality
+		this may break with future versions of Cocoa. If [super ... worked, 
+		we should do NSAlert on theError
+		*/
+		doc = [self makeDocumentWithContentsOfFile:aFile ofType:defaultDocumentType];
 		if (doc) {
-			SLog(@" - succeeded by calling makeDocument.. ofType: %@",defaultDocumentType);
+			SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
 			[self addDocument:doc];
 			[doc makeWindowControllers];
-			if (flag && [self shouldCreateUI]) [doc showWindows];
+			if (displayDocument && [self shouldCreateUI]) [doc showWindows];
 		} else {
 			SLog(@" * failed, returning nil");
 		}
