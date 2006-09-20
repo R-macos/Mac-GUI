@@ -4,8 +4,8 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2006
-@set FAQ-VERSION 2.3-1 @value{FAQ-YEAR}-04-23
-@set REL-VERSION 2.3.0
+@set FAQ-VERSION 2.4-0 @value{FAQ-YEAR}-09-20
+@set REL-VERSION 2.4.0
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -81,7 +81,7 @@ Rob J. Goedman                   @*
 @ifhtml
 @html
 <h2>Frequently Asked Questions on R for Mac OS X</h2>
-<h2>Version @value{FAQ-VERSION}, R.app 1.15</h2>
+<h2>Version @value{FAQ-VERSION}, R.app 1.17</h2>
 <address>Stefano M. Iacus</address>
 <address>Simon Urbanek</address>
 <address>Rob J. Goedman</address>
@@ -171,7 +171,7 @@ The requirements for building @R{} vary, depending whether the build machine is 
 @node C/C++ compiler (gcc 3.3 or later), Fortran compiler (g77 3.3 or later), What is needed to build R, What is needed to build R
 @subsection C/C++ compiler (gcc 3.3 or later)
 
-If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retial version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Tiger is version 2.2.1). During the installation, don't forget to setect X11 SDK if you plan to use X11.
+If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retial version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 1.1 or above (the most recent version of Xcode tools available for Tiger is version 2.4). During the installation, don't forget to setect X11 SDK if you plan to use X11.
 
 If you are using Mac OS X 10.2 (aka Jaguar) then you should download and install the 
 Apple Developers Tools Dec 2002 including the latest updates which dates August 2003. Either it comes 
@@ -181,32 +181,27 @@ In either cases be sure you have gcc version 3.3 or later - you can check the ve
 gcc --version
 @end example
 
-Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{gcc} 3.x is not supported on Intel Macs.
+Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{gcc} 3.x is not supported on Intel Macs. Since the compiler builds for Intel Macs are mostly incompatible between versions, it is highly recommended to use compiler tools available from @CRAN{} as part of R binary installation or available separately from @uref{http://R.research.att.com/}.
 
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.3.0 @CRAN{} binary comes with GNU Fortran F95 4.0.3 in the gcc optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU GCC from the list of packages. The @CRAN{} binaries are configured to use gcc 4.0.3 and the supplied Fortran compiler.
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.3.1 @CRAN{} binary comes with GNU Fortran F95 4.0.3 in the gcc optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU GCC from the list of packages. The @CRAN{} binaries are configured to use gcc 4.0.3 and the supplied Fortran compiler.
 
-Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations don't work.
+Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations don't work. According to some reports, mixing different versions of gcc doesn't work, either (e.g. gcc 4.0 with gfortran 4.1).
 
 @node libreadline 4.3 or higher (optional), X11 window server (optional), Fortran compiler (g77 3.3 or later), What is needed to build R
 @subsection libreadline 4.3 or higher (optional)
-The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with @samp{libedit} library which emulated readline. Nevertheless, GNU readline has some addiional functionality so it may be worth installing anyway.
+The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with @samp{libedit} library which emulates readline. Nevertheless, GNU readline has some addiional functionality so it may be worth installing anyway.
 
 Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
 
-Readline 5.0 and later compile out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, because the configure script fails to detect that flag. The use of readline 5.1 with recent patches is recommended due to bugs in earlier versions that can lead to crashes.
+Readline 5.0 and later compile out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, Because the configure script fails to detect that flag. The use of readline 5.1 with recent patches is recommended due to bugs in earlier versions that can lead to crashes.
 
-If using readline 4.3, you need to modify the original file @file{shlib/Makefile.in} in order to make it
-work under Mac OS X 10.2.x and later (this is because libreadline needs to be linked against
-@code{-lncurses -lcc_dynamic}). If you can do better at configure time working on the original archive 
-let me know. I suggest you to download my patched version from @uref{http://www.economia.unimi.it/R}. 
-Once you have done, please do the following (you'll be asked for a root password):
-uncompress the archive, cd inside the folder and type the following
+To compile readline, uncompress the source archive and follow the standard installation sequence:
 @example
 ./configure
-make
+make CPPFLAGS=-DNEED_EXTERN_PC
 sudo make install
 @end example
 It installs everything in @file{/usr/local}.
@@ -226,7 +221,7 @@ If you plan to use tcltk package for @R{}, you can either use Tcl/Tk headers and
 
 Alternatively you need to download the sources of the Tcl and Tk 8.4.x packages to build yourself the sources. 
 The original sources can be found on the official TclTk web page @uref{http://www.tcl.tk/software/tcltk/8.4.html}.
-Please do the following respecting the sequence (you'll be asked for a root password). These are examples for version 8.4.4
+Please do the following respecting the sequence (you'll be asked for a root password). These are examples for version 8.4.12
 of the Tcl and Tk sources, you'll probably find new version on the web page, thus only the name of the .tar.gz archives
 changes.
 
@@ -297,6 +292,8 @@ with something like
 and the final destination of the @emph{R.framework} will be @emph{FOO/R.framework}, which means that you 
 don't have to specify the @emph{R.framework} text in the path. 
 
+The R framework supports multiple versions of R in the same framework, thus allowing parallel R versions to co-exist. By default R version @samp{x.y.z} will install into the @samp{Versions/x.y} subdirectory of the framework. The name of the subdirectory can be overridden by using @samp{FW_VERSION} configure setting, such as for example @samp{FW_VERSION=R-devel} which will install in @samp{Versions/R-devel}. The currently used framework is always the one pointed to by the @samp{Versions/Current}, see Apple's documentation on framework bundle anatomy for details (@uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html}).
+
 @node How to install R, How to build and install the R.app, How to configure and build R, Building R from sources
 @section How to install R
 A standard installation of R requires you have built it as a Framework. At this point just type (a root 
@@ -308,7 +305,7 @@ and all will be installed in @emph{/Library/Frameworks}.
 You can decide to change the R.framework destination by using the @emph{prefix} option specifying the 
 final destination.
 @smallexample
-sudo make prefix=/where/you/want/R.framework/to/go install
+sudo make prefix=/where/you/want/framework/to/go install
 @end smallexample
 As in the above, you don't need to specify the name @emph{R.framework} in the path.
 
@@ -325,7 +322,7 @@ Using Xcode load the @emph{R.xcodeproj} project, select @emph{R} target (which i
 xcodebuild -target R -configuration Deployment
 @end example
 
-The current development is done using Xcode 2.2 or higher. The default build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure R is available inside the SDK by running the following in Terminal:
+The current development is done using Xcode 2.2 or higher. The default build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure R is available inside the SDK by running the following in Terminal (recent Xcode Tools do that for you already):
 @example
 ln -sf /Library /Developer/SDKs/MacOSX10.4u.sdk/Library
 @end example
@@ -341,16 +338,16 @@ Starting with @R{} 2.3.0 it is possible to build @R{} that runs on multiple arch
 
 In order to be able to build universal R, all necessary libraries must be available as @samp{i386} and @samp{ppc} binaries. For system libraries this is the default for Mac OS X on Intel Macs. Other libraries such as readline must be compiled accordingly.
 
-In addition, the compilers must support both architectures as well. For Intel Macs, such compilers are supplied with @R{} 2.3.0 in the @CRAN{} binary package (GNU gcc 4.0.3 with Apple drivers).
+In addition, the compilers must support both architectures as well. For Intel Macs, such compilers are supplied with @R{} 2.4.0 in the @CRAN{} binary package (GNU gcc 4.0.3 with Apple drivers).
 
 The next step is to build a binary for each architecture. This can be either done natively n two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.3.0.tar.gz} is in the current directory, replace @samp{R-2.3.0} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.4.0.tar.gz} is in the current directory, replace @samp{R-2.4.0} with any other version or name as appropriate):
 @example
-tar fxz R-2.3.0.tar.gz
+tar fxz R-2.4.0.tar.gz
 mkdir R-ppc
 cd R-ppc
-../R-2.3.0/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
+../R-2.4.0/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
 CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
 FC="gfortran-4.0 -arch ppc"
 make
@@ -363,7 +360,7 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.3.0/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+../R-2.4.0/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
 CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
 FC="gfortran-4.0 -arch i386" CPPFLAGS=-msse3
 make
@@ -394,7 +391,7 @@ can be replaced by
 @smallexample
 : $@{R_ARCH=/`arch`@}.
 @end smallexample
-to default to the current native architecture. It addition, it may be a good idea to make sure that the @samp{PATH} environment variable contains the path to your universal compiler, otherwise there may be problems with compilation of universal packages.
+to default to the current native architecture. It addition, it may be a good idea to make sure that the @samp{PATH} environment variable contains the path to your universal compiler, otherwise there may be problems with compilation of universal packages. Those are also modifications that you will find in the @CRAN{} release as compared to vanilla R.
 
 @node Command line version of R, R.app, Building R from sources, Top
 @chapter Command line version of R
@@ -428,17 +425,19 @@ R.app is the name for the new Cocoa-based GUI for Mac OS X that was introduced i
 
 Internally R.app is a Cocoa program (hence written in Obj-C) that loads R dynamic library in order to use R facilities.
 
-Historically there were two more GUI for Mac OS X: @emph{RAqua} and @emph{Cocoa GUI bundle}. The latter was never officially released and RAqua was retired in R version 2.1, because it used legacy toolkit from the times of Mac OS9.
+Historically there were two more GUIs for Mac OS X: @emph{RAqua} and @emph{Cocoa GUI bundle}. The latter was never officially released and RAqua was retired in R version 2.1, because it used legacy toolkit from the times of MacOS9.
 
 @node How to get R.app, How to install the R.app, R.app, R.app
 @section How to get R.app
 R.app is part of the binary distribution of R for Mac OS X available from @CRAN{}. That distribution consists of one disk image containing multiple packages including R framework and R.app.
 
-Development versions of R.app are made available on daily basis in the form of a disk image containing the R.app itself. See the Mac OS X pages on @CRAN{} for detail how to obtain such images.
+Development versions of R.app are made available on daily basis in the form of a disk image containing the R.app itself. See the Mac OS X pages on @CRAN{} for detail how to obtain such images (currently at @uref{http://R.reseach.att.com/}).
 
 @node How to install the R.app, The R Console, How to get R.app, R.app
 @section How to install the R.app
 R.app is installed the same way as the R framework, namely using binary package provided on @CRAN{}. The @file{bin/macosx} directory of a @CRAN{} site contains a standard Apple installer package inside a disk image named @file{R.dmg} (optinally containing the version number). Download and double-click the image. New window will appear with a package icon representing the installer. Double-click that icon and it will install the current non-developer release of R, including R.app.
+
+Nightly build typically come as a disk image that contains R.app itself and thus can be started directly from teh disk image or installed by dragging the icon in the @samp{Applications} folder.
 
 @node The R Console, General Features, How to install the R.app, R.app
 @section The R Console
@@ -998,18 +997,13 @@ button. If you happen to have a multi-button mouse, you can use any of the addit
 @section Saving the image
 You can can the content of the quartz device window into a PDF file. This is a very simple way to
 export high quality graphics from @R{} into other applications on Mac OS X graphics is PDF based (so are almost all
-applications available). If you want bitmap copies of you quartz device window just use copy, to copy the image into the clipboard and
-paste the result in a graphic application (@pxref{Copying the image into the clipboard}).
+applications available). However, this process uses @R{}'s PDF device and not Mac OS X PDF facilities and thus doesn't yeild an exact copy of the device contents. For Mac-native solution, see (@pxref{Copying the image into the clipboard}) and @command{quartz.save} command.
 
 @node Copying the image into the clipboard, Known bugs and missing features, Saving the image, Quartz device
 @section Copying the image into the clipboard
 You can copy the content of the quartz device window in the clipboard to make the resulting image available for
-pasting into other applications. The clipboard will contain a bitmap copy of the quartz device window. If you
-want to work with high resolution images, you should save the content of the quartz device as a PDF file (@pxref{Saving the image}).
-Pay attention to the following fact: the bitmap image produced has exactly the same dimensions of the quartz device window. This
-means that if you resize the window, the resulting image you obtain in the clipboard will have the same
-dimensions and you cannot resize the image from the inside another applications (say MS-Word) without loosing quality.
-
+pasting into other applications. The clipboard will contain both a PDF versiond and a bitmap version of the quartz device window. Which version will be used depends on the pasting applications, most modern application will prefer the PDF version which is of higher quality as it supports vector graphics.
+Note that there is currently a difference between using the clipboard and saving to a PDF file (@pxref{Saving the image}). The latter will use R's PDF device which will not yield WYSIWYG results. However, using @command{quartz.save} command will produce the same result as the clipboard operation.
 
 @node Known bugs and missing features,  , Copying the image into the clipboard, Quartz device
 @section Known bugs and missing features
@@ -1036,6 +1030,12 @@ sudo /Developer/Tools/Rez -t APPL Carbon.r -o R.bin
 @chapter Internationalization of the R.app
 In R 2.1 both R and the R.app GUI introduced support for internationalization. Among other things this means that both messages and GUI elements can be translated into various languages. R.app automatically detects user's settings in the @emph{International} section of the System Preferences and uses that information to offer translated messages and GUI if available. Please note that both @emph{Language} and @emph{Formats} information is used so they should be set up consistently.
 
+If you use a non-standard setup (e.g. different language than formats), you can override the auto-detection performed by setting @samp{force.LANG} defaults settin, such as for example
+@example
+defaults write org.R-project.R force.LANG en_US.UTF-8
+@end example
+will enforce US-english setting regardless of the system setting. Please note that you must always use @samp{.UTF-8} version of the locale, otherwise R.app will not work properly.
+
 Another change from previous versions (R 2.0 and R.app 1.01) is the support for UTF-8 character encoding. By default R.app uses UTF-8 for newly created documents and for the console. When opening new documents R.app assumes UTF-8 and only if the document violates UTF-8 rules, it will try to fallback to legacy encoding, usually Mac Roman.
 
 If you are interested in translating R.app GUI into other languages, please read the developer documentation @uref{http://developer.r-project.org/Translations.html} for details.
@@ -1058,9 +1058,8 @@ ADC and get the latest up-to-date tools from Apple (compilers for example).
 @node The R for Mac OS X Developer page,  , Apple Developer Connection, Additional resources
 @section The R for Mac OS X Developer page
 There is a page dedicated to the latest R-devel version of R. This page is located at
-@uref{http://www.economia.unimi.it/R} and is maintained by Stefano M. Iacus.
-This page is intended to give additional documentation for building  the latest R-devel
-version of R. From time to time, snapshots of R-devel binaries are available for testing purposes.
+@uref{http://R.research.att.com/} and is maintained by Simon Urbanek.
+It contains latest nightly builds of R and R.app as well as information on tools necessary to build R.
 
 @node Acknowledgments, Sparse questions, Additional resources, Top
 @chapter Acknowledgments
