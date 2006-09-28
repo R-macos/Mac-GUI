@@ -233,7 +233,7 @@
 			[[REngine mainEngine] executeString:@"dev.off()"];
 
 	}
-	
+	[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
 }
 
 - (void) setDeviceName: (NSString*) name
