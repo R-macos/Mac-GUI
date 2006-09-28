@@ -46,8 +46,6 @@
 - (NSWindow*) walkKeyListForward;
 - (NSWindow*) findLastDocType: (NSString*) aType;
 
-- (id) openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)theError;
-
 // starts external editor with the specified file (regardless of prefs)
 - (void) invokeExternalForFile:(NSString*)aFile;
 

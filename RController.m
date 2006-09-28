@@ -64,6 +64,11 @@
 #import "Preferences.h"
 #import "SearchTable.h"
 
+// R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
+#ifdef error
+#undef error
+#endif
+
 // size of the console output cache buffer
 #define DEFAULT_WRITE_BUFFER_SIZE 32768
 // high water-mark of the buffer - it's [length - x] where x is the smallest possible size to be flushed before a new string will be split.
@@ -924,7 +929,7 @@ extern BOOL isTimeToFinish;
 	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSString *fn = [NSString stringWithUTF8String:file];
 	if (fn) fn = [fn stringByExpandingTildeInPath];
-	if (!fn) error("Invalid file name.");
+	if (!fn) Rf_error("Invalid file name.");
 
 	SLog(@"RController.handleEdit: %s", file);
 	

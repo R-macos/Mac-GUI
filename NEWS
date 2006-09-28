@@ -1,5 +1,9 @@
 NEWS 
 
+Last-update: 2006-09-28 [SU]
+*	Fix bug causing crashes when opening documents
+*	Fix GUI version defined in header files
+
 Last-update: 2006-09-13 [RG]
 *	Switch to openDocumentsToContentsOfURL:display:error
 *	R.app now recognizes a .RData file when opened with d&d
