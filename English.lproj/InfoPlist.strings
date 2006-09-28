@@ -4,3 +4,5 @@ CFBundleName = "R";
 CFBundleShortVersionString = "1.17-pre";
 CFBundleGetInfoString = "R Cocoa GUI 1.17-pre (%SVN%), S.Urbanek & S.M.Iacus, © R Foundation for Statistical Computing, 2006";
 NSHumanReadableCopyright = "R Cocoa GUI 1.17-pre (%SVN%), S.Urbanek & S.M.Iacus, © R Foundation for Statistical Computing, 2006";
+
+/* Don't forget to update RGUI.h when changing the verison number! */
