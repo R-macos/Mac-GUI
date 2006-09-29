@@ -34,6 +34,11 @@
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 
+// R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
+#ifdef error
+#undef error
+#endif
+
 @interface RDocumentController (Private)
 int docListLimit = 128; // limit for the number of transitions stored
 int docListPos = 0; // active position in the list
@@ -150,6 +155,10 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 }
 
 - (id) openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument  error:(NSError **)theError {
+	if (absoluteURL == nil) {
+		SLog(@"RDocumentController.openDocumentWithContentsOfURL with null URL. Nothing to do.");
+		return nil;
+	}
 	NSString *aFile = [[absoluteURL path] stringByExpandingTildeInPath];
 	SLog(@"RDocumentController.openDocumentWithContentsOfURL: %@", aFile);
 	int res = [[RController sharedController] isImageData: aFile];
@@ -168,24 +177,30 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 
 	SLog(@" - call super -> openDocumentWithContentsOfURL: %@", aFile);
 	NSDocument *doc = nil;
-//	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
-	if (!doc) {
-		SLog(@" - super couldn't open it - assuming that it's a problem with doc type, creating manually");
-		/* 
-		WARNING: this is a hack for cases where the document type 
-		cannot be determined. Since we're replicating Cocoa functionality
-		this may break with future versions of Cocoa. If [super ... worked, 
-		we should do NSAlert on theError
-		*/
-		doc = [self makeDocumentWithContentsOfFile:aFile ofType:defaultDocumentType];
-		if (doc) {
-			SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
-			[self addDocument:doc];
-			[doc makeWindowControllers];
-			if (displayDocument && [self shouldCreateUI]) [doc showWindows];
-		} else {
-			SLog(@" * failed, returning nil");
+	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
+	if (doc == nil) {				
+		NSAlert *alert = [NSAlert alertWithError:*theError];
+		[alert addButtonWithTitle:NLS(@"Cancel")];
+		[alert addButtonWithTitle:NLS(@"Continue anyway?")];
+		if ([alert runModal] == NSAlertSecondButtonReturn) {
+			/* 
+			WARNING: this is a hack for cases where the document type 
+			cannot be determined and the user opts to continue anyway.
+			Since we're replicating Cocoa functionality this may break 
+			with future versions of Cocoa.
+			*/
+			SLog(@" -  creating manually");
+			doc = [self makeDocumentWithContentsOfFile:aFile ofType:defaultDocumentType];
+			if (doc) {
+				SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
+				[self addDocument:doc];
+				[doc makeWindowControllers];
+				if (displayDocument && [self shouldCreateUI]) [doc showWindows];
+			} else {
+				SLog(@" * failed, returning nil");
+			}
 		}
+		[alert release];
 	}
 	return doc;
 }

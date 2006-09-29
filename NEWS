@@ -1,5 +1,14 @@
 NEWS 
 
+Last-update: 2006-09-28 [RG]
+*	Enables call to super in RDocumentController. On failure
+	will display an NSAlert message allowing the user to cancel or
+	continue anyway. Did not run ./update.strings yet but strings
+	are inside NLS(...)
+
+Last-update: 2006-09-28 [RG]
+*	Caught another dangling window (RQuartz.m)
+
 Last-update: 2006-09-28 [SU]
 *	Fix bug causing crashes when opening documents
 *	Fix GUI version defined in header files
