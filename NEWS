@@ -1,5 +1,7 @@
 NEWS 
 
+-- Release Version 1.17 (3863) - supplied with R 2.4.0 --
+
 Last-update: 2006-10-02 [SU]
 *	Implemented lazy syntax-highlighting in the editor: the syntax
 	highlighting is only updated on a limited region and if the
