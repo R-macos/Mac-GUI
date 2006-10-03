@@ -179,28 +179,19 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	NSDocument *doc = nil;
 	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
 	if (doc == nil) {				
-		NSAlert *alert = [NSAlert alertWithError:*theError];
-		[alert addButtonWithTitle:NLS(@"Cancel")];
-		[alert addButtonWithTitle:NLS(@"Continue anyway?")];
-		if ([alert runModal] == NSAlertSecondButtonReturn) {
-			/* 
-			WARNING: this is a hack for cases where the document type 
-			cannot be determined and the user opts to continue anyway.
-			Since we're replicating Cocoa functionality this may break 
-			with future versions of Cocoa.
-			*/
-			SLog(@" -  creating manually");
-			doc = [self makeDocumentWithContentsOfFile:aFile ofType:defaultDocumentType];
-			if (doc) {
-				SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
-				[self addDocument:doc];
-				[doc makeWindowControllers];
-				if (displayDocument && [self shouldCreateUI]) [doc showWindows];
-			} else {
-				SLog(@" * failed, returning nil");
-			}
+		/* WARNING: this is a hack for cases where the document type 
+		   cannot be determined. Since we're replicating Cocoa functionality this may break
+		   with future versions of Cocoa. */
+		SLog(@" -  creating manually");
+		doc = [self makeDocumentWithContentsOfFile:aFile ofType:defaultDocumentType];
+		if (doc) {
+			SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
+			[self addDocument:doc];
+			[doc makeWindowControllers];
+			if (displayDocument && [self shouldCreateUI]) [doc showWindows];
+		} else {
+			SLog(@" * failed, returning nil");
 		}
-		[alert release];
 	}
 	return doc;
 }

@@ -6,6 +6,8 @@ Last-update: 2006-10-02 [SU]
 	change affects further text, its update is postponed until
 	editing is done in such region. It is not perfect, but should
 	solve speed issues when typing quotes.
+*	Remove NSAlert introduced in last commit as it pops up for
+	most documents where the GUI is used as pager
 
 Last-update: 2006-09-28 [RG]
 *	Enables call to super in RDocumentController. On failure
