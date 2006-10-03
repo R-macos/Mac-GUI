@@ -77,7 +77,7 @@ build/$(STYLE)/R.app: .svn/entries
 	touch build/$(STYLE)/R.app
 
 R.$(ARCH): $(OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(CC) -arch $(ARCH) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 R: $(SRC)
 	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-arch ppc -g -O2' 'LDFLAGS=-arch ppc' R.ppc
@@ -88,15 +88,15 @@ sush.$(ARCH): Tools/sush.c
 	$(CC) -o $@ $^ $(CFLAGS)
 
 sush: Tools/sush.c
-	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-arch ppc -g -O2' 'LDFLAGS=-arch ppc' sush.ppc
+	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-g -O2' 'LDFLAGS=-arch ppc' sush.ppc
 	$(MAKE) CC=/usr/local/gcc4.0/bin/gcc ARCH=i386 sush.i386
 	lipo -create sush.ppc sush.i386 -o sush
 
 %.$(ARCH).o: %.c
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $^
+	$(CC) -arch $(ARCH) -c $(CFLAGS) $(CPPFLAGS) -o $@ $^
 
 %.$(ARCH).o: %.m
-	$(OBJCC) -c $(CFLAGS) $(CPPFLAGS) $(OBJCFLAGS) -o $@ $^
+	$(OBJCC) -arch $(ARCH) -c $(CFLAGS) $(CPPFLAGS) $(OBJCFLAGS) -o $@ $^
 
 clean-obj:
 	rm -f $(OBJ)
