@@ -10,6 +10,11 @@ Last-update: 2006-09-28 [RG]
 *	Caught another dangling window (RQuartz.m)
 
 Last-update: 2006-09-28 [SU]
+*	Locales containing additional flags (e.g. en_GB@currency=EUR)
+	didn't use UTF-8. Current fix is to strip the flags, although
+	that may result in an incorrect variant of the locale to be used.
+	The underlying problem is the interpretation in R, so there is
+	not much we can do about it right now.
 *	Fix bug causing crashes when opening documents
 *	Fix GUI version defined in header files
 

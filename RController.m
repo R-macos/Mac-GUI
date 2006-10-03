@@ -370,9 +370,22 @@ static RController* sharedRController;
 		else {
 			CFLocaleRef lr = CFLocaleCopyCurrent();
 			CFStringRef ls = CFLocaleGetIdentifier(lr);
-			if (ls) SLog(@"   CFLocaleGetIdentifier=\"%@\"", ls);
-			strncpy(cloc, [((NSString*)ls) UTF8String],63);
-			CFRelease(lr);
+			*cloc=0;
+			if (ls) {
+				NSString *lss = (NSString*)ls;
+				NSRange atr = [lss rangeOfString:@"@"];
+				SLog(@"   CFLocaleGetIdentifier=\"%@\"", ls);
+				if (atr.location != NSNotFound) {
+					lss = [lss substringToIndex:atr.location];
+					SLog(@"   - it contains @, stripped to \"%@\"", lss);
+				}
+				strncpy(cloc, [lss UTF8String], 63);
+			}
+			if (! *cloc) {
+				SLog(@"   CFLocaleGetIdentifier is empty, falling back to en_US.UTF-8");
+				strcpy(cloc,"en_US.UTF-8");
+			}
+			if (lr) CFRelease(lr);
 		}
 			
 		if (!strchr(cloc,'.'))
