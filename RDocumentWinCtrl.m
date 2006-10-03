@@ -56,6 +56,14 @@ NSArray *keywordList=nil;
 #define hsTypeExact   1
 #define hsTypeApprox  2
 
+@interface RDocumentWinCtrl (Private)
+BOOL dirtyHL;     // YES = some part of the HL wasn't re-done
+int  dirtyHead;   // position from which the highlighting needs to be re-done
+int  dirtyTail;   // last updated position beyond which the HL is undefined
+@end
+
+static int dirtyLimit = 600; // max. length of highlighting extension before giving up in favor of dirty HL mode
+
 @implementation RDocumentWinCtrl
 
 + (void) setDefaultSyntaxHighlightingColors
@@ -156,6 +164,7 @@ NSArray *keywordList=nil;
 		updating=NO;
 		helpTempFile=nil;
 		execNewlineFlag=NO;
+		dirtyHL = NO;
 	}
 	return self;
 }
@@ -553,6 +562,7 @@ NSArray *keywordList=nil;
 /* this method is called after editing took place - we use it for updating the syntax highlighting */
 - (void)updateSyntaxHighlightingForRange: (NSRange) range
 {
+	BOOL dirtyRun = NO;
 	NSTextStorage *ts = [textView textStorage];
 	NSString *s = [ts string];
 	
@@ -562,7 +572,7 @@ NSArray *keywordList=nil;
 	int hardStop = last;       // hard-stop; it is ok to look beyond last when necessary, but not ok to look beyond hardStop
 	BOOL foundItem=NO;
 	
-	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d (%d/%d)", self, range.location, range.length, (int)useHighlighting, (int)plainFile);
+	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d (%d/%d) [dirty=%s]", self, range.location, range.length, (int)useHighlighting, (int)plainFile, dirtyHL?"yes":"no");
 
 	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
 
@@ -577,7 +587,18 @@ NSArray *keywordList=nil;
 	}
 	updating=YES;
 
-	
+	if (dirtyHL) {
+		if (i>dirtyHead) {
+			SLog(@" - dirtyHL is active, moving HL start from %d to %d", i, dirtyHead);
+			bb = i = dirtyHead;
+			hardStop = last = dirtyTail;
+		}
+		if (dirtyTail > last) {
+			SLog(@" - dirtyHL is active, extending HL from %d to %d", last, dirtyTail);
+			hardStop = last = dirtyTail;
+		}
+	}
+
 	NSDictionary *trailAttr = nil;
 	int trailPos = 0;
 	
@@ -697,17 +718,30 @@ reHilite:
 		[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
 	}
 
-	if (trailAttr) { // it's partial update and there is trailing contents - let's check whether we need to go beyond the required scope
+	if (trailAttr) { // it's partial update and there is trailing contents - let's check whether we need to go beyond the required scope (but let it go if we just had a dirty run)
 		NSRange efr;
 		NSDictionary *newAttr = [ts attributesAtIndex:trailPos effectiveRange:&efr];
 		NSString *oldA = (NSString*) [trailAttr objectForKey:@"shType"];
 		NSString *newA = (NSString*) [newAttr objectForKey:@"shType"];
-		if (oldA && newA && ![oldA isEqual:newA]) {  // trailing contents must be changed, too
+		BOOL haveMismatch = oldA && newA && ![oldA isEqual:newA];
+		if (!dirtyRun && haveMismatch) {  // trailing contents must be changed, too
 			SLog(@" - syntaxHL: old [%@] new [%@] at %d - need to re-process to the end of the file", oldA, newA, trailPos);
 			trailAttr=nil;
 			last=[s length];
 			bb = i = range.location; // the HL code doesn't support continuation out of the loop, because of the inner loops, so we just re-do it all ...
+			if (last - bb > dirtyLimit) {
+				SLog(@" - syntaxHL: range to re-do is too big (%d chars), enabling dirty mode", last - bb);
+				dirtyHL = YES;
+				dirtyHead = bb;
+				dirtyTail = bb + dirtyLimit;
+				dirtyRun = YES;
+				last = dirtyTail;
+			}
 			goto reHilite;
+		}
+		if (!haveMismatch && dirtyHL) { // we can disable dirty HL, because the marks match
+			SLog(@" - disabling dirty HL, because marks match at the tail");
+			dirtyHL=NO;
 		}
 	}
 	SLog(@" - sh done, rescan and finish");

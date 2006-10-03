@@ -1,5 +1,12 @@
 NEWS 
 
+Last-update: 2006-10-02 [SU]
+*	Implemented lazy syntax-highlighting in the editor: the syntax
+	highlighting is only updated on a limited region and if the
+	change affects further text, its update is postponed until
+	editing is done in such region. It is not perfect, but should
+	solve speed issues when typing quotes.
+
 Last-update: 2006-09-28 [RG]
 *	Enables call to super in RDocumentController. On failure
 	will display an NSAlert message allowing the user to cancel or
