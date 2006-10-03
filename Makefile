@@ -54,12 +54,15 @@ ifeq ($(ARCH),i386)
 endif
 
 CPPFLAGS+=-I. -I/Library/Frameworks/R.framework/Headers -I/Library/Frameworks/R.framework/PrivateHeaders
-CFLAGS+=-g
 OBJCFLAGS+=-fobjc-exceptions
 LIBS+=-framework R -framework Cocoa -framework Security -framework ExceptionHandling -framework WebKit -framework AppKit
 
 ifeq ($(STYLE),)
   STYLE:=Deployment
+endif
+
+ifneq ($(STYLE),Deployment)
+  CFLAGS+=-g
 endif
 
 all: R.app
@@ -104,6 +107,6 @@ clean-obj:
 clean: clean-obj
 	$(MAKE) ARCH=ppc clean-obj
 	$(MAKE) ARCH=i386 clean-obj
-	rm -rf R R.fat R.i386 R.ppc build R.app
+	rm -rf R R.fat R.i386 R.ppc sush sush.i386 sush.ppc build R.app
 
 .PHONY: clean clean-obj all
