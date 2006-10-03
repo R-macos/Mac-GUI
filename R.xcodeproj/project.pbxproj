@@ -1479,7 +1479,10 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				OTHER_CFLAGS = "-DDEBUG_RGUI";
+				OTHER_CFLAGS = (
+					"-DPLAIN_STDERR",
+					"-DDEBUG_RGUI",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					R,
