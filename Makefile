@@ -23,6 +23,8 @@
 # clean      - as usual
 #
 
+NATIVE_ARCH:=$(shell arch)
+
 # get the native architecture (override on the command line)
 ifeq ($(ARCH),)
   ARCH:=$(shell arch)
@@ -37,6 +39,8 @@ SRC = $(SRC_M) $(SRC_C) $(SRC_H)
 OBJ_M = $(SRC_M:%.m=%.$(ARCH).o)
 OBJ_C = $(SRC_C:%.c=%.$(ARCH).o)
 OBJ = $(OBJ_M) $(OBJ_C)
+
+LD=$(CC)
 
 # cc->gcc and add corresponding flags when on ix86
 ifeq ($(CC),cc)
@@ -61,8 +65,13 @@ ifeq ($(STYLE),)
   STYLE:=Deployment
 endif
 
-ifneq ($(STYLE),Deployment)
-  CFLAGS+=-g
+CFLAGS+=-g
+
+ifeq ($(NATIVE_ARCH)$(ARCH),ppci386)
+  CFLAGS+=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
+  LDFLAGS+=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
+  # linking must be done with apple's gcc, because apparently we don't support -isysroot
+  LD=/usr/bin/gcc
 endif
 
 all: R.app
@@ -80,18 +89,18 @@ build/$(STYLE)/R.app: .svn/entries
 	touch build/$(STYLE)/R.app
 
 R.$(ARCH): $(OBJ)
-	$(CC) -arch $(ARCH) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(LD) -arch $(ARCH) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 R: $(SRC)
-	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-arch ppc -g -O2' 'LDFLAGS=-arch ppc' R.ppc
+	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-g -O2' R.ppc
 	$(MAKE) CC=/usr/local/gcc4.0/bin/gcc ARCH=i386 R.i386
 	lipo -create R.ppc R.i386 -o R
 
 sush.$(ARCH): Tools/sush.c
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(LD) -arch $(ARCH) -o $@ $^ $(CFLAGS)
 
 sush: Tools/sush.c
-	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-g -O2' 'LDFLAGS=-arch ppc' sush.ppc
+	$(MAKE) CC=/usr/bin/gcc ARCH=ppc 'CFLAGS=-g -O2' sush.ppc
 	$(MAKE) CC=/usr/local/gcc4.0/bin/gcc ARCH=i386 sush.i386
 	lipo -create sush.ppc sush.i386 -o sush
 
