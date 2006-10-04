@@ -83,7 +83,15 @@ int main(int argc, const char *argv[])
 #if (R_VERSION < R_Version(2,3,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
 #else
+#if (R_VERSION < R_Version(2,4,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.8/bioc','1.8/data/annotation','1.8/data/experiment','1.8/omegahat','1.8/lindsey'),sep=''))"];
+#else
+#if (R_VERSION < R_Version(2,5,0))
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.9/bioc','1.9/data/annotation','1.9/data/experiment','1.9/omegahat'),sep=''))"];
+#else
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.0/bioc','2.0/data/annotation','2.0/data/experiment','2.0/omegahat'),sep=''))"];
+#endif
+#endif
 #endif
 	 SLog(@" - loading secondary NIBs");
 	 if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
