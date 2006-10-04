@@ -1,9 +1,11 @@
 NEWS 
 
--- Release Version 1.17 (38??) - supplied with R 2.4.0 --
+-- Release Version 1.17 (3868) - supplied with R 2.4.0 --
 
 Last-update: 2006-10-04 [SU]
 *	Updated Bioconductor repository URL for R 2.4.0 and R-devel
+*	Changes in the Makefile (add -g even for deployment and allow
+	ppc machines to compile; other cleanups)
 
 Last-update: 2006-10-02 [SU]
 *	Implemented lazy syntax-highlighting in the editor: the syntax
@@ -13,8 +15,6 @@ Last-update: 2006-10-02 [SU]
 	solve speed issues when typing quotes.
 *	Remove NSAlert introduced in last commit as it pops up for
 	most documents where the GUI is used as pager
-*	Changes in the Makefile (add -g even for deployment and allow
-	ppc machines to compile; other cleanups)
 
 Last-update: 2006-09-28 [RG]
 *	Enables call to super in RDocumentController. On failure
