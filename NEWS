@@ -1,5 +1,9 @@
 NEWS 
 
+Last-update: 2006-10-13 [RG]
+*	Passed focus back to RConsole after ?... returns no help
+	topic found and user dismisses the alert panel
+
 -- Release Version 1.17 (3868) - supplied with R 2.4.0 --
 
 Last-update: 2006-10-04 [SU]

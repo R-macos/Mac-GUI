@@ -1137,11 +1137,26 @@ extern BOOL isTimeToFinish;
 			[[HelpManager sharedController] showHelpUsingFile: [obj string] topic: topic];
 			[[self window] makeKeyWindow];
 			[[[HelpManager sharedController] window] makeKeyAndOrderFront:self];
-		} else
-			NSBeginAlertSheet(NLS(@"Help topic not found"),NLS(@"OK"),nil,nil,[RTextView window],self,nil,NULL,NULL,[NSString stringWithFormat: NLS(@"Help for the topic \"%@\" was not found."), topic]);
+		} else {
+			NSBeginAlertSheet(
+				NLS(@"Help topic not found"),
+				NLS(@"OK"),
+				nil,
+				nil,
+				[RTextView window],
+				self,
+				@selector(sheetDidEnd:returnCode:contextInfo:),
+				@selector(sheetDidEnd:returnCode:contextInfo:),
+				NULL,
+				[NSString stringWithFormat: NLS(@"Help for the topic \"%@\" was not found."), topic]);
+		}
 	}
-	
 	return 0;
+}
+
+-(void)sheetDidEnd:(NSWindow *)sheet returnCode: (int)returnCode 
+		contextInfo: (void *)contextInfo {
+	[[RController sharedController] makeConsoleKey:self];
 }
 
 //==========
@@ -2382,6 +2397,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[[HelpManager sharedController] showHelpFor:[sender stringValue]];
         [helpSearch setStringValue:@""];
     }
+	[RConsoleWindow makeKeyAndOrderFront:self];
 }
 
 - (IBAction)sourceOrLoadFile:(id)sender
