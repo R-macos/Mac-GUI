@@ -330,6 +330,12 @@ For compatibility, the GUI offers an old-style project for Xcode 2.0 named @file
 
 The build includes both R.app and this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
 
+In addition, R.app also supports unix-style build which is run by simply issuing
+@smallexample
+make
+@end smallexample
+at the top level. It works on both PowerPC and Intel-based Macs, resulting in an universal binary. This is the building method used by the CRAN release and nightly builds.
+
 R.app does not need to be installed in any specific way. Building R.app results in the R.app bundle which appears as one R icon. This application bundle can be run anywhere and it is customary to place it in the @emph{Applications} folder.
 
 @node How to build universal R,  , How to build and install the R.app, Building R from sources
@@ -378,10 +384,7 @@ FFLAGS="-g -O2 -march=pentium-m -mtune=prescott" \
 FCFLAGS="-g -O2 -march=pentium-m -mtune=prescott"
 @end example
 
-In addition, @samp{vecLib} currently does not use both cores on Core Duo, so it advisable to use threaded BLAS library such as ATLAS instead. Assuming ATLAS is installed in a standard place, the corresponding configure flag is
-@smallexample
---with-blas="-lptf77blas -lpthread -latlas"
-@end smallexample
+Since Mac OS X 10.4.8 @samp{vecLib} is now multi-threaded, so there is no need for threaded ATLAS anymore and the corresponding static library is no longer included in the toolbox.
 
 Finally, the standard @R{} shell script uses by default the last installed architecture. This is probably not what you want, because the native architecture is known at run time. Therefore the line
 @smallexample
@@ -431,7 +434,7 @@ Historically there were two more GUIs for Mac OS X: @emph{RAqua} and @emph{Cocoa
 @section How to get R.app
 R.app is part of the binary distribution of R for Mac OS X available from @CRAN{}. That distribution consists of one disk image containing multiple packages including R framework and R.app.
 
-Development versions of R.app are made available on daily basis in the form of a disk image containing the R.app itself. See the Mac OS X pages on @CRAN{} for detail how to obtain such images (currently at @uref{http://R.reseach.att.com/}).
+Development versions of R.app are made available on daily basis in the form of a disk image containing the R.app itself. See the Mac OS X pages on @CRAN{} for detail how to obtain such images (currently at @uref{http://R.research.att.com/}).
 
 @node How to install the R.app, The R Console, How to get R.app, R.app
 @section How to install the R.app
@@ -525,7 +528,7 @@ The editor maintains a popup list of functions defined in the edited document. T
 
 @node Editor syntax coloring, Editor (internal and external), Editor function list, General Features
 @subsection Editor  syntax coloring
-The editor supports syntax-highlighting for R code. It is possible to change the syntax highlighting colors using the Syntax Color Preference Pane (see below).
+The editor supports syntax-highlighting for R code. It is possible to change the syntax highlighting colors using the Syntax Color Preference Pane (see below). Starting with R.app version 1.17 lazy syntax highlighting is used, which means that changes influencing the entire file (such as typing a single or double quote) no longer apply to the entire file, but only a few lines. This temporary state is usually recovered by closing the quote, but in some rare instances it may persist until a change is made to the first line of the offending quote. However, lazy highlighting brings huge speedup when editing large files.
 
 @node Editor (internal and external), Editor help, Editor syntax coloring, General Features
 @subsection Editor (internal and external)
@@ -534,9 +537,11 @@ relatively simple multi-document editor that supports the features listed above.
 two powerful commands are available to source the file being edited in its entirety (@kbd{Command-E})
 or to source the current selection to @R{} (@kbd{Command-Return}). Using @R{}'s @code{edit()} function, allows
 editing of R objects or files while @R{} is kept waiting for the edit session to finish.
+
 It is possible to 'redirect' all @R{} requests to an external editor, which runs
 outside R.app. In that case, it is not possible to keep @R{} waiting if @code{edit()} is used. Using
 AppleScript it is easy to implement @kbd{Command-E} and @kbd{Command-Return} like functionality.
+
 
 @node Editor help, Drag & drop, Editor (internal and external), General Features
 @subsection Editor help
