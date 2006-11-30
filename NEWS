@@ -1,8 +1,13 @@
 NEWS 
 
+Last-update: 2006-11-30 [SU]
+*	Fix errors popping up if the working directory is no longer
+	existent (reported by Demitri Muna).
+
 Last-update: 2006-10-13 [RG]
 *	Passed focus back to RConsole after ?... returns no help
 	topic found and user dismisses the alert panel
+
 
 -- Release Version 1.17 (3868) - supplied with R 2.4.0 --
 

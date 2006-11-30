@@ -2275,7 +2275,11 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (IBAction) showWorkingDir:(id)sender
 {
 	[WDirView setEditable:YES];
-	[WDirView setStringValue: [[[NSFileManager defaultManager] currentDirectoryPath] stringByAbbreviatingWithTildeInPath]];
+	{
+		NSString *wd = [[NSFileManager defaultManager] currentDirectoryPath];
+		if (!wd) wd = NLS(@"<deleted>");
+		[WDirView setStringValue: [wd stringByAbbreviatingWithTildeInPath]];
+	}
 	[WDirView setEditable:NO];
 }
 
