@@ -33,9 +33,16 @@
 #import <Cocoa/Cocoa.h>
 #include "Rinit.h"
 #include <R.h>
+#include <Rversion.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
 #import "REngine.h"
+
+#if R_VERSION < R_Version(2,5,0)
+#define RS_ParseVector R_ParseVector
+#else
+#define RS_ParseVector(A,B,C) R_ParseVector(A,B,C,R_NilValue)
+#endif
 
 /* we should move this to another callback at some point ... it's a bad, bad hack for now */
 #ifndef RENG_STAND_ALONE
@@ -239,7 +246,7 @@ BOOL preventReentrance = NO;
 	RENGINE_BEGIN;
     PROTECT(cv=allocVector(STRSXP, 1));
     SET_STRING_ELT(cv, 0, mkChar([str UTF8String]));    
-    pstr=R_ParseVector(cv, count, &ps);
+    pstr=RS_ParseVector(cv, count, &ps);
     UNPROTECT(1);
 	RENGINE_END;
     //NSLog(@"parse status: %d, SEXP: %x, type: %d\n", ps, pstr, TYPEOF(pstr));

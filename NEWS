@@ -1,5 +1,8 @@
 NEWS 
 
+Last-update: 2006-12-06 [SU]
+*	Adapt to API change in R-devel (R_ParseVector)
+
 Last-update: 2006-11-30 [SU]
 *	Fix errors popping up if the working directory is no longer
 	existent (reported by Demitri Muna).
