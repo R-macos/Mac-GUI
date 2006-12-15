@@ -240,7 +240,9 @@
 	if (sortByCategory) {
 		// add headers
 		NSFont *boldSystemFont = [[NSFont boldSystemFontOfSize:[NSFont systemFontSize]] autorelease];
-		captionHeight = ceilf([boldSystemFont defaultLineHeightForFont]);
+		NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
+		captionHeight = ceilf((float) [layoutManager defaultLineHeightForFont: boldSystemFont]);
+		[layoutManager release];
 	} else {
 		captionHeight = 0.0;
 	}
@@ -248,7 +250,7 @@
 	[self setFrame:newFrame];
 }
 
-int _am_compareByCategory(id array1, id array2, void *prefsController)
+NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 {
 	NSString *identifier1 = [(AMPrefPaneIcon *)[array1 objectAtIndex:0] itemIdentifier];
 	NSString *identifier2 = [(AMPrefPaneIcon *)[array2 objectAtIndex:0] itemIdentifier];
@@ -605,9 +607,9 @@ int _am_compareByCategory(id array1, id array2, void *prefsController)
 #pragma mark ━ drag & drop handling ━
 // ============================================================
 
-- (unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal
+- (NSDragOperation) draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-	unsigned int result = NSDragOperationNone;
+	NSDragOperation result = NSDragOperationNone;
 	if (isLocal) {
 		result = NSDragOperationEvery; // NSDragOperationCopy sufficient?
 	}
