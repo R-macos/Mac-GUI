@@ -331,9 +331,19 @@ static RController* sharedRController;
 #define arch_lib_nss @"/lib/ppc"
 #define arch_str "/ppc"
 #else
+#ifdef __ppc64__
+#define arch_lib_nss @"/lib/ppc64"
+#define arch_str "/ppc64"
+#else
 #ifdef __i386__
 #define arch_lib_nss @"/lib/i386"
 #define arch_str "/i386"
+#else
+#ifdef __x86_64__
+#define arch_lib_nss @"/lib/x86_64"
+#define arch_str "/x86_64"
+#endif
+#endif
 #endif
 #endif
 #ifdef arch_lib_nss
