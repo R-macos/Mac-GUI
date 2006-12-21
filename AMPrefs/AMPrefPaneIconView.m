@@ -250,6 +250,17 @@
 	[self setFrame:newFrame];
 }
 
+/* OS X <10.5 don't have NSInteger, so we need to defined it */
+#ifndef NSINTEGER_DEFINED
+#if __LP64__ || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+#endif
+
 NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 {
 	NSString *identifier1 = [(AMPrefPaneIcon *)[array1 objectAtIndex:0] itemIdentifier];
