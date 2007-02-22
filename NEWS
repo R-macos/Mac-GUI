@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-02-21 [SU]
+*	Cache value for working directory to prevent superfluous
+	repaints that may lead to copy/paste PDF issues. (Thanks
+	to Demitri Muna for helpful hints)
+
+
 -- Release Version 1.18 (4045) - supplied with R 2.4.1 --
 
 Last-update: 2006-12-15 [SU]

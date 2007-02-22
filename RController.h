@@ -130,6 +130,8 @@
 	char *writeBufferPos;
 	int  writeBufferLen;
 	
+	NSString *lastShownWD; // holds current directory after it has been shown (in non-abreviated form)
+	
 	NSMutableArray *pendingDocsToOpen; // paths of documents to open once initialized
 }
 

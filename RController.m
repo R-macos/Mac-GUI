@@ -157,6 +157,7 @@ static RController* sharedRController;
 	rootFD = -1;
 	childPID = 0;
 	RLtimer = nil;
+	lastShownWD = nil;
 	busyRFlag = YES;
 	appLaunched = NO;
 	terminating = NO;
@@ -2284,13 +2285,14 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (IBAction) showWorkingDir:(id)sender
 {
-	[WDirView setEditable:YES];
-	{
-		NSString *wd = [[NSFileManager defaultManager] currentDirectoryPath];
-		if (!wd) wd = NLS(@"<deleted>");
+	NSString *wd = [[NSFileManager defaultManager] currentDirectoryPath];
+	if (!wd) wd = NLS(@"<deleted>");
+	if (!lastShownWD || ![wd isEqual:lastShownWD]) {
+		lastShownWD = wd;
+		[WDirView setEditable:YES];
 		[WDirView setStringValue: [wd stringByAbbreviatingWithTildeInPath]];
+		[WDirView setEditable:NO];
 	}
-	[WDirView setEditable:NO];
 }
 
 
