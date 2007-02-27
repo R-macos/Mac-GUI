@@ -3,8 +3,8 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2006
-@set FAQ-VERSION 2.4-1 @value{FAQ-YEAR}-12-18
+@set FAQ-YEAR 2007
+@set FAQ-VERSION 2.4-2 @value{FAQ-YEAR}-02-27
 @set REL-VERSION 2.4.1
 @set GUI-VERSION 1.18
 @documentlanguage en
@@ -172,7 +172,7 @@ The requirements for building @R{} vary, depending whether the build machine is 
 @node C/C++ compiler (gcc 3.3 or later), Fortran compiler (g77 3.3 or later), What is needed to build R, What is needed to build R
 @subsection C/C++ compiler (gcc 3.3 or later)
 
-If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retial version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 2.4 or above. During the installation, don't forget to setect X11 SDK if you plan to use X11.
+If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retail version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 2.4 or above. During the installation, don't forget to setect X11 SDK if you plan to use X11.
 
 If you are using Mac OS X 10.2 (aka Jaguar) then you should download and install the 
 Apple Developers Tools Dec 2002 including the latest updates which dates August 2003. Either it comes 
@@ -193,9 +193,9 @@ Please note that it is important that the major version of the Fortran compiler 
 
 @node libreadline 4.3 or higher (optional), X11 window server (optional), Fortran compiler (g77 3.3 or later), What is needed to build R
 @subsection libreadline 4.3 or higher (optional)
-The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with @samp{libedit} library which emulates readline. Nevertheless, GNU readline has some addiional functionality so it may be worth installing anyway.
+The readline library is optional and only necessary for OS X 10.3 (Panther) and earlier. Mac OS X 10.4 (Tiger) comes with @samp{libedit} library which emulates readline. Nevertheless, GNU readline has some additional functionality so it may be worth installing anyway.
 
-Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. 
+Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. (Also consider installing the @samp{rcompletion} package that uses readline for code-completion in R).
 
 Readline 5.0 and later compile out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, Because the configure script fails to detect that flag. The use of readline 5.2 with recent patches is recommended due to bugs in earlier versions that can lead to crashes.
 
@@ -207,7 +207,7 @@ sudo make install
 @end example
 It installs everything in @file{/usr/local}.
 
-@emph{Note:} It is possible to build multi-architecture readline binary in one step, for example set @samp{CC='gcc -arch ppc -arch ppc64 -arch i386 -arch x86_64'} to build all four architectures (see Apple Xcode tools reference for details).
+@emph{Note:} It is possible to build multi-architecture readline binary in one step, for example set @samp{CC='gcc -arch ppc -arch ppc64 -arch i386 -arch x86_64'} to build all four architectures (see Apple Xcode tools reference for details). Such binary is available from @uref{http://r.research.att.com/exp/}.
 
 @node X11 window server (optional), X11 TclTk headers and libraries (optional), libreadline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
@@ -218,7 +218,7 @@ To install X11 on Mac OS X 10.3 or higher, follow these steps:
 
 @enumerate
 @item
-Insert Mac OS X Disk 1 that came with your Mac
+Insert Mac OS X Disk 1 (CD/DVD) that came with your Mac
 
 @item
 @key{Ctrl}-Click (or right button click) on "Install Bundled Software Only", select "Show Original"
@@ -230,7 +230,7 @@ double-click on "X11User.pkg"
 If you have a retail version of OS X, replace second step by
 @enumerate 2
 @item
-Go to System/Installation/Packages direrctory on the DVD
+Go to @samp{System/Installation/Packages} direrctory on the DVD
 @end enumerate
 
 In addition to the user part, you need to install the X11 SDK package from the Xcode Tools CD. In Xcode 2.4.0 and higher this is the default if X11 is installed, therefore it is important to install X11 before installing Xcode.
@@ -907,7 +907,7 @@ Starting with R 2.3.0 the same binary package can be used for both PowerPC and I
 
 Further, universal binaries can be currently built on Intel Macs only. The main reason is that the default Mac OS X installation on PowerPC based Macs does not include system libraries for Intel Macs (experienced users can try to add corresponding @code{-isysroot} for 10.4u SDK to @code{CC}). If you happen to have a PowerPC machine with full system libraries it should work. Finally, a compiler supporting both platforms is necessary, see @pxref{How to build universal R}.
 
-Once all tools are in place it is considerably easy to build an universal binary. If the package doe not contain a @emph{confgiure} script then a regular package installation using either @code{install.packages} or @code{R CMD INSTALL} automatically creates an universal binary. If the package contains a @emph{configure} script then it cannot be compiled in-place for multiple platforms, and the following process should be used. Assuming that you have a source package called @code{foo_1.0.tar.gz} that uses a @emph{configure} script, it can be installed universally using the following two-step process:
+Once all tools are in place it is considerably easy to build an universal binary. If the package does not contain a @emph{configure} script then a regular package installation using either @code{install.packages} or @code{R CMD INSTALL} automatically creates an universal binary. If the package contains a @emph{configure} script then it cannot be compiled in-place for multiple platforms, and the following process should be used. Assuming that you have a source package called @code{foo_1.0.tar.gz} that uses a @emph{configure} script, it can be installed universally using the following two-step process:
 
 @example
 R_ARCH=/i386 R CMD INSTALL foo_1.0.tar.gz
@@ -1095,7 +1095,7 @@ sudo /Developer/Tools/Rez -t APPL Carbon.r -o R.bin
 @chapter Internationalization of the R.app
 In R 2.1 both R and the R.app GUI introduced support for internationalization. Among other things this means that both messages and GUI elements can be translated into various languages. R.app automatically detects user's settings in the @emph{International} section of the System Preferences and uses that information to offer translated messages and GUI if available. Please note that both @emph{Language} and @emph{Formats} information is used so they should be set up consistently.
 
-If you use a non-standard setup (e.g. different language than formats), you can override the auto-detection performed by setting @samp{force.LANG} defaults settin, such as for example
+If you use a non-standard setup (e.g. different language than formats), you can override the auto-detection performed by setting @samp{force.LANG} defaults setting, such as for example
 @example
 defaults write org.R-project.R force.LANG en_US.UTF-8
 @end example
