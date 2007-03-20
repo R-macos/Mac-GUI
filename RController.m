@@ -2288,7 +2288,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 	NSString *wd = [[NSFileManager defaultManager] currentDirectoryPath];
 	if (!wd) wd = NLS(@"<deleted>");
 	if (!lastShownWD || ![wd isEqual:lastShownWD]) {
-		lastShownWD = wd;
+		if (lastShownWD) [lastShownWD release];
+		lastShownWD = [wd retain];
 		[WDirView setEditable:YES];
 		[WDirView setStringValue: [wd stringByAbbreviatingWithTildeInPath]];
 		[WDirView setEditable:NO];
