@@ -81,6 +81,8 @@
 
 #define saveOnExitKey @"save.on.exit"
 
+#define kAutoCloseBrackets @"auto.close.parens"
+
 // other constants
 
 #define iBackgroundColor 0

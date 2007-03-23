@@ -60,10 +60,11 @@
 #import "AMPrefs/AMPreferenceWindowController.h"
 #import "Preferences.h"
 #import "PreferenceKeys.h"
+#import "RTextView.h"
 
 @interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent>
 {
-	IBOutlet NSTextView *RTextView;
+	IBOutlet RTextView *consoleTextView;
 	IBOutlet NSProgressIndicator *progressWheel;
 	IBOutlet NSTableView *historyView;			/* TableView for the package manager */ 
 	IBOutlet NSTextField *WDirView;				/* Mini-TextField for the working directory */

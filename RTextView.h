@@ -39,7 +39,11 @@
 
  */
 
+extern BOOL RTextView_autoCloseBrackets;
+
 @interface RTextView : NSTextView {
 }
+
+- (void) setConsoleMode: (BOOL) isConsole;
 
 @end

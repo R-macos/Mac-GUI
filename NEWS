@@ -1,5 +1,18 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-02-22 [SU]
+*	Add support for automatically closing brackets. Typing an opening bracket
+	automatically adds a closing bracket as well (this applies to round, square
+	and curly brackets). However, the closing bracket can be subsequently
+	overwritten.
+
+	This new feature can be disabled by setting auto.close.brackets
+	preference to NO
+	
+*	New shortcuts have been added:
+	<Alt> + <-> and <Ctrl> + <=> for left assignment arrow
+	<Alt> + <=> for "!="
+
 Last-update: 2007-02-21 [SU]
 *	Cache value for working directory to prevent superfluous
 	repaints that may lead to copy/paste PDF issues. (Thanks

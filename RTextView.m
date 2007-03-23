@@ -34,6 +34,15 @@
 
 #import "RGUI.h"
 
+#define kTALinked @"RTVLinkedChar"
+#define TAVal @""
+
+BOOL RTextView_autoCloseBrackets = YES;
+
+@interface RTextView (Private)
+BOOL console;
+@end
+
 @implementation RTextView
 
 /* we don't need custom init, but in case it's necessary just uncomment this
@@ -48,19 +57,102 @@
 
 - (void) awakeFromNib
 {
+	SLog(@"RTextView: awakeFromNib %@", self);
+	console = NO;
 }
 
 - (void)keyDown:(NSEvent *)theEvent
 {
 	NSString *rc = [theEvent charactersIgnoringModifiers];
+	NSString *cc = [theEvent characters];
 	unsigned int modFlags = [theEvent modifierFlags];
-	//SLog(@"RTextView: keyDown: %@ *** \"%@\" %d", theEvent, rc, modFlags);
+	SLog(@"RTextView: keyDown: %@ *** \"%@\" %d", theEvent, rc, modFlags);
 	if ([rc isEqual:@"."] && (modFlags&(NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask))==NSControlKeyMask) {
 		SLog(@" - send complete: to self");
 		[self complete:self];
 		return;
 	}
+	if ([rc isEqual:@"="]) {
+		int mf = modFlags&(NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask);
+		if ( mf ==NSControlKeyMask) {
+			[self insertText:@"<-"];
+			return;
+		}
+		if ( mf == NSAlternateKeyMask ) {
+			[self insertText:@"!="];
+			return;
+		}
+	}
+	if ([rc isEqual:@"-"] && (modFlags&(NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask))==NSAlternateKeyMask) {
+		[self insertText:@" <- "];
+		return;
+	}
+	if (cc && [cc length]==1 && RTextView_autoCloseBrackets) {
+		unsigned int ck = [cc characterAtIndex:0];
+		NSString *complement = nil;
+		switch (ck) {
+			case '{':
+				complement = @"}";
+			case '(':
+				if (!complement) complement = @")";
+			case '[':
+				if (!complement) complement = @"]";
+				SLog(@"RTextView: open bracket chracter %c", ck);
+				[super keyDown:theEvent];
+				{
+					NSRange r = [self selectedRange];
+					if (r.location != NSNotFound) {
+						// NSAttributedString *as = [[NSAttributedString alloc] initWithString:complement attributes:
+						// [NSDictionary dictionaryWithObject:TAVal forKey:kTALinked]];
+						NSTextStorage *ts = [self textStorage];
+						[self replaceCharactersInRange:r withString:complement];
+						r.length=1;
+						[ts addAttribute:kTALinked value:TAVal range:r];
+						r.length=0;
+						[self setSelectedRange:r];
+					}
+					return;
+				}
+					
+				case '}':
+				case ')':
+				case ']':
+				{
+					NSRange r = [self selectedRange];
+					if (r.location != NSNotFound && r.length == 0) {
+						NSTextStorage *ts = [self textStorage];
+						id attr = nil;
+						@try {
+							attr = [ts attribute:kTALinked atIndex:r.location effectiveRange:0];
+						}
+						@catch (id ue) {}
+						if (attr) {
+							unsigned int cuc = [[ts string] characterAtIndex:r.location];
+							SLog(@"RTextView: encountered linked character '%c', while writing '%c'", cuc, ck);
+							if (cuc == ck) {
+								r.length = 1;
+								SLog(@"RTextView: selecting linked character for removal on type");
+								[self setSelectedRange:r];
+							}
+						}
+					}
+				}
+					SLog(@"RTextView: closing bracket chracter %c", ck);
+		}
+	}
+	if ((modFlags&(NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask))==NSControlKeyMask) {
+		if ([rc isEqual:@"{"]) {
+			
+		} else if ([rc isEqual:@"}"]) {
+			
+		}
+	}
 	[super keyDown:theEvent];
+}
+
+- (void) setConsoleMode: (BOOL) isConsole {
+	console = isConsole;
+	SLog(@"RTextView: set console flag to %@ (%@)", isConsole?@"yes":@"no", self);
 }
 
 @end

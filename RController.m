@@ -249,18 +249,21 @@ static RController* sharedRController;
 	sharedRController = self;
 	pendingDocsToOpen = [[NSMutableArray alloc] init];
 	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleAppleEvent:withReplyEvent:) forEventClass:kCoreEventClass andEventID:kAEOpenDocuments];
-	NSLayoutManager *lm = [[RTextView layoutManager] retain];
-	NSTextStorage *origTS = [[RTextView textStorage] retain];
+	[consoleTextView setConsoleMode: YES];
+	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
+	NSTextStorage *origTS = [[consoleTextView textStorage] retain];
 	RConsoleTextStorage * textStorage = [[RConsoleTextStorage alloc] init];
 	[origTS removeLayoutManager:lm];
 	[textStorage addLayoutManager:lm];
 	[lm release];
 	[origTS release];
 	
+	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];
+	
 	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
-	[RTextView setDrawsBackground:NO];
-	[[RTextView enclosingScrollView] setDrawsBackground:NO];
+	[consoleTextView setDrawsBackground:NO];
+	[[consoleTextView enclosingScrollView] setDrawsBackground:NO];
 	
 	SLog(@" - load preferences");
 	[self updatePreferences]; // first update, then add self
@@ -424,24 +427,24 @@ static RController* sharedRController;
 
 	SLog(@" - font and other widgets");
 	/*
-	[RTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
+	[consoleTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
 	[fontSizeStepper setIntValue:currentFontSize];
-    theFont=[RTextView font];
+    theFont=[consoleTextView font];
     theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
-    [RTextView setFont:theFont];
+    [consoleTextView setFont:theFont];
 	 */
-	[RTextView setFont: textFont];
+	[consoleTextView setFont: textFont];
 	{
-		NSMutableDictionary *md = [[RTextView typingAttributes] mutableCopy];
+		NSMutableDictionary *md = [[consoleTextView typingAttributes] mutableCopy];
 		[md setObject: [consoleColors objectAtIndex:iInputColor] forKey: @"NSColor"];
-		[RTextView setTypingAttributes:[NSDictionary dictionaryWithDictionary:md]];
+		[consoleTextView setTypingAttributes:[NSDictionary dictionaryWithDictionary:md]];
 		[md release];
 	}
-	[RTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
-	[[RTextView textStorage] setDelegate:self];
+	[consoleTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
+	[[consoleTextView textStorage] setDelegate:self];
 		
-	//	[RTextView changeColor: inputColor];
-	[RTextView display];
+	//	[consoleTextView changeColor: inputColor];
+	[consoleTextView display];
 	[self setupToolbar];
 
 	[RConsoleWindow setDocumentEdited:YES];
@@ -481,8 +484,8 @@ static RController* sharedRController;
 	SLog(@" - set cwd and load history");
 	[historyView setDoubleAction: @selector(historyDoubleClick:)];
 	
-	currentSize = [[RTextView textContainer] containerSize].width;
-	//currentFontSize = [[RTextView font] pointSize];
+	currentSize = [[consoleTextView textContainer] containerSize].width;
+	//currentFontSize = [[consoleTextView font] pointSize];
 	currentConsoleWidth = -1;
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByExpandingTildeInPath]];
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
@@ -498,7 +501,7 @@ static RController* sharedRController;
 	SLog(@"RController:applicationDidFinishLaunching");
 	SLog(@" - clean up and flush console");
 	[self setOptionWidth:YES];
-	[RTextView setEditable:YES];
+	[consoleTextView setEditable:YES];
 	[self flushROutput];
 	
 	SLog(@" - setup notification and timers");
@@ -727,9 +730,9 @@ static RController* sharedRController;
     NSFont *theFont;
     
     [fontSizeField takeIntValueFrom:fontSizeStepper];
-    theFont=[RTextView font];
+    theFont=[consoleTextView font];
     theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
-    [RTextView setFont:theFont];
+    [consoleTextView setFont:theFont];
 	[self setOptionWidth:NO];
 	[[NSUserDefaults standardUserDefaults] setFloat: [fontSizeStepper intValue] forKey:FontSizeKey];
 }
@@ -832,8 +835,8 @@ extern BOOL isTimeToFinish;
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */
 - (void) writeConsoleDirectly: (NSString*) txt withColor: (NSColor*) color{
 	@synchronized(textViewSync) {
-		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [RTextView textStorage];
-		NSRange origSel = [RTextView selectedRange];
+		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
+		NSRange origSel = [consoleTextView selectedRange];
 		unsigned tl = [txt length];
 		if (tl>0) {
 			unsigned oldCL=committedLength;
@@ -848,8 +851,8 @@ extern BOOL isTimeToFinish;
 			if (outputPosition<=origSel.location) origSel.location+=tl;
 			outputPosition+=tl;
 			[textStorage endEditing];
-			[RTextView setSelectedRange:origSel];
-			[RTextView scrollRangeToVisible:origSel];
+			[consoleTextView setSelectedRange:origSel];
+			[consoleTextView scrollRangeToVisible:origSel];
 		}
 	}
 }
@@ -858,7 +861,7 @@ extern BOOL isTimeToFinish;
 - (void)handleWritePrompt: (NSString*) prompt {
     [self handleFlushConsole];
 	@synchronized(textViewSync) {
-		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [RTextView textStorage];
+		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
 		unsigned textLength = [textStorage length];
 		int promptLength=[prompt length];
 //		NSLog(@"Prompt: %@", prompt);
@@ -881,8 +884,8 @@ extern BOOL isTimeToFinish;
 		[textStorage endEditing];
 		{
 			NSRange targetRange = NSMakeRange(committedLength,0);
-			[RTextView setSelectedRange:targetRange];
-			[RTextView scrollRangeToVisible:targetRange];
+			[consoleTextView setSelectedRange:targetRange];
+			[consoleTextView scrollRangeToVisible:targetRange];
 		}
 	}
 }
@@ -892,16 +895,16 @@ extern BOOL isTimeToFinish;
 	NSString *s = [[NSString alloc] initWithUTF8String:cmd];
 	
 	@synchronized(textViewSync) {
-		unsigned textLength = [[RTextView textStorage] length];
+		unsigned textLength = [[consoleTextView textStorage] length];
 		
-		[RTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
-		[RTextView insertText:s];
-		textLength = [[RTextView textStorage] length];
-		[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
+		[consoleTextView setSelectedRange:NSMakeRange(committedLength, textLength-committedLength)];
+		[consoleTextView insertText:s];
+		textLength = [[consoleTextView textStorage] length];
+		[consoleTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
 		outputPosition=committedLength=textLength;
 		
 		// remove undo actions to prevent undo across prompts
-		[[RTextView undoManager] removeAllActions];
+		[[consoleTextView undoManager] removeAllActions];
 	}
 	
 	[s release];
@@ -1154,7 +1157,7 @@ extern BOOL isTimeToFinish;
 				NLS(@"OK"),
 				nil,
 				nil,
-				[RTextView window],
+				[consoleTextView window],
 				self,
 				@selector(sheetDidEnd:returnCode:contextInfo:),
 				@selector(sheetDidEnd:returnCode:contextInfo:),
@@ -1178,7 +1181,7 @@ extern BOOL isTimeToFinish;
 	NSString *sa = [Preferences stringForKey:@"saveOnExit" withDefault:@"ask"];
 	if ([sa isEqualToString: @"ask"])
 		NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),
-			[RTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,
+			[consoleTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,
 			NLS(@"Save workspace image?"));
 	else {
 		terminating = YES;
@@ -1357,7 +1360,7 @@ at current cursor position
 	
 	cmd = [[hist entries] objectAtIndex:index];
 	[self consoleInput:cmd interactive:NO];
-	[RConsoleWindow makeFirstResponder:RTextView];
+	[RConsoleWindow makeFirstResponder:consoleTextView];
 }
 
 - (IBAction)historyDeleteEntry:(id)sender {
@@ -1370,9 +1373,9 @@ at current cursor position
 /*  This routine is intended to "cat" some text to the R Console without
 issuing the newline.
 - (void) consolePaste: (NSString*) text {
-	unsigned textLength = [[RTextView textStorage] length];
-	[RTextView setSelectedRange:NSMakeRange(textLength, 0)];
-	[RTextView insertText:text];
+	unsigned textLength = [[consoleTextView textStorage] length];
+	[consoleTextView setSelectedRange:NSMakeRange(textLength, 0)];
+	[consoleTextView insertText:text];
 }
 */
 /* This function is used by two threads to write  stderr and/or stdout to the console
@@ -1397,13 +1400,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 {
 	@synchronized(textViewSync) {
 		if (!inter) {
-			int textLength = [[RTextView textStorage] length];
+			int textLength = [[consoleTextView textStorage] length];
 			if (textLength>committedLength)
-				[RTextView replaceCharactersInRange:NSMakeRange(committedLength,textLength-committedLength) withString:@""];
-			[RTextView setSelectedRange:NSMakeRange(committedLength,0)];
-			[RTextView insertText: cmd];
-			textLength = [[RTextView textStorage] length];
-			[RTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength,textLength-committedLength)];
+				[consoleTextView replaceCharactersInRange:NSMakeRange(committedLength,textLength-committedLength) withString:@""];
+			[consoleTextView setSelectedRange:NSMakeRange(committedLength,0)];
+			[consoleTextView insertText: cmd];
+			textLength = [[consoleTextView textStorage] length];
+			[consoleTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength,textLength-committedLength)];
 		}
 		
 		if (inter) {
@@ -1508,7 +1511,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (void)textStorageDidProcessEditing:(NSNotification *)aNotification {
 	NSTextStorage *ts = [aNotification object];
 	NSString *s = [ts string];
-	NSRange sr = [RTextView selectedRange];
+	NSRange sr = [consoleTextView selectedRange];
 
 	// check for a typed (
 	if (argsHints && sr.location>committedLength && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
@@ -1845,7 +1848,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		answer = [sp runModalForDirectory:nil file:@"R Console.txt"];
 		
 		if(answer == NSOKButton) {
-			[[RTextView string] writeToFile:[sp filename] atomically:YES];
+			[[consoleTextView string] writeToFile:[sp filename] atomically:YES];
 		}
 	}
 	[RConsoleWindow makeKeyWindow];
@@ -2235,8 +2238,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (void) setOptionWidth:(BOOL)force;
 {
-	float newSize = [[RTextView textContainer] containerSize].width;
-	float newFontSize = [[RTextView font] pointSize];
+	float newSize = [[consoleTextView textContainer] containerSize].width;
+	float newFontSize = [[consoleTextView font] pointSize];
 	if((newSize != currentSize) | (newFontSize != currentFontSize) | force){
 		float newConsoleWidth = 1.5*newSize/newFontSize-1.0;
 		if((int)newConsoleWidth != (int)currentConsoleWidth){
@@ -2461,7 +2464,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	[printInfo setVerticalPagination: NSAutoPagination];
 	[printInfo setVerticallyCentered:NO];
 	
-	printOp = [NSPrintOperation printOperationWithView:RTextView 
+	printOp = [NSPrintOperation printOperationWithView:consoleTextView 
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
 	[printOp runOperation];
@@ -2503,9 +2506,9 @@ This method calls the showHelpFor method of the Help Manager which opens
 			}
 			i++;
 		}
-		[RTextView setInsertionPointColor:[consoleColors objectAtIndex:iInputColor]];
+		[consoleTextView setInsertionPointColor:[consoleColors objectAtIndex:iInputColor]];
 	}
-	[RTextView setNeedsDisplay:YES];
+	[consoleTextView setNeedsDisplay:YES];
 	SLog(@" - done, preferences updated");
 }
 
@@ -2513,8 +2516,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 	return RConsoleWindow;
 }
 
-- (NSTextView *)getRTextView{
-	return RTextView;
+- (NSTextView *)getconsoleTextView{
+	return consoleTextView;
 }
 
 - (NSWindow *)getRConsoleWindow{
