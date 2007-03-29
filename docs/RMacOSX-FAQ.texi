@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2007
-@set FAQ-VERSION 2.4-2 @value{FAQ-YEAR}-02-27
-@set REL-VERSION 2.4.1
-@set GUI-VERSION 1.18
+@set FAQ-VERSION 2.5-1 @value{FAQ-YEAR}-03-29
+@set REL-VERSION 2.5.0
+@set GUI-VERSION 1.19
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -172,7 +172,7 @@ The requirements for building @R{} vary, depending whether the build machine is 
 @node C/C++ compiler (gcc 3.3 or later), Fortran compiler (g77 3.3 or later), What is needed to build R, What is needed to build R
 @subsection C/C++ compiler (gcc 3.3 or later)
 
-If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retail version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from Apple Developer Connection site (@pxref{Apple Developer Connection}): in the download section, look for Xcode Tools v 2.4 or above. During the installation, don't forget to setect X11 SDK if you plan to use X11.
+If you have Mac OS X 10.3 (aka Panther) or higher you just need to install the software from the Xcode Tools CD or DVD. This is only true if you bought retail version of Mac OS X. If your computer came with pre-installed version of OS X, look into @file{/Applications/Installers}. Recent installations feature @file{Xcode Tools} folder containing the necessary installer. If neither of the above works for you, download Xcode from @uref{http://developer.apple.com/tools/xcode/}.
 
 If you are using Mac OS X 10.2 (aka Jaguar) then you should download and install the 
 Apple Developers Tools Dec 2002 including the latest updates which dates August 2003. Either it comes 
@@ -187,9 +187,9 @@ Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.3.0-2.4.1 @CRAN{} binaries comes with GNU Fortran F95 4.0.3 in the gcc optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU GCC from the list of packages. The @CRAN{} binaries are configured to use gcc 4.0.3 and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.5.0 @CRAN{} binary comes with GNU Fortran 4.2.0 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
 
-Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.0 with gfortran 4.x, other combinations usually don't work. According to some reports, mixing different versions of gcc doesn't work, either (e.g. gcc 4.0 with gfortran 4.1), but this is platform-dependent.
+Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.x with gfortran 4.x, other combinations usually don't work.
 
 @node libreadline 4.3 or higher (optional), X11 window server (optional), Fortran compiler (g77 3.3 or later), What is needed to build R
 @subsection libreadline 4.3 or higher (optional)
@@ -312,7 +312,7 @@ Some additional, useful flags that you may want to add to configure include:
 @code{--with-blas='-framework vecLib'} enables @code{vecLib} as BLAS implementation. Given that @code{vecLib} is highly optimized by Apple, it is recommended for most users.
 
 @item
-@code{--with-BLAS-shlib} enables the use of @code{libRblas.dylib} which separates BLAS from the R library. This allows you to switch between various BLAS implementations (such as vecLib, internal R BLAS and ATLAS) without the need to re-compile R. It is in general a good idea and can be used with both internal BLAS and vecLib.
+@code{--enable-BLAS-shlib} enables the use of @code{libRblas.dylib} which separates BLAS from the R library. This allows you to switch between various BLAS implementations (such as vecLib, internal R BLAS and ATLAS) without the need to re-compile R. It is in general a good idea and can be used with both internal BLAS and vecLib.
 
 @c -- better keep quiet, it is not recommended --
 @c @item
@@ -368,7 +368,7 @@ In addition, R.app also supports unix-style build which is run by simply issuing
 @smallexample
 make
 @end smallexample
-at the top level. It works on both PowerPC and Intel-based Macs, resulting in an universal binary. This is currently the building method used by the CRAN release and nightly builds.
+at the top level. It works on both PowerPC and Intel-based Macs, resulting in an universal binary.
 
 R.app does not need to be installed in any specific way. Building R.app results in the R.app bundle which appears as one R icon. This application bundle can be run anywhere and it is customary to place it in the @emph{Applications} folder.
 
@@ -378,16 +378,16 @@ Starting with @R{} 2.3.0 it is possible to build @R{} that runs on multiple arch
 
 In order to be able to build universal R, all necessary libraries must be available as @samp{i386} and @samp{ppc} binaries. For system libraries this is the default for Mac OS X on Intel Macs. Other libraries such as readline must be compiled accordingly.
 
-In addition, the compilers must support both architectures as well. For Intel Macs, such compilers are supplied with @R{} 2.4.0 in the @CRAN{} binary package (GNU gcc 4.0.3 with Apple drivers).
+In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.5.0 in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.4.1.tar.gz} is in the current directory, replace @samp{R-2.4.1} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.5.0.tar.gz} is in the current directory, replace @samp{R-2.5.0} with any other version or name as appropriate):
 @example
-tar fxz R-2.4.1.tar.gz
+tar fxz R-2.5.0.tar.gz
 mkdir R-ppc
 cd R-ppc
-../R-2.4.1/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
+../R-2.5.0/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
 CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
 FC="gfortran-4.0 -arch ppc"
 make
@@ -400,9 +400,9 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.4.1/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+../R-2.5.0/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
 CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
-FC="gfortran-4.0 -arch i386" CPPFLAGS=-msse3
+FC="gfortran-4.0 -arch i386"
 make
 make install
 cd ..
@@ -1171,9 +1171,9 @@ Also note that the development build of R.app sends output to the error console 
 
 @node Why do I need custom compilers for the CRAN binary?,  , I don't see a thing when installing packages!, Sparse questions
 @section Why do I need custom compilers for the CRAN binary?
-@CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supply their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler is kept in place, but @R{} uses the new compiler for compiling packages instead. The main reason for this is that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. Note that on Intel Macs the compiler has a different ABI from the system compiler, so you will need to compile dependent libraries using the @R{} compiler.
+As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 2.4.1 and a GNU Fortran 4.2.0 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/} and it lives in @code{/usr/local}.
 
-Those bugs in the compilers were not fixed until after @R{} 2.4.0 was released, therefore we had to supplly our own, fixed compiler in the meantime. In order to maintain compatibility we continue to use the gcc 4.0.3 for @R{} 2.4.1, but users are free to use Xcode 2.4.1 or later with gfortran from HPC pages (@uref{http://hpc.sourceforge.net/}) if they wish to compile their own @R{}. It will be, however, incompatible with our binary packages.
+@CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler was kept in place, but @R{} used the new compiler for compiling packages instead. The main reason for this was that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we switched back to Apple's compilers for @R{} 2.5.0 and later.
 
 @bye
 
