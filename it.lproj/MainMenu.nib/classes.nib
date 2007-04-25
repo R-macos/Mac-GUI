@@ -116,7 +116,6 @@
                 installFromBinary = id; 
                 installFromDir = id; 
                 installFromSource = id; 
-                kickstart = id; 
                 loadWorkSpace = id; 
                 loadWorkSpaceFile = id; 
                 makeConsoleKey = id; 
@@ -152,9 +151,9 @@
             OUTLETS = {
                 HistoryDrawer = NSDrawer; 
                 RConsoleWindow = NSWindow; 
-                RTextView = NSTextView; 
                 WDirView = NSTextField; 
                 clearHistory = NSButton; 
+                consoleTextView = RTextView; 
                 deleteEntry = NSButton; 
                 fontSizeField = NSTextField; 
                 fontSizeStepper = NSStepper; 
