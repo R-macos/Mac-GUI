@@ -7,13 +7,13 @@
 /* NSTextField (250) : <title:250> (oid:95) */
 "250" = "250";
 
-/* NSButton (Add $HOME/R/Library) : <title:Add $HOME/R/Library> (oid:25) */
-"Add $HOME/R/Library" = "Ajouter $HOME/R/Library";
+/* NSButton (Add ~/Library/R…) : <title:Add ~/Library/R…> (oid:25) */
+"Add ~/Library/R…" = "Ajouter ~/Library/R…";
 
 /* NSButton (Always apply) : <title:Always apply> (oid:88) */
 "Always apply" = "Appliquer toujours";
 
-/* NSButtonCell (Ask ) : <title:Ask > (oid:123) */
+/* NSButtonCell (Ask) : <title:Ask> (oid:123) */
 "Ask" = "Demander";
 
 /* NSButton (Change) : <title:Change> (oid:37) */
