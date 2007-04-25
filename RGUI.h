@@ -49,4 +49,7 @@
 #endif
 #endif
 
+extern NSString *Rapp_R_version_short;
+extern NSString *Rapp_R_version;
+
 #endif
