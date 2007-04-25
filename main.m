@@ -44,6 +44,9 @@
 #import "Tools/GlobalExHandler.h"
 #endif
 
+NSString *Rapp_R_version_short;
+NSString *Rapp_R_version;
+
 int main(int argc, const char *argv[])
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -54,6 +57,10 @@ int main(int argc, const char *argv[])
 		[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: NSLogAndHandleEveryExceptionMask]; // log+handle all
 	}
 #endif
+	
+	Rapp_R_version_short = [[NSString alloc] initWithFormat:@"%d.%d", (R_VERSION >> 16), (R_VERSION >> 8)&255];
+	Rapp_R_version = [[NSString alloc] initWithFormat:@"%s.%s", R_MAJOR, R_MINOR];
+	
 	[NSApplication sharedApplication];
 	[NSBundle loadNibNamed:@"MainMenu" owner:NSApp];
 	
