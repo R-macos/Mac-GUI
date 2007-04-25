@@ -1,7 +1,17 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.19 (4305) - supplied with R 2.5.0 --
+
 Last-update: 2007-04-25 [SU]
 *	Both R NEWS and R.app NEWS are shown for the "What's new" menu.
+
+*	local package repository is now in
+	~/Library/R/x.y/library
+	where x.y is the R version (as in R version x.y.z) to prevent
+	clashes between R versions
+	(was ~/Library/R/library)
+	It is possible to symlink x.y to .. in order to get the previous
+	behavior.
 
 Last-update: 2007-02-22 [SU]
 *	Add support for automatically closing brackets. Typing an opening
