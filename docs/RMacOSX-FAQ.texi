@@ -613,7 +613,7 @@ of duplicate entries and strip comments.
 @subsection Authentication and .libPath
 The official CRAN binaries come pre-packaged in such a way that administrator have sufficient privileges to update R and install packages system-wide. However, the default unix build requires root-authentication for package instllation and other administrative tasks. As it is not feasible to run the GUI as root, we provide the possibility to authenticate system commands issued from the GUI. The authentication requires an administrator login and causes all subsequent system commands to be executed as root. Use with care!
 
-In order to allow non-administrators to maintain their own set of packages, R.app optionally adds @code{~/Library/R/library} to the @code{.libPaths} (see start-up preferences). It is possible to use the Package Installer to install packages either globally (admin users only) or for the current user only. Note that user-local packages are only used when the corresponding preference option is enabled. The default for admin users is to use system-wide directorie, for non-admin users local packages will be used.
+In order to allow non-administrators to maintain their own set of packages, R.app optionally adds @code{~/Library/R/x.y/library} to the @code{.libPaths} (see start-up preferences, @code{x.y} denotes the R version without patch level). It is possible to use the Package Installer to install packages either globally (admin users only) or for the current user only. Note that user-local packages are only used when the corresponding preference option is enabled. The default for admin users is to use system-wide directorie, for non-admin users local packages will be used.
 
 @node Preference Panes,  , Authentication and .libPath, General Features
 @subsection Preference Panes
@@ -940,7 +940,7 @@ A Mac OS X specific requirements is that a prebuilt package is assumed to be nam
 
 @node Where are the packages I've installed?,  , Can I install packages built for other platforms?, How to install packages
 @section Where are the packages I've installed?
-The main library of packages is the one located inside the R.framework (in @code{/Library/Frameworks/R.framework/Resources/library}). This library contains the packages (base and recommended ones) distributed along with @R{}. Only administrators are allowed to install packages in this system-wide directory. Note that tis directory is @R{}-version-specific. Optionally users can install private packages in their @code{~/Library/R/library} directory.
+The main library of packages is the one located inside the R.framework (in @code{/Library/Frameworks/R.framework/Resources/library}). This library contains the packages (base and recommended ones) distributed along with @R{}. Only administrators are allowed to install packages in this system-wide directory. Note that tis directory is @R{}-version-specific. Optionally users can install private packages in their @code{~/Library/R/x.y/library} directory where @code{x.y} denotes the R version without the patch level (such as 2.5).
 
 @noindent
 The Package Installer performs installation to either place depending on the installation target setting. The default for an admin users is to install packages system-wide, whereas the default for regular users is their private place.
@@ -952,7 +952,7 @@ If you happen to use @code{install.packages} @R{} function instead of the Packag
 @end example
 
 @noindent
-@strong{Note:} When upgrading to a next major release of @R{}, users should delete their @code{~/Library/R/library} directory, because packages are incompatible across major @R{} versions. When you experience problems loading packages or starting R after an upgrade, make sure you don't have packages for your old @R{} version floating around.
+@strong{Note:} When upgrading to a next major release of @R{}, users should delete their @code{~/Library/R/library} directory, because packages are incompatible across major @R{} versions. When you experience problems loading packages or starting R after an upgrade, make sure you don't have packages for your old @R{} version floating around. More recent versions of R.app (1.19) include the version number in the path to prevent this from happening.
 
 @node R and external applications, Quartz device, How to install packages, Top
 @chapter R and external applications
@@ -1122,7 +1122,7 @@ ADC and get the latest up-to-date tools from Apple (compilers for example).
 
 @node The R for Mac OS X Developer page,  , Apple Developer Connection, Additional resources
 @section The R for Mac OS X Developer page
-There is a page dedicated to the latest R-devel version of R. This page is located at
+There is a page dedicated to development versions for R for Mac OS X. This page is located at
 @uref{http://R.research.att.com/} and is maintained by Simon Urbanek.
 It contains latest nightly builds of R and R.app as well as information on tools necessary to build R.
 
