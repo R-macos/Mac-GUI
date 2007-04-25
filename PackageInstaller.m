@@ -42,7 +42,7 @@ static id sharedController;
 
 NSString *location[4] = {
 	@"\"/Library/Frameworks/R.framework/Resources/library/\"",
-	@"\"~/Library/R/library\"",
+	@"\"~/Library/R/library\"", /* this is changed by awakeFromNIB to Library/R/x.y/library */
 	nil, /* other location - choose directory */
 	@".libPaths()[1]"
 };
@@ -496,6 +496,10 @@ NSString *location[4] = {
 - (void)awakeFromNib
 {
 	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL" withDefault:defaultCustomURL];
+	{
+		// add version number to local installation 
+		location[1] = [[NSString alloc] initWithFormat:@"\"~/Library/R/%@/library\"", Rapp_R_version_short];
+	}
 	[formatCheckBox setEnabled:NO];
 	if (cURL) [urlTextField setStringValue:cURL];
 	[urlTextField setHidden:YES];

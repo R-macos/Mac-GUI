@@ -277,9 +277,10 @@ static RController* sharedRController;
 			flag=[prefStr isEqualToString: @"YES"];
 		if (flag) {
 			char *cRLIBS = getenv("R_LIBS");
-			NSString *addPath = [@"~/Library/R/library" stringByExpandingTildeInPath];
+			NSString *addPath = [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath];
 			if (![[NSFileManager defaultManager] fileExistsAtPath:addPath]) { // make sure the directory exists
 				[[NSFileManager defaultManager] createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
+				[[NSFileManager defaultManager] createDirectoryAtPath:[[NSString stringWithFormat:@"~/Library/R/%@", Rapp_R_version_short] stringByExpandingTildeInPath] attributes:nil];
 				[[NSFileManager defaultManager] createDirectoryAtPath:addPath attributes:nil];
 			}
 			if (cRLIBS && *cRLIBS)
@@ -2516,7 +2517,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	return RConsoleWindow;
 }
 
-- (NSTextView *)getconsoleTextView{
+- (NSTextView *)getRTextView{
 	return consoleTextView;
 }
 
