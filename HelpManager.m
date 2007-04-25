@@ -158,11 +158,20 @@ static id sharedHMController;
 
 - (IBAction)whatsNew:(id)sender
 {
-	 REngine *re = [REngine mainEngine];	
+	REngine *re = [REngine mainEngine];	
+	/* syntax-highlighting kills us, so we use TextEdit for now */
+	[re executeString:@"system(paste('open -a /Applications/TextEdit.app',file.path(R.home(),'NEWS')))"];
+	{
+		NSBundle* myBundle = [NSBundle mainBundle];
+		if (myBundle)
+			system([[NSString stringWithFormat:@"open -a /Applications/TextEdit.app \"%@/NEWS\"", [myBundle resourcePath]] UTF8String]);
+	}
+	/*
 	 RSEXP *x= [re evaluateString:@"file.show(file.path(R.home(),\"NEWS\"))"];
 	 if(x==nil)
 		return;
-	[x release];
+	[x release]; */
+	
 }
 
 + (id) sharedController{
