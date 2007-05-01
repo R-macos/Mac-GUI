@@ -1,6 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
-Last-update: 2005-04-26 [SU]
+Last-update: 2007-05-01 [SU]
+*	expand tilde in quartz.save
+
+Last-update: 2007-04-26 [SU]
 *	Adjust Bioconductor repositories and get ready for 2.1
 
 -- Release Version 1.19 (4308) - supplied with R 2.5.0 --

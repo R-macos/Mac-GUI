@@ -1005,6 +1005,7 @@ SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
 				QuartzDesc *xd = (QuartzDesc *) dd-> deviceSpecific;
 				NSString *sFn = [NSString stringWithUTF8String:CHAR(STRING_ELT(fn, 0))];
 				if (!sFn) error("Invalid file name.");
+				sFn = [sFn stringByExpandingTildeInPath];
 				if (bitmap)
 					[xd->DevView saveAsBitmap: sFn usingType:ftype];
 				else
