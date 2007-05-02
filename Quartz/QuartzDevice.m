@@ -1016,8 +1016,13 @@ SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
 	return R_NilValue;
 }
 
-/*-- now, this is ugly, we use internals of Rdynload to squeeze our functions into base load table --*/
+static R_CallMethodDef quartzCallMethods[]  = {
+  {"QuartzSaveContents", (DL_FUNC) &QuartzSaveContents, 4},
+  {NULL, NULL, 0}
+};
 
+#if (R_VERSION < R_Version(2,6,0))
+/*-- now, this is ugly, we use internals of Rdynload to squeeze our functions into base load table --*/
 static void R_addCallRoutine(DllInfo *info, const R_CallMethodDef * const croutine,
                  Rf_DotCallSymbol *sym)
 {
@@ -1037,10 +1042,13 @@ static void registerCall(DllInfo *info, const R_CallMethodDef * const callRoutin
 }
 
 void QuartzRegisterSymbols() {
-	R_CallMethodDef callMethods[]  = {
-	{"QuartzSaveContents", (DL_FUNC) &QuartzSaveContents, 4},
-	{NULL, NULL, 0}
-	};
 	/* we add those to the base as we have no specific entry (yet?) */
-	registerCall(R_getDllInfo("base"), callMethods);
+	registerCall(R_getDllInfo("base"), quartzCallMethods);
 }
+
+#else
+/* since R 2.6.0 we have an API for this */
+void QuartzRegisterSymbols() {
+	R_registerRoutines(R_getEmbeddingDllInfo(), 0, quartzCallMethods, 0, 0);
+}
+#endif
