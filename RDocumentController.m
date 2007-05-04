@@ -56,6 +56,7 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	docList = (NSDocument**) malloc(sizeof(NSDocument*) * docListLimit);
 	memset(docList, 0, sizeof(NSDocument*) * docListLimit);
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotifications:) name:NSWindowDidBecomeKeyNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillCloseNotifications:) name:NSWindowWillCloseNotification object:nil];
 	return self;
 }
 
@@ -64,6 +65,18 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	free(docList);
 	[mainDoc release];
 	[super dealloc];
+}
+
+- (void)windowWillCloseNotifications:(NSNotification*) aNotification
+{
+	NSWindow *w = [aNotification object];
+	if (w) {
+		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
+		if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
+			[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
+			SLog(@" RConsole set to key window");
+		}
+	}
 }
 
 - (void)windowDidBecomeKeyNotifications:(NSNotification*) aNotification
