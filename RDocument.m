@@ -62,9 +62,9 @@
 		[self removeWindowController:myWinCtrl];
 		[myWinCtrl close];
 		// --- something is broken - winctrl close doesn't work - I have no idea why - this is a horrible hack to cover up
-		NSWindow *w = [myWinCtrl window];
-		if (w) [NSApp removeWindowsItem: w];
-		[[(RDocumentController*)[NSDocumentController sharedDocumentController] walkKeyListBack] makeKeyAndOrderFront:self];
+		//NSWindow *w = [myWinCtrl window];
+		//if (w) [NSApp removeWindowsItem: w];
+		//[[(RDocumentController*)[NSDocumentController sharedDocumentController] walkKeyListBack] makeKeyAndOrderFront:self];
 		// --- end of hack
 		[myWinCtrl release];
 		myWinCtrl=nil;

@@ -72,10 +72,19 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	NSWindow *w = [aNotification object];
 	if (w) {
 		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
-		if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
-			[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
-			SLog(@" RConsole set to key window");
-		}
+		NSDocument *d = [self documentForWindow:w];
+		if (d) {
+			SLog(@"RDocumentController%@.windowWillCloseNotifications.removeDocument:%@ (%@)", self, w, d);
+			[self removeDocument:d];
+			NSWindow *ww = [self walkKeyListBack];
+			SLog(@"RDocumentController.windowWillCloseNotifications.walkBackWindow:%@ (%@)", self, ww, d);
+			[[self walkKeyListBack] makeKeyWindow];
+		} else
+			if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
+				[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
+				SLog(@" RConsole set to key window");
+			}
+		[NSApp removeWindowsItem: w];
 	}
 }
 

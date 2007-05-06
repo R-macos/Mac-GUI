@@ -63,8 +63,8 @@
 		NSWindow *w = [(NSWindowController*)[a objectAtIndex:0] window];
 		SLog(@" - window: %@", w);
 		// --- something is broken - winctrl close doesn't work - I have no idea why - this is a horrible hack to cover up
-		if (w) [NSApp removeWindowsItem: w];
-		[[(RDocumentController*)[NSDocumentController sharedDocumentController] walkKeyListBack] makeKeyAndOrderFront:self];
+		//if (w) [NSApp removeWindowsItem: w];
+		//[[(RDocumentController*)[NSDocumentController sharedDocumentController] walkKeyListBack] makeKeyAndOrderFront:self];
 		// --- end of hack
 	}
 	[super close];
@@ -233,7 +233,7 @@
 			[[REngine mainEngine] executeString:@"dev.off()"];
 
 	}
-	[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
+//	[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
 }
 
 - (void) setDeviceName: (NSString*) name

@@ -126,10 +126,10 @@ static RController* sharedRController;
 @implementation NSApplication (ScriptingSupport)
 - (id)handleDCMDCommand:(NSScriptCommand*)command
 {
-	if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
-		[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
-		SLog(@" RConsole set to key window");
-	}
+//	if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
+//		[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
+//		SLog(@" RConsole set to key window");
+//	}
     NSDictionary *args = [command evaluatedArguments];
     NSString *cmd = [args objectForKey:@""];
     if (!cmd || [cmd isEqualToString:@""])
@@ -1862,6 +1862,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		[cd saveDocument:sender];
 	else // for the console this is the same as Save As ..
 		[self saveDocumentAs:sender];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (int) handleChooseFile:(char *)buf len:(int)len isNew:(int)isNew
@@ -2346,15 +2347,15 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (IBAction)loadWorkSpace:(id)sender
 {
 	[self sendInput:@"load(\".RData\")"];
-	//	[[REngine mainEngine] evaluateString:@"load(\".RData\")" ];
-	
+	//	[[REngine mainEngine] evaluateString:@"load(\".RData\")" ];	
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)saveWorkSpace:(id)sender
 {
 	[self sendInput:@"save.image()"];
 	//	[[REngine mainEngine] evaluateString:@"save.image()"];
-	
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)loadWorkSpaceFile:(id)sender
@@ -2371,12 +2372,14 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (IBAction)showWorkSpace:(id)sender{
 	[self sendInput:@"ls()"];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)clearWorkSpace:(id)sender
 {
 	NSBeginAlertSheet(NLS(@"Clear Workspace"), NLS(@"Yes"), NLS(@"No") , nil, RConsoleWindow, self, @selector(shouldClearWS:returnCode:contextInfo:), NULL, NULL,
 					  NLS(@"All objects in the workspace will be removed. Are you sure you want to proceed?"));
+	[RConsoleWindow makeKeyWindow];
 }
 
 /* this gets called by the "wanna save?" sheet on window close */
@@ -2418,7 +2421,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[[HelpManager sharedController] showHelpFor:[sender stringValue]];
         [helpSearch setStringValue:@""];
     }
-	[RConsoleWindow makeKeyAndOrderFront:self];
+	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)sourceOrLoadFile:(id)sender

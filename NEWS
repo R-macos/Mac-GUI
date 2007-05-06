@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-05-06 [RG]
+*	Window menu cleanup and a few more dangling windows. Most of the
+	windowController workaround code now resides in RDocumentController
+
 Last-update: 2007-05-01 [SU]
 *	expand tilde in quartz.save
 
