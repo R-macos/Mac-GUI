@@ -120,6 +120,7 @@ It also contains a user guide to the @samp{R.app} version of @R{}.
 * How many versions of R for Mac OS X?::  
 * What machines does R for Mac OS X run on?::  
 * How can R for Mac OS X be obtained and installed?::  
+* How can R for Mac OS X be uninstalled?::  
 @end menu
 
 @node How many versions of R for Mac OS X?, What machines does R for Mac OS X run on?, Introduction, Introduction
@@ -135,7 +136,7 @@ R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.a
 
 @R{} can be compiled from sources as a pure 64-bit application on PowerMac G5 and Intel x86_64 machines on Mac OS X 10.4 or higher. R.app GUI can be built for 64-bit R as well, but Mac OS X 10.5 (Leopard) or higher is necessary.
 
-@node How can R for Mac OS X be obtained and installed?,  , What machines does R for Mac OS X run on?, Introduction
+@node How can R for Mac OS X be obtained and installed?, How can R for Mac OS X be uninstalled?, What machines does R for Mac OS X run on?, Introduction
 @section How can R for Mac OS X be obtained and installed?
 
 @R{} for Mac OS X is available on @CRAN{} in the form of a disk image containing a multi-package consisting of the R framework, the R.app GUI and optional libraries. The image is usually named @file{R.dmg} with optional version number.
@@ -143,6 +144,17 @@ R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.a
 The installation is done by double-clicking on the disk image, which opens a new Finder window with the installer package, followed by double-clicking on that package installer. The installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the installer will require password or login of an administrator. The installation can be customized, but the default is suitable for most users.
 
 If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes. Note that the @CRAN{} binary includes R shared library, so there is no need to re-compile @R{} with @code{--enable-R-shlib}.
+
+@node How can R for Mac OS X be uninstalled?,  , How can R for Mac OS X be obtained and installed?, Introduction
+@section How can R for Mac OS X be uninstalled?
+
+@R{} for Mac OS X consists of two parts: the GUI (R.app) and the R framework. The un-installation is as simple as removing those two folders (e.g. by dragging them into the Trash). The typical installation will install the GUI into the @file{/Applications} folder and the R framework in the @file{/Library/Frameworks} folder.
+
+If you want to get rid of R from the Terminal, simply run (prepend @code{sudo} if you don't have admin privileges):
+
+@example
+rm -rf /Library/Frameworks/R.framework /Applications/R.app
+@end example
 
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
@@ -1138,11 +1150,10 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * How can I have a per session .Rprofile?::  
 * What happens if I drag a file on the R icon?::  
 * How can I interrupt lengthy operations or output?::  
+* I see spurious error messages when starting R!::  
 * I don't see a thing when installing packages!::  
 * Why do I need custom compilers for the CRAN binary?::  
 @end menu
-
-
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
 @section How can I have a per session .Rprofile?
@@ -1154,7 +1165,7 @@ session directory and change accordingly the startup working directory using the
 In this case @R{} will try to source this file or load the image data file (@pxref{Finder actions}). If @R{} is not
 yet running it will be launched.
 
-@node How can I interrupt lengthy operations or output?, I don't see a thing when installing packages!, What happens if I drag a file on the R icon?, Sparse questions
+@node How can I interrupt lengthy operations or output?, I see spurious error messages when starting R!, What happens if I drag a file on the R icon?, Sparse questions
 @section How can I interrupt lengthy operations or output?
 In R.app you can use the the @emph{Stop} toolbar button or the @key{ESC} (escape) key in the console window to interrupt a running calculation or output.
 
@@ -1163,7 +1174,12 @@ For the command line version the same is achieved by pressing @kbd{@key{Ctrl}-c}
 killall -INT R
 @end smallexample
 
-@node I don't see a thing when installing packages!, Why do I need custom compilers for the CRAN binary?, How can I interrupt lengthy operations or output?, Sparse questions
+@node I see spurious error messages when starting R!, I don't see a thing when installing packages!, How can I interrupt lengthy operations or output?, Sparse questions
+@section I see spurious error messages when starting R!
+
+If you see error messages upon start of the R GUI which contain @code{Library/InputManagers} anywhere in the text, then you have some broken haxxies installed in your system. Those messages do NOT come from @R{}, so don't blame us. Bundles located in @code{Library/InputManagers} of your home (or system) are hacks that get loaded into every Mac application that you start. In most cases you don't seem them crashing, because most applications don't show the console ouput, but @R{} does, so all the errors those hacks are causing become visible. The easiest remedy is to delete all offending bundles (possibly the whole @code{Library/InputManagers} folder) and get a fixed version of the hack (if you need it). The most common cause for broken hacks is system updgrade (e.g. you get a new Mac and you transfer you settings which include those hacks that are incompatible with your new Mac).
+
+@node I don't see a thing when installing packages!, Why do I need custom compilers for the CRAN binary?, I see spurious error messages when starting R!, Sparse questions
 @section I don't see a thing when installing packages!
 The output is not produced continuously during the package installation. Unlike previous GUIs R.app does its best to display the output as soon as possible, but for example the documentation script does not print anything until done.
 
