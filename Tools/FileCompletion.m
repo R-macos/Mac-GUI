@@ -51,8 +51,7 @@
 			// this is not easy - stricly speaking we should look for all users
 			// but we use a trick: we find our home and strip the last component
 			dir = [[@"~" stringByExpandingTildeInPath] stringByDeletingLastPathComponent];
-			//NSLog(@" - home completion attempt: '%@'", dir);
-			ls = 1; homeCompletion = 1;
+			ls = 1; homeCompletion = YES;
 		}
 	}
     if (!dir) dir = working?@".":((ls==0)?@"/":[part substringToIndex:ls]);
