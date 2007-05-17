@@ -1,5 +1,17 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-05-17 [SU]
+*	auto.close.parens now includes string delimiters (' and ")
+
+*	deleting an initial bracket (using plain backspace or delete)
+	will also delete the closing bracket if they are linked and there is
+	no text between them (e.g. typing an opening bracket and pressing
+	backspace will delete it and the automatically generated closing one).
+
+*	improve auto-completion: it uses different tokens for file completion
+	and expression completion
+	(partially based on suggestions by Hans-Jšrg Bibiko)
+
 Last-update: 2007-05-06 [RG]
 *	Window menu cleanup and a few more dangling windows. Most of the
 	windowController workaround code now resides in RDocumentController
@@ -29,7 +41,7 @@ Last-update: 2007-02-22 [SU]
 	to round, square and curly brackets). However, the closing bracket
 	can be subsequently	overwritten.
 
-	This new feature can be disabled by setting auto.close.brackets
+	This new feature can be disabled by setting auto.close.parens
 	preference to NO
 	
 *	New shortcuts have been added:

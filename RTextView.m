@@ -248,6 +248,48 @@ NSCharacterSet *commentTokensSet;
 	[super keyDown:theEvent];
 }
 
+// if the current position and the next one are matching pairs,
+// select both (mathing means that the closing part must be linked)
+- (void) selectMatchingPairAt: (int) pos
+{
+	@try {
+		unichar c = [[self string] characterAtIndex: pos - 1];
+		unichar cc = 0;
+		switch (c) {
+			case '(': cc=')'; break;
+			case '{': cc='}'; break;
+			case '[': cc=']'; break;
+			case '"':
+			case '\'':
+				cc=c; break;
+		}
+		if (cc) {
+			unichar cs = [[self string] characterAtIndex: pos];
+			if (cs == cc) {
+				id attr = [[self textStorage] attribute:kTALinked atIndex:pos effectiveRange:0];
+				if (attr) 
+					[self setSelectedRange:NSMakeRange(pos - 1,2)];
+			}
+		}
+	}
+	@catch (id ee) {}
+}
+
+- (void) deleteBackward: (id) sender {
+	NSRange r = [self selectedRange];
+	if (r.length == 0 && r.location > 0) 
+		[self selectMatchingPairAt: r.location];
+	[super deleteBackward: sender];
+}
+
+- (void) deleteForward: (id) sender
+{
+	NSRange r = [self selectedRange];
+	if (r.length == 0) 
+		[self selectMatchingPairAt: r.location + 1];
+	[super deleteForward: sender];
+}
+
 - (void) setConsoleMode: (BOOL) isConsole {
 	console = isConsole;
 	SLog(@"RTextView: set console flag to %@ (%@)", isConsole?@"yes":@"no", self);
