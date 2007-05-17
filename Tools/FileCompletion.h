@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-7  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
@@ -33,7 +33,7 @@
 @interface FileCompletion : NSObject {
     
 }
-+ (NSString*) complete: (NSString*) part;
+
 + (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix;
 
 @end

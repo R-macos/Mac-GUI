@@ -33,72 +33,30 @@
 
 @implementation FileCompletion
 
-+ (NSString*) complete: (NSString*) part {
-    int tl = [part length];
-    int ls = tl-1, fb;
-    NSString *dir;
-    BOOL working=NO;
-    NSString *fn;
-    
-    //NSLog(@"attepted file-completion: \"%@\"", part);
-    while (ls>0 && [part characterAtIndex:ls]!='/') ls--;
-    if (ls<1 && (tl==0 || [part characterAtIndex:ls]!='/'))
-        working=YES;
-    dir=working?@".":((ls==0)?@"/":[part substringToIndex:ls]);
-    fb=ls; if (fb<tl && [part characterAtIndex:fb]=='/') fb++;
-    fn=(fb>=0 && fb<tl)?[part substringFromIndex:fb]:@"";
-    //NSLog(@"directory to look in: \"%@\" for entry beginning with \"%@\"", dir, fn);
-    {
-        NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:dir];
-        if (a==nil) return nil;
-        { 
-            int i=0, firstMatch=-1, matches=0;
-            NSString *common=nil;
-            while (i<[a count]) {
-                NSString *sx = (NSString*) [a objectAtIndex:i];
-                if ([sx hasPrefix: fn]) {
-                    if (matches==0) {
-                        firstMatch=i;
-                        common=[[NSString alloc] initWithString: sx];
-                    } else {
-                        NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
-                        [common release];
-                        common=cpref;
-                    }
-                    matches++;
-                }
-                i++;
-            }
-            if (common!=nil) {
-                NSString *fnp=[common autorelease];
-                BOOL isDir=NO;
-                fnp = ((dir==@".")?fnp:
-                       ((dir==@"/")?[@"/" stringByAppendingString:fnp]:
-                        [[dir stringByAppendingString:@"/"] stringByAppendingString:fnp]));
-                if ([[NSFileManager defaultManager] fileExistsAtPath:fnp isDirectory:&isDir] && isDir)
-                    fnp = [fnp stringByAppendingString:@"/"];
-                if ([fnp isEqualToString:@"//"])
-                    fnp=@"/";
-                return fnp;
-            }
-        }
-    }
-    return nil;
-}
-
 + (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix {
+	//NSLog(@"FileCompletion completeAll: '%@' curPrefix: %d", part, prefix);
+
     int tl = [part length];
     int ls = tl-1, fb;
-    NSString *dir;
-    BOOL working=NO, voidFn=NO;
+    NSString *dir = nil;
+    BOOL working=NO, voidFn=NO, homeCompletion=NO;
     NSString *fn;
 	NSMutableArray *ca = [[NSMutableArray alloc] initWithCapacity: 8];
     
     //NSLog(@"attepted file-completion: \"%@\"", part);
-    while (ls>0 && [part characterAtIndex:ls]!='/') ls--;
-    if (ls<1 && (tl==0 || [part characterAtIndex:ls]!='/'))
+    while (ls>0 && [part characterAtIndex:ls]!='/') ls--; // ls=last / || 0
+    if (ls<1 && (tl==0 || [part characterAtIndex:ls]!='/')) {
         working=YES;
-    dir=working?@".":((ls==0)?@"/":[part substringToIndex:ls]);
+		if (tl > 0 && [part characterAtIndex:0]=='~') {
+			// this is not easy - stricly speaking we should look for all users
+			// but we use a trick: we find our home and strip the last component
+			dir = [[@"~" stringByExpandingTildeInPath] stringByDeletingLastPathComponent];
+			//NSLog(@" - home completion attempt: '%@'", dir);
+			ls = 1; homeCompletion = 1;
+		}
+	}
+    if (!dir) dir = working?@".":((ls==0)?@"/":[part substringToIndex:ls]);
+	if ([dir characterAtIndex:0] == '~') dir = [dir stringByExpandingTildeInPath];
     fb=ls; if (fb<tl && [part characterAtIndex:fb]=='/') fb++;
     fn=(fb>=0 && fb<tl)?[part substringFromIndex:fb]:@"";
 	if ([fn length]==0) voidFn=YES;
@@ -112,6 +70,10 @@
             while (i<[a count]) {
                 NSString *sx = (NSString*) [a objectAtIndex:i];
                 if (voidFn || [sx hasPrefix: fn]) {
+					BOOL isDir;
+					if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", dir, sx] isDirectory:&isDir] && isDir)
+						sx = [sx stringByAppendingString:@"/"];
+					if (homeCompletion) sx = [@"~" stringByAppendingString:sx];
                     if (matches==0) {
                         firstMatch=i;
                         common=[[NSString alloc] initWithString: sx];
@@ -126,19 +88,6 @@
                 i++;
             }
 			return ca; 
-			/*
-            if (common!=nil) {
-                NSString *fnp=[common autorelease];
-                BOOL isDir=NO;
-                fnp = ((dir==@".")?fnp:
-                       ((dir==@"/")?[@"/" stringByAppendingString:fnp]:
-                        [[dir stringByAppendingString:@"/"] stringByAppendingString:fnp]));
-                if ([[NSFileManager defaultManager] fileExistsAtPath:fnp isDirectory:&isDir] && isDir)
-                    fnp = [fnp stringByAppendingString:@"/"];
-                if ([fnp isEqualToString:@"//"])
-                    fnp=@"/";
-                return fnp;
-            } */
         }
     }
     return nil;
