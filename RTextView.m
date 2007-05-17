@@ -113,6 +113,37 @@ NSCharacterSet *commentTokensSet;
 	return context;	
 }
 
+- (NSRange) rangeForUserCompletion 
+{
+	NSRange userRange;
+	NSRange selection = [self selectedRange];
+	NSString *string = [self string];
+	int cursor = selection.location + selection.length; // we complete at the end of the selection
+	NSString *context = [self parserContextForPosition: cursor];
+	SLog(@" - rangeForUserCompletion: parser context: %@", context);
+	if (context == pcComment) return NSMakeRange(NSNotFound,0); // no completion in comments
+	if (context == pcStringDQ || context == pcStringSQ) // we're in a string, hence file completion
+														// the beginning of the range doesn't matter, because we're guaranteed to find a string separator on the same line
+		userRange = [string rangeOfCharacterFromSet: [NSCharacterSet characterSetWithCharactersInString: (context == pcStringDQ)?@"\" /":@"' /"] options: NSBackwardsSearch|NSLiteralSearch range: NSMakeRange(0, selection.location)];
+	if (context == pcExpression) // we're in an expression, so use R separating tokens
+		userRange = [string rangeOfCharacterFromSet: separatingTokensSet options: NSBackwardsSearch|NSLiteralSearch range: NSMakeRange(0, selection.location)];
+	if( userRange.location == NSNotFound )
+		// everything is one expression - we're guaranteed to be in the first line (because \n would match)
+		return NSMakeRange( 0, cursor );
+	if( userRange.length < 1 ) // nothing to complete
+		return NSMakeRange(NSNotFound, 0);
+	if( userRange.location == selection.location - 1 ) { // just before cursor means empty completion
+		userRange.location++;
+		userRange.length = 1;
+	} else { // normal completion
+		userRange.location++; // skip past first bad one
+		userRange.length = selection.location - userRange.location;
+		SLog(@" - returned range: %d:%d", userRange.location, userRange.length);
+		[self setSelectedRange:userRange];
+	}
+	return userRange;
+}
+
 - (void)keyDown:(NSEvent *)theEvent
 {
 	NSString *rc = [theEvent charactersIgnoringModifiers];

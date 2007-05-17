@@ -1573,12 +1573,12 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	NSRange sr=[textView selectedRange];
 	SLog(@"completion attempt; cursor at %d, complRange: %d-%d, commit: %d", sr.location, charRange.location, charRange.location+charRange.length, committedLength);
 	//sr=charRange;
-	int bow=sr.location;
-	if (bow>committedLength) {
+	int bow = sr.location + sr.length;
+	if (bow > committedLength) {
 		while (bow>committedLength) bow--;
 		{
 			NSString *rep=nil;
-			NSRange er = NSMakeRange(bow,sr.location-bow);
+			NSRange er = NSMakeRange(bow,sr.location+sr.length-bow);
 			NSString *text = [[textView attributedSubstringFromRange:er] string];
 			
 			// first we need to find out whether we're in a text part or code part

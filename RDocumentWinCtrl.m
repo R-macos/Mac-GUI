@@ -909,7 +909,7 @@ reHilite:
 	SLog(@"completion attempt; cursor at %d, complRange: %d-%d", sr.location, charRange.location, charRange.location+charRange.length);
 
 	NSString *rep=nil;
-	NSRange er = NSMakeRange(lr.location,sr.location-lr.location);
+	NSRange er = NSMakeRange(lr.location,sr.location+sr.length-lr.location);
 	NSString *text = [[aTextView attributedSubstringFromRange:er] string];
 			
 	// first we need to find out whether we're in a text part or code part
