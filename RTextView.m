@@ -41,6 +41,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 @interface RTextView (Private)
 BOOL console;
+NSCharacterSet *separatingTokensSet;
+NSCharacterSet *commentTokensSet;
 @end
 
 @implementation RTextView
@@ -57,8 +59,58 @@ BOOL console;
 
 - (void) awakeFromNib
 {
-	SLog(@"RTextView: awakeFromNib %@", self);
-	console = NO;
+	separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
+	 commentTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"#"] retain];
+	 SLog(@"RTextView: awakeFromNib %@", self);
+	 console = NO;
+}
+
+// parser context in text
+#define pcStringSQ @"singe quote string"
+#define pcStringDQ @"double quote string"
+#define pcComment  @"comment"
+#define pcExpression @"expression"
+
+// returns the parser context for a given position
+// the current implementation ignores multi-line strings
+- (NSString*) parserContextForPosition: (int) x
+{
+	NSString *context = pcExpression;
+	if (x<1) return context;
+	NSString *string = [self string];
+	if (x > [string length]) x = [string length];
+	NSRange thisLine = [string lineRangeForRange: NSMakeRange(x, 0)];
+	
+	// we do NOT support multi-line strings, so the line always starts as an expression
+	if (thisLine.location == x) return context;
+	SLog(@"textView: parserContextForPosition: %d, line span=%d:%d", x, thisLine.location, thisLine.length);
+	
+	int i = thisLine.location;
+	BOOL skip = NO;
+	while (i < x) {
+		unichar c;
+		@try {
+			c = [string characterAtIndex:i];
+		}
+		@catch (id ae) {
+			return context;
+		}
+		if (skip)
+			skip = NO;
+		else {
+			if (c == '\\' && (context == pcStringDQ || context == pcStringSQ)) {
+				skip = YES;
+			} else if (c == '"') {
+				if (context == pcStringDQ) context = pcExpression;
+				else if (context == pcExpression) context = pcStringDQ;
+			} else if (c == '\'') {
+				if (context == pcStringSQ) context = pcExpression;
+				else if (context == pcExpression) context = pcStringSQ;
+			} else if (c == '#' && context == pcExpression) return pcComment;
+		}
+		i++;
+	}
+	return context;	
 }
 
 - (void)keyDown:(NSEvent *)theEvent
@@ -90,6 +142,8 @@ BOOL console;
 	if (cc && [cc length]==1 && RTextView_autoCloseBrackets) {
 		unsigned int ck = [cc characterAtIndex:0];
 		NSString *complement = nil;
+		NSRange r = [self selectedRange];
+		BOOL acCheck = NO;
 		switch (ck) {
 			case '{':
 				complement = @"}";
@@ -97,10 +151,23 @@ BOOL console;
 				if (!complement) complement = @")";
 			case '[':
 				if (!complement) complement = @"]";
+			case '"':
+				if (!complement) {
+					complement = @"\"";
+					acCheck = YES;
+					if ([self parserContextForPosition:r.location] != pcExpression) break;
+				}
+			case '\'':
+				if (!complement) {
+					complement = @"\'";
+					acCheck = YES;
+					if ([self parserContextForPosition:r.location] != pcExpression) break;
+				}
+				
 				SLog(@"RTextView: open bracket chracter %c", ck);
 				[super keyDown:theEvent];
 				{
-					NSRange r = [self selectedRange];
+					r = [self selectedRange];
 					if (r.location != NSNotFound) {
 						// NSAttributedString *as = [[NSAttributedString alloc] initWithString:complement attributes:
 						// [NSDictionary dictionaryWithObject:TAVal forKey:kTALinked]];
@@ -113,31 +180,31 @@ BOOL console;
 					}
 					return;
 				}
-					
-				case '}':
-				case ')':
-				case ']':
-				{
-					NSRange r = [self selectedRange];
-					if (r.location != NSNotFound && r.length == 0) {
-						NSTextStorage *ts = [self textStorage];
-						id attr = nil;
-						@try {
-							attr = [ts attribute:kTALinked atIndex:r.location effectiveRange:0];
-						}
-						@catch (id ue) {}
-						if (attr) {
-							unsigned int cuc = [[ts string] characterAtIndex:r.location];
-							SLog(@"RTextView: encountered linked character '%c', while writing '%c'", cuc, ck);
-							if (cuc == ck) {
-								r.length = 1;
-								SLog(@"RTextView: selecting linked character for removal on type");
-								[self setSelectedRange:r];
-							}
-						}
+			case '}':
+			case ')':
+			case ']':
+				acCheck = YES;
+		}
+		if (acCheck) {
+			NSRange r = [self selectedRange];
+			if (r.location != NSNotFound && r.length == 0) {
+				NSTextStorage *ts = [self textStorage];
+				id attr = nil;
+				@try {
+					attr = [ts attribute:kTALinked atIndex:r.location effectiveRange:0];
+				}
+				@catch (id ue) {}
+				if (attr) {
+					unsigned int cuc = [[ts string] characterAtIndex:r.location];
+					SLog(@"RTextView: encountered linked character '%c', while writing '%c'", cuc, ck);
+					if (cuc == ck) {
+						r.length = 1;
+						SLog(@"RTextView: selecting linked character for removal on type");
+						[self setSelectedRange:r];
 					}
 				}
-					SLog(@"RTextView: closing bracket chracter %c", ck);
+			}
+			SLog(@"RTextView: closing bracket chracter %c", ck);
 		}
 	}
 	if ((modFlags&(NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask))==NSControlKeyMask) {
