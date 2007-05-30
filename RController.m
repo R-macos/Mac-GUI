@@ -589,12 +589,14 @@ static RController* sharedRController;
 	int bufFD=0;
     fd_set readfds;
 	struct timeval timv;
+	BOOL truncated = NO;
 	
 	timv.tv_sec=0; timv.tv_usec=300000; /* timeout */
 	
 	connectionToController = [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0]
 															sendPort:[portArray objectAtIndex:1]];
-	
+	[connectionToController setRequestTimeout:2.0];
+	[connectionToController setReplyTimeout:2.0];
 	rc = ((RController *)[connectionToController rootProxy]);
 	
     fcntl(stdoutFD, F_SETFL, O_NONBLOCK);
@@ -615,7 +617,9 @@ static RController* sharedRController;
 			if (bufFD!=0 && pib>0) {
 				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
+					if (truncated) { [rc writeLogsWithBytes:"\n(WARNING: partial output only, ask package author to use Rprintf instead!)\n" length:-1 type:1]; truncated=NO; }
 				} @catch(NSException *ex) {
+					truncated = YES;
 				}
 				pib=0;
 			}
@@ -625,7 +629,9 @@ static RController* sharedRController;
 			if (pib>flushMark) { // if we reach the flush mark, dump it
 				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
+					if (truncated) { [rc writeLogsWithBytes:"\n(WARNING: partial output only, ask package author to use Rprintf instead!)\n" length:-1 type:1]; truncated=NO; }
 				} @catch(NSException *ex) {
+					truncated = YES;
 				}
 				pib=0;
             }
@@ -651,6 +657,7 @@ static RController* sharedRController;
 				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
 				} @catch(NSException *ex) {
+					truncated = YES;
 				}
 				pib=0;
 			}
@@ -661,6 +668,7 @@ static RController* sharedRController;
 				@try{
 					[rc writeLogsWithBytes:buf length:pib type:bufFD];
 				} @catch(NSException *ex) {
+					truncated = YES;
 				}
 				pib=0;
 			}
@@ -670,6 +678,7 @@ static RController* sharedRController;
 			@try{
 				[rc writeLogsWithBytes:buf length:pib type:bufFD];
 			} @catch(NSException *ex) {
+				truncated = YES;
 			}
 			pib=0;
 		}
@@ -1380,12 +1389,13 @@ issuing the newline.
 }
 */
 /* This function is used by two threads to write  stderr and/or stdout to the console
+length: -1 = the string is null-terminated
 outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 */
 - (void) writeLogsWithBytes: (char*) buf length: (int) len type: (int) outputType
 {
 	NSColor *color=(outputType==0)?[consoleColors objectAtIndex:iStdoutColor]:((outputType==1)?[consoleColors objectAtIndex:iStderrColor]:[consoleColors objectAtIndex:iRootColor]);
-	buf[len]=0; /* this MAY be dangerous ... */
+	if (len>=0 && buf[len]!=0) buf[len]=0; /* this MAY be dangerous ... */
 	NSString *s = [[NSString alloc] initWithUTF8String:buf];
 	[self flushROutput];
 	[self writeConsoleDirectly:s withColor:color];

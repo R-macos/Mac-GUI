@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-05-30 [SU]
+*	add timeout to stdout/err thread to avoid deadlocks in
+	packages that abuse stdout/err
+
 Last-update: 2007-05-17 [SU]
 *	add exception handling to the outermost event loop (REngine)
 	this should catch most causes for a crash and provide detailed
