@@ -41,6 +41,9 @@
 /* NSTextField (Margin width:) : <title:Margin width:> (oid:125) */
 "Margin width:" = "Randbreite:";
 
+/* NSButton (Match braces/quotes) : <title:Match braces/quotes> (oid:142) */
+"Match braces/quotes" = "Klammern automatisch schliessen";
+
 /* NSButton (New editor) : <title:New editor> (oid:105) */
 "New editor" = "Editor auswählen";
 
