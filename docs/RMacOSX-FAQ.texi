@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2007
-@set FAQ-VERSION 2.5-1 @value{FAQ-YEAR}-04-24
-@set REL-VERSION 2.5.0
-@set GUI-VERSION 1.19
+@set FAQ-VERSION 2.5-1 @value{FAQ-YEAR}-07-01
+@set REL-VERSION 2.5.1
+@set GUI-VERSION 1.20
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -199,7 +199,7 @@ Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.5.0 @CRAN{} binary comes with GNU Fortran 4.2.0 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.5.1 @CRAN{} binary comes with GNU Fortran 4.2.0 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
 
 Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.x with gfortran 4.x, other combinations usually don't work.
 
@@ -390,16 +390,16 @@ Starting with @R{} 2.3.0 it is possible to build @R{} that runs on multiple arch
 
 In order to be able to build universal R, all necessary libraries must be available as @samp{i386} and @samp{ppc} binaries. For system libraries this is the default for Mac OS X on Intel Macs. Other libraries such as readline must be compiled accordingly.
 
-In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.5.0 in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
+In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.5.1 in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.5.0.tar.gz} is in the current directory, replace @samp{R-2.5.0} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.5.1.tar.gz} is in the current directory, replace @samp{R-2.5.1} with any other version or name as appropriate):
 @example
-tar fxz R-2.5.0.tar.gz
+tar fxz R-2.5.1.tar.gz
 mkdir R-ppc
 cd R-ppc
-../R-2.5.0/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
+../R-2.5.1/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
 CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
 FC="gfortran-4.0 -arch ppc"
 make
@@ -412,7 +412,7 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.5.0/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+../R-2.5.1/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
 CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
 FC="gfortran-4.0 -arch i386"
 make
