@@ -68,6 +68,7 @@ NSCharacterSet *commentTokensSet;
 // parser context in text
 #define pcStringSQ @"singe quote string"
 #define pcStringDQ @"double quote string"
+#define pcStringBQ @"back quote string"
 #define pcComment  @"comment"
 #define pcExpression @"expression"
 
@@ -98,11 +99,14 @@ NSCharacterSet *commentTokensSet;
 		if (skip)
 			skip = NO;
 		else {
-			if (c == '\\' && (context == pcStringDQ || context == pcStringSQ)) {
+			if (c == '\\' && (context == pcStringDQ || context == pcStringSQ || context == pcStringBQ)) {
 				skip = YES;
 			} else if (c == '"') {
 				if (context == pcStringDQ) context = pcExpression;
 				else if (context == pcExpression) context = pcStringDQ;
+			} else if (c == '`') {
+				if (context == pcStringBQ) context = pcExpression;
+				else if (context == pcExpression) context = pcStringBQ;
 			} else if (c == '\'') {
 				if (context == pcStringSQ) context = pcExpression;
 				else if (context == pcExpression) context = pcStringSQ;
@@ -188,6 +192,12 @@ NSCharacterSet *commentTokensSet;
 					acCheck = YES;
 					if ([self parserContextForPosition:r.location] != pcExpression) break;
 				}
+			case '`':
+				if (!complement) {
+					complement = @"`";
+					acCheck = YES;
+					if ([self parserContextForPosition:r.location] != pcExpression) break;
+				}
 			case '\'':
 				if (!complement) {
 					complement = @"\'";
@@ -260,6 +270,7 @@ NSCharacterSet *commentTokensSet;
 			case '{': cc='}'; break;
 			case '[': cc=']'; break;
 			case '"':
+			case '`':
 			case '\'':
 				cc=c; break;
 		}
