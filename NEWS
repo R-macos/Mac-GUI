@@ -1,5 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-07-01 [SU]
+*	add UI for automatic brackets/quotes matching preference
+
+*	include back-quotes to auto-matching
+
+*	fix a problem caused by thread timeout if R takes too
+	long to start.
+
 Last-update: 2007-05-30 [SU]
 *	add timeout to stdout/err thread to avoid deadlocks in
 	packages that abuse stdout/err

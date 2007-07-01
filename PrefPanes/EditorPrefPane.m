@@ -215,6 +215,8 @@
 	[highlightInterval setStringValue:[Preferences stringForKey:highlightIntervalKey withDefault: @"0.30"]];
 
 	[showLineNumbers setState:[Preferences flagForKey:showLineNumbersKey withDefault: YES]?NSOnState:NSOffState];
+
+	[matchingPairs setState:[Preferences flagForKey:kAutoCloseBrackets withDefault:YES]?NSOnState:NSOffState];
 	
 	if (![Preferences flagForKey:showLineNumbersKey withDefault: YES]) {
 		[enableLineWrapping setEnabled:NSOffState];		
@@ -283,6 +285,12 @@
 	int tmp = (int)[sender state];
 	BOOL flag = tmp?YES:NO;
 	[Preferences setKey:showLineNumbersKey withFlag:flag];
+}
+
+- (IBAction) changeMatchingPairs:(id)sender {
+	int tmp = (int)[sender state];
+	BOOL flag = tmp?YES:NO;
+	[Preferences setKey:kAutoCloseBrackets withFlag:flag];
 }
 
 - (IBAction) changeAppOrCommand:(id)sender {

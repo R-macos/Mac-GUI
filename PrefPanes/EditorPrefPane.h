@@ -46,6 +46,7 @@
 	IBOutlet NSButton *showSyntaxColoring;
 	IBOutlet NSButton *showBraceHighlighting;
 	IBOutlet NSButton *showArgsHints;
+	IBOutlet NSButton *matchingPairs;
 	IBOutlet NSTextField *highlightInterval;
 	IBOutlet NSButton *showLineNumbers;
 	IBOutlet NSTextField *externalEditorName;
@@ -84,6 +85,7 @@
 - (IBAction) changeShowBraceHighlighting:(id)sender;
 - (IBAction) changeHighlightInterval:(id)sender;
 - (IBAction) changeShowLineNumbers:(id)sender;
+- (IBAction) changeMatchingPairs:(id)sender;
 - (IBAction) changeAppOrCommand:(id)sender;
 - (IBAction) changeEnableLineWrapping:(id)sender;
 - (IBAction) changeLineNumberGutterWidth:(id)sender;
