@@ -582,7 +582,7 @@ static RController* sharedRController;
 {
     NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
     NSConnection *connectionToController;
-	RController *rc;
+	RController *rc = nil;
 	unsigned int bufSize=2048;
     char *buf=(char*) malloc(bufSize+16);
     int n=0, pib=0, flushMark=bufSize-(bufSize>>2);
@@ -597,7 +597,13 @@ static RController* sharedRController;
 															sendPort:[portArray objectAtIndex:1]];
 	[connectionToController setRequestTimeout:2.0];
 	[connectionToController setReplyTimeout:2.0];
-	rc = ((RController *)[connectionToController rootProxy]);
+	
+	while (!rc) { // we try despite timeouts because R may take a while to start
+		@try {
+			rc = ((RController *)[connectionToController rootProxy]);
+		} @catch (NSException *ex) {
+		}
+	}
 	
     fcntl(stdoutFD, F_SETFL, O_NONBLOCK);
     fcntl(stderrFD, F_SETFL, O_NONBLOCK);
@@ -2506,7 +2512,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	}
 
 	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
-
+	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];
 	{
 		int i = 0, ccs = [consoleColorsKeys count];
 		while (i<ccs) {
