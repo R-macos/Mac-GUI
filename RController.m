@@ -595,16 +595,13 @@ static RController* sharedRController;
 	
 	connectionToController = [NSConnection connectionWithReceivePort:[portArray objectAtIndex:0]
 															sendPort:[portArray objectAtIndex:1]];
+	
+	rc = ((RController *)[connectionToController rootProxy]);
+
+	// set timeouts only *after* the connection was established
 	[connectionToController setRequestTimeout:2.0];
 	[connectionToController setReplyTimeout:2.0];
-	
-	while (!rc) { // we try despite timeouts because R may take a while to start
-		@try {
-			rc = ((RController *)[connectionToController rootProxy]);
-		} @catch (NSException *ex) {
-		}
-	}
-	
+
     fcntl(stdoutFD, F_SETFL, O_NONBLOCK);
     fcntl(stderrFD, F_SETFL, O_NONBLOCK);
     while (1) {

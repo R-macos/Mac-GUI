@@ -1,9 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
--- Release Version 1.20 (4534) - supplied with R 2.5.1 --
+Last-update: 2007-07-18
+*	set stderr/out timeout only after a successful connection,
+	this should eliminate "tossing reply message" errors while R starts
+
+-- Release Version 1.20 (4535) - supplied with R 2.5.1 --
 
 Last-update: 2007-07-01 [SU]
-*	add UI for automatic brackets/quotes matching preference
+*	add preference UI for automatic brackets/quotes matching
 
 *	include back-quotes to auto-matching
 
