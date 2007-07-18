@@ -42,10 +42,10 @@
 	if (self) {
 		consoleColorsKeys = [[NSArray alloc] initWithObjects:
 			backgColorKey, inputColorKey, outputColorKey, promptColorKey,
-			stderrColorKey, stdoutColorKey, rootColorKey];
+			stderrColorKey, stdoutColorKey, rootColorKey, nil];
 		defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
 			[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
-			[NSColor redColor], [NSColor grayColor], [NSColor purpleColor]];
+			[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], nil];
 		consoleColors = [defaultConsoleColors mutableCopy];		
 	}
 	return self;
