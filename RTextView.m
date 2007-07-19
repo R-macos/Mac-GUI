@@ -129,7 +129,7 @@ NSCharacterSet *commentTokensSet;
 	if (context == pcStringDQ || context == pcStringSQ) // we're in a string, hence file completion
 														// the beginning of the range doesn't matter, because we're guaranteed to find a string separator on the same line
 		userRange = [string rangeOfCharacterFromSet: [NSCharacterSet characterSetWithCharactersInString: (context == pcStringDQ)?@"\" /":@"' /"] options: NSBackwardsSearch|NSLiteralSearch range: NSMakeRange(0, selection.location)];
-	if (context == pcExpression) // we're in an expression, so use R separating tokens
+	if (context == pcExpression || context == pcStringBQ) // we're in an expression or back-quote, so use R separating tokens (we could be smarter about the BQ but well..)
 		userRange = [string rangeOfCharacterFromSet: separatingTokensSet options: NSBackwardsSearch|NSLiteralSearch range: NSMakeRange(0, selection.location)];
 	if( userRange.location == NSNotFound )
 		// everything is one expression - we're guaranteed to be in the first line (because \n would match)
