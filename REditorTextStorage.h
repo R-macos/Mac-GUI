@@ -38,7 +38,7 @@
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted
 	double braceHighlightInterval; // interval to flash brace highlighting for
 	NSDictionary *highlightColorAttr; // attributes set while braces matching
-	BOOL insideReplaceEdited; // this flag is set if 'edited' is being called from within replaceCharacters
+	BOOL insideReplaceEdited; // this flag is set if 'edited' is being called from within replaceCharacters or set/addAttributes
 	int pendingHilite; // set to hilite position if hilite is pending that couldn't be performed inside 'edited'
 }
 

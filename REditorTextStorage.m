@@ -73,31 +73,63 @@
 
 - (void) replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString
 {
+	BOOL restoreInside;
 	int origLen = [self length];
 	if (currentHighlight>-1) [self resetHighlights];
 	[cont replaceCharactersInRange:aRange withString:aString];
+	restoreInside = insideReplaceEdited;
 	insideReplaceEdited = YES;
 	[super ensureAttributesAreFixedInRange:NSMakeRange(aRange.location,[aString length])];
 	[self edited:NSTextStorageEditedCharacters range:aRange changeInLength:[self length] - origLen];
-	insideReplaceEdited = NO;
+	insideReplaceEdited = restoreInside;
 	if (pendingHilite>-1) {
 		[self highlightCharacter:pendingHilite];
 		pendingHilite = -1;
 	}
 }
 
+/* be careful! insideReplaceEdited should be treated as a stack, because edit request via add/setAttributes are valid and can span ever begin/endEdit, so the code beolw doe NOT work as it will reset insideReplaceEdited to NO even if it is not safe! This will lead to exceptions in notification */
+- (void) beginEditing
+{
+	SLog(@"REditorTextStorage beginEditing");
+	/* we cannot do this without storing the previous state! insideReplaceEdited = YES; */
+	[super beginEditing];
+}
+
+- (void) endEditing
+{
+	SLog(@"REditorTextStorage endEditing");
+	[super endEditing];
+	/* insideReplaceEdited = NO; cannot do this! it could reset an outer lock */
+	if (pendingHilite>-1) {
+		[self highlightCharacter:pendingHilite];
+		pendingHilite = -1;
+	}
+	if (pendingHilite == -2) {
+		[self resetHighlights];
+		pendingHilite = -1;
+	}
+}
+
 - (void)setAttributes:(NSDictionary *)attributes range:(NSRange)aRange
 {
+	BOOL restoreInside = insideReplaceEdited;
+	insideReplaceEdited = YES;
 	[cont setAttributes:attributes range:aRange];
 	[super ensureAttributesAreFixedInRange:aRange];
 	[self edited:NSTextStorageEditedAttributes range:aRange changeInLength:0];
+	insideReplaceEdited = restoreInside;
 }
 
 - (void)addAttribute:(NSString *)name value:(id)value range:(NSRange)aRange
 {
+	BOOL restoreInside = insideReplaceEdited;
+	SLog(@"REditorTextStorage addAttribute: %@ (inside=%d)", name, insideReplaceEdited);
+	insideReplaceEdited = YES;
 	[cont addAttribute:name value:value range:aRange];
 	[self ensureAttributesAreFixedInRange:aRange];
 	[self edited:NSTextStorageEditedAttributes range:aRange changeInLength:0];
+	insideReplaceEdited = restoreInside;
 }
 
 // end of primitive methods
@@ -122,6 +154,11 @@
 
 -(void)resetHighlights
 {
+	SLog(@"REditorTextStorage resetHighlights (inside=%d)", insideReplaceEdited);
+	if (insideReplaceEdited) {
+		pendingHilite=-2;
+		return;
+	}
 	if (currentHighlight>-1) {
 		if (currentHighlight<[cont length]) {
 			NSLayoutManager *lm = [self layoutManager];
@@ -137,10 +174,12 @@
 		}
 		currentHighlight=-1;
 	}
+	SLog(@" - exit");
 }
 
 -(void)highlightCharacter: (int) pos
 {
+	SLog(@"REditorTextStorage highlightCharacter: %d (inside=%d)", pos, insideReplaceEdited);
 	if (insideReplaceEdited) {
 		pendingHilite = pos;
 		return;

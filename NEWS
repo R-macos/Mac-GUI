@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-07-19
+*	fix lock-ups in the editor when brace-highlighting and auto-close
+	happen at the same time (thanks to Andrew Beckman for reporting).
+
 Last-update: 2007-07-18
 *	set stderr/out timeout only after a successful connection,
 	this should eliminate "tossing reply message" errors while R starts
