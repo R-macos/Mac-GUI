@@ -174,7 +174,6 @@
 		}
 		currentHighlight=-1;
 	}
-	SLog(@" - exit");
 }
 
 -(void)highlightCharacter: (int) pos

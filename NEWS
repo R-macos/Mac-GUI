@@ -3,6 +3,39 @@ NEWS for R.app GUI for Mac OS X
 Last-update: 2007-07-19
 *	fix lock-ups in the editor when brace-highlighting and auto-close
 	happen at the same time (thanks to Andrew Beckman for reporting).
+	
+*	added 'Debug all exceptions' and 'Redirect stdout/err' preferences.
+	Previously those tasks were available only in the debug build.
+	In order to debug problems with the GUI use
+	
+	defaults write org.R-project.R 'Debug all exceptions' YES
+	
+	If the crash is so bad that you can't see the output in the console,
+	also add:
+	
+	defaults write org.R-project.R 'Redirect stdout/err' NO
+	
+	and capture the output from the Console log. To reset both settings
+	back to normal, use
+	
+	defaults delete org.R-project.R 'Debug all exceptions'
+	defaults delete org.R-project.R 'Redirect stdout/err'
+
+	One more notheworthy preference is 'Disable R signal handlers' which
+	if set to YES disables the menu that handles crashes in R (disabling
+	it is a good idea for debugging, because the menu can cause a crash
+	itself as it interacts with the UI)
+	
+	Finally 'Ignore stderr' preference if set to YES:
+	
+	defaults write org.R-project.R 'Ignore stderr' YES
+			
+	suppresses forwarding of all stderr output so that it is not displayed
+	in R. This can be useful if the GUI or some 3rd party programs
+	produce noise on stderr that cannot be handled otherwise. Note, however,
+	that this will suppress all stderr including errors from programs
+	that you start via system(), so use with care. (It has no effect
+	if 'Redirect stdout/err' is set to NO)
 
 Last-update: 2007-07-18
 *	set stderr/out timeout only after a successful connection,

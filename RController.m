@@ -460,10 +460,10 @@ static RController* sharedRController;
 	hist=[[History alloc] init];
 	
 	
-    BOOL WantThread = YES;
+    BOOL WantThread = ([Preferences flagForKey:@"Redirect stdout/err"] != NO);
 	
 	SLog(@" - setup stdout/err grabber");
-    if(WantThread){ // re-route the stdout to our own file descriptor and use ConnectionCache on it
+    if (WantThread){ // re-route the stdout to our own file descriptor and use ConnectionCache on it
         int pfd[2];
         pipe(pfd);
         dup2(pfd[1], STDOUT_FILENO);
@@ -473,8 +473,10 @@ static RController* sharedRController;
 		
         pipe(pfd);
 #ifndef PLAIN_STDERR
-        dup2(pfd[1], STDERR_FILENO);
-        close(pfd[1]);
+		if ([Preferences flagForKey:@"Ignore stderr"] != YES) {
+			dup2(pfd[1], STDERR_FILENO);
+			close(pfd[1]);
+		}
 #endif
         
         stderrFD=pfd[0];
@@ -855,6 +857,7 @@ extern BOOL isTimeToFinish;
 			unsigned oldCL=committedLength;
 			/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
 			origSel.length, outputPosition, tl, promptPosition, committedLength); */
+			SLog(@"RController writeConsoleDirectly, beginEditing");
 			[textStorage beginEditing];
 			committedLength=0;
 			[textStorage insertText:txt atIndex:outputPosition withColor:color];
@@ -864,6 +867,7 @@ extern BOOL isTimeToFinish;
 			if (outputPosition<=origSel.location) origSel.location+=tl;
 			outputPosition+=tl;
 			[textStorage endEditing];
+			SLog(@"RController writeConsoleDirectly, endEditing");
 			[consoleTextView setSelectedRange:origSel];
 			[consoleTextView scrollRangeToVisible:origSel];
 		}
@@ -879,6 +883,7 @@ extern BOOL isTimeToFinish;
 		int promptLength=[prompt length];
 //		NSLog(@"Prompt: %@", prompt);
 		NSRange lr = [[textStorage string] lineRangeForRange:NSMakeRange(textLength,0)];
+		SLog(@"RController handleWritePrompt: '%@', beginEditing", prompt);
 		[textStorage beginEditing];
 		promptPosition=textLength;
 		if (lr.location!=textLength) { // the prompt must be on the beginning of the line
@@ -895,6 +900,7 @@ extern BOOL isTimeToFinish;
 		}
 		committedLength=promptPosition+promptLength;
 		[textStorage endEditing];
+		SLog(@"RController handleWritePrompt: '%@', endEditing", prompt);
 		{
 			NSRange targetRange = NSMakeRange(committedLength,0);
 			[consoleTextView setSelectedRange:targetRange];

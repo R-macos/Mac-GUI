@@ -39,10 +39,8 @@
 #import "RController.h"
 #import "Rversion.h"
 
-#ifdef DEBUG_RGUI
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import "Tools/GlobalExHandler.h"
-#endif
 
 NSString *Rapp_R_version_short;
 NSString *Rapp_R_version;
@@ -50,14 +48,13 @@ NSString *Rapp_R_version;
 int main(int argc, const char *argv[])
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-#ifdef DEBUG_RGUI00
-	{
+
+	if ([Preferences flagForKey:@"Debug all exceptions"] == YES) {
 		// add an independent exception handler
-		[[GlobalExHandler alloc] init];
-		[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: NSLogAndHandleEveryExceptionMask]; // log+handle all
+		[[GlobalExHandler alloc] init]; // the init method also registers the handler
+		[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: 1023]; // hang+log+handle all
 	}
-#endif
-	
+
 	Rapp_R_version_short = [[NSString alloc] initWithFormat:@"%d.%d", (R_VERSION >> 16), (R_VERSION >> 8)&255];
 	Rapp_R_version = [[NSString alloc] initWithFormat:@"%s.%s", R_MAJOR, R_MINOR];
 	
@@ -73,7 +70,7 @@ int main(int argc, const char *argv[])
 	 /* register Quartz symbols */
 	 QuartzRegisterSymbols();
 	 /* create quartz.save function in tools:quartz */
-	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e); assign(\"avaliable.packages\",function(...) available.packages(...),e)}))"];
+	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e))"];
 	 
 	 SLog(@" - set R options");
 	 // force html-help, because that's the only format we can handle ATM
