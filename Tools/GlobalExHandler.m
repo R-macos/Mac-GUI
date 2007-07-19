@@ -61,6 +61,7 @@
 	
 	NSLog(@"Logged exception %@ with trace %@", exception, stack);
 	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/bin/atos"]) {
+		BOOL lastWasNewline = NO;
 		NSPipe *sop = [[NSPipe alloc] init];
 		NSFileHandle *soh = [sop fileHandleForReading];
 		NSLog(@"Calling atos to retrieve symbols, please wait!");
@@ -75,17 +76,19 @@
 		while ([ls isRunning]) {
 			NSData *data = [soh availableData];
 			if (data && [data length]>0) { /* remove empty lines in the trace */
-				const char *c = [data bytes], *d=c;
-				while (*d) {
-					if (*d=='\n' && d[1]=='\n') {
-						int l=d-c;
-						while (*d=='\n') d++;
+				const char *c = [data bytes], *d = c, *cs = [data bytes] + [data length];
+				if (*c == '\n' && lastWasNewline) d=++c;
+				while (*d && d < cs) {
+					if (*d=='\n' && d + 1 < cs && d[1]=='\n') {
+						int l = d - c;
+						while (d < cs && *d=='\n') d++;
 						fwrite(c, 1, l+1, stderr);
 						c=d;
 					} else d++;
 				}
-				if (*c && d-c)
+				if (c < cs && *c && d-c)
 					fwrite(c, 1, d-c, stderr);
+				lastWasNewline = (*(cs-1) == '\n') ? YES : NO;
 			}
 		}
 		[ls release];
