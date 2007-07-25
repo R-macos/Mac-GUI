@@ -103,6 +103,7 @@
                 breakR = id; 
                 changeFontSize = id; 
                 checkForUpdates = id; 
+                clearConsole = id; 
                 clearWorkSpace = id; 
                 doClearHistory = id; 
                 doLoadHistory = id; 

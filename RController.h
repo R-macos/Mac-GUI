@@ -175,6 +175,8 @@
 
 -(IBAction) showVignettes:(id)sender;
 
+-(IBAction) clearConsole:(id)sender;
+
 - (int) numberOfRowsInTableView: (NSTableView *)tableView;
 - (id) tableView: (NSTableView *)tableView
 		objectValueForTableColumn: (NSTableColumn *)tableColumn

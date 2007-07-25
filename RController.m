@@ -179,6 +179,7 @@ static RController* sharedRController;
 		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], nil];
 	consoleColors = [defaultConsoleColors mutableCopy];
 	
+	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
 	textFont = [[NSFont userFixedPitchFontOfSize:currentFontSize] retain];
 		
 	return self;
@@ -427,14 +428,9 @@ static RController* sharedRController;
 		]];
 
 	SLog(@" - font and other widgets");
-	/*
-	[consoleTextView setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
+	[consoleTextView setFont:textFont];
 	[fontSizeStepper setIntValue:currentFontSize];
-    theFont=[consoleTextView font];
-    theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
-    [consoleTextView setFont:theFont];
-	 */
-	[consoleTextView setFont: textFont];
+    [fontSizeField takeIntValueFrom:fontSizeStepper];
 	{
 		NSMutableDictionary *md = [[consoleTextView typingAttributes] mutableCopy];
 		[md setObject: [consoleColors objectAtIndex:iInputColor] forKey: @"NSColor"];
@@ -742,16 +738,26 @@ static RController* sharedRController;
 // custom view, and also by the above routines called from the toolbar item's menu (in text-only mode).
 -(IBAction) changeFontSize:(id)sender
 {
-    NSFont *theFont;
-    
+	int newFontSize = [fontSizeStepper intValue];   
     [fontSizeField takeIntValueFrom:fontSizeStepper];
+	/*
     theFont=[consoleTextView font];
     theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
     [consoleTextView setFont:theFont];
 	[self setOptionWidth:NO];
 	[[NSUserDefaults standardUserDefaults] setFloat: [fontSizeStepper intValue] forKey:FontSizeKey];
+	 */
+	[Preferences setKey:FontSizeKey withFloat:(float) newFontSize];
 }
 
+-(IBAction) clearConsole:(id)sender {
+	if (promptPosition > 0) {
+		committedLength -= promptPosition;
+		outputPosition = 0;
+		[consoleTextView replaceCharactersInRange: NSMakeRange(0,promptPosition) withString:@""];
+		promptPosition = 0;
+	}
+}
 
 extern BOOL isTimeToFinish;
 
@@ -2512,6 +2518,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[textFont release];
 		SLog(@" - using new %@", textFont);
 		textFont = [newFont retain];
+		[consoleTextView setFont:textFont];
 	}
 
 	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];

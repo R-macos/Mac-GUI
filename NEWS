@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-07-25
+*	add "Clear Console" (<Cmd><Opt><L>) menu item
+
+*	fix font handling for the console: the font size toolbar is now
+	correctly initialized the value is consistently stored
+
 Last-update: 2007-07-19
 *	fix lock-ups in the editor when brace-highlighting and auto-close
 	happen at the same time (thanks to Andrew Beckman for reporting).
