@@ -166,6 +166,11 @@ Preferences *globalPrefs=nil;
 	[[Preferences sharedPreferences] setKey: key withObject: value?@"YES":@"NO"];
 }
 
++ (void) setKey: (NSString*) key withFloat: (float) value
+{
+	[[Preferences sharedPreferences] setKey: key withFloat: value];
+}
+
 - (void) setKey: (NSString*) key withArchivedObject: (id) value
 {
 	[self setKey: key withObject: [NSArchiver archivedDataWithRootObject:value]];
@@ -174,6 +179,17 @@ Preferences *globalPrefs=nil;
 - (void) setKey: (NSString*) key withFlag: (BOOL) value
 {
 	[self setKey: key withObject: value?@"YES":@"NO"];
+}
+
+- (void) setKey: (NSString*) key withFloat: (float) value
+{
+	SLog(@"Preferences.setKey:\"%@\" withFloat:\"%f\"", key, value);
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if (defaults) {
+		[defaults setFloat:value forKey:key];
+		changed = YES;
+		[self notifyDependents];
+	}
 }
 
 - (void) setKey: (NSString*) key withObject: (id) value

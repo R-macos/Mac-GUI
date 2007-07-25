@@ -57,6 +57,7 @@
 - (void) setKey: (NSString*) key withObject: (id) value;
 - (void) setKey: (NSString*) key withFlag: (BOOL) value; // note: set doesn't recognize UNKNOWN!
 - (void) setKey: (NSString*) key withArchivedObject: (id) value;
+- (void) setKey: (NSString*) key withFloat: (float) value;
 
 - (void) commit;
 
@@ -64,6 +65,7 @@
 + (void) setKey: (NSString*) key withObject: (id) value;
 + (void) setKey: (NSString*) key withFlag: (BOOL) value;
 + (void) setKey: (NSString*) key withArchivedObject: (id) value;
++ (void) setKey: (NSString*) key withFloat: (float) value;
 
 + (NSString *) stringForKey: (NSString*) key withDefault: (NSString*) defaultString;
 + (NSString *) stringForKey: (NSString*) key; // returns nil if there is no such entry
