@@ -1855,8 +1855,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (IBAction)openDocument:(id)sender{
 	SLog(@" - openDocument");
 	char buf[1000];
-	[self handleChooseFile:&buf[0] len:1000 isNew:0];
-	[self application:NSApp openFile:[[NSString alloc] initWithCString:buf encoding:kCFStringEncodingUTF8]];
+	[self handleChooseFile:buf len:1000 isNew:0];
+	[self application:NSApp openFile:[NSString stringWithUTF8String:buf]];
 //	[[RDocumentController sharedDocumentController] openDocument: sender];
 }
 
@@ -1892,11 +1892,12 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (int) handleChooseFile:(char *)buf len:(int)len isNew:(int)isNew
 {
+	const char *fn;
 	int answer;
 	NSSavePanel *sp;
 	NSOpenPanel *op;
 	
-	buf[0] = '\0';
+	*buf = 0;
 	if(isNew==1){
 		sp = [NSSavePanel savePanel];
 		[sp setTitle:NLS(@"Choose New File Name")];
@@ -1904,8 +1905,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		
 		if(answer == NSOKButton) {
 			if([sp filename] != nil){
-				CFStringGetCString((CFStringRef)[sp filename], buf, len-1,  kCFStringEncodingUTF8); 
-				buf[len] = '\0';
+				fn = [[sp filename] UTF8String];
+				if (strlen(fn)>=len) {
+					SLog(@"** handleChooseFile: bufer too small, truncating");
+					memcpy(buf, fn, len-1);
+					buf[len-1]=0;
+				} else
+					strcpy(buf, fn);
 			}
 		}
 	} else {
@@ -1915,8 +1921,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		
 		if(answer == NSOKButton) {
 			if([op filename] != nil){
-				CFStringGetCString((CFStringRef)[op filename], buf, len-1,  kCFStringEncodingUTF8 ); 
-				buf[len] = '\0';
+				fn = [[op filename] UTF8String];
+				if (strlen(fn)>=len) {
+					SLog(@"** handleChooseFile: bufer too small, truncating");
+					memcpy(buf, fn, len-1);
+					buf[len-1]=0;
+				} else
+					strcpy(buf, fn);
 			}
 		}
 	}

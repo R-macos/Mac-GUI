@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-07-28
+*	fix encoding issue when opening a file via Open Document that
+	has non-ASCII characters in its path name
+
 Last-update: 2007-07-25
 *	add "Clear Console" (<Cmd><Opt><L>) menu item
 
