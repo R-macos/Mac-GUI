@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-08-13 [RG]
+*	Re-enabled make keywindow line in RQuatz.m
+
 Last-update: 2007-07-28
 *	fix encoding issue when opening a file via Open Document that
 	has non-ASCII characters in its path name
