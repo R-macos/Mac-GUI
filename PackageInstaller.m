@@ -498,7 +498,7 @@ NSString *location[4] = {
 	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL" withDefault:defaultCustomURL];
 	{
 		// add version number to local installation 
-		location[1] = [[NSString alloc] initWithFormat:@"\"~/Library/R/%@/library\"", Rapp_R_version_short];
+		location[1] = [[NSString alloc] initWithString: [NSString stringWithFormat:@"\"%@\"", [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath]]];
 	}
 	[formatCheckBox setEnabled:NO];
 	if (cURL) [urlTextField setStringValue:cURL];

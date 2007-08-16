@@ -1,19 +1,23 @@
 NEWS for R.app GUI for Mac OS X
 
-Last-update: 2007-08-13 [RG]
-*	Re-enabled make keywindow line in RQuatz.m
+Last-update: 2007-08-14 [SU]
+*	Use full path in local package installation to avoid
+	tilde expansion (which causes package update to fail).
 
-Last-update: 2007-07-28
+Last-update: 2007-08-13 [RG]
+*	Re-enabled make keywindow line in RQuartz.m
+
+Last-update: 2007-07-28 [SU]
 *	fix encoding issue when opening a file via Open Document that
 	has non-ASCII characters in its path name
 
-Last-update: 2007-07-25
+Last-update: 2007-07-25 [SU]
 *	add "Clear Console" (<Cmd><Opt><L>) menu item
 
 *	fix font handling for the console: the font size toolbar is now
 	correctly initialized the value is consistently stored
 
-Last-update: 2007-07-19
+Last-update: 2007-07-19 [SU]
 *	fix lock-ups in the editor when brace-highlighting and auto-close
 	happen at the same time (thanks to Andrew Beckman for reporting).
 	
@@ -50,7 +54,7 @@ Last-update: 2007-07-19
 	that you start via system(), so use with care. (It has no effect
 	if 'Redirect stdout/err' is set to NO)
 
-Last-update: 2007-07-18
+Last-update: 2007-07-18 [SU]
 *	set stderr/out timeout only after a successful connection,
 	this should eliminate "tossing reply message" errors while R starts
 
