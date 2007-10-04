@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.21 (4807) - supplied with R 2.6.0 --
+
 Last-update: 2007-08-14 [SU]
 *	Use full path in local package installation to avoid
 	tilde expansion (which causes package update to fail).
