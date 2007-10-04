@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2007
-@set FAQ-VERSION 2.5-1 @value{FAQ-YEAR}-07-01
-@set REL-VERSION 2.5.1
-@set GUI-VERSION 1.20
+@set FAQ-VERSION 2.6-0 @value{FAQ-YEAR}-10-03
+@set REL-VERSION 2.6.0
+@set GUI-VERSION 1.21
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -199,7 +199,7 @@ Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.5.1 @CRAN{} binary comes with GNU Fortran 4.2.0 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.6.0 @CRAN{} binary comes with GNU Fortran 4.2.1 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
 
 Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.x with gfortran 4.x, other combinations usually don't work.
 
@@ -390,13 +390,13 @@ Starting with @R{} 2.3.0 it is possible to build @R{} that runs on multiple arch
 
 In order to be able to build universal R, all necessary libraries must be available as @samp{i386} and @samp{ppc} binaries. For system libraries this is the default for Mac OS X on Intel Macs. Other libraries such as readline must be compiled accordingly.
 
-In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.5.1 in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
+In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.6.0 in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.5.1.tar.gz} is in the current directory, replace @samp{R-2.5.1} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.6.0.tar.gz} is in the current directory, replace @samp{R-2.6.0} with any other version or name as appropriate):
 @example
-tar fxz R-2.5.1.tar.gz
+tar fxz R-2.6.0.tar.gz
 mkdir R-ppc
 cd R-ppc
 ../R-2.5.1/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
@@ -560,7 +560,7 @@ The editor supports undo/redo operations on an appropriate level of granularity 
 be all or nothing). The editor has an optional facility to show line numbers. These help with
 locating error messages. The editor also responds to the 'Go to Line' Edit menu function. The
 associated Preference Pane allows enabling/disabling of the line numbers, as well as setting line
-number gutter width and text margin width.
+number gutter width (to fit larger line numbers) and text margin width.
 
 @node Editor text completion, Editor function list, Editor undo and line numbers, General Features
 @subsection Editor text completion
@@ -952,7 +952,7 @@ A Mac OS X specific requirements is that a prebuilt package is assumed to be nam
 
 @node Where are the packages I've installed?,  , Can I install packages built for other platforms?, How to install packages
 @section Where are the packages I've installed?
-The main library of packages is the one located inside the R.framework (in @code{/Library/Frameworks/R.framework/Resources/library}). This library contains the packages (base and recommended ones) distributed along with @R{}. Only administrators are allowed to install packages in this system-wide directory. Note that tis directory is @R{}-version-specific. Optionally users can install private packages in their @code{~/Library/R/x.y/library} directory where @code{x.y} denotes the R version without the patch level (such as 2.5).
+The main library of packages is the one located inside the R.framework (in @code{/Library/Frameworks/R.framework/Resources/library}). This library contains the packages (base and recommended ones) distributed along with @R{}. Only administrators are allowed to install packages in this system-wide directory. Note that this directory is @R{}-version-specific. Optionally users can install private packages in their @code{~/Library/R/x.y/library} directory where @code{x.y} denotes the R version without the patch level (such as 2.6) - see startup preferences.
 
 @noindent
 The Package Installer performs installation to either place depending on the installation target setting. The default for an admin users is to install packages system-wide, whereas the default for regular users is their private place.
@@ -1096,12 +1096,7 @@ define the environment variable DISPLAY before attempting to use X11 from inside
 Sys.putenv("DISPLAY"=":0")
 @end example
 If you don't like the X11 GUI you would probably want to build R using the Aqua version of TclTk (@pxref{Aqua TclTk headers and libraries (optional)}).
-After installing the R.framework you should do the following to have the quartz device working under Aqua TclTk. Open a
-Terminal window and move inside the @file{Resources/bin} directory of the @file{R.framework}
-(usually @file{/Library/Frameworks/R.framework}), then type the following
-@example
-sudo /Developer/Tools/Rez -t APPL Carbon.r -o R.bin
-@end example
+After installing the R.framework you may have to use @code{CarbonEL} package to allow the quartz device to work under Aqua TclTk.
 
 @node Internationalization of the R.app, Additional resources, TclTk issues, Top
 @chapter Internationalization of the R.app
@@ -1179,6 +1174,12 @@ killall -INT R
 
 If you see error messages upon start of the R GUI which contain @code{Library/InputManagers} anywhere in the text, then you have some broken haxxies installed in your system. Those messages do NOT come from @R{}, so don't blame us. Bundles located in @code{Library/InputManagers} of your home (or system) are hacks that get loaded into every Mac application that you start. In most cases you don't seem them crashing, because most applications don't show the console ouput, but @R{} does, so all the errors those hacks are causing become visible. The easiest remedy is to delete all offending bundles (possibly the whole @code{Library/InputManagers} folder) and get a fixed version of the hack (if you need it). The most common cause for broken hacks is system updgrade (e.g. you get a new Mac and you transfer you settings which include those hacks that are incompatible with your new Mac).
 
+If you want to disable all external error output in the GUI, use
+@smallexample
+defaults write org.R-project.R 'Ignore stderr' YES
+@end smallexample
+in the Terminal. Note, however, that this will disable @emph{all} error output from external programs including package installation or the @code{system} command.
+
 @node I don't see a thing when installing packages!, Why do I need custom compilers for the CRAN binary?, I see spurious error messages when starting R!, Sparse questions
 @section I don't see a thing when installing packages!
 The output is not produced continuously during the package installation. Unlike previous GUIs R.app does its best to display the output as soon as possible, but for example the documentation script does not print anything until done.
@@ -1187,7 +1188,7 @@ Also note that the development build of R.app sends output to the error console 
 
 @node Why do I need custom compilers for the CRAN binary?,  , I don't see a thing when installing packages!, Sparse questions
 @section Why do I need custom compilers for the CRAN binary?
-As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 2.4.1 and a GNU Fortran 4.2.0 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/} and it lives in @code{/usr/local}.
+As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 2.4.1 and a GNU Fortran 4.2.1 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/} and it lives in @code{/usr/local}.
 
 @CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler was kept in place, but @R{} used the new compiler for compiling packages instead. The main reason for this was that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we switched back to Apple's compilers for @R{} 2.5.0 and later.
 
