@@ -93,9 +93,18 @@ int main(int argc, const char *argv[])
 #if (R_VERSION < R_Version(2,5,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.9/bioc','1.9/data/annotation','1.9/data/experiment','1.9/omegahat'),sep=''))"];
 #else
-	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.0/bioc','2.0/data/annotation','2.0/data/experiment','2.0/extra'),sep=''))"];
 #if (R_VERSION < R_Version(2,6,0))
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.0/bioc','2.0/data/annotation','2.0/data/experiment','2.0/extra'),sep=''))"];
+#else
+#if (R_VERSION < R_Version(2,7,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.1/bioc','2.1/data/annotation','2.1/data/experiment','2.1/extra'),sep=''))"];
+#else
+#if (R_VERSION < R_Version(2,8,0))
+	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.2/bioc','2.2/data/annotation','2.2/data/experiment','2.2/extra'),sep=''))"];
+#else
+#error "BioC repository is unknown, please add it to main.m or get more recent GUI sources"
+#endif
+#endif
 #endif
 #endif
 #endif
