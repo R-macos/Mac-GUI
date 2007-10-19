@@ -18,6 +18,11 @@
 #ifndef __PRIVATE_R_HEADER__
 #define __PRIVATE_R_HEADER__
 
+/* since Xcode may be using different compiler/flags than R, we have to make sure that inlining behavior is ok. Specifically, Xcode doesn't use -std=gnu99 which changes the inlining, so if we are in Leopard's gcc *and* Xcode didn't enable C99 then we have to override the inline semantics flag as it will be wrong! I have fixed this for R-devel (2.7.0-to-be), but previous R versions need it. */
+#if __APPLE_CC__ > 5400 && !defined(C99_INLINE_SEMANTICS) && !defined(__STDC_VERSION__)
+#define C99_INLINE_SEMANTICS 0
+#endif
+
 #include <Rversion.h>
 
 /* we include config.h in private headers only since 2.3.0 */
