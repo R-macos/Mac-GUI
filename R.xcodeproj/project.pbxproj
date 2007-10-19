@@ -883,6 +883,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -898,6 +899,7 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* R */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* R */,
 				1C34E60F06F9EC7D00211ACC /* sush */,
@@ -1506,6 +1508,7 @@
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
 		};
@@ -1531,6 +1534,7 @@
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
