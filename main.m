@@ -70,7 +70,7 @@ int main(int argc, const char *argv[])
 	 /* register Quartz symbols */
 	 QuartzRegisterSymbols();
 	 /* create quartz.save function in tools:quartz */
-	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e))"];
+	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e)}))"];
 	 
 	 SLog(@" - set R options");
 	 // force html-help, because that's the only format we can handle ATM

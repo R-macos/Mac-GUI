@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-10-23 [SU]
+*	fix missing quartz.save()
+
 Last-update: 2007-10-19 [SU]
 *	minor Leopard-related fixes. It is now safe to cross-build
 	R and the GUI in Leopard for Tiger.
