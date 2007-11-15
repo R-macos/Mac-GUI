@@ -109,6 +109,21 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
     [astr release];
 }
 
+/* override lockFocus behavior by de-miniaturizing the window if necessary */
+- (void) lockFocus
+{
+	if (![self canDraw]) {
+		NSWindow *window = [self window];
+		if (window && [window isMiniaturized])
+			[window deminiaturize:self];
+		if (![self canDraw]) {
+			SLog(@"RDevieView.lockFocus: cannot draw despite window wakeup attempt (%@), cannot lock", window);
+			return;
+		}
+	}
+	[super lockFocus];
+}
+
 /*	FIXME: zoom, minimize don't work. With grid, it waits for event before rewriting, it
 	essentialy blocks R
 */	
