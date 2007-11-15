@@ -2,7 +2,7 @@ NEWS for R.app GUI for Mac OS X
 
 Last-update: 2007-11-15 [SU]
 *	fix exceptions in Quartz when trying to plot in a miniaturized
-	window (thanks to Jordan Thomson for reporting)
+	window (thanks to CO Taylor for reporting)
 
 Last-update: 2007-10-23 [SU]
 *	fix missing quartz.save()
