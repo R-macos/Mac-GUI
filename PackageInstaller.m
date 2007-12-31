@@ -407,7 +407,7 @@ NSString *location[4] = {
 	[installButton setEnabled:(loadedPkgUrl==pkgUrl || pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)];
 	
 	if (pkgUrl==kLocalBin || pkgUrl==kLocalSrc || pkgUrl==kLocalDir)
-		[installButton setTitle:NLS(@"Install…")];
+		[installButton setTitle:NLS(@"Install‚Ä¶")];
 	else
 		[installButton setTitle:NLS(@"Install Selected")];
 			
