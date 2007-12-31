@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2007-12-31 [SU]
+*	execute (<Cmd><Enter>) in editor sends the current line if no
+	characters are selected
+
 -- Release Version 1.22 (4860) - supplied with R 2.6.1 --
 
 Last-update: 2007-11-15 [SU]
