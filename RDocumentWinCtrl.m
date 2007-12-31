@@ -993,6 +993,13 @@ reHilite:
 	if (sr.length>0) {
 		NSString *stx = [[[textView textStorage] string] substringWithRange:sr];
 		[[RController sharedController] sendInput:stx];
+	} else { // if nothing is selected, execute the current line
+		NSRange lineRange = [[[textView textStorage] string] lineRangeForRange:sr];
+		if (lineRange.length < 1)
+			NSBeep(); // nothing to execute
+		else
+			[[RController sharedController] sendInput:
+			 [[[textView textStorage] string] substringWithRange: lineRange]];
 	}
 	execNewlineFlag=YES;
 }
