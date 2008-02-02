@@ -161,6 +161,7 @@ static RController* sharedRController;
 	busyRFlag = YES;
 	appLaunched = NO;
 	terminating = NO;
+	processingEvents = NO;
 	outputPosition = promptPosition = committedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
@@ -945,6 +946,8 @@ extern BOOL isTimeToFinish;
 
 - (char*) handleReadConsole: (int) addtohist
 {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	if (currentConsoleInput) {
 		[currentConsoleInput release];
 		currentConsoleInput=nil;
@@ -964,7 +967,7 @@ extern BOOL isTimeToFinish;
 	
 	{
 		const char *c = [currentConsoleInput UTF8String];
-		if (!c) return 0;
+		if (!c) { [pool release]; return 0; }
 		if (strlen(c)>readConsTransBufferSize-1) { // grow as necessary
 			free(readConsTransBuffer);
 			readConsTransBufferSize = (strlen(c)+2048)&0xfffffc00;
@@ -973,6 +976,7 @@ extern BOOL isTimeToFinish;
 		
 		strcpy(readConsTransBuffer, c);
 	}
+	[pool release];
 	return readConsTransBuffer;
 }
 
@@ -1987,19 +1991,35 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (void) doProcessEvents: (BOOL) blocking {
 	NSEvent *event;
 	
-	if (blocking){
-		event = [NSApp nextEventMatchingMask:NSAnyEventMask
-								   untilDate:[NSDate distantFuture]
-									  inMode:NSDefaultRunLoopMode
-									 dequeue:YES];
-		[NSApp sendEvent:event];	
-	} else {
-		while( (event = [NSApp nextEventMatchingMask:NSAnyEventMask
-										   untilDate:[NSDate dateWithTimeIntervalSinceNow:0.0001]
-											  inMode:NSDefaultRunLoopMode 
-											 dequeue:YES]))
-			[NSApp sendEvent:event];
+	// avoid re-entrant event processing
+	if (processingEvents) return;
+	
+	processingEvents = YES;
+	@try {
+#ifdef USE_POOLS
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+#endif
+		if (blocking){
+			event = [NSApp nextEventMatchingMask:NSAnyEventMask
+									   untilDate:[NSDate distantFuture]
+										  inMode:NSDefaultRunLoopMode
+										 dequeue:YES];
+			[NSApp sendEvent:event];	
+		} else {
+			while( (event = [NSApp nextEventMatchingMask:NSAnyEventMask
+											   untilDate:[NSDate dateWithTimeIntervalSinceNow:0.0001]
+												  inMode:NSDefaultRunLoopMode 
+												 dequeue:YES]))
+				[NSApp sendEvent:event];
+		}
+#ifdef USE_POOLS
+		[pool release];
+#endif
 	}
+	@catch (NSException *foo) {
+		NSLog(@"*** RController: caught ObjC exception while processing system events. Update to the latest GUI version and consider reporting this properly (see FAQ) if it persists and is not known. \n*** reason: %@\n*** name: %@, info: %@\n*** Version: R %s.%s (%s) R.app %@%s\nConsider saving your work soon in case this develops into a problem.", [foo reason], [foo name], [foo userInfo], R_MAJOR, R_MINOR, R_SVN_REVISION, [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], getenv("R_ARCH"));
+	}
+	processingEvents = NO;
 	return;
 }
 
