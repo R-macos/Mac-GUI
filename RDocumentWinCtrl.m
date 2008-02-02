@@ -459,23 +459,29 @@ static int dirtyLimit = 600; // max. length of highlighting extension before giv
 
 - (void) updatePreferences {
 	SLog(@"RDocumentWinCtrl.updatePreferences");
+	// for sanity's sake
+	if (!defaultsInitialized) {
+		[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
+		defaultsInitialized=YES;
+	}
+	
 	NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
-	if (c && c!=[[self window] backgroundColor]) {
+	if (c && c != [[self window] backgroundColor]) {
 		[[self window] setBackgroundColor:c];
 		//		[[self window] display];
 	}
 	c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
-	if (c) { shColorNormal = c; [textView setInsertionPointColor:c]; }
+	if (c) { [shColorNormal release]; shColorNormal = [c retain]; [textView setInsertionPointColor:c]; }
 	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
-	if (c) shColorString = c;
+	if (c) { [shColorString release]; shColorString = [c retain]; }
 	c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];
-	if (c) shColorNumber = c;
+	if (c) { [shColorNumber release]; shColorNumber = [c retain]; }
 	c=[Preferences unarchivedObjectForKey:keywordSyntaxColorKey withDefault:nil];
-	if (c) shColorKeyword = c;
+	if (c) { [shColorKeyword release]; shColorKeyword = [c retain]; }
 	c=[Preferences unarchivedObjectForKey:commentSyntaxColorKey withDefault:nil];
-	if (c) shColorComment = c;
+	if (c) { [shColorComment release]; shColorComment = [c retain]; }
 	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
-	if (c) shColorIdentifier = c;
+	if (c) { [shColorIdentifier release]; shColorIdentifier = [c retain]; }
 
 	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
 	

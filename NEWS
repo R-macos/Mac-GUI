@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-02-01 [SU]
+*	fix spurious crashes in the editor (prematurely released colors)
+	(thanks to Carolyn J Buck-Gengler for reporting)
+
 Last-update: 2007-12-31 [SU]
 *	execute (<Cmd><Enter>) in editor sends the current line if no
 	characters are selected
