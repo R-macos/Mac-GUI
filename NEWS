@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-02-02 [SU]
+*	reduce Quartz memory footprint substantially
+
 Last-update: 2008-02-01 [SU]
 *	fix spurious crashes in the editor (prematurely released colors)
 	(thanks to Carolyn J Buck-Gengler for reporting)

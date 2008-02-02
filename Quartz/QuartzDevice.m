@@ -115,6 +115,12 @@ typedef struct {
 }
 QuartzDesc;
 
+// Quartz - private autorelease pool
+// Note: this is experimental and currently unsafe, because Quartz can
+//       be called asynchronously from withing the event processing
+#ifdef QPOOL
+NSAutoreleasePool *quartzPool = nil;
+#endif
 
 Rboolean innerQuartzDevice(NewDevDesc *dd,char *display,
 						   double width,double height,
@@ -327,6 +333,9 @@ void RQuartz_DiplayGList(RDeviceView * devView)
 static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
 		    double wid, double hgt, int bg)
 {
+#ifdef QPOOL
+	if (!quartzPool) quartzPool = [[NSAutoreleasePool alloc] init];
+#endif
 	NSString *title = [NSString stringWithUTF8String:dsp];
 	RQuartz         *newDocument;
 
@@ -361,7 +370,7 @@ static Rboolean	RQuartz_Open(NewDevDesc *dd, QuartzDesc *xd, char *dsp,
 	[[newDocument getDeviceWindow] setContentSize:NSMakeSize(xd->windowWidth, xd->windowHeight) ];
 	[[newDocument getDeviceWindow] orderFrontRegardless];
 	
-	xd->QuartzDoc = newDocument;
+	xd->QuartzDoc = [newDocument retain];
     xd->color = xd->fill = R_TRANWHITE;
     xd->resize = false;
     xd->lineType = 0;
@@ -374,12 +383,17 @@ static void 	RQuartz_Close(NewDevDesc *dd)
 {
 	QuartzDesc *xd = (QuartzDesc *) dd->deviceSpecific;
 
-	if(xd->QuartzDoc)
+	if(xd->QuartzDoc) {
 		[xd->QuartzDoc close];
+		[xd->QuartzDoc release];
+		// xd->QuartzDoc = nil;
+	}
 
 	if(xd->family)
 		free(xd->family);
-			
+#ifdef QPOOL
+	if (quartzPool) { [quartzPool release]; quartzPool = [[NSAutoreleasePool alloc] init]; }
+#endif
 	free(xd);
 }
 
@@ -465,6 +479,10 @@ static void 	RQuartz_NewPage(R_GE_gcontext *gc, NewDevDesc *dd)
 
 	if ([xd->DevWindow isMiniaturized])
 		[xd->DevWindow deminiaturize:nil];
+
+#ifdef QPOOL
+	if (quartzPool) { [quartzPool release]; quartzPool = [[NSAutoreleasePool alloc] init]; }
+#endif
 	
 	[xd->DevView lockFocus];
 	ClipArea = [xd->DevView bounds];
@@ -583,7 +601,7 @@ static void 	RQuartz_Rect(double x0, double y0, double x1, double y1,
 {
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 
-	NSBezierPath *rPath = [NSBezierPath bezierPath];
+	NSBezierPath *rPath = [[NSBezierPath alloc] init];
 	[rPath appendBezierPathWithRect:NSMakeRect(round(x0),round(y0),round(x1)-round(x0),round(y1)-round(y0))];
 	
 		[xd->DevView lockFocus];
@@ -594,7 +612,8 @@ static void 	RQuartz_Rect(double x0, double y0, double x1, double y1,
 	RQuartz_SetLineProperties(gc, rPath, dd);
 	[rPath fill];
 	[rPath stroke];
-	
+	[rPath release];
+
 		[xd->DevView unlockFocus];
 
 }
@@ -604,7 +623,7 @@ static void 	RQuartz_Circle(double x, double y, double r,
 {
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
     
-	NSBezierPath *rPath = [NSBezierPath bezierPath];
+	NSBezierPath *rPath = [[NSBezierPath alloc] init];
 	[rPath appendBezierPathWithOvalInRect:NSMakeRect(x-r, y-r, 2*r, 2*r)];
 	
 		[xd->DevView lockFocus];
@@ -615,7 +634,7 @@ static void 	RQuartz_Circle(double x, double y, double r,
 	RQuartz_SetLineProperties(gc, rPath, dd);
 	[rPath fill];
 	[rPath stroke];
-	
+	[rPath release];
 		[xd->DevView unlockFocus];
 
 }
@@ -626,7 +645,7 @@ static void 	RQuartz_Line(double x1, double y1, double x2, double y2,
 {
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 		
-	NSBezierPath *rPath = [NSBezierPath bezierPath];
+	NSBezierPath *rPath = [[NSBezierPath alloc] init];
 	[rPath moveToPoint:NSMakePoint(x1,y1)];
 	[rPath lineToPoint:NSMakePoint(x2,y2)];
 	
@@ -638,6 +657,7 @@ static void 	RQuartz_Line(double x1, double y1, double x2, double y2,
 	RQuartz_SetFill( gc->fill, gc->gamma, dd);
 	RQuartz_SetLineProperties(gc,  rPath, dd);
 	[rPath stroke];
+	[rPath release];
 	
 		[xd->DevView unlockFocus];
 }
@@ -649,7 +669,7 @@ static void 	RQuartz_Polyline(int n, double *x, double *y,
     int	i;
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 
-	NSBezierPath *rPath = [NSBezierPath bezierPath];
+	NSBezierPath *rPath = [[NSBezierPath alloc] init];
 	[rPath moveToPoint:NSMakePoint(x[0],y[0])];
     
     for (i = 1; i < n; i++) 
@@ -663,6 +683,7 @@ static void 	RQuartz_Polyline(int n, double *x, double *y,
 	RQuartz_SetFill( gc->fill, gc->gamma, dd);
 	RQuartz_SetLineProperties(gc,  rPath, dd);
 	[rPath stroke];
+	[rPath release];
 	
 		[xd->DevView unlockFocus];
 
@@ -675,7 +696,7 @@ static void 	RQuartz_Polygon(int n, double *x, double *y,
     int	i;
 	QuartzDesc *xd = (QuartzDesc*)dd->deviceSpecific;
 
-	NSBezierPath *rPath = [NSBezierPath bezierPath];
+	NSBezierPath *rPath = [[NSBezierPath alloc] init];
 	[rPath moveToPoint:NSMakePoint(x[0],y[0])];
     
     for (i = 1; i < n; i++) 
@@ -691,6 +712,7 @@ static void 	RQuartz_Polygon(int n, double *x, double *y,
 	RQuartz_SetLineProperties(gc,  rPath, dd);
 	[rPath fill];
 	[rPath stroke];
+	[rPath release];
 	
 		[xd->DevView unlockFocus];
 
@@ -841,6 +863,8 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
 	
 	NSFont* font = [fm fontWithFamily:currFont traits:traits weight:5 size:size];
 
+	NSLog(@"Quartz: font %@", font);
+	
 	return font;
 }
 
