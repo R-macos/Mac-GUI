@@ -126,8 +126,10 @@ extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 extern void (*ptr_do_flushconsole)();
 extern void (*ptr_R_ProcessEvents)();
 
-#if (R_VERSION >= R_Version(2,1,0))
-extern int  (*ptr_R_EditFile)(char *); /* in r-devel ptr_Raqua_Edit is no longer used*/
+#if R_VERSION >= R_Version(2,1,0)
+#if R_VERSION < R_Version(2,6,0)
+extern int  (*ptr_R_EditFile)(char *); /* more recent R versions have this one */
+#endif
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy for help/search/pkg-info */
 #else
