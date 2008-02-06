@@ -863,8 +863,6 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
 	
 	NSFont* font = [fm fontWithFamily:currFont traits:traits weight:5 size:size];
 
-	NSLog(@"Quartz: font %@", font);
-	
 	return font;
 }
 
@@ -1003,7 +1001,7 @@ NSPoint computeTopLeftCornerForDevNum(int devnum, int quartzpos, int width, int 
 SEXP QuartzSaveContents(SEXP nr, SEXP fn, SEXP type, SEXP formatOptions) {
 	int dev = asInteger(nr)-1;
     int ds = NumDevices();
-	char *fts;
+	const char *fts;
 	BOOL bitmap = YES;
 	NSBitmapImageFileType ftype = NSPNGFileType;
 	
