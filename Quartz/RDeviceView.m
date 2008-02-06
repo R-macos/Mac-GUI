@@ -45,7 +45,6 @@
 
 extern void RQuartz_DiplayGList(RDeviceView * devView);
 
-#define POOL NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]
 @implementation RDeviceView
 
 - (id)initWithFrame:(NSRect)frameRect

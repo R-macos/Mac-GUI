@@ -946,8 +946,10 @@ extern BOOL isTimeToFinish;
 
 - (char*) handleReadConsole: (int) addtohist
 {
+#ifdef USE_POOLS
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
+#endif
+	
 	if (currentConsoleInput) {
 		[currentConsoleInput release];
 		currentConsoleInput=nil;
@@ -967,7 +969,10 @@ extern BOOL isTimeToFinish;
 	
 	{
 		const char *c = [currentConsoleInput UTF8String];
+#ifdef USE_POOLS
+
 		if (!c) { [pool release]; return 0; }
+#endif
 		if (strlen(c)>readConsTransBufferSize-1) { // grow as necessary
 			free(readConsTransBuffer);
 			readConsTransBufferSize = (strlen(c)+2048)&0xfffffc00;
@@ -976,13 +981,17 @@ extern BOOL isTimeToFinish;
 		
 		strcpy(readConsTransBuffer, c);
 	}
+#ifdef USE_POOLS
 	[pool release];
+#endif
 	return readConsTransBuffer;
 }
 
 - (int) handleEdit: (char*) file
 {
-	//NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+#ifdef USE_POOLS
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+#endif
 	NSString *fn = [NSString stringWithUTF8String:file];
 	if (fn) fn = [fn stringByExpandingTildeInPath];
 	if (!fn) Rf_error("Invalid file name.");
@@ -1011,7 +1020,9 @@ extern BOOL isTimeToFinish;
 		}
 	}
 	
-	//[pool release];
+#ifdef USE_POOLS
+	[pool release];
+#endif
 	return(0);
 }
 
