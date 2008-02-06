@@ -993,6 +993,82 @@ reHilite:
 	[textView setEditable:editable];
 }
 
+- (IBAction)comment: (id)sender
+{
+	NSRange sr = [textView selectedRange];
+	NSTextStorage *ts = [textView textStorage];
+
+	@try { // make this safe in case we cross some bounds
+		if (sr.length==0) { // just place a # at the carret
+			[textView insertText:@"#"];
+			return;
+		}
+		// the length is non-zero, so we get something
+		NSString *s = [[ts string] substringWithRange:sr];
+		
+		// the hard way - Tiger and earlier don't have "stringByReplacingOccurrencesOfString:withString:"
+		const char *str = [s UTF8String], *c = str;
+		int reps = 0; // count the # of ocurrences
+		while (*c) if (*(c++)=='\n') reps++;
+		int i = strlen(str), j = i + reps + 2, k = i + reps;
+		char *tm = malloc(j);
+		if (!tm) return;
+		tm[0]='#';
+		tm[--j]=0; // fill the string backwards, including # as needed
+		while (--i >= 0) {
+			if (str[i]=='\n') tm[--j]='#';
+			tm[--j]=str[i];
+		}
+		// if the selection ended by a newline, don't comment that one out - doing so might look counter-intuitive
+		if (k > 0 && tm[k]=='#' && tm[k-1]=='\n') tm[k]=0;
+		s = [NSString stringWithUTF8String:tm];
+		free(tm);		
+		
+		// s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@"\n#"];
+		// if (s) s = [@"#" stringByAppendingString:s];
+		if (s) [ts replaceCharactersInRange:sr withString:s];
+		sr.length = [s length];
+		[textView setSelectedRange:sr];
+	}
+	@catch (NSException *e) {
+	}	
+}
+
+- (IBAction)uncomment: (id)sender
+{
+	NSRange sr = [textView selectedRange];
+	NSTextStorage *ts = [textView textStorage];
+	
+	@try { // make this safe in case we cross some bounds
+		if (sr.length==0 ) { // just place a # at the carret
+			//[textView insertText:@"#"];
+			return;
+		}
+		// the length is non-zero, so we get something
+		NSString *s = [[ts string] substringWithRange:sr];
+
+		const char *str = [s UTF8String];
+		int i = strlen(str), j = 0, k = 0;
+		char *tm = malloc(i);
+		if (str[j]=='#') j++;
+		while (j < i) {
+			tm[k++]=str[j++];
+			if (str[j-1]=='\n' && str[j]=='#') j++;
+		}
+		tm[k]=0;
+		s = [NSString stringWithUTF8String:tm];
+		free(tm);		
+		
+		// Leopard: s = [s stringByReplacingOccurrencesOfString:@"\n#" withString:@"\n"];
+
+		if (s) [ts replaceCharactersInRange:sr withString:s];
+		sr.length = [s length];
+		[textView setSelectedRange:sr];
+	}
+	@catch (NSException *e) {
+	}	
+}
+
 - (IBAction)executeSelection:(id)sender
 {
 	NSRange sr = [textView selectedRange];

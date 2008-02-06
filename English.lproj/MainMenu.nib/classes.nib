@@ -1,218 +1,470 @@
-{
-    IBClasses = (
-        {
-            CLASS = AMPreferenceWindowController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {delegate = id; }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {
-            ACTIONS = {loadRData = id; showHelp = id; }; 
-            CLASS = DataManager; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {DataManagerWindow = id; RDataSource = NSTableView; dataInfoView = id; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                activateQuartzDevice = id; 
-                executeSelection = id; 
-                goToLine = id; 
-                sourceCurrentDocument = id; 
-                sourceFile = id; 
-            }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                changeSearchType = id; 
-                printDocument = id; 
-                runHelpSearch = id; 
-                showMainHelp = id; 
-                showRFAQ = id; 
-                whatsNew = id; 
-            }; 
-            CLASS = HelpManager; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                HelpView = WebView; 
-                back = NSButton; 
-                forward = NSButton; 
-                helpWindow = NSWindow; 
-                searchField = NSSearchField; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = MyWebView; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = NSObject; LANGUAGE = ObjC; }, 
-        {CLASS = PackageEntry; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {
-                installSelected = id; 
-                reloadPIData = id; 
-                reloadURL = id; 
-                runPkgSearch = id; 
-                selectOldPackages = id; 
-                setFormat = id; 
-                setLocation = id; 
-                setURL = id; 
-                toggleShowInstalled = id; 
-                updateAll = id; 
-            }; 
-            CLASS = PackageInstaller; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                busyIndicator = NSProgressIndicator; 
-                depsCheckBox = NSButton; 
-                formatCheckBox = NSButton; 
-                getListButton = NSButton; 
-                installButton = NSButton; 
-                locationMatrix = NSMatrix; 
-                pkgDataSource = NSTableView; 
-                pkgScrollView = NSScrollView; 
-                pkgSearchField = NSSearchField; 
-                pkgSearchMenu = NSMenu; 
-                pkgWindow = id; 
-                repositoryButton = NSPopUpButton; 
-                updateAllButton = NSButton; 
-                urlTextField = NSTextField; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {reloadPMData = id; showInfo = id; }; 
-            CLASS = PackageManager; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                PackageInfoView = id; 
-                PackageManagerWindow = id; 
-                packageDataSource = NSTableView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {showPrefsWindow = id; sortByAlphabet = id; sortByCategory = id; }; 
-            CLASS = PrefWindowController; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = AMPreferenceWindowController; 
-        }, 
-        {
-            ACTIONS = {
-                breakR = id; 
-                changeFontSize = id; 
-                checkForUpdates = id; 
-                clearConsole = id; 
-                clearWorkSpace = id; 
-                doClearHistory = id; 
-                doLoadHistory = id; 
-                doSaveHistory = id; 
-                flushconsole = id; 
-                fontSizeBigger = id; 
-                fontSizeSmaller = id; 
-                getWorkingDir = id; 
-                historyDeleteEntry = id; 
-                historyDoubleClick = id; 
-                installFromBinary = id; 
-                installFromDir = id; 
-                installFromSource = id; 
-                loadWorkSpace = id; 
-                loadWorkSpaceFile = id; 
-                makeConsoleKey = id; 
-                makeLastEditorKey = id; 
-                makeLastQuartzKey = id; 
-                newDocument = id; 
-                newQuartzDevice = id; 
-                openColors = id; 
-                openDocument = id; 
-                otherEventLoops = id; 
-                performHelpSearch = id; 
-                quitR = id; 
-                resetWorkingDir = id; 
-                runX11 = id; 
-                saveWorkSpace = id; 
-                saveWorkSpaceFile = id; 
-                setDefaultColors = id; 
-                setWorkingDir = id; 
-                showVignettes = id; 
-                showWorkSpace = id; 
-                showWorkingDir = id; 
-                sourceFile = id; 
-                sourceOrLoadFile = id; 
-                toggleAuthentication = id; 
-                toggleDataManager = id; 
-                toggleHistory = id; 
-                togglePackageInstaller = id; 
-                togglePackageManager = id; 
-                toggleWSBrowser = id; 
-            }; 
-            CLASS = RController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                HistoryDrawer = NSDrawer; 
-                RConsoleWindow = NSWindow; 
-                WDirView = NSTextField; 
-                clearHistory = NSButton; 
-                consoleTextView = RTextView; 
-                deleteEntry = NSButton; 
-                fontSizeField = NSTextField; 
-                fontSizeStepper = NSStepper; 
-                fontSizeView = NSView; 
-                helpSearch = NSSearchField; 
-                historyView = NSTableView; 
-                loadHistory = NSButton; 
-                prefsCtrl = PrefWindowController; 
-                progressWheel = NSProgressIndicator; 
-                saveHistory = NSButton; 
-                statusLine = NSTextField; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            CLASS = RDocumentController; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSDocumentController; 
-        }, 
-        {
-            CLASS = REditor; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {dataWindow = NSWindow; editorSource = NSTableView; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = RTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }, 
-        {
-            CLASS = RToolbar; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {ConsoleWindow = NSWindow; RToolbarView = NSView; }; 
-            SUPERCLASS = NSDocument; 
-        }, 
-        {
-            ACTIONS = {showInfo = id; }; 
-            CLASS = SearchTable; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {TopicHelpView = id; searchTableWindow = id; topicsDataSource = NSTableView; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {cancelSelection = id; returnSelected = id; }; 
-            CLASS = SelectList; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                SelectListWindow = id; 
-                cancelButton = NSButton; 
-                listDataSource = NSTableView; 
-                okButton = NSButton; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {reloadWSBData = id; }; 
-            CLASS = WSBrowser; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {WSBDataSource = NSOutlineView; WSBWindow = NSWindow; }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>RDocumentController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSDocumentController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>loadRData</key>
+				<string>id</string>
+				<key>showHelp</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>DataManager</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>DataManagerWindow</key>
+				<string>id</string>
+				<key>RDataSource</key>
+				<string>NSTableView</string>
+				<key>dataInfoView</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>showPrefsWindow</key>
+				<string>id</string>
+				<key>sortByAlphabet</key>
+				<string>id</string>
+				<key>sortByCategory</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>PrefWindowController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>AMPreferenceWindowController</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>RTextView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSTextView</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>activateQuartzDevice</key>
+				<string>id</string>
+				<key>comment</key>
+				<string>id</string>
+				<key>executeSelection</key>
+				<string>id</string>
+				<key>goToLine</key>
+				<string>id</string>
+				<key>sourceCurrentDocument</key>
+				<string>id</string>
+				<key>sourceFile</key>
+				<string>id</string>
+				<key>uncomment</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSObject</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>reloadPMData</key>
+				<string>id</string>
+				<key>showInfo</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>PackageManager</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>PackageInfoView</key>
+				<string>id</string>
+				<key>PackageManagerWindow</key>
+				<string>id</string>
+				<key>packageDataSource</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>AMPreferenceWindowController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>delegate</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>editObject</key>
+				<string>id</string>
+				<key>reloadWSBData</key>
+				<string>id</string>
+				<key>remObject</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>WSBrowser</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>WSBDataSource</key>
+				<string>NSOutlineView</string>
+				<key>WSBWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>showInfo</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>SearchTable</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>TopicHelpView</key>
+				<string>id</string>
+				<key>searchTableWindow</key>
+				<string>id</string>
+				<key>topicsDataSource</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>breakR</key>
+				<string>id</string>
+				<key>changeFontSize</key>
+				<string>id</string>
+				<key>checkForUpdates</key>
+				<string>id</string>
+				<key>clearConsole</key>
+				<string>id</string>
+				<key>clearWorkSpace</key>
+				<string>id</string>
+				<key>doClearHistory</key>
+				<string>id</string>
+				<key>doLoadHistory</key>
+				<string>id</string>
+				<key>doSaveHistory</key>
+				<string>id</string>
+				<key>flushconsole</key>
+				<string>id</string>
+				<key>fontSizeBigger</key>
+				<string>id</string>
+				<key>fontSizeSmaller</key>
+				<string>id</string>
+				<key>getWorkingDir</key>
+				<string>id</string>
+				<key>historyDeleteEntry</key>
+				<string>id</string>
+				<key>historyDoubleClick</key>
+				<string>id</string>
+				<key>installFromBinary</key>
+				<string>id</string>
+				<key>installFromDir</key>
+				<string>id</string>
+				<key>installFromSource</key>
+				<string>id</string>
+				<key>loadWorkSpace</key>
+				<string>id</string>
+				<key>loadWorkSpaceFile</key>
+				<string>id</string>
+				<key>makeConsoleKey</key>
+				<string>id</string>
+				<key>makeLastEditorKey</key>
+				<string>id</string>
+				<key>makeLastQuartzKey</key>
+				<string>id</string>
+				<key>newDocument</key>
+				<string>id</string>
+				<key>newQuartzDevice</key>
+				<string>id</string>
+				<key>openColors</key>
+				<string>id</string>
+				<key>openDocument</key>
+				<string>id</string>
+				<key>otherEventLoops</key>
+				<string>id</string>
+				<key>performHelpSearch</key>
+				<string>id</string>
+				<key>quitR</key>
+				<string>id</string>
+				<key>resetWorkingDir</key>
+				<string>id</string>
+				<key>runX11</key>
+				<string>id</string>
+				<key>saveWorkSpace</key>
+				<string>id</string>
+				<key>saveWorkSpaceFile</key>
+				<string>id</string>
+				<key>setDefaultColors</key>
+				<string>id</string>
+				<key>setWorkingDir</key>
+				<string>id</string>
+				<key>showVignettes</key>
+				<string>id</string>
+				<key>showWorkSpace</key>
+				<string>id</string>
+				<key>showWorkingDir</key>
+				<string>id</string>
+				<key>sourceFile</key>
+				<string>id</string>
+				<key>sourceOrLoadFile</key>
+				<string>id</string>
+				<key>toggleAuthentication</key>
+				<string>id</string>
+				<key>toggleDataManager</key>
+				<string>id</string>
+				<key>toggleHistory</key>
+				<string>id</string>
+				<key>togglePackageInstaller</key>
+				<string>id</string>
+				<key>togglePackageManager</key>
+				<string>id</string>
+				<key>toggleWSBrowser</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>RController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>HistoryDrawer</key>
+				<string>NSDrawer</string>
+				<key>RConsoleWindow</key>
+				<string>NSWindow</string>
+				<key>WDirView</key>
+				<string>NSTextField</string>
+				<key>clearHistory</key>
+				<string>NSButton</string>
+				<key>consoleTextView</key>
+				<string>RTextView</string>
+				<key>deleteEntry</key>
+				<string>NSButton</string>
+				<key>fontSizeField</key>
+				<string>NSTextField</string>
+				<key>fontSizeStepper</key>
+				<string>NSStepper</string>
+				<key>fontSizeView</key>
+				<string>NSView</string>
+				<key>helpSearch</key>
+				<string>NSSearchField</string>
+				<key>historyView</key>
+				<string>NSTableView</string>
+				<key>loadHistory</key>
+				<string>NSButton</string>
+				<key>prefsCtrl</key>
+				<string>PrefWindowController</string>
+				<key>progressWheel</key>
+				<string>NSProgressIndicator</string>
+				<key>saveHistory</key>
+				<string>NSButton</string>
+				<key>statusLine</key>
+				<string>NSTextField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>installSelected</key>
+				<string>id</string>
+				<key>reloadPIData</key>
+				<string>id</string>
+				<key>reloadURL</key>
+				<string>id</string>
+				<key>runPkgSearch</key>
+				<string>id</string>
+				<key>selectOldPackages</key>
+				<string>id</string>
+				<key>setFormat</key>
+				<string>id</string>
+				<key>setLocation</key>
+				<string>id</string>
+				<key>setURL</key>
+				<string>id</string>
+				<key>toggleShowInstalled</key>
+				<string>id</string>
+				<key>updateAll</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>PackageInstaller</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>busyIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>depsCheckBox</key>
+				<string>NSButton</string>
+				<key>formatCheckBox</key>
+				<string>NSButton</string>
+				<key>getListButton</key>
+				<string>NSButton</string>
+				<key>installButton</key>
+				<string>NSButton</string>
+				<key>locationMatrix</key>
+				<string>NSMatrix</string>
+				<key>pkgDataSource</key>
+				<string>NSTableView</string>
+				<key>pkgScrollView</key>
+				<string>NSScrollView</string>
+				<key>pkgSearchField</key>
+				<string>NSSearchField</string>
+				<key>pkgSearchMenu</key>
+				<string>NSMenu</string>
+				<key>pkgWindow</key>
+				<string>id</string>
+				<key>repositoryButton</key>
+				<string>NSPopUpButton</string>
+				<key>updateAllButton</key>
+				<string>NSButton</string>
+				<key>urlTextField</key>
+				<string>NSTextField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>cancelSelection</key>
+				<string>id</string>
+				<key>returnSelected</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>SelectList</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>SelectListWindow</key>
+				<string>id</string>
+				<key>cancelButton</key>
+				<string>NSButton</string>
+				<key>listDataSource</key>
+				<string>NSTableView</string>
+				<key>okButton</key>
+				<string>NSButton</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>addCol</key>
+				<string>id</string>
+				<key>addRow</key>
+				<string>id</string>
+				<key>remCols</key>
+				<string>id</string>
+				<key>remRows</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>REditor</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>dataWindow</key>
+				<string>NSWindow</string>
+				<key>editorSource</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changeSearchType</key>
+				<string>id</string>
+				<key>printDocument</key>
+				<string>id</string>
+				<key>runHelpSearch</key>
+				<string>id</string>
+				<key>showMainHelp</key>
+				<string>id</string>
+				<key>showRFAQ</key>
+				<string>id</string>
+				<key>whatsNew</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>HelpManager</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>HelpView</key>
+				<string>WebView</string>
+				<key>back</key>
+				<string>NSButton</string>
+				<key>forward</key>
+				<string>NSButton</string>
+				<key>helpWindow</key>
+				<string>NSWindow</string>
+				<key>searchField</key>
+				<string>NSSearchField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

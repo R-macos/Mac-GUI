@@ -6,6 +6,8 @@ Last-update: 2008-02-02 [SU]
 *	improve stability by preventing re-entrant event processing
 	(among others fixes lattice+maximize crash in Quartz)
 
+*	add comment/uncomment items
+
 Last-update: 2008-02-01 [SU]
 *	fix spurious crashes in the editor (prematurely released colors)
 	(thanks to Carolyn J Buck-Gengler for reporting)
