@@ -3,10 +3,10 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2007
-@set FAQ-VERSION 2.6-0 @value{FAQ-YEAR}-10-03
-@set REL-VERSION 2.6.0
-@set GUI-VERSION 1.21
+@set FAQ-YEAR 2008
+@set FAQ-VERSION 2.6-2 @value{FAQ-YEAR}-02-08
+@set REL-VERSION 2.6.2
+@set GUI-VERSION 1.23
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -143,6 +143,8 @@ R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The R.a
 
 The installation is done by double-clicking on the disk image, which opens a new Finder window with the installer package, followed by double-clicking on that package installer. The installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the installer will require password or login of an administrator. The installation can be customized, but the default is suitable for most users.
 
+Note that @R{} version 2.6.0 and earlier do not install properly on Mac OS X 10.5 (Leopard) which was not released by that time. Such old @R{} versions can be installed manually by double-clicking on individual installation packages in the @file{Packages} directory of the distribution.
+
 If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes. Note that the @CRAN{} binary includes R shared library, so there is no need to re-compile @R{} with @code{--enable-R-shlib}.
 
 @node How can R for Mac OS X be uninstalled?,  , How can R for Mac OS X be obtained and installed?, Introduction
@@ -155,6 +157,8 @@ If you want to get rid of R from the Terminal, simply run (prepend @code{sudo} i
 @example
 rm -rf /Library/Frameworks/R.framework /Applications/R.app
 @end example
+
+However, Mac OS X also keeps an installation receipt if an application was installed using the Apple Installer. These receipts are usually kept in @file{/Library/Receipts} and Apple's Installer decides based on the receipt whether a program will be installed or upgraded. If you do not want to perform an upgrade (e.g. if you want to keep multiple @R{} versions in parallel), you will have to remove the corresponding receipt(s). Depending on the OS X version @code{rm -rf /Library/Receipts/R-*} may work. The exact details are system-dependent, please see the corrensponding documentation by Apple.
 
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
@@ -199,7 +203,7 @@ Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.6.0 @CRAN{} binary comes with GNU Fortran 4.2.1 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.6.2 @CRAN{} binary comes with GNU Fortran 4.2.1 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
 
 Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.x with gfortran 4.x, other combinations usually don't work.
 
@@ -224,9 +228,12 @@ It installs everything in @file{/usr/local}.
 @node X11 window server (optional), X11 TclTk headers and libraries (optional), libreadline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
-Mac OS X 10.3 (Panther) and later include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installation CD/DVD.
 
-To install X11 on Mac OS X 10.3 or higher, follow these steps:
+Mac OS X 10.5 (Leopard) installs X11 by default, however the default X11 installaation (as of Mac OS X 10.5.1) ships with a broken OpenGL library that prevents compilation. See @uref{http://r.research.att.com/building.html} for the latest update on the details. Also @code{/usr/X11/bin} must be on the @code{PATH} in order for @R{} to recognize X11 properly (e.g. by issuing @code{export PATH=/usr/X11/bin:$PATH}).
+
+Mac OS X 10.3 (Panther) and 10.4 (Tiger) include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installation CD/DVD.
+
+To install X11 on those systems, follow these steps:
 
 @enumerate
 @item
@@ -390,16 +397,16 @@ Starting with @R{} 2.3.0 it is possible to build @R{} that runs on multiple arch
 
 In order to be able to build universal R, all necessary libraries must be available as @samp{i386} and @samp{ppc} binaries. For system libraries this is the default for Mac OS X on Intel Macs. Other libraries such as readline must be compiled accordingly.
 
-In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.6.0 in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
+In addition, the compilers must support both architectures as well. You will need Xcode Developer Tools version 2.4.0 or higher and a Fortran compiler that can create universal binaries. Such compiler is supplied with @R{} 2.6.x in the @CRAN{} binary package and available from @uref{http://r.research.att.com/tools/}.
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.6.0.tar.gz} is in the current directory, replace @samp{R-2.6.0} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.6.2.tar.gz} is in the current directory, replace @samp{R-2.6.2} with any other version or name as appropriate):
 @example
-tar fxz R-2.6.0.tar.gz
+tar fxz R-2.6.2.tar.gz
 mkdir R-ppc
 cd R-ppc
-../R-2.5.1/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
+../R-2.6.2/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
 CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
 FC="gfortran-4.0 -arch ppc"
 make
@@ -412,7 +419,7 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.5.1/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+../R-2.6.2/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
 CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
 FC="gfortran-4.0 -arch i386"
 make
