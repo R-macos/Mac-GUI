@@ -231,6 +231,7 @@ BOOL preventReentrance = NO;
 	// FIXME: we should set a lock here
 	[replHandler handleBusy:YES];
 	if (insideR) SLog(@"***********> REngine.begin: expected insideR to be 0, but it's %d", insideR);
+	if (insideR < 0) insideR = 0; // this can happen 
 	insideR++;
 }
 
