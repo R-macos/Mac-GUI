@@ -162,6 +162,7 @@ static RController* sharedRController;
 	appLaunched = NO;
 	terminating = NO;
 	processingEvents = NO;
+	breakPending = NO;
 	outputPosition = promptPosition = committedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
@@ -955,8 +956,10 @@ extern BOOL isTimeToFinish;
 		currentConsoleInput=nil;
 	}
 	
-	while ([consoleInputQueue count]==0)
+	while ([consoleInputQueue count]==0) {
+		processingEvents = NO; // we should be at the top level, so for sanity reasons make sure we always process events
 		[self doProcessEvents: YES];
+	}
 	
 	currentConsoleInput = [consoleInputQueue objectAtIndex:0];
 	[consoleInputQueue removeObjectAtIndex:0];
@@ -1724,7 +1727,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	if (childPID)
 		kill(childPID, SIGINT);
 	else
-		onintr();
+		breakPending = YES;
+	// we cannot break immediately in case we're in the middle of an inner event loop processing.
+	// therefore we delay the break until the event loop is back (see doProcessEvents:)
 }
 
 - (IBAction)quitR:(id)sender{
@@ -2031,6 +2036,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		NSLog(@"*** RController: caught ObjC exception while processing system events. Update to the latest GUI version and consider reporting this properly (see FAQ) if it persists and is not known. \n*** reason: %@\n*** name: %@, info: %@\n*** Version: R %s.%s (%s) R.app %@%s\nConsider saving your work soon in case this develops into a problem.", [foo reason], [foo name], [foo userInfo], R_MAJOR, R_MINOR, R_SVN_REVISION, [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], getenv("R_ARCH"));
 	}
 	processingEvents = NO;
+	if (breakPending) {
+		breakPending = NO;
+		onintr();
+	}
 	return;
 }
 

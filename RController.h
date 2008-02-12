@@ -127,6 +127,7 @@
 	BOOL forceStdFlush;
 	BOOL terminating;
 	BOOL processingEvents;
+	BOOL breakPending;
 	
 	char *writeBuffer;
 	char *writeBufferPos;
