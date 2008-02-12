@@ -839,7 +839,7 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
  	char *fontFamily=0;
 	NSFontTraitMask  traits   = 0;
 	NSString *currFont = @"Helvetica";
-	 
+	int weight = 5; 
 	
 	if((gc->fontface == 5) || (strcmp(gc->fontfamily,"symbol")==0))
 		currFont = @"Symbol";
@@ -856,13 +856,16 @@ NSFont *RQuartz_Font(R_GE_gcontext *gc,  NewDevDesc *dd)
 			((gc->fontface==2||gc->fontface==4)?NSBoldFontMask:0)|
 			((gc->fontface==3||gc->fontface==4)?NSItalicFontMask:0);
 
+	if (gc->fontface==2 || gc->fontface==4) weight+=4;
+	
 	NSRange range = NSMakeRange(0, [currFont length]);
 	range = [currFont rangeOfString: @"-" options: 0 range: range];
 	if (range.location != NSNotFound )
 		currFont = [currFont substringWithRange:NSMakeRange(0, range.location)];
 	
-	NSFont* font = [fm fontWithFamily:currFont traits:traits weight:5 size:size];
-
+	NSFont* font = [fm fontWithFamily:currFont traits:traits weight:weight size:size];
+	SLog(@"RQuartz_Font.family: %@, traits:%x, size:%f (ff=%d)", currFont, (int) traits, (float) size, (int)gc->fontface);
+	SLog(@" - resulting font: %@", font);
 	return font;
 }
 
