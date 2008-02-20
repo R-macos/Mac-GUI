@@ -1,5 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-02-20 [SU]
+*	fixes crash when an externally run script produces output on
+	stderr and takes longer than the remote call timeout (e.g. when
+	installing packages from sources that produce errors/warnings)
+	
+*	process output of the system call immediately (improved
+	visibility of package installation output etc.)
+
 Last-update: 2008-02-12 [SU]
 *	fixed an issue where pressing <Esc> or "Stop" would put R into
 	an infinite loop

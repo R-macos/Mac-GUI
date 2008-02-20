@@ -641,7 +641,10 @@ static RController* sharedRController;
         } 
 		if (FD_ISSET(stderrFD, &readfds)) {
 			if (bufFD!=1 && pib>0) {
-				[rc writeLogsWithBytes:buf length:pib type:bufFD];
+				@try {
+					[rc writeLogsWithBytes:buf length:pib type:bufFD];
+				} @catch(NSException *ex) {
+				}				
 				pib=0;
 			}
 			bufFD=1;
@@ -1170,12 +1173,18 @@ extern BOOL isTimeToFinish;
 	if (pid==-1) return -1;
 		
 	{
-		struct timespec peSleep = { 0, 100000000 }; // 100ms sleep
 		while (1) {
 			pid_t w = waitpid(pid, &cstat, WNOHANG);
 			if (w!=0) break;
-			nanosleep(&peSleep, 0); // sleep at least 50ms between PE calls (they're expensive)
-			Re_ProcessEvents();
+			// NOTE: this deliberately circumvents doProcessEvents: since we need events
+			// to be processed in all cases, even if system was called from within
+			// the event handler and as such can run recursively
+			NSEvent *event;
+			if( (event = [NSApp nextEventMatchingMask:NSAnyEventMask
+											untilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]
+											   inMode:NSDefaultRunLoopMode 
+											  dequeue:YES]))
+				[NSApp sendEvent:event];
 		}
 	}
 	[[RController sharedController] rmChildProcess: pid];
