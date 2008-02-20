@@ -1539,6 +1539,95 @@
 			};
 			name = Debug;
 		};
+		68F2A1CA0D6C6B0400A7D43B /* Deployment64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc64,
+					x86_64,
+				);
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+			};
+			name = Deployment64;
+		};
+		68F2A1CB0D6C6B0400A7D43B /* Deployment64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = R_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					R,
+				);
+				PRODUCT_NAME = R;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment64;
+		};
+		68F2A1CC0D6C6B0400A7D43B /* Deployment64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sush;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment64;
+		};
+		68F2A1CD0D6C6B0400A7D43B /* Deployment64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment64;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1547,6 +1636,7 @@
 			buildConfigurations = (
 				680F0B2C0997CE66009CDBE8 /* Development */,
 				680F0B2D0997CE66009CDBE8 /* Deployment */,
+				68F2A1CC0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1557,6 +1647,7 @@
 			buildConfigurations = (
 				680F0B310997CE66009CDBE8 /* Development */,
 				680F0B320997CE66009CDBE8 /* Deployment */,
+				68F2A1CD0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1567,6 +1658,7 @@
 			buildConfigurations = (
 				680F0B360997CE66009CDBE8 /* Development */,
 				680F0B370997CE66009CDBE8 /* Deployment */,
+				68F2A1CB0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1577,6 +1669,7 @@
 			buildConfigurations = (
 				680F0B3B0997CE66009CDBE8 /* Development */,
 				680F0B3C0997CE66009CDBE8 /* Deployment */,
+				68F2A1CA0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;

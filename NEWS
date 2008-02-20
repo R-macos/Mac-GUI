@@ -8,6 +8,8 @@ Last-update: 2008-02-20 [SU]
 *	process output of the system call immediately (improved
 	visibility of package installation output etc.)
 
+*	added "Deployment64" configuration for 64-bit builds of the GUI
+
 Last-update: 2008-02-12 [SU]
 *	fixed an issue where pressing <Esc> or "Stop" would put R into
 	an infinite loop
