@@ -1153,6 +1153,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * What happens if I drag a file on the R icon?::  
 * How can I interrupt lengthy operations or output?::  
 * I see spurious error messages when starting R!::  
+* Which BLAS is used and how can it be changed?::  
 * I don't see a thing when installing packages!::  
 * Why do I need custom compilers for the CRAN binary?::  
 @end menu
@@ -1176,7 +1177,7 @@ For the command line version the same is achieved by pressing @kbd{@key{Ctrl}-c}
 killall -INT R
 @end smallexample
 
-@node I see spurious error messages when starting R!, I don't see a thing when installing packages!, How can I interrupt lengthy operations or output?, Sparse questions
+@node I see spurious error messages when starting R!, Which BLAS is used and how can it be changed?, How can I interrupt lengthy operations or output?, Sparse questions
 @section I see spurious error messages when starting R!
 
 If you see error messages upon start of the R GUI which contain @code{Library/InputManagers} anywhere in the text, then you have some broken haxxies installed in your system. Those messages do NOT come from @R{}, so don't blame us. Bundles located in @code{Library/InputManagers} of your home (or system) are hacks that get loaded into every Mac application that you start. In most cases you don't seem them crashing, because most applications don't show the console ouput, but @R{} does, so all the errors those hacks are causing become visible. The easiest remedy is to delete all offending bundles (possibly the whole @code{Library/InputManagers} folder) and get a fixed version of the hack (if you need it). The most common cause for broken hacks is system updgrade (e.g. you get a new Mac and you transfer you settings which include those hacks that are incompatible with your new Mac).
@@ -1187,7 +1188,27 @@ defaults write org.R-project.R 'Ignore stderr' YES
 @end smallexample
 in the Terminal. Note, however, that this will disable @emph{all} error output from external programs including package installation or the @code{system} command.
 
-@node I don't see a thing when installing packages!, Why do I need custom compilers for the CRAN binary?, I see spurious error messages when starting R!, Sparse questions
+@node Which BLAS is used and how can it be changed?, I don't see a thing when installing packages!, I see spurious error messages when starting R!, Sparse questions
+@section Which BLAS is used and how can it be changed?
+
+Which BLAS library is used depends on the way @R{} was compiled (see `R Installation and Anministration' manual for details). Current @R{} binaries supplied from CRAN provide both vecLib-based BLAS and reference BLAS shipped with @R{}. vecLib is a part of Apple's Accelerate framework which provides an optimized BLAS implementation for Mac hardware. Although fast, it is not under our control and may possibly deliver inaccurate results.
+
+The CRAN binary uses @code{--enable-BLAS-shlib} option and two Rblas shared libraries are supplied: @file{libRblas.vecLib.dylib} which uses vecLib BLAS and @file{libRblas.0.dylib} which uses reference BLAS from @R{}. A symbolic link @file{libRblas.dylib} determines which one is used. Currently the default is to use vecLib for speed, although @R{} BLAS is recommended for precision.
+
+In order to change which BLAS is used, change the @file{libRblas.dylib} symlink correspondingly - for example in Terminal:
+@example
+cd /Library/Frameworks/R.framework/Resources/lib
+
+# for vecLib use
+ln -sf libRblas.vecLib.dylib libRblas.dylib
+
+# for R reference BLAS use
+ln -sf libRblas.0.dylib libRblas.dylib
+@end example
+
+This feature is only present in the @R{} CRAN binary. Ordinarily compiled @R{} from sources will only have one of the above BLAS libraries, corresponding to the configuration options used.
+
+@node I don't see a thing when installing packages!, Why do I need custom compilers for the CRAN binary?, Which BLAS is used and how can it be changed?, Sparse questions
 @section I don't see a thing when installing packages!
 The output is not produced continuously during the package installation. Unlike previous GUIs R.app does its best to display the output as soon as possible, but for example the documentation script does not print anything until done.
 
