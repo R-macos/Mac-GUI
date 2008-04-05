@@ -231,8 +231,10 @@ int initR(int argc, char **argv, int save_action) {
 	ptr_do_wsbrowser = Re_do_wsbrowser;
 	ptr_do_hsbrowser = Re_do_hsbrowser;
 	
+#if R_VERSION < R_Version(2,7,0)
 	ptr_CocoaInnerQuartzDevice = innerQuartzDevice;
 	ptr_CocoaGetQuartzParameters = getQuartzParameters;
+#endif
 	ptr_CocoaSystem = Re_system;
 	ptr_do_dataentry = Re_dataentry;
 #if (R_VERSION >= R_Version(2,1,0))

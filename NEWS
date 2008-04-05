@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-04-05 [SU]
+*	add support for "\r", "\b" and "\a" in console output 
+
 Last-update: 2008-02-20 [SU]
 *	fixes crash when an externally run script produces output on
 	stderr and takes longer than the remote call timeout (e.g. when

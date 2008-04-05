@@ -33,11 +33,16 @@
 #import "../REngine/RSEXP.h"
 #import "../REngine/REngine.h"
 
+#include <Rversion.h>
+
+/* only R version < 2.7.0 needs an external Quartz device */
+
+#if R_VERSION < R_Version(2,7,0)
+
 /* we need this to register QuartzSaveContents */
 #include "privateR.h"
 #include <Rdynpriv.h>
 
-#include <Rversion.h>
 #include <R.h>
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>
@@ -1076,4 +1081,12 @@ void QuartzRegisterSymbols() {
 void QuartzRegisterSymbols() {
 	R_registerRoutines(R_getEmbeddingDllInfo(), 0, quartzCallMethods, 0, 0);
 }
+#endif
+
+#else
+
+/* FIXME: fake functions until we clean up */
+void QuartzRegisterSymbols() {}
+void RQuartz_DiplayGList(void * devView) {}
+
 #endif
