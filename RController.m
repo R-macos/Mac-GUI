@@ -184,6 +184,8 @@ static RController* sharedRController;
 	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
 	textFont = [[NSFont userFixedPitchFontOfSize:currentFontSize] retain];
 		
+	specialCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"\r\b\a"] retain];
+	
 	return self;
 }
 
@@ -860,34 +862,143 @@ extern BOOL isTimeToFinish;
 
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */
 - (void) writeConsoleDirectly: (NSString*) txt withColor: (NSColor*) color{
-	@synchronized(textViewSync) {
-		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
-		NSRange origSel = [consoleTextView selectedRange];
-		unsigned tl = [txt length];
-		if (tl>0) {
-			unsigned oldCL=committedLength;
-			/* NSLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d", origSel.location,
-			origSel.length, outputPosition, tl, promptPosition, committedLength); */
-			SLog(@"RController writeConsoleDirectly, beginEditing");
-			[textStorage beginEditing];
-			committedLength=0;
-			[textStorage insertText:txt atIndex:outputPosition withColor:color];
-			if (outputPosition<=promptPosition) promptPosition+=tl;
-			committedLength=oldCL;
-			if (outputPosition<=committedLength) committedLength+=tl;
-			if (outputPosition<=origSel.location) origSel.location+=tl;
-			outputPosition+=tl;
-			[textStorage endEditing];
-			SLog(@"RController writeConsoleDirectly, endEditing");
-			[consoleTextView setSelectedRange:origSel];
-			[consoleTextView scrollRangeToVisible:origSel];
+	if (!txt) return;
+	NSRange scr = [txt rangeOfCharacterFromSet:specialCharacters];
+	if (scr.location != NSNotFound) { /* at least one special character */
+		int tl = [txt length], cl = scr.location;
+		unichar sc = [txt characterAtIndex: cl];
+		SLog(@"writeConsoleDirectly special char 0x%x (@%d of %d, full string:'%@')", (int) sc, cl, tl, txt);
+		if (sc == '\r') { /* CR */
+			if (tl < cl + 1 && [txt characterAtIndex: cl + 1] == '\n') { /* CR+LF -> can use as-is */
+				if (tl > cl + 2) {
+					NSString *head = [txt substringToIndex: cl + 2];
+					NSString *tail = [txt substringFromIndex: cl + 2];
+					[self writeConsoleDirectly:head withColor:color];
+					[self writeConsoleDirectly:tail withColor:color];
+					return;
+				}
+			} else if (cl > 0 && [txt characterAtIndex:cl - 1] == '\n') { /* LF+CR -> ignore */
+				NSString *head = [txt substringToIndex: cl];
+				cl++; while (cl < tl && [txt characterAtIndex:cl] == '\r') cl++; /* skip all subsequent CRs */
+				if (cl < tl) { /* is there more behind those CRs? Then we need to split-process it */
+					NSString *tail = [txt substringFromIndex: cl];
+					[self writeConsoleDirectly:tail withColor:color];
+					return;
+				} else txt = head; /* just proceed with trailing CRs removed */
+			} else { /* ok, a "true" CR without any of its LF friends */
+				NSString *head = [txt substringToIndex: cl];
+				cl++; while (cl < tl && [txt characterAtIndex:cl] == '\r') cl++; /* skip all subsequent CRs */
+				NSString *tail = nil;
+				if (cl < tl) tail = [txt substringFromIndex: cl];
+				[self writeConsoleDirectly:head withColor:color];
+				if (outputPosition < 0) outputPosition = [[consoleTextView textStorage] length];
+				NSRange lr = [[[consoleTextView textStorage] string] lineRangeForRange:NSMakeRange(outputPosition, 0)];
+				/* do whatever we need to do to mark CR */
+				outputPosition = lr.location;
+				outputOverwrite = lr.length;
+				//[consoleTextView setSelectedRange:lr];
+				if (tail) [self writeConsoleDirectly:tail withColor:color];
+				return;
+			}
+		} else {
+			if (cl > 0) {
+				NSString *head = [txt substringToIndex: cl];
+				SLog(@"write head '%@'", head);
+				[self writeConsoleDirectly:head withColor:color];
+			}
+			NSRange csr = [consoleTextView selectedRange];
+			if (outputPosition < 0) outputPosition = [[consoleTextView textStorage] length];
+			[consoleTextView setSelectedRange:NSMakeRange(outputPosition, 0)];
+			while (cl < tl) {
+				unichar tsc = [txt characterAtIndex:cl];
+				SLog(@" @%d: %d", cl, tsc);
+				if (tsc == '\a')
+					NSBeep();
+				else if (tsc == '\b' && outputPosition > 0) {
+					int ocl = committedLength;
+					committedLength = 0;
+					[consoleTextView deleteBackward:self];
+					committedLength = ocl;
+					if (outputPosition <= committedLength) committedLength--;
+					if (outputPosition <= promptPosition) promptPosition--;
+					if (outputPosition <= csr.location) csr.location--;
+					outputPosition--;
+				}
+				else break;
+				cl++;
+			}
+			[consoleTextView setSelectedRange:csr];
+			if (cl < tl) {
+				NSString *tail = [txt substringFromIndex: cl];
+				SLog(@"process tail '%@'", tail);
+				[self writeConsoleDirectly:tail withColor:color];
+			}
+			return;
 		}
+	}
+	BOOL inEditing = NO;
+	@try {
+		@synchronized(textViewSync) {
+			RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
+			NSRange origSel = [consoleTextView selectedRange];
+			unsigned tl = [txt length];
+			int delta = 0;
+			if (tl>0) {
+				unsigned oldCL=committedLength;
+				SLog(@"original: %d:%d, insertion: %d, length: %d, prompt: %d, commit: %d, overwrite:%d", origSel.location,
+					 origSel.length, outputPosition, tl, promptPosition, committedLength, outputOverwrite);
+				if (outputPosition > [textStorage length]) outputPosition = [textStorage length];
+				SLog(@"RController writeConsoleDirectly, beginEditing");
+				[textStorage beginEditing];
+				inEditing = YES;
+				committedLength=0;
+				if (outputOverwrite) {
+					int otl = [txt length];
+					NSRange nlr = [txt rangeOfString:@"\n"]; /* if it has any newlines, we replace only up to the newline */
+					if (nlr.location != NSNotFound) {
+						int nlpos = nlr.location;
+						nlr.length = (nlpos < outputOverwrite) ? nlpos : outputOverwrite;
+						nlr.location = outputPosition;
+						[textStorage replaceCharactersInRange:nlr withString:@""];
+						[textStorage insertText:[txt substringToIndex:nlpos] atIndex:outputPosition withColor:color];
+						delta = nlpos - outputOverwrite;
+						txt = [txt substringFromIndex:nlr.length];
+						tl = [txt length];
+						outputPosition += outputOverwrite;
+						outputOverwrite = 0;
+					} else {
+						if (otl > outputOverwrite) otl = outputOverwrite;
+						nlr.location = outputPosition;
+						nlr.length = otl;
+						[textStorage replaceCharactersInRange:nlr withString:@""];
+						outputOverwrite -= otl;
+						delta = -nlr.length;
+					}
+				}
+				[textStorage insertText:txt atIndex:outputPosition withColor:color];
+				if (outputPosition <= promptPosition) promptPosition += tl + delta;
+				committedLength=oldCL;
+				if (outputPosition <= committedLength) committedLength += tl + delta;
+				if (outputPosition <= origSel.location) origSel.location += tl + delta;
+				outputPosition += tl;
+				[textStorage endEditing];
+				inEditing = NO;
+				SLog(@"RController writeConsoleDirectly, endEditing");
+				[consoleTextView setSelectedRange:origSel];
+				[consoleTextView scrollRangeToVisible:origSel];
+			}
+		}
+	}
+	@catch (NSException *e) {
+		SLog(@"** EXCEPTION while editing console: %@", e);
+		if (inEditing) [[consoleTextView textStorage] endEditing];
 	}
 }
 
 /* Just writes the prompt in a different color */
 - (void)handleWritePrompt: (NSString*) prompt {
     [self handleFlushConsole];
+	outputOverwrite=0; // disable any overwrites
 	@synchronized(textViewSync) {
 		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
 		unsigned textLength = [textStorage length];

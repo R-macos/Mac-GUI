@@ -98,6 +98,7 @@
 	unsigned committedLength; // any text before this position cannot be edited by the user
     unsigned promptPosition;  // the last prompt is positioned at this position
 	unsigned outputPosition;  // any output (stdxx or consWrite) is to be place here, if -1 then the text can be appended
+	int outputOverwrite;      // length of text that can be overwriten on output
 	
     int stdoutFD;
     int stderrFD;
@@ -132,6 +133,8 @@
 	char *writeBuffer;
 	char *writeBufferPos;
 	int  writeBufferLen;
+	
+	NSCharacterSet *specialCharacters;
 	
 	NSString *lastShownWD; // holds current directory after it has been shown (in non-abreviated form)
 	
