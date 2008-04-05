@@ -555,6 +555,22 @@ static RController* sharedRController;
 	appLaunched = YES;
 	[self setStatusLineText:@""];
 
+    {
+	// check locale
+	RSEXP * x = [[REngine mainEngine] evaluateString:@"Sys.getlocale()"];
+	if (x) {
+	    NSString *s = [x string];
+	    if (s) {
+		NSRange r = [s rangeOfString:@"utf" options:NSCaseInsensitiveSearch];
+		if (r.location == NSNotFound) {
+		    [self writeConsoleDirectly:NLS(@"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n") withColor:[NSColor redColor]];
+		}
+	    }
+	    [x release];
+	}
+    }
+	
+    
 	SLog(@" - done, ready to go");
 }
 
