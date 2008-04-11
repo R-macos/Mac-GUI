@@ -45,6 +45,10 @@
 #include <langinfo.h>
 #include <locale.h>
 
+#if R_VERSION >= R_Version(2,7,0)
+#include <R_ext/QuartzDevice.h>
+#endif
+
 #import <sys/fcntl.h>
 #import <sys/select.h>
 #import <sys/types.h>
@@ -495,6 +499,15 @@ static RController* sharedRController;
 		[self doLoadHistory:nil];
 	}
 		
+#if R_VERSION >= R_Version(2,7,0)
+	/* set embedding flags such that Quartz knows that we have set everything up already */
+	QuartzFunctions_t *qf = getQuartzFunctions();
+	if (qf) {
+		int eflags = QP_Flags_CFLoop | QP_Flags_Cocoa | QP_Flags_Front;
+		qf->SetParameter(NULL, QuartzParam_EmbeddingFlags, &eflags);
+	}
+#endif
+	
 	SLog(@" - awake is done");
 }
 
@@ -1849,12 +1862,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	if (flag) {
 		NSString *width = [Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"];
 		NSString *height = [Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"];
-		cmd = [[[[@"quartz(display=\"\",width=" stringByAppendingString:width]
-			stringByAppendingString:@",height="] stringByAppendingString:height]
-			stringByAppendingString:@")"];
+		cmd = [NSString stringWithFormat:@"quartz(width=%@,height=%@)", width, height];
 	}
 	else
-		cmd = [@"quartz(display=\"\"" stringByAppendingString:@")"];
+		cmd = @"quartz()";
 	
 	[[REngine mainEngine] executeString:cmd];
 }
