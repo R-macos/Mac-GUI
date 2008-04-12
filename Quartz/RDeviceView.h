@@ -29,6 +29,17 @@
 
 /* RDeviceView */
 
+#include <Rversion.h>
+
+#if R_VERSION >= R_Version(2,7,0)
+
+#import <Cocoa/Cocoa.h>
+
+@interface RDeviceView : NSView
+@end
+
+#else
+
 #import <Cocoa/Cocoa.h>
 
 @interface RDeviceView : NSView
@@ -52,3 +63,5 @@
 - (void) saveAsPDF: (NSString*) fname;
 
 @end
+
+#endif

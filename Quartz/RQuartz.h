@@ -28,12 +28,21 @@
  */
 
 
-
 #import <Cocoa/Cocoa.h>
 
 #define quartzDocType @"Quartz Graphics"
 
 #import "RDeviceView.h"
+
+#include <Rversion.h>
+#if R_VERSION >= R_Version(2,7,0)
+
+@interface RQuartz : NSDocument
+{
+}
+@end
+
+#else
 
 @interface RQuartz : NSDocument
 {
@@ -53,3 +62,5 @@
 - (NSString*) deviceName;
 
 @end
+
+#endif

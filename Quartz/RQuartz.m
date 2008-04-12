@@ -34,7 +34,9 @@
 #import "RDeviceView.h"
 #import "../REngine/REngine.h"
 
+#include <Rversion.h>
 #include <Graphics.h>
+#if R_VERSION < R_Version(2,7,0)
 #include <Rdevices.h>
 
 // we'll need to clarify if any special action is necessary ...
@@ -273,3 +275,4 @@
 
 @end
 
+#endif

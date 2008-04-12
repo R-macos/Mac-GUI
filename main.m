@@ -86,28 +86,20 @@ int main(int argc, const char *argv[])
 	 SLog(@" - set BioC repositories");
 #if (R_VERSION < R_Version(2,3,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
-#else
-#if (R_VERSION < R_Version(2,4,0))
+#elif (R_VERSION < R_Version(2,4,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.8/bioc','1.8/data/annotation','1.8/data/experiment','1.8/omegahat','1.8/lindsey'),sep=''))"];
-#else
-#if (R_VERSION < R_Version(2,5,0))
+#elif (R_VERSION < R_Version(2,5,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.9/bioc','1.9/data/annotation','1.9/data/experiment','1.9/omegahat'),sep=''))"];
-#else
-#if (R_VERSION < R_Version(2,6,0))
+#elif (R_VERSION < R_Version(2,6,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.0/bioc','2.0/data/annotation','2.0/data/experiment','2.0/extra'),sep=''))"];
-#else
-#if (R_VERSION < R_Version(2,7,0))
+#elif (R_VERSION < R_Version(2,7,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.1/bioc','2.1/data/annotation','2.1/data/experiment','2.1/extra'),sep=''))"];
-#else
-#if (R_VERSION < R_Version(2,8,0))
+#elif (R_VERSION < R_Version(2,8,0))
 	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.2/bioc','2.2/data/annotation','2.2/data/experiment','2.2/extra'),sep=''))"];
+#elif (R_VERSION < R_Version(2,9,0))
+	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.3/bioc','2.3/data/annotation','2.3/data/experiment','2.3/extra'),sep=''))"];
 #else
 #error "BioC repository is unknown, please add it to main.m or get more recent GUI sources"
-#endif
-#endif
-#endif
-#endif
-#endif
 #endif
 	 SLog(@" - loading secondary NIBs");
 	 if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {

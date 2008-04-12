@@ -499,15 +499,6 @@ static RController* sharedRController;
 		[self doLoadHistory:nil];
 	}
 		
-#if R_VERSION >= R_Version(2,7,0)
-	/* set embedding flags such that Quartz knows that we have set everything up already */
-	QuartzFunctions_t *qf = getQuartzFunctions();
-	if (qf) {
-		int eflags = QP_Flags_CFLoop | QP_Flags_Cocoa | QP_Flags_Front;
-		qf->SetParameter(NULL, QuartzParam_EmbeddingFlags, &eflags);
-	}
-#endif
-	
 	SLog(@" - awake is done");
 }
 
@@ -519,6 +510,15 @@ static RController* sharedRController;
 	[self setOptionWidth:YES];
 	[consoleTextView setEditable:YES];
 	[self flushROutput];
+	
+#if R_VERSION >= R_Version(2,7,0)
+	/* set embedding flags such that Quartz knows that we have set everything up already */
+	QuartzFunctions_t *qf = getQuartzFunctions();
+	if (qf) {
+		int eflags = QP_Flags_CFLoop | QP_Flags_Cocoa | QP_Flags_Front;
+		qf->SetParameter(NULL, QuartzParam_EmbeddingFlags, &eflags);
+	}
+#endif
 	
 	SLog(@" - setup notification and timers");
 	[[NSNotificationCenter defaultCenter] 
@@ -2055,6 +2055,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	else // for the console this is the same as Save As ..
 		[self saveDocumentAs:sender];
 	[RConsoleWindow makeKeyWindow];
+}
+
+- (IBAction)runPageLayout:(id)sender {
+	[NSApp runPageLayout:sender];
 }
 
 - (int) handleChooseFile:(char *)buf len:(int)len isNew:(int)isNew

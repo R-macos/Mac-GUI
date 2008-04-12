@@ -43,8 +43,12 @@
 #include <R_ext/Parse.h>
 #include <Parse.h>
 
+#if R_VERSION < R_Version(2,7,0)
 #include <Rdevices.h>
 #include <R_ext/GraphicsDevice.h>
+#else
+#include <R_ext/GraphicsEngine.h>
+#endif
 
 #include <Rdefines.h>
 

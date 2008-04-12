@@ -124,7 +124,7 @@
 - (void)addAttribute:(NSString *)name value:(id)value range:(NSRange)aRange
 {
 	BOOL restoreInside = insideReplaceEdited;
-	SLog(@"REditorTextStorage addAttribute: %@ (inside=%d)", name, insideReplaceEdited);
+	// SLog(@"REditorTextStorage addAttribute: %@ (inside=%d)", name, insideReplaceEdited);
 	insideReplaceEdited = YES;
 	[cont addAttribute:name value:value range:aRange];
 	[self ensureAttributesAreFixedInRange:aRange];

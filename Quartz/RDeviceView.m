@@ -33,6 +33,9 @@
 #import "../RController.h"
 
 #include <R.h>
+#include <Rversion.h>
+
+#if R_VERSION < R_Version(2,7,0)
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>
 #include <Rdefines.h>
@@ -139,10 +142,13 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 
 - (void)drawRect:(NSRect)aRect
 {
+	SLog(@"RDeviceView:darwRect [%f:%f-%f:%f]", aRect.origin.x, aRect.origin.y,
+		  aRect.size.width, aRect.size.height);
     NSRect		frame = [self frame];
  
     if ([self inLiveResize])
     {
+		SLog(@" - live resize (frame %f:%f)", frame.size.width, frame.size.height);
 		[self lockFocus];
         NSString *str = [NSString stringWithFormat: NLS(@"Resizing to %g x %g"),
                                                     frame.size.width, frame.size.height];
@@ -152,7 +158,10 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
     }
 	
 	if (PDFDrawing) {
+		SLog(@" - PDF drawing, re-running display list");
+		[self lockFocus];		
 		RQuartz_DiplayGList(self);
+		[self unlockFocus];		
 		PDFDrawing = NO;
 	}
 }
@@ -180,3 +189,6 @@ static void drawStringInRect(NSRect rect, NSString *str, int fontSize)
 }
 
 @end
+
+#endif
+
