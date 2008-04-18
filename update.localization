@@ -46,7 +46,7 @@ for LANG in $LANGUAGES; do
 		if [ -e "$LANG.lproj/$NIB.nib" ]; then
 			# create a strings file with all translations
 			if [[ "x$1" != "x-t" && "x$2" != "x-t" ]]; then
-				nibtool -8 -I "$LANG.lproj/$NIB.nib" -L "English.lproj/$NIB.nib" > "Translated.strings/$NIB.$LANG.strings"
+				nibtool -F 4 -8 -I "$LANG.lproj/$NIB.nib" -L "English.lproj/$NIB.nib" > "Translated.strings/$NIB.$LANG.strings"
 			fi
 			if [ ! -e "Translated.strings/$NIB.$LANG.strings" ]; then
 				echo "   $NIB .. ERROR: Can't find translation strings"
@@ -55,10 +55,10 @@ for LANG in $LANGUAGES; do
 				if [[ "x$1" != "x-g" && "x$1" != "x-g" ]]; then
 					if [[ "x$1" == "x-c" || "x$2" == "x-c" ]]; then
 						# "clean" merge - i.e. don't use localized NIB for source
-						nibtool -8  -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
+						nibtool -F 4 -8  -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
 					else
 						# merge the changes taking modifications into account
-						 nibtool -8 -I "$LANG.lproj/$NIB.nib" -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
+						 nibtool -F 4 -8 -I "$LANG.lproj/$NIB.nib" -W "$LANG.lproj/temp.nib" -d "Translated.strings/$NIB.$LANG.strings" "English.lproj/$NIB.nib"
 					fi
 					if [ -e "$LANG.lproj/temp.nib/classes.nib" ]; then
 						cp "$LANG.lproj/temp.nib/"* "$LANG.lproj/$NIB.nib/"
