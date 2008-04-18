@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2008
-@set FAQ-VERSION 2.6-2 @value{FAQ-YEAR}-02-08
-@set REL-VERSION 2.6.2
-@set GUI-VERSION 1.23
+@set FAQ-VERSION 2.7-0 @value{FAQ-YEAR}-04-18
+@set REL-VERSION 2.7.0
+@set GUI-VERSION 1.24
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -121,6 +121,7 @@ It also contains a user guide to the @samp{R.app} version of @R{}.
 * What machines does R for Mac OS X run on?::  
 * How can R for Mac OS X be obtained and installed?::  
 * How can R for Mac OS X be uninstalled?::  
+* Installation Problems::       
 @end menu
 
 @node How many versions of R for Mac OS X?, What machines does R for Mac OS X run on?, Introduction, Introduction
@@ -147,7 +148,7 @@ Note that @R{} version 2.6.0 and earlier do not install properly on Mac OS X 10.
 
 If you experience problems with @R{}, we highly recommend the use of the @CRAN{} binary package to make sure @R{} was built correctly. Nevertheless it is possible to build @R{} from the sources which can be useful for special purposes. Note that the @CRAN{} binary includes R shared library, so there is no need to re-compile @R{} with @code{--enable-R-shlib}.
 
-@node How can R for Mac OS X be uninstalled?,  , How can R for Mac OS X be obtained and installed?, Introduction
+@node How can R for Mac OS X be uninstalled?, Installation Problems, How can R for Mac OS X be obtained and installed?, Introduction
 @section How can R for Mac OS X be uninstalled?
 
 @R{} for Mac OS X consists of two parts: the GUI (R.app) and the R framework. The un-installation is as simple as removing those two folders (e.g. by dragging them into the Trash). The typical installation will install the GUI into the @file{/Applications} folder and the R framework in the @file{/Library/Frameworks} folder.
@@ -159,6 +160,18 @@ rm -rf /Library/Frameworks/R.framework /Applications/R.app
 @end example
 
 However, Mac OS X also keeps an installation receipt if an application was installed using the Apple Installer. These receipts are usually kept in @file{/Library/Receipts} and Apple's Installer decides based on the receipt whether a program will be installed or upgraded. If you do not want to perform an upgrade (e.g. if you want to keep multiple @R{} versions in parallel), you will have to remove the corresponding receipt(s). Depending on the OS X version @code{rm -rf /Library/Receipts/R-*} may work. The exact details are system-dependent, please see the corrensponding documentation by Apple.
+
+@node Installation Problems,  , How can R for Mac OS X be uninstalled?, Introduction
+@section Installation Problems
+
+The binary version of @R{} is provided as an Apple Installer package. Therefore the installation is performed by the Apple Installer, which is the recommended way of installing software on Mac OS X. If you encounter any problem during the installation, please check the Installer log by clicking on the ``Window'' menu and item ``Installer Log''. The full output (select ``Show All Log'') is useful for tracking down problems.
+
+Some users have experienced problems during the installation of optional packages (compiler tools or Tcl/Tk) due to an infinite soft link ``@file{/usr/local/lib}''. This prevents installation of any files into that location. Apple Xcode 2.5 and 3.0 is suspected to create this problem as it renames the ``real'', existing @file{/usr/local/lib} to ``lib 1'' while creating an infinite link (i.e a link that points to itself). If that is the case (easily verified with @code{ls -ld /usr/local/lib*}), you can fix this problem by issuing the following commands in Terminal:
+
+@example
+sudo rm -f /usr/local/lib && \
+sudo mv '/usr/local/lib 1' /usr/local/lib
+@end example
 
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
