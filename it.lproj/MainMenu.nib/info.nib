@@ -6,14 +6,12 @@
 	<string>489.0</string>
 	<key>IBLastKnownRelativeProjectPath</key>
 	<string>../../R.xcodeproj</string>
-	<key>IBLockedObjects</key>
-	<array>
-		<integer>340</integer>
-	</array>
 	<key>IBOldestOS</key>
 	<integer>5</integer>
 	<key>IBSystem Version</key>
 	<string>9C7010</string>
+	<key>IBUsesTextArchiving</key>
+	<true/>
 	<key>targetFramework</key>
 	<string>IBCocoaFramework</string>
 </dict>
