@@ -102,7 +102,7 @@
 "Commands" = "Commando's";
 
 /* NSMenuItem : <title:Comment-out> (oid:1207) */
-"Comment-out" = "Comment-out";
+"Comment-out" = "Maak kommentaar";
 
 /* NSMenuItem : <title:Complete> (oid:1013) */
 "Complete" = "Voltooid";
@@ -511,7 +511,7 @@
 "URL Of Repository. Must Begin With \"http://\"" = "URL Of Repository. Must Begin With \"http://\"";
 
 /* NSMenuItem : <title:Uncomment> (oid:1208) */
-"Uncomment" = "Uncomment";
+"Uncomment" = "Maak uitvoerbaar";
 
 /* NSMenuItem : <title:Underline> (oid:835) */
 "Underline" = "Onderlijnen";
