@@ -75,13 +75,16 @@
 "Center" = "Centreer";
 
 /* NSMenuItem : <title:Change Working Directory...> (oid:322) */
-"Change Working Directory..." = "Wijzig werkmap...";
+"Change Working Directory..." = "Wijzig werkmap…";
 
 /* NSMenuItem : <title:Check For R Updates> (oid:218) */
 "Check For R Updates" = "Zoek naar R updates";
 
 /* NSMenuItem : <title:Clear> (oid:1076) */
 "Clear" = "Wis";
+
+/* NSMenuItem : <title:Clear Console> (oid:1128) */
+"Clear Console" = "Wis Console";
 
 /* NSButton (Clear History) : <title:Clear History> (oid:348) */
 "Clear History" = "Wis geschiedenis";
@@ -97,6 +100,9 @@
 
 /* NSTableColumn : <title:Commands> (oid:342) */
 "Commands" = "Commando's";
+
+/* NSMenuItem : <title:Comment-out> (oid:1207) */
+"Comment-out" = "Comment-out";
 
 /* NSMenuItem : <title:Complete> (oid:1013) */
 "Complete" = "Voltooid";
@@ -144,7 +150,7 @@
 "Edit" = "Wijzig";
 
 /* NSMenuItem : <title:Edit Object…> (oid:221) */
-"Edit Object…" = "Bewerk object...";
+"Edit Object…" = "Bewerk object…";
 
 /* NSMenuItem : <title:Empty> (oid:1078) */
 "Empty" = "Leeg";
@@ -168,7 +174,7 @@
 "Find Previous" = "Zoek vorige";
 
 /* NSMenuItem : <title:Find…> (oid:154) */
-"Find…" = "Zoek....";
+"Find…" = "Zoek…";
 
 /* NSMenu : <title:Font> (oid:854) */
 "Font" = "Lettertype";
@@ -250,10 +256,10 @@
 "Load History" = "Laad geschiedenis";
 
 /* NSMenuItem : <title:Load Workspace File…> (oid:250) */
-"Load Workspace File…" = "Laad Workspace-bestand...";
+"Load Workspace File…" = "Laad Workspace-bestand…";
 
 /* NSTextField (Loading R ...) : <title:Loading R ...> (oid:1104) */
-"Loading R ..." = "R laden...";
+"Loading R ..." = "R laden…";
 
 /* NSMenuItem : <title:Local Binary Package> (oid:596) */
 "Local Binary Package" = "Lokaal binair pakket";
@@ -298,7 +304,7 @@
 "Ok" = "Ok";
 
 /* NSMenuItem : <title:Open Document...> (oid:220) */
-"Open Document..." = "Open document...";
+"Open Document..." = "Open document…";
 
 /* NSMenu : <title:Open Recent> (oid:125) */
 "Open Recent" = "Open recente";
@@ -331,7 +337,7 @@
 "Packages Repository" = "Pakket Repository";
 
 /* NSMenuItem : <title:Page Setup…> (oid:77) */
-"Page Setup…" = "Pagina-instellingen...";
+"Page Setup…" = "Pagina-instellingen…";
 
 /* NSMenuItem : <title:Paste> (oid:171) */
 "Paste" = "Plak";
@@ -343,7 +349,7 @@
 "Paste Style" = "Plak stijl";
 
 /* NSMenuItem : <title:Preferences…> (oid:129) */
-"Preferences…" = "Voorkeuren...";
+"Preferences…" = "Voorkeuren…";
 
 /* NSButton (Print) : <title:Print> (oid:978) */
 "Print" = "Print";
@@ -409,7 +415,7 @@
 "Save" = "Bewaar";
 
 /* NSMenuItem : <title:Save As…> (oid:80) */
-"Save As…" = "Bewaar als...";
+"Save As…" = "Bewaar als…";
 
 /* NSMenuItem : <title:Save Default Workspace> (oid:246) */
 "Save Default Workspace" = "Bewaar standaard Workspace";
@@ -418,7 +424,7 @@
 "Save History" = "Bewaar geschiedenis";
 
 /* NSMenuItem : <title:Save Workspace File…> (oid:260) */
-"Save Workspace File…" = "Bewaar Workspac-bestand...";
+"Save Workspace File…" = "Bewaar Workspac-bestand…";
 
 /* NSMenuItem : <title:Select All> (oid:172) */
 "Select All" = "Selecteer alle";
@@ -460,7 +466,7 @@
 "Source Document" = "Brondocument";
 
 /* NSMenuItem : <title:Source File...> (oid:72) */
-"Source File..." = "Broncodebestand...";
+"Source File..." = "Broncodebestand…";
 
 /* NSTableColumn : <title:Status> (oid:451) */
 "Status" = "Status";
@@ -503,6 +509,9 @@
 
 /* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:582) */
 "URL Of Repository. Must Begin With \"http://\"" = "URL Of Repository. Must Begin With \"http://\"";
+
+/* NSMenuItem : <title:Uncomment> (oid:1208) */
+"Uncomment" = "Uncomment";
 
 /* NSMenuItem : <title:Underline> (oid:835) */
 "Underline" = "Onderlijnen";

@@ -83,6 +83,9 @@
 /* NSMenuItem : <title:Clear> (oid:1076) */
 "Clear" = "消去";
 
+/* NSMenuItem : <title:Clear Console> (oid:1128) */
+"Clear Console" = "コンソール消去";
+
 /* NSButton (Clear History) : <title:Clear History> (oid:348) */
 "Clear History" = "履歴の消去";
 
@@ -97,6 +100,9 @@
 
 /* NSTableColumn : <title:Commands> (oid:342) */
 "Commands" = "コマンド";
+
+/* NSMenuItem : <title:Comment-out> (oid:1207) */
+"Comment-out" = "コメント";
 
 /* NSMenuItem : <title:Complete> (oid:1013) */
 "Complete" = "完了";
@@ -409,7 +415,7 @@
 "Save" = "保存";
 
 /* NSMenuItem : <title:Save As…> (oid:80) */
-"Save As…" = "別名で保存...";
+"Save As…" = "別名で保存…";
 
 /* NSMenuItem : <title:Save Default Workspace> (oid:246) */
 "Save Default Workspace" = "ワークスペースを保存";
@@ -503,6 +509,9 @@
 
 /* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:582) */
 "URL Of Repository. Must Begin With \"http://\"" = "リポジトリのURL. \"http://\"で始まっていなければなりません.";
+
+/* NSMenuItem : <title:Uncomment> (oid:1208) */
+"Uncomment" = "コメントを外す";
 
 /* NSMenuItem : <title:Underline> (oid:835) */
 "Underline" = "アンダーライン";

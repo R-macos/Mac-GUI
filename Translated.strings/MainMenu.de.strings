@@ -27,7 +27,7 @@
 "Align Right" = "Rechtsbündig";
 
 /* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
-"As defined by .libPaths()" = "Wie von .libPaths() definiert";
+"As defined by .libPaths()" = "Wie in .libPaths() definiert";
 
 /* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:574) */
 "At System Level (in R framework)" = "Systemweit (in R framework)";
@@ -83,6 +83,9 @@
 /* NSMenuItem : <title:Clear> (oid:1076) */
 "Clear" = "Löschen";
 
+/* NSMenuItem : <title:Clear Console> (oid:1128) */
+"Clear Console" = "Konsole löschen";
+
 /* NSButton (Clear History) : <title:Clear History> (oid:348) */
 "Clear History" = "Verlauf löschen";
 
@@ -97,6 +100,9 @@
 
 /* NSTableColumn : <title:Commands> (oid:342) */
 "Commands" = "Befehl";
+
+/* NSMenuItem : <title:Comment-out> (oid:1207) */
+"Comment-out" = "Auskommentieren";
 
 /* NSMenuItem : <title:Complete> (oid:1013) */
 "Complete" = "Ergänzen";
@@ -135,7 +141,7 @@
 "Description" = "Beschreibung";
 
 /* NSIBHelpConnector : <title:Double click on one package to load it in the R workspace. > (oid:505) */
-"Double click on one package to load it in the R workspace. " = "Dopleklicken Sie, um ein Paket in den aktuellen Arbeitsbereich zu laden.";
+"Double click on one package to load it in the R workspace. " = "Doppelklicken Sie, um ein Paket in den aktuellen Arbeitsbereich zu laden.";
 
 /* NSIBHelpConnector : <title:Downloads Selected Packages And Installs In Selected Location> (oid:580) */
 "Downloads Selected Packages And Installs In Selected Location" = "Lädt ausgewählte Pakete herunter und installiert sie.";
@@ -229,7 +235,7 @@
 "Italic" = "Kursiv";
 
 /* NSMenuItem : <title:Item> (oid:1075) */
-"Item" = "Item";
+"Item" = "Eintrag";
 
 /* NSMenuItem : <title:Jump to Selection> (oid:155) */
 "Jump to Selection" = "Zur Auswahl springen";
@@ -305,7 +311,7 @@
 
 /* NSMenuItem : <title:Other Directory URL> (oid:1107) */
 "Other Directory URL" = "Web-Verzeichnis";
- 
+
 /* NSMenuItem : <title:Other Repository> (oid:1109) */
 "Other Repository" = "Andere 'Repository'";
 
@@ -429,6 +435,9 @@
 /* NSIBHelpConnector : <title:Select The Appropriate Location. Non-Admin User Should Select "At User Level".> (oid:581) */
 "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Wählen Sie das gewünschte Zielverzeichnis.";
 
+/* NSMenuItem : <title:Select packages from previous R> (oid:1113) */
+"Select packages from previous R" = "Select packages from previous R";
+
 /* NSMenuItem : <title:Services> (oid:131) */
 "Services" = "Dienste";
 
@@ -500,6 +509,9 @@
 
 /* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:582) */
 "URL Of Repository. Must Begin With \"http://\"" = "URL der Repository. Muss mit \"http://\" anfangen";
+
+/* NSMenuItem : <title:Uncomment> (oid:1208) */
+"Uncomment" = "Ein Kommentarzeichen entfernen";
 
 /* NSMenuItem : <title:Underline> (oid:835) */
 "Underline" = "Unterstreichen";

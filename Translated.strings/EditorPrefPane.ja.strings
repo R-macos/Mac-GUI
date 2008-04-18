@@ -27,7 +27,7 @@
 
 /* NSTextField (Editor: ) : <title:Editor:
 > (oid:46) */
-"Editor:\n" = "Editor:\n";
+"Editor:\n" = "エディタ:\n";
 
 /* NSButtonCell (External Editor) : <title:External Editor> (oid:97) */
 "External Editor" = "外部エディタ";
@@ -40,6 +40,9 @@
 
 /* NSTextField (Margin width:) : <title:Margin width:> (oid:125) */
 "Margin width:" = "マージンの幅:";
+
+/* NSButton (Match braces/quotes) : <title:Match braces/quotes> (oid:142) */
+"Match braces/quotes" = "Match braces/quotes";
 
 /* NSButton (New editor) : <title:New editor> (oid:105) */
 "New editor" = "新規エディタ";

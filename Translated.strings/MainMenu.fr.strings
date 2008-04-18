@@ -83,6 +83,9 @@
 /* NSMenuItem : <title:Clear> (oid:1076) */
 "Clear" = "Clear";
 
+/* NSMenuItem : <title:Clear Console> (oid:1128) */
+"Clear Console" = "Effacer Console";
+
 /* NSButton (Clear History) : <title:Clear History> (oid:348) */
 "Clear History" = "Effacer Historique";
 
@@ -97,6 +100,9 @@
 
 /* NSTableColumn : <title:Commands> (oid:342) */
 "Commands" = "Commandes";
+
+/* NSMenuItem : <title:Comment-out> (oid:1207) */
+"Comment-out" = "Ajouter un commentaire";
 
 /* NSMenuItem : <title:Complete> (oid:1013) */
 "Complete" = "Completer";
@@ -503,6 +509,9 @@
 
 /* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:582) */
 "URL Of Repository. Must Begin With \"http://\"" = "URL Of Repository. Must Begin With \"http://\"";
+
+/* NSMenuItem : <title:Uncomment> (oid:1208) */
+"Uncomment" = "Enlever le commentaire";
 
 /* NSMenuItem : <title:Underline> (oid:835) */
 "Underline" = "Souligner";
