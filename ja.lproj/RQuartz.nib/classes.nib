@@ -1,18 +1,27 @@
 {
-    IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            CLASS = RDeviceView; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {delegate = id; }; 
-            SUPERCLASS = NSView; 
-        }, 
-        {
-            CLASS = RQuartz; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {deviceView = RDeviceView; deviceWindow = NSWindow; }; 
-            SUPERCLASS = NSDocument; 
+    IBClasses =     (
+                {
+            CLASS = FirstResponder;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSObject;
+        },
+                {
+            CLASS = RDeviceView;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                delegate = id;
+            };
+            SUPERCLASS = NSView;
+        },
+                {
+            CLASS = RQuartz;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                deviceView = RDeviceView;
+                deviceWindow = NSWindow;
+            };
+            SUPERCLASS = NSDocument;
         }
-    ); 
-    IBVersion = 1; 
+    );
+    IBVersion = 1;
 }

@@ -1,50 +1,52 @@
 {
-    IBClasses = (
-        {
-            ACTIONS = {"" = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                changeCleanupHistoryEntries = id; 
-                changeEditOrSource = id; 
-                changeEnforceInitialWorkingDirectory = id; 
-                changeHistoryFileNamePath = id; 
-                changeHistoryFileNamePathToDefault = id; 
-                changeImportOnStartup = id; 
-                changeLibPaths = id; 
-                changeMaxHistoryEntries = id; 
-                changeMirrorURL = id; 
-                changeRemoveDuplicateHistoryEntries = id; 
-                changeStripCommentsFromHistoryEntries = id; 
-                changeWorkingDir = id; 
-                chooseWorkingDir = id; 
-                saveOnExit = id; 
-                selectMirror = id; 
-            }; 
-            CLASS = MiscPrefPane; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                cbRAquaPath = NSButton; 
-                cleanupHistoryEntries = NSButton; 
-                defaultMirror = NSTextField; 
-                editOrSource = NSMatrix; 
-                enforceInitialWorkingDirectory = NSButton; 
-                historyFileNamePath = NSTextField; 
-                historyFileNamePathText = NSTextField; 
-                importOnStartup = NSButton; 
-                mainView = NSView; 
-                maxHistoryEntries = NSTextField; 
-                removeDuplicateHistoryEntries = NSButton; 
-                saveOnExit = NSMatrix; 
-                setToDefault = NSButton; 
-                stripCommentsFromHistoryEntries = NSButton; 
-                workingDir = NSTextField; 
-            }; 
-            SUPERCLASS = NSObject; 
+    IBClasses =     (
+                {
+            ACTIONS =             {
+                "" = id;
+            };
+            CLASS = FirstResponder;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSObject;
+        },
+                {
+            ACTIONS =             {
+                changeCleanupHistoryEntries = id;
+                changeEditOrSource = id;
+                changeEnforceInitialWorkingDirectory = id;
+                changeHistoryFileNamePath = id;
+                changeHistoryFileNamePathToDefault = id;
+                changeImportOnStartup = id;
+                changeLibPaths = id;
+                changeMaxHistoryEntries = id;
+                changeMirrorURL = id;
+                changeRemoveDuplicateHistoryEntries = id;
+                changeStripCommentsFromHistoryEntries = id;
+                changeWorkingDir = id;
+                chooseWorkingDir = id;
+                saveOnExit = id;
+                selectMirror = id;
+            };
+            CLASS = MiscPrefPane;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                cbRAquaPath = NSButton;
+                cleanupHistoryEntries = NSButton;
+                defaultMirror = NSTextField;
+                editOrSource = NSMatrix;
+                enforceInitialWorkingDirectory = NSButton;
+                historyFileNamePath = NSTextField;
+                historyFileNamePathText = NSTextField;
+                importOnStartup = NSButton;
+                mainView = NSView;
+                maxHistoryEntries = NSTextField;
+                removeDuplicateHistoryEntries = NSButton;
+                saveOnExit = NSMatrix;
+                setToDefault = NSButton;
+                stripCommentsFromHistoryEntries = NSButton;
+                workingDir = NSTextField;
+            };
+            SUPERCLASS = NSObject;
         }
-    ); 
-    IBVersion = 1; 
+    );
+    IBVersion = 1;
 }

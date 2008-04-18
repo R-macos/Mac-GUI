@@ -1,47 +1,58 @@
 {
-    IBClasses = (
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {
-                executeSelection = id; 
-                printDocument = id; 
-                resetBackgroundColor = id; 
-                sourceCurrentDocument = id; 
-            }; 
-            CLASS = RDocument; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {textView = NSTextView; window = NSWindow; }; 
-            SUPERCLASS = NSDocument; 
-        }, 
-        {
-            ACTIONS = {
-                executeSelection = id; 
-                functionGo = id; 
-                goHelpSearch = id; 
-                goToLine = id; 
-                goToLineCloseSheet = id; 
-                printDocument = id; 
-                setHelpSearchType = id; 
-                sourceCurrentDocument = id; 
-            }; 
-            CLASS = RDocumentWinCtrl; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                fnListBox = NSPopUpButton; 
-                fnListView = NSView; 
-                goToLineField = NSTextField; 
-                goToLineSheet = NSPanel; 
-                helpDrawer = NSDrawer; 
-                helpWebView = WebView; 
-                scrollView = NSScrollView; 
-                searchToolbarField = NSSearchField; 
-                searchToolbarView = NSView; 
-                statusLine = NSTextField; 
-                textView = NSTextView; 
-            }; 
-            SUPERCLASS = NSWindowController; 
-        }, 
-        {CLASS = RTextView; LANGUAGE = ObjC; SUPERCLASS = NSTextView; }
-    ); 
-    IBVersion = 1; 
+    IBClasses =     (
+                {
+            CLASS = FirstResponder;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSObject;
+        },
+                {
+            ACTIONS =             {
+                executeSelection = id;
+                printDocument = id;
+                resetBackgroundColor = id;
+                sourceCurrentDocument = id;
+            };
+            CLASS = RDocument;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                textView = NSTextView;
+                window = NSWindow;
+            };
+            SUPERCLASS = NSDocument;
+        },
+                {
+            ACTIONS =             {
+                executeSelection = id;
+                functionGo = id;
+                goHelpSearch = id;
+                goToLine = id;
+                goToLineCloseSheet = id;
+                printDocument = id;
+                setHelpSearchType = id;
+                sourceCurrentDocument = id;
+            };
+            CLASS = RDocumentWinCtrl;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                fnListBox = NSPopUpButton;
+                fnListView = NSView;
+                goToLineField = NSTextField;
+                goToLineSheet = NSPanel;
+                helpDrawer = NSDrawer;
+                helpWebView = WebView;
+                scrollView = NSScrollView;
+                searchToolbarField = NSSearchField;
+                searchToolbarView = NSView;
+                statusLine = NSTextField;
+                textView = NSTextView;
+            };
+            SUPERCLASS = NSWindowController;
+        },
+                {
+            CLASS = RTextView;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSTextView;
+        }
+    );
+    IBVersion = 1;
 }
