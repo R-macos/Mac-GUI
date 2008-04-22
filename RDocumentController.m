@@ -33,6 +33,7 @@
 #import "RController.h"
 #import "Preferences.h"
 #import "PreferenceKeys.h"
+#import "QuartzCocoaDocument.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -75,7 +76,7 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 		NSDocument *d = [self documentForWindow:w];
 		if (d) {
 			SLog(@"RDocumentController%@.windowWillCloseNotifications.removeDocument:%@ (%@)", self, w, d);
-			[self removeDocument:d];
+//			[self removeDocument:d];
 			NSWindow *ww = [self walkKeyListBack];
 			SLog(@"RDocumentController.windowWillCloseNotifications.walkBackWindow:%@ (%@)", self, ww, d);
 			[[self walkKeyListBack] makeKeyWindow];
@@ -97,7 +98,18 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	if (w) {
 		SLog(@"RDocumentController%@.windowDidBecomeKeyNotifications:%@", self, w);
 		NSDocument *d = [self documentForWindow:w];
-		if (!d && w == [[RController sharedController] window]) d = mainDoc;
+		if (!d && w == [[RController sharedController] window])
+			d = mainDoc;
+		else if (!d) { /* if no document is associated wit this window, check whether this is a Quartz Cocoa window */
+			NSView *v = [w contentView];
+			SLog(@" - contentView = %@", v);
+			if (v && [[v className] isEqual:@"QuartzCocoaView"]) { // it's a Quartz window created by R - assign a fake document to it
+				d = [[QuartzCocoaDocument alloc] initWithWindow:w];
+				[d makeWindowControllers];
+				[[NSDocumentController sharedDocumentController] addDocument:d];
+				[d release];
+			}
+		}
 		if (d) {
 			SLog(@" - document: %@", d);
 			if (docList[docListPos] && docList[docListPos]!=d) {

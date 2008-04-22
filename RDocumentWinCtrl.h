@@ -32,6 +32,7 @@
 #import <Cocoa/Cocoa.h>
 #import "Preferences.h"
 #import "RDocument.h"
+#import "REditorTextStorage.h"
 //#import "RRulerView.h"
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
@@ -85,6 +86,8 @@ extern NSColor *shColorIdentifier;
 	NSString *helpTempFile; // path to temporary file used for help
 	
 	int currentHighlight; // currently highlighted character
+	
+	REditorTextStorage *textStorage;
 }
 
 - (void) replaceContentsWithString: (NSString*) strContents;

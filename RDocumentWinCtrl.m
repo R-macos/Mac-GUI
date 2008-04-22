@@ -127,7 +127,8 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (void)dealloc {
 	SLog(@"RDocumentWinCtrl.dealloc<%@>", self);
-	[editorToolbar release];
+	if (editorToolbar) [editorToolbar release];
+	if (textStorage) [textStorage release];
 	if (highlightColorAttr) [highlightColorAttr release];
 	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -190,6 +191,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 		helpTempFile=nil;
 		execNewlineFlag=NO;
 		dirtyHL = NO;
+		[self setShouldCloseDocument:YES];
 	}
 	return self;
 }
@@ -261,7 +263,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	SLog(@" - replace back-end with REditorTextStorage");
 	NSLayoutManager *lm = [[textView layoutManager] retain];
 	NSTextStorage *origTS = [[textView textStorage] retain];
-	REditorTextStorage * textStorage = [[REditorTextStorage alloc] init];
+	textStorage = [[REditorTextStorage alloc] init];
 	[origTS removeLayoutManager:lm];
 	[textStorage addLayoutManager:lm];
 	[lm release];
@@ -456,6 +458,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 									[mi setTag:fp];
 									[mi setTarget:self];
 									[fnm insertItem:mi atIndex:pim];
+									[mi release];
 									pim++;
 								}
 							}
@@ -465,9 +468,10 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 							mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
 							[mi setTag:fp];
 							[mi setTarget:self];
-							[fnm addItem:[mi autorelease]];
+							[fnm addItem:mi];
+							[mi release];
 							pim++;
-						} 
+						}
 					}
 				}
 			}
@@ -1003,7 +1007,7 @@ reHilite:
 
 - (BOOL)windowShouldClose:(id)sender
 {
-	SLog(@"RDocumentWinCtrl%@.windowShouldClose: (doc=%@, win=%@)", self, [self document], [self window]);
+	SLog(@"RDocumentWinCtrl%@.windowShouldClose: (doc=%@, win=%@, self.rc=%d)", self, [self document], [self window], [self retainCount]);
 	if([[self document] hasREditFlag]) {
 		[NSApp stopModal];
 		[(RDocument*)[self document] setREditFlag: NO];
@@ -1011,6 +1015,12 @@ reHilite:
 	//[[self document] close];
 	//[[[RDocumentController sharedDocumentController] currentDocument] close];
 	return YES;
+}
+
+- (void) close
+{
+	SLog(@"RDocumentWinCtrl<%@>.close", self);
+	[super close];
 }
 
 - (void) setEditable: (BOOL) editable
