@@ -109,6 +109,10 @@ int main(int argc, const char *argv[])
 	 SLog(@"main: finish launching");
 	 [NSApp finishLaunching];
  
+	// torture
+	[pool release];
+	pool = [[NSAutoreleasePool alloc] init];
+
 	 // ready to rock
 	 SLog(@"main: entering REPL");
 	 [[REngine mainEngine] runREPL];

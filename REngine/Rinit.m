@@ -366,9 +366,15 @@ static void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel)
     if(R_Verbose)
 		REprintf(" >R_ReplConsole(): before \"for(;;)\" {Rinit.c}\n");
     for(;;) {
-		status = RGUI_ReplIteration(rho, savestack, browselevel, &state);
-		if(status < 0)
-			return;
+#ifdef USE_POOLS
+	    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+#endif
+	    status = RGUI_ReplIteration(rho, savestack, browselevel, &state);
+#ifdef USE_POOLS
+	    [pool release];
+#endif
+	    if(status < 0)
+		    return;
     }
 }
 

@@ -118,7 +118,7 @@
 		16E8506F0708CF2E00BB0282 /* objRem.png in Resources */ = {isa = PBXBuildFile; fileRef = 16E8506E0708CF2E00BB0282 /* objRem.png */; };
 		16E850850708CFF900BB0282 /* quit.png in Resources */ = {isa = PBXBuildFile; fileRef = 16E850840708CFF900BB0282 /* quit.png */; };
 		16E850980708D5BC00BB0282 /* objEdit.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 16E850970708D5BC00BB0282 /* objEdit.tiff */; };
-		16EE32EF06E48A4300D6A457 /* Rinit.c in Sources */ = {isa = PBXBuildFile; fileRef = 16EE32EE06E48A4300D6A457 /* Rinit.c */; };
+		16EE32EF06E48A4300D6A457 /* Rinit.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EE32EE06E48A4300D6A457 /* Rinit.m */; };
 		1C0BD6BF07345B4300D43C33 /* Authorization.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C0BD6BD07345B4300D43C33 /* Authorization.h */; };
 		1C0BD6C007345B4300D43C33 /* Authorization.c in Sources */ = {isa = PBXBuildFile; fileRef = 1C0BD6BE07345B4300D43C33 /* Authorization.c */; };
 		1C34E5CA06F9C76700211ACC /* stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 1C34E5C906F9C76700211ACC /* stop.tiff */; };
@@ -153,6 +153,8 @@
 		687B4F9807944B8000074042 /* REditorTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B4F9607944B8000074042 /* REditorTextStorage.m */; };
 		687B503B07945D4C00074042 /* RConsoleTextStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 687B503907945D4C00074042 /* RConsoleTextStorage.h */; };
 		687B503C07945D4C00074042 /* RConsoleTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B503A07945D4C00074042 /* RConsoleTextStorage.m */; };
+		6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */; };
+		6880A0F40DBE886200FC684F /* QuartzCocoaDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */; };
 		68AAC9E208F41CA10064CDA1 /* Vignettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 68AAC9E008F41CA10064CDA1 /* Vignettes.nib */; };
 		68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */; };
 		68AAC9E808F41CBB0064CDA1 /* DraggableScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */; };
@@ -324,7 +326,7 @@
 		16E8506E0708CF2E00BB0282 /* objRem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = objRem.png; path = images/objRem.png; sourceTree = "<group>"; };
 		16E850840708CFF900BB0282 /* quit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = quit.png; path = images/quit.png; sourceTree = "<group>"; };
 		16E850970708D5BC00BB0282 /* objEdit.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = objEdit.tiff; path = images/objEdit.tiff; sourceTree = "<group>"; };
-		16EE32EE06E48A4300D6A457 /* Rinit.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = Rinit.c; sourceTree = "<group>"; };
+		16EE32EE06E48A4300D6A457 /* Rinit.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Rinit.m; sourceTree = "<group>"; };
 		1C0BD6BD07345B4300D43C33 /* Authorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Authorization.h; sourceTree = "<group>"; };
 		1C0BD6BE07345B4300D43C33 /* Authorization.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Authorization.c; sourceTree = "<group>"; };
 		1C34E5C906F9C76700211ACC /* stop.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = stop.tiff; path = images/stop.tiff; sourceTree = "<group>"; };
@@ -373,6 +375,8 @@
 		687B503907945D4C00074042 /* RConsoleTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RConsoleTextStorage.h; sourceTree = "<group>"; };
 		687B503A07945D4C00074042 /* RConsoleTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RConsoleTextStorage.m; sourceTree = "<group>"; };
 		6880973207AFFB2000F90DB0 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
+		6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuartzCocoaDocument.h; sourceTree = "<group>"; };
+		6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuartzCocoaDocument.m; sourceTree = "<group>"; };
 		68AAC9E108F41CA10064CDA1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Vignettes.nib; sourceTree = "<group>"; };
 		68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableScrollView.h; sourceTree = "<group>"; };
 		68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableScrollView.m; sourceTree = "<group>"; };
@@ -460,6 +464,8 @@
 				16D3041706B54EE3009CB94A /* RController.m */,
 				68DEAEE6083271CA00C5D76C /* RTextView.h */,
 				68DEAEE7083271CA00C5D76C /* RTextView.m */,
+				6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */,
+				6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -554,7 +560,7 @@
 				1636285306BA2B490005C811 /* REngine.h */,
 				1636285406BA2B490005C811 /* REngine.m */,
 				1636285606BA2B490005C811 /* Rinit.h */,
-				16EE32EE06E48A4300D6A457 /* Rinit.c */,
+				16EE32EE06E48A4300D6A457 /* Rinit.m */,
 				1636285706BA2B490005C811 /* RSEXP.h */,
 				1636285806BA2B490005C811 /* RSEXP.m */,
 			);
@@ -833,6 +839,7 @@
 				68AAC9E908F41CBB0064CDA1 /* PDFImageView.h in Headers */,
 				68AAC9ED08F41CD80064CDA1 /* VignettesController.h in Headers */,
 				68F84C6209ABB2BF0098D772 /* privateR.h in Headers */,
+				6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1031,7 +1038,7 @@
 				167BDD6006D4C0F5005381BB /* PackageManager.m in Sources */,
 				169970A406DCD17300FFACB0 /* DataManager.m in Sources */,
 				1673550F06DE155F00A75774 /* PackageInstaller.m in Sources */,
-				16EE32EF06E48A4300D6A457 /* Rinit.c in Sources */,
+				16EE32EF06E48A4300D6A457 /* Rinit.m in Sources */,
 				1633F01F06E62F7000225AA9 /* RQuartz.m in Sources */,
 				1633F0E606E63DEB00225AA9 /* QuartzDevice.m in Sources */,
 				16CAC3E806E67FBA0049192B /* RDeviceView.m in Sources */,
@@ -1068,6 +1075,7 @@
 				68AAC9E808F41CBB0064CDA1 /* DraggableScrollView.m in Sources */,
 				68AAC9EA08F41CBB0064CDA1 /* PDFImageView.m in Sources */,
 				68AAC9EE08F41CD80064CDA1 /* VignettesController.m in Sources */,
+				6880A0F40DBE886200FC684F /* QuartzCocoaDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1485,6 +1493,7 @@
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
+					"-DUSE_POOLS",
 				);
 				OTHER_LDFLAGS = (
 					"-framework",
