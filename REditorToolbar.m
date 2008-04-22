@@ -43,7 +43,53 @@
 	self = [super init];
 	if (self) {
 		winCtrl = dwCtrl;
-		toolbar = [[[NSToolbar alloc] initWithIdentifier: @"REditorToolbar"] autorelease];
+		[winCtrl retain];
+		// Items
+		tiSave = [[NSToolbarItem alloc] initWithItemIdentifier: RETI_Save];
+		[tiSave setLabel: NLS(@"Save")];
+		[tiSave setPaletteLabel: NLS(@"Save")];
+		[tiSave setToolTip: NLS(@"Save current document")];
+		[tiSave setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
+		[tiSave setTarget: [winCtrl document]];
+		[tiSave setAction: @selector(saveDocument:)];
+
+		tiHelpSearch = [[NSToolbarItem alloc] initWithItemIdentifier: RETI_HelpSearch];
+		NSView *myView = [winCtrl searchToolbarView];
+		// Set up the standard properties 
+		[tiHelpSearch setLabel:@"Search"];
+		[tiHelpSearch setPaletteLabel:@"Search"];
+		[tiHelpSearch setToolTip:@"Search Help"];
+		// Use a custom view, a rounded text field, attached to searchFieldOutlet in InterfaceBuilder as the custom view 
+		SLog(@" - tiHelpSearch=%@, view=%@", tiHelpSearch, myView);
+		[tiHelpSearch setView:myView];
+		[tiHelpSearch setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
+		[tiHelpSearch setMaxSize:NSMakeSize(300,NSHeight([myView frame]))];
+		// Create the custom menu (alternative if icons are disabled)
+		NSMenu *submenu=[[NSMenu alloc] init];
+		NSMenuItem *submenuItem=[[NSMenuItem alloc] initWithTitle: @"Search Panel"
+								   action: @selector(searchUsingSearchPanel:)
+							    keyEquivalent: @""];
+		NSMenuItem *menuFormRep=[[NSMenuItem alloc] init];
+		[submenu addItem: submenuItem];
+		[submenuItem setTarget:self];
+		[menuFormRep setSubmenu:submenu];
+		[menuFormRep setTitle:[tiHelpSearch label]];
+		[tiHelpSearch setMenuFormRepresentation:menuFormRep];
+		[menuFormRep release];
+		[submenuItem release];
+		[submenu release];
+		
+		myView = [winCtrl fnListView];
+		tiFnList = [[NSToolbarItem alloc] initWithItemIdentifier: RETI_FnList];
+		[tiFnList setLabel:@"Functions"];
+		[tiFnList setPaletteLabel:@"Functions"];
+		[tiFnList setToolTip:@"List of Functions"];
+		SLog(@" - tiFnList=%@, view=%@", tiFnList, myView);
+		[tiFnList setView:myView];
+		[tiFnList setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
+		[tiFnList setMaxSize:NSMakeSize(200,NSHeight([myView frame]))];
+		
+		toolbar = [[NSToolbar alloc] initWithIdentifier: @"REditorToolbar"];
 
 		[toolbar setAllowsUserCustomization: YES];
 		[toolbar setAutosavesConfiguration: YES];
@@ -51,58 +97,34 @@
 		
 		// We are the delegate
 		[toolbar setDelegate: self];
-		
+			
 		// Attach the toolbar to the document window 
 		[[winCtrl window] setToolbar: toolbar];		
 	}
 	return self;
 }
 
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    // Required delegate method:  Given an item identifier, this method returns an item 
-    // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
-    NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-    
-    if ([itemIdent isEqual: RETI_Save]) {
-		// Set the text label to be displayed in the toolbar and customization palette 
-		[toolbarItem setLabel: NLS(@"Save")];
-		[toolbarItem setPaletteLabel: NLS(@"Save")];
-		[toolbarItem setToolTip: NLS(@"Save current document")];
-		[toolbarItem setImage: [NSImage imageNamed: @"SaveDocumentItemImage"]];
-		[toolbarItem setTarget: [winCtrl document]];
-		[toolbarItem setAction: @selector(saveDocument:)];
-	} else if ([itemIdent isEqual: RETI_HelpSearch]) { /* help search filed - view item */
-		NSView *myView = [winCtrl searchToolbarView];
-		// Set up the standard properties 
-		[toolbarItem setLabel:@"Search"];
-		[toolbarItem setPaletteLabel:@"Search"];
-		[toolbarItem setToolTip:@"Search Help"];
-		// Use a custom view, a rounded text field, attached to searchFieldOutlet in InterfaceBuilder as the custom view 
-		[toolbarItem setView:myView];
-		[toolbarItem setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
-		[toolbarItem setMaxSize:NSMakeSize(300,NSHeight([myView frame]))];
-		// Create the custom menu (alternative if icons are disabled)
-		NSMenu *submenu=[[[NSMenu alloc] init] autorelease];
-		NSMenuItem *submenuItem=[[[NSMenuItem alloc] initWithTitle: @"Search Panel"
-															action: @selector(searchUsingSearchPanel:)
-													 keyEquivalent: @""] autorelease];
-		NSMenuItem *menuFormRep=[[[NSMenuItem alloc] init] autorelease];
-		[submenu addItem: submenuItem];
-		[submenuItem setTarget:self];
-		[menuFormRep setSubmenu:submenu];
-		[menuFormRep setTitle:[toolbarItem label]];
-		[toolbarItem setMenuFormRepresentation:menuFormRep];
-	} else if ([itemIdent isEqual: RETI_FnList]) { /* function list - view item */
-		NSView *myView = [winCtrl fnListView];
-		[toolbarItem setLabel:@"Functions"];
-		[toolbarItem setPaletteLabel:@"Functions"];
-		[toolbarItem setToolTip:@"List of Functions"];
-		[toolbarItem setView:myView];
-		[toolbarItem setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
-		[toolbarItem setMaxSize:NSMakeSize(200,NSHeight([myView frame]))];
-	} else
-		toolbarItem = nil;
+- (void) dealloc
+{
+	[toolbar release];
+	[tiFnList release];
+	[tiHelpSearch release];
+	[tiSave release];
+	[winCtrl release];
+	[super dealloc];
+}
 
+- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
+	// Required delegate method:  Given an item identifier, this method returns an item 
+	// The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
+	NSToolbarItem *toolbarItem = nil;
+	SLog(@"toolbar:%@ itemForItemIdentifier:%@", toolbar, itemIdent);
+	if ([itemIdent isEqual: RETI_Save])
+		return tiSave;
+	else if ([itemIdent isEqual: RETI_HelpSearch])
+		return tiHelpSearch;
+	else if ([itemIdent isEqual: RETI_FnList]) 
+		return tiFnList;
 	return toolbarItem;
 }
 

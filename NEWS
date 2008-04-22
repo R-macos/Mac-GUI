@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-04-22 [SU]
+*	work around a bug in Cocoa that caused a crash on
+	"Customize Toolbar" in the editor.
+
 Last-update: 2008-04-05 [SU]
 *	add support for "\r", "\b" and "\a" in console output 
 

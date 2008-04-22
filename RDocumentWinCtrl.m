@@ -99,10 +99,35 @@ static int dirtyLimit = 600; // max. length of highlighting extension before giv
 		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
 }
 
-//- (id)init // NOTE: init is *not* used! put any initialization in windowDidLoad
+//- (id)init { // NOTE: init is *not* used! put any initialization in windowDidLoad
+
+static RDocumentWinCtrl *staticCodedRWC = nil;
+
+// FIXME: this is a very, very ugly hack to work around a bug in Cocoa: 
+// "Customize Toolbar.." creates a copy of the custom views in the tollbar and
+// one of it is the help search view (defined in the RDocument NIB). It turns
+// out that a copy is made by encoding and decoding it. However, due to some
+// strange bug in Cocoa this leads to instantiation of RDocumentWinCtrl via initWithCoder:
+// which is then released immediately. This leads to a crash, so we work
+// around this by retaining that copy thus making sure it won't be released.
+// In order to reduce the memory overhead we keep around only one instance
+// of this "special" controller and keep returning it.
+- (id)initWithCoder: (NSCoder*) coder {
+	SLog(@"RDocumentWinCtrl.initWithCoder<%@>: %@ **** this is due to a bug in Cocoa! Working around it:", self, coder);
+	if (!staticCodedRWC) {
+		staticCodedRWC = [super initWithCoder:coder];
+		SLog(@" - creating static answer: %@", staticCodedRWC);
+	} else {
+		SLog(@" - release original, return static answer %@", staticCodedRWC);
+		[self release];
+		self = staticCodedRWC;
+	}
+	return [self retain]; // add a retain because it will be matched by the caller
+}
 
 - (void)dealloc {
 	SLog(@"RDocumentWinCtrl.dealloc<%@>", self);
+	[editorToolbar release];
 	if (highlightColorAttr) [highlightColorAttr release];
 	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -156,7 +181,7 @@ static int dirtyLimit = 600; // max. length of highlighting extension before giv
 - (id) initWithWindowNibName:(NSString*) nib
 {
 	self = [super initWithWindowNibName:nib];
-	SLog(@"RDocumentWinCtrl.initWithNibName:%@", nib);
+	SLog(@"RDocumentWinCtrl<%@>.initWithNibName:%@", self, nib);
 	if (self) {
 		plainFile=NO;
 		hsType=1;
@@ -1125,7 +1150,7 @@ reHilite:
 {
 	NSSearchField *sf = (NSSearchField*) sender;
 	NSString *ss = [sf stringValue];
-	SLog(@"RDocumentWinCtrl.goHelpSearch: \"%@\", type=%d", ss, hsType);
+	SLog(@"RDocumentWinCtrl<%@>.goHelpSearch: \"%@\", type=%d", self, ss, hsType);
 	if ([ss length]<1)
 		[helpDrawer close];
 	else {

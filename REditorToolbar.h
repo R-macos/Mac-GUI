@@ -46,6 +46,8 @@ NSToolbarPrintItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarFlexibl
 @interface REditorToolbar : NSObject {
 	RDocumentWinCtrl *winCtrl;
 	NSToolbar *toolbar;
+	
+	NSToolbarItem *tiSave, *tiHelpSearch, *tiFnList;
 }
 
 - initWithEditor: (RDocumentWinCtrl *)dwCtrl;
