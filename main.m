@@ -67,11 +67,16 @@ int main(int argc, const char *argv[])
 		 exit(-1);
 	 }
 	 
+#if R_VERSION < R_Version(2,7,0)
 	 /* register Quartz symbols */
 	 QuartzRegisterSymbols();
 	 /* create quartz.save function in tools:quartz */
 	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e)}))"];
-	 
+#else
+	/* in R 2.7.0 we use dev.copy to implement quartz.save */
+	[[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\", function(file, type='png', device=dev.cur(), dpi=100, ...) {\n # modified version of dev.copy2pdf\n dev.set(device)\n current.device <- dev.cur()\n nm <- names(current.device)[1]\n if (nm == 'null device') stop('no device to print from')\n oc <- match.call()\n oc[[1]] <- as.name('dev.copy')\n oc$file <- NULL\n oc$device <- quartz\n oc$type <- type\n oc$file <- file\n oc$dpi <- dpi\n din <- dev.size('in')\n w <- din[1]\n h <- din[2]\n if (is.null(oc$width))\n oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w\n if (is.null(oc$height))\n oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h\n dev.off(eval.parent(oc))\n dev.set(current.device)\n},e); environment(e$quartz.save) <- e}))"];
+#endif
+	
 	 SLog(@" - set R options");
 	 // force html-help, because that's the only format we can handle ATM
 	 [[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
