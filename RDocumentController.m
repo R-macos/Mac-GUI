@@ -74,20 +74,11 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	if (w) {
 		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
 		NSDocument *d = [self documentForWindow:w];
-		if (d) {
-			SLog(@"RDocumentController%@.windowWillCloseNotifications.removeDocument:%@ (%@)", self, w, d);
-//			[self removeDocument:d];
-			NSWindow *ww = [self walkKeyListBack];
-			SLog(@"RDocumentController.windowWillCloseNotifications.walkBackWindow:%@ (%@)", self, ww, d);
-			[[self walkKeyListBack] makeKeyWindow];
-		}
-/*
-		} else
-			if (![[[RController sharedController] getRConsoleWindow] isKeyWindow]) {
-				[[[RController sharedController] getRConsoleWindow] makeKeyWindow];
-				SLog(@" RConsole set to key window");
-			}
-*/
+		if (!d) docListPos++; // HACK: since walkKeyListBack does docListPos-- first, by increasing it we get the current doc which is what we want when an unknown window got closed (e.g. preferences)
+		NSWindow *ww = [self walkKeyListBack];
+		SLog(@"RDocumentController.windowWillCloseNotifications.walkBackWindow:%@ (%@)", self, ww, d);
+		[ww makeKeyWindow];
+		// FIXME: this is an ugly hack - our windows never get released and this is just cosmetics to remove them from the window list even though they exist
 		[NSApp removeWindowsItem: w];
 	}
 }
