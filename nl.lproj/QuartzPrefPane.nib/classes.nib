@@ -6,7 +6,12 @@
             SUPERCLASS = NSObject;
         },
                 {
+            CLASS = NSObject;
+            LANGUAGE = ObjC;
+        },
+                {
             ACTIONS =             {
+                changeQuartzPrefPaneDPI = id;
                 changeQuartzPrefPaneDefaults = id;
                 changeQuartzPrefPaneFont = id;
                 changeQuartzPrefPaneHeight = id;
@@ -19,6 +24,7 @@
             OUTLETS =             {
                 changeQuartzPrefPaneFont = NSButton;
                 mainView = NSView;
+                quartzPrefPaneDPI = NSTextField;
                 quartzPrefPaneFont = NSTextField;
                 quartzPrefPaneFontSize = NSTextField;
                 quartzPrefPaneHeight = NSTextField;
