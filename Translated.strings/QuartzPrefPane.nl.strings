@@ -19,9 +19,11 @@
 /* NSButton (Change) : <title:Change> (oid:48) */
 "Change" = "Wijzig";
 
-/* NSTextField (Location :) : <title:Location
-:> (oid:38) */
-"Location\n:" = "Locatie\n:";
+/* NSTextField (DPI:) : <title:DPI:> (oid:87) */
+"DPI:" = "DPI:";
+
+/* NSTextField (Location:) : <title:Location:> (oid:38) */
+"Location:" = "Locatie:";
 
 /* NSTextField (Note: Change and press return) : <title:Note: Change and press return> (oid:71) */
 "Note: Change and press return" = "Opm.: Wijzig en toets enter";
@@ -47,16 +49,12 @@
 /* NSTextField (font family:) : <title:font family:> (oid:46) */
 "font family:" = "lettertypefamilie:";
 
-/* NSTextField (font point size:  :) : <title:font point size:
+/* NSTextField (font point size:) : <title:font point size:> (oid:47) */
+"font point size:" = "lettertypegrootte:";
 
-:> (oid:47) */
-"font point size:\n\n:" = "lettertypegrootte:";
+/* NSTextField (height (inches):) : <title:height (inches):> (oid:30) */
+"height (inches):" = "hoogte (inches):\n:";
 
-/* NSTextField (height (inches): :) : <title:height (inches):
-:> (oid:30) */
-"height (inches):\n:" = "hoogte (inches):\n:";
-
-/* NSTextField (width (inches): ) : <title:width (inches):
-> (oid:29) */
-"width (inches):\n" = "breedte (inches):\n";
+/* NSTextField (width (inches):) : <title:width (inches):> (oid:29) */
+"width (inches):" = "breedte (inches):\n";
 

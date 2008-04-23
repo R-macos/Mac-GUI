@@ -5,56 +5,56 @@
 "5.0" = "5.0";
 
 /* NSMenuItem : <title:Bottom Left> (oid:31) */
-"Bottom Left" = "左下";
+"Bottom Left" = "links unten";
 
 /* NSMenuItem : <title:Bottom Right> (oid:32) */
-"Bottom Right" = "右下";
+"Bottom Right" = "rechts unten";
 
 /* NSBox (Box) : <title:Box> (oid:45) */
-"Box" = "ボックス";
+"Box" = "Box";
 
 /* NSMenuItem : <title:Centered> (oid:37) */
-"Centered" = "中央";
+"Centered" = "Zentriert";
 
 /* NSButton (Change) : <title:Change> (oid:48) */
-"Change" = "変更";
+"Change" = "Ändern";
 
 /* NSTextField (DPI:) : <title:DPI:> (oid:87) */
 "DPI:" = "DPI:";
 
 /* NSTextField (Location:) : <title:Location:> (oid:38) */
-"Location:" = "位置:";
+"Location:" = "Anfangsposition:";
 
 /* NSTextField (Note: Change and press return) : <title:Note: Change and press return> (oid:71) */
-"Note: Change and press return" = "注: 変更してリターンを押して下さい";
+"Note: Change and press return" = "(Drücken Sie <Enter>, um Änderung zu aktivieren)";
 
 /* NSMenu : <title:OtherViews> (oid:35) */
-"OtherViews" = "他のビュー";
+"OtherViews" = "Andere Ansichten";
 
 /* NSButton (Override R Quartz width/height parameters) : <title:Override R Quartz width/height parameters> (oid:22) */
-"Override R Quartz width/height parameters" = "R Quartz の幅/高さパラメータよりも優先する";
+"Override R Quartz width/height parameters" = "Standardeinstellungen für Quartz überschreiben";
 
 /* NSButton (Restore defaults) : <title:Restore defaults> (oid:51) */
-"Restore defaults" = "デフォルトに戻す";
+"Restore defaults" = "Zurücksetzen";
 
 /* NSTextField (System Font Text) : <title:System Font Text> (oid:49) */
-"System Font Text" = "システムフォントテキスト";
+"System Font Text" = "System-Schrift";
 
 /* NSMenuItem : <title:Top Left> (oid:36) */
-"Top Left" = "左上";
+"Top Left" = "links oben";
 
 /* NSMenuItem : <title:Top Right> (oid:34) */
-"Top Right" = "右上";
+"Top Right" = "rechts oben";
 
 /* NSTextField (font family:) : <title:font family:> (oid:46) */
-"font family:" = "フォントファミリ:";
+"font family:" = "Schriftart:";
 
 /* NSTextField (font point size:) : <title:font point size:> (oid:47) */
-"font point size:" = "サイズ(ポイント):";
+"font point size:" = "Schriftgröße:";
 
 /* NSTextField (height (inches):) : <title:height (inches):> (oid:30) */
-"height (inches):" = "高さ (インチ):";
+"height (inches):" = "Höhe (in Zoll):";
 
 /* NSTextField (width (inches):) : <title:width (inches):> (oid:29) */
-"width (inches):" = "幅 (インチ):";
+"width (inches):" = "Breite (in Zoll):";
 
