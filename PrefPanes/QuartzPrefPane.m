@@ -30,7 +30,8 @@
 #import "QuartzPrefPane.h"
 #import "PreferenceKeys.h"
 #import "Preferences.h"
-
+#import "REngine.h"
+#include <Rversion.h>
 
 @interface QuartzPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
@@ -177,15 +178,24 @@
 	if (flag) {
 		[quartzPrefPaneWidth setEnabled:NSOnState];
 		[quartzPrefPaneHeight setEnabled:NSOnState];
+		[quartzPrefPaneDPI setEnabled:NSOnState];
 	} else {
 		[quartzPrefPaneWidth setEnabled:NSOffState];
 		[quartzPrefPaneHeight setEnabled:NSOffState];
+		[quartzPrefPaneDPI setEnabled:NSOffState];
 	}
 	[quartzPrefPaneWidth setStringValue:
-		[Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"4.5"]];
+		[Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"5"]];
 	[quartzPrefPaneHeight setStringValue:
-		[Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"4.5"]];
-	
+		[Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"5"]];
+	[quartzPrefPaneDPI setStringValue:
+	 [Preferences stringForKey:quartzPrefPaneDPIKey withDefault: @""]];
+#if R_VERSION >= R_Version(2,7,0)
+	if (flag)
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quartz.options(width=%@,height=%@,dpi=%@)", [quartzPrefPaneWidth stringValue],
+						     [quartzPrefPaneHeight stringValue], ([[quartzPrefPaneDPI stringValue] length] == 0) ? @"NA_real_" : [quartzPrefPaneDPI stringValue]]];
+#endif
+
 	[quartzPrefPaneLocation setEnabled:NSOnState];
 	NSString *i = [Preferences stringForKey:quartzPrefPaneLocationKey withDefault: @"Top Left"];
 	if (i) [quartzPrefPaneLocation selectItemWithTitle:i];
@@ -198,29 +208,39 @@
 }
 
 - (IBAction) changeQuartzPrefPaneWidth:(id)sender {
-	NSString *width = ([[sender stringValue] length] == 0)?@"4.5":[sender stringValue];
+	NSString *width = ([[sender stringValue] length] == 0)?@"5":[sender stringValue];
 	if ([width length] == 0) {
-		width = @"4.5";
+		width = @"5";
 	} else {
 		double value = [width doubleValue];
-		if (value < 4.5)
-			width = @"4.5";
-		else if (value > 12.0)
-			width = @"12.0";
+		if (value < 3)
+			width = @"3";
+		else if (value > 15.0)
+			width = @"15.0";
 	}
 	[Preferences setKey:quartzPrefPaneWidthKey withObject:width];
 }
 
+- (IBAction) changeQuartzPrefPaneDPI:(id)sender {
+	NSString *dpi = [sender stringValue];
+	if ([dpi length] == 0) {
+	} else {
+		double value = [dpi doubleValue];
+		if (value < 10 || value > 2000) dpi = @"";
+	}
+	[Preferences setKey:quartzPrefPaneDPIKey withObject:dpi];
+}
+
 - (IBAction) changeQuartzPrefPaneHeight:(id)sender {
-	NSString *height = ([[sender stringValue] length] == 0)?@"4.5":[sender stringValue];
+	NSString *height = ([[sender stringValue] length] == 0)?@"5":[sender stringValue];
 	if ([height length] == 0) {
-		height = @"4.5";
+		height = @"5";
 	} else {
 		double value = [height doubleValue];
-		if (value < 4.5)
-			height = @"4.5";
-		else if (value > 10.0)
-			height = @"10.0";
+		if (value < 3)
+			height = @"3";
+		else if (value > 15.0)
+			height = @"15.0";
 	}
 	[Preferences setKey:quartzPrefPaneHeightKey withObject:height];
 }
@@ -239,18 +259,21 @@
 	[[Preferences sharedPreferences] beginBatch];
 	[useQuartzPrefPaneSettings setState:NSOffState];
 	[Preferences setKey:useQuartzPrefPaneSettingsKey withFlag:NSOffState];
-	[quartzPrefPaneWidth setStringValue:@"4.5"];
-	[Preferences setKey:quartzPrefPaneWidthKey withObject:@"4.5"];
-	[quartzPrefPaneHeight setStringValue:@"4.5"];
-	[Preferences setKey:quartzPrefPaneHeightKey withObject:@"4.5"];
+	[quartzPrefPaneWidth setStringValue:@"5"];
+	[Preferences setKey:quartzPrefPaneWidthKey withObject:@"5"];
+	[quartzPrefPaneHeight setStringValue:@"5"];
+	[Preferences setKey:quartzPrefPaneHeightKey withObject:@"5"];
+	[quartzPrefPaneDPI setStringValue:@""];
+	[Preferences setKey:quartzPrefPaneDPIKey withObject:@""];
 
 	[quartzPrefPaneLocation selectItemWithTitle:@"Top Left"];
 	[Preferences setKey:quartzPrefPaneLocationKey withObject:@"Top Left"];
 	[Preferences setKey:quartzPrefPaneLocationIntKey withObject:[NSNumber numberWithInt:3]];
 
-	[useQuartzPrefPaneSettings setEnabled:NSOnState];
-	[quartzPrefPaneWidth setEnabled:NSOnState];
-	[quartzPrefPaneHeight setEnabled:NSOnState];
+	[useQuartzPrefPaneSettings setEnabled:NSOffState];
+	[quartzPrefPaneWidth setEnabled:NSOffState];
+	[quartzPrefPaneHeight setEnabled:NSOffState];
+	[quartzPrefPaneDPI setEnabled:NSOffState];
 	[quartzPrefPaneLocation setEnabled:NSOnState];
 	[quartzPrefPaneFont setEnabled:NSOffState];
 

@@ -72,6 +72,7 @@
 #define useQuartzPrefPaneSettingsKey @"Use QuartzPrefPane values"
 #define quartzPrefPaneWidthKey @"QuartzPrefPane width"
 #define quartzPrefPaneHeightKey @"QuartzPrefPane height"
+#define quartzPrefPaneDPIKey @"QuartzPrefPane DPI"
 #define quartzPrefPaneLocationKey @"QuartzPrefPane location"
 #define quartzPrefPaneLocationIntKey @"QuartzPrefPane location as an integer"
 #define quartzPrefPaneFontKey @"QuartzPrefPane font"

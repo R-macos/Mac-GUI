@@ -565,6 +565,17 @@ static RController* sharedRController;
 		[pendingDocsToOpen removeAllObjects];
 	}
 	
+#if R_VERSION >= R_Version(2,7,0)
+	SLog(@" - set Quartz preferences (if necessary)");
+	BOOL flag=[Preferences flagForKey:useQuartzPrefPaneSettingsKey withDefault: NO];
+	if (flag) {
+		NSString *qWidth = [Preferences stringForKey:quartzPrefPaneWidthKey withDefault: @"5"];
+		NSString *qHeight = [Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"5"];
+		NSString *qDPI = [Preferences stringForKey:quartzPrefPaneDPIKey withDefault: @""];
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quartz.options(width=%@,height=%@,dpi=%@)", qWidth, qHeight, ([qDPI length] == 0) ? @"NA_real_" : qDPI]];
+	}
+#endif
+	
 	appLaunched = YES;
 	[self setStatusLineText:@""];
 

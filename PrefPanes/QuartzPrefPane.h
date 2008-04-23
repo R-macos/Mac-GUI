@@ -43,6 +43,7 @@
 	IBOutlet NSButton *useQuartzPrefPaneSettings;
 	IBOutlet NSTextField *quartzPrefPaneWidth;
 	IBOutlet NSTextField *quartzPrefPaneHeight;
+	IBOutlet NSTextField *quartzPrefPaneDPI;
 	IBOutlet NSPopUpButton *quartzPrefPaneLocation;
 	IBOutlet NSTextField *quartzPrefPaneFont;
 	IBOutlet NSTextField *quartzPrefPaneFontSize;
@@ -78,6 +79,7 @@
 - (void) changeUseQuartzPrefPaneSettings:(id)sender;
 - (void) changeQuartzPrefPaneWidth:(id)sender;
 - (void) changeQuartzPrefPaneHeight:(id)sender;
+- (void) changeQuartzPrefPaneDPI:(id)sender;
 - (void) changeQuartzPrefPaneLocation:(id)sender;
 - (void) changeQuartzPrefPaneFont:(id)sender;
 - (void) changeQuartzPrefPaneDefaults:(id)sender;
