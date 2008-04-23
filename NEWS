@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.24 (5102) - supplied with R 2.7.0 --
+
 Last-update: 2008-04-22 [SU]
 *	work around a bug in Cocoa that caused a crash on
 	"Customize Toolbar" in the editor.
