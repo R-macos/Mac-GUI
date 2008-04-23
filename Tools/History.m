@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-8  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
@@ -34,7 +34,7 @@
 
 
 @implementation History
-/** implements a history with one dirt entry (i.e. an entry which is still being edited but not cimmited yet) */
+/** implements a history with one dirty entry (i.e. an entry which is still being edited but not committed yet) */
 
 - (id) init {
     hist = [[NSMutableArray alloc] initWithCapacity: 16];
@@ -69,8 +69,7 @@
 		len = [entry length]; 		
 		if ([Preferences flagForKey:stripCommentsFromHistoryEntriesKey withDefault:NO]) {
 			int i = 0, j = 0, k = 0;
-			NSString *newEntry = [[NSString alloc] initWithString:entry];
-			NSString *restString;
+			NSString *newEntry = [[[NSString alloc] initWithString:entry] autorelease];
 			BOOL firstTime = YES;
 			BOOL done = NO;
 			BOOL found = NO;
@@ -84,7 +83,7 @@
 								newEntry = [entry substringWithRange: NSMakeRange(k, i)];
 								firstTime = NO;
 							} else {
-								restString = [entry substringWithRange: NSMakeRange(k, i-k)];
+								NSString *restString = [entry substringWithRange: NSMakeRange(k, i-k)];
 								newEntry = [newEntry stringByAppendingString: restString];
 							}
 							k = j; i = j; done = YES;
@@ -93,7 +92,7 @@
 				}			
 			}
 			if (!(j>=(len-1)) && found) {
-				restString = [entry substringWithRange: NSMakeRange(k, i-k)];
+				NSString *restString = [entry substringWithRange: NSMakeRange(k, i-k)];
 				newEntry = [newEntry stringByAppendingString: restString];
 			}		
 			entry = newEntry;
@@ -185,7 +184,7 @@
 //	NSLog(@"Hist: %d", pos);
 }
 
-/** returns a snapshot of the current histroy (w/o the dirty entry). you will need to release the resulting object. */
+/** returns a snapshot of the current histroy (w/o the dirty entry). */
 - (NSArray*) entries {
     return [NSArray arrayWithArray: hist];
 }

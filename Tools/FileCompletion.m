@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-8  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
@@ -41,7 +41,6 @@
     NSString *dir = nil;
     BOOL working=NO, voidFn=NO, homeCompletion=NO;
     NSString *fn;
-	NSMutableArray *ca = [[NSMutableArray alloc] initWithCapacity: 8];
     
     //NSLog(@"attepted file-completion: \"%@\"", part);
     while (ls>0 && [part characterAtIndex:ls]!='/') ls--; // ls=last / || 0
@@ -63,6 +62,7 @@
     {
         NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:dir];
         if (a==nil) return nil;
+	NSMutableArray *ca = [NSMutableArray arrayWithCapacity: 8];
         { 
             int i=0, firstMatch=-1, matches=0;
             NSString *common=nil;
@@ -86,6 +86,7 @@
                 }
                 i++;
             }
+	    if (common) [common release];
 			return ca; 
         }
     }
