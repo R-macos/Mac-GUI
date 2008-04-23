@@ -4,6 +4,13 @@ Last-update: 2008-04-22 [SU]
 *	work around a bug in Cocoa that caused a crash on
 	"Customize Toolbar" in the editor.
 
+*	add DPI setting to the Quartz preference pane
+	(empty means NA i.e. auto-detect from display)
+
+*	.Rprofile in the current directory is now sourced
+	on startup. Although this was always documented,
+	it was not happening in more recent versions.
+
 Last-update: 2008-04-05 [SU]
 *	add support for "\r", "\b" and "\a" in console output 
 

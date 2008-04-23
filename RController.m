@@ -552,6 +552,11 @@ static RController* sharedRController;
 		[self handleWriteConsole: msg];
 		SLog(@"RController.applicationDidFinishLaunching - load workspace %@", fname);
 	}
+	// source .Rprofile in the current directory if present
+	if (([pendingDocsToOpen count] == 0) && // if docs are pending, they may be directories which handle their own sourcing
+	    ([[NSFileManager defaultManager] fileExistsAtPath: @".Rprofile"]))
+		[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
+
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
 
@@ -1981,6 +1986,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
 				[self handleWriteConsole: msg];
 			}
+			if ([manager fileExistsAtPath:@".Rprofile"])
+				[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
 			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
