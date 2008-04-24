@@ -173,6 +173,8 @@ sudo rm -f /usr/local/lib && \
 sudo mv '/usr/local/lib 1' /usr/local/lib
 @end example
 
+R 2.7.0 installer attempts to detect and resolve the above problem automatically.
+
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
 @menu
@@ -193,6 +195,7 @@ The requirements for building @R{} vary, depending whether the build machine is 
 * Fortran compiler (g77 3.3 or later)::  
 * libreadline 4.3 or higher (optional)::  
 * X11 window server (optional)::  
+* Cairo graphics library (optional)::  
 * X11 TclTk headers and libraries (optional)::  
 * Aqua TclTk headers and libraries (optional)::  
 * TeX suite of tools for documentation (optional)::  
@@ -238,7 +241,7 @@ It installs everything in @file{/usr/local}.
 
 @emph{Note:} It is possible to build multi-architecture readline binary in one step, for example set @samp{CC='gcc -arch ppc -arch ppc64 -arch i386 -arch x86_64'} to build all four architectures (see Apple Xcode tools reference for details). Such binary is available from @uref{http://r.research.att.com/exp/}.
 
-@node X11 window server (optional), X11 TclTk headers and libraries (optional), libreadline 4.3 or higher (optional), What is needed to build R
+@node X11 window server (optional), Cairo graphics library (optional), libreadline 4.3 or higher (optional), What is needed to build R, Cairo graphics library (optional), libreadline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
 
@@ -269,9 +272,18 @@ In addition to the user part, you need to install the X11 SDK package from the X
 
 Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two options to obtain X11: Apple released X11 beta for Jaguar which is still around, although not officially supported. It features the Quartz window manager that integrates nicely into the system. If you are unable to find Apple's X11 beta, you will need to install both the X11 Window server and the X11 SDK package from the XFree86 web page. Other versions such as using fink are available, too.
 
-@node X11 TclTk headers and libraries (optional), Aqua TclTk headers and libraries (optional), X11 window server (optional), What is needed to build R
+@node Cairo graphics library (optional), X11 TclTk headers and libraries (optional), X11 window server (optional), What is needed to build R
+@subsection Cairo graphics library (optional)
+
+R 2.7.0 includes support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary ew use for the release from @uref{http://r.research.att.com/cairo-bin-devpack2.tar.gz}., X11 TclTk headers and libraries (optional), Cairo graphics library (optional), Cairo graphics library (optional)
+
+In general cairo grapics library can be obtained from @uref{http://www.cairographics.org/}. More recent versions can use either native ATSUI/Quartz font back-end or FreeType. If the latter is used, make sure you get the most recent (even development) version available, because there are known bugs in FreeType with respect to Mac font support.
+
+Cairo support is strictly optional given that Quartz is the default graphics device on Mac OS X.
+
+@node X11 TclTk headers and libraries (optional), Aqua TclTk headers and libraries (optional), Cairo graphics library (optional), What is needed to build R
 @subsection X11 TclTk headers and libraries (optional)
-If you plan to use tcltk package for @R{}, you can either use Tcl/Tk headers and library supplied in the @R{} @CRAN{} binary or compile your own. The @CRAN{} binary includes universal Tcl/Tk 8.4.12 for X11. This package is optional so you need to select "custom install" during R installation and enable it. This is the recommended procedure because it will allow you to use @CRAN{} @R{} package binaries as well.
+If you plan to use tcltk package for @R{}, you can either use Tcl/Tk headers and library supplied in the @R{} @CRAN{} binary or compile your own. The @CRAN{} binary includes universal Tcl/Tk 8.4.12 for X11.
 
 Alternatively you need to download the sources of the Tcl and Tk 8.4.x packages to build yourself the sources. 
 The original sources can be found on the official TclTk web page @uref{http://www.tcl.tk/software/tcltk/8.4.html}.
@@ -308,22 +320,15 @@ Mac OS X 10.4 (Tiger) comes with Aqua TclTk libraries. If those are not detected
 --with-tk-config=/System/Library/Frameworks/Tk.framework/tkConfig.sh
 @end example
 
-For older versions of OS X you need to obtain Aqua TclTk separately. Once you have installed the AquaTclTk libraries and headers files, you can configure @R{} using these additional
-arguments
-@example
---with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh 
---with-tk-config=/Library/Frameworks/Tk.framework/tkConfig.sh
-TCLTK_LIBS='-framework Tcl -framework Tk'
-TCLTK_CPPFLAGS='-I/Library/Frameworks/Tcl.Framework/Headers -I/Library/Frameworks/Tk.Framework/Headers'
-@end example
-
-Note that currently R.app doesn't support Aqua Tcl/Tk, because of conflicting event loops.
+Note that currently R.app doesn't support Aqua Tcl/Tk, because of conflicting event loops (in fact Aqua Tcl/Tk cannot be embedded in any UI application due to its design assumptions). Therefore we strongy discourage the use of Aqua TclTk.
 
 @node TeX suite of tools for documentation (optional),  , Aqua TclTk headers and libraries (optional), What is needed to build R
 @subsection TeX suite of tools for documentation (optional)
 There is a nice installer, called the @emph{i-Installer II}, that allows you to install a complete 
 te@TeX{} distribution. You can find details on the i-Installer at @uref{http://www.rna.nl/ii.html}. 
 The te@TeX{} is one of the i-Packages.
+
+Mac@TeX{} (@uref{http://www.tug.org/mactex/}) is a more recent alternative, but it is huge and contains other (possibly unwanted) libraries and programs.
 
 Note: You may also want to install @TeX{}Shop (@uref{http://www.uoregon.edu/~koch/texshop/texshop.html}). Beside wonderful GUI for editing @TeX{} files that page also provides many useful links for @TeX{} on Mac OS X.
 
@@ -1236,11 +1241,11 @@ As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran)
 
 @CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler was kept in place, but @R{} used the new compiler for compiling packages instead. The main reason for this was that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we switched back to Apple's compilers for @R{} 2.5.0 and later.
 
-@node Why is the Quartz much bigger than it used to be?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why do I need custom compilers for the CRAN binary?, Sparse questions, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why do I need custom compilers for the CRAN binary?, Sparse questions
+@node Why is the Quartz much bigger than it used to be?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why do I need custom compilers for the CRAN binary?, Sparse questions
 @section Why are Quartz plots much bigger than they used to be?
 R versions before 2.7.0 had a Quartz window that was smaller both in size and scale. This was caused by two ``bugs'': all devices in R have a default size of 7 inches. Quartz used a default of 5 inches and that was now changed to match all other devices. In addition, Quartz was incorrectly assuming a resolution of 72dpi for all screens. This means that a plot was drawn at ca. 3/4 of its intended size (given that most modern monitors use 100 dpi or more). The new Quartz device correctly detects the resolution of a screen by default and thus the plots will appear larger than they used to be. The resolution can be set using the @code{dpi} parameter of Quartz, i.e. to obtain the old behavior use @code{quartz(width=5,height=5,dpi=72)} When creating a new Quartz device. If you want to make this your default, use @code{quartz.options(width=5, height=5, dpi=72)}. You can also set those options in the Quartz Preferences of the @Rapp{} GUI.
 
-Some other new features of Quartz in R 2.7.0 include a plot history (use <Cmd><Left> and <Cmd><Right> to browse), improved speed (uses Quartz Extreme) and the ability to create a variety of output formats (pdf, png, jpeg, tiff, gif, psd, bmp...) - see @code{?quartz} for details.
+Some other new features of Quartz in R 2.7.0 include a plot history (use <Cmd><Left> and <Cmd><Right> to browse), improved speed (uses Quartz Extreme) and the ability to create a variety of output formats (pdf, png, jpeg, tiff, gif, psd, bmp...) - see @code{?quartz} for details. Also @code{CarbonEL} is no longer needed, Quartz starts its own even loop when necessary.
 
 @node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?,  , Why is the Quartz much bigger than it used to be?, Sparse questions
 @section Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?
