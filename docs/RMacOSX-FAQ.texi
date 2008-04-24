@@ -4,7 +4,7 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2008
-@set FAQ-VERSION 2.7-0 @value{FAQ-YEAR}-04-18
+@set FAQ-VERSION 2.7-0 @value{FAQ-YEAR}-04-24
 @set REL-VERSION 2.7.0
 @set GUI-VERSION 1.24
 @documentlanguage en
@@ -242,7 +242,7 @@ It installs everything in @file{/usr/local}.
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
 
-Mac OS X 10.5 (Leopard) installs X11 by default, however the default X11 installaation (as of Mac OS X 10.5.1) ships with a broken OpenGL library that prevents compilation. See @uref{http://r.research.att.com/building.html} for the latest update on the details. Also @code{/usr/X11/bin} must be on the @code{PATH} in order for @R{} to recognize X11 properly (e.g. by issuing @code{export PATH=/usr/X11/bin:$PATH}).
+Mac OS X 10.5 (Leopard) installs X11 by default, however the default X11 installaation (as of Mac OS X 10.5.2) ships with a broken OpenGL library that prevents compilation. See @uref{http://r.research.att.com/building.html} for the latest update on the details. Also @code{/usr/X11/bin} must be on the @code{PATH} in order for @R{} to recognize X11 properly (e.g. by issuing @code{export PATH=/usr/X11/bin:$PATH}).
 
 Mac OS X 10.3 (Panther) and 10.4 (Tiger) include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installation CD/DVD.
 
@@ -1113,14 +1113,15 @@ Each binary distribution of @R{} available through @CRAN{} is built to use the X
 Of course a X windows server has to be started first. If you are not using the R.app you need to also
 define the environment variable DISPLAY before attempting to use X11 from inside @R{}. You can do this as follows
 @example
-Sys.putenv("DISPLAY"=":0")
+Sys.setenv(DISPLAY=":0")
 @end example
 If you don't like the X11 GUI you would probably want to build R using the Aqua version of TclTk (@pxref{Aqua TclTk headers and libraries (optional)}).
-After installing the R.framework you may have to use @code{CarbonEL} package to allow the quartz device to work under Aqua TclTk.
+
+Note: Mac OS X 10.5 (Leopard) now comes with a ``feature'' that changes the way X11 server is setup. As a consequence DISPLAY variable should not be touched or it will impede that mechnism. The good part is that it should start X11 automatically.
 
 @node Internationalization of the R.app, Additional resources, TclTk issues, Top
 @chapter Internationalization of the R.app
-In R 2.1 both R and the R.app GUI introduced support for internationalization. Among other things this means that both messages and GUI elements can be translated into various languages. R.app automatically detects user's settings in the @emph{International} section of the System Preferences and uses that information to offer translated messages and GUI if available. Please note that both @emph{Language} and @emph{Formats} information is used so they should be set up consistently.
+R and the R.app GUI introduced support for internationalization in R 2.1.0. Among other things this means that both messages and GUI elements can be translated into various languages. R.app automatically detects user's settings in the @emph{International} section of the System Preferences and uses that information to offer translated messages and GUI if available. Please note that both @emph{Language} and @emph{Formats} information is used so they should be set up consistently.
 
 If you use a non-standard setup (e.g. different language than formats), you can override the auto-detection performed by setting @samp{force.LANG} defaults setting, such as for example
 @example
@@ -1169,6 +1170,8 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * Which BLAS is used and how can it be changed?::  
 * I don't see a thing when installing packages!::  
 * Why do I need custom compilers for the CRAN binary?::  
+* Why is the Quartz much bigger than it used to be?::  
+* Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1227,11 +1230,24 @@ The output is not produced continuously during the package installation. Unlike 
 
 Also note that the development build of R.app sends output to the error console instead of the screen. You may want to check the @emph{Console} application in that case.
 
-@node Why do I need custom compilers for the CRAN binary?,  , I don't see a thing when installing packages!, Sparse questions
+@node Why do I need custom compilers for the CRAN binary?, Why is the Quartz much bigger than it used to be?, I don't see a thing when installing packages!, Sparse questions
 @section Why do I need custom compilers for the CRAN binary?
 As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 2.4.1 and a GNU Fortran 4.2.1 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/} and it lives in @code{/usr/local}.
 
 @CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler was kept in place, but @R{} used the new compiler for compiling packages instead. The main reason for this was that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we switched back to Apple's compilers for @R{} 2.5.0 and later.
+
+@node Why is the Quartz much bigger than it used to be?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why do I need custom compilers for the CRAN binary?, Sparse questions, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why do I need custom compilers for the CRAN binary?, Sparse questions
+@section Why are Quartz plots much bigger than they used to be?
+R versions before 2.7.0 had a Quartz window that was smaller both in size and scale. This was caused by two ``bugs'': all devices in R have a default size of 7 inches. Quartz used a default of 5 inches and that was now changed to match all other devices. In addition, Quartz was incorrectly assuming a resolution of 72dpi for all screens. This means that a plot was drawn at ca. 3/4 of its intended size (given that most modern monitors use 100 dpi or more). The new Quartz device correctly detects the resolution of a screen by default and thus the plots will appear larger than they used to be. The resolution can be set using the @code{dpi} parameter of Quartz, i.e. to obtain the old behavior use @code{quartz(width=5,height=5,dpi=72)} When creating a new Quartz device. If you want to make this your default, use @code{quartz.options(width=5, height=5, dpi=72)}. You can also set those options in the Quartz Preferences of the @Rapp{} GUI.
+
+Some other new features of Quartz in R 2.7.0 include a plot history (use <Cmd><Left> and <Cmd><Right> to browse), improved speed (uses Quartz Extreme) and the ability to create a variety of output formats (pdf, png, jpeg, tiff, gif, psd, bmp...) - see @code{?quartz} for details.
+
+@node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?,  , Why is the Quartz much bigger than it used to be?, Sparse questions
+@section Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?
+
+Mac OS X 10.5.2 contains a very serious bug that makes @code{log10} return incorrect results in 64-bit Intel programs (x86_64). The bug was fixed in Mac OS X 10.5.3 therefore you have to update to Mac OS X 10.5.3 if you want to use 64-bit Intel binaries.
+
+If you want to create a binary that works on all versions of Mac OS X 10.5, you have to replace @code{log10} by something like @code{#define log10(X) (log2(X) * 0x1.34413509F79FFp-2)} (see Apple SciTech mailing list for the corresponding discussion and different work-arounds).
 
 @bye
 
