@@ -275,11 +275,11 @@ Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two op
 @node Cairo graphics library (optional), X11 TclTk headers and libraries (optional), X11 window server (optional), What is needed to build R
 @subsection Cairo graphics library (optional)
 
-R 2.7.0 includes support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary ew use for the release from @uref{http://r.research.att.com/cairo-bin-devpack2.tar.gz}., X11 TclTk headers and libraries (optional), Cairo graphics library (optional), Cairo graphics library (optional)
+R 2.7.0 includes support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary we use for the release from @uref{http://r.research.att.com/cairo-bin-devpack2.tar.gz}.
 
 In general cairo grapics library can be obtained from @uref{http://www.cairographics.org/}. More recent versions can use either native ATSUI/Quartz font back-end or FreeType. If the latter is used, make sure you get the most recent (even development) version available, because there are known bugs in FreeType with respect to Mac font support.
 
-Cairo support is strictly optional given that Quartz is the default graphics device on Mac OS X.
+Cairo support is strictly optional given that Quartz is the default graphics device on Mac OS X, but it can be useful for remote displays.
 
 @node X11 TclTk headers and libraries (optional), Aqua TclTk headers and libraries (optional), Cairo graphics library (optional), What is needed to build R
 @subsection X11 TclTk headers and libraries (optional)
