@@ -1982,7 +1982,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
 				[self handleWriteConsole: msg];
 			}
-			if ([manager fileExistsAtPath:@".Rprofile"])
+			if ([manager fileExistsAtPath:@".Rprofile"] && ![[manager currentDirectoryPath] isEqualToString:[@"~" stringByExpandingTildeInPath]])
 				[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
 			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
