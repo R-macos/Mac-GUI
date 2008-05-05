@@ -552,10 +552,6 @@ static RController* sharedRController;
 		[self handleWriteConsole: msg];
 		SLog(@"RController.applicationDidFinishLaunching - load workspace %@", fname);
 	}
-	// source .Rprofile in the current directory if present
-	if (([pendingDocsToOpen count] == 0) && // if docs are pending, they may be directories which handle their own sourcing
-	    ([[NSFileManager defaultManager] fileExistsAtPath: @".Rprofile"]))
-		[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
 
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];

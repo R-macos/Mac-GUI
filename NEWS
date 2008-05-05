@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-05-05 [SU]
+*	bugfix: .Rprofile was loaded twice if the startup and
+	open directories were the same (PR#11380)
+
 -- Release Version 1.24 (5102) - supplied with R 2.7.0 --
 
 Last-update: 2008-04-22 [SU]
