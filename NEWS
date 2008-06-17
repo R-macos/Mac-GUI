@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-06-16 [SU]
+*	fix moveToBeginningOfLineAndModifySelection: (<Cmd><Shift><Left>)
+	to behave as expected; implement deleteToBeginningOfLine:
+	Note that *BeginningOfLine*: is still implemented the same as
+	*BeginningOfParagraph*: which may lead to some confusion when
+	working with multi-line commands (but this was always the case).
+
 Last-update: 2008-05-05 [SU]
 *	bugfix: .Rprofile was loaded twice if the startup and
 	open directories were the same (PR#11380)

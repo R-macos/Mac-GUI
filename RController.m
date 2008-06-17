@@ -1678,15 +1678,33 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
     }
     
 	// ---- make sure the user won't accidentally get out of the input line ----
-	
+	// FIXME: essentially everything here behaves the same for a paragraph and line, but we should be making a distinction because of multi-line commands
 	if (@selector(moveToBeginningOfParagraph:) == commandSelector || @selector(moveToBeginningOfLine:) == commandSelector) {
         [textView setSelectedRange: NSMakeRange(committedLength,0)];
         retval = YES;
     }
 	
+	if (@selector(deleteToBeginningOfLine:) == commandSelector || @selector(deleteToBeginningOfParagraph:) == commandSelector) {
+		NSRange r = [textView selectedRange];
+		if (r.length) /* if anything is selected, only the selected portion gets killed */
+			[textView insertText:@""];
+		else { /* otherwise delete all up to the beginning of the line or commit point */
+			r.length = r.location - committedLength;
+			r.location = committedLength;
+			if (r.length > 0) {
+				[textView setSelectedRange:r];
+				[textView insertText:@""];
+			}
+		}
+		retval = YES;
+	}
+    
 	if (@selector(moveToBeginningOfParagraphAndModifySelection:) == commandSelector || @selector(moveToBeginningOfLineAndModifySelection:) == commandSelector) {
-		// FIXME: this kills the selection - we should retain it ...
-        [textView setSelectedRange: NSMakeRange(committedLength,0)];
+		NSRange r = [textView selectedRange];
+		r.length = r.location + r.length - committedLength;
+		r.location = committedLength;
+		if (r.length < 0) r.length = 0;
+        [textView setSelectedRange: r];
         retval = YES;
     }
 	
