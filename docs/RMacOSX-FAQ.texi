@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2008
-@set FAQ-VERSION 2.7-1 @value{FAQ-YEAR}-04-30
-@set REL-VERSION 2.7.0
-@set GUI-VERSION 1.24
+@set FAQ-VERSION 2.7-2 @value{FAQ-YEAR}-06-23
+@set REL-VERSION 2.7.1
+@set GUI-VERSION 1.25
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -173,7 +173,7 @@ sudo rm -f /usr/local/lib && \
 sudo mv '/usr/local/lib 1' /usr/local/lib
 @end example
 
-R 2.7.0 installer attempts to detect and resolve the above problem automatically.
+R installer since version 2.7.0 attempts to detect and resolve the above problem automatically.
 
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
@@ -219,7 +219,7 @@ Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.6.2 @CRAN{} binary comes with GNU Fortran 4.2.1 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.7.1 @CRAN{} binary comes with GNU Fortran 4.2.3 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
 
 Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.x with gfortran 4.x, other combinations usually don't work.
 
@@ -275,7 +275,7 @@ Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two op
 @node Cairo graphics library (optional), X11 TclTk headers and libraries (optional), X11 window server (optional), What is needed to build R
 @subsection Cairo graphics library (optional)
 
-R 2.7.0 includes support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary we use for the release from @uref{http://r.research.att.com/cairo-bin-devpack2.tar.gz}.
+R 2.7.0 and later include support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary we use for the release from @uref{http://r.research.att.com/cairo-bin-devpack2.tar.gz}.
 
 In general cairo grapics library can be obtained from @uref{http://www.cairographics.org/}. More recent versions can use either native ATSUI/Quartz font back-end or FreeType. If the latter is used, make sure you get the most recent (even development) version available, because there are known bugs in FreeType with respect to Mac font support.
 
@@ -419,14 +419,14 @@ In addition, the compilers must support both architectures as well. You will nee
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.6.2.tar.gz} is in the current directory, replace @samp{R-2.6.2} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.7.1.tar.gz} is in the current directory, replace @samp{R-2.7.1} with any other version or name as appropriate):
 @example
-tar fxz R-2.6.2.tar.gz
+tar fxz R-2.7.1.tar.gz
 mkdir R-ppc
 cd R-ppc
 ../R-2.6.2/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
 CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
-FC="gfortran-4.0 -arch ppc"
+FC="gfortran-4.0 -arch ppc" OBJC="gcc-4.0 -arch ppc"
 make
 make install
 cd ..
@@ -437,9 +437,9 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.6.2/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+../R-2.7.1/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
 CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
-FC="gfortran-4.0 -arch i386"
+FC="gfortran-4.0 -arch i386" OBJC="gcc-4.0 -arch i386"
 make
 make install
 cd ..
@@ -1182,6 +1182,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * Why is the Quartz much bigger than it used to be?::  
 * Why is Quartz so slow?::      
 * Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?::  
+* Why doesn't R GUI support keyboard shortcut XYZ ?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1255,14 +1256,19 @@ Some other new features of Quartz in R 2.7.0 include a plot history (use <Cmd><L
 @node Why is Quartz so slow?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why is the Quartz much bigger than it used to be?, Sparse questions
 @section Why is Quartz so slow?
 
-In @R{} 2.7.0 a new Quartz device was introduced for greater flexibility and speed. It was designed to take advantage of Quartz Extreme and hardware rendering where supported. Nonetheless it turned out that the way lines are drawn can be very slow for certain back-ends if Quartz falls back to software rendering. This issue was addressed in R 2.7.0 patched (r45567 or later). If you experience extreme slowness drawing lines, please update e.g. using binaries from @uref{http://r.research.att.com/}.
+In @R{} 2.7.0 a new Quartz device was introduced for greater flexibility and speed. It was designed to take advantage of Quartz Extreme and hardware rendering where supported. Nonetheless it turned out that the way lines are drawn can be very slow for certain back-ends if Quartz falls back to software rendering. This issue was addressed in R 2.7.0 patched (r45567 or later). If you experience extreme slowness drawing lines, please update to R 2.7.1 or use nightly builds from @uref{http://r.research.att.com/}.
 
-@node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?,  , Why is Quartz so slow?, Sparse questions
+@node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why doesn't R GUI support keyboard shortcut XYZ ?, Why is Quartz so slow?, Sparse questions
 @section Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?
 
 Mac OS X 10.5.2 contains a very serious bug that makes @code{log10} return incorrect results in 64-bit Intel programs (x86_64). The bug was fixed in Mac OS X 10.5.3 therefore you have to update to Mac OS X 10.5.3 if you want to use 64-bit Intel binaries.
 
 If you want to create a binary that works on all versions of Mac OS X 10.5, you have to replace @code{log10} by something like @code{#define log10(X) (log2(X) * 0x1.34413509F79FFp-2)} (see Apple SciTech mailing list for the corresponding discussion and different work-arounds).
+
+@node Why doesn't R GUI support keyboard shortcut XYZ ?,  , Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Sparse questions
+@section Why doesn't R GUI support keyboard shortcut XYZ ?
+
+The R.app GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows very flexible customization. For example if you are not satistied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentaton on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
 
 @bye
 
