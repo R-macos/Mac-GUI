@@ -1180,7 +1180,7 @@ reHilite:
 			}
 			case hsTypeApprox: {
 				if (!helpTempFile)
-					helpTempFile = [NSString stringWithFormat:@"/tmp/RguiHS%x", (int) self];
+					helpTempFile = [NSString stringWithFormat:@"/tmp/RguiHS%p", self];
 				SLog(@" - approx search will use %@", helpTempFile);
 				RSEXP * x= [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try({function(a){sink('%@'); cat(paste('<html><table>',paste('<tr><td><b>',a[,1],'</b> (<a href=\"file://',a[,4],'/html/00Index.html\">',a[,3],'</a></td><td>',a[,2],'</td></tr>',sep='',collapse=''),'</table></html>',sep=''));sink();'OK'}}(help.search(\"%@\")$matches),silent=TRUE)", helpTempFile, ss]];
 				SLog(@" - resulting SEXP=%@", x);

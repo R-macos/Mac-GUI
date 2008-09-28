@@ -47,6 +47,18 @@ NSString *location[4] = {
 	@".libPaths()[1]"
 };
 
+/* for pre-10.5 compatibility */
+#ifndef NSINTEGER_DEFINED
+#if __LP64__ || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+#define NSINTEGER_DEFINED 1
+#endif
+
 @interface PackageEntry (PrivateMethods)
 - (NSString*) name;
 - (NSString*) iver;
@@ -196,7 +208,7 @@ NSString *location[4] = {
 			NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];
 			NSString *repos = @"getOption(\"repos\")";
 			NSString *type  = @"mac.binary";
-			unsigned current_index = [rows firstIndex];
+			NSUInteger current_index = [rows firstIndex];
 			
 			if(current_index == NSNotFound) {
 				[self busy: NO];
@@ -207,8 +219,8 @@ NSString *location[4] = {
 			packagesToInstall = [[NSMutableString alloc] initWithString: @"c("];
 			
 			while (current_index != NSNotFound) {
-				int cix = current_index;
-				if (filter) cix=filter[cix];
+				NSUInteger cix = current_index;
+				if (filter) cix = filter[cix];
 				[packagesToInstall appendFormat:@"\"%@\"",[[packages objectAtIndex:cix] name]];
 				current_index = [rows indexGreaterThanIndex: current_index];
 				if(current_index != NSNotFound)
@@ -734,7 +746,7 @@ NSString *location[4] = {
 	NSIndexSet *preIx = [pkgDataSource selectedRowIndexes];
 	NSMutableIndexSet *postIx = [[NSMutableIndexSet alloc] init];
 	NSMutableIndexSet *absSelIx = [[NSMutableIndexSet alloc] init];
-	int i=0;
+	NSUInteger i=0;
 	
 	if ([preIx count]>0) { // save selection in absolute index positions
 		i = [preIx firstIndex];
@@ -742,8 +754,8 @@ NSString *location[4] = {
 			if (!filter || i<filterlen)
 				[absSelIx addIndex:filter?filter[i]:i];
 			i = [preIx indexGreaterThanIndex:i];
-		} while (i!=NSNotFound);
-		i=0;
+		} while (i != NSNotFound);
+		i = 0;
 	}
 	
 	if (filter) {

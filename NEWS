@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2008-08-28[SU]
+*	fixes to make some of the (older) code more 64-bit robust
+
 -- Release Version 1.25 (5166) - supplied with R 2.7.1 --
 
 Last-update: 2008-06-16 [SU]

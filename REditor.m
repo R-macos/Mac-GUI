@@ -38,6 +38,17 @@
 #include <Rinternals.h>
 #include <Rversion.h>
 
+/* for pre-10.5 compatibility */
+#ifndef NSINTEGER_DEFINED
+#if __LP64__ || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+#define NSINTEGER_DEFINED 1
+#endif
 
 #ifndef max
 #define max(x,y) x<y?y:x;
@@ -401,7 +412,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 -(IBAction) addCol:(id)sender{
 	char clab[25];
-	int lastcol, i;
+	NSUInteger lastcol, i;
 	SEXP names2, work2;
 	/* extend work, names and lens */
 	NSIndexSet *cols =  [editorSource selectedColumnIndexes];			
@@ -443,11 +454,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 -(IBAction) remCols:(id)sender
 {
 	SEXP work2,names2;
-	int i,j,ncols;
+	NSUInteger i, j, ncols;
 	int *colidx;
 
 	NSIndexSet *cols =  [editorSource selectedColumnIndexes];			
-	unsigned current_index = [cols firstIndex];
+	NSUInteger current_index = [cols firstIndex];
 	if(current_index == NSNotFound)
 		return;
 	
@@ -495,7 +506,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 /* FIXME: it actually crashes if a row is added in the middle of the data */
 
 -(IBAction) addRow:(id)sender{
-	int col, row, lastrow;
+	NSUInteger col, row, lastrow;
 	SEXP tmp, tmp2, work2;
 	SEXPTYPE type;
 	
@@ -540,7 +551,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 -(IBAction) remRows:(id)sender{
 
 	SEXP tmp, newc;
-	int idx,col,row,nrows;
+	NSUInteger idx,col,row,nrows;
 	SEXPTYPE type;
 
 	NSIndexSet *rows =  [editorSource selectedRowIndexes];			

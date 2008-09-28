@@ -3,6 +3,17 @@
 #import "REngine/REngine.h"
 #import "REngine/RSEXP.h"
 
+/* for pre-10.5 compatibility */
+#ifndef NSINTEGER_DEFINED
+#if __LP64__ || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+#define NSINTEGER_DEFINED 1
+#endif
 
 @implementation VignettesController
 
@@ -44,7 +55,7 @@ static VignettesController *vignettesSharedController = nil;
 	NSIndexSet *preIx = [tableView selectedRowIndexes];
 	NSMutableIndexSet *postIx = [[NSMutableIndexSet alloc] init];
 	NSMutableIndexSet *absSelIx = [[NSMutableIndexSet alloc] init];
-	int i=0;
+	NSUInteger i=0;
 	
 	if ([preIx count]>0) { // save selection in absolute index positions
 		i = [preIx firstIndex];
@@ -52,7 +63,7 @@ static VignettesController *vignettesSharedController = nil;
 			if (!filter || i<filterlen)
 				[absSelIx addIndex:filter?filter[i]:i];
 			i = [preIx indexGreaterThanIndex:i];
-		} while (i!=NSNotFound);
+		} while (i != NSNotFound);
 		i=0;
 	}
 	

@@ -36,12 +36,12 @@
     [col addObject: colCont];
     [colNames addObject: name];
     if ([col count]==1) {
-		int i=0;
-		rows=[colCont count];
-		sortMap=(int*) malloc(sizeof(int)*rows);
-		invSortMap=(int*) malloc(sizeof(int)*rows);
+		NSUInteger i = 0;
+		rows = [colCont count];
+		sortMap = (int*) malloc(sizeof(int)*rows);
+		invSortMap = (int*) malloc(sizeof(int)*rows);
 		while (i<rows) { sortMap[i]=invSortMap[i]=i; i++; }
-    } else if ([colCont count]!=rows) {
+    } else if ([colCont count] != rows) {
 		NSLog(@"SortableDataSource: column %@ has %d rows, but the data source has %d rows! Bad things may happen...", name, rows);
     }
 }
@@ -146,8 +146,8 @@
     if (row<0 || row>=rows || !name)
 		return nil;
     else {
-		unsigned c = [colNames indexOfObject:name];
-		if (c==NSNotFound) return nil;
+		NSUInteger c = [colNames indexOfObject:name];
+		if (c == NSNotFound) return nil;
 		else {
 			NSArray *cc = (NSArray*) [col objectAtIndex: c];
 			return (!cc)?nil:[cc objectAtIndex: sortMap[row]];

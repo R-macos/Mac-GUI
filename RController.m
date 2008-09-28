@@ -1232,7 +1232,7 @@ extern BOOL isTimeToFinish;
 					SLog(@" - Disabling syntax highlighting for this document");
 					[(RDocumentWinCtrl*) [wcs objectAtIndex:0] setPlain:YES];
 				}
-				if(wtitle[i]!=nil)
+				if (wtitle)
 					[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
 				[document setEditable: NO];
 				SLog(@" - finally show the document window");

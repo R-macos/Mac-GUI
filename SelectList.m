@@ -30,6 +30,18 @@
 #import "RGUI.h"
 #import "SelectList.h"
 
+/* for pre-10.5 compatibility */
+#ifndef NSINTEGER_DEFINED
+#if __LP64__ || NS_BUILD_32_LIKE_64
+typedef long NSInteger;
+typedef unsigned long NSUInteger;
+#else
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+#define NSINTEGER_DEFINED 1
+#endif
+
 static SelectList *sharedController = nil;
 
 @implementation SelectList
@@ -153,7 +165,7 @@ BOOL IsSelectList;
 	
 	if (result == 1) {
 		NSIndexSet *rows =  [listDataSource selectedRowIndexes];			
-		unsigned current_index = [rows firstIndex];
+		NSUInteger current_index = [rows firstIndex];
 		
 		if(current_index == NSNotFound)
 			return 0;
