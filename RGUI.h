@@ -34,7 +34,7 @@
 #define __RGUI_H__
 
 /* GUI version */
-#define R_GUI_VERSION_STR "1.25" /* it must be a string, but should parse to a valid real number */
+#define R_GUI_VERSION_STR "1.26" /* it must be a string, but should parse to a valid real number */
 
 /* macros for translatable strings */
 #define NLS(S) NSLocalizedString(S,@"")
