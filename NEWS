@@ -1,6 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
-Last-update: 2008-08-28[SU]
+Last-update: 2008-10-17 [SU]
+*	run .First() if present after all 'open' events have been
+	processed.
+
+*	load .Rprofile (if present) before loading .RData on
+	drag and drop to be consistent with the regular R startup.
+
+Last-update: 2008-08-28 [SU]
 *	fixes to make some of the (older) code more 64-bit robust
 
 -- Release Version 1.25 (5166) - supplied with R 2.7.1 --

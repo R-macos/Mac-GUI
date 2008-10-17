@@ -565,7 +565,9 @@ static RController* sharedRController;
 			[self application:NSApp openFile:fileName];
 		[pendingDocsToOpen removeAllObjects];
 	}
-	
+
+	[[REngine mainEngine] executeString:@"if (exists('.First') && is.function(.First)) .First()"];
+
 #if R_VERSION >= R_Version(2,7,0)
 	SLog(@" - set Quartz preferences (if necessary)");
 	BOOL flag=[Preferences flagForKey:useQuartzPrefPaneSettingsKey withDefault: NO];
@@ -1992,6 +1994,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		if (!flag && !appLaunched) {
 //			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
 //			[[REngine mainEngine] executeString:@"sys.load.image('.RData', FALSE)"];
+			if ([manager fileExistsAtPath:@".Rprofile"] && ![[manager currentDirectoryPath] isEqualToString:[@"~" stringByExpandingTildeInPath]])
+				[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
 			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"]]) {
 				fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
 				cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
@@ -2000,8 +2004,6 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
 				[self handleWriteConsole: msg];
 			}
-			if ([manager fileExistsAtPath:@".Rprofile"] && ![[manager currentDirectoryPath] isEqualToString:[@"~" stringByExpandingTildeInPath]])
-				[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
 			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
