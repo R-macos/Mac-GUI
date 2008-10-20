@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2008
-@set FAQ-VERSION 2.7-2 @value{FAQ-YEAR}-08-27
-@set REL-VERSION 2.7.2
-@set GUI-VERSION 1.25
+@set FAQ-VERSION 2.8-0 @value{FAQ-YEAR}-10-20
+@set REL-VERSION 2.8.0
+@set GUI-VERSION 1.26
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -245,7 +245,7 @@ It installs everything in @file{/usr/local}.
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other devices that rely on X11.
 
-Mac OS X 10.5 (Leopard) installs X11 by default, however the default X11 installaation (as of Mac OS X 10.5.2) ships with a broken OpenGL library that prevents compilation. See @uref{http://r.research.att.com/building.html} for the latest update on the details. Also @code{/usr/X11/bin} must be on the @code{PATH} in order for @R{} to recognize X11 properly (e.g. by issuing @code{export PATH=/usr/X11/bin:$PATH}).
+Mac OS X 10.5 (Leopard) installs X11 by default, however the default X11 installation ships with a broken OpenGL library that prevents compilation. See @uref{http://r.research.att.com/building.html} for the latest update on the details. Also @code{/usr/X11/bin} must be on the @code{PATH} in order for @R{} to recognize X11 properly (e.g. by issuing @code{export PATH=/usr/X11/bin:$PATH}).
 
 Mac OS X 10.3 (Panther) and 10.4 (Tiger) include X11 on the installation CD/DVD, however, it is not selected by default. If it is not installed, you can re-install it using the original installation CD/DVD.
 
@@ -419,12 +419,12 @@ In addition, the compilers must support both architectures as well. You will nee
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.7.2.tar.gz} is in the current directory, replace @samp{R-2.7.1} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.8.0.tar.gz} is in the current directory, replace @samp{R-2.8.0} with any other version or name as appropriate):
 @example
-tar fxz R-2.7.2.tar.gz
+tar fxz R-2.8.0.tar.gz
 mkdir R-ppc
 cd R-ppc
-../R-2.7.2/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
+../R-2.8.0/configure r_arch=ppc CC="gcc-4.0 -arch ppc" \
 CXX="g++-4.0 -arch ppc" F77="gfortran-4.0 -arch ppc" \
 FC="gfortran-4.0 -arch ppc" OBJC="gcc-4.0 -arch ppc"
 make
@@ -437,7 +437,7 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.7.2/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
+../R-2.8.0/configure r_arch=i386 CC="gcc-4.0 -arch i386" \
 CXX="g++-4.0 -arch i386" F77="gfortran-4.0 -arch i386" \
 FC="gfortran-4.0 -arch i386" OBJC="gcc-4.0 -arch i386"
 make
@@ -446,12 +446,6 @@ cd ..
 @end example
 
 The installation scripts in @R{} are intelligent enough to merge both builds together and create a universal @R{} framework. One crucial requirement for this to work is to use @samp{i386} and @samp{ppc} as the architecture names. Other supported architecture names are @code{ppc64} and @code{x86_64} for 64-bit builds. One R installation can contain all four architectures.
-
-It is possible to use additional flags at configure time. To optimize the build for Intel Core 2 Duo processors, add the following flags for the Intel build:
-@example
-CFLAGS="-g -O2 -march=nocona" CXXFLAGS="-g -O2 -march=nocona" \
-FFLAGS="-g -O2 -march=nocona" FCFLAGS="-g -O2 -march=nocona"
-@end example
 
 Since Mac OS X 10.4.8 @samp{vecLib} is now multi-threaded, so there is no need for threaded ATLAS anymore and the corresponding static library is no longer included in the toolbox.
 
@@ -493,7 +487,7 @@ Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment var
 * R.app Bugs::                  
 @end menu
 
-R.app is the name for the new Cocoa-based GUI for Mac OS X that was introduced in R 2.0. It appears as an icon labeled @emph{R}, but to avoid confusion with general @R{}, we prefer to use the name as it appears when using @emph{Get Info} on the GUI: @samp{R.app} This stands for @emph{R application}.
+R.app is the name for the new Cocoa-based GUI for Mac OS X that was introduced in R 2.0.0. It appears as an icon labeled @emph{R}, but to avoid confusion with general @R{}, we prefer to use the name as it appears when using @emph{Get Info} on the GUI: @samp{R.app} This stands for @emph{R application}.
 
 Internally R.app is a Cocoa program (hence written in Obj-C) that loads R dynamic library in order to use R facilities.
 
@@ -857,7 +851,7 @@ information and sends the bug to the correct address.  Alternatively the
 bug report can be emailed to @email{R-bugs@@R-project.org} or submitted
 to the Web page at @uref{http://bugs.R-project.org/}.
 
-Before you fill a bug report, please try to reproduce it using both R.app and the console version of R (if applicable). If the bug if R.app-specific, please report the bug to @email{R-SIG-Mac@@R-project.org} instead.
+Before you fill a bug report, please try to reproduce it using both R.app and the console version of R (if applicable). If the bug if R.app-specific, please report the bug to @email{R-SIG-Mac@@R-project.org} instead. Please do NOT forget to mention the exact R.app version and include the output of @code{sessionInfo()}.
 
 In any circumstances, in case of a crash, please report the 
 crash.log for the @emph{R.bin} and/or @emph{R.app} application. You can get this
@@ -1183,6 +1177,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * Why is Quartz so slow?::      
 * Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?::  
 * Why doesn't R GUI support keyboard shortcut XYZ ?::  
+* What is the difference between the Leopard and Tiger builds?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1256,7 +1251,7 @@ Some other new features of Quartz in R 2.7.0 include a plot history (use <Cmd><L
 @node Why is Quartz so slow?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why is the Quartz much bigger than it used to be?, Sparse questions
 @section Why is Quartz so slow?
 
-In @R{} 2.7.0 a new Quartz device was introduced for greater flexibility and speed. It was designed to take advantage of Quartz Extreme and hardware rendering where supported. Nonetheless it turned out that the way lines are drawn can be very slow for certain back-ends if Quartz falls back to software rendering. This issue was addressed in R 2.7.0 patched (r45567 or later). If you experience extreme slowness drawing lines or glitches in drawing, please update to R 2.7.2 or use nightly builds from @uref{http://r.research.att.com/}.
+In @R{} 2.7.0 a new Quartz device was introduced for greater flexibility and speed. It was designed to take advantage of Quartz Extreme and hardware rendering where supported. Nonetheless it turned out that the way lines are drawn can be very slow for certain back-ends if Quartz falls back to software rendering. This issue was addressed in R 2.7.0 patched (r45567 or later). If you experience extreme slowness drawing lines or glitches in drawing, please update to R 2.8.0 or use nightly builds from @uref{http://r.research.att.com/}.
 
 @node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why doesn't R GUI support keyboard shortcut XYZ ?, Why is Quartz so slow?, Sparse questions
 @section Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?
@@ -1265,10 +1260,17 @@ Mac OS X 10.5.2 contains a very serious bug that makes @code{log10} return incor
 
 If you want to create a binary that works on all versions of Mac OS X 10.5, you have to replace @code{log10} by something like @code{#define log10(X) (log2(X) * 0x1.34413509F79FFp-2)} (see Apple SciTech mailing list for the corresponding discussion and different work-arounds).
 
-@node Why doesn't R GUI support keyboard shortcut XYZ ?,  , Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Sparse questions
+@node Why doesn't R GUI support keyboard shortcut XYZ ?, What is the difference between the Leopard and Tiger builds?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Sparse questions
 @section Why doesn't R GUI support keyboard shortcut XYZ ?
 
-The R.app GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows very flexible customization. For example if you are not satistied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentaton on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
+The R.app GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows a very flexible customization. For example if you are not satistied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentaton on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
+
+@node What is the difference between the Leopard and Tiger builds?,  , Why doesn't R GUI support keyboard shortcut XYZ ?, Sparse questions
+@section What is the difference between the Leopard and Tiger builds?
+
+We provide two different binary builds on CRAN: Tiger (Mac OS X 10.4) and Leopard (Mac OS X 10.5) builds. The Tiger build is a 32-bit build for PowerPC and Intel and works on Mac OS X 10.4 or higher. It is built using the same setup as @R{} prior to 2.8.0. It includes two architectures @code{i386} and @code{ppc}. The default pacakge type is @code{"mac.binary"} and packages in repositories are expected in @file{bin/macosx/universal/contrib/2.8}.
+
+In contrast the Leopard build requires Mac OS X 10.5 or higher and thus uses features that are new in Leopard. Also it includes both 32-bit and 64-bit architectures. On the console 64-bit version can be started using @code{R --arch=x86_64} for Intel Macs or @code{R --arch=ppc64} for PowerPC Macs. There are two GUI binaries -- one for 32-bit and one for 64-bit. The Leopard build uses Apple's gcc-4.2 compilers, the default package type is @code{"mac.binary.leopard"} and consequently packages are expected in @file{bin/macosx/leopard/contrib/2.8}. Note that some packages may not be available in 64-bit (e.g. if dependent libraries are not available in 64-bit).
 
 @bye
 
