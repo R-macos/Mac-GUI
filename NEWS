@@ -1,7 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.26 (5152) - supplied with R 2.8.0 --
+
 Last-update: 2008-10-17 [SU]
-*	run .First() if present after all 'open' events have been
+*	run .First() if present after (early) 'open' events have been
 	processed.
 
 *	load .Rprofile (if present) before loading .RData on
