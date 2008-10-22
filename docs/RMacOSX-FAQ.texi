@@ -4,7 +4,7 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2008
-@set FAQ-VERSION 2.8-0 @value{FAQ-YEAR}-10-20
+@set FAQ-VERSION 2.8-1 @value{FAQ-YEAR}-10-22
 @set REL-VERSION 2.8.0
 @set GUI-VERSION 1.26
 @documentlanguage en
@@ -214,7 +214,7 @@ In either cases be sure you have gcc version 3.3 or later - you can check the ve
 gcc --version
 @end example
 
-Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{gcc} 3.x is not supported on Intel Macs.
+Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{gcc} 3.x is not supported on Intel Macs. Apple's gcc-4.2 is highly recommended because previous versions are known to contain bugs.
 
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
@@ -239,7 +239,7 @@ sudo make install
 @end example
 It installs everything in @file{/usr/local}.
 
-@emph{Note:} It is possible to build multi-architecture readline binary in one step, for example set @samp{CC='gcc -arch ppc -arch ppc64 -arch i386 -arch x86_64'} to build all four architectures (see Apple Xcode tools reference for details). Such binary is available from @uref{http://r.research.att.com/exp/}.
+@emph{Note:} It is possible to build multi-architecture readline binary in one step, for example set @samp{CC='gcc -arch ppc -arch ppc64 -arch i386 -arch x86_64'} to build all four architectures (see Apple Xcode tools reference for details). Such binary is available as a part of the development pack from @uref{http://cran.r-project.org/bin/macosx/tools/}.
 
 @node X11 window server (optional), Cairo graphics library (optional), libreadline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
@@ -275,7 +275,7 @@ Mac OS X 10.2 (Jaguar) does not include X11 installer. However, there are two op
 @node Cairo graphics library (optional), X11 TclTk headers and libraries (optional), X11 window server (optional), What is needed to build R
 @subsection Cairo graphics library (optional)
 
-R 2.7.0 and later include support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary we use for the release from @uref{http://r.research.att.com/cairo-bin-devpack2.tar.gz}.
+R 2.7.0 and later include support for cairo graphics library as one of the options in X11 support. Mac OS X does not include cairo library, therefore we have to build our own. In order to simplify the distribution, we use a static build of cairo. Therefore the library is not needed at run time as it's already part of R. However, if you want to compile R, you can obtain the same binary we use for the release from @uref{http://r.research.att.com/devpack4-darwin8-bin4.tar.gz}. Read more on CRAN in the ``tools'' directory.
 
 In general cairo grapics library can be obtained from @uref{http://www.cairographics.org/}. More recent versions can use either native ATSUI/Quartz font back-end or FreeType. If the latter is used, make sure you get the most recent (even development) version available, because there are known bugs in FreeType with respect to Mac font support.
 
@@ -283,34 +283,36 @@ Cairo support is strictly optional given that Quartz is the default graphics dev
 
 @node X11 TclTk headers and libraries (optional), Aqua TclTk headers and libraries (optional), Cairo graphics library (optional), What is needed to build R
 @subsection X11 TclTk headers and libraries (optional)
-If you plan to use tcltk package for @R{}, you can either use Tcl/Tk headers and library supplied in the @R{} @CRAN{} binary or compile your own. The @CRAN{} binary includes universal Tcl/Tk 8.4.12 for X11.
+If you plan to use tcltk package for @R{}, you can either use Tcl/Tk headers and library supplied in the @R{} @CRAN{} binary or compile your own. The @CRAN{} binary includes universal Tcl/Tk 8.5.5 for X11 (boht 32-bit and 64-bit).
 
-Alternatively you need to download the sources of the Tcl and Tk 8.4.x packages to build yourself the sources. 
-The original sources can be found on the official TclTk web page @uref{http://www.tcl.tk/software/tcltk/8.4.html}.
-Please do the following respecting the sequence (you'll be asked for a root password). These are examples for version 8.4.12
+Alternatively you need to download the sources of the Tcl and Tk 8.5.x packages to build yourself the sources. 
+The original sources can be found on the official TclTk web page @uref{http://www.tcl.tk/software/tcltk/8.5.html} (do NOT use the ActiveTcl native binaries, they don't work with the tcltk package in R).
+Please do the following respecting the sequence (you'll be asked for a root password). These are examples for version 8.5.5
 of the Tcl and Tk sources, you'll probably find new version on the web page, thus only the name of the .tar.gz archives
 changes.
 
 The following shell commands will download, compile and install universal Tcl/Tk. Modify the configure part to suit your needs, such as if you don't need all architectures:
 @example
 cd /tmp/
-curl -O http://internap.dl.sourceforge.net/sourceforge/tcl/tcl8.4.12-src.tar.gz
-curl -O http://internap.dl.sourceforge.net/sourceforge/tcl/tk8.4.12-src.tar.gz
-tar fxz tcl8.4.12-src.tar.gz
-cd tcl8.4.12/unix
+curl -O http://internap.dl.sourceforge.net/sourceforge/tcl/tcl8.5.5-src.tar.gz
+curl -O http://internap.dl.sourceforge.net/sourceforge/tcl/tk8.5.5-src.tar.gz
+tar fxz tcl8.5.5-src.tar.gz
+cd tcl8.5.5/unix
 CFLAGS='-arch i386 -arch ppc -arch ppc64 -arch x86_64' ./configure --with-x \
 --disable-corefoundation --enable-threads --disable-symbols --disable-aqua
 make
 sudo make install
 
 cd ../..
-tar fxz tk8.4.12-src.tar.gz
-cd tk8.4.12/unix
+tar fxz tk8.5.5-src.tar.gz
+cd tk8.5.5/unix
 CFLAGS='-arch i386 -arch ppc -arch ppc64 -arch x86_64' ./configure --with-x \
 --disable-corefoundation --enable-threads --disable-symbols --disable-aqua
 make
 sudo make install
 @end example
+
+(64-bit build of Tk will only work if you have 64-bit X11 installed - this is the default o Leaoprd but not on Tiger).
 
 @node Aqua TclTk headers and libraries (optional), TeX suite of tools for documentation (optional), X11 TclTk headers and libraries (optional), What is needed to build R
 @subsection Aqua TclTk headers and libraries (optional)
@@ -397,7 +399,7 @@ xcodebuild -target R -configuration Deployment
 
 The current development is done using Xcode 2.2 or higher. The default deployment build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure /Library is available inside the SDK, recent Xcode installations ensure this automatically.
 
-For compatibility, the GUI offers an old-style project for Xcode 2.0 named @file{R.xcode} which will build PowerPC binary only. However, this project file is no longer actively maintained.
+For compatibility, the GUI offers an old-style project for Xcode 2.0 named @file{R.xcode} which will build PowerPC binary only. However, this project file is no longer actively maintained. In addition to the default @code{Deployment} configuration there is also @code{Depolyment64} configuration that build 64-bit version of the GUI - you must have 64-bit R framework and Mac OS X 10.5 or higher for this to work.
 
 The build includes both R.app and this R for Mac OS X FAQ. However, it is recommended to use at least GNU texinfo 4.7, because a bug in previous versions leads to invalid html output. Mac OS X 10.4 (Tiger) and later include the correct version of makeinfo.
 
@@ -1178,6 +1180,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?::  
 * Why doesn't R GUI support keyboard shortcut XYZ ?::  
 * What is the difference between the Leopard and Tiger builds?::  
+* What is the difference between the CRAN build and a vanilla build?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1265,12 +1268,23 @@ If you want to create a binary that works on all versions of Mac OS X 10.5, you 
 
 The R.app GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows a very flexible customization. For example if you are not satistied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentaton on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
 
-@node What is the difference between the Leopard and Tiger builds?,  , Why doesn't R GUI support keyboard shortcut XYZ ?, Sparse questions
+@node What is the difference between the Leopard and Tiger builds?, What is the difference between the CRAN build and a vanilla build?, Why doesn't R GUI support keyboard shortcut XYZ ?, Sparse questions
 @section What is the difference between the Leopard and Tiger builds?
 
 We provide two different binary builds on CRAN: Tiger (Mac OS X 10.4) and Leopard (Mac OS X 10.5) builds. The Tiger build is a 32-bit build for PowerPC and Intel and works on Mac OS X 10.4 or higher. It is built using the same setup as @R{} prior to 2.8.0. It includes two architectures @code{i386} and @code{ppc}. The default pacakge type is @code{"mac.binary"} and packages in repositories are expected in @file{bin/macosx/universal/contrib/2.8}.
 
 In contrast the Leopard build requires Mac OS X 10.5 or higher and thus uses features that are new in Leopard. Also it includes both 32-bit and 64-bit architectures. On the console 64-bit version can be started using @code{R --arch=x86_64} for Intel Macs or @code{R --arch=ppc64} for PowerPC Macs. There are two GUI binaries -- one for 32-bit and one for 64-bit. The Leopard build uses Apple's gcc-4.2 compilers, the default package type is @code{"mac.binary.leopard"} and consequently packages are expected in @file{bin/macosx/leopard/contrib/2.8}. Note that some packages may not be available in 64-bit (e.g. if dependent libraries are not available in 64-bit).
+
+@node What is the difference between the CRAN build and a vanilla build?,  , What is the difference between the Leopard and Tiger builds?, Sparse questions
+@section What is the difference between the CRAN build and a vanilla build?
+
+The CRAN build of R is silghtly different from a vanilla build of R, i.e., a simple @code{./configure && make && make install}. The default package type for all builds compiled from sources is @code{"source"} wheres CRAN uses @code{"mac.binary"} or @code{"mac.binary.leopard"} (see above). Only the CRAN build is guaranteed to be compatible with the package binaries on CRAN.
+
+In addition, the CRAN build contains multiple architectures (two or four) and thus corresponds to setting @code{r_arch} at configure time and installing each architecture. This poses some challenges for package installation, since packages with a @code{configure} script need to be installed several times (see package installation FAQ above). Therefore it is recommended for users to install binary packages instead.
+
+Further, the start script for the CRAN build is modified to launch the current architecture instead of the most recently installed one. Also PowerPC machines don't attempt to install other architectures due to missing universal files (this can be also (ab)used by setting @code{NATIVE_ARCH=/ppc} on any architecture to force analogous behavior).
+
+Since R 2.8.0 the CRAN binary also contains (statically) the most recent FontConfig with configuration and cache located inside R. See the @code{tools} directory in CRAN for the corresponding libraries and details.
 
 @bye
 
