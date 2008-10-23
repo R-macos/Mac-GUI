@@ -132,6 +132,7 @@
 		1CDD05480763E46900B8FCA6 /* PrefWindowController.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CDD05460763E46900B8FCA6 /* PrefWindowController.h */; };
 		1CDD05490763E46900B8FCA6 /* PrefWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CDD05470763E46900B8FCA6 /* PrefWindowController.m */; };
 		1CDD06120763FD2000B8FCA6 /* PreferenceKeys.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CDD06110763FD2000B8FCA6 /* PreferenceKeys.h */; };
+		6807116E0EB0CD4200436993 /* InfoPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = 6807116D0EB0CD4200436993 /* InfoPlist.h */; };
 		6807E645080EAE4100A03223 /* GlobalExHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 6807E643080EAE4100A03223 /* GlobalExHandler.h */; };
 		6807E646080EAE4100A03223 /* GlobalExHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6807E644080EAE4100A03223 /* GlobalExHandler.m */; };
 		6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6828383807804DFC004617B7 /* ExceptionHandling.framework */; };
@@ -262,7 +263,7 @@
 		165C0F4706EF05E000994593 /* SearchTable.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SearchTable.m; sourceTree = "<group>"; };
 		165C0F4806EF05E000994593 /* SearchTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SearchTable.h; sourceTree = "<group>"; };
 		1673550C06DE155F00A75774 /* PackageInstaller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PackageInstaller.h; sourceTree = "<group>"; };
-		1673550D06DE155F00A75774 /* PackageInstaller.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PackageInstaller.m; sourceTree = "<group>"; };
+		1673550D06DE155F00A75774 /* PackageInstaller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInstaller.m; sourceTree = "<group>"; };
 		1674D23406BA2E37008AC794 /* R.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = R.framework; path = /Library/Frameworks/R.framework; sourceTree = "<absolute>"; };
 		167BDD5D06D4C0F5005381BB /* PackageManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PackageManager.h; sourceTree = "<group>"; };
 		167BDD5E06D4C0F5005381BB /* PackageManager.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PackageManager.m; sourceTree = "<group>"; };
@@ -345,6 +346,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* R_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = R_Prefix.pch; sourceTree = "<group>"; };
+		6807116D0EB0CD4200436993 /* InfoPlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPlist.h; sourceTree = "<group>"; };
 		6807E643080EAE4100A03223 /* GlobalExHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalExHandler.h; sourceTree = "<group>"; };
 		6807E644080EAE4100A03223 /* GlobalExHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalExHandler.m; sourceTree = "<group>"; };
 		6812EC9E07BA6A360000B6A8 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 				32CA4F630368D1EE00C91783 /* R_Prefix.pch */,
 				6855194007B8FDDF00F3A57C /* RGUI.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				6807116D0EB0CD4200436993 /* InfoPlist.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -840,6 +843,7 @@
 				68AAC9ED08F41CD80064CDA1 /* VignettesController.h in Headers */,
 				68F84C6209ABB2BF0098D772 /* privateR.h in Headers */,
 				6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */,
+				6807116E0EB0CD4200436993 /* InfoPlist.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1266,6 +1270,196 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		680710F40EB0C05E00436993 /* Leopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD_CFG=1";
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Leopard;
+		};
+		680710F50EB0C05E00436993 /* Leopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = R_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Applications;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					R,
+				);
+				PRODUCT_NAME = R;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Leopard;
+		};
+		680710F60EB0C05E00436993 /* Leopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sush;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Leopard;
+		};
+		680710F70EB0C05E00436993 /* Leopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Leopard;
+		};
+		680710F80EB0C14F00436993 /* Leopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc64,
+					x86_64,
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = Leopard64;
+		};
+		680710F90EB0C14F00436993 /* Leopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = R_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Applications;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					R,
+				);
+				PRODUCT_NAME = R;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Leopard64;
+		};
+		680710FA0EB0C14F00436993 /* Leopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sush;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Leopard64;
+		};
+		680710FB0EB0C14F00436993 /* Leopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Leopard64;
+		};
 		680F0B2C0997CE66009CDBE8 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1278,7 +1472,6 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1347,7 +1540,6 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1422,7 +1614,6 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1519,6 +1710,10 @@
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEVELOPMENT_CFG=1";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Development;
@@ -1536,6 +1731,10 @@
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEPLOYMENT_CFG=1";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1549,6 +1748,10 @@
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEBUG_CFG=1";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
@@ -1565,6 +1768,10 @@
 					/Library/Frameworks/R.framework/Headers,
 					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEPLOYMENT64_CFG=1";
 				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Deployment64;
@@ -1652,6 +1859,8 @@
 			buildConfigurations = (
 				680F0B2C0997CE66009CDBE8 /* Development */,
 				680F0B2D0997CE66009CDBE8 /* Deployment */,
+				680710F60EB0C05E00436993 /* Leopard */,
+				680710FA0EB0C14F00436993 /* Leopard64 */,
 				68F2A1CC0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
@@ -1663,6 +1872,8 @@
 			buildConfigurations = (
 				680F0B310997CE66009CDBE8 /* Development */,
 				680F0B320997CE66009CDBE8 /* Deployment */,
+				680710F70EB0C05E00436993 /* Leopard */,
+				680710FB0EB0C14F00436993 /* Leopard64 */,
 				68F2A1CD0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
@@ -1674,6 +1885,8 @@
 			buildConfigurations = (
 				680F0B360997CE66009CDBE8 /* Development */,
 				680F0B370997CE66009CDBE8 /* Deployment */,
+				680710F50EB0C05E00436993 /* Leopard */,
+				680710F90EB0C14F00436993 /* Leopard64 */,
 				68F2A1CB0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
@@ -1685,6 +1898,8 @@
 			buildConfigurations = (
 				680F0B3B0997CE66009CDBE8 /* Development */,
 				680F0B3C0997CE66009CDBE8 /* Deployment */,
+				680710F40EB0C05E00436993 /* Leopard */,
+				680710F80EB0C14F00436993 /* Leopard64 */,
 				68F2A1CA0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);

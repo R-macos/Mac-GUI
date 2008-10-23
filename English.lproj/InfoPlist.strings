@@ -1,8 +1,5 @@
 /* Localized versions of Info.plist keys */
 
-CFBundleName = "R";
-CFBundleShortVersionString = "R 2.8.0 GUI 1.26";
-CFBundleGetInfoString = "R.app GUI 1.26 (%SVN%), S.Urbanek & S.M.Iacus, © R Foundation for Statistical Computing, 2008";
-NSHumanReadableCopyright = "R.app GUI 1.26 (%SVN%), S.Urbanek & S.M.Iacus, © R Foundation for Statistical Computing, 2008";
+/* CFBundleGetInfoString = "R.app GUI 1.26 (%SVN%), S.Urbanek & S.M.Iacus, © R Foundation for Statistical Computing, 2008"; */
 
 /* Don't forget to update RGUI.h when changing the verison number! */

@@ -32,6 +32,12 @@ fi
 
 sed "s/%SVN%/$SVNREV/g" "$1/English.lproj/InfoPlist.strings" > "$2/English.lproj/InfoPlist.strings"
 # Info.plist is actually one level below resources
-sed "s/%SVN%/$SVNREV/g" "$1/Info.plist" > "$2/../Info.plist"
+#sed "s/%SVN%/$SVNREV/g" "$1/Info.plist" > "$2/../Info.plist"
+# we have to use the target Info.plist because it has been pre-processed by Xcode
+sed "s/%SVN%/$SVNREV/g" "$2/../Info.plist" > "$2/../Info.plist.final"
+if [ -e "$2/../Info.plist.final" ]; then
+    rm -f "$2/../Info.plist"
+    mv "$2/../Info.plist.final" "$2/../Info.plist";
+fi
 
 exit 0
