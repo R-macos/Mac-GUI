@@ -207,7 +207,7 @@ typedef unsigned int NSUInteger;
 			NSMutableString *packagesToInstall = nil;
 			NSIndexSet *rows =  [pkgDataSource selectedRowIndexes];
 			NSString *repos = @"getOption(\"repos\")";
-			NSString *type  = @"mac.binary";
+			NSString *type  = pkgType;
 			NSUInteger current_index = [rows firstIndex];
 			
 			if(current_index == NSNotFound) {
@@ -345,22 +345,22 @@ typedef unsigned int NSUInteger;
 		
 		case kCRANBin:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(type=\"mac.binary\")"];
+				   [NSString stringWithFormat:@"browse.pkgs(type=\"%@\")", pkgType]];
 			break;
 			
 		case kCRANSrc:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(type=\"source\")"];
+				   @"browse.pkgs(type=\"source\")"];
 			break;
 			
 		case kBIOCBin:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"mac.binary\"), type=\"mac.binary\")"];
+				   [NSString stringWithFormat:@"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"%@\"), type=\"%@\")", pkgType, pkgType]];
 			break;
 			
 		case kBIOCSrc:
 			success = [[REngine mainEngine] executeString: 
-				@"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"source\"), type=\"source\")"];
+				   @"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"source\"), type=\"source\")"];
 			break;
 			
 		case kOTHER:
@@ -373,9 +373,9 @@ typedef unsigned int NSUInteger;
 			
 			[Preferences setKey:@"pkgInstaller.customURL" withObject:[urlTextField stringValue]];
 			success = [[REngine mainEngine] executeString: 
-				[NSString stringWithFormat:@"browse.pkgs(%@=\"%@\",type=\"%@\")",
-		                                       (pkgUrl == kOtherFlat)?@"contriburl":@"repos",
-                                               [urlTextField stringValue], (pkgFormat == kSource)?@"source":@"mac.binary"]];
+				   [NSString stringWithFormat:@"browse.pkgs(%@=\"%@\",type=\"%@\")",
+				    (pkgUrl == kOtherFlat)?@"contriburl":@"repos",
+				    [urlTextField stringValue], (pkgFormat == kSource)?@"source":pkgType]];
 			break;
 			
 	}
@@ -450,6 +450,15 @@ typedef unsigned int NSUInteger;
 			break;
 			
 		case kOTHER:
+			pkgFormat = hasBinaries ? kBinary : kSource;
+			[formatCheckBox setState:pkgFormat];
+			[formatCheckBox setEnabled:hasBinaries];
+			[urlTextField setHidden:NO];
+			[getListButton setEnabled:YES];
+			[updateAllButton setEnabled:YES];
+			[depsCheckBox setHidden:NO];
+			break;
+
 		case kOtherFlat:
 			pkgFormat = kBinary;
 			[formatCheckBox setState:pkgFormat];
@@ -505,13 +514,39 @@ typedef unsigned int NSUInteger;
 	pkgFormat = [[ sender selectedCell] state];
 }
 
+- (void)setPkgType: (NSString*) type
+{
+	hasBinaries = YES;
+	if (type && [type isEqualToString:@"source"]) {
+		NSInteger i;
+		pkgUrl = kCRANSrc;
+		pkgFormat = kSource;
+		[formatCheckBox setState:pkgFormat];
+		[repositoryButton selectItemWithTag:pkgUrl];
+		/* disable binary choices */
+		[repositoryButton setAutoenablesItems:NO];
+		i = [repositoryButton indexOfItemWithTag:kCRANBin]; if (i >= 0) [[repositoryButton itemAtIndex:i] setEnabled:NO];
+		SLog(@"Item: %@", [repositoryButton itemAtIndex:i]);
+		i = [repositoryButton indexOfItemWithTag:kBIOCBin]; if (i >= 0) [[repositoryButton itemAtIndex:i] setEnabled:NO];
+		hasBinaries = NO;
+		type = @"mac.binary"; /* not used for repositories but for local packages */
+	}
+	if (type) {
+		[pkgType release];
+		pkgType = [type copy];
+	}
+}
+
 - (void)awakeFromNib
 {
+	SLog(@"PackageInstaller: awakeFromNib");
 	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL" withDefault:defaultCustomURL];
 	{
 		// add version number to local installation 
 		location[1] = [[NSString alloc] initWithString: [NSString stringWithFormat:@"\"%@\"", [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath]]];
 	}
+	pkgType=[@"mac.binary" copy];
+	hasBinaries = YES;
 	[formatCheckBox setEnabled:NO];
 	if (cURL) [urlTextField setStringValue:cURL];
 	[urlTextField setHidden:YES];
@@ -587,12 +622,12 @@ typedef unsigned int NSUInteger;
 	filterlen=0;
 }
 
-- (int)numberOfRowsInTableView: (NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView: (NSTableView *)tableView
 {
 	return (filter)?filterlen:[packages count];
 }
 
-- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
+- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (NSInteger)row
 {
 	int lrow = row;
 	if (!packages) return nil;
@@ -664,7 +699,7 @@ typedef unsigned int NSUInteger;
 {
 	NSString *targetLocation = nil;
 	NSString *repos = nil;
-	NSString *type = @"mac.binary";
+	NSString *type = pkgType;
 	BOOL success = NO;
 
 	if(pkgUrl == kOTHER && [[urlTextField stringValue] isEqual:@""]) {

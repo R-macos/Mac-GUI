@@ -87,7 +87,9 @@
 	NSString *filterString;
 	
 	NSString *oldRPath;
+	NSString *pkgType;
 	
+	BOOL hasBinaries;
 	BOOL optionsChecked;
 	BOOL installedOnly;
 }
@@ -105,6 +107,8 @@
 
 - (IBAction)toggleShowInstalled:(id)sender;
 - (IBAction)selectOldPackages:(id)sender;
+
+- (void)setPkgType: (NSString*) type;
 
 - (id) window;
 - (void) reloadData;

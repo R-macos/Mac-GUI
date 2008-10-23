@@ -511,6 +511,14 @@ static RController* sharedRController;
 	[consoleTextView setEditable:YES];
 	[self flushROutput];
 	
+	RSEXP *xPT = [[REngine mainEngine] evaluateString:@".Platform$pkgType"];
+	if (xPT) {
+		NSString *pkgType = [xPT string];
+		SLog(@" - pkgType in this R: \"%@\"", pkgType);
+		if (pkgType) [[PackageInstaller sharedController] setPkgType:pkgType];
+		[xPT release];
+	}
+	
 #if R_VERSION >= R_Version(2,7,0)
 	/* set embedding flags such that Quartz knows that we have set everything up already */
 	QuartzFunctions_t *qf = getQuartzFunctions();
