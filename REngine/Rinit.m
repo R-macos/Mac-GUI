@@ -145,6 +145,7 @@ extern int  (*ptr_CocoaSystem)(char *);
 int end_Rmainloop(void);    /* from src/main.c */
 int Rf_initialize_R(int ac, char **av); /* from src/unix/system.c */
 
+#if R_VERSION < R_Version(2,7,0)
 extern Rboolean (*ptr_CocoaInnerQuartzDevice)(NewDevDesc *,char *,
 					  double ,double ,
 					  double ,char *,
@@ -162,6 +163,7 @@ extern Rboolean innerQuartzDevice(NewDevDesc*dd,char*display,
 								  int bg);
 extern void getQuartzParameters(double *width, double *height, double *ps, char *family, 
 								Rboolean *antialias, Rboolean *autorefresh, int *quartzpos);
+#endif
 
 /*--- note: the REPL code was modified, R_ReplState is not the same as used internally in R */
 
