@@ -8,9 +8,9 @@
  */
 
 /* GUI version as shown in infos e.g. 1.27-devel */
-#define GUI_VER 1.27-devel
+#define GUI_VER 1.27
 /* R postfix used to denote release versions of GUI - set to R release version (e.g. 2.8.0) or to anything that will be shown in between R and GUI (e.g. - or for Mac) */
-#define R_RELEASE for Mac OS X
+#define R_RELEASE 2.8.1
 
 #if LEOPARD_CFG
 #define CFG_NAME Leopard build 32-bit
@@ -18,7 +18,7 @@
 #if LEOPARD64_CFG
 #define CFG_NAME Leopard build 64-bit
 #endif
-#if DEPLOY_CFG
+#if DEPLOY_CFG || DEPLOYMENT_CFG
 #define CFG_NAME Tiger build 32-bit
 #endif
 #if DEPLOY64_CFG
