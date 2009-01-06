@@ -123,7 +123,7 @@ typedef unsigned int NSUInteger;
 - (IBAction)installSelected:(id)sender
 {
 	NSString *targetLocation = location[pkgInst];
-;
+
 	BOOL success = YES;
 	
 	if(!targetLocation){ /* custom location */
@@ -191,15 +191,31 @@ typedef unsigned int NSUInteger;
 	
 	switch(pkgUrl) {
 		case kLocalBin:
-			[[RController sharedController] installFromBinary:self];
+			[[REngine mainEngine] executeString: [NSString stringWithFormat:@"install.packages(file.choose(),%@,NULL,type='%@')", targetLocation, pkgType]];
 			break;
 			
 		case kLocalSrc:
-			[[RController sharedController] installFromSource:self];
+			 [[REngine mainEngine] executeString: [NSString stringWithFormat:@"install.packages(file.choose(),%@,NULL,type='source')", targetLocation]];
 			break;
 			
 		case kLocalDir:
-			[[RController sharedController] installFromDir:self];
+			 {
+				NSOpenPanel *op;
+				int answer;
+				
+				op = [NSOpenPanel openPanel];
+				[op setCanChooseDirectories:YES];
+				[op setCanChooseFiles:NO];
+				[op setTitle:NLS(@"Select Package Directory")];
+				
+				answer = [op runModalForDirectory:nil file:nil types:[NSArray arrayWithObject:@""]];
+				[op setCanChooseDirectories:NO];
+				[op setCanChooseFiles:YES];		
+				
+				if(answer == NSOKButton) 
+					if([op directory] != nil)
+						[[REngine mainEngine] executeString: [NSString stringWithFormat:@"install.packages(\"%@\",%@,NULL,type='source')",[op directory], targetLocation]];
+			}				
 			break;
 			
 		default:

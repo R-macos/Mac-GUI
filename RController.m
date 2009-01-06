@@ -2571,7 +2571,9 @@ This method calls the showHelpFor method of the Help Manager which opens
 }
 
 
-
+/**** NOTE: the following install...: methods are no longer used by the PakcageInstaller because they are wrong!
+ ****       (Incorrect target directory and packages type) Correct implementations are inside the PI.
+ ****       Remove as soon as it is clear that no NIB code uses it either! */
 - (IBAction)installFromDir:(id)sender
 {
 	NSOpenPanel *op;
@@ -2600,6 +2602,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 {
 	[[REngine mainEngine] executeString: @"install.packages(file.choose(),,NULL,type='source')" ];
 }
+/**** end of obsolete API ****/
 
 - (IBAction)togglePackageInstaller:(id)sender
 {
