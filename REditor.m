@@ -71,7 +71,7 @@ typedef enum {UNKNOWNN, NUMERIC, CHARACTER} CellType;
 
 BOOL IsDataEntry;
  
-char *get_col_name(int col)
+const char *get_col_name(int col)
 {
     static char clab[25];
     if (col <= xmaxused) {
@@ -141,7 +141,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 
     self = [super init];
     if (self) {
-		sharedDEController = self;
+		if (!sharedDEController)
+			sharedDEController = [self retain];
 		// Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		toolbar = nil;
@@ -204,10 +205,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 	
 	tmp = VECTOR_ELT(work, col-1);
 	
- 	CFStringGetCString((CFStringRef)anObject, buf, 255,  kCFStringEncodingMacRoman);
-	
+ 	CFStringGetCString((CFStringRef)anObject, buf, 255,  kCFStringEncodingUTF8);
 
-	
 	switch(get_col_type(col)){
 		case NUMERIC:
 			if(buf[0] == '\0') 
@@ -248,12 +247,13 @@ void printelt(SEXP invec, int vrow, char *strp)
 
     for (i = 1; i <= xmaxused ; i++) {
 		NSTableColumn *col;
-		col = [[[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]] autorelease];
+		col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
 		[[col headerCell] setTitle:[NSString stringWithUTF8String:get_col_name(i)]];
         [col setWidth: 50];
         [col setMaxWidth: 300];
 		[col sizeToFit];
         [editorSource addTableColumn: col];
+		[col release];
 	}
 	[editorSource reloadData];
 
@@ -280,7 +280,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (void) setupToolbar {
 	
     // Create a new toolbar instance, and attach it to our document window 
-	toolbar = [[[NSToolbar alloc] initWithIdentifier: DataEditorToolbarIdentifier] autorelease];
+	toolbar = [[NSToolbar alloc] initWithIdentifier: DataEditorToolbarIdentifier];
     
     // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
     [toolbar setAllowsUserCustomization: NO];
@@ -297,6 +297,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
     // Required delegate method:  Given an item identifier, this method returns an item 
     // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
+	// NSLog(@"toolbar: %@ itemForItemIdentifier:%@ willBeInsertedIntoToolbar:%d\n", toolbar, itemIdent, willBeInserted);
     NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
     
     if ([itemIdent isEqual: AddColToolbarItemIdentifier]) {
@@ -380,7 +381,8 @@ void printelt(SEXP invec, int vrow, char *strp)
     // cache a reference to the toolbar item or need to set up some initial state, this is the best place 
     // to do it.  The notification object is the toolbar to which the item is being added.  The item being 
     // added is found by referencing the @"item" key in the userInfo 
-//    NSToolbarItem *addedItem = [[notif userInfo] objectForKey: @"item"];
+    //NSToolbarItem *addedItem = [[notif userInfo] objectForKey: @"item"];
+	//NSLog(@"toolbarWillAddItem: %@", addedItem);
 }  
 
 - (void) toolbarDidRemoveItem: (NSNotification *) notif {
@@ -388,7 +390,8 @@ void printelt(SEXP invec, int vrow, char *strp)
     // the chance to tear down information related to the item that may have been cached.   The notification object
     // is the toolbar from which the item is being removed.  The item being added is found by referencing the @"item"
     // key in the userInfo 
-	// NSToolbarItem *removedItem = [[notif userInfo] objectForKey: @"item"];
+	//NSToolbarItem *removedItem = [[notif userInfo] objectForKey: @"item"];
+	//NSLog(@"toolbarDidRemoveItem: %@", removedItem);
 }
 
 - (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
@@ -413,13 +416,16 @@ void printelt(SEXP invec, int vrow, char *strp)
 -(IBAction) addCol:(id)sender{
 	char clab[25];
 	NSUInteger lastcol, i;
+	BOOL isEmpty = NO;
 	SEXP names2, work2;
 	/* extend work, names and lens */
 	NSIndexSet *cols =  [editorSource selectedColumnIndexes];			
 	lastcol = [cols lastIndex];
-	if(lastcol == NSNotFound)
-		lastcol = xmaxused -1;
-	
+	if(lastcol == NSNotFound) {
+		isEmpty = (xmaxused == 0);
+		lastcol = !isEmpty ? (xmaxused - 1) : 0;
+	}
+
 	xmaxused++;
 	newvar++;
 	PROTECT(names2 = duplicate(names)); nprotect++;
@@ -430,18 +436,19 @@ void printelt(SEXP invec, int vrow, char *strp)
 	REPROTECT(lens = allocVector(INTSXP, xmaxused), lpi);
 	
 	
-	for (i = 0; i <= lastcol; i++) {
+	if (!isEmpty) for (i = 0; i <= lastcol; i++) {
 		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2,i));
 		SET_VECTOR_ELT(names, i, VECTOR_ELT(names2,i));
 		INTEGER(lens)[i] = ymaxused;
 	}
 
+	if (!isEmpty) lastcol++;
 	sprintf(clab, "var%d", newvar);
-	SET_STRING_ELT(names, lastcol+1, mkChar(clab));
-	INTEGER(lens)[lastcol+1] = ymaxused;
-    SET_VECTOR_ELT(work, lastcol+1, ssNewVector(REALSXP, ymaxused));
-	
-	for (i = lastcol+2; i <xmaxused; i++) {
+	SET_STRING_ELT(names, lastcol, mkChar(clab));
+	INTEGER(lens)[lastcol] = ymaxused;
+    SET_VECTOR_ELT(work, lastcol, ssNewVector(REALSXP, ymaxused));
+
+	for (i = lastcol+1; i <xmaxused; i++) {
 		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2,i-1));
 		SET_VECTOR_ELT(names, i, VECTOR_ELT(names2,i-1));
 		INTEGER(lens)[i] = ymaxused;
@@ -509,37 +516,47 @@ void printelt(SEXP invec, int vrow, char *strp)
 	NSUInteger col, row, lastrow;
 	SEXP tmp, tmp2, work2;
 	SEXPTYPE type;
+	BOOL isEmpty = NO;
 	
 	NSIndexSet *rows =  [editorSource selectedRowIndexes];			
 	lastrow = [rows lastIndex]; /* last row selected by the user */
-	if(lastrow == NSNotFound)
-		lastrow = ymaxused - 1;
+	if(lastrow == NSNotFound) {
+		isEmpty = (ymaxused == 0);
+ 		lastrow = isEmpty ? 0 : (ymaxused - 1);
+	}
 
 	ymaxused++;
 	PROTECT(work2 = allocVector(VECSXP, xmaxused)); nprotect++;
 
 	for(col=1; col<= xmaxused; col++){
-		if (!isVector(tmp = VECTOR_ELT(work, col-1)))
+		tmp = VECTOR_ELT(work, col-1);
+		if (tmp == R_NilValue) /* the user started off with an empty list so we have to decide what to create .. */
+			type = REALSXP;
+		else {
+			if (!isVector(tmp))
 			error("internal type error in dataentry");
-		type = TYPEOF(tmp);
-		tmp2 = ssNewVector(type, ymaxused);
-		for (row = 0; row <= lastrow; row++){
-			if (type == REALSXP)
-				REAL(tmp2)[row] = REAL(tmp)[row];
-			else if (type == STRSXP)
-				SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row));
-			else
-				error("internal type error in dataentry");
+			type = TYPEOF(tmp);
 		}
+		tmp2 = ssNewVector(type, ymaxused);
+		if (tmp != R_NilValue && !isEmpty) {
+			for (row = 0; row <= lastrow; row++){
+				if (type == REALSXP)
+					REAL(tmp2)[row] = REAL(tmp)[row];
+				else if (type == STRSXP)
+					SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row));
+				else
+					error("internal type error in dataentry");
+			}
 		
-		for (row = lastrow+2; row < ymaxused; row++)
-			if (type == REALSXP)
-				REAL(tmp2)[row] = REAL(tmp)[row-1];
-			else if (type == STRSXP)
-				SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row));
-			else
-				error("internal type error in dataentry");
-		
+			for (row = lastrow+2; row < ymaxused; row++)
+				if (type == REALSXP)
+					REAL(tmp2)[row] = REAL(tmp)[row-1];
+				else if (type == STRSXP)
+					SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row));
+				else
+					error("internal type error in dataentry");
+		}
+
 		SET_VECTOR_ELT(work2, col-1, tmp2);	
 		INTEGER(lens)[col - 1] = ymaxused;
 	}

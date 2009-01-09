@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-01-09
+*	fix data editor to not crash when adding rows/columns to an
+	empty data frame.
+
 Last-update: 2009-01-06
 *	fix Package Installer to use correct target directory
 	when installing packages from local files or directories
