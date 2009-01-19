@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2008
-@set FAQ-VERSION 2.8-1 @value{FAQ-YEAR}-10-22
-@set REL-VERSION 2.8.0
-@set GUI-VERSION 1.26
+@set FAQ-VERSION 2.8-2 @value{FAQ-YEAR}-01-19
+@set REL-VERSION 2.8.1
+@set GUI-VERSION 1.28
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -1177,6 +1177,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * Why do I need custom compilers for the CRAN binary?::  
 * Why is the Quartz much bigger than it used to be?::  
 * Why is Quartz so slow?::      
+* Why are there faint lines in image plots?::  
 * Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?::  
 * Why doesn't R GUI support keyboard shortcut XYZ ?::  
 * What is the difference between the Leopard and Tiger builds?::  
@@ -1251,12 +1252,19 @@ R versions before 2.7.0 had a Quartz window that was smaller both in size and sc
 
 Some other new features of Quartz in R 2.7.0 include a plot history (use <Cmd><Left> and <Cmd><Right> to browse), improved speed (uses Quartz Extreme) and the ability to create a variety of output formats (pdf, png, jpeg, tiff, gif, psd, bmp...) - see @code{?quartz} for details. Also @code{CarbonEL} is no longer needed, Quartz starts its own even loop when necessary.
 
-@node Why is Quartz so slow?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why is the Quartz much bigger than it used to be?, Sparse questions
+@node Why is Quartz so slow?, Why are there faint lines in image plots?, Why is the Quartz much bigger than it used to be?, Sparse questions
 @section Why is Quartz so slow?
 
 In @R{} 2.7.0 a new Quartz device was introduced for greater flexibility and speed. It was designed to take advantage of Quartz Extreme and hardware rendering where supported. Nonetheless it turned out that the way lines are drawn can be very slow for certain back-ends if Quartz falls back to software rendering. This issue was addressed in R 2.7.0 patched (r45567 or later). If you experience extreme slowness drawing lines or glitches in drawing, please update to R 2.8.0 or use nightly builds from @uref{http://r.research.att.com/}.
 
-@node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why doesn't R GUI support keyboard shortcut XYZ ?, Why is Quartz so slow?, Sparse questions
+@node Why are there faint lines in image plots?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why is Quartz so slow?, Sparse questions
+@section Why are there faint lines in image plots?
+
+When plots based on the @code{image()} function are exported to PDF, Preview shows very faint grid lines at the edges of the rectangles that create the image. Those lines are a rendering artifact in Preview coming from the combination of anti-aliasing and sub-pixel rendering. They are not really a part of the PDF (zooming in will reveal that they are not a real object which would get larger with zoom) since the recangles are defined as a gapless coverage of the area. The effect can be circumvented by disabling anti-aliasing in Preview.
+
+We correct for this effect in Quartz when rendering on-screen by snapping all recangles to pixel boundaries of the screen, but Preview does not.
+
+@node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why doesn't R GUI support keyboard shortcut XYZ ?, Why are there faint lines in image plots?, Sparse questions
 @section Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?
 
 Mac OS X 10.5.2 contains a very serious bug that makes @code{log10} return incorrect results in 64-bit Intel programs (x86_64). The bug was fixed in Mac OS X 10.5.3 therefore you have to update to Mac OS X 10.5.3 if you want to use 64-bit Intel binaries.
