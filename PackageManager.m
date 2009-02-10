@@ -167,4 +167,10 @@ static PackageManager *sharedController = nil;
 	[[self window] makeKeyAndOrderFront:self];
 }
 
+- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
+{
+	[backButton setEnabled:[sender canGoBack]];
+	[forwardButton setEnabled:[sender canGoForward]];
+}
+
 @end

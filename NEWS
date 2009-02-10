@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-02-10
+*	fix back/forward buttons in Package Manager to work again
+
 Last-update: 2009-01-09
 *	fix data editor to not crash when adding rows/columns to an
 	empty data frame.

@@ -39,6 +39,26 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>activateQuartzDevice</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>RQuartz</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>deviceView</key>
+				<string>RDeviceView</string>
+				<key>deviceWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSDocument</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>showPrefsWindow</key>
 				<string>id</string>
 				<key>sortByAlphabet</key>
@@ -110,6 +130,10 @@
 				<string>id</string>
 				<key>PackageManagerWindow</key>
 				<string>id</string>
+				<key>backButton</key>
+				<string>NSButton</string>
+				<key>forwardButton</key>
+				<string>NSButton</string>
 				<key>packageDataSource</key>
 				<string>NSTableView</string>
 			</dict>
@@ -174,6 +198,60 @@
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>executeSelection</key>
+				<string>id</string>
+				<key>functionGo</key>
+				<string>id</string>
+				<key>goHelpSearch</key>
+				<string>id</string>
+				<key>goToLine</key>
+				<string>id</string>
+				<key>goToLineCloseSheet</key>
+				<string>id</string>
+				<key>printDocument</key>
+				<string>id</string>
+				<key>setHelpSearchType</key>
+				<string>id</string>
+				<key>sourceCurrentDocument</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>RDocumentWinCtrl</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>editorToolbar</key>
+				<string>id</string>
+				<key>fnListBox</key>
+				<string>NSPopUpButton</string>
+				<key>fnListView</key>
+				<string>NSView</string>
+				<key>goToLineField</key>
+				<string>NSTextField</string>
+				<key>goToLineSheet</key>
+				<string>NSPanel</string>
+				<key>helpDrawer</key>
+				<string>NSDrawer</string>
+				<key>helpWebView</key>
+				<string>WebView</string>
+				<key>scrollView</key>
+				<string>NSScrollView</string>
+				<key>searchToolbarField</key>
+				<string>NSSearchField</string>
+				<key>searchToolbarView</key>
+				<string>NSView</string>
+				<key>statusLine</key>
+				<string>NSTextField</string>
+				<key>textView</key>
+				<string>NSTextView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSWindowController</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -426,6 +504,19 @@
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>RDeviceView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>delegate</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>

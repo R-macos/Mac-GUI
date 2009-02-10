@@ -43,6 +43,9 @@ typedef struct pkgManagerEntry {
 {
 	IBOutlet NSTableView *packageDataSource;	/* TableView for the history */ 
 	IBOutlet id PackageInfoView;
+	
+	IBOutlet NSButton *backButton, *forwardButton;
+	
 	id  PackageManagerWindow;
 	
 	int packages;
