@@ -162,4 +162,14 @@ add.fn("data.manager", function ()
     }
 })
 
+add.fn("main.help.url", function () 
+{
+    .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(), 
+        collapse = " ")))
+    make.packages.html()
+    tmpdir <- paste("file://", tempdir(), "/.R", sep = "")
+    url <- paste(tmpdir, "/doc/html/index.html", sep = "")
+    options(main.help.url = url)
+})
+
 cat("[R.app GUI ",Sys.getenv("R_GUI_APP_VERSION")," (",Sys.getenv("R_GUI_APP_REVISION"),") ",R.version$platform,"]\n\n",sep='')
