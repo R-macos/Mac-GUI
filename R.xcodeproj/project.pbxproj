@@ -156,6 +156,7 @@
 		687B503C07945D4C00074042 /* RConsoleTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B503A07945D4C00074042 /* RConsoleTextStorage.m */; };
 		6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */; };
 		6880A0F40DBE886200FC684F /* QuartzCocoaDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */; };
+		6884A71C0F795F71000BB49F /* GUI-tools.R in Resources */ = {isa = PBXBuildFile; fileRef = 6884A70F0F795D7B000BB49F /* GUI-tools.R */; };
 		68AAC9E208F41CA10064CDA1 /* Vignettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 68AAC9E008F41CA10064CDA1 /* Vignettes.nib */; };
 		68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */; };
 		68AAC9E808F41CBB0064CDA1 /* DraggableScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */; };
@@ -379,6 +380,7 @@
 		6880973207AFFB2000F90DB0 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
 		6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuartzCocoaDocument.h; sourceTree = "<group>"; };
 		6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuartzCocoaDocument.m; sourceTree = "<group>"; };
+		6884A70F0F795D7B000BB49F /* GUI-tools.R */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; path = "GUI-tools.R"; sourceTree = "<group>"; };
 		68AAC9E108F41CA10064CDA1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Vignettes.nib; sourceTree = "<group>"; };
 		68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableScrollView.h; sourceTree = "<group>"; };
 		68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableScrollView.m; sourceTree = "<group>"; };
@@ -713,6 +715,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6884A70F0F795D7B000BB49F /* GUI-tools.R */,
 				686967DA07981764002A1932 /* Localizable.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				687B4E350794130800074042 /* RConsole.nib */,
@@ -980,6 +983,7 @@
 				68C11BBB09FED6E1004DD95C /* Rdoc.icns in Resources */,
 				68C11BBC09FED6E1004DD95C /* Rrun.icns in Resources */,
 				68C11BD009FEE47C004DD95C /* Rdata.icns in Resources */,
+				6884A71C0F795F71000BB49F /* GUI-tools.R in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

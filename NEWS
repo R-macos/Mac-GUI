@@ -1,5 +1,15 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-03-24
+*	add customizable script inside R.app that is loaded
+	on startup. This allows us to phase out legacy functions
+	formerly in utils. The first step is to move them to R.app,
+	the next step is to move the C code from R aqua internals into
+	the GUI and the final step is to get rid of the R wrappers
+	where possible.
+
+*	adjust paths to BioC for R 2.10.0
+
 Last-update: 2009-02-10
 *	fix back/forward buttons in Package Manager to work again
 

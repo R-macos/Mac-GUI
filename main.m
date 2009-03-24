@@ -72,9 +72,13 @@ int main(int argc, const char *argv[])
 	 QuartzRegisterSymbols();
 	 /* create quartz.save function in tools:quartz */
 	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e)}))"];
-#else
+#elif R_VERSION < R_Version(2,9,0)
 	/* in R 2.7.0 we use dev.copy to implement quartz.save */
 	[[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\", function(file, type='png', device=dev.cur(), dpi=100, ...) {\n # modified version of dev.copy2pdf\n dev.set(device)\n current.device <- dev.cur()\n nm <- names(current.device)[1]\n if (nm == 'null device') stop('no device to print from')\n oc <- match.call()\n oc[[1]] <- as.name('dev.copy')\n oc$file <- NULL\n oc$device <- quartz\n oc$type <- type\n oc$file <- file\n oc$dpi <- dpi\n din <- dev.size('in')\n w <- din[1]\n h <- din[2]\n if (is.null(oc$width))\n oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w\n if (is.null(oc$height))\n oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h\n dev.off(eval.parent(oc))\n dev.set(current.device)\n},e); environment(e$quartz.save) <- e}))"];
+#else
+	NSString *codePath = [[NSBundle mainBundle] pathForResource:@"GUI-tools.R" ofType:@""];
+	SLog(@" - loading code from '%@'", codePath);
+	[[REngine mainEngine] executeString: [NSString stringWithFormat:@"try(local(source(\"%@\",local=TRUE,echo=FALSE,verbose=FALSE,encoding='UTF-8',keep.source=FALSE)))", codePath]];
 #endif
 	
 	 SLog(@" - set R options");
@@ -105,6 +109,8 @@ int main(int argc, const char *argv[])
 	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.3/bioc','2.3/data/annotation','2.3/data/experiment','2.3/extra'),sep=''))"];
 #elif (R_VERSION < R_Version(2,10,0))
 	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.4/bioc','2.4/data/annotation','2.4/data/experiment','2.4/extra'),sep=''))"];
+#elif (R_VERSION < R_Version(2,11,0))
+	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.5/bioc','2.5/data/annotation','2.5/data/experiment','2.5/extra'),sep=''))"];
 #else
 #error "BioC repository is unknown, please add it to main.m or get more recent GUI sources"
 #endif
