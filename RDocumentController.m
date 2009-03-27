@@ -73,6 +73,7 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	NSWindow *w = [aNotification object];
 	if (w) {
 		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
+		if ([w isKindOfClass:[NSColorPanel class]]) return; // don't mess with wells or the color will change (PR#13625)
 		NSDocument *d = [self documentForWindow:w];
 		if (!d) docListPos++; // HACK: since walkKeyListBack does docListPos-- first, by increasing it we get the current doc which is what we want when an unknown window got closed (e.g. preferences)
 		NSWindow *ww = [self walkKeyListBack];

@@ -312,7 +312,7 @@ static RController* sharedRController;
 				SLog(@" * I'm being desperate and I found R at /Library/Frameworks/R.framework - so I'll use it, wish me luck");
 				setenv("R_HOME", "/Library/Frameworks/R.framework/Resources", 1);
 			} else
-				SLog(@" * I didn't even found R framework in the default location, I'm giving up - you're on your own");
+				SLog(@" * I didn't even find R framework in the default location, I'm giving up - you're on your own");
 		} else {
 			SLog(@"   %s", [[rfb resourcePath] UTF8String]);
 			setenv("R_HOME", [[rfb resourcePath] UTF8String], 1);

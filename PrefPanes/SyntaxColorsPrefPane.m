@@ -163,7 +163,12 @@
 }
 
 - (void)willUnselect
-{}
+{
+	// this is a hack to make sure no well is active since strange things happen if we close with an active well
+	// (fixes PR#13625)
+	[normalSyntaxColorWell activate:YES];
+	[normalSyntaxColorWell deactivate];
+}
 
 - (void)didUnselect
 {}
