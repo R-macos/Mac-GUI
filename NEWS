@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.28 (5395) - supplied with R 2.9.0 --
+
 Last-update: 2009-03-27
 *	deselect all wells before closing color preference panes
 	(fixes PR#13625)
