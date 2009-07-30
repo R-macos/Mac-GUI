@@ -438,7 +438,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	
 	if (!isEmpty) for (i = 0; i <= lastcol; i++) {
 		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2,i));
-		SET_VECTOR_ELT(names, i, VECTOR_ELT(names2,i));
+		SET_STRING_ELT(names, i, STRING_ELT(names2,i));
 		INTEGER(lens)[i] = ymaxused;
 	}
 
@@ -450,7 +450,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	for (i = lastcol+1; i <xmaxused; i++) {
 		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2,i-1));
-		SET_VECTOR_ELT(names, i, VECTOR_ELT(names2,i-1));
+		SET_STRING_ELT(names, i, STRING_ELT(names2,i-1));
 		INTEGER(lens)[i] = ymaxused;
 	}
 	
