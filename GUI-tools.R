@@ -172,4 +172,4 @@ add.fn("main.help.url", function ()
     options(main.help.url = url)
 })
 
-cat("[R.app GUI ",Sys.getenv("R_GUI_APP_VERSION")," (",Sys.getenv("R_GUI_APP_REVISION"),") ",R.version$platform,"]\n\n",sep='')
+if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) cat("[R.app GUI ",Sys.getenv("R_GUI_APP_VERSION")," (",Sys.getenv("R_GUI_APP_REVISION"),") ",R.version$platform,"]\n\n",sep='') else cat("[Warning: GUI-tools are intended for internal use by the R.app GUI only]\n")
