@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-10-01
+*	PowerPC 64-bit is not longer included in the regular
+	targets, use "LeopardPPC64" to compile a ppc64 build.
+
+	SnowLeaoprd target was added as a native 32+64 Intel build
+
 -- Release Version 1.29 (5464) - supplied with R 2.9.2 --
 
 Last-update: 2009-06-26

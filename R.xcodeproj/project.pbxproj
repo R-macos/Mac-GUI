@@ -1372,10 +1372,7 @@
 		680710F80EB0C14F00436993 /* Leopard64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc64,
-					x86_64,
-				);
+				ARCHS = x86_64;
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				GCC_VERSION = 4.2;
@@ -1760,6 +1757,193 @@
 			};
 			name = Debug;
 		};
+		68AD84D6107A47EE00F44691 /* SnowLeopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					x86_64,
+					i386,
+				);
+				COPY_PHASE_STRIP = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "SNOWLEOPARD_CFG=1";
+				SDKROOT = "";
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = SnowLeopard;
+		};
+		68AD84D7107A47EE00F44691 /* SnowLeopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = R_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Applications;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					R,
+				);
+				PRODUCT_NAME = R;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = SnowLeopard;
+		};
+		68AD84D8107A47EE00F44691 /* SnowLeopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sush;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = SnowLeopard;
+		};
+		68AD84D9107A47EE00F44691 /* SnowLeopard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = SnowLeopard;
+		};
+		68AD84DC107A492A00F44691 /* LeopardPPC64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = ppc64;
+				COPY_PHASE_STRIP = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				GCC_VERSION = 4.2;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/R.framework/Headers,
+					/Library/Frameworks/R.framework/PrivateHeaders,
+				);
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = LeopardPPC64;
+		};
+		68AD84DD107A492A00F44691 /* LeopardPPC64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = R_Prefix.pch;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Applications;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					R,
+				);
+				PRODUCT_NAME = R;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = LeopardPPC64;
+		};
+		68AD84DE107A492A00F44691 /* LeopardPPC64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sush;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = LeopardPPC64;
+		};
+		68AD84DF107A492A00F44691 /* LeopardPPC64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = LeopardPPC64;
+		};
 		68F2A1CA0D6C6B0400A7D43B /* Deployment64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1865,6 +2049,8 @@
 				680F0B2D0997CE66009CDBE8 /* Deployment */,
 				680710F60EB0C05E00436993 /* Leopard */,
 				680710FA0EB0C14F00436993 /* Leopard64 */,
+				68AD84DE107A492A00F44691 /* LeopardPPC64 */,
+				68AD84D8107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CC0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
@@ -1878,6 +2064,8 @@
 				680F0B320997CE66009CDBE8 /* Deployment */,
 				680710F70EB0C05E00436993 /* Leopard */,
 				680710FB0EB0C14F00436993 /* Leopard64 */,
+				68AD84DF107A492A00F44691 /* LeopardPPC64 */,
+				68AD84D9107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CD0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
@@ -1891,6 +2079,8 @@
 				680F0B370997CE66009CDBE8 /* Deployment */,
 				680710F50EB0C05E00436993 /* Leopard */,
 				680710F90EB0C14F00436993 /* Leopard64 */,
+				68AD84DD107A492A00F44691 /* LeopardPPC64 */,
+				68AD84D7107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CB0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
@@ -1904,6 +2094,8 @@
 				680F0B3C0997CE66009CDBE8 /* Deployment */,
 				680710F40EB0C05E00436993 /* Leopard */,
 				680710F80EB0C14F00436993 /* Leopard64 */,
+				68AD84DC107A492A00F44691 /* LeopardPPC64 */,
+				68AD84D6107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CA0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);
