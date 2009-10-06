@@ -50,6 +50,10 @@
 #include <R_ext/GraphicsEngine.h>
 #endif
 
+#if R_VERSION >= R_Version(2, 10, 0)
+#include <Rembedded.h>
+#endif
+
 #include <Rdefines.h>
 
 /* This constant defines the maximal length of single ReadConsole input, which usually corresponds to the maximal length of a single line. The buffer is allocated dynamically, so an arbitrary size is fine. */
@@ -176,8 +180,10 @@ typedef struct {
   unsigned char *bufp;
 } R_ReplState;
 
+#if R_VERSION < R_Version(2, 10, 0)
 static int  RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplState *state);
 static void RGUI_ReplConsole(SEXP rho, int savestack, int browselevel);
+#endif
 
 /*---------- implementation -----------*/
 
@@ -259,6 +265,8 @@ void setRSignalHandlers(int val) {
 #endif
 	/* it's a noop on R <2.3.1 */
 }
+
+#if R_VERSION < R_Version(2, 10, 0)
 
 void run_REngineRmainloop(int delayed)
 {
@@ -478,4 +486,44 @@ static int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplSt
 
     return(0);
 }
+
+#else
+/* code for more recent R providing proper event loop embedding.
+ * note that R < 2.10 is unsafe due to missing SETJMP in the init part */
+
+static NSAutoreleasePool *main_loop_pool;
+static int main_loop_result = 0;
+
+void run_REngineRmainloop(int delayed)
+{
+    /* do not use any local variables for the safety of SIGJMP return in case of an error */ 
+    firstRun = delayed;
+    /* guarantee that there is an autorelease pool in place */
+    main_loop_pool = [[NSAutoreleasePool alloc] init];
+
+    R_ReplDLLinit();
+
+    if (firstRun) {
+	firstRun = 0;
+	return;
+    }
+
+    main_loop_result = 1;
+    while (main_loop_result > 0) {
+#ifdef USE_POOLS
+	if (main_loop_pool) {
+	    [main_loop_pool release];
+	    main_loop_pool = nil;
+	}
+	main_loop_pool = [[NSAutoreleasePool alloc] init];
+#endif
+	main_loop_result = R_ReplDLLdo1();
+#ifdef USE_POOLS
+	[main_loop_pool release];
+	main_loop_pool = nil;
+#endif
+    }
+}
+
+#endif
 
