@@ -44,7 +44,7 @@ add.fn("print.hsearch", function (x, ...)
             url = character(rows)
             for (i in 1:rows) {
                 tmp <- as.character(help(db[i, "topic"], package = db[i, 
-                  "Package"], htmlhelp = TRUE))
+                  "Package"], help_type = 'html'))
                 if (length(tmp) > 0) 
                   url[i] <- tmp
             }
