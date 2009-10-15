@@ -34,6 +34,7 @@ add.fn("quartz.save", function(file, type='png', device=dev.cur(), dpi=100, ...)
 add.fn("print.hsearch", function (x, ...) 
 {
     if (.Platform$GUI == "AQUA") {
+	rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
         db <- x$matches
         rows <- NROW(db)
         if (rows == 0) {
@@ -43,10 +44,11 @@ add.fn("print.hsearch", function (x, ...)
         else {
             url = character(rows)
             for (i in 1:rows) {
+		lib <- dirname(db[i, "LibPath"])
                 tmp <- as.character(help(db[i, "topic"], package = db[i, 
-                  "Package"], help_type = 'html'))
+                  "Package"], lib.loc = lib, help_type = 'html'))
                 if (length(tmp) > 0) 
-                  url[i] <- tmp
+                  url[i] <- if (rv >= 210) gsub(lib, '/library', tmp, fixed = TRUE) else tmp
             }
             wtitle <- paste("Help topics matching", sQuote(x$pattern))
             showhelp <- which(.Internal(hsbrowser(db[, "topic"], 
