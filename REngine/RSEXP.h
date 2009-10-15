@@ -36,6 +36,7 @@
 
 #import <Foundation/Foundation.h>
 #include <Rinternals.h>
+#include <Rversion.h>
 
 @interface RSEXP : NSObject {
     SEXP xp;

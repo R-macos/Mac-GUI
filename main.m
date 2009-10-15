@@ -83,9 +83,13 @@ int main(int argc, const char *argv[])
 	
 	 SLog(@" - set R options");
 	 // force html-help, because that's the only format we can handle ATM
-	 [[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
-	 
-	 SLog(@" - set default CRAN mirror");
+#if R_VERSION < R_Version(2, 10, 0)
+	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
+#else
+	[[REngine mainEngine] executeString: @"options(help_type='html')"];	
+#endif
+
+	SLog(@" - set default CRAN mirror");
 	 {
 		 NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
 		 if (![url isEqualToString:@""])

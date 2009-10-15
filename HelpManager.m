@@ -41,6 +41,7 @@ static id sharedHMController;
     self = [super init];
     if (self) {
 		sharedHMController = self;
+		home = nil;
 	}
 	
     return self;
@@ -74,8 +75,26 @@ static id sharedHMController;
 {
 	if (!file) return;
 	if (!topic) topic=@"<unknown>";
+#if R_VERSION < R_Version(2, 10, 0)
 	NSString *url = [NSString stringWithFormat:@"file://%@",file];
 	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
+#else
+	NSString *url = nil;
+	if ([file hasPrefix:@"http://"]) 
+		url = file;
+	else {
+		int port = [[RController sharedController] helpServerPort];
+		if (port == 0) {
+			NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
+			return;
+		}
+		if (!home) home = [[RController sharedController] home];
+		if ([file hasPrefix:home])
+			file = [file substringFromIndex:[home length]];
+		url = [NSString stringWithFormat:@"http://127.0.0.1:%d%@", port, file];
+	}
+	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
+#endif
 	if(url != nil)
 	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 	[helpWindow makeKeyAndOrderFront:self];
@@ -88,10 +107,14 @@ static id sharedHMController;
 	if (!topic) return; /* should we issue an error? This happens only if the encoding is wrong */
 	charSet = [NSCharacterSet characterSetWithCharactersInString:@"'\""];
 	searchString = [topic stringByTrimmingCharactersInSet:charSet];
-//	NSLog(@"showHelpFor: <%@>", searchString);
+	SLog(@"showHelpFor: <%@>", searchString);
 	
 	REngine *re = [REngine mainEngine];	
+#if R_VERSION < R_Version(2, 10, 0)
 	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))",searchString]];
+#else
+	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", help_type='html'))",searchString]];
+#endif
 	if ((x==nil) || ([x string]==NULL)) {
 		NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:searchString];
 		int res = NSRunInformationalAlertPanel(NLS(@"Can't find help for topic, would you like to expand the search?"), topicString, NLS(@"No"), NLS(@"Yes"), nil);

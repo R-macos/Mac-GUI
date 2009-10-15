@@ -318,6 +318,10 @@ static RController* sharedRController;
 			setenv("R_HOME", [[rfb resourcePath] UTF8String], 1);
 		}
 	}
+	if (getenv("R_HOME"))
+		home = [[NSString alloc] initWithUTF8String:getenv("R_HOME")];
+	else
+		home = [[NSString alloc] initWithString:@""];
 
 #if (R_VERSION >= R_Version(2,2,0))
 	/* 2.2.0 is now alpha, so it should be ok by now - keep this for 2.3 in case wee need it
@@ -500,6 +504,11 @@ static RController* sharedRController;
 	}
 		
 	SLog(@" - awake is done");
+}
+
+- (NSString*) home
+{
+	return home;
 }
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
@@ -1294,11 +1303,10 @@ extern BOOL isTimeToFinish;
 		char *argv[3] = { "-c", cmd, 0 };
 		int res;
  		NSBundle *b = [NSBundle mainBundle];
-		char *sushPath=0;
+		char *sushPath = 0;
 		if (b) {
-			NSString *sush=[[b resourcePath] stringByAppendingString:@"/sush"];
-			sushPath = (char*) malloc([sush cStringLength]+1);
-			[sush getCString:sushPath maxLength:[sush cStringLength]];
+			NSString *sush = [[b resourcePath] stringByAppendingString:@"/sush"];
+			sushPath = strdup([sush UTF8String]);
 		}
 		
 		res = runRootScript(sushPath?sushPath:"/bin/sh",argv,&f,1);
@@ -2808,6 +2816,28 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (NSString*) statusLineText {
 	return [statusLine stringValue];
+}
+
+- (int) helpServerPort {
+#if R_VERSION < R_Version(2, 10, 0)
+	return 0;
+#else
+	REngine *re = [REngine mainEngine];	
+	RSEXP *x = [re evaluateString:@"tools:::httpdPort"];
+	int port = 0;
+	if (x) {
+		port = [x integer];
+		[x release];
+	}
+	if (port != 0) return port;
+	[re executeString:@"tools::startDynamicHelp()"];
+	x = [re evaluateString:@"tools:::httpdPort"];
+	if (x) {
+		port = [x integer];
+		[x release];
+	}
+	return port;
+#endif
 }
 
 @end

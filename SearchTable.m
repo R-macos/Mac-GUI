@@ -87,7 +87,21 @@ static id sharedHSController;
 {
 	int row = [sender selectedRow];
 	if(row < 0) return;
+#if R_VERSION < R_Version(2, 10, 0)
 	NSString *urlText = [NSString stringWithFormat:@"file://%@",[dataSource objectAtColumn:@"URL" row:row]];
+#else
+	NSString *urlText = [dataSource objectAtColumn:@"URL" row:row];
+	if (![urlText hasPrefix:@"http://"]) {
+		NSString *home = [[RController sharedController] home];
+		int port = [[RController sharedController] helpServerPort];
+		if (port == 0)
+			urlText = [NSString stringWithFormat:@"file://%@", urlText];
+		else {
+			if ([urlText hasPrefix:home]) urlText = [urlText substringFromIndex:[home length]];
+			urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d%@", port, urlText];
+		}
+	}
+#endif
 	[[TopicHelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }
 

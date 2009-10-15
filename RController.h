@@ -139,6 +139,8 @@
 	NSString *lastShownWD; // holds current directory after it has been shown (in non-abreviated form)
 	
 	NSMutableArray *pendingDocsToOpen; // paths of documents to open once initialized
+	
+	NSString *home;
 }
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
@@ -268,5 +270,8 @@
 - (NSTextView *)getRTextView;
 - (NSWindow *)getRConsoleWindow;
 - (BOOL)appLaunched;
+
+- (NSString*) home;
+- (int) helpServerPort;
 @end
 

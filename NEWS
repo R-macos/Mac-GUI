@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-10-15
+*	Use dynamic html help system in R 2.10+
+
 Last-update: 2009-10-06
 *	Update REPL to use the official embedding API for R 2.10+
 

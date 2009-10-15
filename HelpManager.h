@@ -45,6 +45,7 @@
 	IBOutlet NSButton *back;
 	
 	int searchType;
+	NSString *home;
 }
 
 - (IBAction)runHelpSearch:(id)sender;

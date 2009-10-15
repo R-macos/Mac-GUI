@@ -156,7 +156,7 @@ if (!item) { \
 {
     int i = indent;
     while (i>0) {
-        fprintf(stderr, "%s", [str cString]);
+        fprintf(stderr, "%s", [str UTF8String]);
         i--;
     }
 }
