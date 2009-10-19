@@ -75,9 +75,31 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
 		if ([w isKindOfClass:[NSColorPanel class]]) return; // don't mess with wells or the color will change (PR#13625)
 		NSDocument *d = [self documentForWindow:w];
+		SLog(@"RDocumentController%@.window%@WillCloseNotifications document:%@", self, w, d);
+		if (!d && w == [[RController sharedController] window])
+			d = mainDoc;
+		else if (!d) { /* if no document is associated wit this window, check whether this is a Quartz Cocoa window */
+			NSView *v = [w contentView];
+			SLog(@" - contentView = %@", v);
+			if (v && [[v className] isEqual:@"QuartzCocoaView"]) { // it's a Quartz window created by R - assign a fake document to it
+				d = [[QuartzCocoaDocument alloc] initWithWindow:w];
+				[d makeWindowControllers];
+				[[NSDocumentController sharedDocumentController] addDocument:d];
+				[d release];
+			}
+		}
+		if (d) {
+			SLog(@" - document: %@", d);
+			if (docList[docListPos] && docList[docListPos]!=d) {
+				docListPos++;
+				if (docListPos<0 || docListPos>=docListLimit) docListPos=0;			
+			}
+			docList[docListPos]=d;
+		}
+		d = [self documentForWindow:w];
+		SLog(@"RDocumentController%@.window%@WillCloseNotifications document:%@", self, w, d);
 		if (!d) docListPos++; // HACK: since walkKeyListBack does docListPos-- first, by increasing it we get the current doc which is what we want when an unknown window got closed (e.g. preferences)
 		NSWindow *ww = [self walkKeyListBack];
-		SLog(@"RDocumentController.windowWillCloseNotifications.walkBackWindow:%@ (%@)", self, ww, d);
 		[ww makeKeyWindow];
 		// FIXME: this is an ugly hack - our windows never get released and this is just cosmetics to remove them from the window list even though they exist
 		[NSApp removeWindowsItem: w];
