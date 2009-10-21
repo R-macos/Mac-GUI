@@ -8,6 +8,9 @@ Last-update: 2009-10-21
 *	Fix a bug in edit() that would not show any files
 	(it also fixes the issue of vignette code not appearing)
 
+*	Attempt to fix a potential crash when R error handling
+	kicks in during REPL iteration.
+
 Last-update: 2009-10-15 [RG]
 *	Make sure there is a quartz document before closing the
 	Quartz window. Happened by 'remote' creation of a window,

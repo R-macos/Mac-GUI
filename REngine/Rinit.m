@@ -491,8 +491,8 @@ static int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplSt
 /* code for more recent R providing proper event loop embedding.
  * note that R < 2.10 is unsafe due to missing SETJMP in the init part */
 
-static NSAutoreleasePool *main_loop_pool;
-static int main_loop_result = 0;
+volatile static NSAutoreleasePool *main_loop_pool;
+volatile static int main_loop_result = 0;
 
 void run_REngineRmainloop(int delayed)
 {
@@ -510,18 +510,23 @@ void run_REngineRmainloop(int delayed)
 
     main_loop_result = 1;
     while (main_loop_result > 0) {
+	@try {
 #ifdef USE_POOLS
-	if (main_loop_pool) {
+	    if (main_loop_pool) {
+		[main_loop_pool release];
+		main_loop_pool = nil;
+	    }
+	    main_loop_pool = [[NSAutoreleasePool alloc] init];
+#endif
+	    main_loop_result = R_ReplDLLdo1();
+#ifdef USE_POOLS
 	    [main_loop_pool release];
 	    main_loop_pool = nil;
+#endif
 	}
-	main_loop_pool = [[NSAutoreleasePool alloc] init];
-#endif
-	main_loop_result = R_ReplDLLdo1();
-#ifdef USE_POOLS
-	[main_loop_pool release];
-	main_loop_pool = nil;
-#endif
+	@catch (NSException *foo) {
+	    NSLog(@"*** run_REngineRmainloop: exception %@ caught during REPL iteration. Update to the latest GUI version and consider reporting this properly (see FAQ) if it persists and is not known.\nConsider saving your work soon in case this develops into a problem.", foo);
+	}
     }
 }
 
