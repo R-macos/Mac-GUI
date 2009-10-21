@@ -122,12 +122,17 @@ static id sharedHMController;
 			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", searchString]];
 		return;
 	}
+#if R_VERSION < R_Version(2, 10, 0)
 	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
 	if(url != nil)
 	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 	
 	[helpWindow makeKeyAndOrderFront:self];
 	[x release];
+#else
+	[x release];
+	[re executeString:[NSString stringWithFormat:@"print(help(\"%@\", help_type='html'))",searchString]];
+#endif	
 }
 
 - (NSWindow*) window

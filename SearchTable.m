@@ -91,6 +91,7 @@ static id sharedHSController;
 	NSString *urlText = [NSString stringWithFormat:@"file://%@",[dataSource objectAtColumn:@"URL" row:row]];
 #else
 	NSString *urlText = [dataSource objectAtColumn:@"URL" row:row];
+	SLog(@"showInfo: URL='%@'", urlText);
 	if (![urlText hasPrefix:@"http://"]) {
 		NSString *home = [[RController sharedController] home];
 		int port = [[RController sharedController] helpServerPort];
@@ -102,6 +103,7 @@ static id sharedHSController;
 		}
 	}
 #endif
+	SLog(@" - invoking help sub-panel with %@", urlText);
 	[[TopicHelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }
 

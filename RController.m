@@ -1203,18 +1203,19 @@ extern BOOL isTimeToFinish;
 	return(0);
 }
 
-/* FIXME: the filename is not set for newvly created files */
+/* FIXME: the filename is not set for newly created files */
 - (int) handleEditFiles: (int) nfile withNames: (char**) file titles: (char**) wtitle pager: (char*) pager
 {
 	int    	i;
     
 	SLog(@"RController.handleEditFiles (%d of them, pager %s)", nfile, pager);
-    if (nfile <=0) return 1;
+	if (nfile <=0) return 1;
 	
-    for (i = 0; i < nfile; i++) {
+	for (i = 0; i < nfile; i++) {
 		NSString *fn = [NSString stringWithUTF8String:file[i]];
 		if (fn) fn = [fn stringByExpandingTildeInPath];
-		if (!fn) {
+		SLog(@"file #%d: %@", i + 1, fn);
+		if (fn) {
 			if([[NSFileManager defaultManager] fileExistsAtPath:fn]) {
 				NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
 				NSError *theError;
@@ -1226,7 +1227,7 @@ extern BOOL isTimeToFinish;
 			if(wtitle[i]!=nil)
 				[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle[i]]];
 		}
-    }
+	}
 	return 1;
 }
 

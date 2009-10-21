@@ -3,6 +3,8 @@
 ## target environment for all this
 e<-attach(NULL,name="tools:RGUI")
 
+rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
+
 add.fn <- function(name, FN) { assign(name, FN, e); environment(e[[name]]) <- e }
 
 ## quartz.save
@@ -164,7 +166,7 @@ add.fn("data.manager", function ()
     }
 })
 
-add.fn("main.help.url", function () 
+if (rv < 210) add.fn("main.help.url", function () 
 {
     .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(), 
         collapse = " ")))
@@ -172,6 +174,8 @@ add.fn("main.help.url", function ()
     tmpdir <- paste("file://", tempdir(), "/.R", sep = "")
     url <- paste(tmpdir, "/doc/html/index.html", sep = "")
     options(main.help.url = url)
-})
+}) else add.fn("main.help.url", function() help.start(browser=function(x, ...) {
+    .Internal(aqua.custom.print("help-files", x))
+    return(invisible(x)) }))
 
 if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) cat("[R.app GUI ",Sys.getenv("R_GUI_APP_VERSION")," (",Sys.getenv("R_GUI_APP_REVISION"),") ",R.version$platform,"]\n\n",sep='') else cat("[Warning: GUI-tools are intended for internal use by the R.app GUI only]\n")

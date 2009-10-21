@@ -1,10 +1,18 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-10-21
+*	Fix main help link in R 2.10+
+
+*	Fix help search in the help window in R 2.10+
+
+*	Fix a bug in edit() that would not show any files
+	(it also fixes the issue of vignette code not appearing)
+
 Last-update: 2009-10-15 [RG]
-*   Make sure there is a quartz document before closing the
-    Quartz window. Happened by 'remote' creation of a window,
-    e.g. Rcmdr and AppleScript, if the Quartz window was never
-    made the key window before trying to close it.
+*	Make sure there is a quartz document before closing the
+	Quartz window. Happened by 'remote' creation of a window,
+	e.g. Rcmdr and AppleScript, if the Quartz window was never
+	made the key window before trying to close it.
 
 Last-update: 2009-10-15
 *	Use dynamic html help system in R 2.10+
