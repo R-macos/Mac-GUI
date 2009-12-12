@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2009-12-12
+*	Use dynamic help package index in Package Manager
+	(PR#14134) and Data Manager
+
 -- Release Version 1.30 (5511) - supplied with R 2.10.0 --
 
 Last-update: 2009-10-21

@@ -99,8 +99,23 @@ static id sharedController;
 - (IBAction)showHelp:(id)sender
 {
 	int row = [sender selectedRow];
-	if(row<0) return;
+	if (row < 0) return;
+	SLog(@"DataManager showHelp: (data=%@, package=%@, static-URL=%@)", [dataSource objectAtColumn:@"data" row:row], [dataSource objectAtColumn:@"package" row:row], [dataSource objectAtColumn:@"URL" row:row]);
+#if R_VERSION < R_Version(2, 10, 0)
 	NSString *urlText = [NSString stringWithFormat:@"file://%@",[dataSource objectAtColumn:@"URL" row:row]];
+#else
+	NSString *urlText = nil;
+	int port = [[RController sharedController] helpServerPort];
+	if (port == 0) {
+		NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
+		return;
+	}
+	NSString *topic = [dataSource objectAtColumn:@"data" row:row];
+	NSRange r = [topic rangeOfString:@" ("];
+	if (r.length > 0 && [topic length] - r.length > 3) // some datasets have the topic in parents
+		topic = [topic substringWithRange: NSMakeRange(r.location + 2, [topic length] - r.location - 3)];
+	urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, [dataSource objectAtColumn:@"package" row:row], topic];
+#endif
 	[[dataInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }
 
