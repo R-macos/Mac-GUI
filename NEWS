@@ -3,6 +3,10 @@ NEWS for R.app GUI for Mac OS X
 Last-update: 2009-12-12
 *	Use dynamic help package index in Package Manager
 	(PR#14134) and Data Manager
+	
+*	Added "use.external.help" preference entry. If set to
+	YES then the configured R browser is used to display
+	help pages instead of the internal one.
 
 -- Release Version 1.30 (5511) - supplied with R 2.10.0 --
 

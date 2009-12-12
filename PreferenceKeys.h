@@ -84,6 +84,8 @@
 
 #define kAutoCloseBrackets @"auto.close.parens"
 
+#define kExternalHelp @"use.external.help"
+
 // other constants
 
 #define iBackgroundColor 0

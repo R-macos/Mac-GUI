@@ -95,9 +95,14 @@ static id sharedHMController;
 	}
 	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
 #endif
-	if(url != nil)
-	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-	[helpWindow makeKeyAndOrderFront:self];
+	if(url != nil) {
+		if ([Preferences flagForKey:kExternalHelp withDefault:NO])
+			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"browseURL(\"%@\")", url]];
+		else {
+			[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+			[helpWindow makeKeyAndOrderFront:self];
+		}
+	}
 }
 
 - (void)showHelpFor:(NSString *)topic
