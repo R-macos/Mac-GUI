@@ -3,8 +3,8 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2009
-@set FAQ-VERSION 2.10-1 @value{FAQ-YEAR}-08-24
+@set FAQ-YEAR 2010
+@set FAQ-VERSION 2.10-2 @value{FAQ-YEAR}-01-18
 @set REL-VERSION 2.10.1
 @set GUI-VERSION 1.31
 @documentlanguage en
@@ -349,6 +349,8 @@ make
 @end example
 This will configure R to be built as a Framework to be installed inside your @emph{/Library/Frameworks} directory with the name @emph{R.framework}. @code{make} will compile R. Such compiled @R{} can already be used by running the @code{bin/R} script.
 
+Note that the default configuration assumes that all your compilers produce binaries for the same architecture. This is not true on Mac OS X 10.6 (Snow Leopard) where by default Xcode gcc produces 64-bit binaries but gfortran produces 32-bit binaries. Therefore in such a case you must set the compiler varaibles (@code{CC}, @code{CXX}, @code{OBJC}, @code{F77}, @code{FC}) accordingly to make sure they target the same architecture (see also @pxref{How to build universal R}).
+
 Some additional, useful flags that you may want to add to configure include:
 @itemize
 @item
@@ -453,7 +455,7 @@ cd ..
 
 The installation scripts in @R{} are intelligent enough to merge both builds together and create a universal @R{} framework. One crucial requirement for this to work is to use @samp{i386} and @samp{ppc} as the architecture names. Other supported architecture names are @code{ppc64} and @code{x86_64} for 64-bit builds. One R installation can contain all four architectures.
 
-Since Mac OS X 10.4.8 @samp{vecLib} is now multi-threaded, so there is no need for threaded ATLAS anymore and the corresponding static library is no longer included in the toolbox.
+@c Since Mac OS X 10.4.8 @samp{vecLib} is now multi-threaded, so there is no need for threaded ATLAS anymore and the corresponding static library is no longer included in the toolbox.
 
 Finally, the standard @R{} shell script uses by default the last installed architecture. This is probably not what you want, because the native architecture is known at run time. Therefore the line
 @smallexample
@@ -467,7 +469,7 @@ to default to the current native architecture. It addition, it may be a good ide
 
 To run a specific architecture use the @samp{--arch} flag when starting @R{}, e.g., @samp{R --arch x86_64} for 64-bit R on Intel platform.
 
-Starting with R 2.10.0 installations on Mac OS X Snow Leopard default to 64-bit if the host CPU supports is. All other installations use the native platform type (which is 32-bit in most cases).
+Starting with R 2.10.0 installations on Mac OS X 10.6 (Snow Leopard) default to 64-bit if the host CPU supports is. All other installations use the native platform type (which is 32-bit in most cases).
 
 @node Command line version of R, R.app, Building R from sources, Top
 @chapter Command line version of R
