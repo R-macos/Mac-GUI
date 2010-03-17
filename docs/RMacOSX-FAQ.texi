@@ -957,14 +957,18 @@ Starting with R 2.3.0 the same binary package can be used for both PowerPC and I
 
 Further, universal binaries can be currently built on Intel Macs only. The main reason is that the default Mac OS X installation on PowerPC based Macs does not include system libraries for Intel Macs (experienced users can try to add corresponding @code{-isysroot} for 10.4u SDK to @code{CC}). If you happen to have a PowerPC machine with full system libraries it should work. Finally, a compiler supporting both platforms is necessary, see @pxref{How to build universal R}.
 
-Once all tools are in place it is considerably easy to build an universal binary. If the package does not contain a @emph{configure} script then a regular package installation using either @code{install.packages} or @code{R CMD INSTALL} automatically creates an universal binary. If the package contains a @emph{configure} script then it cannot be compiled in-place for multiple platforms, and the following process should be used. Assuming that you have a source package called @code{foo_1.0.tar.gz} that uses a @emph{configure} script, it can be installed universally using the following two-step process:
+Once all tools are in place it is considerably easy to build an universal binary. If the package does not contain a @emph{configure} script then a regular package installation using either @code{install.packages} or @code{R CMD INSTALL} automatically creates an universal binary. If the package contains a @emph{configure} script then it cannot be compiled in-place for multiple platforms, and the following process should be used. Assuming that you have a source package called @code{foo_1.0.tar.gz} that uses a @emph{configure} script, it can be installed universally using the following three-step process:
 
 @example
-R_ARCH=/i386 R CMD INSTALL foo_1.0.tar.gz
-R_ARCH=/ppc R CMD INSTALL --libs-only foo_1.0.tar.gz
+# full 32-bitIntel install
+R --arch=i386 CMD INSTALL foo_1.0.tar.gz
+# 64-bit Intel library
+R --arch=x86_64 CMD INSTALL --libs-only foo_1.0.tar.gz
+# 32-bit PowerPC library (will require Rosetta to build)
+R --arch=ppc CMD INSTALL --libs-only foo_1.0.tar.gz
 @end example
 
-In the first step a full package for the Intel platform is built and installed. In the scond step a package for PowerPC platform is built, but only the relevant binary libraries are installed. This way both platforms share the same set of files except for the package library.
+In the first step a full package for the Intel platform is built and installed. In the following steps a package for 64-bit Intel platform and PowerPC is built, but only the relevant binary libraries are installed. This way all platforms share the same set of files except for the package library.
 
 @code{R CMD INSTALL --build} does not support universal binaries of packages that contain @emph{configure} scripts for reasons stated above. Therefore it is necessary to create the resulting tar-ball manually. The following is just one example how the process could be automated (replace first line with the real package name and version):
 
@@ -972,10 +976,28 @@ In the first step a full package for the Intel platform is built and installed. 
 pkg=foo_1.0
 rm -rf /tmp/pkg
 mkdir /tmp/pkg
-R_ARCH=/i386 R CMD INSTALL -l /tmp/pkg $pkg.tar.gz
-R_ARCH=/ppc R CMD INSTALL -l /tmp/pkg --libs-only $pkg.tar.gz
+R --arch=i386 CMD INSTALL -l /tmp/pkg $pkg.tar.gz
+R --arch=x86_64 CMD INSTALL -l /tmp/pkg --libs-only $pkg.tar.gz
+R --arch=ppc CMD INSTALL -l /tmp/pkg --libs-only $pkg.tar.gz
 tar fvcz $pkg.tgz -C /tmp/pkg `echo $pkg|awk -F_ '@{print $1@}'`
 rm -rf /tmp/pkg
+@end example
+
+Normally, building a package from sources produces a binary that is tied to the developer tools that you compiled it with, especially if FORTRAN is used, because it requires run-time libraries. Anything you compile with a Fortran requires that you have that Fortran installed at run time, because Fortran uses its own run-time libraries (if the Fortran you compiled with used dynamic libraries). This implies that if you distribute your package you have to tell users to install the same Fortran you used to compile it.
+
+However, unlike other unices Mac users do not necessarily have development tools installed, so on CRAN we make an effort to modify the binaries such that they work even without the tools they have been compiled with. There are several possible approaches, but since R itself already uses the same Fortran, we ship a copy of the Fortran libraries inside R and modify packages such that they use it instead of the one from developer tools.
+
+If you want to share a binary with multiple users and don't want to require them to install Xcode, you can use the same approach as CRAN but only if you use the same tools as we do on CRAN. It means to change the path of the FORTRAN dynamic library (libgfortran) to point inside the R version that you are compiling for. For example, if you have installed a universal package @code{FOO} for R 2.10.x, you can change the paths as follows:
+
+@example
+# change into the library where you installed FOO
+cd /Library/Frameworks/R.framework/Resources/library
+# fix the Fortran paths in FOO to point to R 2.10 instead
+for lib in `ls FOO/libs/*/*.so`; do
+ install_name_tool -change /usr/local/lib/libgfortran.2.dylib \
+   /Library/Frameworks/R.framework/Versions/2.10/Resources/lib/libgfortran.2.dylib \
+  $lib
+done
 @end example
 
 @node Can I install packages built for other platforms?, Where are the packages I've installed?, Building universal package, How to install packages
