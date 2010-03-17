@@ -4,7 +4,7 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2010
-@set FAQ-VERSION 2.10-2 @value{FAQ-YEAR}-01-18
+@set FAQ-VERSION 2.10-3 @value{FAQ-YEAR}-03-17
 @set REL-VERSION 2.10.1
 @set GUI-VERSION 1.31
 @documentlanguage en
@@ -934,7 +934,8 @@ Packages can also be installed from other repositories by selecting @emph{Other 
 
 Usually it is much faster and easier to install binary packages, because they are immeditely ready to use. On the other hand only packages that pass all tests are available in binary form from @CRAN{}. If your desired package is not available in binary form, you will need to use its source form. Source packages have to be compiled first before they can be used. If you want to install a source package, you will need the same working setup for building R itself (see @pxref{Building R from sources}), including Apple Xcode Tools and a working @FORTRAN{} compiler (if the package requires it).
 
-@strong{Important:} When using binary @R{} installation from @CRAN{}, you must use Xcode 2.4.0 or higher (available from @pxref{Apple Developer Connection}). Although @R{} can be built using older tools, the way it is build depends on the version of the tools and therefore your must upgrade at least to Xcode 2.4.0 (or preferably the latest available) which is compatible with the @CRAN{} build. Failing to do so will result in either of the following errors at compile time:
+@strong{Important:} When using binary @R{} installation from @CRAN{}, you must use Xcode 3.1 or higher (available from @pxref{Apple Developer Connection}). Although @R{} can be built using older tools, the way it is build depends on the version of the tools and therefore your must upgrade at least to Xcode 3.1 (or preferably the latest available) which is compatible with the @CRAN{} build. Failing to do so will result in either of the following errors at compile time:
+
 @smallexample
 cc1: error: invalid option 'macosx-version-min=10.4'
 
