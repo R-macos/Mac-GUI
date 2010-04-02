@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2010
-@set FAQ-VERSION 2.10-3 @value{FAQ-YEAR}-03-17
-@set REL-VERSION 2.10.1
-@set GUI-VERSION 1.31
+@set FAQ-VERSION 2.11-1 @value{FAQ-YEAR}-04-02
+@set REL-VERSION 2.11.0
+@set GUI-VERSION 1.32
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -136,14 +136,14 @@ However, @R{} on Mac OS X can be used either on the command-line (@pxref{Command
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
 @section What machines does R for Mac OS X run on?
 
-R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The @Rapp{} GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is always preferable, though. We do not support Mac OS X version 10.1 and earlier. The binaries provided on @CRAN{} are universal and require Mac OS X 10.4.4 (Tiger) or higher, although future versions will likely require Mac OS X 10.5 (Leopard) or higher.
+R for Mac OS X requires Mac OS X version 10.2 (Jaguar) or higher to run. The @Rapp{} GUI requires Mac OS X 10.3 (Panther) or higher. The latest version of the system is always preferable, though. We do not support Mac OS X version 10.1 and earlier. The binaries provided on @CRAN{} are universal (32-bit Intel + PowerPC, 64-bit Intel) and require Mac OS X 10.5 (Leopard) or higher.
 
 @R{} can be compiled from sources as a pure 64-bit application on PowerMac G5 and Intel x86_64 machines on Mac OS X 10.4 or higher. @Rapp{} GUI can be built for 64-bit R as well, but Mac OS X 10.5 (Leopard) or higher is necessary.
 
 @node How can R for Mac OS X be obtained and installed?, How can R for Mac OS X be uninstalled?, What machines does R for Mac OS X run on?, Introduction
 @section How can R for Mac OS X be obtained and installed?
 
-@R{} for Mac OS X 10.5 and higher (Leopard build) is available on @CRAN{} in the form of an Installer package consisting of the R framework and the @Rapp{} GUI. The package is usually named @file{R.pkg} with optional version number. The legacy Tiger build is packaged in a compressed disk image and usually names @file{R.dmg}.
+@R{} is available on @CRAN{} in the form of an Installer package consisting of the R framework and the @Rapp{} GUI. The package is usually named @file{R.pkg} with optional version number. Previously the legacy Tiger build was packaged in a compressed disk image and usually named @file{R.dmg}.
 
 The installation is done by double-clicking on the Installer package. The Installer will guide you through the steps necessary to install @R{} on Mac OS X. Note that the Installer will require password or login of an administrator. The installation can be customized, but the default is suitable for most users.
 
@@ -160,7 +160,7 @@ If you want to get rid of R from the Terminal, simply run (prepend @code{sudo} i
 rm -rf /Library/Frameworks/R.framework /Applications/R.app
 @end example
 
-However, Mac OS X also keeps an installation receipt if an application was installed using the Apple Installer. These receipts are usually kept in @file{/Library/Receipts} and Apple's Installer decides based on the receipt whether a program will be installed or upgraded. If you do not want to perform an upgrade (e.g. if you want to keep multiple @R{} versions in parallel), you will have to remove the corresponding receipt(s). Depending on the OS X version @code{rm -rf /Library/Receipts/R-*} may work. The exact details are system-dependent, please see the corrensponding documentation by Apple. (Mac OS X 10.5 and higher uses @samp{pkgutil --forget} instead - see the installation README).
+Another alternative is to use Apple's @code{pkgutil} tools to uninstall R. R consists of three packages: @code{org.r-project.R.Leopard.fw.pkg}, @code{org.r-project.R.Leopard.GUI.pkg} and @code{org.r-project.R.Leopard.GUI64.pkg}. You can use @code{pkgutil --unlink} for each of them to remove their files and/or @code{pkgutil --forget} if you want the Apple Installer to forget about the package without deleting its files (useful when installing multiple R versions in parallel).
 
 @node Installation Problems,  , How can R for Mac OS X be uninstalled?, Introduction
 @section Installation Problems
@@ -220,7 +220,7 @@ Users of Intel Macs have to use @samp{gcc} version 4.0 or higher, because @samp{
 @node Fortran compiler (g77 3.3 or later), libreadline 4.3 or higher (optional), C/C++ compiler (gcc 3.3 or later), What is needed to build R
 @subsection Fortran compiler (g77 3.3 or later)
 
-Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. @R{} 2.7.2 @CRAN{} binary comes with GNU Fortran 4.2.3 in the gfortran optional package. If you plan to install packages from sources, select "custom install" during R installation and enable the GNU Fortran from the list of packages. It is also available separately from @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
+Unfortunately the Xcode Tools don't include a Fortran compiler. You need to install a version 3.3 or later of the Fortran compiler from gcc which is built for Mac OS X. We provide GNU Fortran builds that can be added to Apple's Xcode tools - see @uref{http://r.research.att.com/tools/}. The @CRAN{} binaries are configured to use Apple's gcc and the supplied Fortran compiler (see also @pxref{Why do I need custom compilers for the CRAN binary?}).
 
 Please note that it is important that the major version of the Fortran compiler matches the version of your C compiler! You can only use gcc 3.x with g77 3.x or gcc 4.x with gfortran 4.x, other combinations usually don't work.
 
@@ -230,7 +230,7 @@ The readline library is optional and only necessary for OS X 10.3 (Panther) and 
 
 Readline is necessary if you want to be able to retrieve history using use arrow keys or for @key{TAB} completion of filenames when you run R as a command line tool. The original source archive is located at GNU web page @uref{ftp://www.gnu.org}. (Also consider installing the @samp{rcompletion} package that uses readline for code-completion in R).
 
-Readline 5.0 and later compile out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, Because the configure script fails to detect that flag. The use of readline 5.2 with recent patches is recommended due to bugs in earlier versions that can lead to crashes.
+Readline 5.0 and later compile out-of-the box, however it is recommended to use @code{make CPPFLAGS=-DNEED_EXTERN_PC}, because the configure script fails to detect that flag. The use of readline 5.2 with recent patches is recommended due to bugs in earlier versions that can lead to crashes. (We cannot distribute readline 6.0 on @CRAN due to its incompatible licensing terms).
 
 To compile readline, uncompress the source archive and follow the standard installation sequence:
 @example
@@ -403,7 +403,7 @@ Using Xcode load the @emph{R.xcodeproj} project, select @emph{R} target (which i
 xcodebuild -target R -configuration Deployment
 @end example
 
-The current development is done using Xcode 2.2 or higher. The default deployment build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure /Library is available inside the SDK, recent Xcode installations ensure this automatically.
+The current development is done using Xcode 3.1 or higher. The default deployment build is universal, therefore you will need universal R framework and Mac OS X 10.4u SDK. Make sure /Library is available inside the SDK, recent Xcode installations ensure this automatically.
 
 For compatibility, the GUI offers an old-style project for Xcode 2.0 named @file{R.xcode} which will build PowerPC binary only. However, this project file is no longer actively maintained. In addition to the default @code{Deployment} configuration there is also @code{Depolyment64} configuration that build 64-bit version of the GUI - you must have 64-bit R framework and Mac OS X 10.5 or higher for this to work. Other useful configurations include @code{Leopard}, @code{Leopard64}, @code{SnowLeopard} and @code{Debug}.
 
@@ -1281,7 +1281,7 @@ Also note that the development build of @Rapp{} sends output to the error consol
 
 @node Why do I need custom compilers for the CRAN binary?, Why is the Quartz much bigger than it used to be?, I don't see a thing when installing packages!, Sparse questions
 @section Why do I need custom compilers for the CRAN binary?
-As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 2.5.0 and a GNU Fortran 4.2.3 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/} and it lives in @code{/usr/local}.
+As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 3.1.4 and a GNU Fortran 4.2.4 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/}.
 
 @CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler was kept in place, but @R{} used the new compiler for compiling packages instead. The main reason for this was that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we switched back to Apple's compilers for @R{} 2.5.0 and later.
 
@@ -1320,9 +1320,9 @@ The @Rapp{} GUI uses Apple frameworks for text editing and thus the behavior of 
 @node What is the difference between the Leopard and Tiger builds?, What is the difference between the CRAN build and a vanilla build?, Why doesn't R GUI support keyboard shortcut XYZ ?, Sparse questions
 @section What is the difference between the Leopard and Tiger builds?
 
-We provide two different binary builds on CRAN: Tiger (Mac OS X 10.4) and Leopard (Mac OS X 10.5) builds. The Tiger build is a 32-bit build for PowerPC and Intel and works on Mac OS X 10.4 or higher. It is built using the same setup as @R{} prior to 2.8.0. It includes two architectures @code{i386} and @code{ppc}. The default pacakge type is @code{"mac.binary"} and packages in repositories are expected in @file{bin/macosx/universal/contrib/2.8}.
+Before R version 2.11.0 we provided two different binary builds on CRAN: Tiger (Mac OS X 10.4) and Leopard (Mac OS X 10.5) builds. The Tiger build was a 32-bit build for PowerPC and Intel and works on Mac OS X 10.4 or higher. It was built using the same setup as @R{} prior to 2.8.0. It included two architectures @code{i386} and @code{ppc}. The default package type was @code{"mac.binary"} and packages in repositories were expected in @file{bin/macosx/universal/contrib/2.x}.
 
-In contrast the Leopard build requires Mac OS X 10.5 or higher and thus uses features that are new in Leopard. Also it includes both 32-bit and 64-bit architectures. On the console 64-bit version can be started using @code{R --arch=x86_64} for Intel Macs or @code{R --arch=ppc64} for PowerPC Macs. There are two GUI binaries -- one for 32-bit and one for 64-bit. The Leopard build uses Apple's gcc-4.2 compilers, the default package type is @code{"mac.binary.leopard"} and consequently packages are expected in @file{bin/macosx/leopard/contrib/2.10}. Note that some packages may not be available in 64-bit (e.g. if dependent libraries are not available in 64-bit).
+In contrast the Leopard build requires Mac OS X 10.5 or higher and thus uses features that are new in Leopard. Also it includes both 32-bit and 64-bit architectures. On the console 64-bit version can be started using @code{R --arch=x86_64} for Intel Macs or @code{R --arch=ppc64} for PowerPC Macs (if included). There are two GUI binaries -- one for 32-bit and one for 64-bit. The Leopard build uses Apple's gcc-4.2 compilers, the default package type is @code{"mac.binary.leopard"} and consequently packages are expected in @file{bin/macosx/leopard/contrib/2.x}. Note that some packages may not be available in 64-bit (e.g. if dependent libraries are not available in 64-bit).
 
 @node What is the difference between the CRAN build and a vanilla build?, Why is R.home() not versioned?, What is the difference between the Leopard and Tiger builds?, Sparse questions
 @section What is the difference between the CRAN build and a vanilla build?
