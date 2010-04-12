@@ -166,6 +166,18 @@ add.fn("data.manager", function ()
     }
 })
 
+## we catch q/quit to make sure users don't use it inadvertently
+if (!isTRUE(getOption("RGUI.base.quit"))) {
+add.fn("q", function(..., NOTE="q is NOT supported in the GUI!") {
+  cat("***\n*** NOTE: q() does NOT save history nor open documents - you will lose your changes!\n***       Use the \"Quit R\" menu (<Cmd><Q>) instead!\n***\n\n")
+  stop("If you really want to quit R without saving your documents use base::q()")
+})
+add.fn("quit", function(..., NOTE="quit is NOT supported in the GUI!") {
+  cat("***\n*** NOTE: quit() does NOT save history nor open documents - you will lose your changes!\n***       Use the \"Quit R\" menu (<Cmd><Q>) instead!\n***\n\n")
+  stop("If you really want to quit R without saving your documents use base::quit()")
+})
+}
+
 if (rv < 210) add.fn("main.help.url", function () 
 {
     .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(), 

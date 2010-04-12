@@ -1,5 +1,21 @@
 NEWS for R.app GUI for Mac OS X
 
+Last update: 2010-04-12
+*	GUI redefines q()/quit() function to issue an error
+	when used unless the RGUI.base.quit option is TRUE,
+	to avoid inadvertent use of q()/quit() instead of
+	"Quit R" (<Command><Q>). The original function can
+	still be called	as base::quit() if the use is
+	deliberate (with all its consequences).
+	
+*	work around browseEnv() refusing work on an empty
+	environment which prevents updating the workspace
+	browser when all items were removed (PR#8647)
+	
+*	added a new menu item "Paste As Plain Text" which
+	corresponds to pasting + striping text attributes
+	of the pasted text (wish PR#7927)
+
 -- Release Version 1.31 (5537) - supplied with R 2.10.1 --
 
 Last-update: 2009-12-12

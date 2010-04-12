@@ -180,28 +180,6 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key>showInfo</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>SearchTable</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>TopicHelpView</key>
-				<string>id</string>
-				<key>searchTableWindow</key>
-				<string>id</string>
-				<key>topicsDataSource</key>
-				<string>NSTableView</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>executeSelection</key>
 				<string>id</string>
 				<key>functionGo</key>
@@ -252,6 +230,28 @@
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSWindowController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>showInfo</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>SearchTable</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>TopicHelpView</key>
+				<string>id</string>
+				<key>searchTableWindow</key>
+				<string>id</string>
+				<key>topicsDataSource</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>

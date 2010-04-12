@@ -348,7 +348,8 @@ if (!item) { \
 
 - (IBAction) reloadWSBData:(id)sender
 {
-	[[REngine mainEngine] executeString:@"browseEnv(html=F)"];
+	NumOfWSObjects = 0;
+	[[REngine mainEngine] executeString:@"capture.output(browseEnv(html=F))"];
 	[self  doInitWSData];
 }
 

@@ -1426,7 +1426,7 @@ extern BOOL isTimeToFinish;
 	if ([sa isEqual:@"yes"] || [sa isEqual:@"no"]) {
 		[Preferences commit];
 		[self doSaveHistory:nil];
-		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quit('%@')", sa]];
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"base::quit('%@')", sa]];
 		return YES;
 	}
 	//[[RDocumentController sharedDocumentController] closeAllDocumentsWithDelegate:self didCloseAllSelector:@selector(didCloseAll:) contextInfo:nil];	
