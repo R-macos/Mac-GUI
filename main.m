@@ -117,6 +117,8 @@ int main(int argc, const char *argv[])
 	[[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.5/bioc','2.5/data/annotation','2.5/data/experiment','2.5/extra'),sep=''))"];
 #elif (R_VERSION < R_Version(2,12,0))
     [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.6/bioc','2.6/data/annotation','2.6/data/experiment','2.6/extra'),sep=''))"];
+#elif (R_VERSION < R_Version(2,13,0))
+    [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('2.7/bioc','2.7/data/annotation','2.7/data/experiment','2.7/extra'),sep=''))"];
 #else
 #error "BioC repository is unknown, please add it to main.m or get more recent GUI sources"
 #endif
