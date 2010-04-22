@@ -8,8 +8,15 @@
    From: RDocumentWinCtrl.m (hintForFunction) */
 "(arguments lookup is disabled while R is busy)" = "(Hilfe zu Funktionsargumenten ist ausgeschaltet, solange R beschäftigt ist)";
 
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<gelöscht>";
+
 /* From: SearchTable.m (show) */
 "<unknown>" = "<unbekannt>";
+
+/* From: RController.m (applicationDidFinishLaunching)
+   From: RController.m (application) */
+"[Workspace restored from " = "[Arbeitsbereich wiederhergestellt aus ";
 
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "+ Spalte";
@@ -49,6 +56,11 @@
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Abbrechen";
+
+/* From: HelpManager.m (showHelpUsingFile)
+   From: DataManager.m (showHelp)
+   From: PackageManager.m (showInfo) */
+"Cannot start HTML help server." = "Der HTML Server für das dynamische Hilfesystem konnte nicht gestartet werden.";
 
 /* From: main.m (webView) */
 "Cannot start R" = "R kann nicht gestratet werden";
@@ -105,6 +117,11 @@
 /* From: RController.m (toolbar) */
 "Font Size" = "Schriftgröße";
 
+/* From: HelpManager.m (showHelpUsingFile)
+   From: DataManager.m (showHelp)
+   From: PackageManager.m (showInfo) */
+"Help" = "Hilfe";
+
 /* From: RController.m (handleCustomPrint) */
 "Help for the topic \"%@\" was not found." = "Das Hilfethema zu \"%@\" wurde nicht gefunden.";
 
@@ -123,8 +140,8 @@
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Bricht die aktuelle Berechnung ab";
 
-/* From: PackageInstaller.m (reloadURL)
-   From: PackageInstaller.m (updateAll) */
+/* From: PackageInstaller.m (updateAll)
+   From: PackageInstaller.m (reloadURL) */
 "Invalid Repository URL" = "Ungültige Repository-URL";
 
 /* From: PackageInstaller.m (checkOptions) */
@@ -147,6 +164,11 @@
 
 /* From: PackageInstaller.m (checkOptions) */
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Es wurde kein gültiger CRAN Server ausgewählt.\nEs können keine Pakete installiert werden, bis ein gültiger Server ausgewählt wird.";
+
+/* From: HelpManager.m (showHelpUsingFile)
+   From: DataManager.m (showHelp)
+   From: PackageManager.m (showInfo) */
+"Ok" = "Ok";
 
 /* Global string @ */
 "OK" = "OK";
@@ -182,8 +204,8 @@
 /* From: PackageInstaller.m (reloadURL) */
 "Please consult  R Console output for details." = "Bitte schauen Sie in die R Konsole, um mehr hierzu zu erfahren.";
 
-/* From: PackageInstaller.m (reloadURL)
-   From: PackageInstaller.m (updateAll) */
+/* From: PackageInstaller.m (updateAll)
+   From: PackageInstaller.m (reloadURL) */
 "Please specify a valid URL first." = "Bitte wählen Sie zuerst eine gültige URL.";
 
 /* Editor preference group */
@@ -282,7 +304,7 @@
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Inhalt des Quartz-Fensters in eine PDF Datei speichern";
 
-/* From: REditorToolbar.m (toolbar) */
+/* From: REditorToolbar.m (updatePreferences) */
 "Save current document" = "Aktuelles Dokument speichern";
 
 /* From: RController.m (doSaveHistory) */
@@ -310,7 +332,8 @@
 /* From: REngine/Rcallbacks.m (validateToolbarItem) */
 "Select one or more" = "Wählen Sie einen oder mehrere Einträge";
 
-/* From: RController.m (installFromDir) */
+/* From: PackageInstaller.m (installSelected)
+   From: RController.m (installFromDir) */
 "Select Package Directory" = "Wählen Sie das Paketverzeichnis";
 
 /* From: PackageInstaller.m (awakeFromNib) */
@@ -367,6 +390,9 @@
 
 /* From: main.m (webView) */
 "Unable to start R: %@" = "R kann nicht gestartet werden: %@";
+
+/* From: RController.m (applicationDidFinishLaunching) */
+"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "WARNUNG: Sie verwenden eine andere Umgebung als UTF-8, daher werden nur einfache Zeichen (ohne Umlaute) funktionieren.\nBitte lesen Sie R for Mac OS X FAQ (siehe Hilfe) Sektion 9 und ändern Sie Ihre Einstellungen entsprechend.\n";
 
 /* Global string @ */
 "Yes" = "Ja";
