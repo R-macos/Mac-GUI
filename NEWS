@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.32 (5573) - supplied with R 2.11.0 --
+
 Last update: 2010-04-12
 *	GUI redefines q()/quit() function to issue an error
 	when used unless the RGUI.base.quit option is TRUE,
