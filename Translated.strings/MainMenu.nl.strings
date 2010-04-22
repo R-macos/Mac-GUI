@@ -342,6 +342,9 @@
 /* NSMenuItem : <title:Paste> (oid:171) */
 "Paste" = "Plak";
 
+/* NSMenuItem : <title:Paste As Plain Text> (oid:1475) */
+"Paste As Plain Text" = "Plak (platte tekst)";
+
 /* NSMenuItem : <title:Paste Ruler> (oid:845) */
 "Paste Ruler" = "Plak lineaal";
 

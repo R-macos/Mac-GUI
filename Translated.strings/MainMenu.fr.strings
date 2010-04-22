@@ -342,6 +342,9 @@
 /* NSMenuItem : <title:Paste> (oid:171) */
 "Paste" = "Coller";
 
+/* NSMenuItem : <title:Paste As Plain Text> (oid:1475) */
+"Paste As Plain Text" = "Coller (format Texte)";
+
 /* NSMenuItem : <title:Paste Ruler> (oid:845) */
 "Paste Ruler" = "Coller Règle";
 
