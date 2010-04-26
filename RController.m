@@ -1447,9 +1447,9 @@ extern BOOL isTimeToFinish;
 	[[NSApplication sharedApplication] stopModalWithCode: 
 		(returnCode==NSAlertDefaultReturn || returnCode==NSAlertAlternateReturn)?YES:NO];
     if (returnCode==NSAlertDefaultReturn)
-		[[REngine mainEngine] executeString:@"quit(\"yes\")"];
+		[[REngine mainEngine] executeString:@"base::quit(\"yes\")"];
     if (returnCode==NSAlertAlternateReturn)
-		[[REngine mainEngine] executeString:@"quit(\"no\")"];
+		[[REngine mainEngine] executeString:@"base::quit(\"no\")"];
 }
 
 /*  This is used to send commands through the GUI, i.e. from menus 
