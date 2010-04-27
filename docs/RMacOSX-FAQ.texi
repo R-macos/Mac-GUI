@@ -1219,6 +1219,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * What is the difference between the CRAN build and a vanilla build?::  
 * Why is R.home() not versioned?::  
 * R.app GUI crashes on startup!::  
+* R.app GUI does not save the workspace!::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
