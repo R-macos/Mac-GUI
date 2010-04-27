@@ -4,6 +4,12 @@ NEWS for R.app GUI for Mac OS X
 Last update: 2010-04-26
 *	fixed bug which caused Quit -> Save to not save the
 	work space
+	
+*	when a preference pane is closed the active text
+	field's content is saved as if <Enter> was pressed
+
+	(Note: closing the application while a preference
+	pane is open still does NOT save the value)
 
 -- Release Version 1.32 (5573) - supplied with R 2.11.0 --
 

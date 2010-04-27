@@ -147,6 +147,21 @@
 	return AMUnselectNow;
 }
 
+- (void)willUnselect
+{
+	/* check for any uncommitted text fields */
+	if (mainView) {
+		NSWindow *w = [mainView window];
+		if (w) {
+			NSResponder *fr = [w firstResponder];
+			if (fr && [fr isMemberOfClass:[NSTextView class]]) {
+				SLog(@"%@ didUnselect: committing text in the current text field", self);				
+				[fr insertNewline:self];
+			}
+		}
+	}
+}
+
 /* end of std methods implementation */
 
 - (void) awakeFromNib

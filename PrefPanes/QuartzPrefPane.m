@@ -157,7 +157,17 @@
 }
 
 - (void)willUnselect
-{}
+{
+	/* check for any uncommitted text fields */
+	if (mainView) {
+		NSWindow *w = [mainView window];
+		if (w) {
+			NSResponder *fr = [w firstResponder];
+			if (fr && [fr isMemberOfClass:[NSTextView class]])
+				[fr insertNewline:self];
+		}
+	}
+}
 
 - (void)didUnselect
 {}
