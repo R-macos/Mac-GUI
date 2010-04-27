@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2010
-@set FAQ-VERSION 2.11-1 @value{FAQ-YEAR}-04-02
+@set FAQ-VERSION 2.11-2 @value{FAQ-YEAR}-04-27
 @set REL-VERSION 2.11.0
-@set GUI-VERSION 1.32
+@set GUI-VERSION 1.33
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -340,11 +340,11 @@ Note: You may also want to install @TeX{}Shop (@uref{http://www.uoregon.edu/~koc
 @node How to configure and build R, How to install R, What is needed to build R, Building R from sources
 @section How to configure and build R
 Download the latest sources of R from @CRAN{} or fetch them using SVN. Unpack the archive with tar -zxf @emph{name_of_R_sources_archive} and cd
-inside the R sources directory. Then you need to configure R for your system and build R. It is recommended to use separate directory for building from the sources. For example if you unpackged @R{} as R-2.10.1 type:
+inside the R sources directory. Then you need to configure R for your system and build R. It is recommended to use separate directory for building from the sources. For example if you unpackged @R{} as R-2.11.0 type:
 @example
 mkdir build
 cd build
-../R-2.10.1/configure
+../R-2.11.0/configure
 make
 @end example
 This will configure R to be built as a Framework to be installed inside your @emph{/Library/Frameworks} directory with the name @emph{R.framework}. @code{make} will compile R. Such compiled @R{} can already be used by running the @code{bin/R} script.
@@ -427,12 +427,12 @@ In addition, the compilers must support both architectures as well. You will nee
 
 The next step is to build a binary for each architecture. This can be either done natively on two machines - one PowerPC and one Intel based Mac, or by cross-compiling the PowerPC part on an Intel Mac. In either case, the configuration is the same.
 
-Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.10.1.tar.gz} is in the current directory, replace @samp{R-2.10.1} with any other version or name as appropriate):
+Configure, build and install the @samp{ppc} binary (assuming @samp{R-2.11.0.tar.gz} is in the current directory, replace @samp{R-2.11.0} with any other version or name as appropriate):
 @example
-tar fxz R-2.10.1.tar.gz
+tar fxz R-2.11.0.tar.gz
 mkdir R-ppc
 cd R-ppc
-../R-2.10.1/configure r_arch=ppc CC="gcc -arch ppc" \
+../R-2.11.0/configure r_arch=ppc CC="gcc -arch ppc" \
 CXX="g++ -arch ppc" F77="gfortran -arch ppc" \
 FC="gfortran -arch ppc" OBJC="gcc -arch ppc"
 make
@@ -445,7 +445,7 @@ Depending on your permissions, you may need to run @samp{sudo make install}. The
 @example
 mkdir R-i386
 cd R-i386
-../R-2.10.1/configure r_arch=i386 CC="gcc -arch i386" \
+../R-2.11.0/configure r_arch=i386 CC="gcc -arch i386" \
 CXX="g++ -arch i386" F77="gfortran -arch i386" \
 FC="gfortran -arch i386" OBJC="gcc -arch i386"
 make
@@ -987,15 +987,15 @@ Normally, building a package from sources produces a binary that is tied to the 
 
 However, unlike other unices Mac users do not necessarily have development tools installed, so on CRAN we make an effort to modify the binaries such that they work even without the tools they have been compiled with. There are several possible approaches, but since R itself already uses the same Fortran, we ship a copy of the Fortran libraries inside R and modify packages such that they use it instead of the one from developer tools.
 
-If you want to share a binary with multiple users and don't want to require them to install Xcode, you can use the same approach as CRAN but only if you use the same tools as we do on CRAN. It means to change the path of the FORTRAN dynamic library (libgfortran) to point inside the R version that you are compiling for. For example, if you have installed a universal package @code{FOO} for R 2.10.x, you can change the paths as follows:
+If you want to share a binary with multiple users and don't want to require them to install Xcode, you can use the same approach as CRAN but only if you use the same tools as we do on CRAN. It means to change the path of the FORTRAN dynamic library (libgfortran) to point inside the R version that you are compiling for. For example, if you have installed a universal package @code{FOO} for R 2.11.x, you can change the paths as follows:
 
 @example
 # change into the library where you installed FOO
 cd /Library/Frameworks/R.framework/Resources/library
-# fix the Fortran paths in FOO to point to R 2.10 instead
+# fix the Fortran paths in FOO to point to R 2.11 instead
 for lib in `ls FOO/libs/*/*.so`; do
  install_name_tool -change /usr/local/lib/libgfortran.2.dylib \
-   /Library/Frameworks/R.framework/Versions/2.10/Resources/lib/libgfortran.2.dylib \
+   /Library/Frameworks/R.framework/Versions/2.11/Resources/lib/libgfortran.2.dylib \
   $lib
 done
 @end example
@@ -1338,13 +1338,13 @@ Since R 2.8.0 the CRAN binary also contains (statically) the most recent FontCon
 @node Why is R.home() not versioned?, R.app GUI crashes on startup!, What is the difference between the CRAN build and a vanilla build?, Sparse questions
 @section Why is R.home() in the R framework not versioned?
 
-In the command line version of R @code{R.home()} always points to the @code{Resources} directory symbolic link inside the R framework which points to @code{Versions/Current/Resource} which is turn points to the actual home -- a versioned directory such as for example @code{Versions/2.10/Resources}. This is how framework versioning works in Mac OS X and is defined by Apple (see @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html, Framework Anatomy}).
+In the command line version of R @code{R.home()} always points to the @code{Resources} directory symbolic link inside the R framework which points to @code{Versions/Current/Resource} which is turn points to the actual home -- a versioned directory such as for example @code{Versions/2.11/Resources}. This is how framework versioning works in Mac OS X and is defined by Apple (see @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html, Framework Anatomy}).
 
 The advanatage of this setup is that it is possible to install multiple R versions in parallel and they all will be fully functional as long as the @code{Current} symbolic link points to the currently used version. There is even a small GUI utility @code{RSwitch} available form the @uref{http://r.research.att.com/, R for Mac devel page} that allows you to select the desired version. In addition, any application embedding R (such as the R GUI) can choose to use a specific R version (in most cases) or any version.
 
 Although it is possible to set @code{R_HOME} directly to the versioned path in the R shell scripts (and thus be able to run different version in parallel without changing the symbolic link), there are several dangers lurking there so we don't recommend it. One problem is that building packages from source won't work. The linker is always linking against the current version of the framework and therefore only the currently active version of R can compile packages. Further, packages may have used the value of @code{R.home()} at install time and thus may not work with incorrect setting. Similar problem may arise with help pages. Finally, if such an R start script happens to get copied and the R version changes, it will stop working.
 
-@node R.app GUI crashes on startup!,  , Why is R.home() not versioned?, Sparse questions
+@node R.app GUI crashes on startup!, R.app GUI does not save the workspace!, Why is R.home() not versioned?, Sparse questions
 @section R.app GUI crashes on startup!
 
 If your R.app GUI crashes on startup, there are usually two major causes for this: saved workspace or corrupted history
@@ -1366,6 +1366,11 @@ mv ~/.Rhistory ~/history.txt
 Although we are trying to recover from invalid history files, they can still crash @Rapp{} due to issues in the internal handling of strings in Mac OS X. We are currently working on preventing this issue.
 
 If you did both of the above and @Rapp{} still crashes, please select `1' in the menu after the crash (if you get the crash menu in the console) and send us the resulting crash report (see @pxref{R.app Bugs} above).
+
+@node R.app GUI does not save the workspace!,  , R.app GUI crashes on startup!, Sparse questions
+@section R.app GUI does not save the workspace!
+
+When you quit the R.app GUI it asks you whether to save the workspace or not. There was a bug in R.app GUI 1.32 (shipped with the initial release of R 2.11.0) that did not save the workspace even if told to. If you use R.app GUI version 1.32 please make sure you upgrade to 1.33 (or higher) to avoid this bug. The current R on CRAN ships with the more recent R.app GUI version that does not exhibit the problem.
 
 @bye
 
