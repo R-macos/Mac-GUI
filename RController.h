@@ -89,6 +89,8 @@
 	
 	NSFont *textFont;
 	
+	NSString *requestSaveAction;
+	
     IBOutlet NSStepper *fontSizeStepper;
     IBOutlet NSTextField *fontSizeField;
     IBOutlet NSView *fontSizeView;
@@ -188,6 +190,8 @@
 - (id) tableView: (NSTableView *)tableView
 		objectValueForTableColumn: (NSTableColumn *)tableColumn
 			 row: (int)row;
+
+- (int) quitRequest: (int) saveFlag withCode: (int) code last: (int) runLast;
 
 - (IBAction)doClearHistory:(id)sender;
 - (IBAction)doLoadHistory:(id)sender;

@@ -42,8 +42,35 @@
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import "Tools/GlobalExHandler.h"
 
+/* we need teh following two to implement RappQuit and register it with R */
+#include "Startup.h"
+#include "R_ext/Rdynload.h"
+
 NSString *Rapp_R_version_short;
 NSString *Rapp_R_version;
+
+/* this is called by the R.app q/quit function */
+static SEXP RappQuit(SEXP save, SEXP status, SEXP runLast) {
+	int sc, rl, save_flag = -1, cancel = 0; /* 1=yes, 0=no, -1=ask */
+	const char *sv;
+	if (!isString(save) || LENGTH(save) != 1) Rf_error("save must be a character vector of length one.");
+	sc = asInteger(status);
+	rl = asInteger(runLast);
+	sv = CHAR(STRING_ELT(save, 0));
+	if (sv && !strcmp(sv, "yes")) save_flag = 1;
+	else if (sv && !strcmp(sv, "no")) save_flag = 0;
+	if ([RController sharedController])
+		cancel = [[RController sharedController] quitRequest: save_flag withCode: sc last: rl];
+	if (!cancel) /* no cancel and we're still here -> run the internal version */
+		R_CleanUp((save_flag == 0) ? SA_NOSAVE : ((save_flag == -1) ? SA_SAVEASK : SA_SAVE), sc, rl);
+	Rf_error("cancelled by user");
+	return R_NilValue;
+}
+
+static R_CallMethodDef mainCallMethods[]  = {
+	{"RappQuit", (DL_FUNC) &RappQuit, 3},
+	{NULL, NULL, 0}
+};
 
 int main(int argc, const char *argv[])
 {
@@ -76,6 +103,8 @@ int main(int argc, const char *argv[])
 	/* in R 2.7.0 we use dev.copy to implement quartz.save */
 	[[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\", function(file, type='png', device=dev.cur(), dpi=100, ...) {\n # modified version of dev.copy2pdf\n dev.set(device)\n current.device <- dev.cur()\n nm <- names(current.device)[1]\n if (nm == 'null device') stop('no device to print from')\n oc <- match.call()\n oc[[1]] <- as.name('dev.copy')\n oc$file <- NULL\n oc$device <- quartz\n oc$type <- type\n oc$file <- file\n oc$dpi <- dpi\n din <- dev.size('in')\n w <- din[1]\n h <- din[2]\n if (is.null(oc$width))\n oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w\n if (is.null(oc$height))\n oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h\n dev.off(eval.parent(oc))\n dev.set(current.device)\n},e); environment(e$quartz.save) <- e}))"];
 #else
+	R_registerRoutines(R_getEmbeddingDllInfo(), 0, mainCallMethods, 0, 0);
+	
 	NSString *codePath = [[NSBundle mainBundle] pathForResource:@"GUI-tools.R" ofType:@""];
 	SLog(@" - loading code from '%@'", codePath);
 	[[REngine mainEngine] executeString: [NSString stringWithFormat:@"try(local(source(\"%@\",local=TRUE,echo=FALSE,verbose=FALSE,encoding='UTF-8',keep.source=FALSE)))", codePath]];

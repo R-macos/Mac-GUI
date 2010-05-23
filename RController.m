@@ -254,7 +254,9 @@ static RController* sharedRController;
 - (void) awakeFromNib {
 	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
-		
+	
+	requestSaveAction = nil;
+	
 	sharedRController = self;
 	pendingDocsToOpen = [[NSMutableArray alloc] init];
 	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleAppleEvent:withReplyEvent:) forEventClass:kCoreEventClass andEventID:kAEOpenDocuments];
@@ -1421,7 +1423,7 @@ extern BOOL isTimeToFinish;
 		return NO;
 	}
 //	NSString *sa = [[REngine mainEngine] saveAction];
-	NSString *sa = [Preferences stringForKey:saveOnExitKey withDefault:@"ask"];
+	NSString *sa = requestSaveAction ? requestSaveAction : [Preferences stringForKey:saveOnExitKey withDefault:@"ask"];
 	SLog(@"RController.windowShouldClose: save action is %@.", sa);
 	if ([sa isEqual:@"yes"] || [sa isEqual:@"no"]) {
 		[Preferences commit];
@@ -2817,6 +2819,16 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (NSString*) statusLineText {
 	return [statusLine stringValue];
+}
+
+- (int) quitRequest: (int) saveFlag withCode: (int) code last: (int) runLast
+{
+	if (saveFlag == 0)
+		requestSaveAction = @"no";
+	if (saveFlag == 1)
+		requestSaveAction = @"yes";
+	[[NSApplication sharedApplication] terminate:self];
+	return 1;
 }
 
 - (int) helpServerPort {

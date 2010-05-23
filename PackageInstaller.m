@@ -577,8 +577,10 @@ typedef unsigned int NSUInteger;
 	[busyIndicator setUsesThreadedAnimation:YES];
 	
 	{
-		/* we take first 3 chars from the version string - this may or may not be correct FIXME */
-		NSString *curRV = [[NSString stringWithCString:R_MAJOR "." R_MINOR] substringToIndex:3];
+		NSString *curRV = [NSString stringWithUTF8String:R_MAJOR "." R_MINOR];
+		NSRange cr = [curRV rangeOfString:@"." options:NSBackwardsSearch];
+		if (cr.location != NSNotFound)
+			curRV = [curRV substringToIndex:cr.location];
 		NSArray *a = [[NSFileManager defaultManager] directoryContentsAtPath:@"/Library/Frameworks/R.framework/Versions"];
 		int i;
 

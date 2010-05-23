@@ -1,5 +1,16 @@
 NEWS for R.app GUI for Mac OS X
 
+Last update: 2010-05-23
+*	When identifying old R versions allow any size of
+	the minor version (only one character was used before)
+	
+*	Change q()/quit() to map to the Quit command of the
+	application. NOTE: the GUI still asks independently
+	about unsaved documents regardless of the `save'
+	argument, so unlike command-line R quit("yes")
+	can be cancelled by the user if there are unsaved
+	documents.
+
 -- Release Version 1.33 (5582) - supplied with R 2.11.0 --
 
 Last update: 2010-04-26
