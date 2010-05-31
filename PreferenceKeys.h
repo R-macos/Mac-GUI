@@ -86,6 +86,10 @@
 
 #define kExternalHelp @"use.external.help"
 
+// defaults
+
+#define kDefaultHistoryFile @".Rapp.history"
+
 // other constants
 
 #define iBackgroundColor 0

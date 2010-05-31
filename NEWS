@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.34 (5589) - supplied with R 2.11.1 --
+
 Last update: 2010-05-23
 *	When identifying old R versions allow any size of
 	the minor version (only one character was used before)
@@ -10,6 +12,14 @@ Last update: 2010-05-23
 	argument, so unlike command-line R quit("yes")
 	can be cancelled by the user if there are unsaved
 	documents.
+	
+*	Change default history file name to .Rapp.history
+	temporarily until R/R.app history interaction is
+	resolved. If you are upgrading and experience R GUI
+	apparently not saving your history, go to Preferences
+	-> Startup, click on the "Default" button next to the
+	"R history file" text box and close the preferences.
+
 
 -- Release Version 1.33 (5582) - supplied with R 2.11.0 --
 

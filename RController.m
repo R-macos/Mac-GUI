@@ -1495,7 +1495,7 @@ The input replaces what the user is currently typing.
 			fname = [op filename];
 	} else
 		fname = [[Preferences stringForKey:historyFileNamePathKey
-							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
+							   withDefault: kDefaultHistoryFile] stringByExpandingTildeInPath];
 	SLog(@" - history file to load: %@", fname);
 	if(fname != nil){
 //		fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath] stringByAppendingString:[NSString stringWithFormat:@"/%@", fname]];
@@ -1552,7 +1552,7 @@ The input replaces what the user is currently typing.
 		if([sp runModal] == NSOKButton) fname = [sp filename];		
 	} else 
 		fname = [[Preferences stringForKey:historyFileNamePathKey
-							   withDefault: @".Rhistory"] stringByExpandingTildeInPath];
+							   withDefault: kDefaultHistoryFile] stringByExpandingTildeInPath];
 
 	SLog(@"RController.doSaveHistory (file %@)", fname);
 	rhist = fopen([fname UTF8String], "w");

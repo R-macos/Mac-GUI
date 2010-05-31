@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2010
-@set FAQ-VERSION 2.11-2 @value{FAQ-YEAR}-04-27
-@set REL-VERSION 2.11.0
-@set GUI-VERSION 1.33
+@set FAQ-VERSION 2.11-3 @value{FAQ-YEAR}-05-31
+@set REL-VERSION 2.11.1
+@set GUI-VERSION 1.34
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -179,6 +179,7 @@ R installer since version 2.7.0 attempts to detect and resolve the above problem
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
 @menu
+* Quick start::                 
 * What is needed to build R::   
 * How to configure and build R::  
 * How to install R::            
@@ -186,7 +187,58 @@ R installer since version 2.7.0 attempts to detect and resolve the above problem
 * How to build universal R::    
 @end menu
 
-@node What is needed to build R, How to configure and build R, Building R from sources, Building R from sources
+@node Quick start, What is needed to build R, Building R from sources, Building R from sources
+@section Quick start
+
+If you have a clean, recent Mac OS X (10.5 Leopard or 10.6 Snow Leopard) and want quick instructions how to build your own R binary, read this section. In all other cases please read the details in the following sections.
+
+First, you need to install developer tools - that is Xcode 3.1 for Mac OS X 10.5 (Leopard) or Xcode 3.2 for Mac OS X 10.6 (Snow Leopard). Xcode is present on the OS X installation DVD or can be downloaded from @uref{http://developer.apple.com/mac/}. Then download the matching FORTRAN compiler from @uref{http://R.research.att.com/tools/}.
+
+Optionally you can also install TeX (@uref{http://www.tug.org/mactex/}) to build documntation. You can pick useful external libraries from @uref{http://r.research.att.com/libs/} (such as readline, libpng, jpeg) but they are not required. You can install them using the Terminal (in Application/Utilities) for example:
+
+@smallexample
+curl -s -S http://r.research.att.com/libs/readline-5.2-12-darwin8-bin4.tar.gz \
+| sudo tar fvxz - -C /
+@end smallexample
+
+Download, configure and build R. In the following we assume you have an Intel-based Mac with of 64-bit support. Again in Terminal type:
+
+@smallexample
+# download R
+curl -O http://cran.r-project.org/src/base/R-2/R-2.11.1.tar.gz
+# unpack R
+tar fxz R-2.11.1.tar.gz
+# choose the architecture (x86_64, i386, ppc or ppc64)
+arch=x86_64
+# create a build directory
+mkdir R-$arch
+cd R-$arch
+# configure R
+../R-2.11.1/configure r_arch=$arch  CC="gcc -arch $arch" \
+     CXX="g++ -arch $arch" F77="gfortran -arch $arch" \
+     FC="gfortran -arch $arch" OBJC="gcc -arch $arch" \
+     --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib \
+     --with-blas='-framework vecLib' --with-lapack
+# build R
+make -j8
+# At this point you can run R as `bin/R' even without installing
+
+# install R
+make install
+# in some cases you may need to use ``sudo make install'' instead
+@end smallexample
+
+If you want 32-bit Intel build replace @code{arch=x86_64} with @code{arch=i386}. For PowerPC use @code{arch=ppc} (32-bit) or @code{arch=ppc64} (64-bit and only supported on Mac OS X 10.5). You can repeat the steps above for any number of architectures.
+
+In order to make the newly installed R visible from the command line, use
+
+@smallexample
+sudo ln -sfn /Library/Frameworks/R.framework/Resources/bin/R /usr/bin/R
+@end smallexample
+
+Please note that any version of R you build yourself will be different from the released binary CRAN version and may not work with the package binaries we provide. Therefore we recommend using the CRAN binary or nightly builds from @uref{http://R.research.att.com} unless you want to modify R sources yourself.
+
+@node What is needed to build R, How to configure and build R, Quick start, Building R from sources
 @section What is needed to build R
 
 The requirements for building @R{} vary, depending whether the build machine is an Intel-based or PowerPC-based Mac and whether universal build is desired. The following description shows the minimum requirements for building @R{}. The process of building a universal binary is more complex and described in section @pxref{How to build universal R}.
@@ -625,7 +677,7 @@ The editor contains a light-weight help system in form of a search filed placed 
 @node Drag & drop, Help system, Editor help, General Features
 @subsection Drag & drop
 Drag and drop of a directory on the R icon while R is not running will start R and
-set the working directory. By default .RData and .Rhistory are fetched from this working directory.
+set the working directory. By default @file{.RData} and @file{.Rapp.history} are fetched from this working directory.
 If a file is dropped on thr R icon while R is not running, R is started, the file is either
 restored (if it is a saved workspace), sourced into R or opened in the selected editor. Whether
 the file is opened or sourced is specified by a Preference setting in the StartUp Preference Pane.
@@ -682,8 +734,8 @@ default. The Change button allows to select a new directory. The Always apply se
 enforce the specified intial start-up directory. The history section controls reading of
 the history file on startup. If selected, R will read history file on start-up.
 The R history file field is used to read and store history from/to. This field can be edited
-to allow selecting files starting with a period (e.g. .Rhistory). If you want the same history
-file regardless of your selected working directory, specify a fixec path (e.g. ~/.Rhistory).
+to allow selecting files starting with a period (e.g. @code{.Rapp.history}). If you want the same history
+file regardless of your selected working directory, specify a fixec path (e.g. @code{~/.Rapp.history}).
 The Default button will reset the history file name to its default value. The History handling 
 area allows setting of the max number of entries to be kept in history, to remove duplicate
 entries, to cleanup history entries (this is very useful to remove blank lines when submitting
@@ -1220,6 +1272,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * Why is R.home() not versioned?::  
 * R.app GUI crashes on startup!::  
 * R.app GUI does not save the workspace!::  
+* Why is the GUI not saving my history?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1368,10 +1421,15 @@ Although we are trying to recover from invalid history files, they can still cra
 
 If you did both of the above and @Rapp{} still crashes, please select `1' in the menu after the crash (if you get the crash menu in the console) and send us the resulting crash report (see @pxref{R.app Bugs} above).
 
-@node R.app GUI does not save the workspace!,  , R.app GUI crashes on startup!, Sparse questions
+@node R.app GUI does not save the workspace!, Why is the GUI not saving my history?, R.app GUI crashes on startup!, Sparse questions
 @section R.app GUI does not save the workspace!
 
 When you quit the R.app GUI it asks you whether to save the workspace or not. There was a bug in R.app GUI 1.32 (shipped with the initial release of R 2.11.0) that did not save the workspace even if told to. If you use R.app GUI version 1.32 please make sure you upgrade to 1.33 (or higher) to avoid this bug. The current R on CRAN ships with the more recent R.app GUI version that does not exhibit the problem.
+
+@node Why is the GUI not saving my history?,  , R.app GUI does not save the workspace!, Sparse questions
+@section Why is the GUI not saving my history?
+
+In some recent versions of R there is a conflict between the history of R itself and the GUI such that the history file will be always empty. In R 2.11.1 the default has been changed such that the GUI will use @code{.Rapp.history} file whereas command line R will use @code{.Rhistory} so that they will not collide. If you have old preferences, go to Preferences -> Startup in the GUI and click on the Default button next to the R history file text box and close the preferences. This is a work-around until the internal R history and the history of the GUI are synchronized properly.
 
 @bye
 

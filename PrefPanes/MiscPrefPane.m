@@ -190,7 +190,7 @@
 	flag = [Preferences flagForKey:importOnStartupKey withDefault:YES];
 	[importOnStartup setState: flag?NSOnState:NSOffState];
 
-	[historyFileNamePath setStringValue:[Preferences stringForKey:historyFileNamePathKey withDefault:@".Rhistory"]];	
+	[historyFileNamePath setStringValue:[Preferences stringForKey:historyFileNamePathKey withDefault:kDefaultHistoryFile]];	
 	[maxHistoryEntries setStringValue:[Preferences stringForKey:maxHistoryEntriesKey withDefault:@"250"]];
 	flag = [Preferences flagForKey:removeDuplicateHistoryEntriesKey withDefault:NO];
 	[removeDuplicateHistoryEntries setState: flag?NSOnState:NSOffState];
@@ -258,11 +258,11 @@
 }
 
 - (IBAction) changeHistoryFileNamePathToDefault: (id)sender {
-	[Preferences setKey:historyFileNamePathKey withObject:@".Rhistory"];	
+	[Preferences setKey:historyFileNamePathKey withObject:kDefaultHistoryFile];	
 }
 
 - (IBAction) changeHistoryFileNamePath:(id)sender {
-	NSString *name = ([[sender stringValue] length] == 0)?[Preferences stringForKey:historyFileNamePathKey withDefault:@".Rhistory"]:[sender stringValue];
+	NSString *name = ([[sender stringValue] length] == 0)?[Preferences stringForKey:historyFileNamePathKey withDefault:kDefaultHistoryFile]:[sender stringValue];
 	[Preferences setKey:historyFileNamePathKey withObject:[name stringByAbbreviatingWithTildeInPath]];
 }
 
