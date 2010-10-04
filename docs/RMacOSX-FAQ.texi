@@ -174,6 +174,8 @@ sudo rm -f /usr/local/lib && \
 sudo mv '/usr/local/lib 1' /usr/local/lib
 @end example
 
+@strong{Note:} In order for Tcl/Tk to work, don't forget to install the additional tools the very first time you upgrade. On the MacOS install page, see the note on the difference between the xxx.pkg and the xxx.dmg.
+
 R installer since version 2.7.0 attempts to detect and resolve the above problem automatically.
 
 @node Building R from sources, Command line version of R, Introduction, Top
@@ -387,7 +389,7 @@ The te@TeX{} is one of the i-Packages.
 
 Mac@TeX{} (@uref{http://www.tug.org/mactex/}) is a more recent alternative, but it is huge and contains other (possibly unwanted) libraries and programs.
 
-Note: You may also want to install @TeX{}Shop (@uref{http://www.uoregon.edu/~koch/texshop/texshop.html}). Beside wonderful GUI for editing @TeX{} files that page also provides many useful links for @TeX{} on Mac OS X.
+@strong{Note:} You may also want to install @TeX{}Shop (@uref{http://www.uoregon.edu/~koch/texshop/texshop.html}). Beside wonderful GUI for editing @TeX{} files that page also provides many useful links for @TeX{} on Mac OS X.
 
 @node How to configure and build R, How to install R, What is needed to build R, Building R from sources
 @section How to configure and build R
@@ -551,15 +553,15 @@ Assuming that you have @emph{/usr/local/bin} in your @emph{PATH} environment var
 * R.app Bugs::                  
 @end menu
 
-@Rapp{} is the name for the new Cocoa-based GUI for Mac OS X that was introduced in R 2.0.0. It appears as an icon labeled @emph{R}, but to avoid confusion with general @R{}, we prefer to use the name as it appears when using @emph{Get Info} on the GUI: @Rapp{} This stands for @emph{R application}.
+@Rapp{} is the name of the Cocoa-based GUI for Mac OS X that was introduced in R 2.0.0. It appears as an icon labeled @emph{R}, but to avoid confusion with general @R{}, we prefer to use the name as it appears when using @emph{Get Info} on the GUI: @Rapp{} This stands for @emph{R application}.
 
-Internally @Rapp{} is a Cocoa program (hence written in Obj-C) that loads R dynamic library in order to use R facilities.
+Internally @Rapp{} is a Cocoa program (hence written in Obj-C) that loads the R dynamic library in order to use R facilities.
 
 Historically there were two more GUIs for Mac OS X: @emph{RAqua} and @emph{Cocoa GUI bundle}. The latter was never officially released and RAqua was retired in R version 2.1, because it used legacy toolkit from the times of MacOS9.
 
 @node How to get R.app, How to install the R.app, R.app, R.app
 @section How to get R.app
-@Rapp{} is part of the binary distribution of R for Mac OS X available from @CRAN{}. That distribution consists of one disk image containing multiple packages including R framework and @Rapp{}.
+@Rapp{} is part of the binary distribution of R for Mac OS X available from @CRAN{}. That distribution consists of one disk image containing multiple packages including the R framework and @Rapp{}.
 
 Development versions of @Rapp{} are made available on daily basis in the form of a disk image containing the @Rapp{} itself. See the Mac OS X pages on @CRAN{} for detail how to obtain such images (currently at @uref{http://R.research.att.com/}).
 
@@ -567,7 +569,9 @@ Development versions of @Rapp{} are made available on daily basis in the form of
 @section How to install the R.app
 @Rapp{} is installed the same way as the R framework, namely using binary package provided on @CRAN{}. The @file{bin/macosx} directory of a @CRAN{} site contains a standard Apple installer package inside a disk image named @file{R.dmg} (optinally containing the version number). Download and double-click the image. New window will appear with a package icon representing the installer. Double-click that icon and it will install the current non-developer release of R, including @Rapp{}.
 
-Nightly build typically come as a disk image that contains @Rapp{} itself and thus can be started directly from the disk image or installed by dragging the icon in the @samp{Applications} folder.
+Please, carefully read the note on the usage of tcltk and Fortran on the @file{bin/macosx} directory of a @CRAN{} site, e.g. @uref{http://cran.cnr.berkeley.edu/}.
+
+Nightly builds typically come as a disk image that contains @Rapp{} itself and thus can be started directly from the disk image or installed by dragging the icon in the @samp{Applications} folder.
 
 @node The R Console, General Features, How to install the R.app, R.app
 @section The R Console
@@ -606,15 +610,11 @@ the Preferences (or any other method mentioned above) to change the startup dire
 @node Resizing the R Console, R Console text colors, The current and startup working directories, The R Console
 @subsection Resizing the R Console
 When the R Console Window is resized, the R option @emph{width} is set appropriately so that any future
-output will fit the window size. This behavior can be inhibited using the Preferences settings (@pxref{Preferences}).
-On closing the R application, the position and the size of the R Console window are saved in the Preferences and reused
-next time you launch R. You can inhibit R to do this using the appropriate Preferences settings.
+output will fit the window size.
 
 @node R Console text colors,  , Resizing the R Console, The R Console
 @subsection R Console text colors
-Text windows and frames are divided in Read-Only and Read and Write ones. Text colors can be set separately
-for the two kinds of windows. This happens as well for their respective backgrounds. Use the Preferences window to set these 
-colors (@pxref{Preferences}).
+Use the Preferences window to set the R Console text colors (@pxref{Preferences}).
 
 @node General Features, The Menus, The R Console, R.app
 @section General Features
@@ -630,7 +630,6 @@ colors (@pxref{Preferences}).
 * Help system::                 
 * History::                     
 * Authentication and .libPath::  
-* Preference Panes::            
 @end menu
 
 @node Editor, Editor undo and line numbers, General Features, General Features
@@ -678,10 +677,12 @@ The editor contains a light-weight help system in form of a search filed placed 
 @subsection Drag & drop
 Drag and drop of a directory on the R icon while R is not running will start R and
 set the working directory. By default @file{.RData} and @file{.Rapp.history} are fetched from this working directory.
-If a file is dropped on thr R icon while R is not running, R is started, the file is either
+If a file is dropped on the R icon while R is not running, R is started, the file is either
 restored (if it is a saved workspace), sourced into R or opened in the selected editor. Whether
 the file is opened or sourced is specified by a Preference setting in the StartUp Preference Pane.
+
 Note: At this point opening a file in the editor before R is finished loading will crash R.
+
 While R is running, d&d of a directory updates the working directory. D&d of a file sources or
 opens the file in the selected editor. Double clicking on files bound to ("Open With ...") R, if
 R is not running, R is started and the file is sourced or opened in editor. If R is running, the
@@ -701,71 +702,18 @@ support remains available from inside @Rapp{}. Multiline is particularly useful 
 history from files visible in the Mac OS Finder. Multiline is preserved. This can be set through
 the StartUp Preference Panel. Default number of kept history entries is 250. A variety of history
 entry cleanup modes is possible.
-At a minimum I would suggest to select "Cleanup history entries". It's optional to select removal
+At a minimum it is suggested to select "Cleanup history entries". It's optional to select removal
 of duplicate entries and strip comments.
 
-@node Authentication and .libPath, Preference Panes, History, General Features
+Note: R itself sometimes stores history in a file usually called .Rhistory. It is suggested to use a different name for the R.app history file.
+
+@node Authentication and .libPath, , History, General Features
 @subsection Authentication and .libPath
 The official CRAN binaries come pre-packaged in such a way that administrator have sufficient privileges to update R and install packages system-wide. However, the default unix build requires root-authentication for package instllation and other administrative tasks. As it is not feasible to run the GUI as root, we provide the possibility to authenticate system commands issued from the GUI. The authentication requires an administrator login and causes all subsequent system commands to be executed as root. Use with care!
 
-In order to allow non-administrators to maintain their own set of packages, @Rapp{} optionally adds @code{~/Library/R/x.y/library} to the @code{.libPaths} (see start-up preferences, @code{x.y} denotes the R version without patch level). It is possible to use the Package Installer to install packages either globally (admin users only) or for the current user only. Note that user-local packages are only used when the corresponding preference option is enabled. The default for admin users is to use system-wide directorie, for non-admin users local packages will be used.
+In order to allow non-administrators to maintain their own set of packages, @Rapp{} optionally adds @code{~/Library/R/x.y/library} to the @code{.libPaths} (see start-up preferences, @code{x.y} denotes the R version without patch level). It is possible to use the Package Installer to install packages either globally (admin users only) or for the current user only.
 
-@node Preference Panes,  , Authentication and .libPath, General Features
-@subsection Preference Panes
-Several aditional preference panes have been implemented (see below).
-
-@menu
-* Startup::                     
-* Editor Preferences::          
-* Syntax Colors::               
-* Console Colors::              
-* Quartz window::               
-@end menu
-
-@node Startup, Editor Preferences, Preference Panes, Preference Panes
-@subsubsection Startup
-The Drag & drop section defines drag & drop behaviour during R start-up. Options are to open
-file in an editor or to source file. Default is to source the file.
-The Default Library Paths section enables, on next start-up of R, to add a directory, e.g.
-~/R/Library, to the
-library search/install path. The initial working directory section can be used to enforce
-the initial working directory. If no directory is specified, this directory is used as the
-default. The Change button allows to select a new directory. The Always apply selection will
-enforce the specified intial start-up directory. The history section controls reading of
-the history file on startup. If selected, R will read history file on start-up.
-The R history file field is used to read and store history from/to. This field can be edited
-to allow selecting files starting with a period (e.g. @code{.Rapp.history}). If you want the same history
-file regardless of your selected working directory, specify a fixec path (e.g. @code{~/.Rapp.history}).
-The Default button will reset the history file name to its default value. The History handling 
-area allows setting of the max number of entries to be kept in history, to remove duplicate
-entries, to cleanup history entries (this is very useful to remove blank lines when submitting
-multiple lines using Command-Return) and the strip comments before the entry is added to the
-history.
-
-@node Editor Preferences, Syntax Colors, Startup, Preference Panes
-@subsubsection Editor Preferences
-If Built-in editor is selected, allows enable/disable of syntax coloring, brace highlighting
-and the showing of line numbers. If External editor is selected, allows specifying which
-external editor. That editor will be used for all editing functions. It runs as a separate
-application. Using an external editor means that R will never wait while editing (e.g. edit(A)
-will return immediately and open A in the external editor. Command-E and Command-Return like
-functionality would need to be implemented by other means, i.e. AppleScript. The external editor
-can be any application (e.g. SubEthaEdit, TextWrangler, BBEdit, Smultron, etc) or can be activated
-through a shell script (e.g. see or smultron, both give better control on how to start the editor).
-					
-@node Syntax Colors, Console Colors, Editor Preferences, Preference Panes
-@subsubsection Syntax Colors
-Enables to select the syntax colors.
-
-@node Console Colors, Quartz window, Syntax Colors, Preference Panes
-@subsubsection Console Colors
-Enables to select the input/output colors in R Console.
-
-@node Quartz window,  , Console Colors, Preference Panes
-@subsubsection Quartz window
-Use the Quartz preference pane to override R Quartz width/height parameters if override is enabled.
-You can set the default location for initial Quartz window. Subsequent windows are offset sligthly.
-The Font section is not implemented. Restore defaults resets to default values.
+Note that user-local packages are only used when the corresponding preference option is enabled. The default for admin users is to use system-wide directorie, for non-admin users local packages will be used.
 
 @node The Menus, Preferences, General Features, R.app
 @section The Menus
@@ -855,51 +803,58 @@ There are also interfaces to the R @emph{help} and @emph{help.search} functions 
 @section Preferences
 You can set several aspects of the @R{} GUI via preferences. You can access the Preferences window via the Application menu when the
 @R{} Console is open.
-Preferences are organized in Tabs, more or less grouped for content.
 
 @menu
-* Text Windows tab::            
-* Quartz device tab::           
-* Packages tab::                
-* Misc tab::                    
+* Startup::                     
+* Editor Preferences::          
+* Syntax Colors::               
+* Console Colors::              
+* Quartz window::               
 @end menu
 
-@node Text Windows tab, Quartz device tab, Preferences, Preferences
-@subsection Text Windows tab
-You can change the font size, face and the tab size in all the windows including the Console.
-If you have help windows opened, the changed only apply to the Console window and to the window
-you'll open from now on. This is a misfeature more than a bug.
+@node Startup, Editor Preferences, , Preferences
+@subsubsection Startup
+The Drag & drop section defines drag & drop behaviour during R start-up. Options are to open
+file in an editor or to source file. Default is to source the file.
+The Default Library Paths section enables, on next start-up of R, to add a directory, e.g.
+~/R/Library, to the
+library search/install path. The initial working directory section can be used to enforce
+the initial working directory. If no directory is specified, this directory is used as the
+default. The Change button allows to select a new directory. The Always apply selection will
+enforce the specified intial start-up directory. The history section controls reading of
+the history file on startup. If selected, R will read history file on start-up.
+The R history file field is used to read and store history from/to. This field can be edited
+to allow selecting files starting with a period (e.g. @code{.Rapp.history}). If you want the same history
+file regardless of your selected working directory, specify a fixed path (e.g. @code{~/.Rapp.history}).
+The Default button will reset the history file name to its default value. The History handling 
+area allows setting of the max number of entries to be kept in history, to remove duplicate
+entries, to cleanup history entries (this is very useful to remove blank lines when submitting
+multiple lines using Command-Return) and the strip comments before the entry is added to the
+history.
 
-You can also change the foreground and background colors for the read-only windows (i.e. the @R{} Console
-output and the Help windows) and for read-and-write windows (i.e. the @R{} Console input and the Edit windows).
-At the moment you cannot change the color of the cursor which always stays black which ever  background you choose.
-So, for the time being, it's a bad idea to set the background of the @R{} Console to black.
+@node Editor Preferences, Syntax Colors, Startup, Preferences
+@subsubsection Editor Preferences
+If Built-in editor is selected, allows enable/disable of syntax coloring, brace highlighting
+and the showing of line numbers. If External editor is selected, allows specifying which
+external editor. That editor will be used for all editing functions. It runs as a separate
+application. Using an external editor means that R will never wait while editing (e.g. edit(A)
+will return immediately and open A in the external editor. Command-E and Command-Return like
+functionality would need to be implemented by other means, i.e. AppleScript. The external editor
+can be any application (e.g. SubEthaEdit, TextWrangler, BBEdit, Smultron, etc) or can be activated
+through a shell script (e.g. see or smultron, both give better control on how to start the editor).
+					
+@node Syntax Colors, Console Colors, Editor Preferences, Preferences
+@subsubsection Syntax Colors
+Enables to select the syntax colors.
 
-You have also the possibility to check two options. The first is for adapting the @R{} output when you resize the
-@R{} Console to the maximum character displayable, the second one is to let @R{} remember the position of the
-@R{} Console on exit.
+@node Console Colors, Quartz window, Syntax Colors, Preferences
+@subsubsection Console Colors
+Enables to select the input/output colors in R Console.
 
-@node Quartz device tab, Packages tab, Text Windows tab, Preferences
-@subsection Quartz device tab
-You can set all the parameters of the @command{quartz} device for this tab. Please note: your changes only take effect
-if you select the final checkbox, namely @emph{override the R quartz default settings}.
+@node Quartz window,  , Console Colors, Preferences
+@subsubsection Quartz window
+Currently the the Quartz preference pane is not being used.
 
-This also apply to the @emph{Quartz window position} option even if it is not a @command{quartz} parameter itself.
-
-
-@node Packages tab, Misc tab, Quartz device tab, Preferences
-@subsection Packages tab
-From this tab you can set the default repositories for the @CRAN{} and Bioconductor urls. This will affect the
-corresponding @R{} @command{options}.
-
-@node Misc tab,  , Packages tab, Preferences
-@subsection Misc tab
-For this tab you can decide to redirect the stderr and stdout of @R{} and the tasks launched by @R{}, to the @R{} Console.
-This is useful, for example, during package installation. If you don't check these options, every output will be sent to the @emph{Console}
-application which you can find on every Mac OS X installation inside the directory @file{/Applications/Utilities}.
-
-You can also set the startup working directory. This is very useful for having different sessions in different
-directories (see @ref{The current and startup working directories} and @ref{How can I have a per session .Rprofile?}).
 
 @node The near future of the R.app, R.app Bugs, Preferences, R.app
 @section The near future of the R.app
