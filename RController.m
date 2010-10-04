@@ -567,11 +567,25 @@ static RController* sharedRController;
 		cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
 		cmd = [cmd stringByAppendingString: @"\")"]; 
 		[[REngine mainEngine] executeString:cmd];
-		NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
+		NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n"];		
 		[self handleWriteConsole: msg];
 		SLog(@"RController.applicationDidFinishLaunching - load workspace %@", fname);
 	}
-
+    fname = [[Preferences stringForKey:historyFileNamePathKey withDefault: @".Rapp.history"] stringByExpandingTildeInPath];
+    if ([Preferences flagForKey:importOnStartupKey withDefault:YES] && ([[NSFileManager defaultManager] fileExistsAtPath: fname])) {
+        NSString *fullfname = [NSString stringWithString:fname];
+        if ([fname characterAtIndex:0] != '/') {
+            fullfname = [[[[[NSFileManager defaultManager] currentDirectoryPath] 
+                           stringByAppendingString:@"/"] stringByAppendingString: fname]
+                         stringByExpandingTildeInPath];
+        }
+        NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[History restored from ")] 
+                          stringByAppendingString: fullfname] 
+                         stringByAppendingString: @"]\n\n"];		
+        [self handleWriteConsole: msg];
+		SLog(@"RController.applicationDidFinishLaunching - load history file %@", fname);
+    }
+    
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
 
@@ -2668,7 +2682,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 /* this gets called by the "wanna save?" sheet on window close */
 - (void) shouldClearWS:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
     if (returnCode==NSAlertDefaultReturn)
-		[[REngine mainEngine] executeString: @"rm(list=ls())"];
+		[[REngine mainEngine] executeString: @"rm(list=ls(all=TRUE))"];
 }
 
 - (IBAction)togglePackageManager:(id)sender
