@@ -1,24 +1,24 @@
-/* NSBox (Colors) : <title:Colors> (oid:26) */
+/* Entry = "26.title"; Class = "NSBox" */
 "Colors" = "Kleuren";
 
-/* NSTextField (Comment) : <title:Comment> (oid:38) */
+/* Entry = "119.title"; Class = "NSTextFieldCell" */
 "Comment" = "Opmerking";
 
-/* NSButton (Defaults) : <title:Defaults> (oid:91) */
+/* Entry = "120.title"; Class = "NSButtonCell" */
 "Defaults" = "Standaard";
 
-/* NSTextField (Identifier) : <title:Identifier> (oid:36) */
+/* Entry = "118.title"; Class = "NSTextFieldCell" */
 "Identifier" = "Identificatie";
 
-/* NSTextField (Keyword) : <title:Keyword> (oid:33) */
+/* Entry = "117.title"; Class = "NSTextFieldCell" */
 "Keyword" = "Trefwoord";
 
-/* NSTextField (Normal) : <title:Normal> (oid:30) */
+/* Entry = "115.title"; Class = "NSTextFieldCell" */
 "Normal" = "Normaal";
 
-/* NSTextField (Number) : <title:Number> (oid:22) */
+/* Entry = "114.title"; Class = "NSTextFieldCell" */
 "Number" = "Nummer";
 
-/* NSTextField (String) : <title:String> (oid:32) */
+/* Entry = "116.title"; Class = "NSTextFieldCell" */
 "String" = "Tekenreeks";
 

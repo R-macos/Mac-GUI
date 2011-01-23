@@ -1,584 +1,681 @@
-/* NSTextField ( ) : <title:
-> (oid:1103) */
-"\n" = "\n";
-
-/* NSTextField (11) : <title:11> (oid:396) */
+/* Entry = "1499.title"; Class = "NSTextFieldCell" */
 "11" = "11";
 
-/* NSButton (<) : <title:<> (oid:988) */
+/* Entry = "1513.title"; Class = "NSButtonCell" */
 "<" = "<";
 
-/* NSButton (< Back) : <title:< Back> (oid:982) */
+/* Entry = "1501.title"; Class = "NSButtonCell" */
 "< Back" = "< Indietro";
 
-/* NSButton (>) : <title:>> (oid:989) */
+/* Entry = "1514.title"; Class = "NSButtonCell" */
 ">" = ">";
 
-/* NSMenuItem : <title:About R> (oid:58) */
+/* Entry = "58.title"; Class = "NSMenuItem" */
 "About R" = "Info su R";
 
-/* NSMenuItem : <title:Activate Quartz Device Window> (oid:312) */
+/* Entry = "312.title"; Class = "NSMenuItem" */
 "Activate Quartz Device Window" = "Attiva Finestra Grafica Quartz";
 
-/* NSMenuItem : <title:Align Left> (oid:834) */
+/* Entry = "834.title"; Class = "NSMenuItem" */
 "Align Left" = "Allinea a Sinistra";
 
-/* NSMenuItem : <title:Align Right> (oid:858) */
+/* Entry = "858.title"; Class = "NSMenuItem" */
 "Align Right" = "Allinea a Destra";
 
-/* NSButtonCell (As defined by .libPaths()) : <title:As defined by .libPaths()> (oid:1125) */
+/* Entry = "1125.title"; Class = "NSButtonCell" */
 "As defined by .libPaths()" = "Come definito in .libPaths()";
 
-/* NSButtonCell (At System Level (in R framework)) : <title:At System Level (in R framework)> (oid:1122) */
+/* Entry = "1122.title"; Class = "NSButtonCell" */
 "At System Level (in R framework)" = "A Livello Sistema (in R framework)";
 
-/* NSButtonCell (At User Level) : <title:At User Level> (oid:1123) */
+/* Entry = "1123.title"; Class = "NSButtonCell" */
 "At User Level" = "A Livello Utente";
 
-/* NSButton (<) : <title:Back> (oid:988) */
+/* Entry = "1513.alternateTitle"; Class = "NSButtonCell" */
 "Back" = "Indietro";
 
-/* NSMenuItem : <title:Baseline> (oid:844) */
+/* Entry = "844.title"; Class = "NSMenuItem" */
 "Baseline" = "Linea di Base";
 
-/* NSMenuItem : <title:Bigger> (oid:830) */
+/* Entry = "816.title"; Class = "NSMenu" */
+"Baseline" = "Linea di Base";
+
+/* Entry = "830.title"; Class = "NSMenuItem" */
 "Bigger" = "Più Grande";
 
-/* NSButton (Binary Format Packages) : <title:Binary Format Packages> (oid:565) */
+/* Entry = "1506.title"; Class = "NSButtonCell" */
 "Binary Format Packages" = "Pacchetti Formato Binario";
 
-/* NSMenuItem : <title:BioConductor (binaries)> (oid:542) */
+/* Entry = "542.title"; Class = "NSMenuItem" */
 "BioConductor (binaries)" = "BioConductor (binari)";
 
-/* NSMenuItem : <title:BioConductor (sources)> (oid:563) */
+/* Entry = "563.title"; Class = "NSMenuItem" */
 "BioConductor (sources)" = "BioConductor (sorgenti)";
 
-/* NSMenuItem : <title:Bold> (oid:849) */
+/* Entry = "849.title"; Class = "NSMenuItem" */
 "Bold" = "Grassetto";
 
-/* NSBox (Box) : <title:Box> (oid:966) */
+/* Entry = "966.title"; Class = "NSBox" */
 "Box" = "Box";
 
-/* NSMenuItem : <title:Bring All to Front> (oid:5) */
+/* Entry = "5.title"; Class = "NSMenuItem" */
 "Bring All to Front" = "Porta tutto in primo piano";
 
-/* NSMenuItem : <title:CRAN (binaries)> (oid:541) */
+/* Entry = "541.title"; Class = "NSMenuItem" */
 "CRAN (binaries)" = "CRAN (binari)";
 
-/* NSMenuItem : <title:CRAN (sources)> (oid:1108) */
+/* Entry = "1108.title"; Class = "NSMenuItem" */
 "CRAN (sources)" = "CRAN (sorgenti)";
 
-/* NSButton (Cancel) : <title:Cancel> (oid:1033) */
+/* Entry = "1515.title"; Class = "NSButtonCell" */
 "Cancel" = "Annulla";
 
-/* NSMenuItem : <title:Center> (oid:829) */
+/* Entry = "829.title"; Class = "NSMenuItem" */
 "Center" = "Centra";
 
-/* NSMenuItem : <title:Change Working Directory...> (oid:322) */
+/* Entry = "322.title"; Class = "NSMenuItem" */
 "Change Working Directory..." = "Cambia Directory di Lavoro…";
 
-/* NSMenuItem : <title:Check For R Updates> (oid:218) */
+/* Entry = "218.title"; Class = "NSMenuItem" */
 "Check For R Updates" = "Cerca Aggiornamenti di R";
 
-/* NSMenuItem : <title:Clear> (oid:1076) */
+/* Entry = "1066.title"; Class = "NSMenuItem" */
 "Clear" = "Clear";
 
-/* NSMenuItem : <title:Clear Console> (oid:1128) */
+/* Entry = "1076.title"; Class = "NSMenuItem" */
+"Clear" = "Clear";
+
+/* Entry = "1128.title"; Class = "NSMenuItem" */
 "Clear Console" = "Cancella Console";
 
-/* NSButton (Clear History) : <title:Clear History> (oid:348) */
+/* Entry = "1495.title"; Class = "NSButtonCell" */
 "Clear History" = "Cancella History";
 
-/* NSMenuItem : <title:Clear Menu> (oid:126) */
+/* Entry = "126.title"; Class = "NSMenuItem" */
 "Clear Menu" = "Cancella Menu";
 
-/* NSMenuItem : <title:Clear Workspace> (oid:243) */
+/* Entry = "243.title"; Class = "NSMenuItem" */
 "Clear Workspace" = "Cancella Workspace";
 
-/* NSMenuItem : <title:Close> (oid:73) */
+/* Entry = "73.title"; Class = "NSMenuItem" */
 "Close" = "Chiudi";
 
-/* NSTableColumn : <title:Commands> (oid:342) */
+/* Entry = "342.headerCell.title"; Class = "NSTableColumn" */
 "Commands" = "Comandi";
 
-/* NSMenuItem : <title:Comment-out> (oid:1207) */
+/* Entry = "1207.title"; Class = "NSMenuItem" */
 "Comment-out" = "Commenta";
 
-/* NSMenuItem : <title:Complete> (oid:1013) */
+/* Entry = "1013.title"; Class = "NSMenuItem" */
 "Complete" = "Completa";
 
-/* NSMenuItem : <title:Copy> (oid:157) */
+/* Entry = "157.title"; Class = "NSMenuItem" */
 "Copy" = "Copia";
 
-/* NSMenuItem : <title:Copy Ruler> (oid:822) */
+/* Entry = "822.title"; Class = "NSMenuItem" */
 "Copy Ruler" = "Copia Righello";
 
-/* NSMenuItem : <title:Copy Style> (oid:859) */
+/* Entry = "859.title"; Class = "NSMenuItem" */
 "Copy Style" = "Copia Stile";
 
-/* NSTextField (Current Working Directory) : <title:Current Working Directory> (oid:405) */
+/* Entry = "1489.title"; Class = "NSTextFieldCell" */
 "Current Working Directory" = "Directory Lavoro Corrente";
 
-/* NSTextField (10) : <title:Custom Repository URL> (oid:539) */
+/* Entry = "1503.placeholderString"; Class = "NSTextFieldCell" */
 "Custom Repository URL" = "Custom Repository URL";
 
-/* NSMenuItem : <title:Cut> (oid:160) */
+/* Entry = "160.title"; Class = "NSMenuItem" */
 "Cut" = "Taglia";
 
-/* NSTableColumn : <title:Data> (oid:501) */
+/* Entry = "501.headerCell.title"; Class = "NSTableColumn" */
 "Data" = "Dati";
 
-/* NSMenuItem : <title:Data Manager> (oid:267) */
+/* Entry = "267.title"; Class = "NSMenuItem" */
 "Data Manager" = "Gestione Dati";
 
-/* NSMenuItem : <title:Delete> (oid:164) */
+/* Entry = "164.title"; Class = "NSMenuItem" */
 "Delete" = "Cancella";
 
-/* NSButton (Delete entry) : <title:Delete entry> (oid:1046) */
+/* Entry = "1496.title"; Class = "NSButtonCell" */
 "Delete entry" = "Delete entry";
 
-/* NSTableColumn : <title:Description> (oid:701) */
+/* Entry = "504.headerCell.title"; Class = "NSTableColumn" */
 "Description" = "Descrizione";
 
-/* NSIBHelpConnector : <title:Double click on one package to load it in the R workspace. > (oid:1213) */
+/* Entry = "447.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Descrizione";
+
+/* Entry = "701.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Descrizione";
+
+/* Entry = "502.gToolTip"; Class = "NSScrollView" */
 "Double click on one package to load it in the R workspace. " = "Double click on one package to load it in the R workspace. ";
 
-/* NSIBHelpConnector : <title:Downloads Selected Packages And Installs In Selected Location> (oid:1219) */
+/* Entry = "577.gToolTip"; Class = "NSButton" */
 "Downloads Selected Packages And Installs In Selected Location" = "Downloads Selected Packages And Installs In Selected Location";
 
-/* NSMenu : <title:Edit> (oid:169) */
+/* Entry = "163.title"; Class = "NSMenuItem" */
 "Edit" = "Modifica";
 
-/* NSMenuItem : <title:Edit Object…> (oid:221) */
+/* Entry = "169.title"; Class = "NSMenu" */
+"Edit" = "Modifica";
+
+/* Entry = "221.title"; Class = "NSMenuItem" */
 "Edit Object…" = "Modifica Oggetto…";
 
-/* NSMenuItem : <title:Empty> (oid:1078) */
+/* Entry = "1078.title"; Class = "NSMenuItem" */
 "Empty" = "Empty";
 
-/* NSMenuItem : <title:Exact Search> (oid:1082) */
+/* Entry = "1071.title"; Class = "NSMenuItem" */
+"Empty" = "Empty";
+
+/* Entry = "1082.title"; Class = "NSMenuItem" */
 "Exact Search" = "Ricerca Esatta";
 
-/* NSMenuItem : <title:Execute> (oid:890) */
+/* Entry = "890.title"; Class = "NSMenuItem" */
 "Execute" = "Esegui";
 
-/* NSMenuItem : <title:File> (oid:83) */
+/* Entry = "83.title"; Class = "NSMenuItem" */
 "File" = "File";
 
-/* NSMenuItem : <title:Find> (oid:168) */
+/* Entry = "81.title"; Class = "NSMenu" */
+"File" = "File";
+
+/* Entry = "168.title"; Class = "NSMenuItem" */
 "Find" = "Cerca";
 
-/* NSMenuItem : <title:Find Next> (oid:167) */
+/* Entry = "159.title"; Class = "NSMenu" */
+"Find" = "Cerca";
+
+/* Entry = "167.title"; Class = "NSMenuItem" */
 "Find Next" = "Cerca Successivo";
 
-/* NSMenuItem : <title:Find Previous> (oid:162) */
+/* Entry = "162.title"; Class = "NSMenuItem" */
 "Find Previous" = "Cerca Precedente";
 
-/* NSMenuItem : <title:Find…> (oid:154) */
+/* Entry = "154.title"; Class = "NSMenuItem" */
 "Find…" = "Cerca…";
 
-/* NSMenu : <title:Font> (oid:854) */
+/* Entry = "854.title"; Class = "NSMenu" */
 "Font" = "Font";
 
-/* NSTextField (Font Size: ) : <title:Font Size:
-> (oid:394) */
+/* Entry = "836.title"; Class = "NSMenuItem" */
+"Font" = "Font";
+
+/* Entry = "1497.title"; Class = "NSTextFieldCell" */
 "Font Size:\n" = "Dimensione Font:\n";
 
-/* NSMenuItem : <title:Format> (oid:833) */
+/* Entry = "833.title"; Class = "NSMenuItem" */
 "Format" = "Formato";
 
-/* NSButton (>) : <title:Forward> (oid:989) */
+/* Entry = "828.title"; Class = "NSMenu" */
+"Format" = "Formato";
+
+/* Entry = "1514.alternateTitle"; Class = "NSButtonCell" */
 "Forward" = "Avanti";
 
-/* NSMenuItem : <title:Fuzzy Search> (oid:1084) */
+/* Entry = "1084.title"; Class = "NSMenuItem" */
 "Fuzzy Search" = "Ricerca Approssimata";
 
-/* NSButton (Fwd >) : <title:Fwd >> (oid:984) */
+/* Entry = "1502.title"; Class = "NSButtonCell" */
 "Fwd >" = "Avanti >";
 
-/* NSButton (Get List) : <title:Get List> (oid:545) */
+/* Entry = "1505.title"; Class = "NSButtonCell" */
 "Get List" = "Scarica Elenco";
 
-/* NSMenuItem : <title:Get Working Directory> (oid:317) */
+/* Entry = "317.title"; Class = "NSMenuItem" */
 "Get Working Directory" = "Mostra Directory di Lavoro";
 
-/* NSMenuItem : <title:Go To Line> (oid:1049) */
+/* Entry = "1049.title"; Class = "NSMenuItem" */
 "Go To Line" = "Go To Line";
 
-/* NSMenu : <title:Help> (oid:106) */
+/* Entry = "106.title"; Class = "NSMenu" */
 "Help" = "Aiuto";
 
-/* NSSearchField (0) : <title:Help Search> (oid:957) */
+/* Entry = "103.title"; Class = "NSMenuItem" */
+"Help" = "Aiuto";
+
+/* Entry = "1511.placeholderString"; Class = "NSSearchFieldCell" */
 "Help Search" = "Help Search";
 
-/* NSWindow (Help Search Topics) : <title:Help Search Topics> (oid:687) */
+/* Entry = "687.title"; Class = "NSWindow" */
 "Help Search Topics" = "Ricerca Aiuto per Argomento";
 
-/* NSMenuItem : <title:Hide Others> (oid:145) */
+/* Entry = "145.title"; Class = "NSMenuItem" */
 "Hide Others" = "Nascondi gli Altri";
 
-/* NSMenuItem : <title:Hide R> (oid:134) */
+/* Entry = "134.title"; Class = "NSMenuItem" */
 "Hide R" = "Nascondi R";
 
-/* NSButtonCell (In Other Location (Will Be Asked Upon Installation)) : <title:In Other Location (Will Be Asked Upon Installation)> (oid:1124) */
+/* Entry = "1124.title"; Class = "NSButtonCell" */
 "In Other Location (Will Be Asked Upon Installation)" = "Percorso differente (Verrà specificato durante installazione)";
 
-/* NSBox (Install Location) : <title:Install Location> (oid:570) */
+/* Entry = "570.title"; Class = "NSBox" */
 "Install Location" = "Percorso Installazione";
 
-/* NSButton (Install Selected) : <title:Install Selected> (oid:577) */
+/* Entry = "1508.title"; Class = "NSButtonCell" */
 "Install Selected" = "Installa/Aggiorna";
 
-/* NSTableColumn : <title:Installed Version> (oid:548) */
+/* Entry = "548.headerCell.title"; Class = "NSTableColumn" */
 "Installed Version" = "Versione Installata";
 
-/* NSMenuItem : <title:Italic> (oid:815) */
+/* Entry = "815.title"; Class = "NSMenuItem" */
 "Italic" = "Corsivo";
 
-/* NSMenuItem : <title:Item> (oid:1075) */
+/* Entry = "1030.headerCell.title"; Class = "NSTableColumn" */
 "Item" = "Item";
 
-/* NSMenuItem : <title:Jump to Selection> (oid:155) */
+/* Entry = "1072.title"; Class = "NSMenuItem" */
+"Item" = "Item";
+
+/* Entry = "1075.title"; Class = "NSMenuItem" */
+"Item" = "Item";
+
+/* Entry = "155.title"; Class = "NSMenuItem" */
 "Jump to Selection" = "Vai alla Selezione";
 
-/* NSMenuItem : <title:Justify> (oid:838) */
+/* Entry = "838.title"; Class = "NSMenuItem" */
 "Justify" = "Giustifica";
 
-/* NSMenu : <title:Kern> (oid:842) */
+/* Entry = "842.title"; Class = "NSMenu" */
 "Kern" = "Crenatura";
 
-/* NSMenuItem : <title:Ligature> (oid:848) */
+/* Entry = "839.title"; Class = "NSMenuItem" */
+"Kern" = "Crenatura";
+
+/* Entry = "824.title"; Class = "NSMenu" */
 "Ligature" = "Legatura";
 
-/* NSMenuItem : <title:Load Default Workspace> (oid:247) */
+/* Entry = "848.title"; Class = "NSMenuItem" */
+"Ligature" = "Legatura";
+
+/* Entry = "247.title"; Class = "NSMenuItem" */
 "Load Default Workspace" = "Carica Workspace";
 
-/* NSButton (Load History) : <title:Load History> (oid:346) */
+/* Entry = "1493.title"; Class = "NSButtonCell" */
 "Load History" = "Carica History";
 
-/* NSMenuItem : <title:Load Workspace File…> (oid:250) */
+/* Entry = "250.title"; Class = "NSMenuItem" */
 "Load Workspace File…" = "Carica File Workspace…";
 
-/* NSTextField (Loading R ...) : <title:Loading R ...> (oid:1104) */
+/* Entry = "1492.title"; Class = "NSTextFieldCell" */
 "Loading R ..." = "Loading R …";
 
-/* NSMenuItem : <title:Local Binary Package> (oid:596) */
+/* Entry = "596.title"; Class = "NSMenuItem" */
 "Local Binary Package" = "Paccheto Binario Locale";
 
-/* NSMenuItem : <title:Local Package Directory> (oid:595) */
+/* Entry = "595.title"; Class = "NSMenuItem" */
 "Local Package Directory" = "Directory Pacchetto Locale";
 
-/* NSMenuItem : <title:Local Source Package> (oid:597) */
+/* Entry = "597.title"; Class = "NSMenuItem" */
 "Local Source Package" = "Pacchetto Sorgente Locale";
 
-/* NSMenuItem : <title:Loosen> (oid:818) */
+/* Entry = "818.title"; Class = "NSMenuItem" */
 "Loosen" = "Incrementa";
 
-/* NSMenuItem : <title:Lower> (oid:821) */
+/* Entry = "821.title"; Class = "NSMenuItem" */
 "Lower" = "Più in basso";
 
-/* NSMenuItem : <title:Main R Help Page> (oid:1083) */
+/* Entry = "1083.title"; Class = "NSMenuItem" */
 "Main R Help Page" = "Main R Help Page";
 
-/* NSMenu : <title:MainMenu> (oid:29) */
+/* Entry = "29.title"; Class = "NSMenu" */
 "MainMenu" = "Principale";
 
-/* NSMenu : <title:Menu> (oid:1074) */
+/* Entry = "1064.title"; Class = "NSMenu" */
 "Menu" = "Menu";
 
-/* NSMenuItem : <title:Minimize> (oid:23) */
+/* Entry = "1074.title"; Class = "NSMenu" */
+"Menu" = "Menu";
+
+/* Entry = "23.title"; Class = "NSMenuItem" */
 "Minimize" = "Contrai";
 
-/* NSMenu : <title:Misc> (oid:319) */
+/* Entry = "318.title"; Class = "NSMenuItem" */
 "Misc" = "Misc";
 
-/* NSMenuItem : <title:New Document> (oid:945) */
+/* Entry = "319.title"; Class = "NSMenu" */
+"Misc" = "Misc";
+
+/* Entry = "945.title"; Class = "NSMenuItem" */
 "New Document" = "Nuovo Documento";
 
-/* NSMenuItem : <title:New Quartz Device Window> (oid:311) */
+/* Entry = "311.title"; Class = "NSMenuItem" */
 "New Quartz Device Window" = "Nuova Finestra Grafica Quartz";
 
-/* NSTableColumn : <title:Object> (oid:667) */
+/* Entry = "667.headerCell.title"; Class = "NSTableColumn" */
 "Object" = "Oggetto";
 
-/* NSButton (Ok) : <title:Ok> (oid:1034) */
+/* Entry = "1516.title"; Class = "NSButtonCell" */
 "Ok" = "Ok";
 
-/* NSMenuItem : <title:Open Document...> (oid:220) */
+/* Entry = "220.title"; Class = "NSMenuItem" */
 "Open Document..." = "Apri Documento…";
 
-/* NSMenu : <title:Open Recent> (oid:125) */
+/* Entry = "125.title"; Class = "NSMenu" */
 "Open Recent" = "Apri Recenti";
 
-/* NSMenuItem : <title:Other Directory URL> (oid:1107) */
+/* Entry = "124.title"; Class = "NSMenuItem" */
+"Open Recent" = "Apri Recenti";
+
+/* Entry = "1107.title"; Class = "NSMenuItem" */
 "Other Directory URL" = "Other Directory URL";
 
-/* NSMenuItem : <title:Other Repository> (oid:1109) */
+/* Entry = "1109.title"; Class = "NSMenuItem" */
 "Other Repository" = "Other Repository";
 
-/* NSMenu : <title:OtherViews> (oid:543) */
+/* Entry = "543.title"; Class = "NSMenu" */
 "OtherViews" = "AltreViste";
 
-/* NSTableColumn : <title:Package> (oid:697) */
+/* Entry = "546.headerCell.title"; Class = "NSTableColumn" */
 "Package" = "Pacchetto";
 
-/* NSMenuItem : <title:Package Installer> (oid:559) */
+/* Entry = "697.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Pacchetto";
+
+/* Entry = "446.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Pacchetto";
+
+/* Entry = "500.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Pacchetto";
+
+/* Entry = "559.title"; Class = "NSMenuItem" */
 "Package Installer" = "Installatore Pacchetti";
 
-/* NSMenuItem : <title:Package Manager> (oid:266) */
+/* Entry = "266.title"; Class = "NSMenuItem" */
 "Package Manager" = "Gestione Pacchetti";
 
-/* NSSearchField (0) : <title:Package Search> (oid:1060) */
+/* Entry = "1507.placeholderString"; Class = "NSSearchFieldCell" */
 "Package Search" = "Package Search";
 
-/* NSMenu : <title:Packages & Data> (oid:270) */
+/* Entry = "270.title"; Class = "NSMenu" */
 "Packages & Data" = "Pacchetti & Dati";
 
-/* NSBox (Packages Repository) : <title:Packages Repository> (oid:538) */
+/* Entry = "262.title"; Class = "NSMenuItem" */
+"Packages & Data" = "Pacchetti & Dati";
+
+/* Entry = "538.title"; Class = "NSBox" */
 "Packages Repository" = "Archivio Pacchetti";
 
-/* NSMenuItem : <title:Page Setup…> (oid:77) */
+/* Entry = "77.title"; Class = "NSMenuItem" */
 "Page Setup…" = "Imposta Pagina…";
 
-/* NSMenuItem : <title:Paste> (oid:171) */
+/* Entry = "171.title"; Class = "NSMenuItem" */
 "Paste" = "Incolla";
 
-/* NSMenuItem : <title:Paste As Plain Text> (oid:1475) */
+/* Entry = "1475.title"; Class = "NSMenuItem" */
 "Paste As Plain Text" = "Incolla (formato Solo testo)";
 
-/* NSMenuItem : <title:Paste Ruler> (oid:845) */
+/* Entry = "845.title"; Class = "NSMenuItem" */
 "Paste Ruler" = "Incolla Righello";
 
-/* NSMenuItem : <title:Paste Style> (oid:837) */
+/* Entry = "837.title"; Class = "NSMenuItem" */
 "Paste Style" = "Incolla Stile";
 
-/* NSMenuItem : <title:Preferences…> (oid:129) */
+/* Entry = "129.title"; Class = "NSMenuItem" */
 "Preferences…" = "Preferenze…";
 
-/* NSButton (Print) : <title:Print> (oid:978) */
+/* Entry = "1512.title"; Class = "NSButtonCell" */
 "Print" = "Stampa";
 
-/* NSMenuItem : <title:Print…> (oid:78) */
+/* Entry = "78.title"; Class = "NSMenuItem" */
 "Print…" = "Stampa…";
 
-/* NSMenuItem : <title:Quit R> (oid:136) */
+/* Entry = "136.title"; Class = "NSMenuItem" */
 "Quit R" = "Esci da R";
 
-/* NSMenu : <title:R> (oid:57) */
+/* Entry = "56.title"; Class = "NSMenuItem" */
 "R" = "R";
 
-/* NSWindow (R Console) : <title:R Console> (oid:21) */
+/* Entry = "57.title"; Class = "NSMenu" */
+"R" = "R";
+
+/* Entry = "21.title"; Class = "NSWindow" */
 "R Console" = "R Console";
 
-/* NSWindow (R Data Editor) : <title:R Data Editor> (oid:794) */
+/* Entry = "794.title"; Class = "NSWindow" */
 "R Data Editor" = "R Data Editor";
 
-/* NSWindow (R Data Manager) : <title:R Data Manager> (oid:498) */
+/* Entry = "498.title"; Class = "NSWindow" */
 "R Data Manager" = "Gestione Dataset R";
 
-/* NSMenuItem : <title:R For Mac OS X FAQ> (oid:332) */
+/* Entry = "332.title"; Class = "NSMenuItem" */
 "R For Mac OS X FAQ" = "FAQ di R per Mac OS X";
 
-/* NSWindow (R Help) : <title:R Help> (oid:728) */
+/* Entry = "728.title"; Class = "NSWindow" */
 "R Help" = "Aiuto R";
 
-/* NSWindow (R Package Installer) : <title:R Package Installer> (oid:525) */
+/* Entry = "111.title"; Class = "NSMenuItem" */
+"R Help" = "Aiuto R";
+
+/* Entry = "525.title"; Class = "NSWindow" */
 "R Package Installer" = "Installatore Pacchetti R";
 
-/* NSWindow (R Package Manager) : <title:R Package Manager> (oid:444) */
+/* Entry = "444.title"; Class = "NSWindow" */
 "R Package Manager" = "Gestione Pacchetti R";
 
-/* NSWindow (R Workspace Browser) : <title:R Workspace Browser> (oid:662) */
+/* Entry = "662.title"; Class = "NSWindow" */
 "R Workspace Browser" = "Esplora Workspace di R";
 
-/* NSMenuItem : <title:R for Mac OS X FAQ> (oid:1081) */
+/* Entry = "1081.title"; Class = "NSMenuItem" */
 "R for Mac OS X FAQ" = "R for Mac OS X FAQ";
 
-/* NSMenuItem : <title:Raise> (oid:850) */
+/* Entry = "1517.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* Entry = "850.title"; Class = "NSMenuItem" */
 "Raise" = "Incrementa";
 
-/* NSMenuItem : <title:Redo> (oid:173) */
+/* Entry = "173.title"; Class = "NSMenuItem" */
 "Redo" = "Ripristina";
 
-/* NSButton (Refresh List) : <title:Refresh List> (oid:493) */
+/* Entry = "1500.title"; Class = "NSButtonCell" */
 "Refresh List" = "Aggiorna Elenco";
 
-/* NSTableColumn : <title:Repository Version> (oid:550) */
+/* Entry = "550.headerCell.title"; Class = "NSTableColumn" */
 "Repository Version" = "Versione Archivio";
 
-/* NSMenuItem : <title:Reset Working Directory> (oid:316) */
+/* Entry = "316.title"; Class = "NSMenuItem" */
 "Reset Working Directory" = "Ripristina Directory Lavoro";
 
-/* NSMenuItem : <title:Revert> (oid:112) */
+/* Entry = "112.title"; Class = "NSMenuItem" */
 "Revert" = "Ripristina";
 
-/* NSMenuItem : <title:Run X11 Server> (oid:658) */
+/* Entry = "658.title"; Class = "NSMenuItem" */
 "Run X11 Server" = "Lancia Server X11";
 
-/* NSMenuItem : <title:Save> (oid:75) */
+/* Entry = "75.title"; Class = "NSMenuItem" */
 "Save" = "Salva";
 
-/* NSMenuItem : <title:Save As…> (oid:80) */
+/* Entry = "80.title"; Class = "NSMenuItem" */
 "Save As…" = "Salva Come…";
 
-/* NSMenuItem : <title:Save Default Workspace> (oid:246) */
+/* Entry = "246.title"; Class = "NSMenuItem" */
 "Save Default Workspace" = "Salva Workspace";
 
-/* NSButton (Save History) : <title:Save History> (oid:347) */
+/* Entry = "1494.title"; Class = "NSButtonCell" */
 "Save History" = "Salva History";
 
-/* NSMenuItem : <title:Save Workspace File…> (oid:260) */
+/* Entry = "260.title"; Class = "NSMenuItem" */
 "Save Workspace File…" = "Salva File Workspace…";
 
-/* NSMenuItem : <title:Select All> (oid:172) */
+/* Entry = "172.title"; Class = "NSMenuItem" */
 "Select All" = "Seleziona Tutto";
 
-/* NSIBHelpConnector : <title:Select Packages You Want To Install Or Update. Multiple Selections Allowed. > (oid:1214) */
+/* Entry = "547.gToolTip"; Class = "NSScrollView" */
 "Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Select Packages You Want To Install Or Update. Multiple Selections Allowed. ";
 
-/* NSIBHelpConnector : <title:Select The Appropriate Location. Non-Admin User Should Select "At User Level".> (oid:1218) */
+/* Entry = "573.gToolTip"; Class = "NSMatrix" */
 "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\".";
 
-/* NSMenuItem : <title:Select packages from previous R> (oid:1113) */
+/* Entry = "1113.title"; Class = "NSMenuItem" */
 "Select packages from previous R" = "Select packages from previous R";
 
-/* NSMenuItem : <title:Services> (oid:131) */
+/* Entry = "130.title"; Class = "NSMenu" */
 "Services" = "Servizi";
 
-/* NSMenuItem : <title:Show All> (oid:150) */
+/* Entry = "131.title"; Class = "NSMenuItem" */
+"Services" = "Servizi";
+
+/* Entry = "150.title"; Class = "NSMenuItem" */
 "Show All" = "Mostra Tutti";
 
-/* NSMenuItem : <title:Show Colors> (oid:819) */
+/* Entry = "819.title"; Class = "NSMenuItem" */
 "Show Colors" = "Mostra Colori";
 
-/* NSMenuItem : <title:Show Fonts> (oid:826) */
+/* Entry = "826.title"; Class = "NSMenuItem" */
 "Show Fonts" = "Mostra Fonts";
 
-/* NSMenuItem : <title:Show Installed Only> (oid:1065) */
+/* Entry = "1065.title"; Class = "NSMenuItem" */
 "Show Installed Only" = "Mostra solo installati";
 
-/* NSMenuItem : <title:Show Ruler> (oid:843) */
+/* Entry = "843.title"; Class = "NSMenuItem" */
 "Show Ruler" = "Mostra Righello";
 
-/* NSMenuItem : <title:Show Workspace> (oid:412) */
+/* Entry = "412.title"; Class = "NSMenuItem" */
 "Show Workspace" = "Elenco Workspace";
 
-/* NSMenuItem : <title:Smaller> (oid:855) */
+/* Entry = "855.title"; Class = "NSMenuItem" */
 "Smaller" = "Più Piccolo";
 
-/* NSMenuItem : <title:Source Document> (oid:970) */
+/* Entry = "970.title"; Class = "NSMenuItem" */
 "Source Document" = "Elabora Documento";
 
-/* NSMenuItem : <title:Source File...> (oid:72) */
+/* Entry = "72.title"; Class = "NSMenuItem" */
 "Source File..." = "Elabora File...";
 
-/* NSTableColumn : <title:Status> (oid:451) */
+/* Entry = "451.headerCell.title"; Class = "NSTableColumn" */
 "Status" = "Stato";
 
-/* NSTableColumn : <title:Structure> (oid:664) */
+/* Entry = "664.headerCell.title"; Class = "NSTableColumn" */
 "Structure" = "Struttura";
 
-/* NSMenuItem : <title:Subscript> (oid:852) */
+/* Entry = "852.title"; Class = "NSMenuItem" */
 "Subscript" = "Pedice";
 
-/* NSMenuItem : <title:Superscript> (oid:827) */
+/* Entry = "827.title"; Class = "NSMenuItem" */
 "Superscript" = "Apice";
 
-/* NSMenuItem : <title:Switch to Console Window> (oid:942) */
+/* Entry = "942.title"; Class = "NSMenuItem" */
 "Switch to Console Window" = "Passa a Finestra Console";
 
-/* NSMenuItem : <title:Switch to Last Editor Window> (oid:1117) */
+/* Entry = "1117.title"; Class = "NSMenuItem" */
 "Switch to Last Editor Window" = "Cambia sull'Ultima Finestra dell'Editor";
 
-/* NSMenuItem : <title:Switch to Last Quartz Window> (oid:1118) */
+/* Entry = "1118.title"; Class = "NSMenuItem" */
 "Switch to Last Quartz Window" = "Cambia sull'Ultima Finestra Quartz";
 
-/* NSMenu : <title:Text> (oid:832) */
+/* Entry = "823.title"; Class = "NSMenuItem" */
 "Text" = "Testo";
 
-/* NSIBHelpConnector : <title:The Package Installer Requires An Internet Connection> (oid:1212) */
+/* Entry = "832.title"; Class = "NSMenu" */
+"Text" = "Testo";
+
+/* Entry = "559.gToolTip"; Class = "NSMenuItem" */
 "The Package Installer Requires An Internet Connection" = "The Package Installer Requires An Internet Connection";
 
-/* NSMenuItem : <title:Tighten> (oid:841) */
+/* Entry = "841.title"; Class = "NSMenuItem" */
 "Tighten" = "Stringi";
 
-/* NSTableColumn : <title:Topic> (oid:699) */
+/* Entry = "699.headerCell.title"; Class = "NSTableColumn" */
 "Topic" = "Argomento";
 
-/* NSIBHelpConnector : <title:Try To Download The List Of Packages From The Specified URL> (oid:1216) */
+/* Entry = "545.gToolTip"; Class = "NSButton" */
 "Try To Download The List Of Packages From The Specified URL" = "Try To Download The List Of Packages From The Specified URL";
 
-/* NSTableColumn : <title:Type> (oid:668) */
+/* Entry = "668.headerCell.title"; Class = "NSTableColumn" */
 "Type" = "Tipo";
 
-/* NSIBHelpConnector : <title:URL Of Repository. Must Begin With "http://"> (oid:1215) */
+/* Entry = "539.gToolTip"; Class = "NSTextField" */
 "URL Of Repository. Must Begin With \"http://\"" = "URL Of Repository. Must Begin With \"http://\"";
 
-/* NSMenuItem : <title:Uncomment> (oid:1208) */
+/* Entry = "1208.title"; Class = "NSMenuItem" */
 "Uncomment" = "Rimuovi commento";
 
-/* NSMenuItem : <title:Underline> (oid:835) */
+/* Entry = "835.title"; Class = "NSMenuItem" */
 "Underline" = "Sottolinea";
 
-/* NSMenuItem : <title:Undo> (oid:158) */
+/* Entry = "158.title"; Class = "NSMenuItem" */
 "Undo" = "Annulla";
 
-/* NSButton (Update All) : <title:Update All> (oid:1057) */
+/* Entry = "1509.title"; Class = "NSButtonCell" */
 "Update All" = "Aggiorna Tutti";
 
-/* NSMenuItem : <title:Use All> (oid:817) */
+/* Entry = "817.title"; Class = "NSMenuItem" */
 "Use All" = "Usa Tutti";
 
-/* NSMenuItem : <title:Use Default> (oid:857) */
+/* Entry = "857.title"; Class = "NSMenuItem" */
 "Use Default" = "Usa Default";
 
-/* NSMenuItem : <title:Use None> (oid:851) */
+/* Entry = "846.title"; Class = "NSMenuItem" */
+"Use Default" = "Usa Default";
+
+/* Entry = "856.title"; Class = "NSMenuItem" */
+"Use Default" = "Usa Default";
+
+/* Entry = "851.title"; Class = "NSMenuItem" */
 "Use None" = "Usa Nessuno";
 
-/* NSMenuItem : <title:Use Selection for Find> (oid:161) */
+/* Entry = "820.title"; Class = "NSMenuItem" */
+"Use None" = "Usa Nessuno";
+
+/* Entry = "161.title"; Class = "NSMenuItem" */
 "Use Selection for Find" = "Usa selezione per cercare";
 
-/* NSIBHelpConnector : <title:User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  > (oid:1217) */
+/* Entry = "565.gToolTip"; Class = "NSButton" */
 "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  ";
 
-/* NSMenuItem : <title:Vignettes> (oid:1110) */
+/* Entry = "1110.title"; Class = "NSMenuItem" */
 "Vignettes" = "Vignettes";
 
-/* NSMenuItem : <title:What's New In This Version?> (oid:333) */
+/* Entry = "333.title"; Class = "NSMenuItem" */
 "What's New In This Version?" = "Novità di questa versione";
 
-/* NSWindow (Window) : <title:Window> (oid:1027) */
+/* Entry = "19.title"; Class = "NSMenuItem" */
 "Window" = "Finestra";
 
-/* NSMenu : <title:Workspace> (oid:252) */
+/* Entry = "1027.title"; Class = "NSWindow" */
+"Window" = "Finestra";
+
+/* Entry = "24.title"; Class = "NSMenu" */
+"Window" = "Finestra";
+
+/* Entry = "245.title"; Class = "NSMenuItem" */
 "Workspace" = "Workspace";
 
-/* NSMenuItem : <title:Workspace Browser> (oid:249) */
+/* Entry = "252.title"; Class = "NSMenu" */
+"Workspace" = "Workspace";
+
+/* Entry = "249.title"; Class = "NSMenuItem" */
 "Workspace Browser" = "Esplora Workspace";
 
-/* NSMenuItem : <title:Zoom> (oid:197) */
+/* Entry = "197.title"; Class = "NSMenuItem" */
 "Zoom" = "Ingrandisci";
 
-/* NSTableColumn : <title:a> (oid:799) */
+/* Entry = "1491.title"; Class = "NSTextFieldCell" */
+"\n" = "\n";
+
+/* Entry = "799.headerCell.title"; Class = "NSTableColumn" */
 "a" = "a";
 
-/* NSTableColumn : <title:b> (oid:797) */
+/* Entry = "797.headerCell.title"; Class = "NSTableColumn" */
 "b" = "b";
 
-/* NSTableColumn : <title:c> (oid:806) */
+/* Entry = "806.headerCell.title"; Class = "NSTableColumn" */
 "c" = "c";
 
-/* NSTableColumn : <title:d> (oid:807) */
+/* Entry = "807.headerCell.title"; Class = "NSTableColumn" */
 "d" = "d";
 
-/* NSTableColumn : <title:e> (oid:808) */
+/* Entry = "808.headerCell.title"; Class = "NSTableColumn" */
 "e" = "e";
 
-/* NSButton (install dependencies) : <title:install dependencies> (oid:1121) */
+/* Entry = "1510.title"; Class = "NSButtonCell" */
 "install dependencies" = "installa pacchetti correlati";
 
-/* NSButtonCell (not loaded) : <title:loaded> (oid:462) */
+/* Entry = "462.alternateTitle"; Class = "NSButtonCell" */
 "loaded" = "caricato";
 
-/* NSButtonCell (not loaded) : <title:not loaded> (oid:462) */
+/* Entry = "462.title"; Class = "NSButtonCell" */
 "not loaded" = "non caricato";
 

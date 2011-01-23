@@ -1,96 +1,102 @@
-/* NSTextField ((was default in RAqua)) : <title:(was default in RAqua)> (oid:29) */
+/* Entry = "130.title"; Class = "NSTextFieldCell" */
 "(was default in RAqua)" = "(was standaard in RAqua)";
 
-/* NSTextField (.Rhistory) : <title:.Rhistory> (oid:63) */
+/* Entry = "139.title"; Class = "NSTextFieldCell" */
 ".Rhistory" = ".Rhistory";
 
-/* NSTextField (250) : <title:250> (oid:95) */
+/* Entry = "144.title"; Class = "NSTextFieldCell" */
 "250" = "250";
 
-/* NSButton (Add ~/Library/R…) : <title:Add ~/Library/R…> (oid:25) */
+/* Entry = "129.title"; Class = "NSButtonCell" */
 "Add ~/Library/R…" = "Voeg ~/Library/R… toe";
 
-/* NSButton (Always apply) : <title:Always apply> (oid:88) */
+/* Entry = "136.title"; Class = "NSButtonCell" */
 "Always apply" = "Altijd toepassen";
 
-/* NSButtonCell (Ask) : <title:Ask> (oid:123) */
+/* Entry = "123.title"; Class = "NSButtonCell" */
 "Ask" = "Vraag";
 
-/* NSButton (Change) : <title:Change> (oid:37) */
+/* Entry = "133.title"; Class = "NSButtonCell" */
 "Change" = "Wijzig";
 
-/* NSButton (Cleanup history entries) : <title:Cleanup history entries> (oid:96) */
+/* Entry = "145.title"; Class = "NSButtonCell" */
 "Cleanup history entries" = "Schoon geschiedenis op (wis lege regels edm.)";
 
-/* NSButton (Default) : <title:Default> (oid:52) */
+/* Entry = "138.title"; Class = "NSButtonCell" */
 "Default" = "Standaard";
 
-/* NSBox (Default CRAN mirror) : <title:Default CRAN mirror> (oid:106) */
+/* Entry = "106.title"; Class = "NSBox" */
 "Default CRAN mirror" = "Standaard CRAN mirror";
 
-/* NSBox (Default Library Paths) : <title:Default Library Paths> (oid:23) */
+/* Entry = "23.title"; Class = "NSBox" */
 "Default Library Paths" = "Standaard bibliotheek pad";
 
-/* NSTextField (Directory:) : <title:Directory:> (oid:36) */
+/* Entry = "132.title"; Class = "NSTextFieldCell" */
 "Directory:" = "Map:";
 
-/* NSBox (Drag & drop action during R start-up) : <title:Drag & drop action during R start-up> (oid:17) */
+/* Entry = "17.title"; Class = "NSBox" */
 "Drag & drop action during R start-up" = "Drag & drop actie tijdens opstarten van R";
 
-/* NSBox (History) : <title:History> (oid:44) */
+/* Entry = "44.title"; Class = "NSBox" */
 "History" = "Geschiedenis";
 
-/* NSBox (Initial working directory) : <title:Initial working directory> (oid:34) */
+/* Entry = "34.title"; Class = "NSBox" */
 "Initial working directory" = "Initiële werkmap";
 
-/* NSTextField (Max number of entries in history:) : <title:Max number of entries in history:> (oid:94) */
+/* Entry = "143.title"; Class = "NSTextFieldCell" */
 "Max number of entries in history:" = "Maximum aantal lijnen in geschiedenis:";
 
-/* NSButtonCell (No) : <title:No> (oid:124) */
+/* Entry = "124.title"; Class = "NSButtonCell" */
 "No" = "Nee";
 
-/* NSTextField (Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.) : <title:Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced.> (oid:86) */
+/* Entry = "135.title"; Class = "NSTextFieldCell" */
 "Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Opm.: Selecteer 'Altijd toepassen'. Anders zullen andere methodes om de werkmap in te stellen voorrang krijgen, bvb. door op het R-icoon te dubbelklikken. Door een map op het R-icoon te slepen of door  'open -a R.app <dir-or-file>' te gebruiken.";
 
-/* NSTextField (Note: This change is effective only after a restart of R.app) : <title:Note: This change is effective only after a restart of R.app> (oid:32) */
+/* Entry = "131.title"; Class = "NSTextFieldCell" */
 "Note: This change is effective only after a restart of R.app" = "Opm.: Deze wijziging gaat pas in na het herstarten van R.app";
 
-/* NSTextField (Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory) : <title:Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory> (oid:87) */
+/* Entry = "141.title"; Class = "NSTextFieldCell" */
 "Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Opm.: Gebruik een vast pad naar het geschiedenisbestand, bvb. ~/.Rhistory om altijd (onafhankelijk van de werkmap) dezelfde geschiedenis te zien";
 
-/* NSButtonCell (Open file in editor) : <title:Open file in editor> (oid:18) */
+/* Entry = "18.title"; Class = "NSButtonCell" */
 "Open file in editor" = "Open bestand in editor";
 
-/* NSTextField (R history file:) : <title:R history file:> (oid:46) */
+/* Entry = "137.title"; Class = "NSTextFieldCell" */
 "R history file:" = "R geschiedenisbestand:";
 
-/* NSButton (Read history file on startup) : <title:Read history file on startup> (oid:82) */
+/* Entry = "150.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* Entry = "151.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* Entry = "140.title"; Class = "NSButtonCell" */
 "Read history file on startup" = "Lees geschiedenisbestand in tijdens opstarten";
 
-/* NSButton (Remove duplicate entries in history) : <title:Remove duplicate entries in history> (oid:93) */
+/* Entry = "142.title"; Class = "NSButtonCell" */
 "Remove duplicate entries in history" = "Verwijder dubbele geschiedenisinvoer";
 
-/* NSBox (Save workspace on exit from R) : <title:Save workspace on exit from R> (oid:115) */
+/* Entry = "115.title"; Class = "NSBox" */
 "Save workspace on exit from R" = "Bewaar werkbestand bij het afsluiten van R";
 
-/* NSButton (Select) : <title:Select> (oid:110) */
+/* Entry = "149.title"; Class = "NSButtonCell" */
 "Select" = "Selecteer";
 
-/* NSButtonCell (Source input file) : <title:Source input file> (oid:19) */
+/* Entry = "19.title"; Class = "NSButtonCell" */
 "Source input file" = "Source invoerbestand";
 
-/* NSButton (Strip comments in history entries) : <title:Strip comments in history entries> (oid:97) */
+/* Entry = "146.title"; Class = "NSButtonCell" */
 "Strip comments in history entries" = "Wis commentaar uit geschiedenis";
 
-/* NSIBHelpConnector : <title:URL for the default CRAN URL. If left empty, the user will be prompted.> (oid:114) */
+/* Entry = "108.gToolTip"; Class = "NSTextField" */
 "URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
 
-/* NSTextField (URL:) : <title:URL:> (oid:109) */
+/* Entry = "148.title"; Class = "NSTextFieldCell" */
 "URL:" = "URL:";
 
-/* NSButtonCell (Yes) : <title:Yes> (oid:125) */
+/* Entry = "125.title"; Class = "NSButtonCell" */
 "Yes" = "Ja";
 
-/* NSTextField (~) : <title:~> (oid:41) */
+/* Entry = "134.title"; Class = "NSTextFieldCell" */
 "~" = "~";
 

@@ -1,24 +1,24 @@
-/* NSBox (Colors) : <title:Colors> (oid:26) */
+/* Entry = "26.title"; Class = "NSBox" */
 "Colors" = "Colori";
 
-/* NSTextField (Comment) : <title:Comment> (oid:38) */
+/* Entry = "119.title"; Class = "NSTextFieldCell" */
 "Comment" = "Commenti";
 
-/* NSButton (Defaults) : <title:Defaults> (oid:91) */
+/* Entry = "120.title"; Class = "NSButtonCell" */
 "Defaults" = "Default";
 
-/* NSTextField (Identifier) : <title:Identifier> (oid:36) */
+/* Entry = "118.title"; Class = "NSTextFieldCell" */
 "Identifier" = "Identificatore";
 
-/* NSTextField (Keyword) : <title:Keyword> (oid:33) */
+/* Entry = "117.title"; Class = "NSTextFieldCell" */
 "Keyword" = "Parola chiave";
 
-/* NSTextField (Normal) : <title:Normal> (oid:30) */
+/* Entry = "115.title"; Class = "NSTextFieldCell" */
 "Normal" = "Normale";
 
-/* NSTextField (Number) : <title:Number> (oid:22) */
+/* Entry = "114.title"; Class = "NSTextFieldCell" */
 "Number" = "Numeri";
 
-/* NSTextField (String) : <title:String> (oid:32) */
+/* Entry = "116.title"; Class = "NSTextFieldCell" */
 "String" = "Stringhe";
 

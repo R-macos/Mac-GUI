@@ -1,27 +1,27 @@
-/* NSTextField (Background) : <title:Background> (oid:36) */
+/* Entry = "76.title"; Class = "NSTextFieldCell" */
 "Background" = "背景";
 
-/* NSBox (Colors) : <title:Colors> (oid:26) */
+/* Entry = "26.title"; Class = "NSBox" */
 "Colors" = "色";
 
-/* NSButton (Defaults) : <title:Defaults> (oid:34) */
+/* Entry = "78.title"; Class = "NSButtonCell" */
 "Defaults" = "デフォルト";
 
-/* NSTextField (Input) : <title:Input> (oid:30) */
+/* Entry = "73.title"; Class = "NSTextFieldCell" */
 "Input" = "入力";
 
-/* NSTextField (Output) : <title:Output> (oid:32) */
+/* Entry = "74.title"; Class = "NSTextFieldCell" */
 "Output" = "出力";
 
-/* NSTextField (Prompt) : <title:Prompt> (oid:22) */
+/* Entry = "72.title"; Class = "NSTextFieldCell" */
 "Prompt" = "プロンプト";
 
-/* NSTextField (Stderr) : <title:Stderr> (oid:33) */
+/* Entry = "75.title"; Class = "NSTextFieldCell" */
 "Stderr" = "Stderr";
 
-/* NSTextField (Stdout) : <title:Stdout> (oid:38) */
+/* Entry = "77.title"; Class = "NSTextFieldCell" */
 "Stdout" = "Stdout";
 
-/* NSTextField (Transparency :) : <title:Transparency :> (oid:24) */
+/* Entry = "71.title"; Class = "NSTextFieldCell" */
 "Transparency :" = "透明度 :";
 

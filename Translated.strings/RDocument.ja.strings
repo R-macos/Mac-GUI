@@ -1,45 +1,90 @@
-/* NSMenuItem : <title:<functions>> (oid:45) */
+/* Entry = "45.title"; Class = "NSMenuItem" */
 "<functions>" = "<関数>";
 
-/* NSBox (Box) : <title:Box> (oid:87) */
+/* Entry = "87.title"; Class = "NSBox" */
 "Box" = "Box";
 
-/* NSButton (Cancel) : <title:Cancel> (oid:70) */
+/* Entry = "115.title"; Class = "NSMenuItem" */
+"CP1250" = "CP1250";
+
+/* Entry = "113.title"; Class = "NSMenuItem" */
+"CP1251" = "CP1251";
+
+/* Entry = "114.title"; Class = "NSMenuItem" */
+"CP1252" = "CP1252";
+
+/* Entry = "117.title"; Class = "NSMenuItem" */
+"CP1253" = "CP1253";
+
+/* Entry = "116.title"; Class = "NSMenuItem" */
+"CP1254" = "CP1254";
+
+/* Entry = "94.title"; Class = "NSButtonCell" */
 "Cancel" = "キャンセル";
 
-/* NSMenuItem : <title:Clear> (oid:83) */
+/* Entry = "83.title"; Class = "NSMenuItem" */
 "Clear" = "消去";
 
-/* NSMenuItem : <title:Empty> (oid:82) */
+/* Entry = "110.title"; Class = "NSMenuItem" */
+"EUC (jp)" = "EUC (jp)";
+
+/* Entry = "82.title"; Class = "NSMenuItem" */
 "Empty" = "空";
 
-/* NSMenuItem : <title:Exact Search> (oid:59) */
+/* Entry = "108.title"; Class = "NSTextFieldCell" */
+"Encoding:" = "Encoding:";
+
+/* Entry = "59.title"; Class = "NSMenuItem" */
 "Exact Search" = "完全一致";
 
-/* NSMenuItem : <title:Fuzzy Search> (oid:60) */
+/* Entry = "60.title"; Class = "NSMenuItem" */
 "Fuzzy Search" = "部分一致";
 
-/* NSTextField (Go to line:) : <title:Go to line:> (oid:72) */
+/* Entry = "96.title"; Class = "NSTextFieldCell" */
 "Go to line:" = "指定行へ:";
 
-/* NSSearchField (0) : <title:Help search> (oid:36) */
+/* Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
 "Help search" = "Help search";
 
-/* NSMenuItem : <title:Item> (oid:81) */
+/* Entry = "120.title"; Class = "NSMenuItem" */
+"ISO2022-JP" = "ISO2022-JP";
+
+/* Entry = "81.title"; Class = "NSMenuItem" */
 "Item" = "項目";
 
-/* NSMenu : <title:Menu> (oid:58) */
+/* Entry = "106.title"; Class = "NSMenuItem" */
+"Latin1" = "Latin1";
+
+/* Entry = "112.title"; Class = "NSMenuItem" */
+"Latin2" = "Latin2";
+
+/* Entry = "105.title"; Class = "NSMenuItem" */
+"MacRoman" = "MacRoman";
+
+/* Entry = "58.title"; Class = "NSMenu" */
 "Menu" = "メニュー";
 
-/* NSButton (OK) : <title:OK> (oid:71) */
+/* Entry = "95.title"; Class = "NSButtonCell" */
 "OK" = "OK";
 
-/* NSMenu : <title:OtherViews> (oid:44) */
+/* Entry = "44.title"; Class = "NSMenu" */
 "OtherViews" = "他のビュー";
 
-/* NSPanel (Panel) : <title:Panel> (oid:68) */
+/* Entry = "103.title"; Class = "NSMenu" */
+"OtherViews" = "OtherViews";
+
+/* Entry = "68.title"; Class = "NSPanel" */
 "Panel" = "パネル";
 
-/* NSWindow (Window) : <title:Window> (oid:5) */
+/* Entry = "111.title"; Class = "NSMenuItem" */
+"Shift-JIS" = "Shift-JIS";
+
+/* Entry = "104.title"; Class = "NSMenuItem" */
+"UTF-8" = "UTF-8";
+
+/* Entry = "109.title"; Class = "NSMenuItem" */
+"Unicode" = "Unicode";
+
+/* Entry = "5.title"; Class = "NSWindow" */
 "Window" = "ウィンドウ";
 

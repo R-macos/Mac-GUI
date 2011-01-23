@@ -1,60 +1,63 @@
-/* NSTextField (12) : <title:12> (oid:50) */
+/* Entry = "122.title"; Class = "NSTextFieldCell" */
 "12" = "12";
 
-/* NSTextField (5.0) : <title:5.0> (oid:28) */
+/* Entry = "113.title"; Class = "NSTextFieldCell" */
 "5.0" = "5.0";
 
-/* NSMenuItem : <title:Bottom Left> (oid:31) */
+/* Entry = "112.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* Entry = "31.title"; Class = "NSMenuItem" */
 "Bottom Left" = "左下";
 
-/* NSMenuItem : <title:Bottom Right> (oid:32) */
+/* Entry = "32.title"; Class = "NSMenuItem" */
 "Bottom Right" = "右下";
 
-/* NSBox (Box) : <title:Box> (oid:45) */
+/* Entry = "45.title"; Class = "NSBox" */
 "Box" = "ボックス";
 
-/* NSMenuItem : <title:Centered> (oid:37) */
+/* Entry = "37.title"; Class = "NSMenuItem" */
 "Centered" = "中央";
 
-/* NSButton (Change) : <title:Change> (oid:48) */
+/* Entry = "120.title"; Class = "NSButtonCell" */
 "Change" = "変更";
 
-/* NSTextField (DPI:) : <title:DPI:> (oid:87) */
+/* Entry = "125.title"; Class = "NSTextFieldCell" */
 "DPI:" = "DPI:";
 
-/* NSTextField (Location:) : <title:Location:> (oid:38) */
+/* Entry = "117.title"; Class = "NSTextFieldCell" */
 "Location:" = "位置:";
 
-/* NSTextField (Note: Change and press return) : <title:Note: Change and press return> (oid:71) */
+/* Entry = "124.title"; Class = "NSTextFieldCell" */
 "Note: Change and press return" = "注: 変更してリターンを押して下さい";
 
-/* NSMenu : <title:OtherViews> (oid:35) */
+/* Entry = "35.title"; Class = "NSMenu" */
 "OtherViews" = "他のビュー";
 
-/* NSButton (Override R Quartz width/height parameters) : <title:Override R Quartz width/height parameters> (oid:22) */
+/* Entry = "111.title"; Class = "NSButtonCell" */
 "Override R Quartz width/height parameters" = "R Quartz の幅/高さパラメータよりも優先する";
 
-/* NSButton (Restore defaults) : <title:Restore defaults> (oid:51) */
+/* Entry = "123.title"; Class = "NSButtonCell" */
 "Restore defaults" = "デフォルトに戻す";
 
-/* NSTextField (System Font Text) : <title:System Font Text> (oid:49) */
+/* Entry = "121.title"; Class = "NSTextFieldCell" */
 "System Font Text" = "システムフォントテキスト";
 
-/* NSMenuItem : <title:Top Left> (oid:36) */
+/* Entry = "36.title"; Class = "NSMenuItem" */
 "Top Left" = "左上";
 
-/* NSMenuItem : <title:Top Right> (oid:34) */
+/* Entry = "34.title"; Class = "NSMenuItem" */
 "Top Right" = "右上";
 
-/* NSTextField (font family:) : <title:font family:> (oid:46) */
+/* Entry = "118.title"; Class = "NSTextFieldCell" */
 "font family:" = "フォントファミリ:";
 
-/* NSTextField (font point size:) : <title:font point size:> (oid:47) */
+/* Entry = "119.title"; Class = "NSTextFieldCell" */
 "font point size:" = "サイズ(ポイント):";
 
-/* NSTextField (height (inches):) : <title:height (inches):> (oid:30) */
+/* Entry = "115.title"; Class = "NSTextFieldCell" */
 "height (inches):" = "高さ (インチ):";
 
-/* NSTextField (width (inches):) : <title:width (inches):> (oid:29) */
+/* Entry = "114.title"; Class = "NSTextFieldCell" */
 "width (inches):" = "幅 (インチ):";
 

@@ -1,21 +1,21 @@
-/* NSTableColumn : <title:Description> (oid:13) */
+/* Entry = "13.headerCell.title"; Class = "NSTableColumn" */
 "Description" = "Beschrijving";
 
-/* NSButton (Open PDF) : <title:Open PDF> (oid:12) */
+/* Entry = "63.title"; Class = "NSButtonCell" */
 "Open PDF" = "Open PDF";
 
-/* NSButton (Open Source) : <title:Open Source> (oid:58) */
+/* Entry = "64.title"; Class = "NSButtonCell" */
 "Open Source" = "Open Source";
 
-/* NSTableColumn : <title:Package> (oid:10) */
+/* Entry = "10.headerCell.title"; Class = "NSTableColumn" */
 "Package" = "Pakket";
 
-/* NSSearchField (0) : <title:Search> (oid:11) */
+/* Entry = "62.placeholderString"; Class = "NSSearchFieldCell" */
 "Search" = "Zoek";
 
-/* NSTableColumn : <title:Vignette> (oid:9) */
+/* Entry = "9.headerCell.title"; Class = "NSTableColumn" */
 "Vignette" = "Vignet";
 
-/* NSWindow (Vignettes) : <title:Vignettes> (oid:5) */
+/* Entry = "5.title"; Class = "NSWindow" */
 "Vignettes" = "Vignetten";
 

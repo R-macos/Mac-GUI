@@ -1,73 +1,78 @@
-/* NSTextField ((Valid range is between 0.1 and 0.8 sec.)) : <title:(Valid range is between 0.1 and 0.8 sec.)> (oid:103) */
+/* Entry = "151.title"; Class = "NSTextFieldCell" */
 "(Valid range is between 0.1 and 0.8 sec.)" = "(Gültiger Bereich ist von 0.1 bis 0.8 Sek.)";
 
-/* NSTextField ((Wrapping and padding for new windows only)) : <title:(Wrapping and padding for new windows only)> (oid:117) */
+/* Entry = "152.title"; Class = "NSTextFieldCell" */
 "(Wrapping and padding for new windows only)" = "(nur für neu geöffnete Fenster)";
 
-/* NSTextField (0.2) : <title:0.2> (oid:44) */
+/* Entry = "150.title"; Class = "NSTextFieldCell" */
 "0.2" = "0.2";
 
-/* NSTextField (16.0) : <title:16.0> (oid:124) */
+/* Entry = "154.title"; Class = "NSTextFieldCell" */
 "16.0" = "16.0";
 
-/* NSTextField (5.0) : <title:5.0> (oid:127) */
+/* Entry = "157.title"; Class = "NSTextFieldCell" */
 "5.0" = "5.0";
 
-/* NSButtonCell (Application) : <title:Application> (oid:49) */
+/* Entry = "49.title"; Class = "NSButtonCell" */
 "Application" = "Programm";
 
-/* NSButtonCell (Built-in editor) : <title:Built-in editor> (oid:96) */
+/* Entry = "96.title"; Class = "NSButtonCell" */
 "Built-in editor" = "Eingebauter Editor";
 
-/* NSBox (Built-in editor preferences) : <title:Built-in editor preferences> (oid:35) */
+/* Entry = "35.title"; Class = "NSBox" */
 "Built-in editor preferences" = "Einstellung für eingeb. Editor";
 
-/* NSButtonCell (Command) : <title:Command> (oid:47) */
+/* Entry = "47.title"; Class = "NSButtonCell" */
 "Command" = "Befehl";
 
-/* NSTextField (Editor: ) : <title:Editor:
-> (oid:46) */
+/* Entry = "160.title"; Class = "NSTextFieldCell" */
 "Editor:\n" = "Editor:\n";
 
-/* NSButtonCell (External Editor) : <title:External Editor> (oid:97) */
+/* Entry = "97.title"; Class = "NSButtonCell" */
 "External Editor" = "Externer Editor";
 
-/* NSBox (External editor settings) : <title:External editor settings> (oid:37) */
+/* Entry = "37.title"; Class = "NSBox" */
 "External editor settings" = "Einstellungen für ext. Editor";
 
-/* NSTextField (Highlight interval:) : <title:Highlight interval:> (oid:43) */
+/* Entry = "149.title"; Class = "NSTextFieldCell" */
 "Highlight interval:" = "Dauer der Hervorhebung:";
 
-/* NSTextField (Margin width:) : <title:Margin width:> (oid:125) */
+/* Entry = "155.title"; Class = "NSTextFieldCell" */
 "Margin width:" = "Randbreite:";
 
-/* NSButton (Match braces/quotes) : <title:Match braces/quotes> (oid:142) */
+/* Entry = "159.title"; Class = "NSButtonCell" */
 "Match braces/quotes" = "Klammern automatisch schliessen";
 
-/* NSButton (New editor) : <title:New editor> (oid:105) */
+/* Entry = "162.title"; Class = "NSButtonCell" */
 "New editor" = "Editor auswählen";
 
-/* NSTextField (Note: Command is executed in a shell) : <title:Note: Command is executed in a shell> (oid:104) */
+/* Entry = "161.title"; Class = "NSTextFieldCell" */
 "Note: Command is executed in a shell" = "(der Befehl wird in der 'Shell' ausgeführt)";
 
-/* NSButton (Show brace highlighting) : <title:Show brace highlighting> (oid:40) */
+/* Entry = "165.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* Entry = "164.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* Entry = "147.title"; Class = "NSButtonCell" */
 "Show brace highlighting" = "Klammern hervorheben";
 
-/* NSButton (Show function hints) : <title:Show function hints> (oid:138) */
+/* Entry = "158.title"; Class = "NSButtonCell" */
 "Show function hints" = "Funktionsparameter anzeigen";
 
-/* NSButton (Show line numbers) : <title:Show line numbers> (oid:42) */
+/* Entry = "148.title"; Class = "NSButtonCell" */
 "Show line numbers" = "Zeilennummern anzeigen";
 
-/* NSButton (Show syntax coloring) : <title:Show syntax coloring> (oid:39) */
+/* Entry = "146.title"; Class = "NSButtonCell" */
 "Show syntax coloring" = "Syntax farblich hervorheben";
 
-/* NSTextField (SubEthaEdit) : <title:SubEthaEdit> (oid:115) */
+/* Entry = "163.title"; Class = "NSTextFieldCell" */
 "SubEthaEdit" = "SubEthaEdit";
 
-/* NSTextField (Text padding:) : <title:Text padding:> (oid:126) */
+/* Entry = "156.title"; Class = "NSTextFieldCell" */
 "Text padding:" = "Abstand vom Text:";
 
-/* NSButton (Wrap lines) : <title:Wrap lines> (oid:123) */
+/* Entry = "153.title"; Class = "NSButtonCell" */
 "Wrap lines" = "Zeilen umbrechen";
 
