@@ -1,0 +1,43 @@
+#!/usr/bin/perl
+
+$td="/tmp/nib-$$";
+system "rm -rf '$td'";
+mkdir "/tmp/nib-$$" || die "cannot create temporary directory for processing";
+
+$en=shift;
+$str=shift;
+$tl=shift;
+
+if ( $en eq '' || $tl eq '' || $str eq '') {
+    print "\n Usage: $ARGV[0] <english.nib> <strings> <lang.nib>\n\n";
+    exit 1;
+}
+
+open IN, "$str" || die "cannot open strings file";
+open OUT, ">$td/strings";
+while (<IN>) {
+    chomp;
+    if (/\/\* Entry = \"(\d+)\.([a-zA-Z0-9.]+)\"; Class = \"(.*)\"/) {
+	$id=$1; $item=$2; $cls=$3;
+	$e = <IN>;
+	chomp;
+	if ($e =~ /^\"(.*)\" = \"(.*)\";$/) {
+	    print OUT "/* Class = \"$cls\"; $item = \"$2\"; ObjectID = \"$id\"; */\n\"$id.$item\" = \"$2\";\n\n";
+	} else {
+	    print STDERR "WARNING: invalid entry for $id.$item: $e\n";
+	}
+    } elsif ($_ ne '') {
+	print STDERR "WARNING: unknown line: $_\n";
+    }
+}
+close IN;
+
+system "iconv -f utf-8 -t utf-16 '$td/strings' > '$td/strings.uni'" || die "converting strings to unicode failed";
+
+# system "ibtool --previous-file '$en' --incremental-file '$lo' --strings-file '$td/strings.uni' --localize-incremental --write '$tl' '$en'" || die "converting lang file to strings failed";
+
+if ( -e "$td/strings.uni" ) {
+    system "ibtool --strings-file '$td/strings.uni' --write '$tl' '$en'" || die "generating lang nib failed";
+}
+
+system "rm -rf '$td'";
