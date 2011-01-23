@@ -286,4 +286,19 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	[super removeDocument:document];
 }
 
+- (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel forTypes:(NSArray *)extensions
+{
+	// TODO: add accessory view for open file encoding - it's tricky because we don't have a document yet so we can't use the convenient way that we use in the save panel
+	return [super runModalOpenPanel:openPanel forTypes:extensions];
+}
+
+/*
+- (IBAction)openDocument:(id)sender
+{
+	NSOpenPanel *op = [NSOpenPanel openPanel];
+	[op setAccessoryView:saveOpenAccView];
+	NSInteger res = [self run
+			 }
+*/
+
 @end

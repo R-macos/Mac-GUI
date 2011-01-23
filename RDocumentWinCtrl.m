@@ -179,6 +179,19 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	return plainFile;
 }
 
+// fileEncoding is passed through to the document - bound by the save box
+- (int) fileEncoding
+{
+	SLog(@"%@ fileEncoding (%@ gives %d)", self, [self document], [[self document] fileEncoding]);
+	return [[self document] fileEncoding];
+}
+
+- (void) setFileEncoding: (int) encoding
+{
+	SLog(@"%@ setFileEncoding: %d (doc %@)", self, encoding, [self document]);
+	[[self document] setFileEncoding:encoding];
+}
+
 - (id) initWithWindowNibName:(NSString*) nib
 {
 	self = [super initWithWindowNibName:nib];
@@ -309,6 +322,12 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 		[[textView undoManager] beginUndoGrouping];
 	}	
 }
+
+- (NSView*) saveOpenAccView
+{
+	return saveOpenAccView;
+}
+
 
 - (void)windowDidBecomeKey:(NSNotification *)aNotification {
 	[theRulerView updateView];
@@ -1138,6 +1157,7 @@ reHilite:
 		}
 	}
 }
+
 
 - (IBAction)setHelpSearchType:(id)sender
 {

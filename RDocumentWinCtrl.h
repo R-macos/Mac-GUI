@@ -65,6 +65,8 @@ extern NSColor *shColorIdentifier;
 
 	IBOutlet NSTextField *statusLine;
 	
+	IBOutlet NSView *saveOpenAccView;
+	
     RRulerView *theRulerView;
 	
 	BOOL useHighlighting; // if set to YES syntax highlighting is used
@@ -114,6 +116,9 @@ extern NSColor *shColorIdentifier;
 - (void) setPlain: (BOOL) plain; // plain = don't use highlighting even if preferences say so
 - (BOOL) plain;
 
+- (int) fileEncoding;
+- (void) setFileEncoding: (int) encoding;
+
 - (void) setHighlighting: (BOOL) use;
 - (void) updatePreferences;
 
@@ -123,6 +128,8 @@ extern NSColor *shColorIdentifier;
 - (NSTextView *) textView;
 - (NSView*) searchToolbarView;
 - (NSView*) fnListView;
+
+- (NSView*) saveOpenAccView;
 
 - (void) functionRescan; // re-scans the functions it the document and updates function list/pop-up
 - (void) functionGo: (id) sender; // invoked by function pop-up, the tag of the sender specifies the position to go to

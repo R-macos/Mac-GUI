@@ -43,6 +43,8 @@
 	BOOL isEditable; // determines whether this document can be edited
 	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
 	
+	NSStringEncoding documentEncoding;
+
 	RDocumentWinCtrl *myWinCtrl;
 }
 
@@ -54,6 +56,9 @@
 - (BOOL) editable;
 - (void) setREditFlag: (BOOL) flag;
 - (BOOL) hasREditFlag;
+
+- (int) fileEncoding;
+- (void) setFileEncoding: (int) encoding;
 
 - (NSTextView *)textView;
 

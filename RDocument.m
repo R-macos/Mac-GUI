@@ -42,6 +42,7 @@
     self = [super init];
     if (self) {
 		SLog(@"RDocument(%@) init", self);
+	    documentEncoding = NSUTF8StringEncoding;
 		initialContents=nil;
 		initialContentsType=nil;
 		isEditable=YES;
@@ -98,6 +99,25 @@
 	return @"RDocument";
 }
 
+- (int) fileEncoding
+{
+	return (int) documentEncoding;
+}
+
+- (void) setFileEncoding: (int) encoding
+{
+	SLog(@" - setFileEncoding: %d", encoding);
+	documentEncoding = (NSStringEncoding) encoding;
+}
+
+// customize Save panel by adding "encoding" view
+- (BOOL)prepareSavePanel:(NSSavePanel *)savePanel
+{
+	if (myWinCtrl)
+		[savePanel setAccessoryView:[myWinCtrl saveOpenAccView]];
+	return YES;
+}
+
 - (BOOL)writeToFile:(NSString *)fileName ofType:(NSString *)docType {
 	SLog(@"RDocument.writeToFile: %@ ofType: %@", fileName, docType);
 	return [super writeToFile:fileName ofType:docType];
@@ -118,14 +138,45 @@
 			SLog(@" - new RTF contents (%d bytes) for window controller %@", [initialContents length], wc);
 			[wc replaceContentsWithRtf: initialContents];
 		} else {
-			NSString * cs = [NSString stringWithUTF8String:[initialContents bytes]];
-			if (!cs) cs = [NSString stringWithCString:[initialContents bytes] length:[initialContents length]];
-			if (cs) {
+			const unsigned char *ic = [initialContents bytes];
+			documentEncoding = NSUTF8StringEncoding;
+			if (ic[0] == 0xff && ic[1] == 0xfe) // Unicode BOM
+				documentEncoding = NSUnicodeStringEncoding;
+			NSString *csa = [NSString alloc];
+			NSString *cs = [csa initWithData:initialContents encoding:documentEncoding];
+			if (!cs) { // fall back to MacRoman - old default
+				SLog(@" - failed to load as %d encoding, falling back to MacRoman", documentEncoding);
+				documentEncoding = NSMacOSRomanStringEncoding;
+				cs = [csa initWithData:initialContents encoding:documentEncoding];
+			}
+			if (!cs)
+				[csa release];
+			else {
 				SLog(@" - new string contents (%d chars) for window controller %@", [cs length], wc);
+				// Important! otherwise the save box won't know
+				[wc setFileEncoding:documentEncoding];
 				[wc replaceContentsWithString: cs];
+				[cs release];
 			}
 		}
 	}
+}
+
+- (void) reinterpretInEncoding: (NSStringEncoding) encoding
+{
+	NSString *sc = [myWinCtrl contentsAsString];
+	NSData *data = [sc dataUsingEncoding:documentEncoding];
+	NSString *nsa = [NSString alloc];
+	NSString *ns = [nsa initWithData:data encoding:encoding];
+	if (!ns) {
+		[nsa release];
+		// TODO: alert: invalid in that encoding
+		return;
+	}
+	documentEncoding = encoding;
+	[myWinCtrl setFileEncoding:documentEncoding];
+	[myWinCtrl replaceContentsWithString:ns];
+	[ns release];
 }
 
 - (NSData *)dataRepresentationOfType:(NSString *)aType
@@ -138,7 +189,7 @@
 		if([aType isEqual:@"rtf"])
 			return [wc contentsAsRtf];
 		else
-			return [[wc contentsAsString] dataUsingEncoding: NSUTF8StringEncoding];
+			return [[wc contentsAsString] dataUsingEncoding: documentEncoding];
 	}
 	return nil;
 }
@@ -165,18 +216,8 @@ create the UI for the document.
 	}
 	
 	initialContentsType = [[NSString alloc] initWithString:aType];
-	{ // terminate the data so it can be loaded as 0ts
-		int tl = [data length]+4;
-		void *buf = (void*) malloc(tl);
-		SLog(@"RDocument.loadDataRepresentation loading %d bytes of data", [data length]);
-		memcpy(buf, [data bytes], [data length]);
-		memset(buf+tl-4, 0, 4); // set trailing 4 bytes to 0 to make sure the termination is safe
-		
-		// for performance resons we leave it to the NSData to take over the ownership, no need to copy anything.
-		initialContents = [[NSData alloc] initWithBytesNoCopy:buf length:tl freeWhenDone:YES];
-		SLog(@" - resulting ic has %d bytes", [initialContents length]);
-	}
-
+	initialContents = [data retain];
+	SLog(@"RDocument.loadDataRepresentation loading %d bytes of data", [data length]);
 	[self loadInitialContents];
 
 	return YES;

@@ -1,5 +1,14 @@
 NEWS for R.app GUI for Mac OS X
 
+Last update: 2011-01-23
+*	add an option to specify the encoding of the text
+	file when saving a document.
+	
+*	add detection and support for Unicode files
+
+*	fix help type deprecation in Data Manager
+
+
 -- Release Version 1.35 (5665) - supplied with R 2.12.1 --
 --                      (5632) - supplied with R 2.12.0 --
 
