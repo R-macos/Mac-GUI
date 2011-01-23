@@ -8,7 +8,7 @@
  */
 
 /* GUI version as shown in infos e.g. 1.27-devel */
-#define GUI_VER 1.35
+#define GUI_VER 1.36-dev
 /* R postfix used to denote release versions of GUI - set to R release version (e.g. 2.8.0) or to anything that will be shown in between R and GUI (e.g. - or for Mac) */
 #define R_RELEASE for Mac OS X
 
