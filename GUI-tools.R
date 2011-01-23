@@ -154,11 +154,11 @@ add.fn("data.manager", function ()
     len <- NROW(dt)
     url <- character(len)
     for (i in 1:len) {
-        tmp <- as.character(help(dt[i], package = pkg[i], htmlhelp = TRUE))
+        tmp <- as.character(help(dt[i], package = pkg[i], help_type = "html"))
         if (length(tmp) > 0) 
             url[i] <- tmp
     }
-    as.character(help("BOD", package = "datasets", htmlhelp = T))
+    as.character(help("BOD", package = "datasets", help_type = "html"))
     load.idx <- which(.Internal(data.manager(dt, pkg, desc, url)))
     for (i in load.idx) {
         cat("loading dataset:", dt[i], "\n")
@@ -185,3 +185,4 @@ if (rv < 210) add.fn("main.help.url", function ()
     return(invisible(x)) }))
 
 if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) cat("[R.app GUI ",Sys.getenv("R_GUI_APP_VERSION")," (",Sys.getenv("R_GUI_APP_REVISION"),") ",R.version$platform,"]\n\n",sep='') else cat("[Warning: GUI-tools are intended for internal use by the R.app GUI only]\n")
+if (rv < 210) cat(" NOTE: your R version is too old, some GUI tools may not work correctly!\n")
