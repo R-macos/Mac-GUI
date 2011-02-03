@@ -103,8 +103,11 @@ void printelt(SEXP invec, int vrow, char *strp)
     if(!strp)
      return;
      
-     
+#if (R_VERSION < R_Version(2,13,0))
     PrintDefaults(R_NilValue);
+#else
+    PrintDefaults();
+#endif
     if (TYPEOF(invec) == REALSXP) {
 	if (REAL(invec)[vrow] != ssNA_REAL) {
 #if (R_VERSION >= R_Version(2,2,0))
