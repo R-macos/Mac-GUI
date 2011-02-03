@@ -1386,11 +1386,9 @@ extern BOOL isTimeToFinish;
 		NSString *topic = @"<unknown>";
 		if (x && [x string]) topic = [x string];
 		[x release];
-		if ([obj type]==STRSXP && [obj length]>0) {
+		if ([obj type]==STRSXP && [obj length]>0)
 			[[HelpManager sharedController] showHelpUsingFile: [obj string] topic: topic];
-			[[self window] makeKeyWindow];
-			[[[HelpManager sharedController] window] makeKeyAndOrderFront:self];
-		} else {
+		else {
 			NSBeginAlertSheet(
 				NLS(@"Help topic not found"),
 				NLS(@"OK"),

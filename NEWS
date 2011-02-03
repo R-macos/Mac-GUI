@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last update: 2011-02-03
+*	bug fix: help window no longer pops up when
+	use.external.help is enabled
+
 Last update: 2011-01-23
 *	add an option to specify the encoding of the text
 	file when saving a document.
