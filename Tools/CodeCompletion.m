@@ -29,7 +29,11 @@
 
 #import "CodeCompletion.h"
 #import "../REngine/REngine.h"
+#import "../RegexKitLite.h"
+#import "FileCompletion.h"
 #import "RGUI.h"
+#import "../RController.h"
+
 
 @implementation CodeCompletion
 
@@ -183,6 +187,111 @@
 	[re endProtected];
 	[ca release];
     return nil;
+}
+
++ (NSArray*) retrieveSuggestionsForScopeRange:(NSRange)scopeRange inTextView:(NSTextView*)textView
+{
+
+	if (preventReentrance && insideR>0) {
+		SLog(@"CodeCompletion.retrieveSuggestionForScope: returning nil completion to prevent R re-entrance [***]");
+		return nil;
+	}
+
+	REngine *re = [REngine mainEngine];
+	if (![re beginProtected]) {
+		SLog(@"CodeCompletion.retrieveSuggestionForScope: returning nil completion because protected REngine entry failed [***]");
+		return nil;
+	}
+
+	NSString *linebuffer = [[[textView textStorage] string] substringWithRange:scopeRange];
+
+	SLog(@" - passed string for completion:\n%@", [linebuffer description]);
+	if(!linebuffer || ![linebuffer length]) {
+		[re endProtected];
+		return nil;
+	}
+
+	// convert scope string to single line
+	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"[\n\r\t]+" withString:@" "];
+
+	// first we need to find out whether we're in a text part or code part
+	unichar c;
+	int tl = [linebuffer length], tp=0, quotes=0, dquotes=0, lastQuote=-1;
+	while (tp < tl) {
+		c = CFStringGetCharacterAtIndex((CFStringRef)linebuffer, tp);
+		if (c=='\\') 
+			tp++; // skip the next char after a backslash (we don't have to worry about \023 and friends)
+		else {
+			if (dquotes==0 && c=='\'') {
+				quotes^=1;
+				if (quotes) lastQuote=tp;
+			}
+			if (quotes==0 && c=='"') {
+				dquotes^=1;
+				if (dquotes) lastQuote=tp;
+			}
+		}
+		tp++;
+	}
+
+	// if we're inside any quotes, bail via file completion
+	if (quotes+dquotes>0) {
+		SLog(@" - cursor is inside quotes - call file completion");
+		[re endProtected];
+		return [FileCompletion completeAll:[linebuffer substringFromIndex:lastQuote+1] cutPrefix:0];
+	}
+
+	// use internal rcompgen to retrieve completion suggestions;
+	// can be modified by the user via rc.setting s() and rc.options() resp.
+
+	// escape ' since we pass it via @" '...' "
+	linebuffer = [linebuffer stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+	SLog(@" - rcompgen completion will be invoked with:\n%@", linebuffer);
+	RSEXP *xx = [re evaluateString:[NSString stringWithFormat:@"rcompgen.completion('%@')", linebuffer]];
+	[re endProtected];
+	if(xx) {
+
+		NSArray *ca = [xx array];
+
+		// if only one suggestion was found set function hint in status bar
+		if (ca && [ca count]==1) {
+
+			NSString *foundItem = [ca objectAtIndex:0];
+
+			// ignore all spaces, equal signs, and opened paranthesis at the end
+			BOOL showIt = YES;
+			int i = [foundItem length]-1;
+			unichar c;
+			while(i>0) {
+				c = CFStringGetCharacterAtIndex((CFStringRef)foundItem, i);
+				if(c == ' ' || c == '(') {
+					i--;
+				}
+				else if (c == '=') {
+					// if suggestion ends with a = do not show the hint, since
+					// it's a parameter
+					showIt = NO;
+					break;
+				}
+				else
+					break;
+			}
+			i++;
+			foundItem = [foundItem substringToIndex:i];
+			SLog(@" - show function hint '%@' with display %d", foundItem, showIt);
+			if(showIt && [[(NSTextView*)[[NSApp keyWindow] firstResponder] delegate] respondsToSelector:@selector(hintForFunction:)])
+				// (RController*) is only a dummy to avoid compiler warnings
+				[(RController*)[(NSTextView*)[[NSApp keyWindow] firstResponder] delegate] hintForFunction:foundItem];
+		}
+
+		SLog(@" - found %d suggestions", [ca count]);
+		[xx release];
+		return (ca && [ca count]) ? ca : nil;
+
+	}
+
+	return nil;
+
 }
 
 @end

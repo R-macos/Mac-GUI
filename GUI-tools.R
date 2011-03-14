@@ -139,6 +139,15 @@ add.fn("package.manager", function ()
     }
 })
 
+add.fn("rcompgen.completion", function (x)
+{
+    utils:::.assignLinebuffer(x)
+    utils:::.assignEnd(nchar(x))
+    utils:::.guessTokenFromLine()
+    utils:::.completeToken()
+    utils:::.CompletionEnv[["comps"]]
+})
+
 add.fn("data.manager", function () 
 {
     if (.Platform$GUI != "AQUA") 

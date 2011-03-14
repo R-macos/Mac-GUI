@@ -46,9 +46,9 @@
 
 - (id) window;
 - (IBAction) showInfo:(id)sender;
+- (IBAction)printDocument:(id)sender;
 
 - (void) updateHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
-- (void) reloadData;
 - (int) count;
 - (void) show;
 

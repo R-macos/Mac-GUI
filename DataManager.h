@@ -44,6 +44,7 @@
 - (id) window;
 - (IBAction)loadRData:(id)sender;
 - (IBAction)showHelp:(id)sender;
+
 - (void) show;
 
 - (void) resetDatasets;

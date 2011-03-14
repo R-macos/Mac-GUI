@@ -47,6 +47,8 @@
 #define initialWorkingDirectoryKey @"Working directory"
 
 #define FontSizeKey    @"Console Font Size"
+#define RScriptEditorTabWidth    @"R Script Editor tab width"
+#define RScriptEditorDefaultFont    @"R Script Editor default font"
 #define internalOrExternalKey  @"Use Internal Editor"
 #define showSyntaxColoringKey  @"Show syntax coloring"
 #define showBraceHighlightingKey  @"Show brace highlighting"

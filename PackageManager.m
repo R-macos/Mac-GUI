@@ -60,6 +60,9 @@ static PackageManager *sharedController = nil;
 	[super dealloc];
 }
 
+#pragma mark -
+#pragma mark TableView delegates
+
 /* These two routines are needed to update the History TableView */
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
@@ -96,6 +99,25 @@ static PackageManager *sharedController = nil;
 	} 
 }
 
+#pragma mark -
+#pragma mark TableView notifications
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	// Check our notification object is our table
+	if ([aNotification object] != packageDataSource) return;
+
+	// Update Info delayed
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showInfo:) 
+							object:packageDataSource];
+
+	[self performSelector:@selector(showInfo:) withObject:packageDataSource afterDelay:0.5];
+	
+}
+
+#pragma mark -
+
 - (IBAction) showInfo:(id)sender
 {
 	int row = [sender selectedRow];
@@ -123,11 +145,6 @@ static PackageManager *sharedController = nil;
 - (IBAction) reloadPMData:(id)sender
 {
 	[[REngine mainEngine] executeString:@"package.manager()"];
-	[packageDataSource reloadData];
-}
-
-- (void) reloadData
-{
 	[packageDataSource reloadData];
 }
 
@@ -182,6 +199,35 @@ static PackageManager *sharedController = nil;
 {
 	[backButton setEnabled:[sender canGoBack]];
 	[forwardButton setEnabled:[sender canGoForward]];
+}
+
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
+{
+	[PackageManagerWindow makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)printDocument:(id)sender
+{
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showInfo:) 
+							object:packageDataSource];
+
+	NSPrintInfo *printInfo;
+	NSPrintOperation *printOp;
+	
+	printInfo = [NSPrintInfo sharedPrintInfo];
+	[printInfo setHorizontalPagination: NSFitPagination];
+	[printInfo setVerticalPagination: NSAutoPagination];
+	[printInfo setVerticallyCentered:NO];
+	
+	printOp = [NSPrintOperation printOperationWithView:[[[PackageInfoView mainFrame] frameView] documentView] 
+											 printInfo:printInfo];
+	[printOp setShowPanels:YES];
+	[printOp runOperationModalForWindow:[self window] 
+							   delegate:self 
+						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						    contextInfo:@""];
 }
 
 @end

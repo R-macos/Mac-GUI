@@ -39,12 +39,10 @@
 #define defaultDocumentType ftRSource
 
 @interface RDocumentController : NSDocumentController
-{
-}
 
-- (NSWindow*) walkKeyListBack;
-- (NSWindow*) walkKeyListForward;
-- (NSWindow*) findLastDocType: (NSString*) aType;
+- (NSWindow*)findLastWindowForDocType:(NSString*)aType;
+- (NSWindow*)findNextWindowForDocType:(NSString*)aType;
+- (NSWindow*)findWindowForDocType:(NSString*)aType getLast:(BOOL)getLast;
 
 // starts external editor with the specified file (regardless of prefs)
 - (void) invokeExternalForFile:(NSString*)aFile;

@@ -627,6 +627,7 @@ typedef unsigned int NSUInteger;
 
 - (void)dealloc {
 	[self resetPackages];
+	if(packages) [packages release];
 	[super dealloc];
 }
 

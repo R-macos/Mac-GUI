@@ -35,11 +35,9 @@
 #import "RController.h"
 #import "RDocumentController.h"
 #import "REngine/REngine.h"
-#import "REditorTextStorage.h"
-#import "RRulerView.h"
-#import "REditorToolbar.h"
 #import "Tools/FileCompletion.h"
 #import "Tools/CodeCompletion.h"
+#import "RegexKitLite.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -50,19 +48,10 @@ NSColor *shColorKeyword;
 NSColor *shColorComment;
 NSColor *shColorIdentifier;
 
-NSArray *keywordList=nil;
-
 // note: those must match tags in the NIB!
 #define hsTypeExact   1
 #define hsTypeApprox  2
 
-@interface RDocumentWinCtrl (Private)
-BOOL dirtyHL;     // YES = some part of the HL wasn't re-done
-int  dirtyHead;   // position from which the highlighting needs to be re-done
-int  dirtyTail;   // last updated position beyond which the HL is undefined
-@end
-
-static int dirtyLimit = 600; // max. length of highlighting extension before giving up in favor of dirty HL mode
 
 @implementation RDocumentWinCtrl
 
@@ -93,10 +82,7 @@ static int dirtyLimit = 600; // max. length of highlighting extension before giv
 	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
 	[shColorIdentifier retain]; 
 	//	NSLog(@"shColorIdentifier %f %f %f %f", [c redComponent], [c greenComponent], [c blueComponent], [c alphaComponent]);
-	
-	keywordList = [[NSArray alloc] initWithObjects: 
-		@"for", @"if", @"else", @"function", @"TRUE", @"FALSE", @"while",
-		@"do", @"NULL", @"Inf", @"NA", @"NaN", @"in", nil];
+
 }
 
 //- (id)init { // NOTE: init is *not* used! put any initialization in windowDidLoad
@@ -127,12 +113,11 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (void)dealloc {
 	SLog(@"RDocumentWinCtrl.dealloc<%@>", self);
-	if (editorToolbar) [editorToolbar release];
-	if (textStorage) [textStorage release];
-	if (highlightColorAttr) [highlightColorAttr release];
-	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
+	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
+	if (functionMenuInvalidAttribute) [functionMenuInvalidAttribute release];
+	if (functionMenuCommentAttribute) [functionMenuCommentAttribute release];
 	[super dealloc];
 }
 
@@ -141,13 +126,16 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	[textView replaceCharactersInRange:
 		NSMakeRange(0, [[textView textStorage] length])
 							   withRTF:rtfContents];
-	[self updateSyntaxHighlightingForRange:NSMakeRange(0, [[textView textStorage] length])];
+	[textView setSelectedRange:NSMakeRange(0,0)];
 }
 
 - (void) replaceContentsWithString: (NSString*) strContents
 {
-	[textView replaceCharactersInRange: NSMakeRange(0, [[textView textStorage] length]) withString:strContents];
-	[self updateSyntaxHighlightingForRange:NSMakeRange(0, [[textView textStorage] length])];
+	[[textView layoutManager] setAllowsNonContiguousLayout:YES];
+	[textView setString:strContents];
+	[textView setSelectedRange:NSMakeRange(0,0)];
+	[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0];
+	[[textView layoutManager] setAllowsNonContiguousLayout:NO];
 }
 
 - (NSData*) contentsAsRtf
@@ -171,7 +159,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	if (plain && useHighlighting && textView)
 		[textView setTextColor:[NSColor blackColor] range:NSMakeRange(0,[[textView textStorage] length])];
 	else if (!plain && useHighlighting && textView)
-		[self setHighlighting:YES];
+		[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0];
 }
 
 - (BOOL) plain
@@ -203,7 +191,16 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 		updating=NO;
 		helpTempFile=nil;
 		execNewlineFlag=NO;
-		dirtyHL = NO;
+
+		functionMenuInvalidAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
+			[NSColor redColor], NSForegroundColorAttributeName,
+			[NSFont menuFontOfSize:0], NSFontAttributeName,
+		nil] retain];
+		functionMenuCommentAttribute =[[NSDictionary dictionaryWithObjectsAndKeys:
+			[NSColor grayColor], NSForegroundColorAttributeName,
+			[NSFont menuFontOfSize:0], NSFontAttributeName,
+		nil] retain];
+
 		[self setShouldCloseDocument:YES];
 	}
 	return self;
@@ -214,123 +211,31 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (void) windowDidLoad
 {
-	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
-	
-	if (!defaultsInitialized) {
-		[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-		defaultsInitialized=YES;
-	}
-		// For now replaced selectedTextBackgroundColor by redColor
-	highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
 
-	BOOL showLineNos = [Preferences flagForKey:showLineNumbersKey withDefault: NO];
-	BOOL lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
-	if (showLineNos) {
-		SLog(@" - line numbers requested");
-		// This should probably get loaded from NSUserDefaults.
-		NSFont *font = [NSFont fontWithName:@"Monaco" size: 10];
-		
-		NSSize layoutSize = [textView maxSize];
-		layoutSize.width = layoutSize.height;
-		if (!lineWrappingEnabled) {
-			// Make sure that we don't wrap lines.
-			[scrollView setHasHorizontalScroller: YES];
-			[textView setHorizontallyResizable: YES]; 
-			[textView setMaxSize: layoutSize];
-			[[textView textContainer] setWidthTracksTextView: NO];
-			[[textView textContainer] setHeightTracksTextView: NO];
-			[[textView textContainer] setContainerSize: layoutSize];			
-		} else {
-			[scrollView setHasHorizontalScroller: NO];
-			[textView setHorizontallyResizable: YES]; 
-			[textView setMaxSize: layoutSize];
-			[[textView textContainer] setWidthTracksTextView: YES];
-			[[textView textContainer] setHeightTracksTextView: NO];
-			[[textView textContainer] setContainerSize: layoutSize];						
-		}
-		
-		// Create and install our line numbers
-		if (theRulerView) [theRulerView release];
-		theRulerView = [[RRulerView alloc] initWithScrollView: scrollView orientation: NSVerticalRuler showLineNumbers: showLineNos textView:textView];
-		
-		[scrollView setHasHorizontalRuler: NO];
-		[scrollView setHasVerticalRuler: YES];
-		[scrollView setVerticalRulerView: theRulerView];
-		[scrollView setRulersVisible: YES];    
-		[scrollView setLineScroll: [font pointSize]];
-		
-		// Add a small pad to the textViews
-		float lineFragmentPadding;
-		lineFragmentPadding = [[Preferences stringForKey:lineFragmentPaddingWidthKey withDefault: @"6.0"] floatValue];
-		[[textView textContainer] setLineFragmentPadding: lineFragmentPadding];
-		
-		[textView setUsesRuler: YES];
-		[textView setFont: font];
-		
-	}
-	SLog(@" - setup views");
-	[scrollView setDocumentView:textView];		
-    [textView setDelegate: self];
-		
-	// instead of building the whole text storage network, we just replace the text storage - but ti's not trivial since ts is actually the root of the network
-	SLog(@" - replace back-end with REditorTextStorage");
-	NSLayoutManager *lm = [[textView layoutManager] retain];
-	NSTextStorage *origTS = [[textView textStorage] retain];
-	textStorage = [[REditorTextStorage alloc] init];
-	[origTS removeLayoutManager:lm];
-	[textStorage addLayoutManager:lm];
-	[lm release];
-	[origTS release];
-	
-	SLog(@" - setup window, preferences and widgets");
-	[[self window] setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
-	[textView setDrawsBackground:NO];
-	[[textView enclosingScrollView] setDrawsBackground:NO];
-	
-	[textView setFont:[[RController sharedController] currentFont]];
-	[textView setContinuousSpellCheckingEnabled:NO]; // by default no continuous spell checking
-	[textView setAllowsUndo: YES];
+	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
+
+	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
+	argsHints = [Preferences flagForKey:prefShowArgsHints withDefault:YES];
 
 	SLog(@" - load document contents into textView");
 	[(RDocument*)[self document] loadInitialContents];
-	[textView setEditable: [[self document] editable]];
-	[[NSNotificationCenter defaultCenter] 
-		addObserver:self
-		   selector:@selector(textDidChange:)
-			   name:NSTextDidChangeNotification
-			 object: textView];
-	[[textView textStorage] setDelegate:self];
-	[self updatePreferences];
-	[[Preferences sharedPreferences] addDependent:self];
-	
-	
-	// use textView's undoManager - this is just paranoia to be honest
-	[[self document] setUndoManager:[textView undoManager]];
-	[[self document] setHasUndoManager:YES];
-	
-	SLog(@" - setup editor toolbar");
-	editorToolbar = [[REditorToolbar alloc] initWithEditor:self];
+
 	SLog(@" - scan document for functions");
 	[self functionRescan];
-	SLog(@" - windowDidLoad is done");
-}
 
-- (void) setUndoBreakpoint
-{
-	if ([[textView undoManager] groupingLevel]>0) {
-		[[textView undoManager] endUndoGrouping];
-		[[textView undoManager] beginUndoGrouping];
-	}	
+	[[textView undoManager] removeAllActions];
+
+	[super windowDidLoad];
+
+	SLog(@" - windowDidLoad is done");
+
+	return;
+
 }
 
 - (NSView*) saveOpenAccView
 {
 	return saveOpenAccView;
-}
-
-
-- (void)windowDidBecomeKey:(NSNotification *)aNotification {
-	[theRulerView updateView];
 }
 
 - (NSUndoManager*) windowWillReturnUndoManager: (NSWindow*) sender
@@ -345,7 +250,14 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (BOOL) hintForFunction: (NSString*) fn
 {
+
 	BOOL success = NO;
+
+	if([[self document] hasREditFlag]) {
+		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
+		return NO;
+	}
+
 	if (preventReentrance && insideR>0) {
 		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
 		return NO;
@@ -378,10 +290,11 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 {
 	SLog(@"RDocumentWinCtrl.functionReset");
 	if (fnListBox) {
-		NSMenuItem *fmi = [[NSMenuItem alloc] initWithTitle:@"<functions>" action:nil keyEquivalent:@""];
+		NSMenuItem *fmi = [[NSMenuItem alloc] initWithTitle:NLS(@"<functions>") action:nil keyEquivalent:@""];
 		[fmi setTag:-1];
 		[fnListBox removeAllItems];
 		[[fnListBox menu] addItem:fmi];
+		[fmi release];
 	}
 	SLog(@" - reset done");
 }
@@ -416,92 +329,87 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (void) functionRescan
 {
+
+	// Cancel pending functionRescan calls
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(functionRescan) 
+							object:nil];
+
 	NSTextStorage *ts = [textView textStorage];
 	NSString *s = [ts string];
+	unsigned long strLength = [s length];
 	int oix = 0;
 	int pim = 0;
 	int sit = 0;
 	int fnf = 0;
 	NSMenu *fnm = [fnListBox menu];
 	NSRange sr = [textView selectedRange];
-	
+	[self functionReset];
+
+	if([s length]<8) return;
+
 	SLog(@"RDoumentWinCtrl.functionRescan");
 	while (1) {
-		NSRange r = [s rangeOfString:@"function" options:0 range:NSMakeRange(oix,[s length]-oix)];
+		NSRange r = [s rangeOfRegex:@"\\bfunction\\s*\\(" inRange:NSMakeRange(oix,strLength-oix)];
 		if (r.length<8) break;
-		oix=r.location+r.length;
-		
-		{
-			int li = r.location-1;
-			SLog(@" - potential function at %d", li);
-			unichar fc;
-			while (li>0 && ((fc=[s characterAtIndex:li])==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
-			if (li>0) {
-				fc=[s characterAtIndex:li];
-				if (fc=='=' || (fc=='-' && [s characterAtIndex:--li]=='<')) {
-					int lci;
-					li--;
-					SLog(@" - matched =/<- at %d", li);
-					while (li>0 && ((fc=[s characterAtIndex:li])==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
-					lci=li;
-					while (li>=0 && (((fc=[s characterAtIndex:li])>='0' && fc<='9')||(fc>='a' && fc<='z')||(fc>='A' && fc<='Z')||
-									 fc=='.'||fc=='_')) li--;
-					if (lci!=li) {
-						NSString *fn = [s substringWithRange:NSMakeRange(li+1,lci-li)];
-						int fp = li+1;
-						NSMenuItem *mi = nil;
-						SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
-						fnf++;
-						if (fp<sr.location) sit=pim;
-						if (pim<[fnm numberOfItems]) {
-							mi = (NSMenuItem*) [fnm itemAtIndex:pim];
-							if ([[mi title] isEqual:fn]) {
-								SLog(@" - replacing function at %d (title match)", pim);
-								[mi setTag:fp];
-								pim++;
-							} else if ([mi tag]==fp) {
-								SLog(@" - replacing function at %d (position match)", pim);
-								if (![[mi title] isEqual:fn])
-									[mi setTitle:fn];
-								pim++;
-							} else {
-								while (mi && [mi tag]<fp) {
-									[fnm removeItemAtIndex:pim];
-									mi=nil;
-									if (pim<[fnm numberOfItems])
-										mi=(NSMenuItem*) [fnm itemAtIndex:pim];
-								}
-								if (mi) {
-									SLog(@" - inserting at %d", pim);
-									mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-									[mi setTag:fp];
-									[mi setTarget:self];
-									[fnm insertItem:mi atIndex:pim];
-									[mi release];
-									pim++;
-								}
-							}
-						}
-						if (!mi && pim>=[fnm numberOfItems]) {
-							SLog(@" - appending");
-							mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-							[mi setTag:fp];
-							[mi setTarget:self];
-							[fnm addItem:mi];
-							[mi release];
-							pim++;
-						}
+		oix=NSMaxRange(r);
+		int li = r.location-1;
+		SLog(@" - potential function at %d", li);
+		unichar fc;
+		while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+		if (li>0) {
+			fc=CFStringGetCharacterAtIndex((CFStringRef)s, li);
+			if (fc=='=' || (fc=='-' && CFStringGetCharacterAtIndex((CFStringRef)s, --li)=='<')) {
+				int lci;
+				li--;
+				SLog(@" - matched =/<- at %d", li);
+				while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+				lci=li;
+				// while (li>=0 && (((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li))>='0' && fc<='9')||(fc>='a' && fc<='z')||(fc>='A' && fc<='Z')|| //(fc>=0x00C && fc<=0xFF9F)||
+				// 				 fc=='.'||fc=='_')) li--;
+				while (li>=0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) !='\n' && fc!=' ' && fc!='\r' && fc!='\t' && fc!=';' && fc!='#')) li--;
+				if (lci!=li) {
+
+					NSString *fn = [s substringWithRange:NSMakeRange(li+1,lci-li)];
+
+					int type = 1; // invalid function name
+					if([textView parserContextForPosition:li+2] == 4)
+						type = 2; // function declaration is commented out
+					else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
+						type = 0; // function name is valid
+
+					int fp = li+1;
+
+					NSMenuItem *mi = nil;
+					SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
+					fnf++;
+					if (fp<=sr.location) sit=pim;
+					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+					if(type == 1) {
+						NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
+						[mi setAttributedTitle:fna];
+						[fna release];
 					}
+					else if(type == 2) {
+						NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
+						[mi setAttributedTitle:fna];
+						[fna release];
+					}
+					[mi setTag:fp];
+					[mi setTarget:self];
+					[fnm addItem:mi];
+					[mi release];
+					pim++;
 				}
 			}
 		}
 	}
-	while (pim<[fnm numberOfItems])
-		[fnm removeItemAtIndex:pim];
-	if (fnf==0)
-		[self functionReset];
-	else
+
+	if (fnf) {
+		[fnListBox removeItemAtIndex:0];
 		[fnListBox selectItemAtIndex:sit];
+	}
+
 	SLog(@" - rescan finished (%d functions)", fnf);
 }
 
@@ -532,13 +440,44 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	if (c) { [shColorIdentifier release]; shColorIdentifier = [c retain]; }
 
 	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
-	
+
 	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
-	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
-	[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
 	[textView setNeedsDisplay:YES];
 	SLog(@" - preferences updated");
+}
+
+- (IBAction)saveDocumentAs:(id)sender
+{
+
+	RDocument *cd = [[RDocumentController sharedDocumentController] currentDocument];
+
+	// if cd document is a REdit call do not allow to save it under another name
+	// to preserving REdit editing
+	if (cd && [cd hasREditFlag]) {
+		[cd saveDocument:sender];
+		return;
+	}
+	[cd saveDocumentAs:sender];
+}
+
+- (IBAction)saveDocument:(id)sender
+{
+
+	RDocument *cd = [[RDocumentController sharedDocumentController] currentDocument];
+
+	// if cd document is a REdit call ensure that the last character is a line ending
+	// to avoid error in edit()
+	if (cd && [cd hasREditFlag]) {
+		NSRange selectedRange = [textView selectedRange];
+		if(![[textView string] length])
+			[[[textView textStorage] mutableString] setString:@"\n"];
+		if([[textView string] characterAtIndex:[[textView string] length]-1] != '\n') {
+			[[[textView textStorage] mutableString] appendString:@"\n"];
+			[textView setSelectedRange:NSIntersectionRange(selectedRange, NSMakeRange(0, [[textView string] length]))];
+		}
+	}
+	[cd saveDocument:sender];
 }
 
 - (IBAction)printDocument:(id)sender
@@ -563,38 +502,27 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	printOp = [NSPrintOperation printOperationWithView:textView 
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
-	[printOp runOperation];
+
+	[printOp runOperationModalForWindow:[self window] 
+							   delegate:self 
+						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						    contextInfo:@""];
 	[self updatePreferences];
 }
 
 
 - (IBAction)goToLine:(id)sender
 {
-	[NSApp beginSheet: goToLineSheet modalForWindow: [self window] modalDelegate: goToLineSheet didEndSelector: @selector(orderOut:) contextInfo: nil];
+	[NSApp beginSheet:goToLineSheet
+	   modalForWindow:[self window]
+		modalDelegate:self
+	   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+	      contextInfo:@"goToLine"];
 }
 
 - (IBAction)goToLineCloseSheet:(id)sender
 {
-	if ([((NSButton*) sender) tag] == 1) { // OK
-		NSString *s = [[textView textStorage] string];
-		int l = [goToLineField intValue];
-		// I know of no simple way to determine line #s, so let's just count them
-		int i=0, cl=1, tl = [s length];
-		if (l<1) l=1;
-		if (tl>0) {		
-			if (cl!=l) while (i<tl) {
-				if ([s characterAtIndex:i]=='\n') { // we could use indexOf, but ...
-					cl++;
-					if (cl==l) break;
-				}
-				i++;
-			};
-			if (l>1) i++; // get past the detected newline
-			if (i>=tl) i=tl-1; // make sure the range is valid
-			[textView setSelectedRange:NSMakeRange(i,0)];
-		}
-	}
-    [NSApp endSheet:goToLineSheet];
+	[NSApp endSheet:goToLineSheet returnCode:[sender tag]];
 }
 
 - (void) setHighlighting: (BOOL) use
@@ -602,211 +530,20 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	useHighlighting=use;
 	if (textView) {
 		if (use)
-			[self updateSyntaxHighlightingForRange:NSMakeRange(0,[[textView textStorage] length])];
+			[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0];
 		else
 			[textView setTextColor:[NSColor blackColor] range:NSMakeRange(0,[[textView textStorage] length])];
 	}
 }
 
-/* This is needed to force the NSDocument to know when edited windows are dirty */
-- (void) textDidChange: (NSNotification *)notification{
-	[[self document] updateChangeCount:NSChangeDone];
-}
-
-/* this method is called after editing took place - we use it for updating the syntax highlighting */
-- (void)updateSyntaxHighlightingForRange: (NSRange) range
+- (void)highlightBracesAfterDidProcessEditing
 {
-	BOOL dirtyRun = NO;
-	NSTextStorage *ts = [textView textStorage];
-	NSString *s = [ts string];
-	
-	int i = range.location;    // index in the string
-	int bb = i;                // index of the beginning of the currently detected segment
-	int last = i+range.length; // proposed stop - index behind the last character (must be <=hardStop)
-	int hardStop = last;       // hard-stop; it is ok to look beyond last when necessary, but not ok to look beyond hardStop
-	BOOL foundItem=NO;
-	
-	SLog(@"RDocumentWinCtrl(%@).updateSyntaxHL: %d:%d (%d/%d) [dirty=%s]", self, range.location, range.length, (int)useHighlighting, (int)plainFile, dirtyHL?"yes":"no");
-
-	if (!keywordList) [RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-
-	if ([self document] == nil) {
-		SLog(@" - no document, skipping.");
-		return;
-	}
-
-	if (range.length<1 || updating || !useHighlighting || plainFile) {
-		SLog(@" - no need to update, skipping.");
-		return;
-	}
-	updating=YES;
-
-	if (dirtyHL) {
-		if (i>dirtyHead) {
-			SLog(@" - dirtyHL is active, moving HL start from %d to %d", i, dirtyHead);
-			bb = i = dirtyHead;
-			hardStop = last = dirtyTail;
-		}
-		if (dirtyTail > last) {
-			SLog(@" - dirtyHL is active, extending HL from %d to %d", last, dirtyTail);
-			hardStop = last = dirtyTail;
-		}
-	}
-
-	NSDictionary *trailAttr = nil;
-	int trailPos = 0;
-	
-	if (last>0 && last<[s length]) {
-		int sl = [s length];
-		unichar c;
-
-		trailPos=last+1;
-		while (trailPos<sl && ((c = [s characterAtIndex:trailPos])==' ' || c=='\n' || c=='\r' || c=='\t')) trailPos++;
-		if (trailPos>=[s length]) {
-			hardStop = last = [s length]; trailPos=0;
-		} else {
-			NSRange efr;
-			last = trailPos--;
-			hardStop = [s length]; // feel free to go up to the end if necessary (in fact max(last+64,[s length]) should be sufficient, but it shouldn't matter)
-			trailAttr = [ts attributesAtIndex:trailPos effectiveRange:&efr];
-			//SLog(@"trailDict: %@, last was %d and is now %d", trailAttr, last, trailPos);
-		}
-	}
-	
-	[ts beginEditing];
-reHilite:
-	while (i < last) {
-		foundItem=NO;
-		unichar c = [s characterAtIndex:i];
-		if (c=='\'' || c=='"') {
-			unichar lc=c;
-			int ss=i;
-			NSRange fr;
-			if (i-bb>0) {
-				fr=NSMakeRange(bb,i-bb);
-				[ts addAttribute:@"shType" value:@"none" range:fr];
-				[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
-			}
-			i++;
-			while (i<last && (c=[s characterAtIndex:i])!=lc) {
-				if (c=='\\') { i++; if (i>=last) break; }
-				i++;
-			}
-			fr=NSMakeRange(ss,i-ss+((i==last)?0:1));
-			[ts addAttribute:@"shType" value:@"string" range:fr];
-			[ts addAttribute:@"NSColor" value:shColorString range:fr];
-			bb=i; if (i==last) break;
-			i++; bb=i; if (i==last) break;
-			c=[s characterAtIndex:i];
-			foundItem=YES;
-		}
-		if (c>='0' && c<='9') {
-			int ss=i;
-			NSRange fr;
-			if (i-bb>0) {
-				fr=NSMakeRange(bb,i-bb);
-				[ts addAttribute:@"shType" value:@"none" range:fr];
-				[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
-			}
-			i++;
-			while (i<last && ((c=[s characterAtIndex:i])=='.' || (c>='0' && c<='9'))) i++;
-			fr=NSMakeRange(ss,i-ss);
-			[ts addAttribute:@"shType" value:@"number" range:fr];
-			[ts addAttribute:@"NSColor" value:shColorNumber range:fr];
-			bb=i;
-			if (i==last) break;
-			c=[s characterAtIndex:i];	
-			foundItem=YES;
-		}
-		if ((c>='a' && c<='z') || (c>='A' && c<='Z') || c=='.') {
-			int ss=i;
-			NSRange fr;
-			if (i-bb>0) {
-				fr=NSMakeRange(bb,i-bb);
-				[ts addAttribute:@"shType" value:@"none" range:fr];
-				[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
-			}
-			i++;
-			// unlike all others id/keyword use hardStop, because keywords cannot be determined until the entire string is known
-			while (i<hardStop && ((c=[s characterAtIndex:i])=='_' || c=='.' || (c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9'))) i++;
-			fr=NSMakeRange(ss,i-ss);
-			
-			{
-				NSString *word = [s substringWithRange:fr];
-				if (word && keywordList && [keywordList containsObject:word]) {
-					[ts addAttribute:@"shType" value:@"keyword" range:fr];
-					[ts addAttribute:@"NSColor" value:shColorKeyword range:fr];
-				} else {
-					[ts addAttribute:@"shType" value:@"id" range:fr];
-					[ts addAttribute:@"NSColor" value:shColorIdentifier range:fr];
-				}
-			}
-			bb=i;
-			if (i>=last) break;
-			c=[s characterAtIndex:i];	
-			foundItem=YES;
-		}
-		if (c=='#') {
-			int ss=i;
-			NSRange fr;
-			if (i-bb>0) {
-				fr=NSMakeRange(bb,i-bb);
-				[ts addAttribute:@"shType" value:@"none" range:fr];
-				[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
-			}
-			i++;
-			while (i<last && ((c=[s characterAtIndex:i])!='\n' && c!='\r')) i++;
-			fr=NSMakeRange(ss,i-ss);
-			[ts addAttribute:@"shType" value:@"comment" range:fr];
-			[ts addAttribute:@"NSColor" value:shColorComment range:fr];
-			bb=i;
-			if (i==last) break;
-			c=[s characterAtIndex:i];
-			foundItem=YES;
-		}
-		if (!foundItem) i++;
-	}
-	if (bb<last && i-bb>0) {
-		NSRange fr=NSMakeRange(bb,i-bb);
-		[ts addAttribute:@"shType" value:@"none" range:fr];
-		[ts addAttribute:@"NSColor" value:shColorNormal range:fr];
-	}
-
-	if (trailAttr) { // it's partial update and there is trailing contents - let's check whether we need to go beyond the required scope (but let it go if we just had a dirty run)
-		NSRange efr;
-		NSDictionary *newAttr = [ts attributesAtIndex:trailPos effectiveRange:&efr];
-		NSString *oldA = (NSString*) [trailAttr objectForKey:@"shType"];
-		NSString *newA = (NSString*) [newAttr objectForKey:@"shType"];
-		BOOL haveMismatch = oldA && newA && ![oldA isEqual:newA];
-		if (!dirtyRun && haveMismatch) {  // trailing contents must be changed, too
-			SLog(@" - syntaxHL: old [%@] new [%@] at %d - need to re-process to the end of the file", oldA, newA, trailPos);
-			trailAttr=nil;
-			last=[s length];
-			bb = i = range.location; // the HL code doesn't support continuation out of the loop, because of the inner loops, so we just re-do it all ...
-			if (last - bb > dirtyLimit) {
-				SLog(@" - syntaxHL: range to re-do is too big (%d chars), enabling dirty mode", last - bb);
-				dirtyHL = YES;
-				dirtyHead = bb;
-				dirtyTail = bb + dirtyLimit;
-				dirtyRun = YES;
-				last = dirtyTail;
-			}
-			goto reHilite;
-		}
-		if (!haveMismatch && dirtyHL) { // we can disable dirty HL, because the marks match
-			SLog(@" - disabling dirty HL, because marks match at the tail");
-			dirtyHL=NO;
-		}
-	}
-	SLog(@" - sh done, rescan and finish");
-	[self functionRescan];
-	[ts endEditing];
-	updating=NO;
-	SLog(@" - finished syntax hilite, whew ..");
+	[self highlightBracesWithShift:0 andWarn:YES];
 }
 
 - (void) highlightBracesWithShift: (int) shift andWarn: (BOOL) warn
 {
+
 	NSString *completeString = [[textView textStorage] string];
 	unsigned int completeStringLength = [completeString length];
 	if (completeStringLength < 2) return;
@@ -821,7 +558,7 @@ reHilite:
 	characterToCheck = [completeString characterAtIndex:cursorLocation];
 	int skipMatchingBrace = 0;
 	
-	[(REditorTextStorage*)[textView textStorage] resetHighlights];
+	[textView resetHighlights];
 	if (characterToCheck == ')') openingChar='(';
 	else if (characterToCheck == ']') openingChar='[';
 	else if (characterToCheck == '}') openingChar='{';
@@ -832,7 +569,7 @@ reHilite:
 			unichar c = [completeString characterAtIndex:cursorLocation];
 			if (c == openingChar) {
 				if (!skipMatchingBrace) {
-					[(REditorTextStorage*)[textView textStorage] highlightCharacter:cursorLocation];
+					[textView highlightCharacter:cursorLocation];
 					return;
 				} else
 					skipMatchingBrace--;
@@ -851,7 +588,7 @@ reHilite:
 				unichar c = [completeString characterAtIndex:cursorLocation];
 				if (c == openingChar) {
 					if (!skipMatchingBrace) {
-						[(REditorTextStorage*)[textView textStorage] highlightCharacter:cursorLocation];
+						[textView highlightCharacter:cursorLocation];
 						return;
 					} else
 						skipMatchingBrace--;
@@ -860,41 +597,6 @@ reHilite:
 			}
 		}
 	}
-}
-
-- (void)textStorageDidProcessEditing:(NSNotification *)aNotification {
-	NSTextStorage *ts = [aNotification object];
-	NSString *s = [ts string];
-	NSRange er = [ts editedRange];
-	
-	/* get all lines that span the range that was affected. this impementation updates only lines containing the change, not beyond */
-	NSRange lr = [s lineRangeForRange:er];
-	
-	//lr.length = [ts length]-lr.location; // change everything up to the end of the document ...
-	
-	SLog(@"line range %d:%d (original was %d:%d), cil=%d", lr.location, lr.length, er.location, er.length, [ts changeInLength]);
-	[self updateSyntaxHighlightingForRange:lr];
-	if (!deleteBackward) {
-		NSRange sr = [textView selectedRange];
-		if (showMatchingBraces) [self highlightBracesWithShift:0 andWarn:YES];
-		// check for a typed (
-		if (argsHints && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
-			int i = sr.location-1;
-			unichar c = [s characterAtIndex:i];
-			BOOL hasLit = NO;
-			while ((c>='0' && c<='9') || (c>='a' && c<='z') || (c>='A' && c<='Z') || c=='.' || c=='_') {
-				if (!hasLit && ((c>='a' && c<='z') || (c>='A' && c<='Z'))) hasLit=YES;
-				i--;
-				if (i<0) break;
-				c = [s characterAtIndex:i];
-			}
-			i++;
-			if (hasLit && sr.location>i)
-				[self hintForFunction: [s substringWithRange:NSMakeRange(i,sr.location-i)]];
-		}
-	}
-	deleteBackward = NO;
-	
 }
 
 - (BOOL)textView:(NSTextView *)textViewSrc doCommandBySelector:(SEL)commandSelector {
@@ -920,7 +622,9 @@ reHilite:
 			int last=csr.location;
 			int whiteSpaces=0, addShift=0;
 			BOOL initial=YES;
+			BOOL caretIsAdjacentCurlyBrackets = NO;
 			NSString *wss=@"\n";
+			NSString *wssForClosingCurlyBracket = @"";
 			while (i<last) {
 				unichar c=[s characterAtIndex:i];
 				if (initial) {
@@ -935,110 +639,142 @@ reHilite:
 			}
 			if (whiteSpaces>0)
 				wss = [wss stringByAppendingString:[s substringWithRange:NSMakeRange(lr.location,whiteSpaces)]];
+			if([s characterAtIndex:last-1] == '{' && [s characterAtIndex:last] == '}') {
+				wssForClosingCurlyBracket = [NSString stringWithString:wss];
+				caretIsAdjacentCurlyBrackets = YES;
+			}
 			while (addShift>0) { wss=[wss stringByAppendingString:@"\t"]; addShift--; }
 			// add an undo checkpoint before actually committing the changes
-			[self setUndoBreakpoint];
+			[textView breakUndoCoalescing];
 			[textView insertText:wss];
+
+			// if caret is adjacent by {} add new line with the original indention
+			// and place the caret one line up at the line's end
+			if(caretIsAdjacentCurlyBrackets) {
+				[textView insertText:wssForClosingCurlyBracket];
+				[textView doCommandBySelector:@selector(moveUp:)];
+				[textView doCommandBySelector:@selector(moveToEndOfLine:)];
+			}
 			return YES;
 		}
 		}
-    if (showMatchingBraces) {
+    if (showMatchingBraces && ![self plain]) {
 		if (commandSelector == @selector(deleteBackward:)) {
-			deleteBackward = YES;
+			[textView setDeleteBackward:YES];
 		}
 		if (commandSelector == @selector(moveLeft:))
 			[self highlightBracesWithShift: -1 andWarn:NO];
 		if(commandSelector == @selector(moveRight:))
 			[self highlightBracesWithShift: 0 andWarn:NO];
-	}	
+	}
 	return retval;
 }
 
 - (NSArray *)textView:(NSTextView *)aTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
 {
-	NSRange sr=[aTextView selectedRange];
-	NSTextStorage * ts = [aTextView textStorage];
-	NSString * s = [ts string];
-	NSRange lr = [s lineRangeForRange:sr];
+
+	NSRange sr = [aTextView selectedRange];
+
+	unsigned caretPosition = NSMaxRange(sr);
+
 	SLog(@"completion attempt; cursor at %d, complRange: %d-%d", sr.location, charRange.location, charRange.location+charRange.length);
 
-	NSString *rep=nil;
-	NSRange er = NSMakeRange(lr.location,sr.location+sr.length-lr.location);
-	NSString *text = [[aTextView attributedSubstringFromRange:er] string];
-			
-	// first we need to find out whether we're in a text part or code part
-	unichar c;
-	int tl = [text length], tp=0, quotes=0, dquotes=0, lastQuote=-1;
-	while (tp<tl) {
-		c=[text characterAtIndex:tp];
-		if (c=='\\') tp++; // skip the next char after a backslash (we don't have to worry about \023 and friends)
-		else {
-			if (dquotes==0 && c=='\'') {
-				quotes^=1;
-				if (quotes) lastQuote=tp;
-			}
-			if (quotes==0 && c=='"') {
-				dquotes^=1;
-				if (dquotes) lastQuote=tp;
-			}
-		}
-		tp++;
-	}
-	
-	if (quotes+dquotes>0) { // if we're inside any quotes, use file completion
-							//rep=[FileCompletion complete:[text substringFromIndex:lastQuote+1]];
-		er.location+=lastQuote+1;
-		er.length-=lastQuote+1;
-		return [FileCompletion completeAll:[text substringFromIndex:lastQuote+1] cutPrefix:0];
-	} else { // otherwise use code completion
-		int s = [text length]-1;
-		c = [text characterAtIndex:s];
-		while (((c>='a')&&(c<='z'))||((c>='A')&&(c<='Z'))||((c>='0')&&(c<='9'))||c=='.') {
-			s--;
-			if (s==-1) break;
-			c = [text characterAtIndex:s];
-		}
-		s++;
-		er.location+=s; er.length-=s;
-		//rep=[CodeCompletion complete:[text substringFromIndex:s]];
-		*index=0;
-		{
-			NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
-			if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[(NSString*)[ca objectAtIndex:0] length]-1]];
-			return ca;
-		}
-	}
-	
-	// ok, by now we should get "rep" if completion is possible and "er" modified to match the proper part
-	if (rep!=nil) {
-		*index=0;
-		return [NSArray arrayWithObjects: rep, @"dummy", nil];
-		//[aTextView replaceCharactersInRange:er withString:rep];
-	}
+	*index=0;
 
-	return nil;
+	// avoid selecting of token if nothing was found
+	[textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
+
+	// For better current function detection we pass maximal 1000 left from caret
+	return [CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
+												 inTextView:aTextView];
+
 }
 
-/*
- Here we only break the modal loop for the R_Edit call. Wether a window
- is to be saved on exit or no, is up to Cocoa
- */ 
+- (void)textViewDidChangeSelection:(NSNotification *)aNotification
+{
+
+	if(argsHints && ![[self document] hasREditFlag] && ![self plain]) {
+
+		// show functions hints due to current caret position or selection
+		SLog(@"RDocumentWinCtrl: textViewDidChangeSelection and calls currentFunctionHint");
+
+		RTextView *tv = [aNotification object];
+
+		// Cancel pending currentFunctionHint calls
+		[NSObject cancelPreviousPerformRequestsWithTarget:tv 
+								selector:@selector(currentFunctionHint) 
+								object:nil];
+
+		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
+
+	}
+}
+
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
+{
+
+	SLog(@"RDocumentWinCtrl: sheetDidEnd: returnCode: %d contextInfo: %@", returnCode, contextInfo);
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	// callback for "Go To Line Number"
+	if([contextInfo isEqualToString:@"goToLine"]) {
+		if(returnCode == 1) {
+			NSRange currentLineRange = NSMakeRange(0, 0);
+			NSString *s = [[textView textStorage] string];
+			int lineCounter = 0;
+			int l = [goToLineField intValue];
+
+			while(lineCounter++ < l)
+				currentLineRange = [s lineRangeForRange:NSMakeRange(NSMaxRange(currentLineRange), 0)];
+
+			SLog(@" - go to line %d", l);
+			// select found line
+			[textView setSelectedRange:currentLineRange];
+			// scroll to found line
+			[textView centerSelectionInVisibleArea:nil];
+			// remove selection after 300ms
+			[textView performSelector:@selector(moveLeft:) withObject:nil afterDelay:0.3];
+
+		}
+	}
+
+	// Make window at which the sheet was attached key window
+	[[self window] makeKeyWindow];
+
+}
 
 - (BOOL)windowShouldClose:(id)sender
 {
+
 	SLog(@"RDocumentWinCtrl%@.windowShouldClose: (doc=%@, win=%@, self.rc=%d)", self, [self document], [self window], [self retainCount]);
-	if([[self document] hasREditFlag]) {
-		[NSApp stopModal];
-		[(RDocument*)[self document] setREditFlag: NO];
-	}
-	//[[self document] close];
-	//[[[RDocumentController sharedDocumentController] currentDocument] close];
+
+	// Cancel pending calls
+	[NSObject cancelPreviousPerformRequestsWithTarget:textView 
+							selector:@selector(currentFunctionHint) 
+							object:nil];
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:textView 
+							selector:@selector(doSyntaxHighlighting) 
+							object:nil];
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(functionRescan) 
+							object:nil];
+
 	return YES;
+
 }
 
 - (void) close
 {
-	SLog(@"RDocumentWinCtrl<%@>.close", self);
+	SLog(@"RDocumentWinCtrl<%@>.close", self);	
 	[super close];
 }
 
@@ -1049,78 +785,95 @@ reHilite:
 
 - (IBAction)comment: (id)sender
 {
-	NSRange sr = [textView selectedRange];
-	NSTextStorage *ts = [textView textStorage];
 
-	@try { // make this safe in case we cross some bounds
-		if (sr.length==0) { // just place a # at the carret
-			[textView insertText:@"#"];
+	NSRange sr = [textView selectedRange];
+
+	if (sr.length == 0) { // comment out the current line only by inserting a "# " after the indention
+
+		SLog(@"RDocumentWinCtrl: comment current line");
+		NSRange lineRange = [[textView string] lineRangeForRange:sr];
+		// for empty line simply insert "# "
+		if(!lineRange.length) {
+			SLog(@" - empty line thus insert # only");
+			[textView insertText:@"# "];
 			return;
 		}
-		// the length is non-zero, so we get something
-		NSString *s = [[ts string] substringWithRange:sr];
-		
-		// the hard way - Tiger and earlier don't have "stringByReplacingOccurrencesOfString:withString:"
-		const char *str = [s UTF8String], *c = str;
-		int reps = 0; // count the # of ocurrences
-		while (*c) if (*(c++)=='\n') reps++;
-		int i = strlen(str), j = i + reps + 2, k = i + reps;
-		char *tm = malloc(j);
-		if (!tm) return;
-		tm[0]='#';
-		tm[--j]=0; // fill the string backwards, including # as needed
-		while (--i >= 0) {
-			if (str[i]=='\n') tm[--j]='#';
-			tm[--j]=str[i];
-		}
-		// if the selection ended by a newline, don't comment that one out - doing so might look counter-intuitive
-		if (k > 0 && tm[k]=='#' && tm[k-1]=='\n') tm[k]=0;
-		s = [NSString stringWithUTF8String:tm];
-		free(tm);		
-		
-		// s = [s stringByReplacingOccurrencesOfString:@"\n" withString:@"\n#"];
-		// if (s) s = [@"#" stringByAppendingString:s];
-		if (s) [ts replaceCharactersInRange:sr withString:s];
-		sr.length = [s length];
+		[textView setSelectedRange:lineRange];
+
+		// set undo break point
+		[textView breakUndoCoalescing];
+		// insert commented string
+		[textView insertText:
+			[[[textView string] substringWithRange:lineRange] stringByReplacingOccurrencesOfRegex:@"^(\\s*)(.*)" 
+					withString:[NSString stringWithFormat:@"%@# %@", @"$1", @"$2"]]
+			];
+		// restore cursor position
+		sr.location+=2;
 		[textView setSelectedRange:sr];
+		return;
 	}
-	@catch (NSException *e) {
-	}	
+
+	SLog(@"RDocumentWinCtrl: comment selected block");
+
+	// comment out the selected block by inserting a "# " after the indention for each line;
+	// empty lines won't be commented out
+	NSMutableString *selectedString = [NSMutableString stringWithCapacity:sr.length];
+	[selectedString setString:[[textView string] substringWithRange:sr] ];
+	// handle first line separately since it doesn't start with a \n or \r
+	NSRange firstLineRange = [selectedString lineRangeForRange:NSMakeRange(0,0)];
+	NSString *firstLineString = [[selectedString substringWithRange:firstLineRange] stringByReplacingOccurrencesOfRegex:@"^(\\s*)(.*)" 
+		withString:[NSString stringWithFormat:@"%@# %@", @"$1", @"$2"]];
+	[selectedString replaceCharactersInRange:firstLineRange withString:firstLineString];
+	NSString *commentedString = [selectedString stringByReplacingOccurrencesOfRegex:@"(?m)([\r\n]+)(\\s*)(?=\\S)" 
+			withString:[NSString stringWithFormat:@"%@%@# ", @"$1", @"$2"]];
+	[textView setSelectedRange:sr];
+
+	// set undo break point
+	[textView breakUndoCoalescing];
+	// insert commented string
+	[textView insertText:commentedString];
+	// restore selection
+	[textView setSelectedRange:NSMakeRange(sr.location, [commentedString length])];
+
 }
 
 - (IBAction)uncomment: (id)sender
 {
+
 	NSRange sr = [textView selectedRange];
-	NSTextStorage *ts = [textView textStorage];
-	
-	@try { // make this safe in case we cross some bounds
-		if (sr.length==0 ) { // just place a # at the carret
-			//[textView insertText:@"#"];
+
+	if (sr.length == 0) { // uncomment the current line only
+
+		SLog(@"RDocumentWinCtrl: uncomment current line");
+		NSRange lineRange = [[textView string] lineRangeForRange:sr];
+		// for empty line does nothing
+		if(!lineRange.length) {
+			SLog(@" - no line found");
 			return;
 		}
-		// the length is non-zero, so we get something
-		NSString *s = [[ts string] substringWithRange:sr];
-
-		const char *str = [s UTF8String];
-		int i = strlen(str), j = 0, k = 0;
-		char *tm = malloc(i);
-		if (str[j]=='#') j++;
-		while (j < i) {
-			tm[k++]=str[j++];
-			if (str[j-1]=='\n' && str[j]=='#') j++;
-		}
-		tm[k]=0;
-		s = [NSString stringWithUTF8String:tm];
-		free(tm);		
 		
-		// Leopard: s = [s stringByReplacingOccurrencesOfString:@"\n#" withString:@"\n"];
-
-		if (s) [ts replaceCharactersInRange:sr withString:s];
-		sr.length = [s length];
-		[textView setSelectedRange:sr];
+		[textView setSelectedRange:lineRange];
+		// set undo break point
+		[textView breakUndoCoalescing];
+		NSString *uncommentedString = [[[textView string] substringWithRange:lineRange] stringByReplacingOccurrencesOfRegex:
+			@"^(\\s*)(# ?)" withString:@"$1"];
+		[textView insertText:uncommentedString];
+		// restore cursor position
+		[textView setSelectedRange:NSMakeRange(sr.location - lineRange.length + [uncommentedString length], 0)];
+		return;
 	}
-	@catch (NSException *e) {
-	}	
+
+	SLog(@"RDocumentWinCtrl: uncomment selected block");
+
+	// uncomment selected block
+	NSString *uncommentedString = [[[textView string] substringWithRange:sr] stringByReplacingOccurrencesOfRegex:
+		@"(?m)^(\\s*)(# ?)" withString:@"$1"];
+	// set undo break point
+	[textView breakUndoCoalescing];
+	[textView insertText:uncommentedString];
+	// restore selection
+	[textView setSelectedRange:NSMakeRange(sr.location, [uncommentedString length])];
+
 }
 
 - (IBAction)executeSelection:(id)sender
@@ -1250,4 +1003,14 @@ reHilite:
 	return fnListView;
 }
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+
+	if ([menuItem action] == @selector(comment:) || [menuItem action] == @selector(uncomment:))  {
+		id firstResponder = [[NSApp keyWindow] firstResponder];
+		return ([firstResponder respondsToSelector:@selector(isEditable)] && [firstResponder isEditable]);
+	}
+
+	return YES;
+}
 @end

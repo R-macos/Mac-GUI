@@ -35,165 +35,134 @@
 #import "PreferenceKeys.h"
 #import "QuartzCocoaDocument.h"
 
+
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
 #undef error
 #endif
 
-@interface RDocumentController (Private)
-int docListLimit = 128; // limit for the number of transitions stored
-int docListPos = 0; // active position in the list
-NSDocument **docList; // list of activated documents
-NSDocument *mainDoc; // dummy document representing the main R window in the list
-@end
-
-
 @implementation RDocumentController
 
 - (id)init {
+
 	self = [super init];
+
 	SLog(@"RDocumentController%@.init", self);
-	mainDoc = [[NSDocument alloc] init];
-	docList = (NSDocument**) malloc(sizeof(NSDocument*) * docListLimit);
-	memset(docList, 0, sizeof(NSDocument*) * docListLimit);
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidBecomeKeyNotifications:) name:NSWindowDidBecomeKeyNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillCloseNotifications:) name:NSWindowWillCloseNotification object:nil];
+
+	if(self) {
+
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(windowWillCloseNotifications:) 
+													 name:NSWindowWillCloseNotification 
+												   object:nil];
+
+	}
+
 	return self;
+
 }
 
 - (void) dealloc {
+
+	SLog(@"RDocumentController%@.dealloc", self);
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
-	free(docList);
-	[mainDoc release];
 	[super dealloc];
+
 }
 
 - (void)windowWillCloseNotifications:(NSNotification*) aNotification
 {
+
 	NSWindow *w = [aNotification object];
-	if (w) {
+
+	if (w && (
+			   [[[w delegate] className] isEqualToString:@"RDocumentWinCtrl"] 
+			|| [[[w delegate] className] isEqualToString:@"QuartzCocoaView"])
+			) {
+
 		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
-		if ([w isKindOfClass:[NSColorPanel class]]) return; // don't mess with wells or the color will change (PR#13625)
-		NSDocument *d = [self documentForWindow:w];
-		SLog(@"RDocumentController%@.window%@WillCloseNotifications document:%@", self, w, d);
-		if (!d && w == [[RController sharedController] window])
-			d = mainDoc;
-		else if (!d) { /* if no document is associated wit this window, check whether this is a Quartz Cocoa window */
-			NSView *v = [w contentView];
-			SLog(@" - contentView = %@", v);
-			if (v && [[v className] isEqual:@"QuartzCocoaView"]) { // it's a Quartz window created by R - assign a fake document to it
-				d = [[QuartzCocoaDocument alloc] initWithWindow:w];
-				[d makeWindowControllers];
-				[[NSDocumentController sharedDocumentController] addDocument:d];
-				[d release];
-			}
+
+		RDocument *d = [self documentForWindow:w];
+		SLog(@" - document for window: %@", d);
+
+		// if no document is associated wit this window, check whether this is a Quartz Cocoa window
+		if (!d && [[[w delegate] className] isEqualToString:@"QuartzCocoaView"]) {
+			d = [[QuartzCocoaDocument alloc] initWithWindow:w];
+			[d makeWindowControllers];
+			[[NSDocumentController sharedDocumentController] addDocument:d];
+			[d release];
+			SLog(@" - added dummy Quartz Cocoa window document");
 		}
-		if (d) {
-			SLog(@" - document: %@", d);
-			if (docList[docListPos] && docList[docListPos]!=d) {
-				docListPos++;
-				if (docListPos<0 || docListPos>=docListLimit) docListPos=0;			
-			}
-			docList[docListPos]=d;
-		}
+		
 		d = [self documentForWindow:w];
-		SLog(@"RDocumentController%@.window%@WillCloseNotifications document:%@", self, w, d);
-		if (!d) docListPos++; // HACK: since walkKeyListBack does docListPos-- first, by increasing it we get the current doc which is what we want when an unknown window got closed (e.g. preferences)
-		NSWindow *ww = [self walkKeyListBack];
-		[ww makeKeyWindow];
-		// FIXME: this is an ugly hack - our windows never get released and this is just cosmetics to remove them from the window list even though they exist
+		SLog(@" - document:%@ of type %@", d, [d fileType]);
+
+		// make the next window of the same docType the key window and order it out;
+		// if no window of the same docType is found make the RConsole the key window
+		NSWindow *nextWindow = [self findNextWindowForDocType:[d fileType]];
+
+		// if document hasREditFlag set focus back to RConsole AND if sanety check fails
+		BOOL reditcheck = ([[self currentDocument] respondsToSelector:@selector(hasREditFlag)]);
+		if((!reditcheck || (reditcheck && ![[self currentDocument] hasREditFlag])) 
+				&& nextWindow && nextWindow != w) {
+			SLog(@" - makeKeyWindow with title %@ and type %@", [nextWindow title], [d fileType]);
+			[nextWindow makeKeyAndOrderFront:nil];
+		} else {
+			SLog(@" - makeKeyWindow RConsole");
+			[[[RController sharedController] window] makeKeyAndOrderFront:nil];
+		}
+
 		[NSApp removeWindowsItem: w];
+
 	}
 }
 
-- (void)windowDidBecomeKeyNotifications:(NSNotification*) aNotification
+- (NSWindow*)findLastWindowForDocType:(NSString*)aType
 {
-	NSWindow *w = [aNotification object];
-	if (w) {
-		SLog(@"RDocumentController%@.windowDidBecomeKeyNotifications:%@", self, w);
-		NSDocument *d = [self documentForWindow:w];
-		if (!d && w == [[RController sharedController] window])
-			d = mainDoc;
-		else if (!d) { /* if no document is associated wit this window, check whether this is a Quartz Cocoa window */
-			NSView *v = [w contentView];
-			SLog(@" - contentView = %@", v);
-			if (v && [[v className] isEqual:@"QuartzCocoaView"]) { // it's a Quartz window created by R - assign a fake document to it
-				d = [[QuartzCocoaDocument alloc] initWithWindow:w];
-				[d makeWindowControllers];
-				[[NSDocumentController sharedDocumentController] addDocument:d];
-				[d release];
+	return [self findWindowForDocType:aType getLast:YES];
+}
+
+- (NSWindow*)findNextWindowForDocType:(NSString*)aType
+{
+	return [self findWindowForDocType:aType getLast:NO];
+}
+
+- (NSWindow*)findWindowForDocType:(NSString*)aType getLast:(BOOL)getLast;
+{
+	SLog(@"RDocumentController%@.findWindowForDocType: %@ getLast: %d", self, aType, getLast);
+
+	NSArray *appWindows = [NSApp orderedWindows]; // Get all windows
+	int i;
+	Class searchClass = nil;
+
+	// set search class due to window's delegates
+	if([aType isEqualToString:ftRSource])
+		searchClass = NSClassFromString(@"RDocumentWinCtrl");
+	else if([aType isEqualToString:ftQuartz])
+		searchClass = NSClassFromString(@"QuartzCocoaView");
+
+	// bail by returning main window if no search class defined
+	if(!searchClass) {
+		SLog(@" - passed docType unknown, return console window");
+		return [[RController sharedController] window];
+	}
+
+	// loop through windows to find first/next window for desired docType
+	for(i=0; i<[appWindows count]; i++) {
+		id win = [appWindows objectAtIndex:i];
+		if([win isVisible] && [[win delegate] isKindOfClass:searchClass]) {
+			if(getLast) {
+				SLog(@" - found window with title '%@'", [win title]);
+				return win;
 			}
-		}
-		if (d) {
-			SLog(@" - document: %@", d);
-			if (docList[docListPos] && docList[docListPos]!=d) {
-				docListPos++;
-				if (docListPos<0 || docListPos>=docListLimit) docListPos=0;			
-			}
-			docList[docListPos]=d;
+			getLast = YES;
 		}
 	}
-}
 
-- (NSWindow*) walkKeyListBack
-{
-	docListPos--;
-	if (docListPos<0) {
-		docListPos = docListLimit - 1;
-		while (docListPos>=0 && !docList[docListPos]) docListPos--;
-		if (docListPos<0) docListPos=0;
-	}
-	NSDocument *d = docList[docListPos];
-	NSWindow *w = nil;
-	SLog(@" - walkKeyListBack: doc=%@", d);
-	if (!d || d==mainDoc) return [[RController sharedController] window];
-	NSArray *a = [d windowControllers];
-	if (a && [a count]>0)
-		w = [[a objectAtIndex:0] window];
-	else
-		w = [[RController sharedController] window];
-	return w;
-}
-
-- (NSWindow*) findLastDocType: (NSString*) aType
-{
-	SLog(@"RDocumentController%@.findLastDocType: %@", self, aType);
-	int i=docListPos;
-	while(1) {
-		i--;
-		if (i<0) {
-			i = docListLimit - 1;
-			while (i>=0 && !docList[i]) i--;
-			if (i<0) i=0;
-		}
-		if (i==docListPos) break; // we're in a loop
-		NSString *dt = [docList[i] fileType];
-		if (dt) {
-			SLog(@" * %@ -> %@", docList[i], dt);
-			if ([dt isEqualToString:aType]) break;
-		}
-	}
-	NSDocument *d = docList[i];
-	if (!d || d==mainDoc) return [[RController sharedController] window];
-	NSArray *a = [d windowControllers];
-	if (a && [a count]>0)
-		return [[a objectAtIndex:0] window];
+	// bail by returning main window
+	SLog(@" - no window found for passed docType, return console window");
 	return [[RController sharedController] window];
-}
 
-- (NSWindow*) walkKeyListForward
-{
-	docListPos++;
-	if (docListPos >= docListLimit) docListPos=0;
-	NSDocument *d = docList[docListPos];
-	NSWindow *w = nil;
-	if (!d || d==mainDoc) return [[RController sharedController] window];
-	NSArray *a = [d windowControllers];
-	if (a && [a count]>0)
-		w = [[a objectAtIndex:0] window];
-	else
-		w = [[RController sharedController] window];
-	return w;
 }
 
 - (IBAction)newDocument:(id)sender {
@@ -205,7 +174,17 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	[super newDocument:sender];
 }
 
-- (id) openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument  error:(NSError **)theError {
+- (void)noteNewRecentDocument:(id)doc
+{
+
+	// suppress showing of doc in recent files if doc was called via REdit
+	if([[RController sharedController] isREditMode]) return;
+
+	[super noteNewRecentDocument:doc];
+
+}
+
+- (id) openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)theError {
 	if (absoluteURL == nil) {
 		SLog(@"RDocumentController.openDocumentWithContentsOfURL with null URL. Nothing to do.");
 		return nil;
@@ -227,7 +206,7 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	}			
 
 	SLog(@" - call super -> openDocumentWithContentsOfURL: %@", aFile);
-	NSDocument *doc = nil;
+	RDocument *doc = nil;
 	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
 	if (doc == nil) {				
 		/* WARNING: this is a hack for cases where the document type 
@@ -238,8 +217,6 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 		if (doc) {
 			SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
 			[self addDocument:doc];
-			[doc makeWindowControllers];
-			if (displayDocument && [self shouldCreateUI]) [doc showWindows];
 		} else {
 			SLog(@" * failed, returning nil");
 		}
@@ -267,25 +244,6 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	system([cmd UTF8String]);	
 }
 
-- (void)removeDocument:(NSDocument *)document {
-	int i=0, j=0, newPos=0;
-	SLog(@"RDocumentController(%@).removeDocument: %@\n", self, document);
-	
-	// remove all references of the document from the doc list
-	while (i<docListLimit) {
-		if (i==docListPos)
-			newPos=(docList[i]==document)?j-1:j; 
-		if (docList[i] != document &&
-			(j==0 || docList[j-1] != document)) { docList[j]=docList[i]; j++; };
-		i++;
-	}
-	if (newPos<0) newPos=0;
-	while (j<docListLimit) docList[j++]=nil;
-	docListPos=newPos;
-	
-	[super removeDocument:document];
-}
-
 - (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel forTypes:(NSArray *)extensions
 {
 	// TODO: add accessory view for open file encoding - it's tricky because we don't have a document yet so we can't use the convenient way that we use in the save panel
@@ -300,5 +258,4 @@ NSDocument *mainDoc; // dummy document representing the main R window in the lis
 	NSInteger res = [self run
 			 }
 */
-
 @end

@@ -25,42 +25,65 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  RScriptEditorTextView.h
+ *
+ *  Created by Hans-J. Bibiko on 15/02/2011.
+ *
  */
 
-/* HelpManager */
-
 #import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
-#import <WebKit/WebFrame.h>
+#import "RTextView.h"
+#import "Preferences.h"
+#import "PreferenceKeys.h"
+#import "RegexKitLite.h"
+#import "NoodleLineNumberView.h"
+#import "REditorToolbar.h"
 
-#define kExactMatch 10
-#define kFuzzyMatch 11
+#define R_TEXT_SIZE_TRIGGER_FOR_PARSING_PARTLY 10000
 
-@interface HelpManager : NSObject
+@interface RScriptEditorTextView : RTextView <PreferencesDependent>
 {
-	IBOutlet WebView *HelpView;
-	IBOutlet NSSearchField *searchField;
-	IBOutlet NSWindow *helpWindow;
-	IBOutlet NSButton *forward;
-	IBOutlet NSButton *back;
 
-	int searchType;
-	NSString *home;
+	IBOutlet NSScrollView *scrollView;
+
+	NSUserDefaults *prefs;
+
+	NSColor *shColorNormal;
+	NSColor *shColorString;
+	NSColor *shColorNumber;
+	NSColor *shColorKeyword;
+	NSColor *shColorComment;
+	NSColor *shColorIdentifier;
+
+	id editorToolbar;
+	NoodleLineNumberView *theRulerView;
+
+	BOOL lineNumberingEnabled;
+	BOOL syntaxHighlightingEnabled;
+	BOOL argsHints;
+	BOOL lineWrappingEnabled;
+	BOOL deleteBackward;
+	BOOL showMatchingBraces;
+	BOOL startListeningToBoundChanges;
+
+	int currentHighlight;
+	double braceHighlightInterval; // interval to flash brace highlighting for
+
+	NSTextStorage *theTextStorage;
+
+	NSDictionary *highlightColorAttr;
 }
 
-- (IBAction)runHelpSearch:(id)sender;
-- (IBAction)showMainHelp:(id)sender;
-- (IBAction)showRFAQ:(id)sender;
-- (IBAction)whatsNew:(id)sender;
-- (IBAction)changeSearchType:(id)sender;
+- (void)setTabStops;
 
-- (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic; // displays results only, used by help() in 2.1 and later
-- (void)showHelpFor:(NSString *)topic; // runs a search
+- (void)setDeleteBackward:(BOOL)delBack;
+- (void)doSyntaxHighlighting;
+- (void)highlightCharacter:(int)pos;
+- (void)resetHighlights;
+- (void)resetBackgroundColor:(id)sender;
 
-+ (id) sharedController;
-- (IBAction)printDocument:(id)sender;
-- (NSWindow*) window;
 
-- (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
+- (void)updatePreferences;
 
 @end

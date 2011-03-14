@@ -42,6 +42,7 @@ static id sharedController;
 {
 	[RDataSource setDoubleAction:@selector(loadRData:)];
 	[RDataSource setDataSource: dataSource];
+	[dataInfoView setFrameLoadDelegate:self];
 }
 
 - (id)init
@@ -128,6 +129,49 @@ static id sharedController;
 {
 	[self reloadData];
 	[DataManagerWindow makeKeyAndOrderFront:self];
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	// Check our notification object is our table
+	if ([aNotification object] != RDataSource) return;
+
+	// Update Info delayed
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showHelp:) 
+							object:RDataSource];
+
+	[self performSelector:@selector(showHelp:) withObject:RDataSource afterDelay:0.5];
+	
+}
+
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
+{
+	[DataManagerWindow makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)printDocument:(id)sender
+{
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showHelp:) 
+							object:RDataSource];
+
+	NSPrintInfo *printInfo;
+	NSPrintOperation *printOp;
+	
+	printInfo = [NSPrintInfo sharedPrintInfo];
+	[printInfo setHorizontalPagination: NSFitPagination];
+	[printInfo setVerticalPagination: NSAutoPagination];
+	[printInfo setVerticallyCentered:NO];
+	
+	printOp = [NSPrintOperation printOperationWithView:[[[dataInfoView mainFrame] frameView] documentView] 
+											 printInfo:printInfo];
+	[printOp setShowPanels:YES];
+	[printOp runOperationModalForWindow:[self window] 
+							   delegate:self 
+						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						    contextInfo:@""];
 }
 
 @end

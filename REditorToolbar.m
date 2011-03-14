@@ -56,9 +56,9 @@
 		tiHelpSearch = [[NSToolbarItem alloc] initWithItemIdentifier: RETI_HelpSearch];
 		NSView *myView = [winCtrl searchToolbarView];
 		// Set up the standard properties 
-		[tiHelpSearch setLabel:@"Search"];
-		[tiHelpSearch setPaletteLabel:@"Search"];
-		[tiHelpSearch setToolTip:@"Search Help"];
+		[tiHelpSearch setLabel:NLS(@"Search")];
+		[tiHelpSearch setPaletteLabel:NLS(@"Search")];
+		[tiHelpSearch setToolTip:NLS(@"Search Help")];
 		// Use a custom view, a rounded text field, attached to searchFieldOutlet in InterfaceBuilder as the custom view 
 		SLog(@" - tiHelpSearch=%@, view=%@", tiHelpSearch, myView);
 		[tiHelpSearch setView:myView];
@@ -66,7 +66,7 @@
 		[tiHelpSearch setMaxSize:NSMakeSize(300,NSHeight([myView frame]))];
 		// Create the custom menu (alternative if icons are disabled)
 		NSMenu *submenu=[[NSMenu alloc] init];
-		NSMenuItem *submenuItem=[[NSMenuItem alloc] initWithTitle: @"Search Panel"
+		NSMenuItem *submenuItem=[[NSMenuItem alloc] initWithTitle: NLS(@"Search Panel")
 								   action: @selector(searchUsingSearchPanel:)
 							    keyEquivalent: @""];
 		NSMenuItem *menuFormRep=[[NSMenuItem alloc] init];
@@ -81,9 +81,9 @@
 		
 		myView = [winCtrl fnListView];
 		tiFnList = [[NSToolbarItem alloc] initWithItemIdentifier: RETI_FnList];
-		[tiFnList setLabel:@"Functions"];
-		[tiFnList setPaletteLabel:@"Functions"];
-		[tiFnList setToolTip:@"List of Functions"];
+		[tiFnList setLabel:NLS(@"Functions")];
+		[tiFnList setPaletteLabel:NLS(@"Functions")];
+		[tiFnList setToolTip:NLS(@"List of Functions")];
 		SLog(@" - tiFnList=%@, view=%@", tiFnList, myView);
 		[tiFnList setView:myView];
 		[tiFnList setMinSize:NSMakeSize(100,NSHeight([myView frame]))];

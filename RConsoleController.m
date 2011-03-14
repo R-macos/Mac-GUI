@@ -64,11 +64,7 @@
 	[[console enclosingScrollView] setDrawsBackground:NO];
 	
 	[console setFont:[NSFont userFixedPitchFontOfSize:currentFontSize]];
-	// [fontSizeStepper setIntValue:currentFontSize];
-    // theFont=[RTextView font];
-    // theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
-    // [RTextView setFont:theFont];
-	
+
 	// make sure the input caret has the right color
 	if (0) {
 		NSMutableDictionary *md = [[console typingAttributes] mutableCopy];
@@ -79,7 +75,6 @@
 	
 	[console setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
 	
-	//	[RTextView changeColor: inputColor];
 	[console display];
 }
 

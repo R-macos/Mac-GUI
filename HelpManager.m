@@ -121,10 +121,21 @@ static id sharedHMController;
 	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", help_type='html'))",searchString]];
 #endif
 	if ((x==nil) || ([x string]==NULL)) {
-		NSString *topicString = [[[NSString alloc] initWithString: @"Topic: "] stringByAppendingString:searchString];
+		NSString *topicString = [NSString stringWithFormat:@"Topic: %@", searchString];
 		int res = NSRunInformationalAlertPanel(NLS(@"Can't find help for topic, would you like to expand the search?"), topicString, NLS(@"No"), NLS(@"Yes"), nil);
 		if (!res)
 			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", searchString]];
+		else {
+			// if user dismiss alert panel set focus back to caller window
+			NSArray *orderedWindows = [NSApp orderedWindows];
+			int i;
+			for(i=0; i<[orderedWindows count]; i++) {
+				if([[orderedWindows objectAtIndex:i] isVisible]) {
+					[[orderedWindows objectAtIndex:i] makeKeyAndOrderFront:nil];
+					return;
+				}
+			}
+		}
 		return;
 	}
 #if R_VERSION < R_Version(2, 10, 0)
@@ -214,17 +225,9 @@ static id sharedHMController;
 - (IBAction)printDocument:(id)sender
 {
 	NSPrintInfo *printInfo;
-	NSPrintInfo *sharedInfo;
 	NSPrintOperation *printOp;
-	NSMutableDictionary *printInfoDict;
-	NSMutableDictionary *sharedDict;
 	
-	sharedInfo = [NSPrintInfo sharedPrintInfo];
-	sharedDict = [sharedInfo dictionary];
-	printInfoDict = [NSMutableDictionary dictionaryWithDictionary:
-		sharedDict];
-	
-	printInfo = [[NSPrintInfo alloc] initWithDictionary: printInfoDict];
+	printInfo = [NSPrintInfo sharedPrintInfo];
 	[printInfo setHorizontalPagination: NSFitPagination];
 	[printInfo setVerticalPagination: NSAutoPagination];
 	[printInfo setVerticallyCentered:NO];

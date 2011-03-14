@@ -582,6 +582,9 @@
 //	}
 	if ([activePane respondsToSelector:@selector(willUnselect)])
 		[(id)activePane willUnselect];
+	// Close opened NSColorPanel if Preferences window will be closed
+	if([NSColorPanel sharedColorPanelExists])
+		[[NSColorPanel sharedColorPanel] close];
 }
 
 - (void)windowDidClose:(NSNotification *)aNotification

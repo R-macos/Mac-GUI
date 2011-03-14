@@ -35,6 +35,11 @@
 #import "RController.h"
 #import "Preferences.h"
 
+// R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
+#ifdef error
+#undef error
+#endif
+
 @implementation RDocument
 
 - (id)init
@@ -54,10 +59,8 @@
 
 - (void)close {
 	SLog(@"RDocument.close <%@> (wctrl=%@)", self, myWinCtrl);
-	if (initialContents) [initialContents release];
-	initialContents=nil;
-	if (initialContentsType) [initialContentsType release];
-	initialContentsType=nil;
+	if (initialContents) [initialContents release], initialContents=nil;
+	if (initialContentsType) [initialContentsType release], initialContentsType=nil;
 	if (myWinCtrl) {
 		SLog(@" - window: %@", [myWinCtrl window]);
 		[self removeWindowController:myWinCtrl];
@@ -70,6 +73,7 @@
 		[myWinCtrl release];
 		myWinCtrl=nil;
 	}
+	
 	[super close];
 }
 
@@ -92,6 +96,7 @@
 	// create RDocumentWinCtrl which is a window controller - it loads the corresponding NIB and sets up the window
 	myWinCtrl = [[RDocumentWinCtrl alloc] initWithWindowNibName:@"RDocument"];
 	[self addWindowController:myWinCtrl];
+	
 }
 
 - (NSString*)windowNibName
@@ -110,6 +115,18 @@
 	documentEncoding = (NSStringEncoding) encoding;
 }
 
+- (void)didSaveSelector
+{
+	// Remain focus on current document after closing SaveAs panel
+	[[myWinCtrl window] makeKeyWindow];
+}
+
+- (void)runModalSavePanelForSaveOperation:(NSSaveOperationType)saveOperation delegate:(id)delegate didSaveSelector:(SEL)didSaveSelector contextInfo:(void *)contextInfo
+{
+	// dispatch didSaveSelector: in order to remain input focus to current document
+	[super runModalSavePanelForSaveOperation:saveOperation delegate:self didSaveSelector:@selector(didSaveSelector) contextInfo:contextInfo];
+}
+
 // customize Save panel by adding "encoding" view
 - (BOOL)prepareSavePanel:(NSSavePanel *)savePanel
 {
@@ -125,6 +142,7 @@
 
 - (void) loadInitialContents
 {
+
 	if (!initialContents) {
 		SLog(@"RDocument.loadInitialContents: empty contents, skipping");
 		return;
@@ -140,36 +158,47 @@
 		} else {
 			const unsigned char *ic = [initialContents bytes];
 			documentEncoding = NSUTF8StringEncoding;
-			if (ic[0] == 0xff && ic[1] == 0xfe) // Unicode BOM
+			if ([initialContents length] > 1 
+					&& ((ic[0] == 0xff && ic[1] == 0xfe) || (ic[0] == 0xfe && ic[1] == 0xff))) // Unicode BOM
 				documentEncoding = NSUnicodeStringEncoding;
-			NSString *csa = [NSString alloc];
-			NSString *cs = [csa initWithData:initialContents encoding:documentEncoding];
+
+			NSString *cs = [[NSString alloc] initWithData:initialContents encoding:documentEncoding];
+			if(!cs && [self fileURL]) {
+				SLog(@" - failed to load as %d encoding, try to autodetect via initWithContentsOfURL:documentEncoding:error:", documentEncoding);
+				cs = [[NSString alloc] initWithContentsOfURL:[self fileURL] usedEncoding:&documentEncoding error:nil];
+			}
+			if (!cs) { // fall back to Latin1 since it's widely used
+				SLog(@" - failed to load as %d encoding, falling back to Latin1", documentEncoding);
+				documentEncoding = NSISOLatin1StringEncoding;
+				cs = [[NSString alloc] initWithData:initialContents encoding:documentEncoding];
+			}
 			if (!cs) { // fall back to MacRoman - old default
 				SLog(@" - failed to load as %d encoding, falling back to MacRoman", documentEncoding);
 				documentEncoding = NSMacOSRomanStringEncoding;
-				cs = [csa initWithData:initialContents encoding:documentEncoding];
+				cs = [[NSString alloc] initWithData:initialContents encoding:documentEncoding];
 			}
-			if (!cs)
-				[csa release];
-			else {
+			if (cs) {
 				SLog(@" - new string contents (%d chars) for window controller %@", [cs length], wc);
 				// Important! otherwise the save box won't know
 				[wc setFileEncoding:documentEncoding];
-				[wc replaceContentsWithString: cs];
-				[cs release];
+				[wc replaceContentsWithString:cs];
 			}
+			[cs release];
 		}
 	}
+
+	// release initialContents to clean heap esp. for large files
+	if(initialContents) [initialContents release], initialContents=nil;
+
 }
 
 - (void) reinterpretInEncoding: (NSStringEncoding) encoding
 {
 	NSString *sc = [myWinCtrl contentsAsString];
 	NSData *data = [sc dataUsingEncoding:documentEncoding];
-	NSString *nsa = [NSString alloc];
-	NSString *ns = [nsa initWithData:data encoding:encoding];
+	NSString *ns = [[NSString alloc] initWithData:data encoding:encoding];
 	if (!ns) {
-		[nsa release];
+		[ns release];
 		// TODO: alert: invalid in that encoding
 		return;
 	}
@@ -201,24 +230,24 @@ create the UI for the document.
 - (BOOL)readFromFile:(NSString *)fileName ofType:(NSString *)docType{
 	if( [docType isEqual:@"R Data File"] || [[RController sharedController] isImageData:fileName] == 0){
 		[[RController sharedController] sendInput: [NSString stringWithFormat:@"load(\"%@\")",fileName]];
-		[[NSDocumentController sharedDocumentController]  setShouldCreateUI:NO];
+		// [[NSDocumentController sharedDocumentController]  setShouldCreateUI:NO];
 		return(YES);
 	} else {
-		[[NSDocumentController sharedDocumentController]  setShouldCreateUI:YES];
+		// [[NSDocumentController sharedDocumentController] setShouldCreateUI:YES];
 		return( [super readFromFile: fileName ofType: docType] );
 	}
 }
 
 - (BOOL) loadDataRepresentation: (NSData *)data ofType:(NSString *)aType {
-	if (initialContents) {
-		[initialContents release];
-		initialContents=nil;
-	}
-	
+
+	if (initialContents) [initialContents release], initialContents=nil;
+	if (initialContentsType) [initialContentsType release], initialContentsType = nil;
+
 	initialContentsType = [[NSString alloc] initWithString:aType];
+
 	initialContents = [data retain];
+
 	SLog(@"RDocument.loadDataRepresentation loading %d bytes of data", [data length]);
-	[self loadInitialContents];
 
 	return YES;
 }

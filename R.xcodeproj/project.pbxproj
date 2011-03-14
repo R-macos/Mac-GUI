@@ -177,6 +177,15 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		BC12B313130A65CE009F7D3F /* RScriptEditorTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */; };
+		BC12B314130A65CE009F7D3F /* RScriptEditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */; };
+		BC12DC4A130EC12900FB39CE /* NoodleLineNumberView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */; };
+		BC12DC4B130EC12900FB39CE /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */; };
+		BCCE4A38130AB3C6003325EB /* RScriptEditorTokens.h in Headers */ = {isa = PBXBuildFile; fileRef = BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */; };
+		BCCE4A3A130AB3E3003325EB /* RScriptEditorTokens.l in Sources */ = {isa = PBXBuildFile; fileRef = BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */; };
+		BCD7EC911301A4950050850E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD7EC901301A4950050850E /* libicucore.dylib */; };
+		BCD7EC951301A5190050850E /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = BCD7EC931301A5190050850E /* RegexKitLite.h */; };
+		BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD7EC941301A5190050850E /* RegexKitLite.m */; };
 		D41DED4C073B3EE400B900F2 /* EditorPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */; };
 		D41DED4D073B3EE400B900F2 /* EditorPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */; };
 		D41DED55073B3F8000B900F2 /* EditorPrefPane.nib in Resources */ = {isa = PBXBuildFile; fileRef = D41DED53073B3F8000B900F2 /* EditorPrefPane.nib */; };
@@ -417,6 +426,15 @@
 		68FC52F508F45C2E0061413F /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/Vignettes.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTextView.h; sourceTree = "<group>"; };
+		BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorTextView.m; sourceTree = "<group>"; };
+		BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoodleLineNumberView.h; sourceTree = "<group>"; };
+		BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoodleLineNumberView.m; sourceTree = "<group>"; };
+		BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTokens.h; sourceTree = "<group>"; };
+		BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = RScriptEditorTokens.l; sourceTree = "<group>"; };
+		BCD7EC901301A4950050850E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = /usr/lib/libicucore.dylib; sourceTree = "<absolute>"; };
+		BCD7EC931301A5190050850E /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		BCD7EC941301A5190050850E /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorPrefPane.h; sourceTree = "<group>"; };
 		D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorPrefPane.m; sourceTree = "<group>"; };
 		D41DED54073B3F8000B900F2 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
@@ -448,6 +466,7 @@
 				167BE02106D5143A005381BB /* WebKit.framework in Frameworks */,
 				162D387C06F71A3000C0936C /* Security.framework in Frameworks */,
 				6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */,
+				BCD7EC911301A4950050850E /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +501,7 @@
 				167BE02006D5143A005381BB /* WebKit.framework */,
 				1674D23406BA2E37008AC794 /* R.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				BCD7EC901301A4950050850E /* libicucore.dylib */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -677,6 +697,7 @@
 		29B97314FDCFA39411CA2CEA /* R */ = {
 			isa = PBXGroup;
 			children = (
+				BCD7EC921301A4EF0050850E /* Regex Engine */,
 				16A25F63072AAD110047E009 /* AMPrefs */,
 				16A25F57072AACF40047E009 /* PrefPanes */,
 				1602BB2D0719702800805588 /* docs */,
@@ -758,6 +779,12 @@
 		687B4E400794165600074042 /* Editor */ = {
 			isa = PBXGroup;
 			children = (
+				BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */,
+				BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */,
+				BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */,
+				BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */,
+				BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */,
+				BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */,
 				D490C1EA07B400870034B42F /* RRulerView.h */,
 				D490C1EB07B400870034B42F /* RRulerView.m */,
 				687B4F9507944B8000074042 /* REditorTextStorage.h */,
@@ -783,6 +810,15 @@
 				687B503A07945D4C00074042 /* RConsoleTextStorage.m */,
 			);
 			name = Console;
+			sourceTree = "<group>";
+		};
+		BCD7EC921301A4EF0050850E /* Regex Engine */ = {
+			isa = PBXGroup;
+			children = (
+				BCD7EC931301A5190050850E /* RegexKitLite.h */,
+				BCD7EC941301A5190050850E /* RegexKitLite.m */,
+			);
+			name = "Regex Engine";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -847,6 +883,10 @@
 				68F84C6209ABB2BF0098D772 /* privateR.h in Headers */,
 				6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */,
 				6807116E0EB0CD4200436993 /* InfoPlist.h in Headers */,
+				BCD7EC951301A5190050850E /* RegexKitLite.h in Headers */,
+				BC12B313130A65CE009F7D3F /* RScriptEditorTextView.h in Headers */,
+				BCCE4A38130AB3C6003325EB /* RScriptEditorTokens.h in Headers */,
+				BC12DC4A130EC12900FB39CE /* NoodleLineNumberView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1085,6 +1125,10 @@
 				68AAC9EA08F41CBB0064CDA1 /* PDFImageView.m in Sources */,
 				68AAC9EE08F41CD80064CDA1 /* VignettesController.m in Sources */,
 				6880A0F40DBE886200FC684F /* QuartzCocoaDocument.m in Sources */,
+				BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */,
+				BC12B314130A65CE009F7D3F /* RScriptEditorTextView.m in Sources */,
+				BCCE4A3A130AB3E3003325EB /* RScriptEditorTokens.l in Sources */,
+				BC12DC4B130EC12900FB39CE /* NoodleLineNumberView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

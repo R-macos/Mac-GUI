@@ -59,10 +59,8 @@
 #import "RController.h"
 #import "REngine/Rcallbacks.h"
 #import "REngine/REngine.h"
-#import "RConsoleTextStorage.h"
 #import "RDocumentWinCtrl.h"
 #import "Quartz/QuartzDevice.h"
-
 #import "Tools/Authorization.h"
 
 #import "Preferences.h"
@@ -79,6 +77,8 @@
 #define writeBufferHighWaterMark  (DEFAULT_WRITE_BUFFER_SIZE-4096)
 // low water-mark of the buffer - if less than the water mark is available then the buffer will be flushed
 #define writeBufferLowWaterMark   2048
+
+#define kR_WebViewSearchWindowHeight 27
 
 /*  RController.m: main GUI code originally based on Simon Urbanek's work of embedding R in Cocoa app (RGui?)
 The Code and File Completion is due to Simon U.
@@ -122,6 +122,14 @@ int R_SetOptionWidth(int);
 #import <sys/fcntl.h>
 
 static RController* sharedRController;
+
+@interface R_WebViewSearchWindow : NSWindow
+@end
+
+@implementation R_WebViewSearchWindow
+- (BOOL)canBecomeKeyWindow { return YES; }
+- (BOOL)acceptsMouseMovedEvents { return YES; }
+@end
 
 @interface NSApplication (ScriptingSupport)
 - (id)handleDCMDCommand:(NSScriptCommand*)command;
@@ -167,6 +175,7 @@ static RController* sharedRController;
 	terminating = NO;
 	processingEvents = NO;
 	breakPending = NO;
+	isREditMode = NO;
 	outputPosition = promptPosition = committedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
@@ -176,6 +185,7 @@ static RController* sharedRController;
 	readConsTransBufferSize = 1024; // initial size - will grow as needed
 	readConsTransBuffer = (char*) malloc(readConsTransBufferSize);
 	textViewSync = [[NSString alloc] initWithString:@"consoleTextViewSemahphore"];
+	searchInWebViewWindow = nil;
 	
 	consoleColorsKeys = [[NSArray alloc] initWithObjects:
 		backgColorKey, inputColorKey, outputColorKey, promptColorKey,
@@ -189,7 +199,12 @@ static RController* sharedRController;
 	textFont = [[NSFont userFixedPitchFontOfSize:currentFontSize] retain];
 		
 	specialCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"\r\b\a"] retain];
-	
+
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(windowWillCloseNotifications:) 
+												 name:NSWindowWillCloseNotification 
+											   object:nil];
+
 	return self;
 }
 
@@ -263,12 +278,12 @@ static RController* sharedRController;
 	[consoleTextView setConsoleMode: YES];
 	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
 	NSTextStorage *origTS = [[consoleTextView textStorage] retain];
-	RConsoleTextStorage * textStorage = [[RConsoleTextStorage alloc] init];
+	textStorage = [[RConsoleTextStorage alloc] init];
 	[origTS removeLayoutManager:lm];
 	[textStorage addLayoutManager:lm];
 	[lm release];
 	[origTS release];
-	
+
 	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];
 	
 	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
@@ -563,28 +578,21 @@ static RController* sharedRController;
 	fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
 	if (([pendingDocsToOpen count] == 0) && 
 		([[NSFileManager defaultManager] fileExistsAtPath: fname])) {
-		NSString *cmd;
-		cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
-		cmd = [cmd stringByAppendingString: @"\")"]; 
-		[[REngine mainEngine] executeString:cmd];
-		NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n"];		
-		[self handleWriteConsole: msg];
+		[[REngine mainEngine] executeString: [NSString stringWithFormat:@"load(\"%@\")", fname]];
+		[self handleWriteConsole: [NSString stringWithFormat:@"%@%@]\n", NLS(@"[Workspace restored from "), fname]];
 		SLog(@"RController.applicationDidFinishLaunching - load workspace %@", fname);
 	}
-    fname = [[Preferences stringForKey:historyFileNamePathKey withDefault: @".Rapp.history"] stringByExpandingTildeInPath];
-    if ([Preferences flagForKey:importOnStartupKey withDefault:YES] && ([[NSFileManager defaultManager] fileExistsAtPath: fname])) {
-        NSString *fullfname = [NSString stringWithString:fname];
-        if ([fname characterAtIndex:0] != '/') {
-            fullfname = [[[[[NSFileManager defaultManager] currentDirectoryPath] 
-                           stringByAppendingString:@"/"] stringByAppendingString: fname]
-                         stringByExpandingTildeInPath];
-        }
-        NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[History restored from ")] 
-                          stringByAppendingString: fullfname] 
-                         stringByAppendingString: @"]\n\n"];		
-        [self handleWriteConsole: msg];
+	fname = [[Preferences stringForKey:historyFileNamePathKey withDefault: @".Rapp.history"] stringByExpandingTildeInPath];
+	if ([Preferences flagForKey:importOnStartupKey withDefault:YES] && ([[NSFileManager defaultManager] fileExistsAtPath: fname])) {
+		NSString *fullfname = [NSString stringWithString:fname];
+		if ([fname characterAtIndex:0] != '/') {
+			fullfname = [[[[[NSFileManager defaultManager] currentDirectoryPath] 
+				stringByAppendingString:@"/"] stringByAppendingString: fname]
+				stringByExpandingTildeInPath];
+		}
+		[self handleWriteConsole: [NSString stringWithFormat:@"%@%@]\n\n", NLS(@"[History restored from "), fullfname]];
 		SLog(@"RController.applicationDidFinishLaunching - load history file %@", fname);
-    }
+	}
     
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
 	[RConsoleWindow makeKeyAndOrderFront:self];
@@ -797,7 +805,21 @@ static RController* sharedRController;
 // call our -changeFontSize: action.
 -(IBAction) fontSizeBigger:(id)sender
 {
-	if ([RConsoleWindow isKeyWindow]) {
+
+	id firstResponder = [[NSApp keyWindow] firstResponder];
+
+	// Check if first responder is a WebView
+	if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+		// Try to get the corresponding WebView
+		id aWebFrameView = [[[firstResponder superview] superview] superview];
+		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
+			if(aWebView) {
+				[aWebView makeTextLarger:sender];
+			}
+		}
+	}
+	else if ([RConsoleWindow isKeyWindow]) {
 		[fontSizeStepper setIntValue:[fontSizeStepper intValue]+1];
 		[self changeFontSize:NULL];
 	} else
@@ -809,7 +831,21 @@ static RController* sharedRController;
 // call our -changeFontSize: action.
 -(IBAction) fontSizeSmaller:(id)sender
 {
-	if ([RConsoleWindow isKeyWindow]) {
+
+	id firstResponder = [[NSApp keyWindow] firstResponder];
+
+	// Check if first responder is a WebView
+	if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+		// Try to get the corresponding WebView
+		id aWebFrameView = [[[firstResponder superview] superview] superview];
+		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
+			if(aWebView) {
+				[aWebView makeTextSmaller:sender];
+			}
+		}
+	}
+	else if ([RConsoleWindow isKeyWindow]) {
 		[fontSizeStepper setIntValue:[fontSizeStepper intValue]-1];
 		[self changeFontSize:NULL];
 	} else
@@ -879,9 +915,14 @@ extern BOOL isTimeToFinish;
 - (void) dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
+	if(currentWebViewForFindAction) [currentWebViewForFindAction release];
+	if(searchInWebViewWindow) [searchInWebViewWindow release], searchInWebViewWindow = nil;
 	[defaultConsoleColors release];
 	[consoleColors release];
 	[consoleColorsKeys release];
+	[textStorage release];
+	[consoleInputQueue release];
+	[pendingDocsToOpen release];
 	[super dealloc];
 }
 
@@ -1015,7 +1056,6 @@ extern BOOL isTimeToFinish;
 	BOOL inEditing = NO;
 	@try {
 		@synchronized(textViewSync) {
-			RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
 			NSRange origSel = [consoleTextView selectedRange];
 			unsigned tl = [txt length];
 			int delta = 0;
@@ -1076,7 +1116,6 @@ extern BOOL isTimeToFinish;
     [self handleFlushConsole];
 	outputOverwrite=0; // disable any overwrites
 	@synchronized(textViewSync) {
-		RConsoleTextStorage *textStorage = (RConsoleTextStorage*) [consoleTextView textStorage];
 		unsigned textLength = [textStorage length];
 		int promptLength=[prompt length];
 //		NSLog(@"Prompt: %@", prompt);
@@ -1195,24 +1234,48 @@ extern BOOL isTimeToFinish;
 		//[pool release];
 		return 0;
 	}
-	NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
+	NSURL *url = [NSURL fileURLWithPath:fn];
 	NSError *theError;
-	RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+	isREditMode = YES;
+	RDocument *document = [[RDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
 	[document setREditFlag: YES];
-	
 	NSArray *wcs = [document windowControllers];
-	if ([wcs count]<1) {
-		SLog(@"handleEdit: WARNING, no window controllers for newly created document!");
-	} else {
-		NSWindowController *wc = (NSWindowController*)[wcs objectAtIndex:0];
-		NSWindow *win = [wc window];
-		if (win) [NSApp runModalForWindow:win];
-		else { SLog(@"handleEdit: WARNING, window is null!"); };
-		if ([wcs count]>1) {
-			SLog(@"handleEdit: WARNING, there is more than one window controller, ignoring all but the first one.");
-		}
+	if (![wcs count]) {
+		[document makeWindowControllers];
+		wcs = [document windowControllers];
+		SLog(@" - created windowController");
 	}
-	
+
+	NSWindow *win = [[wcs objectAtIndex:0] window];
+	if (win) {
+
+		// run win as modal session but allow RDocumentWinCtrl to
+		// manage win like initial syntax highlighting, edit status controlling,
+		// undo behaviour etc.
+		NSModalSession session = [NSApp beginModalSessionForWindow:win];
+		for (;;) {
+
+			// Break the run loop if win was closed
+			if ([NSApp runModalSession:session] != NSRunContinuesResponse 
+				|| ![win isVisible]) 
+				break;
+
+			// Allow the execution of code on DefaultRunLoop
+			[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
+									 beforeDate:[NSDate distantFuture]];
+
+		}
+		[NSApp endModalSession:session];
+
+	} else {
+		SLog(@"handleEdit: WARNING, window is null!");
+	}
+	if ([wcs count]>1) {
+		SLog(@"handleEdit: WARNING, there is more than one window controller, ignoring all but the first one.");
+	}
+
+	isREditMode = NO;
+
 #ifdef USE_POOLS
 	[pool release];
 #endif
@@ -1226,14 +1289,14 @@ extern BOOL isTimeToFinish;
     
 	SLog(@"RController.handleEditFiles (%d of them, pager %s)", nfile, pager);
 	if (nfile <=0) return 1;
-	
+	isREditMode = YES;
 	for (i = 0; i < nfile; i++) {
 		NSString *fn = [NSString stringWithUTF8String:file[i]];
 		if (fn) fn = [fn stringByExpandingTildeInPath];
 		SLog(@"file #%d: %@", i + 1, fn);
 		if (fn) {
 			if([[NSFileManager defaultManager] fileExistsAtPath:fn]) {
-				NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
+				NSURL *url = [NSURL fileURLWithPath:fn];
 				NSError *theError;
 				[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
 			} else
@@ -1244,38 +1307,46 @@ extern BOOL isTimeToFinish;
 				[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle[i]]];
 		}
 	}
+	isREditMode = NO;
 	return 1;
 }
 
 - (int) handleShowFiles: (int) nfile withNames: (char**) file headers: (char**) headers windowTitle: (char*) wtitle pager: (char*) pages andDelete: (BOOL) del
 {
 	int    	i;
-    
-    if (nfile <=0) return 1;
+
+	if (nfile <=0) return 1;
 	SLog(@"RController.handleShowFiles (%d of them, title %s, pager %s)", nfile, wtitle, pages);
-	
-    for (i = 0; i < nfile; i++){
+
+	isREditMode = YES;
+	for (i = 0; i < nfile; i++){
 		NSString *fn = [NSString stringWithUTF8String:file[i]];
-		if (fn) fn =[fn stringByExpandingTildeInPath];
+		if (fn) fn = [fn stringByExpandingTildeInPath];
 		if (fn) {
-			NSURL *url = [[NSURL alloc] initFileURLWithPath:fn];
+			NSURL *url = [NSURL fileURLWithPath:fn];
 			NSError *theError;
-			RDocument *document = [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+			RDocument *document = [[RDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
 			// don't display - we need to prevent the window controller from using highlighting
 			if (document) {
 				NSArray *wcs = [document windowControllers];
+				if (![wcs count]) {
+					[document makeWindowControllers];
+					wcs = [document windowControllers];
+					SLog(@" - created windowController");
+				}
 				if (wcs && [wcs count]>0) {
 					SLog(@" - Disabling syntax highlighting for this document");
 					[(RDocumentWinCtrl*) [wcs objectAtIndex:0] setPlain:YES];
 				}
 				if (wtitle)
-					[RDocument changeDocumentTitle: document Title: [NSString stringWithUTF8String:wtitle]];
+					[RDocument changeDocumentTitle: document Title: [NSString stringWithFormat:@"%@ (%@)", [NSString stringWithUTF8String:wtitle], [document displayName]]];
 				[document setEditable: NO];
 				SLog(@" - finally show the document window");
 				[document showWindows];
 			}
 		}
-    }
+	}
+	isREditMode = NO;
 	return 1;
 }
 
@@ -1405,9 +1476,27 @@ extern BOOL isTimeToFinish;
 	return 0;
 }
 
--(void)sheetDidEnd:(NSWindow *)sheet returnCode: (int)returnCode 
-		contextInfo: (void *)contextInfo {
-	[[RController sharedController] makeConsoleKey:self];
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString*)contextInfo
+{
+
+	SLog(@"RController: sheetDidEnd: returnCode: %d contextInfo: %@", returnCode, contextInfo);
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	if([contextInfo isEqualToString:@"saveAsRConsole"]) {
+		if(returnCode == NSOKButton) {
+				[[consoleTextView string] writeToFile:[sheet filename] atomically:YES];
+		}
+	}
+
+	[RConsoleWindow makeKeyWindow];
+
 }
 
 //==========
@@ -1447,9 +1536,17 @@ extern BOOL isTimeToFinish;
 	//return NO;
 	[self didCloseAll:self];
 	SLog(@"RController.windowShouldClose: running modal");
-	BOOL canClose = (BOOL)[[NSApplication sharedApplication] runModalForWindow:RConsoleWindow];
+
+	// since [self didCloseAll:] has already ordered out "Closing R session" alert sheet
+	// try to run R.app modal for that sheet 
+	BOOL canClose = (BOOL)[[NSApplication sharedApplication] runModalForWindow:([RConsoleWindow attachedSheet])?[RConsoleWindow attachedSheet]:RConsoleWindow];
 	SLog(@"RController.windowShouldClose: returning %@", canClose?@"YES":@"NO");
 	// FWIW: canClose is never YES, because didCloseAll: executes quit(..)
+
+	// If user cancelled termination remain input focus to RConsoleWindow for convenience
+	if(!canClose)
+		[RConsoleWindow makeKeyWindow];
+
 	return canClose;
 }	
 	
@@ -1464,6 +1561,39 @@ extern BOOL isTimeToFinish;
 		[[REngine mainEngine] executeString:@"base::quit(\"yes\")"];
     if (returnCode==NSAlertAlternateReturn)
 		[[REngine mainEngine] executeString:@"base::quit(\"no\")"];
+}
+
+
+/**
+ * Closing a window will set the focus to the next window
+ * according ordered window list
+ */
+- (void)windowWillCloseNotifications:(NSNotification*) aNotification
+{
+
+	// NSLog(@"%@:%@", [aNotification object], [[aNotification object] title]);
+
+	// Get all windows
+	NSArray *appWindows = [NSApp orderedWindows];
+	int i;
+
+	// for NSPanels set focus to the first window; otherwise the first window is the to be
+	// closed window thus set focus to the next window
+	BOOL closingWindowFound = ([[aNotification object] isKindOfClass:[NSPanel class]]);
+
+	// loop through windows to find next window
+	// and make it the key window
+	for(i=0; i<[appWindows count]; i++) {
+		id win = [appWindows objectAtIndex:i];
+		if([win isVisible]) {
+			if(closingWindowFound) {
+				[win makeKeyAndOrderFront:nil];
+				return;
+			}
+			closingWindowFound = YES;
+		}
+	}
+	[RConsoleWindow makeKeyAndOrderFront:nil];
 }
 
 /*  This is used to send commands through the GUI, i.e. from menus 
@@ -1561,7 +1691,7 @@ The input replaces what the user is currently typing.
 		[sp setDirectory:[[[NSFileManager defaultManager] currentDirectoryPath] stringByExpandingTildeInPath]];
 		[sp setRequiredFileType:@"history"];
 		[sp setTitle:NLS(@"Save history File")];
-		if([sp runModal] == NSOKButton) fname = [sp filename];		
+		if([sp runModal] == NSOKButton) fname = [sp filename];
 	} else 
 		fname = [[Preferences stringForKey:historyFileNamePathKey
 							   withDefault: kDefaultHistoryFile] stringByExpandingTildeInPath];
@@ -1578,12 +1708,15 @@ The input replaces what the user is currently typing.
 			if ([entry rangeOfString:@"\n" options:NSLiteralSearch].location!=NSNotFound) { // add # before \n for multi-line strings
 				entry = [entry mutableCopy];
 				[(NSMutableString*)entry replaceOccurrencesOfString:@"\n" withString:@"#\n" options:NSLiteralSearch range:NSMakeRange(0,[entry length])];
+				fputs([entry UTF8String], rhist); // not 100% safe
+				[entry release];
+			} else {
+				fputs([entry UTF8String], rhist); // not 100% safe
 			}
-			fputs([entry UTF8String], rhist); // not 100% safe
 			fputc('\n', rhist); // trailing \n
 		}
 
-		fclose(rhist);	
+		fclose(rhist);
 	}
 }
 
@@ -1764,26 +1897,32 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return retval;
 }
 
-- (void)textStorageDidProcessEditing:(NSNotification *)aNotification {
-	NSTextStorage *ts = [aNotification object];
-	NSString *s = [ts string];
-	NSRange sr = [consoleTextView selectedRange];
+- (void)textViewDidChangeSelection:(NSNotification *)aNotification
+{
 
-	// check for a typed (
-	if (argsHints && sr.location>committedLength && sr.length==0 && sr.location>0 && sr.location<[s length] && [s characterAtIndex:sr.location]=='(') {
-		int i = sr.location-1;
-		unichar c = [s characterAtIndex:i];
-		BOOL hasLit = NO;
-		while ((c>='0' && c<='9') || (c>='a' && c<='z') || (c>='A' && c<='Z') || c=='.' || c=='_') {
-			if (!hasLit && ((c>='a' && c<='z') || (c>='A' && c<='Z'))) hasLit=YES;
-			i--;
-			if (i<0) break;
-			c = [s characterAtIndex:i];
+	if(argsHints) {
+
+		// show functions hints due to current caret position or selection
+
+		SLog(@"RController: textViewDidChangeSelection");
+		RTextView *tv = [aNotification object];
+
+		// Cancel pending currentFunctionHint calls
+		[NSObject cancelPreviousPerformRequestsWithTarget:tv 
+								selector:@selector(currentFunctionHint) 
+								object:nil];
+
+		if([tv selectedRange].location >= committedLength && !busyRFlag && [[[tv textStorage] string] lineRangeForRange:[tv selectedRange]].length > 2) {
+			SLog(@"RController: textViewDidChangeSelection called textView's currentFunctionHint");
+			[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
 		}
-		i++;
-		if (hasLit && sr.location>i)
-			[self hintForFunction: [s substringWithRange:NSMakeRange(i,sr.location-i)]];
+	
 	}
+}
+
+- (BOOL)isREditMode
+{
+	return isREditMode;
 }
 
 - (BOOL) hintForFunction: (NSString*) fn
@@ -1825,69 +1964,26 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
 {
-	NSRange sr=[textView selectedRange];
-	SLog(@"completion attempt; cursor at %d, complRange: %d-%d, commit: %d", sr.location, charRange.location, charRange.location+charRange.length, committedLength);
-	//sr=charRange;
-	int bow = sr.location + sr.length;
-	if (bow > committedLength) {
-		while (bow>committedLength) bow--;
-		{
-			NSString *rep=nil;
-			NSRange er = NSMakeRange(bow,sr.location+sr.length-bow);
-			NSString *text = [[textView attributedSubstringFromRange:er] string];
-			
-			// first we need to find out whether we're in a text part or code part
-			unichar c;
-			int tl = [text length], tp=0, quotes=0, dquotes=0, lastQuote=-1;
-			while (tp<tl) {
-				c=[text characterAtIndex:tp];
-				if (c=='\\') tp++; // skip the next char after a backslash (we don't have to worry about \023 and friends)
-				else {
-					if (dquotes==0 && c=='\'') {
-						quotes^=1;
-						if (quotes) lastQuote=tp;
-					}
-					if (quotes==0 && c=='"') {
-						dquotes^=1;
-						if (dquotes) lastQuote=tp;
-					}
-				}
-				tp++;
-			}
-			
-			if (quotes+dquotes>0) { // if we're inside any quotes, use file completion
-				//rep=[FileCompletion complete:[text substringFromIndex:lastQuote+1]];
-				er.location+=lastQuote+1;
-				er.length-=lastQuote+1;
-				return [FileCompletion completeAll:[text substringFromIndex:lastQuote+1] cutPrefix:0];
-			} else { // otherwise use code completion
-				int s = [text length]-1;
-				c = [text characterAtIndex:s];
-				while (((c>='a')&&(c<='z'))||((c>='A')&&(c<='Z'))||((c>='0')&&(c<='9'))||c=='.') {
-					s--;
-					if (s==-1) break;
-					c = [text characterAtIndex:s];
-				}
-				s++;
-				er.location+=s; er.length-=s;
-				//rep=[CodeCompletion complete:[text substringFromIndex:s]];
-				*index=0;
-				{
-					NSArray *ca = [CodeCompletion completeAll:[text substringFromIndex:s] cutPrefix:charRange.location-er.location];
-					if (ca && [ca count]==1) [self hintForFunction:[[ca objectAtIndex:0] substringToIndex:[(NSString*)[ca objectAtIndex:0] length]-1]];
-					return ca;
-				}
-			}
-			
-			// ok, by now we should get "rep" if completion is possible and "er" modified to match the proper part
-			if (rep!=nil) {
-				*index=0;
-				return [NSArray arrayWithObjects: rep, @"dummy", nil];
-				//[textView replaceCharactersInRange:er withString:rep];
-			}
-		}
-	}
-	return nil;
+
+	NSRange sr = [textView selectedRange];
+
+	SLog(@"completion attempt in RConsole; cursor at %d, complRange: %d-%d, commit: %d", sr.location, charRange.location, charRange.location+charRange.length, committedLength);
+
+	int bow = NSMaxRange(sr);
+
+	if (bow <= committedLength) return nil;
+
+	while (bow>committedLength) bow--;
+
+	NSRange er = NSMakeRange(bow, NSMaxRange(sr)-bow);
+
+	*index=0;
+
+	// avoid selecting of token if nothing was found
+	[textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
+
+	return [CodeCompletion retrieveSuggestionsForScopeRange:er inTextView:textView];
+
 }
 
 - (void) handleBusy: (BOOL) isBusy {
@@ -1931,6 +2027,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		cmd = @"quartz()";
 	
 	[[REngine mainEngine] executeString:cmd];
+	// set focus to RConsole
+	[self makeConsoleKey:nil];
 }
 
 - (IBAction)breakR:(id)sender{
@@ -1953,7 +2051,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (IBAction)makeLastQuartzKey:(id)sender
 {
-	NSWindow *w = [(RDocumentController*)[NSDocumentController sharedDocumentController] findLastDocType:ftQuartz];
+	NSWindow *w = [(RDocumentController*)[NSDocumentController sharedDocumentController] findLastWindowForDocType:ftQuartz];
 	NSDocument *d = [[NSDocumentController sharedDocumentController] documentForWindow:w];
 	if (!d || ![d fileType] || ![[d fileType] isEqualToString:ftQuartz]) {
 		/* could not find Quartz window - either there is none or it has never
@@ -1979,7 +2077,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (IBAction)makeLastEditorKey:(id)sender
 {
-	[[(RDocumentController*)[NSDocumentController sharedDocumentController] findLastDocType:ftRSource] makeKeyAndOrderFront:sender];
+	[[(RDocumentController*)[NSDocumentController sharedDocumentController] findLastWindowForDocType:ftRSource] makeKeyAndOrderFront:sender];
 }
 
 - (IBAction)toggleHistory:(id)sender{
@@ -2008,6 +2106,231 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	}
 }
 
+- (IBAction)performFindPanelFindInWebViewAction:(id)sender
+{
+	if(currentWebViewForFindAction) {
+		NSPasteboard *pasteBoard = [NSPasteboard pasteboardWithName:NSFindPboard];
+		NSString *searchString = [searchInWebViewSearchField stringValue];
+		if(![searchString length]) return;
+		[pasteBoard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, nil] owner:nil];
+		[pasteBoard setString:searchString forType:NSStringPboardType];
+		if(![currentWebViewForFindAction searchFor:searchString direction:YES caseSensitive:NO wrap:YES]) NSBeep();
+	}
+}
+
+- (IBAction)performFindPanelAction:(id)sender
+{
+
+	// Handle each performFindPanelAction: - needed due to the fact that a WebView doesn't listen
+	// as first responder to performFindPanelAction:
+	id firstResponder = [[NSApp keyWindow] firstResponder];
+
+	// Check if first responder is a WebView; if so call [[WebView frameLoadDelegate] performFindPanelAction:]
+	// if implemented
+	if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+		// Try to get the corresponding WebView
+		id aWebFrameView = [[[firstResponder superview] superview] superview];
+		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
+			if(aWebView) {
+				// Handle all non-GUI actions here for each WebView
+				if([sender tag] != 1) {
+					NSPasteboard *pasteBoard = [NSPasteboard pasteboardWithName:NSFindPboard];
+					switch([sender tag]) {
+						case 2: // Find Next
+						if(![aWebView searchFor:[pasteBoard stringForType:NSStringPboardType] direction:YES caseSensitive:NO wrap:YES]) NSBeep();
+						break;
+						case 3: // Find Previous
+						if(![aWebView searchFor:[pasteBoard stringForType:NSStringPboardType] direction:NO caseSensitive:NO wrap:YES]) NSBeep();
+						break;
+						case 7: // Use selection for Find
+						[pasteBoard declareTypes:[NSArray arrayWithObjects:NSStringPboardType, nil] owner:nil];
+						[pasteBoard setString:[[aWebView selectedDOMRange] toString] forType:NSStringPboardType];
+						break;
+						default:
+						NSBeep();
+					}
+				}
+				else if([sender tag] == 1) {
+					// Show Find in WebView Find Panel
+
+					// Get webView's enclosing window
+					NSWindow *webViewsEnclosingWindow = [NSApp keyWindow];
+					NSRect winRect = [webViewsEnclosingWindow frame];
+
+					// If the Find Panel is already open close it since it's application-shared
+					if(searchInWebViewWindow)
+						[self closeFindInWebViewSheet:self];
+
+					// Remember the active webView for searching
+					if(currentWebViewForFindAction) [currentWebViewForFindAction release];
+					currentWebViewForFindAction = [aWebView retain];
+					// Increase webView's content bottom margin
+					[[currentWebViewForFindAction windowScriptObject] evaluateWebScript:@"document.body.style.marginBottom='30px';"];
+
+					// Create Find Panel window and place it at the bottom of the enclosing window
+					searchInWebViewWindow = [[[R_WebViewSearchWindow alloc] initWithContentRect:
+						NSMakeRect(
+							winRect.origin.x, 
+							winRect.origin.y, 
+							[[[[currentWebViewForFindAction mainFrame] frameView] documentView] visibleRect].size.width, 
+							kR_WebViewSearchWindowHeight) 
+						styleMask:NSBorderlessWindowMask 
+						backing:NSBackingStoreBuffered 
+						defer:NO] retain];
+
+					// Add observer for resizing if parent window will be resized
+					[[NSNotificationCenter defaultCenter] addObserver:self
+						selector:@selector(resizeSearchInWebViewWindow:)
+						name:NSWindowDidResizeNotification
+						object:[NSApp keyWindow]];
+
+					[searchInWebViewWindow setParentWindow:webViewsEnclosingWindow];
+					[searchInWebViewWindow setContentView:[searchInWebViewSheet contentView]];
+
+					// Preset search field by the current FindPboard's search pattern
+					NSString *currentFindPattern = [[NSPasteboard pasteboardWithName:NSFindPboard] stringForType:NSStringPboardType];
+					if(currentFindPattern)
+						[searchInWebViewSearchField setStringValue:currentFindPattern];
+					[searchInWebViewWindow setInitialFirstResponder:searchInWebViewSearchField];
+
+					[webViewsEnclosingWindow addChildWindow:searchInWebViewWindow ordered:NSWindowAbove];
+
+					[searchInWebViewWindow makeKeyAndOrderFront:nil];
+
+				}
+			}
+			else
+				NSBeep();
+		} else {
+			NSBeep();
+		}
+	}
+	// Find request came from searchInWebViewSearchField 
+	else if(firstResponder == [searchInWebViewSearchField currentEditor] && currentWebViewForFindAction) {
+		NSPasteboard *pasteBoard = [NSPasteboard pasteboardWithName:NSFindPboard];
+		int tag = [sender tag];
+		// if user pressed Find Next/Prev buttons?
+		if([sender isKindOfClass:[NSSegmentedControl class]])
+			tag = ([sender selectedSegment]==0) ? 3 : 2;
+		switch(tag) {
+			case 2: // Find Next
+			if(![currentWebViewForFindAction searchFor:[pasteBoard stringForType:NSStringPboardType] direction:YES caseSensitive:NO wrap:YES]) NSBeep();
+			break;
+			case 3: // Find Previous
+			if(![currentWebViewForFindAction searchFor:[pasteBoard stringForType:NSStringPboardType] direction:NO caseSensitive:NO wrap:YES]) NSBeep();
+			break;
+			default:
+			NSBeep();
+		}
+	}
+	else if([firstResponder respondsToSelector:@selector(performFindPanelAction:)])
+		[firstResponder performFindPanelAction:sender];
+	else
+		NSBeep();
+
+}
+
+- (void)resizeSearchInWebViewWindow:(NSNotification*)aNotification
+{
+
+	if(!searchInWebViewWindow) return;
+
+	// Resize searchInWebViewWindow if parent window will be resized
+	if([aNotification object] == [searchInWebViewWindow parentWindow]) {
+		NSRect winRect = [[searchInWebViewWindow parentWindow] frame];
+		winRect.size.width = [[[[currentWebViewForFindAction mainFrame] frameView] documentView] visibleRect].size.width;
+		winRect.size.height = kR_WebViewSearchWindowHeight;
+		[searchInWebViewWindow setFrame:winRect display:YES];
+	}
+
+}
+
+- (IBAction)closeFindInWebViewSheet:(id)sender
+{
+
+	[[searchInWebViewWindow parentWindow] removeChildWindow:searchInWebViewWindow];
+	[[currentWebViewForFindAction windowScriptObject] evaluateWebScript:@"document.body.style.marginBottom='5px';"];
+	[searchInWebViewWindow orderOut:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+			name:NSWindowDidResizeNotification 
+			object:[searchInWebViewWindow parentWindow]];
+	if(searchInWebViewWindow) [searchInWebViewWindow release], searchInWebViewWindow = nil;
+	if(currentWebViewForFindAction) [currentWebViewForFindAction release], currentWebViewForFindAction = nil;
+
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+
+	if ([menuItem action] == @selector(printDocument:)) {
+
+		id firstResponder = [[NSApp keyWindow] firstResponder];
+
+		// Check if first responder is a WebView
+		// if so call [[WebView frameLoadDelegate] printDocument:] if implemented
+		if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+			id aWebFrameView = [[[firstResponder superview] superview] superview];
+			if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+				WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
+				if(aWebView && [[aWebView frameLoadDelegate] respondsToSelector:@selector(printDocument:)]) {
+					return YES;
+				} else {
+					return NO;
+				}
+			}
+			return NO;
+		}
+
+		return ([firstResponder delegate] && [[firstResponder delegate] respondsToSelector:@selector(printDocument:)]) ? YES : NO;
+
+	}
+	if ([menuItem action] == @selector(performFindPanelAction:)) {
+
+		id firstResponder = [[NSApp keyWindow] firstResponder];
+
+		// Validate "Use Selection for Find", i.e. is something selected
+		if([menuItem tag] == 7) {
+			if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+				// Try to get the corresponding WebView and check if something is selected
+				id aWebFrameView = [[[firstResponder superview] superview] superview];
+				if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+					return ([[[[[(WebFrameView*)aWebFrameView webFrame] webView] selectedDOMRange] toString] length]) ? YES : NO;
+				} else {
+					return NO;
+				}
+			}
+			if([firstResponder respondsToSelector:@selector(selectedRange)])
+				return ([firstResponder selectedRange].length > 0) ? YES : NO;
+			else
+				return NO;
+		}
+
+		// Check if first responder is a WebView
+		if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+			// Try to get the corresponding WebView
+			id aWebFrameView = [[[firstResponder superview] superview] superview];
+			if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+				WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
+				if(aWebView)
+					return YES;
+				else
+					return NO;
+			} else {
+				return NO;
+			}
+		}
+		else if([firstResponder respondsToSelector:@selector(performFindPanelAction:)])
+			return YES;
+		else
+			return NO;
+
+	}
+
+	return YES;
+
+}
+
 - (IBAction)newDocument:(id)sender{
 	[[NSDocumentController sharedDocumentController] newDocument: sender];
 }
@@ -2016,24 +2339,20 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	SLog(@" - application:openFile:%@ called", (NSString *)filename);
 	NSString *dirname = @"";
 	NSString *fname = nil;
-	NSString *cmd;
 	BOOL isDir;
 	BOOL flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
 	NSFileManager *manager = [NSFileManager defaultManager];
 	if ([manager fileExistsAtPath:filename isDirectory:&isDir] && isDir){
-		[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
+		[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
 		if (!flag && !appLaunched) {
-//			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];			
+//			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
 //			[[REngine mainEngine] executeString:@"sys.load.image('.RData', FALSE)"];
 			if ([manager fileExistsAtPath:@".Rprofile"] && ![[manager currentDirectoryPath] isEqualToString:[@"~" stringByExpandingTildeInPath]])
 				[[REngine mainEngine] executeString:@"source(\".Rprofile\")"];
 			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"]]) {
 				fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
-				cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
-				cmd = [cmd stringByAppendingString: @"\")"]; 
-				[[REngine mainEngine] executeString:cmd];
-				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
-				[self handleWriteConsole: msg];
+				[[REngine mainEngine] executeString:[NSString stringWithFormat:@"load(\"%@\")", fname]];
+				[self handleWriteConsole: [NSString stringWithFormat:@"%@%@]\n\n", NLS(@"[Workspace restored from "), fname]];
 			}
 			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
@@ -2042,11 +2361,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			[self sendInput:[NSString stringWithFormat:@"setwd(\"%@\")",[filename stringByExpandingTildeInPath]]];
 			if ([manager fileExistsAtPath:[filename stringByAppendingString:@"/.RData"]]) {
 				fname = [[[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingString: @"/.RData"] stringByExpandingTildeInPath];
-				cmd = [[[NSString alloc] initWithString: @"load(\""] stringByAppendingString: fname];
-				cmd = [cmd stringByAppendingString: @"\")"]; 
-				[[REngine mainEngine] executeString:cmd];
-				NSString *msg = [[[[NSString alloc] initWithString: NLS(@"[Workspace restored from ")] stringByAppendingString: fname] stringByAppendingString: @"]\n\n"];		
-				[self handleWriteConsole: msg];
+				[[REngine mainEngine] executeString:[NSString stringWithFormat:@"load(\"%@\")", fname]];
+				[self handleWriteConsole: [NSString stringWithFormat:@"%@%@]\n\n", NLS(@"[Workspace restored from "), fname]];
 			}
 		}
 	} else {
@@ -2059,13 +2375,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			}
 			dirname = [filename substringWithRange: NSMakeRange(0, j+1)];
 			[manager changeCurrentDirectoryPath:[dirname stringByExpandingTildeInPath]];
-			[self showWorkingDir:nil];					
+			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
 		}
 		BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
 		if (openInEditor || appLaunched) {
-			NSURL *url = [[NSURL alloc] initFileURLWithPath:filename];
+			NSURL *url = [NSURL fileURLWithPath:filename];
 			NSError *theError;
 			SLog(@" - application:openFile path of URL: <%@>", [url absoluteString]);
 			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
@@ -2098,18 +2414,24 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	if (cd)
 		[cd saveDocumentAs:sender];
 	else {
-		int answer;
-		NSSavePanel *sp;
-		sp = [NSSavePanel savePanel];
-		[sp setRequiredFileType:@"txt"];
-		[sp setTitle:NLS(@"Save R Console To File")];
-		answer = [sp runModalForDirectory:nil file:@"R Console.txt"];
-		
-		if(answer == NSOKButton) {
-			[[consoleTextView string] writeToFile:[sp filename] atomically:YES];
-		}
+
+		NSSavePanel *panel = [NSSavePanel savePanel];
+
+		[panel setRequiredFileType:@"txt"];
+		[panel setMessage:NLS(@"Save R Console To File")];
+
+		[panel setExtensionHidden:NO];
+		[panel setAllowsOtherFileTypes:YES];
+		[panel setCanSelectHiddenExtension:YES];
+
+		[panel beginSheetForDirectory:nil 
+								 file:@"R Console.txt" 
+					   modalForWindow:[self window] 
+					    modalDelegate:self 
+					   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						  contextInfo:@"saveAsRConsole"];
+
 	}
-	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction)saveDocument:(id)sender{
@@ -2571,13 +2893,12 @@ This method calls the showHelpFor method of the Help Manager which opens
 	[op setCanChooseDirectories:YES];
 	[op setCanChooseFiles:NO];
 	[op setTitle:NLS(@"Choose New Working Directory")];
+	[op setDirectory:[[NSFileManager defaultManager] currentDirectoryPath]];
 	
-	answer = [op runModalForDirectory:[[NSFileManager defaultManager] currentDirectoryPath] file:nil types:[NSArray arrayWithObject:@""]];
-	
-	if(answer == NSOKButton && [op directory] != nil)
-		[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[op directory] stringByExpandingTildeInPath]];
+	answer = [op runModal];
+	if(answer == NSOKButton && [op filename] != nil)
+		[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[op filename] stringByExpandingTildeInPath]];
 	[self showWorkingDir:sender];
-	[RConsoleWindow makeKeyWindow];
 }
 
 - (IBAction) showWorkingDir:(id)sender
@@ -2674,13 +2995,25 @@ This method calls the showHelpFor method of the Help Manager which opens
 {
 	NSBeginAlertSheet(NLS(@"Clear Workspace"), NLS(@"Yes"), NLS(@"No") , nil, RConsoleWindow, self, @selector(shouldClearWS:returnCode:contextInfo:), NULL, NULL,
 					  NLS(@"All objects in the workspace will be removed. Are you sure you want to proceed?"));
-	[RConsoleWindow makeKeyWindow];
 }
 
 /* this gets called by the "wanna save?" sheet on window close */
-- (void) shouldClearWS:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
-    if (returnCode==NSAlertDefaultReturn)
+- (void) shouldClearWS:(id)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	if (returnCode==NSAlertDefaultReturn)
 		[[REngine mainEngine] executeString: @"rm(list=ls(all=TRUE))"];
+
+	[RConsoleWindow makeKeyWindow];
+
 }
 
 - (IBAction)togglePackageManager:(id)sender
@@ -2729,7 +3062,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	if (answer==NSOKButton)
 		[self loadFile:[op filename]];
-	[RConsoleWindow makeKeyWindow];
+
 }
 
 - (IBAction)sourceFile:(id)sender
@@ -2742,31 +3075,53 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	if (answer==NSOKButton)
 		[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
-	[RConsoleWindow makeKeyWindow];
+
 }
 
 - (IBAction)printDocument:(id)sender
 {
+
+	id firstResponder = [[NSApp keyWindow] firstResponder];
+
+	// Check if first responder is a WebView
+	// if so call [[WebView frameLoadDelegate] printDocument:] if implemented
+	if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
+		id aWebFrameView = [[[firstResponder superview] superview] superview];
+		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
+			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
+			if(aWebView && [[aWebView frameLoadDelegate] respondsToSelector:@selector(printDocument:)]) {
+				[[aWebView frameLoadDelegate] printDocument:sender];
+				return;
+			}
+		}
+	}
+
+	// Check if call didn't come from RConsole and if delegate responds
+	// to printDocument: - if so call it
+	if(![[firstResponder delegate] isKindOfClass:[RController class]] && [firstResponder delegate]
+		&& [[firstResponder delegate] respondsToSelector:@selector(printDocument:)]) {
+		[[firstResponder delegate] printDocument:sender];
+		return;
+	}
+
+	// Print RConsole
 	NSPrintInfo *printInfo;
-	NSPrintInfo *sharedInfo;
 	NSPrintOperation *printOp;
-	NSMutableDictionary *printInfoDict;
-	NSMutableDictionary *sharedDict;
 	
-	sharedInfo = [NSPrintInfo sharedPrintInfo];
-	sharedDict = [sharedInfo dictionary];
-	printInfoDict = [NSMutableDictionary dictionaryWithDictionary:
-		sharedDict];
-	
-	printInfo = [[NSPrintInfo alloc] initWithDictionary: printInfoDict];
-	[printInfo setHorizontalPagination: NSAutoPagination];
+	printInfo = [NSPrintInfo sharedPrintInfo];
+	[printInfo setHorizontalPagination: NSFitPagination];
 	[printInfo setVerticalPagination: NSAutoPagination];
 	[printInfo setVerticallyCentered:NO];
 	
 	printOp = [NSPrintOperation printOperationWithView:consoleTextView 
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
-	[printOp runOperation];
+
+	[printOp runOperationModalForWindow:[self window] 
+							   delegate:self 
+						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						    contextInfo:@""];
+
 }
 
 - (IBAction) setDefaultColors:(id)sender {

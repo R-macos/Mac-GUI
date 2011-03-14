@@ -34,6 +34,8 @@
 
 /* RTextView is a subclass of NSTextView with some additional properties:
    - responds to <Ctrl><.> by sending complete: to self
+   - responds to <Ctrl><h> by sending showHelpForCurrentFunction: to self
+   - handle deleteBackward/Forward for linked matchin pairs
 
  Used by: console and editor
 
@@ -41,9 +43,17 @@
 
 extern BOOL RTextView_autoCloseBrackets;
 
-@interface RTextView : NSTextView {
+@interface RTextView : NSTextView
+{
+	BOOL _isRConsole;
 }
 
-- (void) setConsoleMode: (BOOL) isConsole;
+- (void)setConsoleMode:(BOOL)isConsole;
+
+- (NSRange)getRangeForCurrentWord;
+- (NSRange)getRangeForCurrentWordOfRange:(NSRange)curRange;
+- (int)parserContextForPosition:(int)position;
+- (void)showHelpForCurrentFunction;
+- (void)currentFunctionHint;
 
 @end

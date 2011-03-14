@@ -25,42 +25,23 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  RScriptEditorTokens.h
+ *
+ *  Created by Hans-J. Bibiko on 15/02/2011.
+ *
+ *  This file defines all the tokens used for syntax highlighting R code
+ *  via a lexer.
+ *
  */
 
-/* HelpManager */
-
-#import <Cocoa/Cocoa.h>
-#import <WebKit/WebKit.h>
-#import <WebKit/WebFrame.h>
-
-#define kExactMatch 10
-#define kFuzzyMatch 11
-
-@interface HelpManager : NSObject
-{
-	IBOutlet WebView *HelpView;
-	IBOutlet NSSearchField *searchField;
-	IBOutlet NSWindow *helpWindow;
-	IBOutlet NSButton *forward;
-	IBOutlet NSButton *back;
-
-	int searchType;
-	NSString *home;
-}
-
-- (IBAction)runHelpSearch:(id)sender;
-- (IBAction)showMainHelp:(id)sender;
-- (IBAction)showRFAQ:(id)sender;
-- (IBAction)whatsNew:(id)sender;
-- (IBAction)changeSearchType:(id)sender;
-
-- (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic; // displays results only, used by help() in 2.1 and later
-- (void)showHelpFor:(NSString *)topic; // runs a search
-
-+ (id) sharedController;
-- (IBAction)printDocument:(id)sender;
-- (NSWindow*) window;
-
-- (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
-
-@end
+#define RPT_DOUBLE_QUOTED_TEXT   1
+#define RPT_SINGLE_QUOTED_TEXT   2
+#define RPT_COMMENT              3
+#define RPT_BACKTICK_QUOTED_TEXT 4
+#define RPT_RESERVED_WORD        5
+#define RPT_WHITESPACE           6
+#define RPT_NUMERIC              7
+#define RPT_VARIABLE             8
+#define RPT_WORD                 9
+#define RPT_OTHER               10

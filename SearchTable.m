@@ -53,6 +53,7 @@ static id sharedHSController;
 {
 	[topicsDataSource setTarget: self];
 	[topicsDataSource setDataSource: dataSource];
+	[TopicHelpView setFrameLoadDelegate:self];
 }
 
 - (void)dealloc {
@@ -78,10 +79,30 @@ static id sharedHSController;
 
 - (void) show
 {
-	[self reloadData];
+	[topicsDataSource reloadData];
 	[searchTableWindow setTitle:(windowTitle)?windowTitle:NLS(@"<unknown>")];
 	[searchTableWindow makeKeyAndOrderFront:self];
+	[topicsDataSource deselectAll:nil];
 }
+
+#pragma mark -
+#pragma mark TableView notifications
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	// Check our notification object is our table
+	if ([aNotification object] != topicsDataSource) return;
+
+	// Update Info delayed
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showInfo:) 
+							object:topicsDataSource];
+
+	[self performSelector:@selector(showInfo:) withObject:topicsDataSource afterDelay:0.5];
+	
+}
+
+#pragma mark -
 
 - (IBAction) showInfo:(id)sender
 {
@@ -117,9 +138,33 @@ static id sharedHSController;
 	return sharedHSController;
 }
 
-- (void) reloadData
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
 {
-	[topicsDataSource reloadData];
+	[searchTableWindow makeKeyAndOrderFront:nil];
+}
+
+- (IBAction)printDocument:(id)sender
+{
+
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showInfo:) 
+							object:topicsDataSource];
+
+	NSPrintInfo *printInfo;
+	NSPrintOperation *printOp;
+	
+	printInfo = [NSPrintInfo sharedPrintInfo];
+	[printInfo setHorizontalPagination: NSFitPagination];
+	[printInfo setVerticalPagination: NSAutoPagination];
+	[printInfo setVerticallyCentered:NO];
+	
+	printOp = [NSPrintOperation printOperationWithView:[[[TopicHelpView mainFrame] frameView] documentView] 
+											 printInfo:printInfo];
+	[printOp setShowPanels:YES];
+	[printOp runOperationModalForWindow:[self window] 
+							   delegate:self 
+						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						    contextInfo:@""];
 }
 
 @end

@@ -32,12 +32,12 @@
 #import <Cocoa/Cocoa.h>
 #import "Preferences.h"
 #import "RDocument.h"
-#import "REditorTextStorage.h"
-//#import "RRulerView.h"
+#import "RScriptEditorTextView.h"
+
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
 
-@class RRulerView;
+// @class RRulerView;
 
 extern NSColor *shColorNormal;
 extern NSColor *shColorString;
@@ -48,8 +48,7 @@ extern NSColor *shColorIdentifier;
 
 @interface RDocumentWinCtrl : NSWindowController <PreferencesDependent>
 {
-	IBOutlet NSScrollView *scrollView;
-    IBOutlet NSTextView *textView;
+	IBOutlet id textView;
 	
 	IBOutlet NSView *searchToolbarView;
 	IBOutlet NSSearchField *searchToolbarField;
@@ -64,10 +63,10 @@ extern NSColor *shColorIdentifier;
 	IBOutlet NSTextField *goToLineField;
 
 	IBOutlet NSTextField *statusLine;
-	
+	IBOutlet NSBox *horizontalLine;
+	IBOutlet NSTextField *statusLineBackground;
+
 	IBOutlet NSView *saveOpenAccView;
-	
-    RRulerView *theRulerView;
 	
 	BOOL useHighlighting; // if set to YES syntax highlighting is used
 	BOOL showMatchingBraces; // if YES mathing braces are highlighted
@@ -77,26 +76,23 @@ extern NSColor *shColorIdentifier;
 	
 	int hsType; // help search type
 	
-	double braceHighlightInterval; // interval to flash brace highlighting for
-	NSDictionary *highlightColorAttr; // attributes set while braces matching
-	
 	BOOL updating; // this flag is set while syntax coloring is changed to prevent recursive changes
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
-	
-	id editorToolbar; // toolbar proxy object
 	
 	NSString *helpTempFile; // path to temporary file used for help
 	
 	int currentHighlight; // currently highlighted character
-	
-	REditorTextStorage *textStorage;
+
+	NSDictionary *functionMenuInvalidAttribute;
+	NSDictionary *functionMenuCommentAttribute;
+
 }
 
 - (void) replaceContentsWithString: (NSString*) strContents;
 - (void) replaceContentsWithRtf: (NSData*) rtfContents;
 
-- (void) updateSyntaxHighlightingForRange: (NSRange) range;
 - (void) highlightBracesWithShift: (int) shift andWarn: (BOOL) warn;
+- (void) highlightBracesAfterDidProcessEditing;
 
 - (IBAction)executeSelection:(id)sender;
 - (IBAction)sourceCurrentDocument:(id)sender;

@@ -38,6 +38,7 @@
 #import <sys/types.h>
 
 #import <Cocoa/Cocoa.h>
+#import <WebKit/WebKit.h>
 
 #import "Tools/History.h"
 #import "Tools/ConnectionCache.h"
@@ -48,35 +49,41 @@
 #define NewEditWinToolbarItemIdentifier          @"New Edit Window Item Identifier"
 #define SaveDocToolbarItemIdentifier             @"Save R ConsoleWindow Item Identifier"
 #define	SourceRCodeToolbarIdentifier             @"Source/Load R Code Identifier"
-#define	InterruptToolbarItemIdentifier 	         @"Interrupt Computation Item Identifier"
-#define	NewQuartzToolbarItemIdentifier 	         @"New Quartz Device Item Identifier"
-#define	LoadFileInEditorToolbarItemIdentifier 	 @"Load File in Editor Item Identifier"
-#define	AuthenticationToolbarItemIdentifier 	 @"Authentication Item Identifier"
-#define	ShowHistoryToolbarItemIdentifier 	     @"Show History Item Identifier"
-#define	QuitRToolbarItemIdentifier 	             @"Quit R Item Identifier"
-#define	X11ToolbarItemIdentifier 	             @"X11 Item Identifier"
-#define	SetColorsToolbarItemIdentifier 	         @"SetColors Item Identifier"
+#define	InterruptToolbarItemIdentifier           @"Interrupt Computation Item Identifier"
+#define	NewQuartzToolbarItemIdentifier           @"New Quartz Device Item Identifier"
+#define	LoadFileInEditorToolbarItemIdentifier    @"Load File in Editor Item Identifier"
+#define	AuthenticationToolbarItemIdentifier      @"Authentication Item Identifier"
+#define	ShowHistoryToolbarItemIdentifier         @"Show History Item Identifier"
+#define	QuitRToolbarItemIdentifier               @"Quit R Item Identifier"
+#define	X11ToolbarItemIdentifier                 @"X11 Item Identifier"
+#define	SetColorsToolbarItemIdentifier           @"SetColors Item Identifier"
 
 #import "AMPrefs/AMPreferenceWindowController.h"
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 #import "RTextView.h"
+#import "RConsoleTextStorage.h"
 
 @interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent>
 {
 	IBOutlet RTextView *consoleTextView;
 	IBOutlet NSProgressIndicator *progressWheel;
-	IBOutlet NSTableView *historyView;			/* TableView for the package manager */ 
-	IBOutlet NSTextField *WDirView;				/* Mini-TextField for the working directory */
-	IBOutlet NSSearchField *helpSearch;			/* help search  field */
+	IBOutlet NSTableView *historyView;            /* TableView for the package manager */ 
+	IBOutlet NSTextField *WDirView;               /* Mini-TextField for the working directory */
+	IBOutlet NSSearchField *helpSearch;           /* help search  field */
 	IBOutlet NSButton *clearHistory;
 	IBOutlet NSButton *loadHistory;
 	IBOutlet NSButton *saveHistory;
 	IBOutlet NSButton *deleteEntry;
-    IBOutlet NSDrawer *HistoryDrawer;	
+	IBOutlet NSDrawer *HistoryDrawer;
 	IBOutlet NSWindow *RConsoleWindow;
 	IBOutlet NSTextField *statusLine;
-		
+	IBOutlet NSSearchField *searchInWebViewSearchField;
+	IBOutlet NSPanel *searchInWebViewSheet;
+
+	WebView *currentWebViewForFindAction;
+	id searchInWebViewWindow;
+
 	NSTimer *timer;
 	NSTimer *RLtimer;
 	NSTimer *Flushtimer;
@@ -84,6 +91,7 @@
 	History *hist;
 	NSToolbar *toolbar;
 	NSToolbarItem *toolbarStopItem;
+	RConsoleTextStorage *textStorage;             /* the global Console textStorage */
 	
 	NSString *textViewSync;
 	
@@ -131,6 +139,7 @@
 	BOOL terminating;
 	BOOL processingEvents;
 	BOOL breakPending;
+	BOOL isREditMode;
 	
 	char *writeBuffer;
 	char *writeBufferPos;
@@ -277,5 +286,11 @@
 
 - (NSString*) home;
 - (int) helpServerPort;
+- (BOOL)isREditMode;
+
+- (IBAction)performFindPanelAction:(id)sender;
+- (IBAction)performFindPanelFindInWebViewAction:(id)sender;
+- (IBAction)closeFindInWebViewSheet:(id)sender;
+- (void)resizeSearchInWebViewWindow:(NSNotification*)aNotification;
 @end
 
