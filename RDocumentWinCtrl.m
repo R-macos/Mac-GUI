@@ -545,13 +545,13 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 {
 
 	NSString *completeString = [[textView textStorage] string];
-	unsigned int completeStringLength = [completeString length];
+	NSUInteger completeStringLength = [completeString length];
 	if (completeStringLength < 2) return;
 	
 	NSRange selRange = [textView selectedRange];
-	unsigned int cursorLocation = selRange.location;
-	cursorLocation+=shift; // add any shift as cursor movement guys need it
-	if (cursorLocation<0 || cursorLocation>=completeStringLength) return;
+	NSInteger cursorLocation = selRange.location;
+	cursorLocation += shift; // add any shift as cursor movement guys need it
+	if (cursorLocation < 0 || cursorLocation >= completeStringLength) return;
 	
 	unichar characterToCheck;
 	unichar openingChar = 0;

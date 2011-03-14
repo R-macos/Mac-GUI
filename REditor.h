@@ -37,7 +37,7 @@
 #define AddRowToolbarItemIdentifier      @"Add Row"
 #define RemoveRowsToolbarItemIdentifier  @"Remove Rows"
 
-@interface REditor : NSObject
+@interface REditor : NSObject <NSToolbarDelegate>
 {
     IBOutlet NSTableView *editorSource;
     IBOutlet NSWindow *dataWindow;

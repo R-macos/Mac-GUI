@@ -41,7 +41,7 @@ char* RGUI_Quartz_TranslateFontFamily(char* family, int face, char *devfamily) {
 	if (strlen(family) > 0) {
 		int found = 0;
 		for (i=0; i<nfonts && !found; i++) {
-			char* fontFamily = CHAR(STRING_ELT(fontnames, i));
+			const char* fontFamily = CHAR(STRING_ELT(fontnames, i));
 			if (strcmp(family, fontFamily) == 0) {
 				found = 1;
 				result = SaveFontSpec(VECTOR_ELT(fontdb, i), face-1);

@@ -44,7 +44,7 @@
 
 - (id)initWithIdentifier:(NSString *)theIdentifier label:(NSString *)theLabel category:(NSString *)theCategory
 {
-	if (self = [super init]) {
+	if ((self = [super init])) {
 		[self setIdentifier:theIdentifier];
 		[self setLabel:theLabel];
 		[self setCategory:theCategory];
@@ -260,6 +260,7 @@
 	NSNumber *ival = [[NSNumber alloc] initWithInt:[quartzPrefPaneLocation indexOfSelectedItem]];
 	[Preferences setKey:quartzPrefPaneLocationKey withObject:val];
 	[Preferences setKey:quartzPrefPaneLocationIntKey withObject:ival];
+    [ival release];
 }
 
 - (void) changeQuartzPrefPaneFont:(id)sender {

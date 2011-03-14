@@ -46,15 +46,12 @@
 
 - (id)initWithScrollView:(NSScrollView *)aScrollView orientation:(NSRulerOrientation)orientation showLineNumbers:(BOOL) use textView:(NSTextView *) tv {
 	SLog(@"RRulerView.initWithScrollView setting up line No ruler");
-	showLineNos = use;
-    if (self = [super initWithScrollView: aScrollView orientation: orientation]) 
+    if ((self = [super initWithScrollView: aScrollView orientation: orientation]) )
     {
-        unsigned textViewFontSize = [[tv font] pointSize];
-        if (textViewFontSize <= 10.0) {
-            fontSize = 8.0;
-        } else {
-            fontSize = 9.0;
-        }
+        myTextView = tv;
+        showLineNos = use;
+
+        fontSize = ([[tv font] pointSize] <= 10.0) ? 8.0 : 9.0;
      
 		[self updatePreferences];
 		[[Preferences sharedPreferences] addDependent:self];
@@ -66,12 +63,12 @@
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setAlignment: NSRightTextAlignment];
         
-        [marginAttributes setObject:[[paragraphStyle copy] autorelease] forKey: NSParagraphStyleAttributeName];
+        [marginAttributes setObject:paragraphStyle forKey: NSParagraphStyleAttributeName];
+            [paragraphStyle release];
 		
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
         [nc addObserver:self selector:@selector(windowDidUpdate:) name: NSWindowDidUpdateNotification object: myTextView];
     }
-	myTextView = tv;
 	SLog(@" - line No ruler is done");
     return self;
 }

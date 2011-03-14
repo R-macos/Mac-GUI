@@ -151,7 +151,7 @@
 	SLog(@"RDocument.loadInitialContents: loading");
 	NSEnumerator *e = [[self windowControllers] objectEnumerator];
 	RDocumentWinCtrl *wc = nil;
-	while (wc = (RDocumentWinCtrl*)[e nextObject]) { 
+	while ((wc = (RDocumentWinCtrl*)[e nextObject])) { 
 		if ([initialContentsType isEqual:@"rtf"]) {
 			SLog(@" - new RTF contents (%d bytes) for window controller %@", [initialContents length], wc);
 			[wc replaceContentsWithRtf: initialContents];
@@ -214,7 +214,7 @@
 	// Insert code here to write your document from the given data.  You can also choose to override -fileWrapperRepresentationOfType: or -writeToFile:ofType: instead.
 	NSEnumerator *e = [[self windowControllers] objectEnumerator];
 	RDocumentWinCtrl *wc = nil;
-	while (wc = (RDocumentWinCtrl*)[e nextObject]) { 
+	while ((wc = (RDocumentWinCtrl*)[e nextObject])) { 
 		if([aType isEqual:@"rtf"])
 			return [wc contentsAsRtf];
 		else
@@ -256,7 +256,7 @@ create the UI for the document.
 	NSEnumerator *e = [[document windowControllers] objectEnumerator];
 	NSWindowController *wc = nil;
 	
-	while (wc = [e nextObject]) {
+	while ((wc = [e nextObject])) {
 		NSWindow *dw = [wc window];
 		[dw setTitle: title];
 	}
@@ -267,7 +267,7 @@ create the UI for the document.
 	isEditable=editable;
 	NSEnumerator *e = [[self windowControllers] objectEnumerator];
 	RDocumentWinCtrl *wc = nil;
-	while (wc = (RDocumentWinCtrl*)[e nextObject])
+	while ((wc = (RDocumentWinCtrl*)[e nextObject]))
 		[wc setEditable: editable];
 }
 

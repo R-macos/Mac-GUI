@@ -515,7 +515,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	yy_switch_to_buffer(yy_scan_string(NSStringUTF8String([selfstr substringWithRange:textRange])));
 
 	// now loop through all the tokens
-	while (token=yylex()){
+	while ((token = yylex())) {
 // NSLog(@"t %d", token);
 		switch (token) {
 			case RPT_SINGLE_QUOTED_TEXT:

@@ -56,7 +56,7 @@
 	return [cont string];
 }
 
-- (NSDictionary *) attributesAtIndex:(unsigned)index effectiveRange:(NSRangePointer)aRange
+- (NSDictionary *) attributesAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
 	return [cont attributesAtIndex:index effectiveRange:aRange];
 }

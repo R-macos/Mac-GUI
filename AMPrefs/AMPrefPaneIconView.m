@@ -206,12 +206,12 @@
 
 	NSEnumerator *listEnumerator = [iconListList objectEnumerator];
 	NSMutableArray *iconList;
-	while (iconList = [listEnumerator nextObject]) { // loop over categories
+	while ((iconList = [listEnumerator nextObject])) { // loop over categories
 		int column = 0;
 
 		NSEnumerator *iconEnumerator = [iconList objectEnumerator];
 		AMPrefPaneIcon *icon;
-		while (icon = [iconEnumerator nextObject]) { // loop over icons
+		while ((icon = [iconEnumerator nextObject])) { // loop over icons
 			column++;
 			if (column > columns) {
 				column = 1;
@@ -274,10 +274,10 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 	if (categorySortOrder) {
 		NSEnumerator *sortOrderEnumerator = [categorySortOrder objectEnumerator];
 		NSString *category;
-		while (category = [sortOrderEnumerator nextObject]) {
+		while ((category = [sortOrderEnumerator nextObject])) {
 			NSEnumerator *enumerator = [iconListList objectEnumerator];
 			NSArray *iconList;
-			while (iconList = [enumerator nextObject]) {
+			while ((iconList = [enumerator nextObject])) {
 				if ([[(AMPrefPaneIcon *)[iconList objectAtIndex:0] category] isEqualToString:category]) {
 					[newIconListList addObject:iconList];
 					break;
@@ -286,8 +286,8 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 		}
 		NSEnumerator *enumerator = [iconListList objectEnumerator];
 		NSArray *iconList;
-		while (iconList = [enumerator nextObject]) {
-			if (![newIconListList containsObject:iconList]) {
+		while ((iconList = [enumerator nextObject])) {
+			if ((![newIconListList containsObject:iconList])) {
 				[newIconListList addObject:iconList];
 			}
 		}
@@ -306,7 +306,7 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 		NSMutableDictionary *categoryIndex = [[[NSMutableDictionary alloc] init] autorelease];
 		NSEnumerator *enumerator = [icons objectEnumerator];
 		AMPrefPaneIcon *icon;
-		while (icon = [enumerator nextObject]) {
+		while ((icon = [enumerator nextObject])) {
 			id key = [icon category];
 			if (key == nil) {
 				key = [NSNull null];
@@ -322,7 +322,7 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 		}
 		enumerator = [iconListList objectEnumerator];
 		NSMutableArray *iconList;
-		while (iconList = [enumerator nextObject]) {
+		while ((iconList = [enumerator nextObject])) {
 			[iconList sortUsingSelector:@selector(caseInsensitiveCompare:)];
 		}
 		[self sortCategories];
@@ -445,7 +445,7 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 	int cIndex = 0;
 	NSEnumerator *enumerator = [iconListList objectEnumerator];
 	NSArray *iconList;
-	while (iconList = [enumerator nextObject]) {
+	while ((iconList = [enumerator nextObject])) {
 		NSRect frame = [self frameForCategoryWithIndex:cIndex];
 		if (NSPointInRect(point, frame)) {
 			// hit - find icon
@@ -453,7 +453,7 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 			int iIndex = 0;
 			NSEnumerator *iconEnumerator = [iconList objectEnumerator];
 			AMPrefPaneIcon *icon;
-			while (icon = [iconEnumerator nextObject]) {
+			while ((icon = [iconEnumerator nextObject])) {
 				NSRect imageFrame = [self imageFrameForIconInCategoryWithIndex:cIndex atIndex:iIndex];
 				NSRect labelFrame = [self labelFrameForIconInCategoryWithIndex:cIndex atIndex:iIndex];
 				if (NSPointInRect(point, imageFrame) || NSPointInRect(point, labelFrame)) {
@@ -510,14 +510,14 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 	offset.y += AMPrefPaneIconViewTopGroupPadding+AMPrefPaneIconViewTopPadding;
 	NSEnumerator *enumerator = [iconListList objectEnumerator];
 	NSArray *iconList;
-	while (iconList = [enumerator nextObject]) {
+	while ((iconList = [enumerator nextObject])) {
 		[self drawBackgroundForCategoryWithIndex:i++];
 		int row = 0;
 		int column = 0;
 		offset.x = (horizontalPadding+iconSpacing)/2.0;
 		NSEnumerator *iconEnumerator = [iconList objectEnumerator];
 		AMPrefPaneIcon *icon;
-		while (icon = [iconEnumerator nextObject]) {
+		while ((icon = [iconEnumerator nextObject])) {
 			if (column == columns) {
 				row++;
 				column = 0;

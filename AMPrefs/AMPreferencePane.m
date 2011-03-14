@@ -219,7 +219,7 @@
 		NSString* pluginPrincipalClass = [pluginBundle objectForInfoDictionaryKey:NSPrincipalClassKey];
 		Class pluginClass = [pluginBundle classNamed:pluginPrincipalClass];
 		NSObject <AMPrefPaneProtocol>* newPrefPane = nil;
-		if (newPrefPane = [[[pluginClass alloc] initWithBundle:pluginBundle] autorelease]) {
+		if ((newPrefPane = [[[pluginClass alloc] initWithBundle:pluginBundle] autorelease])) {
 			[self setPrefPane:newPrefPane];
 			if ([prefPane respondsToSelector:@selector(loadMainView)])
 				[prefPane loadMainView];

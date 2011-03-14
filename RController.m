@@ -598,11 +598,11 @@ static RController* sharedRController;
 	[RConsoleWindow makeKeyAndOrderFront:self];
 
 	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
-	if ([pendingDocsToOpen count]>0) {
+	if ([pendingDocsToOpen count] > 0) {
 		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
 		NSString *fileName;
 		SLog(@" - %d documents to open", [pendingDocsToOpen count]);
-		while (fileName = (NSString*) [enumerator nextObject])
+		while ((fileName = (NSString*) [enumerator nextObject]))
 			[self application:NSApp openFile:fileName];
 		[pendingDocsToOpen removeAllObjects];
 	}
@@ -1660,7 +1660,7 @@ The input replaces what the user is currently typing.
 
 					while (i>0 && (c[i-1]=='\n' || c[i-1]=='\r')) c[--i]=0; // just in case someone has PC history we strip \r too
 					if (!*c) continue; // skip blank lines (is that intended? what about "foo#\n\nbla\n"?)
-					if (multiline=(c[i-1]=='#')) c[i-1]='\n';
+					if ((multiline = (c[i - 1] == '#'))) c[i - 1] = '\n';
 					sEntry=[NSString stringWithUTF8String:c];
 					if (sEntry) {
 						if (entry)
@@ -1704,7 +1704,7 @@ The input replaces what the user is currently typing.
 		NSEnumerator *enumerator = [[hist entries] objectEnumerator];
 		NSString *entry;
         
-		while (entry = [enumerator nextObject]) {
+		while ((entry = [enumerator nextObject])) {
 			if ([entry rangeOfString:@"\n" options:NSLiteralSearch].location!=NSNotFound) { // add # before \n for multi-line strings
 				entry = [entry mutableCopy];
 				[(NSMutableString*)entry replaceOccurrencesOfString:@"\n" withString:@"#\n" options:NSLiteralSearch range:NSMakeRange(0,[entry length])];
@@ -1782,7 +1782,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		
 		if (inter) {
 			if ([cmd characterAtIndex:[cmd length]-1]!='\n') cmd=[cmd stringByAppendingString: @"\n"];
-			[consoleInputQueue addObject:[[NSString alloc] initWithString:cmd]];
+			[consoleInputQueue addObject:[cmd copy]];
 			[self setStatusLineText:@""];
 		}
 	}

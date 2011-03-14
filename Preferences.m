@@ -122,7 +122,7 @@ Preferences *globalPrefs=nil;
 		if (!insideNotify) {
 			NSEnumerator *enumerator = [dependents objectEnumerator];	
 			id<PreferencesDependent> dep;
-			while (dep = (id<PreferencesDependent>) [enumerator nextObject]) {
+			while ((dep = (id<PreferencesDependent>) [enumerator nextObject])) {
 				insideNotify = dep;
 				[dep updatePreferences];
 			}

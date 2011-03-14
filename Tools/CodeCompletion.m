@@ -70,27 +70,26 @@
         }
         
         { // the following code works also if pattern is not specified; with pattern present we could make it even easier, but currently we use it just to narrow the search (e.g. "." could still be matched by something else ...)
-            int i=0, firstMatch=-1, matches=0;
+            int i=0, matches=0;
             NSString *common=nil;
             while (i<[a count]) {
                 NSString *sx = (NSString*) [a objectAtIndex:i];
                 if ([sx hasPrefix: part]) {
-                    if (matches==0) {
-                        firstMatch=i;
-                        common=[[NSString alloc] initWithString: sx];
-                    } else {
+                    if (matches==0)
+                        common = [[NSString alloc] initWithString: sx];
+                    else {
                         NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
                         [common release];
-                        common=cpref;
+                        common = cpref;
                     }
                     matches++;
                 }
                 i++;
             }
-            if (common!=nil) { // attempt to get class of the object - it will fail if that's just a partial object, but who cares..
-                x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
-				[re endProtected];
-                if (x!=nil && [x string]!=nil && [[x string] isEqualToString:@"function"])
+            if (common) { // attempt to get class of the object - it will fail if that's just a partial object, but who cares..
+                    x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
+                    [re endProtected];
+                if (x && [x string] && [[x string] isEqualToString:@"function"])
                     return [[common autorelease] stringByAppendingString:@"("];
                 else
                     return [common autorelease];

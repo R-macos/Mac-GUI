@@ -91,11 +91,12 @@
 				lastWasNewline = (*(cs-1) == '\n') ? YES : NO;
 			}
 		}
-		[ls release];
 		[sop release];
 	} else
 	NSLog(@"Unable to find atos - symbols can't be dumped!");
-    [pool release];
+        [ls release];
+        
+        [pool release];
 
 	return NO;
 }

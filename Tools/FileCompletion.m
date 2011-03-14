@@ -64,7 +64,7 @@
         if (a==nil) return nil;
 	NSMutableArray *ca = [NSMutableArray arrayWithCapacity: 8];
         { 
-            int i=0, firstMatch=-1, matches=0;
+            int i=0, matches=0;
             NSString *common=nil;
             while (i<[a count]) {
                 NSString *sx = (NSString*) [a objectAtIndex:i];
@@ -73,10 +73,9 @@
 					if ([[NSFileManager defaultManager] fileExistsAtPath:[NSString stringWithFormat:@"%@/%@", dir, sx] isDirectory:&isDir] && isDir)
 						sx = [sx stringByAppendingString:@"/"];
 					if (homeCompletion) sx = [@"~" stringByAppendingString:sx];
-                    if (matches==0) {
-                        firstMatch=i;
-                        common=[[NSString alloc] initWithString: sx];
-                    } else {
+                    if (matches==0)
+                            common = [[NSString alloc] initWithString: sx];
+                    else {
                         NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
                         [common release];
                         common=cpref;

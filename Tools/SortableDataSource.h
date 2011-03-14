@@ -41,7 +41,7 @@ typedef unsigned int NSUInteger;
 #define NSINTEGER_DEFINED 1
 #endif
 
-@interface SortableDataSource : NSObject {
+@interface SortableDataSource : NSObject <NSTableViewDataSource> {
     NSMutableArray *col;
     NSMutableArray *colNames;
     NSUInteger rows;

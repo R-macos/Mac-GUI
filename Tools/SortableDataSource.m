@@ -42,7 +42,7 @@
 		invSortMap = (int*) malloc(sizeof(int)*rows);
 		while (i<rows) { sortMap[i]=invSortMap[i]=i; i++; }
     } else if ([colCont count] != rows) {
-		NSLog(@"SortableDataSource: column %@ has %d rows, but the data source has %d rows! Bad things may happen...", name, rows);
+		NSLog(@"SortableDataSource: column %@ has %d rows, but the data source has %d rows! Bad things may happen...", name, rows, [colCont count]);
     }
 }
 
@@ -51,7 +51,7 @@
 	NSString **ca = (NSString**) malloc(sizeof(NSString*)*clen);
 	int i=0;
 	while (i<clen) {
-		ca[i] = [NSString stringWithCString: cstr[i]];
+		ca[i] = [NSString stringWithUTF8String: cstr[i]];
 		i++;
 	}
 	[self addColumn: [NSArray arrayWithObjects:ca count:clen] withName:name];

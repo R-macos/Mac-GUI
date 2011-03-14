@@ -65,7 +65,7 @@
 	return [cont string];
 }
 
-- (NSDictionary *) attributesAtIndex:(unsigned)index effectiveRange:(NSRangePointer)aRange
+- (NSDictionary *) attributesAtIndex:(NSUInteger)index effectiveRange:(NSRangePointer)aRange
 {
 	[super ensureAttributesAreFixedInRange:NSMakeRange(index,1)];
 	return [cont attributesAtIndex:index effectiveRange:aRange];
@@ -144,8 +144,9 @@
 	NSArray *lms = [self layoutManagers];
 	if (lms) {
 		int lmsc = [lms count];
-		if (lmsc>0) {
-			if (lmsc>1) SLog(@"REditorTextStorage(%@).layoutManager: more than one LM exists, returning the first one",self);
+		if (lmsc > 0) {
+			if (lmsc > 1)
+                NSLog(@"REditorTextStorage(%@).layoutManager: more than one LM exists, returning the first one",self);
 			return [lms objectAtIndex:0];
 		}
 	}

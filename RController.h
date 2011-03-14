@@ -64,7 +64,7 @@
 #import "RTextView.h"
 #import "RConsoleTextStorage.h"
 
-@interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent>
+@interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent, NSTextStorageDelegate, NSToolbarDelegate>
 {
 	IBOutlet RTextView *consoleTextView;
 	IBOutlet NSProgressIndicator *progressWheel;
@@ -292,5 +292,10 @@
 - (IBAction)performFindPanelFindInWebViewAction:(id)sender;
 - (IBAction)closeFindInWebViewSheet:(id)sender;
 - (void)resizeSearchInWebViewWindow:(NSNotification*)aNotification;
+
+- (BOOL)windowShouldClose:(id)sender;
+
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
+
 @end
 

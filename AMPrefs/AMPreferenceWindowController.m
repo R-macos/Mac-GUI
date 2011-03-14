@@ -205,7 +205,7 @@
 - (BOOL)addPane:(id<AMPrefPaneProtocol>)newPane withIdentifier:(NSString *)identifier
 {
 	BOOL result;
-	if (result = ([prefPanes objectForKey:identifier] == nil)) {
+	if ((result = ([prefPanes objectForKey:identifier] == nil))) {
 		if ([delegate respondsToSelector:@selector(shouldLoadPreferencePane:)]) {
 			result = [delegate shouldLoadPreferencePane:identifier];
 		}
@@ -227,7 +227,7 @@
 	} else { // loaded successfully
 		NSLog(@"loaded: %@", [pluginBundle bundlePath]);
 		NSString* prefPaneIdentifier;
-		if (prefPaneIdentifier = [pluginBundle objectForInfoDictionaryKey:CFBundleIdentifierKey]) {
+		if ((prefPaneIdentifier = [pluginBundle objectForInfoDictionaryKey:CFBundleIdentifierKey])) {
 			if ([prefPanes objectForKey:prefPaneIdentifier]) {
 				// pane with same identifier exists
 				NSLog(@"pref pane already loaded %@", prefPaneIdentifier);
@@ -238,7 +238,7 @@
 				}
 				if (load) {
 					AMPreferencePane *newPane;
-					if (newPane = [[AMPreferencePane alloc] initWithBundle:pluginBundle]) {
+					if ((newPane = [[AMPreferencePane alloc] initWithBundle:pluginBundle])) {
 						if (newPane)
 							[self addPane:newPane withIdentifier:prefPaneIdentifier];
 					}
@@ -345,7 +345,7 @@
 	NSMutableDictionary *categories = [NSMutableDictionary dictionary];
 	NSEnumerator *enumerator = [[prefPanes allValues] objectEnumerator];
 	AMPreferencePane *prefPane;
-	while (prefPane = [enumerator nextObject]) {
+	while ((prefPane = [enumerator nextObject])) {
 		NSString *category = [prefPane category];
 		if (_am_delegateRespondsToCategoryForPreferencePane) {
 			category = [delegate performSelector:@selector(categoryForPreferencePane:defaultCategory:) withObject:[prefPane identifier] withObject:category];
@@ -444,7 +444,7 @@
 		NSMutableArray *icons = [NSMutableArray array];
 		NSEnumerator *enumerator = [prefPanes objectEnumerator];
 		AMPreferencePane *prefPane;
-		while (prefPane = [enumerator nextObject]) {
+		while ((prefPane = [enumerator nextObject])) {
 			if ([prefPane respondsToSelector:@selector(mainView)] && [prefPane mainView]) {
 				[icons addObject:[self iconForPrefPane:prefPane]];
 			}
@@ -472,7 +472,7 @@
 	NSMutableArray *result = [NSMutableArray array];
 	NSEnumerator *enumerator = [prefPanes objectEnumerator];
 	AMPreferencePane *pane;
-	while (pane = [enumerator nextObject]) {
+	while ((pane = [enumerator nextObject])) {
 		if ([pane respondsToSelector:@selector(mainView)] && [pane mainView]) {
 			[result addObject:[pane identifier]];
 		}
@@ -510,15 +510,15 @@
 	NSToolbarItem *result = nil;
 	AMPreferencePane *pane = nil;
 	if ([itemIdentifier isEqualToString:AMPPToolbarShowAllItemIdentifier]) {
-		if (result = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier]) {
+		if ((result = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier])) {
 			[result setTarget:self];
 			[result setAction:@selector(toolbarShowAll)];
 			[result setEnabled:YES];
 			[result setImage:[NSImage imageNamed:@"Prefs"]];
 			[result setLabel:NLS(@"Show All")];
 		}
-	} else if (pane = [prefPanes objectForKey:itemIdentifier]) {
-		if (result = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier]) {
+	} else if ((pane = [prefPanes objectForKey:itemIdentifier])) {
+		if ((result = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier])) {
 			[result setTarget:self];
 			[result setAction:@selector(toolbarShowPane:)];
 			[result setEnabled:YES];
@@ -526,6 +526,7 @@
 			[result setLabel:[pane label]];
 		}
 	}
+        if (result) [result autorelease];
 	return result;
 }
 

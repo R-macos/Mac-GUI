@@ -136,10 +136,10 @@
     return YES;
 }
 
-- (NSRect) rectForPage: (int) pageNumber // INPUT: ONE-based page number
+- (NSRect) rectForPage: (NSInteger) pageNumber // INPUT: ONE-based page number
 {
     NSPDFImageRep	*rep;
-    int				pageCount;
+    NSInteger		pageCount;
     NSRect			result;
 
     rep = [self pdfRep];
@@ -148,7 +148,7 @@
     //	Start at the first page
     result = [rep bounds];
     if (! [self isFlipped])
-        result = NSOffsetRect (result, 0.0, (pageCount-1)*result.size.height);
+        result = NSOffsetRect (result, 0.0, (pageCount-1) * result.size.height);
 
     //	Move to the N'th page
     if ([self isFlipped])

@@ -149,6 +149,7 @@ if (!item) { \
     [item setObject:itemType forKey:TYPE_KEY];
     [item setObject:itemProperty forKey:PROP_KEY];
     if (childList) [item setObject:childList forKey:CHILD_KEY];
+        [item autorelease];
     return item;
 }
 
@@ -196,7 +197,7 @@ if (!item) { \
 		
 	dataStore = [[NSMutableArray alloc] init];
 	
-	for(i=0;i<NumOfWSObjects; i++){
+	for (i = 0; i < NumOfWSObjects; i++){
 		NSMutableDictionary *item;
 		if(ws_IsRoot[i]){
 		if(ws_IsContainer[i]==0){
@@ -214,7 +215,6 @@ if (!item) { \
 						property: [NSString stringWithUTF8String:ws_size[j]] 
 						andChildren:nil];
 					[group addObject:subitem];
-					[subitem release];
 				}
 			}
 			item = [self itemWithName:[NSString stringWithUTF8String:ws_name[i]] 
@@ -224,7 +224,6 @@ if (!item) { \
 			[group release];					
 		}
 		[dataStore addObject:item];
-		[item release];
 	}
 	}
 }

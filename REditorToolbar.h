@@ -43,7 +43,7 @@
 NSToolbarPrintItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier
 #define RET_ListDefault RETI_Save, NSToolbarPrintItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, RETI_FnList, RETI_HelpSearch
 
-@interface REditorToolbar : NSObject {
+@interface REditorToolbar : NSObject <NSToolbarDelegate> {
 	RDocumentWinCtrl *winCtrl;
 	NSToolbar *toolbar;
 	

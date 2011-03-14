@@ -39,6 +39,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>

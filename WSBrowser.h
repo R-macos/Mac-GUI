@@ -37,7 +37,7 @@
 #define EditObjectToolbarItemIdentifier @"Edit Object"
 #define RefreshObjectsListToolbarItemIdentifier @"Refresh Objects List"
 
-@interface WSBrowser : NSObject
+@interface WSBrowser : NSObject <NSToolbarDelegate>
 {
 	IBOutlet NSWindow *WSBWindow;
 	IBOutlet NSOutlineView *WSBDataSource;

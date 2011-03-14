@@ -76,8 +76,8 @@
 	NSWindow *w = [aNotification object];
 
 	if (w && (
-			   [[[w delegate] className] isEqualToString:@"RDocumentWinCtrl"] 
-			|| [[[w delegate] className] isEqualToString:@"QuartzCocoaView"])
+			   [[(NSObject*)[w delegate] className] isEqualToString:@"RDocumentWinCtrl"] 
+			|| [[(NSObject*)[w delegate] className] isEqualToString:@"QuartzCocoaView"])
 			) {
 
 		SLog(@"RDocumentController%@.windowWillCloseNotifications:%@", self, w);
@@ -86,7 +86,7 @@
 		SLog(@" - document for window: %@", d);
 
 		// if no document is associated wit this window, check whether this is a Quartz Cocoa window
-		if (!d && [[[w delegate] className] isEqualToString:@"QuartzCocoaView"]) {
+		if (!d && [[(NSObject*)[w delegate] className] isEqualToString:@"QuartzCocoaView"]) {
 			d = [[QuartzCocoaDocument alloc] initWithWindow:w];
 			[d makeWindowControllers];
 			[[NSDocumentController sharedDocumentController] addDocument:d];

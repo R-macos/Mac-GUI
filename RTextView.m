@@ -57,10 +57,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 @interface RTextView (Private)
 
-	BOOL console;
-	NSCharacterSet *separatingTokensSet;
-	NSCharacterSet *commentTokensSet;
-
 - (void)selectMatchingPairAt:(int)position;
 - (NSString*)functionNameForCurrentScope;
 
@@ -87,7 +83,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 	commentTokensSet    = [[NSCharacterSet characterSetWithCharactersInString: @"#"] retain];
 	console = NO;
 	RTextView_autoCloseBrackets = YES;
-	_isRConsole = ([[[[self delegate] class] description] isEqualToString:@"RController"]) ? YES : NO;
+    SLog(@" - delegate: %@", [self delegate]);
+    // FIXME: this is a really ugly hack ... behavior should not depend on class names ...
+	isRConsole = [[(NSObject*)[self delegate] className] isEqualToString:@"RController"] ? YES : NO;
 }
 
 - (void)dealloc
@@ -466,7 +464,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return;
 	}
 
-	if(_isRConsole)
+	if(isRConsole)
 		[[NSApp keyWindow] makeFirstResponder:[[self delegate] valueForKeyPath:@"helpSearch"]];
 	else
 		[[NSApp keyWindow] makeFirstResponder:[[self delegate] valueForKeyPath:@"searchToolbarField"]];
@@ -557,11 +555,11 @@ BOOL RTextView_autoCloseBrackets = YES;
 			int end = ([parseString length] > 100) ? 100 : [parseString length];
 			unichar c;
 			for(i = start; i < end; i++) {
-				if(c=CFStringGetCharacterAtIndex((CFStringRef)parseString, i) == '(') {
+                if ((c = CFStringGetCharacterAtIndex((CFStringRef)parseString, i)) == '(') {
 					found = YES;
 					break;
 				}
-				if(c != ' ' || c != '\t' || c != '\n' || c != '\r') break;
+				if (c != ' ' || c != '\t' || c != '\n' || c != '\r') break;
 			}
 			if(found) {
 				SLog(@" - caret was inside function name; return it");
@@ -573,7 +571,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	SLog(@" - invalid current word -> start parsing for current function scope");
 
 	// if we're in the RConsole do parse the current line only
-	if(_isRConsole) {
+	if(isRConsole) {
 		parseRange = [parseString lineRangeForRange:NSMakeRange(selectedRange.location, 0)];
 		// ignore any prompt signs
 		parseRange.location += 1;

@@ -110,11 +110,11 @@
 			}
 		}
 		if (!(len == 1 &&
-			  [entry characterAtIndex:len-1] == '\n' ||
+             ([entry characterAtIndex:len-1] == '\n' ||
 			  [entry characterAtIndex:len-1] == '\r' ||
 			  [entry characterAtIndex:len-1] == '\t' ||
 			  [entry characterAtIndex:len-1] == ' '  ||
-			  [entry characterAtIndex:len-1] == '#')) {
+			  [entry characterAtIndex:len-1] == '#'))) {
 			if (len > 0 ) {
 				if ([Preferences flagForKey:removeDuplicateHistoryEntriesKey withDefault:NO])
 					[hist removeObject: entry];

@@ -42,7 +42,7 @@
 
 #define R_TEXT_SIZE_TRIGGER_FOR_PARSING_PARTLY 10000
 
-@interface RScriptEditorTextView : RTextView <PreferencesDependent>
+@interface RScriptEditorTextView : RTextView <PreferencesDependent, NSTextStorageDelegate>
 {
 
 	IBOutlet NSScrollView *scrollView;
