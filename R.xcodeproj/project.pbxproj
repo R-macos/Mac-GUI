@@ -33,7 +33,6 @@
 		162D387C06F71A3000C0936C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162D387B06F71A3000C0936C /* Security.framework */; };
 		1633F01F06E62F7000225AA9 /* RQuartz.m in Sources */ = {isa = PBXBuildFile; fileRef = 1633F01E06E62F7000225AA9 /* RQuartz.m */; };
 		1633F02506E62F7800225AA9 /* RQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 1633F02406E62F7800225AA9 /* RQuartz.h */; };
-		1633F03F06E630B900225AA9 /* RQuartz.nib in Resources */ = {isa = PBXBuildFile; fileRef = 1633F03D06E630B900225AA9 /* RQuartz.nib */; };
 		1633F0E506E63DEB00225AA9 /* QuartzDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 1633F0E306E63DEB00225AA9 /* QuartzDevice.h */; };
 		1633F0E606E63DEB00225AA9 /* QuartzDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1633F0E406E63DEB00225AA9 /* QuartzDevice.m */; };
 		1636285906BA2B490005C811 /* Rcallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 1636285106BA2B490005C811 /* Rcallbacks.h */; };
@@ -45,7 +44,6 @@
 		1636286006BA2B490005C811 /* RSEXP.m in Sources */ = {isa = PBXBuildFile; fileRef = 1636285806BA2B490005C811 /* RSEXP.m */; };
 		163B0CA506CE528400A380BE /* RDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 163B0CA306CE528400A380BE /* RDocument.h */; };
 		163B0CA606CE528400A380BE /* RDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 163B0CA406CE528400A380BE /* RDocument.m */; };
-		163B0CF906CE58F000A380BE /* RDocument.nib in Resources */ = {isa = PBXBuildFile; fileRef = 163B0CF706CE58F000A380BE /* RDocument.nib */; };
 		163B0D0606CE597300A380BE /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 163B0D0406CE597300A380BE /* Credits.rtf */; };
 		163B2CBC06ED1A990035FFD5 /* WSBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = 163B2CBA06ED1A990035FFD5 /* WSBrowser.h */; };
 		163B2CBD06ED1A990035FFD5 /* WSBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 163B2CBB06ED1A990035FFD5 /* WSBrowser.m */; };
@@ -91,15 +89,12 @@
 		16A25F7B072AAD120047E009 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 16A25F6E072AAD120047E009 /* index.html */; };
 		16A25F7C072AAD120047E009 /* NSImage_AMAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 16A25F6F072AAD120047E009 /* NSImage_AMAdditions.h */; };
 		16A25F7D072AAD120047E009 /* NSImage_AMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 16A25F70072AAD120047E009 /* NSImage_AMAdditions.m */; };
-		16A25FA7072AAFD40047E009 /* QuartzPrefPane.nib in Resources */ = {isa = PBXBuildFile; fileRef = 16A25FA5072AAFD40047E009 /* QuartzPrefPane.nib */; };
-		16A25FAE072AAFDF0047E009 /* MiscPrefPane.nib in Resources */ = {isa = PBXBuildFile; fileRef = 16A25FAC072AAFDF0047E009 /* MiscPrefPane.nib */; };
 		16A25FE1072AB2800047E009 /* miscPP.png in Resources */ = {isa = PBXBuildFile; fileRef = 16A25FE0072AB2800047E009 /* miscPP.png */; };
 		16A25FE8072AB28C0047E009 /* Prefs.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 16A25FE7072AB28C0047E009 /* Prefs.tiff */; };
 		16A25FEF072AB2940047E009 /* quartzPP.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 16A25FEE072AB2940047E009 /* quartzPP.tiff */; };
 		16A2602B072AB6360047E009 /* colorsPP.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 16A2602A072AB6360047E009 /* colorsPP.tiff */; };
 		16A26033072AB6660047E009 /* ColorsPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 16A26031072AB6660047E009 /* ColorsPrefPane.h */; };
 		16A26034072AB6660047E009 /* ColorsPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 16A26032072AB6660047E009 /* ColorsPrefPane.m */; };
-		16A2604C072AB7D80047E009 /* ColorsPrefPane.nib in Resources */ = {isa = PBXBuildFile; fileRef = 16A2604A072AB7D80047E009 /* ColorsPrefPane.nib */; };
 		16ABE72A06C7512D00815F91 /* History.h in Headers */ = {isa = PBXBuildFile; fileRef = 16ABE72806C7512D00815F91 /* History.h */; };
 		16ABE72B06C7512D00815F91 /* History.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ABE72906C7512D00815F91 /* History.m */; };
 		16ABE75906C752C600815F91 /* FileCompletion.h in Headers */ = {isa = PBXBuildFile; fileRef = 16ABE75706C752C600815F91 /* FileCompletion.h */; };
@@ -139,7 +134,6 @@
 		6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6828383807804DFC004617B7 /* ExceptionHandling.framework */; };
 		684D008507BD72BE0047EEF6 /* SyntaxColorsPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 684D008307BD72BE0047EEF6 /* SyntaxColorsPrefPane.h */; };
 		684D008607BD72BE0047EEF6 /* SyntaxColorsPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 684D008407BD72BE0047EEF6 /* SyntaxColorsPrefPane.m */; };
-		684D008907BD72F10047EEF6 /* SyntaxColorsPrefPane.nib in Resources */ = {isa = PBXBuildFile; fileRef = 684D008707BD72F10047EEF6 /* SyntaxColorsPrefPane.nib */; };
 		6855194107B8FDDF00F3A57C /* RGUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 6855194007B8FDDF00F3A57C /* RGUI.h */; };
 		686967DB07981764002A1932 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 686967DA07981764002A1932 /* Localizable.strings */; };
 		68756EDA07FDDAEF0014821A /* REditorToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 68756ED807FDDAEF0014821A /* REditorToolbar.h */; };
@@ -148,7 +142,6 @@
 		687B4DC507940DAA00074042 /* RConsole.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B4DC307940DAA00074042 /* RConsole.m */; };
 		687B4DF90794110900074042 /* RConsoleController.h in Headers */ = {isa = PBXBuildFile; fileRef = 687B4DF70794110900074042 /* RConsoleController.h */; };
 		687B4DFA0794110900074042 /* RConsoleController.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B4DF80794110900074042 /* RConsoleController.m */; };
-		687B4E370794130800074042 /* RConsole.nib in Resources */ = {isa = PBXBuildFile; fileRef = 687B4E350794130800074042 /* RConsole.nib */; };
 		687B4F0707942C1500074042 /* RDocumentWinCtrl.h in Headers */ = {isa = PBXBuildFile; fileRef = 687B4F0507942C1500074042 /* RDocumentWinCtrl.h */; };
 		687B4F0807942C1500074042 /* RDocumentWinCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 687B4F0607942C1500074042 /* RDocumentWinCtrl.m */; };
 		687B4F9707944B8000074042 /* REditorTextStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 687B4F9507944B8000074042 /* REditorTextStorage.h */; };
@@ -158,7 +151,16 @@
 		6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */; };
 		6880A0F40DBE886200FC684F /* QuartzCocoaDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */; };
 		6884A71C0F795F71000BB49F /* GUI-tools.R in Resources */ = {isa = PBXBuildFile; fileRef = 6884A70F0F795D7B000BB49F /* GUI-tools.R */; };
-		68AAC9E208F41CA10064CDA1 /* Vignettes.nib in Resources */ = {isa = PBXBuildFile; fileRef = 68AAC9E008F41CA10064CDA1 /* Vignettes.nib */; };
+		68958941132FAF72007D8E7B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895893F132FAF72007D8E7B /* MainMenu.xib */; };
+		6895894D132FAFDB007D8E7B /* RDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895894B132FAFDB007D8E7B /* RDocument.xib */; };
+		68958951132FAFEB007D8E7B /* RQuartz.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895894F132FAFEB007D8E7B /* RQuartz.xib */; };
+		68958955132FAFFA007D8E7B /* Vignettes.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68958953132FAFFA007D8E7B /* Vignettes.xib */; };
+		6895895B132FB01D007D8E7B /* SyntaxColorsPrefPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68958959132FB01D007D8E7B /* SyntaxColorsPrefPane.xib */; };
+		6895895F132FB02F007D8E7B /* ColorsPrefPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895895D132FB02F007D8E7B /* ColorsPrefPane.xib */; };
+		68958963132FB03D007D8E7B /* EditorPrefPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68958961132FB03D007D8E7B /* EditorPrefPane.xib */; };
+		68958967132FB04C007D8E7B /* MiscPrefPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68958965132FB04C007D8E7B /* MiscPrefPane.xib */; };
+		6895896B132FB05C007D8E7B /* QuartzPrefPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = 68958969132FB05C007D8E7B /* QuartzPrefPane.xib */; };
+		6895897C132FB19D007D8E7B /* RConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6895897B132FB19D007D8E7B /* RConsole.xib */; };
 		68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */; };
 		68AAC9E808F41CBB0064CDA1 /* DraggableScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */; };
 		68AAC9E908F41CBB0064CDA1 /* PDFImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68AAC9E508F41CBB0064CDA1 /* PDFImageView.h */; };
@@ -174,7 +176,6 @@
 		68E2B9F30796C9D200E31F29 /* devQuartz.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E2B9F10796C9D200E31F29 /* devQuartz.c */; };
 		68F84C6209ABB2BF0098D772 /* privateR.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F84C6109ABB2BF0098D772 /* privateR.h */; };
 		8D1107280486CEB800E47090 /* R_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* R_Prefix.pch */; };
-		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -189,7 +190,6 @@
 		BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD7EC941301A5190050850E /* RegexKitLite.m */; };
 		D41DED4C073B3EE400B900F2 /* EditorPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */; };
 		D41DED4D073B3EE400B900F2 /* EditorPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */; };
-		D41DED55073B3F8000B900F2 /* EditorPrefPane.nib in Resources */ = {isa = PBXBuildFile; fileRef = D41DED53073B3F8000B900F2 /* EditorPrefPane.nib */; };
 		D41DED59073B3FF700B900F2 /* RDocumentController.h in Headers */ = {isa = PBXBuildFile; fileRef = D41DED57073B3FF700B900F2 /* RDocumentController.h */; };
 		D41DED5A073B3FF700B900F2 /* RDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = D41DED58073B3FF700B900F2 /* RDocumentController.m */; };
 		D490C1EC07B400870034B42F /* RRulerView.h in Headers */ = {isa = PBXBuildFile; fileRef = D490C1EA07B400870034B42F /* RRulerView.h */; };
@@ -228,26 +228,13 @@
 		1602BB2E0719702800805588 /* RMacOSX-FAQ.html */ = {isa = PBXFileReference; explicitFileType = text.html.documentation; fileEncoding = 30; name = "RMacOSX-FAQ.html"; path = "docs/RMacOSX-FAQ.html"; sourceTree = "<group>"; };
 		1602BB2F0719702800805588 /* RMacOSX-FAQ.texi */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "RMacOSX-FAQ.texi"; sourceTree = "<group>"; };
 		161034F007D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		161034F107D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		161034F207D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
-		161034F307D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
-		161034F407D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
-		161034F507D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
-		161034F607D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		161034F707D2232400677899 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = ja; path = ja.lproj/Credits.rtf; sourceTree = "<group>"; };
 		1611E2E9070B83770025F66D /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = English; path = English.lproj/R.scriptSuite; sourceTree = "<group>"; };
 		1611E30A070B84080025F66D /* English */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 30; name = English; path = English.lproj/R.scriptTerminology; sourceTree = "<group>"; };
-		16151A5507CD2B2B0018B619 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		16151A5607CD2B3B0018B619 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
-		16151A5707CD2B430018B619 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
-		16151A5807CD2B500018B619 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
-		16151A5907CD2B5B0018B619 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
-		16151A5A07CD2B660018B619 /* fr */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = fr; path = fr.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		162B6A1906CD773800C0B085 /* logs.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = logs.icns; path = images/logs.icns; sourceTree = "<group>"; };
 		162D387B06F71A3000C0936C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		1633F01E06E62F7000225AA9 /* RQuartz.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RQuartz.m; sourceTree = "<group>"; };
 		1633F02406E62F7800225AA9 /* RQuartz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RQuartz.h; sourceTree = "<group>"; };
-		1633F03E06E630B900225AA9 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RQuartz.nib; sourceTree = "<group>"; };
 		1633F0E306E63DEB00225AA9 /* QuartzDevice.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QuartzDevice.h; sourceTree = "<group>"; };
 		1633F0E406E63DEB00225AA9 /* QuartzDevice.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = QuartzDevice.m; sourceTree = "<group>"; };
 		1636285106BA2B490005C811 /* Rcallbacks.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Rcallbacks.h; sourceTree = "<group>"; };
@@ -257,12 +244,8 @@
 		1636285606BA2B490005C811 /* Rinit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Rinit.h; sourceTree = "<group>"; };
 		1636285706BA2B490005C811 /* RSEXP.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RSEXP.h; sourceTree = "<group>"; };
 		1636285806BA2B490005C811 /* RSEXP.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RSEXP.m; sourceTree = "<group>"; };
-		1638AFAD07D2247500BEE02D /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/RConsole.nib; sourceTree = "<group>"; };
-		1638AFAE07D2247500BEE02D /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/RDocument.nib; sourceTree = "<group>"; };
-		1638AFAF07D2247500BEE02D /* ja */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = ja; path = ja.lproj/RQuartz.nib; sourceTree = "<group>"; };
 		163B0CA306CE528400A380BE /* RDocument.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RDocument.h; sourceTree = "<group>"; };
 		163B0CA406CE528400A380BE /* RDocument.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RDocument.m; sourceTree = "<group>"; };
-		163B0CF806CE58F000A380BE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RDocument.nib; sourceTree = "<group>"; };
 		163B0D0506CE597300A380BE /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		163B2CBA06ED1A990035FFD5 /* WSBrowser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = WSBrowser.h; sourceTree = "<group>"; };
 		163B2CBB06ED1A990035FFD5 /* WSBrowser.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = WSBrowser.m; sourceTree = "<group>"; };
@@ -270,7 +253,6 @@
 		1651D9640715EA5D00FB6962 /* colors.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = colors.tiff; path = images/colors.tiff; sourceTree = "<group>"; };
 		16572B2706F3A98600C69946 /* REditor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = REditor.h; sourceTree = "<group>"; };
 		16572B2806F3A98600C69946 /* REditor.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = REditor.m; sourceTree = "<group>"; };
-		1659C15A07BBA5040076DC4F /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
 		165C0F4706EF05E000994593 /* SearchTable.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = SearchTable.m; sourceTree = "<group>"; };
 		165C0F4806EF05E000994593 /* SearchTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SearchTable.h; sourceTree = "<group>"; };
 		1673550C06DE155F00A75774 /* PackageInstaller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PackageInstaller.h; sourceTree = "<group>"; };
@@ -309,15 +291,12 @@
 		16A25F6E072AAD120047E009 /* index.html */ = {isa = PBXFileReference; explicitFileType = text.html.documentation; fileEncoding = 30; path = index.html; sourceTree = "<group>"; };
 		16A25F6F072AAD120047E009 /* NSImage_AMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSImage_AMAdditions.h; sourceTree = "<group>"; };
 		16A25F70072AAD120047E009 /* NSImage_AMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSImage_AMAdditions.m; sourceTree = "<group>"; };
-		16A25FA6072AAFD40047E009 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
-		16A25FAD072AAFDF0047E009 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
 		16A25FE0072AB2800047E009 /* miscPP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = miscPP.png; path = images/miscPP.png; sourceTree = "<group>"; };
 		16A25FE7072AB28C0047E009 /* Prefs.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Prefs.tiff; path = images/Prefs.tiff; sourceTree = "<group>"; };
 		16A25FEE072AB2940047E009 /* quartzPP.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = quartzPP.tiff; path = images/quartzPP.tiff; sourceTree = "<group>"; };
 		16A2602A072AB6360047E009 /* colorsPP.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = colorsPP.tiff; path = images/colorsPP.tiff; sourceTree = "<group>"; };
 		16A26031072AB6660047E009 /* ColorsPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ColorsPrefPane.h; sourceTree = "<group>"; };
 		16A26032072AB6660047E009 /* ColorsPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ColorsPrefPane.m; sourceTree = "<group>"; };
-		16A2604B072AB7D80047E009 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
 		16ABE72806C7512D00815F91 /* History.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = History.h; sourceTree = "<group>"; };
 		16ABE72906C7512D00815F91 /* History.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = History.m; sourceTree = "<group>"; };
 		16ABE75706C752C600815F91 /* FileCompletion.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileCompletion.h; sourceTree = "<group>"; };
@@ -353,25 +332,18 @@
 		1CDD05470763E46900B8FCA6 /* PrefWindowController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PrefWindowController.m; sourceTree = "<group>"; };
 		1CDD06110763FD2000B8FCA6 /* PreferenceKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferenceKeys.h; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32CA4F630368D1EE00C91783 /* R_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = R_Prefix.pch; sourceTree = "<group>"; };
 		6807116D0EB0CD4200436993 /* InfoPlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoPlist.h; sourceTree = "<group>"; };
 		6807E643080EAE4100A03223 /* GlobalExHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalExHandler.h; sourceTree = "<group>"; };
 		6807E644080EAE4100A03223 /* GlobalExHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalExHandler.m; sourceTree = "<group>"; };
-		6812EC9E07BA6A360000B6A8 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
 		681D40BE081D653B0019CB4C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		6825104C132F337800367C93 /* CCComp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCComp.h; sourceTree = "<group>"; };
 		6828383807804DFC004617B7 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = /System/Library/Frameworks/ExceptionHandling.framework; sourceTree = "<absolute>"; };
 		684D008307BD72BE0047EEF6 /* SyntaxColorsPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyntaxColorsPrefPane.h; sourceTree = "<group>"; };
 		684D008407BD72BE0047EEF6 /* SyntaxColorsPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyntaxColorsPrefPane.m; sourceTree = "<group>"; };
-		684D008807BD72F10047EEF6 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
-		684D008A07BD73090047EEF6 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
-		684D008B07BD731D0047EEF6 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
-		685355FF07B0052E00FDAAC3 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
 		6855194007B8FDDF00F3A57C /* RGUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGUI.h; sourceTree = "<group>"; };
-		686967B9079813AD002A1932 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		686967BF079814E0002A1932 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/Credits.rtf; sourceTree = "<group>"; };
 		686967D807981746002A1932 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		686967E7079818C1002A1932 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -381,18 +353,61 @@
 		687B4DC307940DAA00074042 /* RConsole.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RConsole.m; sourceTree = "<group>"; };
 		687B4DF70794110900074042 /* RConsoleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RConsoleController.h; sourceTree = "<group>"; };
 		687B4DF80794110900074042 /* RConsoleController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RConsoleController.m; sourceTree = "<group>"; };
-		687B4E360794130800074042 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/RConsole.nib; sourceTree = "<group>"; };
 		687B4F0507942C1500074042 /* RDocumentWinCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDocumentWinCtrl.h; sourceTree = "<group>"; };
 		687B4F0607942C1500074042 /* RDocumentWinCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDocumentWinCtrl.m; sourceTree = "<group>"; };
 		687B4F9507944B8000074042 /* REditorTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = REditorTextStorage.h; sourceTree = "<group>"; };
 		687B4F9607944B8000074042 /* REditorTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = REditorTextStorage.m; sourceTree = "<group>"; };
 		687B503907945D4C00074042 /* RConsoleTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RConsoleTextStorage.h; sourceTree = "<group>"; };
 		687B503A07945D4C00074042 /* RConsoleTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RConsoleTextStorage.m; sourceTree = "<group>"; };
-		6880973207AFFB2000F90DB0 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
 		6880A0F10DBE886200FC684F /* QuartzCocoaDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuartzCocoaDocument.h; sourceTree = "<group>"; };
 		6880A0F20DBE886200FC684F /* QuartzCocoaDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuartzCocoaDocument.m; sourceTree = "<group>"; };
 		6884A70F0F795D7B000BB49F /* GUI-tools.R */ = {isa = PBXFileReference; explicitFileType = text.script; fileEncoding = 4; path = "GUI-tools.R"; sourceTree = "<group>"; };
-		68AAC9E108F41CA10064CDA1 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Vignettes.nib; sourceTree = "<group>"; };
+		68958940132FAF72007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		68958946132FAFBA007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/RConsole.xib; sourceTree = "<group>"; };
+		6895894C132FAFDB007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68958950132FAFEB007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/RQuartz.xib; sourceTree = "<group>"; };
+		68958954132FAFFA007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Vignettes.xib; sourceTree = "<group>"; };
+		6895895A132FB01D007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
+		6895895E132FB02F007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ColorsPrefPane.xib; sourceTree = "<group>"; };
+		68958962132FB03D007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		68958966132FB04C007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		6895896A132FB05C007D8E7B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68958970132FB14B007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		68958971132FB14F007D8E7B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		68958972132FB152007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		68958973132FB154007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6895897D132FB1F4007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/RConsole.xib; sourceTree = "<group>"; };
+		6895897E132FB1F7007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/RConsole.xib; sourceTree = "<group>"; };
+		6895897F132FB20C007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68958980132FB20E007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68958981132FB215007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68958982132FB22D007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68958983132FB236007D8E7B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68958984132FB273007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/Vignettes.xib; sourceTree = "<group>"; };
+		68958985132FB275007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/Vignettes.xib; sourceTree = "<group>"; };
+		68958986132FB28B007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/ColorsPrefPane.xib; sourceTree = "<group>"; };
+		68958987132FB28D007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/ColorsPrefPane.xib; sourceTree = "<group>"; };
+		68958988132FB290007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/ColorsPrefPane.xib; sourceTree = "<group>"; };
+		68958989132FB294007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/ColorsPrefPane.xib; sourceTree = "<group>"; };
+		6895898A132FB29F007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		6895898B132FB2A1007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		6895898C132FB2A6007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		6895898D132FB2A8007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		6895898E132FB2B7007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		6895898F132FB2B9007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		68958990132FB2BC007D8E7B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		68958991132FB2C0007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		68958992132FB2C2007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		68958993132FB2CC007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68958994132FB2CE007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68958995132FB2D3007D8E7B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68958996132FB2D5007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68958997132FB2D7007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68958998132FB2E3007D8E7B /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
+		68958999132FB2E5007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
+		6895899A132FB2E7007D8E7B /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
+		6895899B132FB2E9007D8E7B /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
+		689589B4132FB5B8007D8E7B /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		68AAC9E308F41CBB0064CDA1 /* DraggableScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DraggableScrollView.h; sourceTree = "<group>"; };
 		68AAC9E408F41CBB0064CDA1 /* DraggableScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DraggableScrollView.m; sourceTree = "<group>"; };
 		68AAC9E508F41CBB0064CDA1 /* PDFImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PDFImageView.h; sourceTree = "<group>"; };
@@ -400,32 +415,16 @@
 		68AAC9EB08F41CD80064CDA1 /* VignettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VignettesController.h; sourceTree = "<group>"; };
 		68AAC9EC08F41CD80064CDA1 /* VignettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VignettesController.m; sourceTree = "<group>"; };
 		68B8EB410A46EB0700515847 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		68C0CFD307BBDAF000EA34B7 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
-		68C0CFD407BBDAF300EA34B7 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		68C11BB909FED6E1004DD95C /* Rdoc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rdoc.icns; path = images/Rdoc.icns; sourceTree = "<group>"; };
 		68C11BBA09FED6E1004DD95C /* Rrun.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rrun.icns; path = images/Rrun.icns; sourceTree = "<group>"; };
 		68C11BCF09FEE47C004DD95C /* Rdata.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rdata.icns; path = images/Rdata.icns; sourceTree = "<group>"; };
-		68C30D3A07B80D510020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		68C30D3D07B80D6C0020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
-		68C30D4007B80D7B0020A506 /* it */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = it; path = it.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
 		68DDE1D109697A3F00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		68DDE1D409697AAE00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		68DDE1D709697ABE00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/RConsole.nib; sourceTree = "<group>"; };
-		68DDE1DA09697AC600BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/RDocument.nib; sourceTree = "<group>"; };
-		68DDE1DD09697ACC00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/RQuartz.nib; sourceTree = "<group>"; };
-		68DDE1E009697AD300BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/Vignettes.nib; sourceTree = "<group>"; };
-		68DDE1E309697AEA00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/SyntaxColorsPrefPane.nib; sourceTree = "<group>"; };
-		68DDE1E609697AF200BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/ColorsPrefPane.nib; sourceTree = "<group>"; };
-		68DDE1E909697AFC00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
-		68DDE1EC09697B0400BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/MiscPrefPane.nib; sourceTree = "<group>"; };
-		68DDE1EF09697B0C00BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = nl; path = nl.lproj/QuartzPrefPane.nib; sourceTree = "<group>"; };
 		68DDE21309697C6100BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nl; path = nl.lproj/Credits.rtf; sourceTree = "<group>"; };
 		68DEAEE6083271CA00C5D76C /* RTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTextView.h; sourceTree = "<group>"; };
 		68DEAEE7083271CA00C5D76C /* RTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTextView.m; sourceTree = "<group>"; };
 		68E2B9F00796C9D200E31F29 /* devQuartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devQuartz.h; sourceTree = "<group>"; };
 		68E2B9F10796C9D200E31F29 /* devQuartz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = devQuartz.c; sourceTree = "<group>"; };
 		68F84C6109ABB2BF0098D772 /* privateR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = privateR.h; sourceTree = SOURCE_ROOT; };
-		68FC52F508F45C2E0061413F /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/Vignettes.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTextView.h; sourceTree = "<group>"; };
@@ -439,7 +438,6 @@
 		BCD7EC941301A5190050850E /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorPrefPane.h; sourceTree = "<group>"; };
 		D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorPrefPane.m; sourceTree = "<group>"; };
-		D41DED54073B3F8000B900F2 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
 		D41DED57073B3FF700B900F2 /* RDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RDocumentController.h; sourceTree = "<group>"; };
 		D41DED58073B3FF700B900F2 /* RDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RDocumentController.m; sourceTree = "<group>"; };
 		D490C1EA07B400870034B42F /* RRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RRulerView.h; sourceTree = "<group>"; };
@@ -741,11 +739,11 @@
 			children = (
 				6884A70F0F795D7B000BB49F /* GUI-tools.R */,
 				686967DA07981764002A1932 /* Localizable.strings */,
-				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
-				687B4E350794130800074042 /* RConsole.nib */,
-				163B0CF706CE58F000A380BE /* RDocument.nib */,
-				1633F03D06E630B900225AA9 /* RQuartz.nib */,
-				68AAC9E008F41CA10064CDA1 /* Vignettes.nib */,
+				6895893F132FAF72007D8E7B /* MainMenu.xib */,
+				6895897B132FB19D007D8E7B /* RConsole.xib */,
+				6895894B132FAFDB007D8E7B /* RDocument.xib */,
+				6895894F132FAFEB007D8E7B /* RQuartz.xib */,
+				68958953132FAFFA007D8E7B /* Vignettes.xib */,
 				6853563B07B0285E00FDAAC3 /* PrefPanes */,
 				162B6A0406CD770C00C0B085 /* images */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -770,11 +768,11 @@
 		6853563B07B0285E00FDAAC3 /* PrefPanes */ = {
 			isa = PBXGroup;
 			children = (
-				684D008707BD72F10047EEF6 /* SyntaxColorsPrefPane.nib */,
-				16A2604A072AB7D80047E009 /* ColorsPrefPane.nib */,
-				D41DED53073B3F8000B900F2 /* EditorPrefPane.nib */,
-				16A25FAC072AAFDF0047E009 /* MiscPrefPane.nib */,
-				16A25FA5072AAFD40047E009 /* QuartzPrefPane.nib */,
+				6895895D132FB02F007D8E7B /* ColorsPrefPane.xib */,
+				68958961132FB03D007D8E7B /* EditorPrefPane.xib */,
+				68958965132FB04C007D8E7B /* MiscPrefPane.xib */,
+				68958969132FB05C007D8E7B /* QuartzPrefPane.xib */,
+				68958959132FB01D007D8E7B /* SyntaxColorsPrefPane.xib */,
 			);
 			name = PrefPanes;
 			sourceTree = "<group>";
@@ -942,6 +940,7 @@
 			isa = PBXProject;
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -972,7 +971,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C34E62406F9EE2000211ACC /* sush in Resources */,
-				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				16D3042806B55072009CB94A /* RLogo.png in Resources */,
 				16D3044406B556BD009CB94A /* RLogo.icns in Resources */,
@@ -981,14 +979,12 @@
 				1601F00D06CBBF9F00BF60D4 /* TODO-LIST in Resources */,
 				1601F04706CBC0EF00BF60D4 /* INSTALL in Resources */,
 				162B6A1A06CD773800C0B085 /* logs.icns in Resources */,
-				163B0CF906CE58F000A380BE /* RDocument.nib in Resources */,
 				163B0D0606CE597300A380BE /* Credits.rtf in Resources */,
 				167EA45A06D0F07F0039E305 /* NewDocumentItemImage.tiff in Resources */,
 				167EA46C06D0F36E0039E305 /* SaveDocumentItemImage.tiff in Resources */,
 				167EA48606D0FD1F0039E305 /* LoadDocumentItemImage.tiff in Resources */,
 				167EA49106D100310039E305 /* RInput.png in Resources */,
 				169B45B106DFED7E006915E6 /* X11.icns in Resources */,
-				1633F03F06E630B900225AA9 /* RQuartz.nib in Resources */,
 				1C94C8C106F9AC8900F4D9C0 /* lock-locked.tiff in Resources */,
 				1C94C8F306F9B56E00F4D9C0 /* lock-unlocked.tiff in Resources */,
 				1C34E5CA06F9C76700211ACC /* stop.tiff in Resources */,
@@ -1010,24 +1006,27 @@
 				163C8F3E072937E800117DC8 /* refresh.png in Resources */,
 				16A25F7A072AAD120047E009 /* default.css in Resources */,
 				16A25F7B072AAD120047E009 /* index.html in Resources */,
-				16A25FA7072AAFD40047E009 /* QuartzPrefPane.nib in Resources */,
-				16A25FAE072AAFDF0047E009 /* MiscPrefPane.nib in Resources */,
 				16A25FE1072AB2800047E009 /* miscPP.png in Resources */,
 				16A25FE8072AB28C0047E009 /* Prefs.tiff in Resources */,
 				16A25FEF072AB2940047E009 /* quartzPP.tiff in Resources */,
 				16A2602B072AB6360047E009 /* colorsPP.tiff in Resources */,
-				16A2604C072AB7D80047E009 /* ColorsPrefPane.nib in Resources */,
 				16DB0E8A072E5CFA00380720 /* COPYRIGHTS in Resources */,
-				D41DED55073B3F8000B900F2 /* EditorPrefPane.nib in Resources */,
-				687B4E370794130800074042 /* RConsole.nib in Resources */,
 				686967DB07981764002A1932 /* Localizable.strings in Resources */,
-				684D008907BD72F10047EEF6 /* SyntaxColorsPrefPane.nib in Resources */,
 				1C5306EE081F54F600ECECD2 /* history.png in Resources */,
-				68AAC9E208F41CA10064CDA1 /* Vignettes.nib in Resources */,
 				68C11BBB09FED6E1004DD95C /* Rdoc.icns in Resources */,
 				68C11BBC09FED6E1004DD95C /* Rrun.icns in Resources */,
 				68C11BD009FEE47C004DD95C /* Rdata.icns in Resources */,
 				6884A71C0F795F71000BB49F /* GUI-tools.R in Resources */,
+				68958941132FAF72007D8E7B /* MainMenu.xib in Resources */,
+				6895897C132FB19D007D8E7B /* RConsole.xib in Resources */,
+				6895894D132FAFDB007D8E7B /* RDocument.xib in Resources */,
+				68958951132FAFEB007D8E7B /* RQuartz.xib in Resources */,
+				68958955132FAFFA007D8E7B /* Vignettes.xib in Resources */,
+				6895895B132FB01D007D8E7B /* SyntaxColorsPrefPane.xib in Resources */,
+				6895895F132FB02F007D8E7B /* ColorsPrefPane.xib in Resources */,
+				68958963132FB03D007D8E7B /* EditorPrefPane.xib in Resources */,
+				68958967132FB04C007D8E7B /* MiscPrefPane.xib in Resources */,
+				6895896B132FB05C007D8E7B /* QuartzPrefPane.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1175,26 +1174,6 @@
 			name = R.scriptTerminology;
 			sourceTree = "<group>";
 		};
-		1633F03D06E630B900225AA9 /* RQuartz.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1633F03E06E630B900225AA9 /* English */,
-				1638AFAF07D2247500BEE02D /* ja */,
-				68DDE1DD09697ACC00BC6883 /* nl */,
-			);
-			name = RQuartz.nib;
-			sourceTree = "<group>";
-		};
-		163B0CF706CE58F000A380BE /* RDocument.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				163B0CF806CE58F000A380BE /* English */,
-				1638AFAE07D2247500BEE02D /* ja */,
-				68DDE1DA09697AC600BC6883 /* nl */,
-			);
-			name = RDocument.nib;
-			sourceTree = "<group>";
-		};
 		163B0D0406CE597300A380BE /* Credits.rtf */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1206,71 +1185,6 @@
 				68DDE21309697C6100BC6883 /* nl */,
 			);
 			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		16A25FA5072AAFD40047E009 /* QuartzPrefPane.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				16A25FA6072AAFD40047E009 /* English */,
-				68C0CFD307BBDAF000EA34B7 /* de */,
-				68C0CFD407BBDAF300EA34B7 /* it */,
-				16151A5A07CD2B660018B619 /* fr */,
-				161034F607D2232400677899 /* ja */,
-				68DDE1EF09697B0C00BC6883 /* nl */,
-			);
-			name = QuartzPrefPane.nib;
-			sourceTree = "<group>";
-		};
-		16A25FAC072AAFDF0047E009 /* MiscPrefPane.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				16A25FAD072AAFDF0047E009 /* English */,
-				685355FF07B0052E00FDAAC3 /* de */,
-				68C30D4007B80D7B0020A506 /* it */,
-				16151A5907CD2B5B0018B619 /* fr */,
-				161034F507D2232400677899 /* ja */,
-				68DDE1EC09697B0400BC6883 /* nl */,
-			);
-			name = MiscPrefPane.nib;
-			sourceTree = "<group>";
-		};
-		16A2604A072AB7D80047E009 /* ColorsPrefPane.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				16A2604B072AB7D80047E009 /* English */,
-				6880973207AFFB2000F90DB0 /* de */,
-				68C30D3D07B80D6C0020A506 /* it */,
-				16151A5707CD2B430018B619 /* fr */,
-				161034F307D2232400677899 /* ja */,
-				68DDE1E609697AF200BC6883 /* nl */,
-			);
-			name = ColorsPrefPane.nib;
-			sourceTree = "<group>";
-		};
-		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				29B97319FDCFA39411CA2CEA /* English */,
-				686967B9079813AD002A1932 /* de */,
-				68C30D3A07B80D510020A506 /* it */,
-				16151A5507CD2B2B0018B619 /* fr */,
-				161034F107D2232400677899 /* ja */,
-				68DDE1D409697AAE00BC6883 /* nl */,
-			);
-			name = MainMenu.nib;
-			sourceTree = "<group>";
-		};
-		684D008707BD72F10047EEF6 /* SyntaxColorsPrefPane.nib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				684D008807BD72F10047EEF6 /* English */,
-				684D008A07BD73090047EEF6 /* de */,
-				684D008B07BD731D0047EEF6 /* it */,
-				16151A5607CD2B3B0018B619 /* fr */,
-				161034F207D2232400677899 /* ja */,
-				68DDE1E309697AEA00BC6883 /* nl */,
-			);
-			name = SyntaxColorsPrefPane.nib;
 			sourceTree = "<group>";
 		};
 		686967DA07981764002A1932 /* Localizable.strings */ = {
@@ -1286,37 +1200,120 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		687B4E350794130800074042 /* RConsole.nib */ = {
+		6895893F132FAF72007D8E7B /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				687B4E360794130800074042 /* English */,
-				1638AFAD07D2247500BEE02D /* ja */,
-				68DDE1D709697ABE00BC6883 /* nl */,
+				68958940132FAF72007D8E7B /* English */,
+				68958970132FB14B007D8E7B /* de */,
+				68958971132FB14F007D8E7B /* fr */,
+				68958972132FB152007D8E7B /* it */,
+				68958973132FB154007D8E7B /* ja */,
+				689589B4132FB5B8007D8E7B /* nl */,
 			);
-			name = RConsole.nib;
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		68AAC9E008F41CA10064CDA1 /* Vignettes.nib */ = {
+		6895894B132FAFDB007D8E7B /* RDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				68AAC9E108F41CA10064CDA1 /* English */,
-				68FC52F508F45C2E0061413F /* de */,
-				68DDE1E009697AD300BC6883 /* nl */,
+				6895894C132FAFDB007D8E7B /* English */,
+				6895897F132FB20C007D8E7B /* ja */,
+				68958980132FB20E007D8E7B /* nl */,
+				68958981132FB215007D8E7B /* it */,
+				68958982132FB22D007D8E7B /* de */,
+				68958983132FB236007D8E7B /* fr */,
 			);
-			name = Vignettes.nib;
+			name = RDocument.xib;
 			sourceTree = "<group>";
 		};
-		D41DED53073B3F8000B900F2 /* EditorPrefPane.nib */ = {
+		6895894F132FAFEB007D8E7B /* RQuartz.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D41DED54073B3F8000B900F2 /* English */,
-				6812EC9E07BA6A360000B6A8 /* de */,
-				1659C15A07BBA5040076DC4F /* it */,
-				16151A5807CD2B500018B619 /* fr */,
-				161034F407D2232400677899 /* ja */,
-				68DDE1E909697AFC00BC6883 /* nl */,
+				68958950132FAFEB007D8E7B /* English */,
 			);
-			name = EditorPrefPane.nib;
+			name = RQuartz.xib;
+			sourceTree = "<group>";
+		};
+		68958953132FAFFA007D8E7B /* Vignettes.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68958954132FAFFA007D8E7B /* English */,
+				68958984132FB273007D8E7B /* ja */,
+				68958985132FB275007D8E7B /* nl */,
+			);
+			name = Vignettes.xib;
+			sourceTree = "<group>";
+		};
+		68958959132FB01D007D8E7B /* SyntaxColorsPrefPane.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6895895A132FB01D007D8E7B /* English */,
+				68958998132FB2E3007D8E7B /* ja */,
+				68958999132FB2E5007D8E7B /* nl */,
+				6895899A132FB2E7007D8E7B /* it */,
+				6895899B132FB2E9007D8E7B /* de */,
+			);
+			name = SyntaxColorsPrefPane.xib;
+			sourceTree = "<group>";
+		};
+		6895895D132FB02F007D8E7B /* ColorsPrefPane.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6895895E132FB02F007D8E7B /* English */,
+				68958986132FB28B007D8E7B /* ja */,
+				68958987132FB28D007D8E7B /* nl */,
+				68958988132FB290007D8E7B /* it */,
+				68958989132FB294007D8E7B /* de */,
+			);
+			name = ColorsPrefPane.xib;
+			sourceTree = "<group>";
+		};
+		68958961132FB03D007D8E7B /* EditorPrefPane.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68958962132FB03D007D8E7B /* English */,
+				6895898A132FB29F007D8E7B /* ja */,
+				6895898B132FB2A1007D8E7B /* nl */,
+				6895898C132FB2A6007D8E7B /* it */,
+				6895898D132FB2A8007D8E7B /* de */,
+			);
+			name = EditorPrefPane.xib;
+			sourceTree = "<group>";
+		};
+		68958965132FB04C007D8E7B /* MiscPrefPane.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68958966132FB04C007D8E7B /* English */,
+				6895898E132FB2B7007D8E7B /* ja */,
+				6895898F132FB2B9007D8E7B /* de */,
+				68958990132FB2BC007D8E7B /* fr */,
+				68958991132FB2C0007D8E7B /* it */,
+				68958992132FB2C2007D8E7B /* nl */,
+			);
+			name = MiscPrefPane.xib;
+			sourceTree = "<group>";
+		};
+		68958969132FB05C007D8E7B /* QuartzPrefPane.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6895896A132FB05C007D8E7B /* English */,
+				68958993132FB2CC007D8E7B /* ja */,
+				68958994132FB2CE007D8E7B /* de */,
+				68958995132FB2D3007D8E7B /* fr */,
+				68958996132FB2D5007D8E7B /* it */,
+				68958997132FB2D7007D8E7B /* nl */,
+			);
+			name = QuartzPrefPane.xib;
+			sourceTree = "<group>";
+		};
+		6895897B132FB19D007D8E7B /* RConsole.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				68958946132FAFBA007D8E7B /* English */,
+				6895897D132FB1F4007D8E7B /* ja */,
+				6895897E132FB1F7007D8E7B /* nl */,
+			);
+			name = RConsole.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
