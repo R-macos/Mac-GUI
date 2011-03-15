@@ -148,10 +148,10 @@
 /* Entry = "701.headerCell.title"; Class = "NSTableColumn" */
 "Description" = "Description";
 
-/* Entry = "502.gToolTip"; Class = "NSScrollView" */
+/* Entry = "502.ibShadowedToolTip"; Class = "NSScrollView" */
 "Double click on one package to load it in the R workspace. " = "Double-cliquer sur un paquet pour le charger dans l'espace de travail R.";
 
-/* Entry = "577.gToolTip"; Class = "NSButton" */
+/* Entry = "577.ibShadowedToolTip"; Class = "NSButton" */
 "Downloads Selected Packages And Installs In Selected Location" = "Télécharge les paquets sélectionnés et les installe à l'endroit spécifié";
 
 /* Entry = "163.title"; Class = "NSMenuItem" */
@@ -502,10 +502,10 @@
 /* Entry = "172.title"; Class = "NSMenuItem" */
 "Select All" = "Sélectionner Tout";
 
-/* Entry = "547.gToolTip"; Class = "NSScrollView" */
+/* Entry = "547.ibShadowedToolTip"; Class = "NSScrollView" */
 "Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Sélectionner les paquets pour installation ou mise à jour. Sélections multiples autorisées.";
 
-/* Entry = "573.gToolTip"; Class = "NSMatrix" */
+/* Entry = "573.ibShadowedToolTip"; Class = "NSMatrix" */
 "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Sélectionner l'endroit approprié. Pour les non-administrateurs sélectionner \"Au Niveau Utilisateur\".";
 
 /* Entry = "1113.title"; Class = "NSMenuItem" */
@@ -571,7 +571,7 @@
 /* Entry = "832.title"; Class = "NSMenu" */
 "Text" = "Texte";
 
-/* Entry = "559.gToolTip"; Class = "NSMenuItem" */
+/* Entry = "559.ibShadowedToolTip"; Class = "NSMenuItem" */
 "The Package Installer Requires An Internet Connection" = "Le logiciel d'installation des paquets requiert un accès à Internet";
 
 /* Entry = "841.title"; Class = "NSMenuItem" */
@@ -580,13 +580,13 @@
 /* Entry = "699.headerCell.title"; Class = "NSTableColumn" */
 "Topic" = "Rubrique";
 
-/* Entry = "545.gToolTip"; Class = "NSButton" */
+/* Entry = "545.ibShadowedToolTip"; Class = "NSButton" */
 "Try To Download The List Of Packages From The Specified URL" = "Essaye de télécharger la liste des paquets à partir de l'emplacement spécifié";
 
 /* Entry = "668.headerCell.title"; Class = "NSTableColumn" */
 "Type" = "Type";
 
-/* Entry = "539.gToolTip"; Class = "NSTextField" */
+/* Entry = "539.ibShadowedToolTip"; Class = "NSTextField" */
 "URL Of Repository. Must Begin With \"http://\"" = "URL Of Repository. Must Begin With \"http://\"";
 
 /* Entry = "1208.title"; Class = "NSMenuItem" */
@@ -622,7 +622,7 @@
 /* Entry = "161.title"; Class = "NSMenuItem" */
 "Use Selection for Find" = "Utiliser la  Sélection pour Recherche";
 
-/* Entry = "565.gToolTip"; Class = "NSButton" */
+/* Entry = "565.ibShadowedToolTip"; Class = "NSButton" */
 "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "Il est conseillé de spécifier le format du paquet s'il n'est pas standard. En général les archives avec l'extension \".tar.gz\" sont au \"Format Source\" alors que l'extension \".tgz\" indique un Format Binaire\".";
 
 /* Entry = "1110.title"; Class = "NSMenuItem" */

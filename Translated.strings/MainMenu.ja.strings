@@ -148,10 +148,10 @@
 /* Entry = "701.headerCell.title"; Class = "NSTableColumn" */
 "Description" = "説明";
 
-/* Entry = "502.gToolTip"; Class = "NSScrollView" */
+/* Entry = "502.ibShadowedToolTip"; Class = "NSScrollView" */
 "Double click on one package to load it in the R workspace. " = "パッケージをダブルクリックすると R ワークスペースに読み込まれます. ";
 
-/* Entry = "577.gToolTip"; Class = "NSButton" */
+/* Entry = "577.ibShadowedToolTip"; Class = "NSButton" */
 "Downloads Selected Packages And Installs In Selected Location" = "選択されたパッケージをダウンロードし, 選択された場所にインストールします";
 
 /* Entry = "163.title"; Class = "NSMenuItem" */
@@ -502,10 +502,10 @@
 /* Entry = "172.title"; Class = "NSMenuItem" */
 "Select All" = "すべてを選択";
 
-/* Entry = "547.gToolTip"; Class = "NSScrollView" */
+/* Entry = "547.ibShadowedToolTip"; Class = "NSScrollView" */
 "Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "インストール/アップデートしたいパッケージを選択して下さい. 複数選択も可能です. ";
 
-/* Entry = "573.gToolTip"; Class = "NSMatrix" */
+/* Entry = "573.ibShadowedToolTip"; Class = "NSMatrix" */
 "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "適切なインストール先を指定して下さい. 管理者権限がない場合は「ユーザエリア」を選択して下さい.";
 
 /* Entry = "1113.title"; Class = "NSMenuItem" */
@@ -571,7 +571,7 @@
 /* Entry = "832.title"; Class = "NSMenu" */
 "Text" = "テキスト";
 
-/* Entry = "559.gToolTip"; Class = "NSMenuItem" */
+/* Entry = "559.ibShadowedToolTip"; Class = "NSMenuItem" */
 "The Package Installer Requires An Internet Connection" = "パッケージインストーラの実行にはインターネット接続が必要です";
 
 /* Entry = "841.title"; Class = "NSMenuItem" */
@@ -580,13 +580,13 @@
 /* Entry = "699.headerCell.title"; Class = "NSTableColumn" */
 "Topic" = "トピック";
 
-/* Entry = "545.gToolTip"; Class = "NSButton" */
+/* Entry = "545.ibShadowedToolTip"; Class = "NSButton" */
 "Try To Download The List Of Packages From The Specified URL" = "指定されたURLからパッケージの一覧をダウンロードします";
 
 /* Entry = "668.headerCell.title"; Class = "NSTableColumn" */
 "Type" = "型";
 
-/* Entry = "539.gToolTip"; Class = "NSTextField" */
+/* Entry = "539.ibShadowedToolTip"; Class = "NSTextField" */
 "URL Of Repository. Must Begin With \"http://\"" = "リポジトリのURL. \"http://\"で始まっていなければなりません.";
 
 /* Entry = "1208.title"; Class = "NSMenuItem" */
@@ -622,7 +622,7 @@
 /* Entry = "161.title"; Class = "NSMenuItem" */
 "Use Selection for Find" = "選択部分を用いて検索";
 
-/* Entry = "565.gToolTip"; Class = "NSButton" */
+/* Entry = "565.ibShadowedToolTip"; Class = "NSButton" */
 "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "デフォルト以外のリポジトリを用いる場合には、パッケージフォーマットを指定する必要があります. 通常、拡張子 \".tar.gz\" のアーカイブは「ソース形式」, 拡張子 \".tgz\" のパッケージは「バイナリ形式」です. ";
 
 /* Entry = "1110.title"; Class = "NSMenuItem" */
