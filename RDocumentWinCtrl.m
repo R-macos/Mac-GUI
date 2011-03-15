@@ -138,7 +138,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 {
 	[textView setString:strContents];
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[textView setSelectedRange:NSMakeRange(0,0)];
 	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.3];
 #endif
@@ -702,7 +702,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 	RTextView *tv = [aNotification object];
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[tv layoutManager] setAllowsNonContiguousLayout:NO];
 #endif
 

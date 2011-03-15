@@ -114,7 +114,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
 	[[self textStorage] setDelegate:self];
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[self layoutManager] setAllowsNonContiguousLayout:YES];
 #endif
 	
@@ -496,7 +496,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	NSRange textRange = NSMakeRange(start, end-start);
 
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[self layoutManager] ensureLayoutForCharacterRange:textRange];
 #endif
 
@@ -619,7 +619,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			currentHighlight = pos;
 			[lm setTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(pos, 1)];
 			[self performSelector:@selector(resetBackgroundColor:) withObject:nil afterDelay:braceHighlightInterval];
-		} else SLog(@"highlightCharacter: attempt to set highlight %d beyond the text range 0:%d - I refuse!", pos, [self length]-1);
+		} else SLog(@"highlightCharacter: attempt to set highlight %d beyond the text range 0:%d - I refuse!", pos, [[self string] length] - 1);
 	}
 }
 

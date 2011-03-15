@@ -75,7 +75,6 @@ typedef unsigned int NSUInteger;
 - (int)  numberOfRowsInTableView:(NSTableView *)tableView;
 - (id)   tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row;
 - (void) tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(int)row;
-	// #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
 - (void) tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *) oldDescriptors;
 
 @end
