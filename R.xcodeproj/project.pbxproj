@@ -940,7 +940,6 @@
 			isa = PBXProject;
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
 			compatibilityVersion = "Xcode 2.4";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -2073,7 +2072,7 @@
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = Leopard;
 		};
 		680F0B300997CE66009CDBE8 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
 			isa = XCConfigurationList;
@@ -2088,7 +2087,7 @@
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = Leopard;
 		};
 		680F0B350997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "R" */ = {
 			isa = XCConfigurationList;
@@ -2103,7 +2102,7 @@
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = Leopard;
 		};
 		680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */ = {
 			isa = XCConfigurationList;
@@ -2118,7 +2117,7 @@
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = Leopard;
 		};
 /* End XCConfigurationList section */
 	};

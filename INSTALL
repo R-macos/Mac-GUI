@@ -1,26 +1,39 @@
 INSTALL
 
-configure, build and install R-2.2.x with
+configure, build and install R with
 
 	./configure
 	make
 	sudo make install
 	
 Once you have the R.framework installed in /Library/Frameworks, you can build R.app
+Note that for universal GUI you will have to set r_arch in configure above to one of
+the supported architectures: i386, x86_64, ppc, ppc64 or arm.
 
 
  Building R.app
 ================
 
-There are two projects now:
-  "R.xcode" works with Xcode 1.5 - 2.0
-  "R.xcodeproj" work with Xcode 2.1 and higher
+Since R.app GUI 1.40 only Mac OS X 10.5 and higher are supported. The project
+is called "R.xcodeproj" and requires Xcode 3.0 or higher. If you need a support
+for older Mac OS X version, you use a GUI version before 1.40.
 
-Only the latter project supports universal binaries.
-Either project can be built by selecting "R" target and "Build" inside the XCode GUI.
+The project can be built by selecting "R" target and "Build" inside the XCode GUI.
 
 To build the project from the command line in Mac-GUI directory use:
-	xcodebuild -target R -buildstyle Deployment
+	xcodebuild -target R -configuration Leopard
+
+Supported configurations are:
+  Leopard (32-bit Intel + PPC, release, OS X 10.5+)
+  Leopard64 (64-bit Intel, release, OS X 10.5+)
+  LeopardPPC64 (64-bit PowerPC, release, OS X 10.5+)
+  SnowLeopard (32 and 64-bit Intel, release, OS X 10.6+)
+  Debug (native arch, with debugging output, current OS X)
+
+The following legacy configurations are only supported until 1.40:
+  Development (native arch, debug, OS X 10.4+)
+  Deployment (32-bit Intel + PPC, release, OS X 10.4+)
+  Deployment64 (64-bit Intel + PPX, release, OS X 10.4+)
 
 To build the R for Mac OS X Faq use either
 	xcodebuild -target Docs
@@ -29,26 +42,10 @@ or manually in docs folder
 	
 In any case the resulting html FAQ file can be found in Mac-GUI/docs directory.
 
-If you plan to build R.app on an Intel Mac, you will need patched gcc 4.0.3 in
-/usr/local/gcc4.0 (see http://wiki.urbanek.info/index.cgi?TigerGCC ) and use
-make
-instead of xcodebuild. It uses xcode intenally, but the actual code is re-compiled
-using the 4.0.3 gcc compiler.
-
-NOTE:
-To run R.app from inside the XCode debugger, you have to setup the R_HOME 
-environment variable. Proceed as follows:
-* Select the "R" executable (in Groups & Files view: R -> Executables -> R)
-* choose "Info" (shortcut: <Cmd><I>)
-* Click the "Arguments" tab, in the lower list (Variables ..) use (+) and set 
-	R_HOME  
-	to   
-	/Library/Frameworks/R.framework/Resources
-
 
 Note about binary compatibility:
 The general rules for R apply, that is binary compatibility is given only if the major and minor version numbers match - only the patch level may differ. When using the X.Y.Z version form it means that X.Y must match. For example R-GUIs linked to 2.0.x and 2.1.x are NOT binary compatible (in fact there is even some conditional code in the GUI).
 The compiled R.app is usually bound to a specific version, such as 2.0.1. If you upgrade R removing the older version, let's say using R.app built for 2.0.0 and updating R to 2.0.1, you may need to fix the absolute path to libR.dylib. The nightly builds use generic path /Library/Frameworks/R.framework/Resources/lib/libR.dylib which points to the latest version of R, but this is done by an additional call to install_name_tool in the building script. Release versions of the GUI use fixed-version path as they come with a specific R version (in fact the default behavior doesn't depends on the GUI, but on libR.dylib - changing its own reference entry changes the way R.app is linked).
 
 --
- Last update: 2005-04-20
+ Last update: 2011-03-15

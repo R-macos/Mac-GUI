@@ -1,5 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
+
+Last update: 2011-03-15
+*	R.app is now more strict about file types. It no
+	longer attempts to read any file as text. However,
+	plain text UTI is added such that the GUI can handle
+	URL and file types that are declared as text.
+
+
 -- Release Version 1.36 (5691) - supplied with R 2.12.2 --
 
 Last update: 2011-02-03

@@ -209,6 +209,9 @@
 	SLog(@" - call super -> openDocumentWithContentsOfURL: %@", aFile);
 	RDocument *doc = nil;
 	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
+
+	// FIXME: this no longer works since 1.40 editor changes -- we just signal defeat for now
+#if 0
 	if (doc == nil) {				
 		/* WARNING: this is a hack for cases where the document type 
 		   cannot be determined. Since we're replicating Cocoa functionality this may break
@@ -222,6 +225,7 @@
 			SLog(@" * failed, returning nil");
 		}
 	}
+#endif
 	return doc;
 }
 

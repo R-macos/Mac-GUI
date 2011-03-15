@@ -2357,10 +2357,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	SLog(@" - application:openFile:%@ called", (NSString *)filename);
 	NSString *dirname = @"";
 	NSString *fname = nil;
-	BOOL isDir;
+	BOOL isDir = NO;
 	BOOL flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
 	NSFileManager *manager = [NSFileManager defaultManager];
 	if ([manager fileExistsAtPath:filename isDirectory:&isDir] && isDir){
+		SLog(@"   is a directory, cwd to %@", filename);
 		[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
 		if (!flag && !appLaunched) {
 //			[manager changeCurrentDirectoryPath:[filename stringByExpandingTildeInPath]];
@@ -2392,17 +2393,23 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				};
 			}
 			dirname = [filename substringWithRange: NSMakeRange(0, j+1)];
+			SLog(@" - intial start, changing wd to pathname whic is %@", dirname);
 			[manager changeCurrentDirectoryPath:[dirname stringByExpandingTildeInPath]];
 			[self showWorkingDir:nil];
 			[self doClearHistory:nil];
 			[self doLoadHistory:nil];
 		}
 		BOOL openInEditor = [Preferences flagForKey:editOrSourceKey withDefault: YES];
+		SLog(@"   appLaunched = %@, openInEditor = %@", appLaunched ? @"YES" : @"NO", openInEditor ? @"YES" : @"NO");
 		if (openInEditor || appLaunched) {
 			NSURL *url = [NSURL fileURLWithPath:filename];
-			NSError *theError;
+			NSError *theError = nil;
 			SLog(@" - application:openFile path of URL: <%@>", [url absoluteString]);
 			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+			if (theError) {
+				SLog(@"*** openDocumentWithContentsOfURL: failed with %@", theError);
+				return NO;
+			}
 		} else {
 			int res = [[RController sharedController] isImageData: filename];
 			SLog(@"RDocumentController.openDocumentWithContentsOfFile: %@", filename);

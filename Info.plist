@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleShortVersionString</key>
-	<string>R R_RELEASE GUI GUI_VER CFG_NAME</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>R.app GUI GUI_VER (%SVN% CFG_NAME), S.Urbanek &amp; S.M.Iacus, © R Foundation for Statistical Computing, 2010</string>
-	<key>CFBundleName</key>
-	<string>R</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDocumentTypes</key>
@@ -99,6 +93,22 @@
 			<key>NSDocumentClass</key>
 			<string>RDocument</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Plain Text</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.text</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>RDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>R</string>
@@ -108,8 +118,12 @@
 	<string>org.R-project.R</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>R</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>R R_RELEASE GUI GUI_VER CFG_NAME</string>
 	<key>CFBundleSignature</key>
 	<string>Rgui</string>
 	<key>CFBundleVersion</key>
@@ -118,6 +132,8 @@
 	<string>MIN_VERSION</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>R.app GUI GUI_VER (%SVN% CFG_NAME), S.Urbanek &amp; S.M.Iacus, © R Foundation for Statistical Computing, 2011</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
