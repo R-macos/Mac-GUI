@@ -114,11 +114,9 @@
 	[super dealloc];
 }
 
-- (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-	// Required delegate method:  Given an item identifier, this method returns an item 
-	// The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
+- (NSToolbarItem *) toolbar: (NSToolbar *)aToolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
 	NSToolbarItem *toolbarItem = nil;
-	SLog(@"toolbar:%@ itemForItemIdentifier:%@", toolbar, itemIdent);
+	SLog(@"toolbar:%@ itemForItemIdentifier:%@", aToolbar, itemIdent);
 	if ([itemIdent isEqual: RETI_Save])
 		return tiSave;
 	else if ([itemIdent isEqual: RETI_HelpSearch])
@@ -128,11 +126,11 @@
 	return toolbarItem;
 }
 
-- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
+- (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) aToolbar {
     return [NSArray arrayWithObjects: RET_ListDefault, nil];
 }
 
-- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
+- (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) aToolbar {
     return [NSArray arrayWithObjects: RET_ListAll, nil];
 }
 
