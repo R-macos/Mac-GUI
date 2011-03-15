@@ -29,7 +29,7 @@
 
 /* HelpManager */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
 

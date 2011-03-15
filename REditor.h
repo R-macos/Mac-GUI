@@ -29,7 +29,7 @@
 
 /* REditor */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 #define DataEditorToolbarIdentifier      @"DataEditor Toolbar Identifier"
 #define AddColToolbarItemIdentifier      @"Add Column"

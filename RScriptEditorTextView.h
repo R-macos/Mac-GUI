@@ -32,7 +32,7 @@
  *
  */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import "RTextView.h"
 #import "Preferences.h"
 #import "PreferenceKeys.h"

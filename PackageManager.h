@@ -29,7 +29,7 @@
 
 /* PackageManager */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 // structure holding all available data about a package
 typedef struct pkgManagerEntry {

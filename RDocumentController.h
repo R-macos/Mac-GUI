@@ -29,7 +29,7 @@
 
 /* RDocumentController */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import "Preferences.h"
 #import "RDocument.h"
 

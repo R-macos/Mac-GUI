@@ -28,9 +28,8 @@
  */
 
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import "Preferences.h"
-//#import "RDocumentWinCtrl.h"
 
 @class RDocumentWinCtrl;
 

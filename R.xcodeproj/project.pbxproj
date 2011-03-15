@@ -135,6 +135,7 @@
 		6807116E0EB0CD4200436993 /* InfoPlist.h in Headers */ = {isa = PBXBuildFile; fileRef = 6807116D0EB0CD4200436993 /* InfoPlist.h */; };
 		6807E645080EAE4100A03223 /* GlobalExHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 6807E643080EAE4100A03223 /* GlobalExHandler.h */; };
 		6807E646080EAE4100A03223 /* GlobalExHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 6807E644080EAE4100A03223 /* GlobalExHandler.m */; };
+		6825104D132F337800367C93 /* CCComp.h in Headers */ = {isa = PBXBuildFile; fileRef = 6825104C132F337800367C93 /* CCComp.h */; };
 		6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6828383807804DFC004617B7 /* ExceptionHandling.framework */; };
 		684D008507BD72BE0047EEF6 /* SyntaxColorsPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 684D008307BD72BE0047EEF6 /* SyntaxColorsPrefPane.h */; };
 		684D008607BD72BE0047EEF6 /* SyntaxColorsPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 684D008407BD72BE0047EEF6 /* SyntaxColorsPrefPane.m */; };
@@ -361,6 +362,7 @@
 		6807E644080EAE4100A03223 /* GlobalExHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalExHandler.m; sourceTree = "<group>"; };
 		6812EC9E07BA6A360000B6A8 /* de */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = de; path = de.lproj/EditorPrefPane.nib; sourceTree = "<group>"; };
 		681D40BE081D653B0019CB4C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/Credits.rtf; sourceTree = "<group>"; };
+		6825104C132F337800367C93 /* CCComp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCComp.h; sourceTree = "<group>"; };
 		6828383807804DFC004617B7 /* ExceptionHandling.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExceptionHandling.framework; path = /System/Library/Frameworks/ExceptionHandling.framework; sourceTree = "<absolute>"; };
 		684D008307BD72BE0047EEF6 /* SyntaxColorsPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyntaxColorsPrefPane.h; sourceTree = "<group>"; };
 		684D008407BD72BE0047EEF6 /* SyntaxColorsPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyntaxColorsPrefPane.m; sourceTree = "<group>"; };
@@ -725,6 +727,7 @@
 			isa = PBXGroup;
 			children = (
 				68F84C6109ABB2BF0098D772 /* privateR.h */,
+				6825104C132F337800367C93 /* CCComp.h */,
 				32CA4F630368D1EE00C91783 /* R_Prefix.pch */,
 				6855194007B8FDDF00F3A57C /* RGUI.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -887,6 +890,7 @@
 				BC12B313130A65CE009F7D3F /* RScriptEditorTextView.h in Headers */,
 				BCCE4A38130AB3C6003325EB /* RScriptEditorTokens.h in Headers */,
 				BC12DC4A130EC12900FB39CE /* NoodleLineNumberView.h in Headers */,
+				6825104D132F337800367C93 /* CCComp.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -938,7 +942,6 @@
 			isa = PBXProject;
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
 			compatibilityVersion = "Xcode 2.4";
-			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -1780,8 +1783,8 @@
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEBUG_CFG=1";
-				STRIP_INSTALLED_PRODUCT = NO;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};

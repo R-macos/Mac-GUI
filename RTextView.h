@@ -30,7 +30,7 @@
  *  $Id$
  */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 /* RTextView is a subclass of NSTextView with some additional properties:
    - responds to <Ctrl><.> by sending complete: to self

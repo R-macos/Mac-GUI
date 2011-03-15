@@ -32,7 +32,7 @@
  *  Created by Simon Urbanek on 4/1/05.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import "RDocumentWinCtrl.h"
 
 #define	RETI_Save       @"RETI Save Document"

@@ -31,7 +31,7 @@
  *  inspired by LineNumbering example authored by Koen van der Drift.
  */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import "PreferenceKeys.h"
 #import "Preferences.h"
 

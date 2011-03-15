@@ -37,7 +37,7 @@
 #include <R_ext/eventloop.h>
 #import <sys/types.h>
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import <WebKit/WebKit.h>
 
 #import "Tools/History.h"

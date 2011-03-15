@@ -29,7 +29,7 @@
 
 /* DataManager */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 #import "Tools/SortableDataSource.h"
 
 @interface DataManager : NSObject

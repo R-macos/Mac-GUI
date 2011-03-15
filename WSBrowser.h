@@ -29,7 +29,7 @@
 
 /* WSBrowser */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 #define WorkSpaceBrowserToolbarIdentifier      @"WorkSpaceBrowser Toolbar Identifier"
 

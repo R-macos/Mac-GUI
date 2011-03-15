@@ -29,7 +29,7 @@
 
 /* SelectList */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 @interface SelectList : NSObject
 {

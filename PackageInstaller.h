@@ -46,7 +46,7 @@
 #define kBinary		1
 #define kSource		0
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 @interface PackageEntry : NSObject {
 	NSString *name;

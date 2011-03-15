@@ -29,7 +29,7 @@
  *  Create by Simon Urbanek on 12/5/2004
  */
 
-#import <Cocoa/Cocoa.h>
+#import "CCComp.h"
 
 @protocol PreferencesDependent
 - (void) updatePreferences;

@@ -1,7 +1,7 @@
 /* VignettesController */
 
-#import <Cocoa/Cocoa.h>
 #import "RGUI.h"
+#import "CCComp.h"
 #import "Tools/SortableDataSource.h"
 #import "Tools/PDFImageView.h"
 
