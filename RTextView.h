@@ -49,7 +49,7 @@ extern BOOL RTextView_autoCloseBrackets;
 @private
 	BOOL console;
 	NSCharacterSet *separatingTokensSet;
-	NSCharacterSet *commentTokensSet;
+	// NSCharacterSet *commentTokensSet;
 }
 
 - (void)setConsoleMode:(BOOL)isConsole;

@@ -64,12 +64,12 @@ static PackageManager *sharedController = nil;
 #pragma mark TableView delegates
 
 /* These two routines are needed to update the History TableView */
-- (int)numberOfRowsInTableView: (NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView: (NSTableView *)tableView
 {
 	return packages;
 }
 
-- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
+- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (NSInteger)row
 {
 	if (row<packages) {
 		if([[tableColumn identifier] isEqualToString:@"status"])
@@ -85,7 +85,7 @@ static PackageManager *sharedController = nil;
 - (void)tableView:(NSTableView *)tableView
 	setObjectValue:(id)object
 	forTableColumn:(NSTableColumn *)tableColumn
-	row:(int)row
+	row:(NSInteger)row
 {
 	if (row>=packages) return;
 	if([[tableColumn identifier] isEqualToString:@"status"]){

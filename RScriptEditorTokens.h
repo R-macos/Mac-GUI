@@ -45,3 +45,5 @@
 #define RPT_VARIABLE             8
 #define RPT_WORD                 9
 #define RPT_OTHER               10
+#define RPT_OPERATOR            11
+#define RPT_DECLARATION         12

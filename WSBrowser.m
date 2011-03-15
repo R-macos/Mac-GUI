@@ -86,7 +86,7 @@ if (!item) { \
 }
 
 // required
-- (id)outlineView:(NSOutlineView *)ov child:(int)index ofItem:(id)item
+- (id)outlineView:(NSOutlineView *)ov child:(NSInteger)index ofItem:(id)item
 {
     // item is an NSDictionary...
     GET_CHILDREN;
@@ -101,7 +101,7 @@ if (!item) { \
     return YES;
 }
 
-- (int)outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item
+- (NSInteger)outlineView:(NSOutlineView *)ov numberOfChildrenOfItem:(id)item
 {
     GET_CHILDREN;
     return [children count];

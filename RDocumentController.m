@@ -103,16 +103,17 @@
 
 		// if document hasREditFlag set focus back to RConsole AND if sanety check fails
 		BOOL reditcheck = ([[self currentDocument] respondsToSelector:@selector(hasREditFlag)]);
+
 		if((!reditcheck || (reditcheck && ![[self currentDocument] hasREditFlag])) 
 				&& nextWindow && nextWindow != w) {
 			SLog(@" - makeKeyWindow with title %@ and type %@", [nextWindow title], [d fileType]);
-			[nextWindow makeKeyAndOrderFront:nil];
 		} else {
 			SLog(@" - makeKeyWindow RConsole");
-			[[[RController sharedController] window] makeKeyAndOrderFront:nil];
+			nextWindow = [[RController sharedController] window];
 		}
 
 		[NSApp removeWindowsItem: w];
+		[nextWindow makeKeyAndOrderFront:nil];
 
 	}
 }

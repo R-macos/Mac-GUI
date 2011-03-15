@@ -34,6 +34,7 @@
 #import "HelpManager.h"
 #import "RGUI.h"
 #import "RegexKitLite.h"
+#import "RController.h"
 
 // linked character attributes
 #define kTALinked    @"RTVLinkedChar"
@@ -80,16 +81,18 @@ BOOL RTextView_autoCloseBrackets = YES;
 {
 	SLog(@"RTextView: awakeFromNib %@", self);
 	separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
-	commentTokensSet    = [[NSCharacterSet characterSetWithCharactersInString: @"#"] retain];
+	// commentTokensSet    = [[NSCharacterSet characterSetWithCharactersInString: @"#"] retain];
 	console = NO;
 	RTextView_autoCloseBrackets = YES;
     SLog(@" - delegate: %@", [self delegate]);
     // FIXME: this is a really ugly hack ... behavior should not depend on class names ...
-	isRConsole = [[(NSObject*)[self delegate] className] isEqualToString:@"RController"] ? YES : NO;
+	isRConsole = ([(NSObject*)[self delegate] isKindOfClass:[RController class]]) ? YES : NO;
 }
 
 - (void)dealloc
 {
+	if(separatingTokensSet) [separatingTokensSet release];
+	// if(commentTokensSet) [commentTokensSet release];
 	[super dealloc];
 }
 
@@ -351,6 +354,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	if (context == pcComment) return NSMakeRange(NSNotFound,0); // no completion in comments
 
+	if(!separatingTokensSet)
+		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
+
 	if (context == pcStringDQ || context == pcStringSQ) // we're in a string, hence file completion
 														// the beginning of the range doesn't matter, because we're guaranteed to find a string separator on the same line
 		userRange = [string rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:(context == pcStringDQ) ? @"\" /" : @"' /"]
@@ -479,7 +485,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	if(helpString && ![helpString isMatchedByRegex:@"(?s)[^\\w\\d_\\.]"] && [[self delegate] respondsToSelector:@selector(hintForFunction:)]) {
 		SLog(@"RTextView: currentFunctionHint for '%@'", helpString);
-		[[self delegate] hintForFunction:helpString];
+		[(RController*)[self delegate] hintForFunction:helpString];
 	}
 
 }

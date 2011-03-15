@@ -153,14 +153,14 @@ void printelt(SEXP invec, int vrow, char *strp)
 }
 
 /* These two routines are needed to update the  TableView */
-- (int)numberOfRowsInTableView: (NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView: (NSTableView *)tableView
 {
 	return ymaxused;
 }
 
 - (id)tableView: (NSTableView *)tableView
 		objectValueForTableColumn: (NSTableColumn *)tableColumn
-		row: (int)row
+		row: (NSInteger)row
 {
 	int i = [[tableColumn identifier] intValue];
 	if(i > xmaxused)
@@ -183,7 +183,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (void)tableView:(NSTableView *)aTableView
 	setObjectValue:anObject
 	forTableColumn:(NSTableColumn *)tableColumn
-	row:(int)row
+	row:(NSInteger)row
 {
 	int col;
 	if(row<0) return;

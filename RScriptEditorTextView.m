@@ -114,6 +114,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
 	[[self textStorage] setDelegate:self];
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+	[[self layoutManager] setAllowsNonContiguousLayout:YES];
+#endif
+	
 
 	// Set defaults for general usage
 	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
@@ -491,6 +495,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		start = start_temp;
 
 	NSRange textRange = NSMakeRange(start, end-start);
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+	[[self layoutManager] ensureLayoutForCharacterRange:textRange];
+#endif
 
 	// only to be sure that nothing went wrongly
 	textRange = NSIntersectionRange(textRange, NSMakeRange(0, [theTextStorage length])); 

@@ -85,6 +85,8 @@ functions	(if|f(or|unction)|while)
 <equation>{ops}				{ BEGIN(INITIAL); return RPT_OTHER; }				/* set operator after a numeric   */
 {numeric}/{alpha}			{ return RPT_WORD; }								/* catch numeric followed by char */
 
+{ops}						{ return RPT_OPERATOR; }							/* all operators                  */
+{decl}						{ return RPT_DECLARATION; }							/* all declarations               */
 {s}+						{ return RPT_WHITESPACE; }							/* ignore spaces                  */
 
 {numeric}					{ return RPT_NUMERIC; }								/* single numeric value           */

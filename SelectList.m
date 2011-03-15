@@ -62,12 +62,12 @@ BOOL IsSelectList;
 }
 
 /* These two routines are needed to update the SelectList TableView */
-- (int)numberOfRowsInTableView: (NSTableView *)tableView
+- (NSInteger)numberOfRowsInTableView: (NSTableView *)tableView
 {
 	return totalItems;
 }
 
-- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (int)row
+- (id)tableView: (NSTableView *)tableView objectValueForTableColumn: (NSTableColumn *)tableColumn row: (NSInteger)row
 {
 	if (row<totalItems) {
 		if([[tableColumn identifier] isEqualToString:@"item"])

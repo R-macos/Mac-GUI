@@ -1491,7 +1491,11 @@ extern BOOL isTimeToFinish;
 
 	if([contextInfo isEqualToString:@"saveAsRConsole"]) {
 		if(returnCode == NSOKButton) {
-				[[consoleTextView string] writeToFile:[sheet filename] atomically:YES];
+			NSError *writeError = nil;
+			[[consoleTextView string] writeToFile:[sheet filename] atomically:YES encoding:NSUTF8StringEncoding error:&writeError];
+			if(writeError != nil) {
+				NSBeginCriticalAlertSheet(NLS(@"Error"), NLS(@"OK"), nil, nil, RConsoleWindow, self, nil, nil, nil, [writeError localizedDescription]);
+			}
 		}
 	}
 
@@ -1571,7 +1575,19 @@ extern BOOL isTimeToFinish;
 - (void)windowWillCloseNotifications:(NSNotification*) aNotification
 {
 
-	// NSLog(@"%@:%@", [aNotification object], [[aNotification object] title]);
+	NSWindow *w = [aNotification object];
+
+	SLog(@"RController%@.windowWillCloseNotifications:%@", self, w);
+
+	if (w && (
+			   [[(NSObject*)[w delegate] className] isEqualToString:@"RDocumentWinCtrl"] 
+			|| [[(NSObject*)[w delegate] className] isEqualToString:@"QuartzCocoaView"])
+			)
+		{
+			SLog(@" - R source or Quartz windows will be handled by RDocumentController.windowWillCloseNotifications");
+			return;
+		}
+
 
 	// Get all windows
 	NSArray *appWindows = [NSApp orderedWindows];
@@ -1579,7 +1595,7 @@ extern BOOL isTimeToFinish;
 
 	// for NSPanels set focus to the first window; otherwise the first window is the to be
 	// closed window thus set focus to the next window
-	BOOL closingWindowFound = ([[aNotification object] isKindOfClass:[NSPanel class]]);
+	BOOL closingWindowFound = ([w isKindOfClass:[NSPanel class]]);
 
 	// loop through windows to find next window
 	// and make it the key window
@@ -1587,12 +1603,14 @@ extern BOOL isTimeToFinish;
 		id win = [appWindows objectAtIndex:i];
 		if([win isVisible]) {
 			if(closingWindowFound) {
+				SLog(@" - next key window title: %@", [win title]);
 				[win makeKeyAndOrderFront:nil];
 				return;
 			}
 			closingWindowFound = YES;
 		}
 	}
+	SLog(@" - no window found; make RConsole key window");
 	[RConsoleWindow makeKeyAndOrderFront:nil];
 }
 
@@ -1962,7 +1980,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return YES;
 }
 
-- (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
+- (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index 
 {
 
 	NSRange sr = [textView selectedRange];

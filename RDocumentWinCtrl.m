@@ -129,13 +129,20 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	[textView setSelectedRange:NSMakeRange(0,0)];
 }
 
+- (void)layoutTextView
+{
+	[[textView layoutManager] ensureLayoutForCharacterRange:NSMakeRange(0, [[textView string] length])];
+}
+
 - (void) replaceContentsWithString: (NSString*) strContents
 {
-	[[textView layoutManager] setAllowsNonContiguousLayout:YES];
 	[textView setString:strContents];
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
 	[textView setSelectedRange:NSMakeRange(0,0)];
-	[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0];
-	[[textView layoutManager] setAllowsNonContiguousLayout:NO];
+	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.3];
+#endif
+
 }
 
 - (NSData*) contentsAsRtf
@@ -670,7 +677,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	return retval;
 }
 
-- (NSArray *)textView:(NSTextView *)aTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(int *)index 
+- (NSArray *)textView:(NSTextView *)aTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index 
 {
 
 	NSRange sr = [aTextView selectedRange];
@@ -693,12 +700,16 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
 
+	RTextView *tv = [aNotification object];
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 1050
+	[[tv layoutManager] setAllowsNonContiguousLayout:NO];
+#endif
+
 	if(argsHints && ![[self document] hasREditFlag] && ![self plain]) {
 
 		// show functions hints due to current caret position or selection
 		SLog(@"RDocumentWinCtrl: textViewDidChangeSelection and calls currentFunctionHint");
-
-		RTextView *tv = [aNotification object];
 
 		// Cancel pending currentFunctionHint calls
 		[NSObject cancelPreviousPerformRequestsWithTarget:tv 
@@ -746,7 +757,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	}
 
 	// Make window at which the sheet was attached key window
-	[[self window] makeKeyWindow];
+	[[self window] makeKeyAndOrderFront:nil];
 
 }
 
