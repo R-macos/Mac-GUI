@@ -541,9 +541,9 @@ void printelt(SEXP invec, int vrow, char *strp)
 		
 			for (row = lastrow+2; row < ymaxused; row++)
 				if (type == REALSXP)
-					REAL(tmp2)[row] = REAL(tmp)[row-1];
+					REAL(tmp2)[row] = REAL(tmp)[row - 1];
 				else if (type == STRSXP)
-					SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row));
+					SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row - 1));
 				else
 					error("internal type error in dataentry");
 		}

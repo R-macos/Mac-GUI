@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-03-21
+*	fixed crash when adding rows in a data frame
+	containing strings (PR#14434)
+
 Last update: 2011-03-19 [HJBB]
 *	Implemented Menu > Format > 
 	- Reinterpret with Encoding...
