@@ -102,6 +102,10 @@ extern NSColor *shColorIdentifier;
 
 - (IBAction)setHelpSearchType:(id)sender;
 - (IBAction)goHelpSearch:(id)sender;
+- (IBAction)reInterpretDocument:(id)sender;
+
+- (IBAction)shiftRight:(id)sender;
+- (IBAction)shiftLeft:(id)sender;
 
 - (void) setEditable: (BOOL) editable;
 

@@ -34,12 +34,17 @@
 #import "Preferences.h"
 #import "PreferenceKeys.h"
 #import "QuartzCocoaDocument.h"
+#import "RChooseEncodingPopupAccessory.h"
 
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
 #undef error
 #endif
+
+
+@implementation OpenSaveAccessoryOwner
+@end
 
 @implementation RDocumentController
 
@@ -185,6 +190,11 @@
 
 }
 
+- (Class)documentClassForType:(NSString *)documentTypeName
+{
+	return [RDocument class];
+}
+
 - (id) openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)theError {
 	if (absoluteURL == nil) {
 		SLog(@"RDocumentController.openDocumentWithContentsOfURL with null URL. Nothing to do.");
@@ -207,25 +217,7 @@
 	}			
 
 	SLog(@" - call super -> openDocumentWithContentsOfURL: %@", aFile);
-	RDocument *doc = nil;
-	doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
-
-	// FIXME: this no longer works since 1.40 editor changes -- we just signal defeat for now
-#if 0
-	if (doc == nil) {				
-		/* WARNING: this is a hack for cases where the document type 
-		   cannot be determined. Since we're replicating Cocoa functionality this may break
-		   with future versions of Cocoa. */
-		SLog(@" -  creating manually");
-		doc = [self makeDocumentWithContentsOfFile:aFile ofType:defaultDocumentType];
-		if (doc) {
-			SLog(@" - succeeded by calling makeDocument.. ofType: %@", defaultDocumentType);
-			[self addDocument:doc];
-		} else {
-			SLog(@" * failed, returning nil");
-		}
-	}
-#endif
+	RDocument *doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:theError];
 	return doc;
 }
 
@@ -249,18 +241,22 @@
 	system([cmd UTF8String]);	
 }
 
-- (NSInteger)runModalOpenPanel:(NSOpenPanel *)openPanel forTypes:(NSArray *)extensions
+/**
+ * Loads the "encoding" accessory view used in save panels. 
+ */
++ (NSView *)encodingAccessory:(NSStringEncoding)encoding includeDefaultEntry:(BOOL)includeDefaultItem encodingPopUp:(NSPopUpButton **)popup
 {
-	// TODO: add accessory view for open file encoding - it's tricky because we don't have a document yet so we can't use the convenient way that we use in the save panel
-	return [super runModalOpenPanel:openPanel forTypes:extensions];
+	OpenSaveAccessoryOwner *owner = [[[OpenSaveAccessoryOwner alloc] init] autorelease];
+	// Rather than caching, load the accessory view everytime, as it might appear in multiple panels simultaneously.
+	if (![NSBundle loadNibNamed:@"EncodingPopupView" owner:owner])  {
+		NSLog(@"Failed to load EncodingPopupView.xib");
+		NSBeep();
+		return nil;
+	}
+	if (popup) *popup = owner->encodingPopUp;
+	[[RChooseEncodingPopupAccessory sharedInstance] setupPopUpCell:[owner->encodingPopUp cell] selectedEncoding:encoding withDefaultEntry:includeDefaultItem];
+	[owner->label setStringValue:[NSString stringWithFormat:@"%@:", NLS(@"Encoding")]];
+	return [owner->accessoryView autorelease];
 }
 
-/*
-- (IBAction)openDocument:(id)sender
-{
-	NSOpenPanel *op = [NSOpenPanel openPanel];
-	[op setAccessoryView:saveOpenAccView];
-	NSInteger res = [self run
-			 }
-*/
 @end

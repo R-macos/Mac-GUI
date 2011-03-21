@@ -1,5 +1,43 @@
 NEWS for R.app GUI for Mac OS X
 
+Last update: 2011-03-19 [HJBB]
+*	Implemented Menu > Format > 
+	- Reinterpret with Encoding...
+	- Increase Indent (of current line or selection)
+	- Decrease Indent (of current line or selection)
+
+*	Added Menu > Select >
+	- All
+	- Word
+	- Line
+	- Balanced Brackets
+
+*	Fixed on runtime changing of Preference item
+	'Wrap Lines'
+
+*	RConsole and R Editor are listening at two finger
+	zoom gesture of trackpads to de/increase font size
+
+Last update: 2011-03-18 [HJBB]
+*	Enabled and implemented Main Menu > File > Revert
+
+*	If Match braces/quotes is activated and something is
+	selected in RConsole or R Editor the typing of ({"'`[
+	will wrap the selection with the typed character and
+	its complement
+
+*	Fixed MoveToLeftEndOfLine and
+	moveToLeftEndOfLineAndModifySelection in RConsole
+	to remain the cursor inside the active input line
+
+Last update: 2011-03-17 [HJBB]
+*	Improved the Save Panel for R scripts; now it offers
+	a new list of encodings which is customizable by the
+	user and displays the names of these encodings
+	localized. Any changes will be stored permanently.
+
+Last update: 2011-03-17 [HJBB]
+*	Now the Open Panel allows to open more than one file
 
 Last update: 2011-03-15
 *	R.app is now more strict about file types. It no
@@ -7,6 +45,68 @@ Last update: 2011-03-15
 	plain text UTI is added such that the GUI can handle
 	URL and file types that are declared as text.
 
+Last update: 2011-03-14 [HJBB]
+*	Applied Deepayan Sarkar's base package 'rcompgen'
+	for code completion. This includes the ability to
+	complete $ or @ variables and function parameters.
+	It is customizable by the user via rc.settings()
+	and rc.options(). More details at the help page for
+	'rcompgen'. For the R Editor it also works in
+	multi-line mode.
+	Examples: [ | := cursor position]
+
+	.Platform$| -> will show all names
+	plot(x, xl|) -> will show 'xlab=' and 'xlim'
+	plot(|) -> show all parameter
+
+	To append e.g. a ( to all functions you can set
+	rc.settings(func=TRUE). To allow to complete installed
+	package names set rc.settings(ipck=TRUE); then the
+	behavior changes for library(|), now one gets a 
+	list of all installed packages.
+
+
+Last update: 2011-03-04 [HJBB]
+*	Overhaul of the entire R Script Editor:
+	- new line numbering including the chance to select
+	a line by clicking into the gutter or a bunch of lines
+	by dragging the mouse in the gutter
+	- improved syntax highlighting by using flex and it'll
+	be done on demand which increases the speed enormously;
+	supports multi-line strings etc.
+	- improved the declared function name parsing; show 
+	names in red if the name is invalid and grayed if the
+	function is commented out
+
+Last update: 2011-02-13 [HJBB]
+*	Implemented 'Search in Help files' (generally in each
+	WebView) via CMD+F etc. if the WebView has the focus.
+
+*	The function hint in the status bar of the RConsole
+	and R Editor tries to follow the current cursor position
+
+*	Improved the general closing behavior of windows to
+	make the last touched window the key window
+
+*	Fixed issue for 'Choose New Working Directory'; now the
+	working directory will be taken by the user's selection
+	and not the actual current directory inside the panel
+
+*	Fixed printing CMD+P of each help page and the RConsole
+
+*	Changed the behavior of SHIFT+CMD+N 'New Quartz Device
+	Window' slightly; after opening it sets the input focus
+	to RConsole for convenience
+
+Last update: 2011-02-10 [HJBB]
+*	Added menu item 'Show Help for current Function' CTRL+H
+	to context menu of RConsole and each Script Editor. It
+	parses backwards from the current cursor's position to
+	to find the current function and opens the help page.
+	If the user did select a text chunk CTRL+H will try
+	to come up with help page of the selected text.
+	If nothing was found it sets the focus to the Help 
+	Search Field.
 
 -- Release Version 1.36 (5691) - supplied with R 2.12.2 --
 
@@ -1277,3 +1377,4 @@ Authors:
 SI	Stefano M Iacus
 SU	Simon Urbanek
 RG	Rob J Goedman
+HJBB	Hans-J. Bibiko

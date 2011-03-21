@@ -179,10 +179,16 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		BC0D319A1334B1410071B76A /* NSTextView_RAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = BC0D31981334B1410071B76A /* NSTextView_RAdditions.h */; };
+		BC0D319B1334B1410071B76A /* NSTextView_RAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */; };
 		BC12B313130A65CE009F7D3F /* RScriptEditorTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */; };
 		BC12B314130A65CE009F7D3F /* RScriptEditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */; };
 		BC12DC4A130EC12900FB39CE /* NoodleLineNumberView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */; };
 		BC12DC4B130EC12900FB39CE /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */; };
+		BC1952B21330C9D400D52B29 /* RChooseEncodingPopupAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */; };
+		BC1952B31330C9D400D52B29 /* RChooseEncodingPopupAccessory.h in Headers */ = {isa = PBXBuildFile; fileRef = BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */; };
+		BC1952B61330CA3500D52B29 /* EncodingPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC1952B41330CA3500D52B29 /* EncodingPopupView.xib */; };
+		BC81712F13321873004B52A0 /* SelectEncodingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC81712D13321873004B52A0 /* SelectEncodingsPanel.xib */; };
 		BCCE4A38130AB3C6003325EB /* RScriptEditorTokens.h in Headers */ = {isa = PBXBuildFile; fileRef = BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */; };
 		BCCE4A3A130AB3E3003325EB /* RScriptEditorTokens.l in Sources */ = {isa = PBXBuildFile; fileRef = BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */; };
 		BCD7EC911301A4950050850E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD7EC901301A4950050850E /* libicucore.dylib */; };
@@ -258,7 +264,7 @@
 		1673550C06DE155F00A75774 /* PackageInstaller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PackageInstaller.h; sourceTree = "<group>"; };
 		1673550D06DE155F00A75774 /* PackageInstaller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageInstaller.m; sourceTree = "<group>"; };
 		1674D23406BA2E37008AC794 /* R.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = R.framework; path = /Library/Frameworks/R.framework; sourceTree = "<absolute>"; };
-		167BDD5D06D4C0F5005381BB /* PackageManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PackageManager.h; sourceTree = "<group>"; };
+		167BDD5D06D4C0F5005381BB /* PackageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageManager.h; sourceTree = "<group>"; };
 		167BDD5E06D4C0F5005381BB /* PackageManager.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PackageManager.m; sourceTree = "<group>"; };
 		167BE02006D5143A005381BB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		167EA45906D0F07F0039E305 /* NewDocumentItemImage.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = NewDocumentItemImage.tiff; path = images/NewDocumentItemImage.tiff; sourceTree = "<group>"; };
@@ -427,15 +433,26 @@
 		68F84C6109ABB2BF0098D772 /* privateR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = privateR.h; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC0D31981334B1410071B76A /* NSTextView_RAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_RAdditions.h; sourceTree = "<group>"; };
+		BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_RAdditions.m; sourceTree = "<group>"; };
 		BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTextView.h; sourceTree = "<group>"; };
 		BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorTextView.m; sourceTree = "<group>"; };
 		BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoodleLineNumberView.h; sourceTree = "<group>"; };
 		BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoodleLineNumberView.m; sourceTree = "<group>"; };
+		BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RChooseEncodingPopupAccessory.m; sourceTree = "<group>"; };
+		BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RChooseEncodingPopupAccessory.h; sourceTree = "<group>"; };
+		BC1952B51330CA3500D52B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EncodingPopupView.xib; sourceTree = "<group>"; };
+		BC6DECCE133267F900C852C1 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BC81712E13321873004B52A0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BC9EF20313326D98005E61C6 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTokens.h; sourceTree = "<group>"; };
 		BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = RScriptEditorTokens.l; sourceTree = "<group>"; };
 		BCD7EC901301A4950050850E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = /usr/lib/libicucore.dylib; sourceTree = "<absolute>"; };
 		BCD7EC931301A5190050850E /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		BCD7EC941301A5190050850E /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		BCE2529913326919001D3138 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BCE5C673133262CC00381F90 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BCEEA0EE1332641B00F55604 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorPrefPane.h; sourceTree = "<group>"; };
 		D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorPrefPane.m; sourceTree = "<group>"; };
 		D41DED57073B3FF700B900F2 /* RDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RDocumentController.h; sourceTree = "<group>"; };
@@ -476,6 +493,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				BC0D31971334B1240071B76A /* Category Additions */,
 				687B4E430794167000074042 /* Console */,
 				687B4E400794165600074042 /* Editor */,
 				D41DED57073B3FF700B900F2 /* RDocumentController.h */,
@@ -738,6 +756,8 @@
 			isa = PBXGroup;
 			children = (
 				6884A70F0F795D7B000BB49F /* GUI-tools.R */,
+				BC1952B41330CA3500D52B29 /* EncodingPopupView.xib */,
+				BC81712D13321873004B52A0 /* SelectEncodingsPanel.xib */,
 				686967DA07981764002A1932 /* Localizable.strings */,
 				6895893F132FAF72007D8E7B /* MainMenu.xib */,
 				6895897B132FB19D007D8E7B /* RConsole.xib */,
@@ -782,6 +802,8 @@
 			children = (
 				BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */,
 				BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */,
+				BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */,
+				BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */,
 				BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */,
 				BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */,
 				BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */,
@@ -811,6 +833,15 @@
 				687B503A07945D4C00074042 /* RConsoleTextStorage.m */,
 			);
 			name = Console;
+			sourceTree = "<group>";
+		};
+		BC0D31971334B1240071B76A /* Category Additions */ = {
+			isa = PBXGroup;
+			children = (
+				BC0D31981334B1410071B76A /* NSTextView_RAdditions.h */,
+				BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */,
+			);
+			name = "Category Additions";
 			sourceTree = "<group>";
 		};
 		BCD7EC921301A4EF0050850E /* Regex Engine */ = {
@@ -889,6 +920,8 @@
 				BCCE4A38130AB3C6003325EB /* RScriptEditorTokens.h in Headers */,
 				BC12DC4A130EC12900FB39CE /* NoodleLineNumberView.h in Headers */,
 				6825104D132F337800367C93 /* CCComp.h in Headers */,
+				BC1952B31330C9D400D52B29 /* RChooseEncodingPopupAccessory.h in Headers */,
+				BC0D319A1334B1410071B76A /* NSTextView_RAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -940,6 +973,7 @@
 			isa = PBXProject;
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -1026,6 +1060,8 @@
 				68958963132FB03D007D8E7B /* EditorPrefPane.xib in Resources */,
 				68958967132FB04C007D8E7B /* MiscPrefPane.xib in Resources */,
 				6895896B132FB05C007D8E7B /* QuartzPrefPane.xib in Resources */,
+				BC1952B61330CA3500D52B29 /* EncodingPopupView.xib in Resources */,
+				BC81712F13321873004B52A0 /* SelectEncodingsPanel.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1130,6 +1166,8 @@
 				BC12B314130A65CE009F7D3F /* RScriptEditorTextView.m in Sources */,
 				BCCE4A3A130AB3E3003325EB /* RScriptEditorTokens.l in Sources */,
 				BC12DC4B130EC12900FB39CE /* NoodleLineNumberView.m in Sources */,
+				BC1952B21330C9D400D52B29 /* RChooseEncodingPopupAccessory.m in Sources */,
+				BC0D319B1334B1410071B76A /* NSTextView_RAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1313,6 +1351,27 @@
 				6895897E132FB1F7007D8E7B /* nl */,
 			);
 			name = RConsole.xib;
+			sourceTree = "<group>";
+		};
+		BC1952B41330CA3500D52B29 /* EncodingPopupView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC1952B51330CA3500D52B29 /* English */,
+			);
+			name = EncodingPopupView.xib;
+			sourceTree = "<group>";
+		};
+		BC81712D13321873004B52A0 /* SelectEncodingsPanel.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BC81712E13321873004B52A0 /* English */,
+				BCE5C673133262CC00381F90 /* de */,
+				BCEEA0EE1332641B00F55604 /* fr */,
+				BC6DECCE133267F900C852C1 /* it */,
+				BCE2529913326919001D3138 /* ja */,
+				BC9EF20313326D98005E61C6 /* nl */,
+			);
+			name = SelectEncodingsPanel.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

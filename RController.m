@@ -62,6 +62,7 @@
 #import "RDocumentWinCtrl.h"
 #import "Quartz/QuartzDevice.h"
 #import "Tools/Authorization.h"
+#import "RChooseEncodingPopupAccessory.h"
 
 #import "Preferences.h"
 #import "SearchTable.h"
@@ -623,23 +624,44 @@ static RController* sharedRController;
 	appLaunched = YES;
 	[self setStatusLineText:@""];
 
-    {
-	// check locale
-	RSEXP * x = [[REngine mainEngine] evaluateString:@"Sys.getlocale()"];
-	if (x) {
-	    NSString *s = [x string];
-	    if (s) {
-		NSRange r = [s rangeOfString:@"utf" options:NSCaseInsensitiveSearch];
-		if (r.location == NSNotFound) {
-		    [self writeConsoleDirectly:NLS(@"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n") withColor:[NSColor redColor]];
+	{
+		// check locale
+		RSEXP * x = [[REngine mainEngine] evaluateString:@"Sys.getlocale()"];
+		if (x) {
+			NSString *s = [x string];
+			if (s) {
+				NSRange r = [s rangeOfString:@"utf" options:NSCaseInsensitiveSearch];
+				if (r.location == NSNotFound) {
+					[self writeConsoleDirectly:NLS(@"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n") withColor:[NSColor redColor]];
+				}
+			}
+			[x release];
 		}
-	    }
-	    [x release];
 	}
-    }
-	
-    
+
+	[self updateReInterpretEncodingMenu];
+
 	SLog(@" - done, ready to go");
+
+}
+
+- (void)updateReInterpretEncodingMenu
+{
+	// Update Re-Open with Encoding submenu
+	while ([reinterpretEncodingMenu numberOfItems]) [reinterpretEncodingMenu removeItemAtIndex:0];
+	NSArray *enabledEncodings = [[RChooseEncodingPopupAccessory sharedInstance] enabledEncodings];
+	NSInteger i;
+	NSMenuItem *encItem;
+	for(i=0; i<[enabledEncodings count]; i++) {
+		encItem = [[NSMenuItem alloc] initWithTitle:[NSString localizedNameOfStringEncoding:[[enabledEncodings objectAtIndex:i] unsignedIntValue]] action:@selector(reInterpretDocument:) keyEquivalent:@""];
+		[encItem setRepresentedObject:[enabledEncodings objectAtIndex:i]];
+		[reinterpretEncodingMenu addItem:encItem];
+		[encItem release];
+	}
+	[reinterpretEncodingMenu addItem:[NSMenuItem separatorItem]];
+	encItem = [[NSMenuItem alloc] initWithTitle:NLS(@"Customize List…") action:@selector(customizeEncodingList:) keyEquivalent:@""];
+	[reinterpretEncodingMenu addItem:encItem];
+	[encItem release];
 }
 
 - (BOOL)appLaunched {
@@ -1237,7 +1259,9 @@ extern BOOL isTimeToFinish;
 	NSURL *url = [NSURL fileURLWithPath:fn];
 	NSError *theError;
 	isREditMode = YES;
+
 	RDocument *document = [[RDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+
 	[document setREditFlag: YES];
 	NSArray *wcs = [document windowControllers];
 	if (![wcs count]) {
@@ -1863,7 +1887,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
     
 	// ---- make sure the user won't accidentally get out of the input line ----
 	// FIXME: essentially everything here behaves the same for a paragraph and line, but we should be making a distinction because of multi-line commands
-	if (@selector(moveToBeginningOfParagraph:) == commandSelector || @selector(moveToBeginningOfLine:) == commandSelector) {
+	if (@selector(moveToBeginningOfParagraph:) == commandSelector 
+			|| @selector(moveToBeginningOfLine:) == commandSelector
+			|| @selector(moveToLeftEndOfLine:) == commandSelector) {
+
         [textView setSelectedRange: NSMakeRange(committedLength,0)];
         retval = YES;
     }
@@ -1883,7 +1910,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		retval = YES;
 	}
     
-	if (@selector(moveToBeginningOfParagraphAndModifySelection:) == commandSelector || @selector(moveToBeginningOfLineAndModifySelection:) == commandSelector) {
+	if (@selector(moveToBeginningOfParagraphAndModifySelection:) == commandSelector 
+			|| @selector(moveToLeftEndOfLineAndModifySelection:) == commandSelector
+			|| @selector(moveToBeginningOfLineAndModifySelection:) == commandSelector) {
 		NSRange r = [textView selectedRange];
 		r.length = r.location + r.length - committedLength;
 		r.location = committedLength;
@@ -2281,6 +2310,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
 
+
+	if ([menuItem action] == @selector(reInterpretDocument:)) {
+		return NO;
+	}
+
 	if ([menuItem action] == @selector(printDocument:)) {
 
 		id firstResponder = [[NSApp keyWindow] firstResponder];
@@ -2425,12 +2459,36 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return YES;
 }
 
-- (IBAction)openDocument:(id)sender{
-	SLog(@" - openDocument");
-	char buf[1000];
-	[self handleChooseFile:buf len:1000 isNew:0];
-	[self application:NSApp openFile:[NSString stringWithUTF8String:buf]];
-//	[[RDocumentController sharedDocumentController] openDocument: sender];
+- (IBAction)openDocument:(id)sender
+{
+
+	SLog(@"RController: openDocument");
+
+	NSOpenPanel *op = [NSOpenPanel openPanel];
+	[op setTitle:NLS(@"Choose File")];
+	[op setAllowsMultipleSelection:YES];
+	[op setCanSelectHiddenExtension:YES];
+	[op setCanChooseDirectories:NO];
+	[op setResolvesAliases:YES];
+
+	NSInteger answer = [op runModalForDirectory:nil file:nil];
+	
+	if(answer == NSOKButton) {
+		if([op filenames] != nil) {
+			NSInteger i;
+			for(i=0; i<[[op filenames] count]; i++) {
+				NSString *pathName = [[op filenames] objectAtIndex:i];
+				SLog(@" - will open %@", pathName);
+				[self application:NSApp openFile:pathName];
+			}
+		}
+	}
+
+}
+
+- (IBAction)customizeEncodingList:(id)sender;
+{
+	[[RChooseEncodingPopupAccessory sharedInstance] showPanel:nil];
 }
 
 - (IBAction)saveDocumentAs:(id)sender{

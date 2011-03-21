@@ -41,7 +41,9 @@
 	
 	BOOL isEditable; // determines whether this document can be edited
 	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
-	
+
+	NSPopUpButton *encodingPopUp;
+
 	NSStringEncoding documentEncoding;
 
 	RDocumentWinCtrl *myWinCtrl;
@@ -50,7 +52,7 @@
 + (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
 
 - (void) loadInitialContents;
-
+- (void) reinterpretInEncoding: (NSStringEncoding) encoding;
 - (void) setEditable: (BOOL) editable;
 - (BOOL) editable;
 - (void) setREditFlag: (BOOL) flag;

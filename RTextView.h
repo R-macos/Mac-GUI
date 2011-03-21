@@ -54,10 +54,14 @@ extern BOOL RTextView_autoCloseBrackets;
 
 - (void)setConsoleMode:(BOOL)isConsole;
 
-- (NSRange)getRangeForCurrentWord;
-- (NSRange)getRangeForCurrentWordOfRange:(NSRange)curRange;
 - (int)parserContextForPosition:(int)position;
 - (void)showHelpForCurrentFunction;
 - (void)currentFunctionHint;
+- (BOOL) wrapSelectionWithPrefix:(NSString *)prefix suffix:(NSString *)suffix;
+- (BOOL) isNextCharMarkedBy:(id)attribute withValue:(id)aValue;
+- (BOOL) isCursorAdjacentToAlphanumCharWithInsertionOf:(unichar)aChar;
+- (BOOL) shiftSelectionRight;
+- (BOOL) shiftSelectionLeft;
+- (BOOL) isRConsole;
 
 @end

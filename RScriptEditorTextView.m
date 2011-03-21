@@ -297,6 +297,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			[[self textContainer] setContainerSize:[self bounds].size];
 			[scrollView setHasHorizontalScroller:NO];
 			[[self textContainer] setWidthTracksTextView:YES];
+			// Enforce view to be re-layouted correctly
+			[[self undoManager] disableUndoRegistration];
+			[self selectAll:nil];
+			[self cut:nil];
+			[self paste:nil];
+			[[self undoManager] enableUndoRegistration];
 		}
 		[[self textContainer] setHeightTracksTextView:NO];
 

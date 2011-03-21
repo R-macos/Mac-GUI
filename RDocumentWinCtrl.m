@@ -38,6 +38,7 @@
 #import "Tools/FileCompletion.h"
 #import "Tools/CodeCompletion.h"
 #import "RegexKitLite.h"
+#import "RTextView.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -52,6 +53,7 @@ NSColor *shColorIdentifier;
 #define hsTypeExact   1
 #define hsTypeApprox  2
 
+#define kMainMenuFileTag 1001
 
 @implementation RDocumentWinCtrl
 
@@ -517,6 +519,26 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	[self updatePreferences];
 }
 
+- (IBAction)reInterpretDocument:(id)sender;
+{
+
+	RDocument* doc = [[NSDocumentController sharedDocumentController] documentForWindow:[NSApp keyWindow]];
+	if(doc)
+		[doc reinterpretInEncoding:(NSStringEncoding)[[sender representedObject] unsignedIntValue]];
+	else
+		NSBeep();
+
+}
+
+- (IBAction)shiftRight:(id)sender
+{
+	[textView shiftSelectionRight];
+}
+
+- (IBAction)shiftLeft:(id)sender
+{
+	[textView shiftSelectionLeft];
+}
 
 - (IBAction)goToLine:(id)sender
 {
@@ -1017,7 +1039,11 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
 
-	if ([menuItem action] == @selector(comment:) || [menuItem action] == @selector(uncomment:))  {
+	if ([menuItem action] == @selector(reInterpretDocument:)) {
+		return ([[RDocumentController sharedDocumentController] currentDocument] && [[[RDocumentController sharedDocumentController] currentDocument] fileURL]);
+	}
+
+	if ([menuItem action] == @selector(comment:) || [menuItem action] == @selector(uncomment:)) {
 		id firstResponder = [[NSApp keyWindow] firstResponder];
 		return ([firstResponder respondsToSelector:@selector(isEditable)] && [firstResponder isEditable]);
 	}

@@ -45,6 +45,8 @@
 #define identifierSyntaxColorKey @"Identifier Syntax Color"
 
 #define initialWorkingDirectoryKey @"Working directory"
+#define lastUsedFileEncoding @"LastUsedFileEncoding"
+#define usedFileEncodings @"UsedFileEncodings"
 
 #define FontSizeKey    @"Console Font Size"
 #define RScriptEditorTabWidth    @"R Script Editor tab width"

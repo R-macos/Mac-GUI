@@ -35,10 +35,11 @@
 #import "RGUI.h"
 #import "RegexKitLite.h"
 #import "RController.h"
+#import "NSTextView_RAdditions.h"
 
 // linked character attributes
-#define kTALinked    @"RTVLinkedChar"
-#define TAVal        @""
+#define kTALinked    @"link"
+#define kTAVal       @"x"
 
 // context menu tags
 #define kShowHelpContextMenuItemTag 10001
@@ -171,7 +172,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return;
 	}
 	if (cc && [cc length]==1 && RTextView_autoCloseBrackets) {
-		unsigned int ck = [cc characterAtIndex:0];
+		unichar ck = [cc characterAtIndex:0];
 		NSString *complement = nil;
 		NSRange r = [self selectedRange];
 		BOOL acCheck = NO;
@@ -201,6 +202,21 @@ BOOL RTextView_autoCloseBrackets = YES;
 					if ([self parserContextForPosition:r.location] != pcExpression) break;
 				}
 
+				// Check if something is selected and wrap it into matching pair characters and preserve the selection
+				// - in RConsole only if selection is in the last line
+				if(((isRConsole && [[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || !isRConsole) 
+					&& [self wrapSelectionWithPrefix:[NSString stringWithFormat:@"%c", ck] suffix:complement]) {
+					SLog(@"RTextView: selection was wrapped with auto-pairs");
+					return;
+				}
+
+				// Try to suppress unnecessary auto-pairing
+				if( ([self isCursorAdjacentToAlphanumCharWithInsertionOf:ck] && ![self isNextCharMarkedBy:kTALinked withValue:kTAVal] && ![self selectedRange].length) ){ 
+					SLog(@"RTextView: suppressed auto-pairing");
+					[super keyDown:theEvent];
+					return;
+				}
+
 				SLog(@"RTextView: open bracket chracter %c", ck);
 				[super keyDown:theEvent];
 				{
@@ -213,7 +229,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 						[self shouldChangeTextInRange:r replacementString:complement];
 						[self replaceCharactersInRange:r withString:complement];
 						r.length=1;
-						[ts addAttribute:kTALinked value:TAVal range:r];
+						[ts addAttribute:kTALinked value:kTAVal range:r];
 						r.length=0;
 						[self setSelectedRange:r];
 					}
@@ -224,6 +240,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 			case ']':
 				acCheck = YES;
 		}
+
 		if (acCheck) {
 			NSRange r = [self selectedRange];
 			if (r.location != NSNotFound && r.length == 0) {
@@ -276,6 +293,34 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	[super deleteForward:sender];
 
+}
+
+/**
+ * If the textview has a selection, wrap it with the supplied prefix and suffix strings;
+ * return whether or not any wrap was performed.
+ */
+- (BOOL) wrapSelectionWithPrefix:(NSString *)prefix suffix:(NSString *)suffix
+{
+
+	NSRange currentRange = [self selectedRange];
+
+	// Only proceed if a selection is active
+	if (currentRange.length == 0 || ![self isEditable])
+		return NO;
+
+	NSString *selString = [[self string] substringWithRange:currentRange];
+
+	// Replace the current selection with the selected string wrapped in prefix and suffix
+	[self insertText:[NSString stringWithFormat:@"%@%@%@", prefix, selString, suffix]];
+	
+	// Re-select original selection
+	NSRange innerSelectionRange = NSMakeRange(currentRange.location+1, [selString length]);
+	[self setSelectedRange:innerSelectionRange];
+
+	// Mark last autopair character as autopair-linked
+	[[self textStorage] addAttribute:kTALinked value:kTAVal range:NSMakeRange(NSMaxRange(innerSelectionRange), 1)];
+
+	return YES;
 }
 
 /**
@@ -390,52 +435,62 @@ BOOL RTextView_autoCloseBrackets = YES;
 }
 
 /**
+ * Checks if the char after the current caret position/selection matches a supplied attribute
+ */
+- (BOOL) isNextCharMarkedBy:(id)attribute withValue:(id)aValue
+{
+	NSUInteger caretPosition = [self selectedRange].location;
+
+	// Perform bounds checking
+	if (caretPosition >= [[self string] length]) return NO;
+	
+	// Perform the check
+	if ([[[self textStorage] attribute:attribute atIndex:caretPosition effectiveRange:nil] isEqualToString:aValue])
+		return YES;
+
+	return NO;
+}
+
+/**
+ * Checks if the caret adjoins to an alphanumeric char  |word or word| or wo|rd
+ * Exception for word| and char is a “(” or “[” to allow e.g. auto-pairing () for functions
+ */
+- (BOOL) isCursorAdjacentToAlphanumCharWithInsertionOf:(unichar)aChar
+{
+	NSUInteger caretPosition = [self selectedRange].location;
+	NSCharacterSet *alphanum = [NSCharacterSet alphanumericCharacterSet];
+	BOOL leftIsAlphanum = NO;
+	BOOL rightIsAlphanum = NO;
+	BOOL charIsOpenBracket = (aChar == '(' || aChar == '[');
+	NSUInteger bufferLength = [[self string] length];
+
+	if(!bufferLength) return NO;
+	
+	// Check previous/next character for being alphanum
+	// @try block for bounds checking
+	@try
+	{
+		if(caretPosition==0)
+			leftIsAlphanum = NO;
+		else
+			leftIsAlphanum = [alphanum characterIsMember:[[self string] characterAtIndex:caretPosition-1]] && !charIsOpenBracket;
+	} @catch(id ae) { }
+	@try {
+		if(caretPosition >= bufferLength)
+			rightIsAlphanum = NO;
+		else
+			rightIsAlphanum= [alphanum characterIsMember:[[self string] characterAtIndex:caretPosition]];
+		
+	} @catch(id ae) { }
+
+	return (leftIsAlphanum ^ rightIsAlphanum || (leftIsAlphanum && rightIsAlphanum));
+}
+
+/**
  * Returns the range of the current word relative the current cursor position
  *   finds: [| := caret]  |word  wo|rd  word|
  *   if | is in between whitespaces range length is zero.
  */
-- (NSRange)getRangeForCurrentWord
-{
-	return [self getRangeForCurrentWordOfRange:[self selectedRange]];
-}
-
-- (NSRange)getRangeForCurrentWordOfRange:(NSRange)curRange
-{
-
-	if (curRange.length) return curRange;
-
-	NSString *str = [self string];
-	int curLocation = curRange.location;
-	int start = curLocation;
-	int end = curLocation;
-	unsigned int strLen = [[self string] length];
-	NSMutableCharacterSet *wordCharSet = [NSMutableCharacterSet alphanumericCharacterSet];
-	[wordCharSet addCharactersInString:@"_."];
-
-	if(start) {
-		start--;
-		if(CFStringGetCharacterAtIndex((CFStringRef)str, start) != '\n' || CFStringGetCharacterAtIndex((CFStringRef)str, start) != '\r') {
-			while([wordCharSet characterIsMember:CFStringGetCharacterAtIndex((CFStringRef)str, start)]) {
-				start--;
-				if(start < 0) break;
-			}
-		}
-		start++;
-	}
-
-	while(end < strLen && [wordCharSet characterIsMember:CFStringGetCharacterAtIndex((CFStringRef)str, end)])
-		end++;
-
-	// correct range if found range ends with a .
-	NSRange wordRange = NSMakeRange(start, end-start);
-	if(wordRange.length && CFStringGetCharacterAtIndex((CFStringRef)str, NSMaxRange(wordRange)-1) == '.')
-		wordRange.length--;
-
-	SLog(@"RTextView: returned range for current word: %@", NSStringFromRange(wordRange));
-
-	return(wordRange);
-
-}
 
 /**
  * Sets the console mode
@@ -488,6 +543,187 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[(RController*)[self delegate] hintForFunction:helpString];
 	}
 
+}
+
+/**
+ * Shifts the selection, if any, rightwards by indenting any selected lines with one tab.
+ * If the caret is within a line, the selection is not changed after the index; if the selection
+ * has length, all lines crossed by the length are indented and fully selected.
+ * Returns whether or not an indentation was performed.
+ */
+- (BOOL) shiftSelectionRight
+{
+	NSString *textViewString = [[self textStorage] string];
+	NSRange currentLineRange;
+	NSRange selectedRange = [self selectedRange];
+
+	if (selectedRange.location == NSNotFound || ![self isEditable]) return NO;
+
+	NSString *indentString = @"\t";
+	// if ([prefs soft]) {
+	// 	NSUInteger numberOfSpaces = [prefs soft width];
+	// 	if(numberOfSpaces < 1) numberOfSpaces = 1;
+	// 	if(numberOfSpaces > 32) numberOfSpaces = 32;
+	// 	NSMutableString *spaces = [NSMutableString string];
+	// 	for(NSUInteger i = 0; i < numberOfSpaces; i++)
+	// 		[spaces appendString:@" "];
+	// 	indentString = [NSString stringWithString:spaces];
+	// }
+
+	// Indent the currently selected line if the caret is within a single line
+	if (selectedRange.length == 0) {
+
+		// Extract the current line range based on the text caret
+		currentLineRange = [textViewString lineRangeForRange:selectedRange];
+
+		// Register the indent for undo
+		[self shouldChangeTextInRange:NSMakeRange(currentLineRange.location, 0) replacementString:indentString];
+
+		// Insert the new tab
+		[self replaceCharactersInRange:NSMakeRange(currentLineRange.location, 0) withString:indentString];
+
+		return YES;
+	}
+
+	// Otherwise, something is selected
+	NSRange firstLineRange = [textViewString lineRangeForRange:NSMakeRange(selectedRange.location,0)];
+	NSUInteger lastLineMaxRange = NSMaxRange([textViewString lineRangeForRange:NSMakeRange(NSMaxRange(selectedRange)-1,0)]);
+	
+	// Expand selection for first and last line to begin and end resp. but not the last line ending
+	NSRange blockRange = NSMakeRange(firstLineRange.location, lastLineMaxRange - firstLineRange.location);
+	if([textViewString characterAtIndex:NSMaxRange(blockRange)-1] == '\n' || [textViewString characterAtIndex:NSMaxRange(blockRange)-1] == '\r')
+		blockRange.length--;
+
+	// Replace \n by \n\t of all lines in blockRange
+	NSString *newString;
+	// check for line ending
+	if([textViewString characterAtIndex:NSMaxRange(firstLineRange)-1] == '\r')
+		newString = [indentString stringByAppendingString:
+			[[textViewString substringWithRange:blockRange] 
+				stringByReplacingOccurrencesOfString:@"\r" withString:[NSString stringWithFormat:@"\r%@", indentString]]];
+	else
+		newString = [indentString stringByAppendingString:
+			[[textViewString substringWithRange:blockRange] 
+				stringByReplacingOccurrencesOfString:@"\n" withString:[NSString stringWithFormat:@"\n%@", indentString]]];
+
+	// Register the indent for undo
+	[self shouldChangeTextInRange:blockRange replacementString:newString];
+
+	[self replaceCharactersInRange:blockRange withString:newString];
+
+	[self setSelectedRange:NSMakeRange(blockRange.location, [newString length])];
+
+	if(blockRange.length == [newString length])
+		return NO;
+	else
+		return YES;
+
+}
+
+
+/**
+ * Shifts the selection, if any, leftwards by un-indenting any selected lines by one tab if possible.
+ * If the caret is within a line, the selection is not changed after the undent; if the selection has
+ * length, all lines crossed by the length are un-indented and fully selected.
+ * Returns whether or not an indentation was performed.
+ */
+- (BOOL) shiftSelectionLeft
+{
+	NSString *textViewString = [[self textStorage] string];
+	NSRange currentLineRange;
+
+	if ([self selectedRange].location == NSNotFound || ![self isEditable]) return NO;
+
+	// Undent the currently selected line if the caret is within a single line
+	if ([self selectedRange].length == 0) {
+
+		// Extract the current line range based on the text caret
+		currentLineRange = [textViewString lineRangeForRange:[self selectedRange]];
+
+		// Ensure that the line has length and that the first character is a tab
+		if (currentLineRange.length < 1
+			|| ([textViewString characterAtIndex:currentLineRange.location] != '\t' && [textViewString characterAtIndex:currentLineRange.location] != ' '))
+			return NO;
+
+		NSRange replaceRange;
+
+		// Check for soft indention
+		NSUInteger indentStringLength = 1;
+		// if ([prefs soft]) {
+		// 	NSUInteger numberOfSpaces = [prefs soft width];
+		// 	if(numberOfSpaces < 1) numberOfSpaces = 1;
+		// 	if(numberOfSpaces > 32) numberOfSpaces = 32;
+		// 	indentStringLength = numberOfSpaces;
+		// 	replaceRange = NSIntersectionRange(NSMakeRange(currentLineRange.location, indentStringLength), NSMakeRange(0,[[self string] length]));
+		// 	// Correct length for only white spaces
+		// 	NSString *possibleIndentString = [[[self textStorage] string] substringWithRange:replaceRange];
+		// 	NSUInteger numberOfLeadingWhiteSpaces = [possibleIndentString rangeOfRegex:@"^(\\s*)" capture:1L].length;
+		// 	if(numberOfLeadingWhiteSpaces == NSNotFound) numberOfLeadingWhiteSpaces = 0;
+		// 	replaceRange = NSMakeRange(currentLineRange.location, numberOfLeadingWhiteSpaces);
+		// } else {
+			replaceRange = NSMakeRange(currentLineRange.location, indentStringLength);
+		// }
+
+		// Register the undent for undo
+		[self shouldChangeTextInRange:replaceRange replacementString:@""];
+
+		// Remove the tab
+		[self replaceCharactersInRange:replaceRange withString:@""];
+
+		return YES;
+	}
+
+	// Otherwise, something is selected
+	NSRange firstLineRange = [textViewString lineRangeForRange:NSMakeRange([self selectedRange].location,0)];
+	NSUInteger lastLineMaxRange = NSMaxRange([textViewString lineRangeForRange:NSMakeRange(NSMaxRange([self selectedRange])-1,0)]);
+	
+	// Expand selection for first and last line to begin and end resp. but the last line ending
+	NSRange blockRange = NSMakeRange(firstLineRange.location, lastLineMaxRange - firstLineRange.location);
+	if([textViewString characterAtIndex:NSMaxRange(blockRange)-1] == '\n' || [textViewString characterAtIndex:NSMaxRange(blockRange)-1] == '\r')
+		blockRange.length--;
+
+	// Check for soft or hard indention
+	NSString *indentString = @"\t";
+	NSUInteger indentStringLength = 1;
+	// if ([prefs soft]) {
+	// 	indentStringLength = [prefs soft width];
+	// 	if(indentStringLength < 1) indentStringLength = 1;
+	// 	if(indentStringLength > 32) indentStringLength = 32;
+	// 	NSMutableString *spaces = [NSMutableString string];
+	// 	for(NSUInteger i = 0; i < indentStringLength; i++)
+	// 		[spaces appendString:@" "];
+	// 	indentString = [NSString stringWithString:spaces];
+	// }
+
+	// Check if blockRange starts with SPACE or TAB
+	// (this also catches the first line of the entire text buffer or
+	// if only one line is selected)
+	NSInteger leading = 0;
+	if([textViewString characterAtIndex:blockRange.location] == ' ' 
+		|| [textViewString characterAtIndex:blockRange.location] == '\t')
+		leading += indentStringLength;
+
+	// Replace \n[ \t] by \n of all lines in blockRange
+	NSString *newString;
+	// check for line ending
+	if([textViewString characterAtIndex:NSMaxRange(firstLineRange)-1] == '\r')
+		newString = [[textViewString substringWithRange:NSMakeRange(blockRange.location+leading, blockRange.length-leading)] 
+			stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"\r%@", indentString] withString:@"\r"];
+	else
+		newString = [[textViewString substringWithRange:NSMakeRange(blockRange.location+leading, blockRange.length-leading)] 
+		stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"\n%@", indentString] withString:@"\n"];
+
+	// Register the unindent for undo
+	[self shouldChangeTextInRange:blockRange replacementString:newString];
+
+	[self replaceCharactersInRange:blockRange withString:newString];
+
+	[self setSelectedRange:NSMakeRange(blockRange.location, [newString length])];
+
+	if(blockRange.length == [newString length])
+		return NO;
+	else
+		return YES;
 }
 
 #pragma mark -
@@ -597,6 +833,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	// go back according opened/closed parentheses
 	BOOL opened, closed;
+	BOOL found = NO;
 	for(index = NSMaxRange(parseRange) - 1; index > parseRange.location; index--) {
 		unichar c = CFStringGetCharacterAtIndex((CFStringRef)parseString, index);
 		closed = (c == ')');
@@ -609,7 +846,15 @@ BOOL RTextView_autoCloseBrackets = YES;
 		}
 		if(closed) parentheses--;
 		if(opened) parentheses++;
-		if(parentheses > 0) break;
+		if(parentheses > 0) {
+			found = YES;
+			break;
+		}
+	}
+
+	if(!found) {
+		SLog(@" - parsing unsuccessfull; bail");
+		return nil;
 	}
 
 	SLog(@" - first not closed ( found at index: %d", index);
@@ -653,6 +898,11 @@ BOOL RTextView_autoCloseBrackets = YES;
 	SLog(@" - found function name wasn't valid, i.e. empty or represents a numeric value; return nil");
 	return nil;
 
+}
+
+- (BOOL) isRConsole
+{
+	return isRConsole;
 }
 
 @end

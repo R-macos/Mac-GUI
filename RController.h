@@ -80,6 +80,7 @@
 	IBOutlet NSTextField *statusLine;
 	IBOutlet NSSearchField *searchInWebViewSearchField;
 	IBOutlet NSPanel *searchInWebViewSheet;
+	IBOutlet NSMenu *reinterpretEncodingMenu;
 
 	WebView *currentWebViewForFindAction;
 	id searchInWebViewWindow;
@@ -222,6 +223,7 @@
 
 - (IBAction)newDocument:(id)sender;
 - (IBAction)openDocument:(id)sender;
+- (IBAction)customizeEncodingList:(id)sender;
 
 - (IBAction)loadWorkSpace:(id)sender;
 - (IBAction)loadWorkSpaceFile:(id)sender;
@@ -296,6 +298,8 @@
 - (BOOL)windowShouldClose:(id)sender;
 
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
+
+- (void)updateReInterpretEncodingMenu;
 
 @end
 

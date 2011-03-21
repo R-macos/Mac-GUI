@@ -25,38 +25,53 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  RChooseEncodingPopupAccessory.h
+ *
+ *  Created by Hans-J. Bibiko on 16/03/2011.
  */
 
-/* RDocumentController */
+#import <Cocoa/Cocoa.h>
 
-#import "CCComp.h"
-#import "Preferences.h"
-#import "RDocument.h"
 
-#define ftRSource @"R Source File"
-#define ftQuartz @"Quartz Graphics"
+#define kNoStringEncoding 0xFFFFFFFF
+#define kAutoStringEncoding 0xFFFFFFFE
+#define kWantsAutomaticTag -1
 
-#define defaultDocumentType ftRSource
-
-/**
- * A very simple container class which is used to collect the outlets from loading the encoding accessory.
- * No implementation provided, because all of the references are weak and don't need retain/release.
- */
-@interface OpenSaveAccessoryOwner : NSObject {
-@public
-	IBOutlet NSView *accessoryView;
-	IBOutlet NSPopUpButton *encodingPopUp;
-	IBOutlet NSTextField *label;
+@interface EncodingPopUpButtonCell : NSPopUpButtonCell
+{
 }
 @end
 
-@interface RDocumentController : NSDocumentController
+@interface RChooseEncodingPopupAccessory : NSObject 
+{
 
-- (NSWindow*)findLastWindowForDocType:(NSString*)aType;
-- (NSWindow*)findNextWindowForDocType:(NSString*)aType;
-- (NSWindow*)findWindowForDocType:(NSString*)aType getLast:(BOOL)getLast;
+	@private
 
-// starts external editor with the specified file (regardless of prefs)
-- (void) invokeExternalForFile:(NSString*)aFile;
-+ (NSView *)encodingAccessory:(NSStringEncoding)encoding includeDefaultEntry:(BOOL)includeDefaultItem encodingPopUp:(NSPopUpButton **)popup;
+	IBOutlet NSTextField *label;
+	IBOutlet NSMatrix *encodingMatrix;
+
+	NSArray *encodings;
+
+}
+
+// There is just one instance...
++ (RChooseEncodingPopupAccessory *)sharedInstance;
+
+// List of encodings that should be shown in encoding lists
+- (NSArray *)enabledEncodings;
+
+// Empties then initializes the supplied popup with the supported encodings
+- (void)setupPopUpCell:(EncodingPopUpButtonCell *)button selectedEncoding:(NSStringEncoding)selectedEncoding withDefaultEntry:(BOOL)includeDefaultItem;
+
+// Action methods for bringing up and dealing with changes in the encodings list panel
+- (IBAction)showPanel:(id)sender;
+- (IBAction)encodingListChanged:(id)sender;
+- (IBAction)clearAll:(id)sender;
+- (IBAction)selectAll:(id)sender;
+- (IBAction)revertToDefault:(id)sender;
+    
+// Internal method to save and communicate changes to the encoding list
+- (void)noteEncodingListChange:(BOOL)writeDefault updateList:(BOOL)updateList postNotification:(BOOL)post;
+
 @end

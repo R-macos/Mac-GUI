@@ -25,38 +25,37 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  NSTextView_RAdditions.h
+ *
+ *  Created by Hans-J. Bibiko on 19/03/2011.
+ *
  */
 
-/* RDocumentController */
+#import <Cocoa/Cocoa.h>
 
-#import "CCComp.h"
-#import "Preferences.h"
-#import "RDocument.h"
 
-#define ftRSource @"R Source File"
-#define ftQuartz @"Quartz Graphics"
+@interface NSTextView (NSTextView_RAdditions)
 
-#define defaultDocumentType ftRSource
+- (NSRange)getRangeForCurrentWord;
+- (NSRange)getRangeForCurrentWordOfRange:(NSRange)curRange;
 
-/**
- * A very simple container class which is used to collect the outlets from loading the encoding accessory.
- * No implementation provided, because all of the references are weak and don't need retain/release.
- */
-@interface OpenSaveAccessoryOwner : NSObject {
-@public
-	IBOutlet NSView *accessoryView;
-	IBOutlet NSPopUpButton *encodingPopUp;
-	IBOutlet NSTextField *label;
-}
-@end
+- (IBAction)selectCurrentWord:(id)sender;
+- (IBAction)selectCurrentLine:(id)sender;
+- (IBAction)selectEnclosingBrackets:(id)sender;
+- (IBAction)doSelectionUpperCase:(id)sender;
+- (IBAction)doSelectionLowerCase:(id)sender;
+- (IBAction)doSelectionTitleCase:(id)sender;
+- (IBAction)doDecomposedStringWithCanonicalMapping:(id)sender;
+- (IBAction)doDecomposedStringWithCompatibilityMapping:(id)sender;
+- (IBAction)doPrecomposedStringWithCanonicalMapping:(id)sender;
+- (IBAction)doPrecomposedStringWithCompatibilityMapping:(id)sender;
+- (IBAction)doTranspose:(id)sender;
+- (IBAction)doRemoveDiacritics:(id)sender;
+- (IBAction)moveSelectionLineUp:(id)sender;
+- (IBAction)moveSelectionLineDown:(id)sender;
 
-@interface RDocumentController : NSDocumentController
+- (void)makeTextSizeLarger;
+- (void)makeTextSizeSmaller;
 
-- (NSWindow*)findLastWindowForDocType:(NSString*)aType;
-- (NSWindow*)findNextWindowForDocType:(NSString*)aType;
-- (NSWindow*)findWindowForDocType:(NSString*)aType getLast:(BOOL)getLast;
-
-// starts external editor with the specified file (regardless of prefs)
-- (void) invokeExternalForFile:(NSString*)aFile;
-+ (NSView *)encodingAccessory:(NSStringEncoding)encoding includeDefaultEntry:(BOOL)includeDefaultItem encodingPopUp:(NSPopUpButton **)popup;
 @end
