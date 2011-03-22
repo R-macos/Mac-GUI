@@ -65,6 +65,7 @@
 {
 	[self updatePreferences];
 	[[Preferences sharedPreferences] addDependent:self];
+	[[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
 }
 
 - (void) dealloc
@@ -200,6 +201,18 @@
 	[Preferences setKey:identifierSyntaxColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
+- (IBAction)changeBackgroundColor:(id)sender {
+	[Preferences setKey:editorBackgroundColorKey withArchivedObject:[(NSColorWell*)sender color]];
+}
+
+- (IBAction)changeCurrentLineColor:(id)sender {
+	[Preferences setKey:editorCurrentLineBackgroundColorKey withArchivedObject:[(NSColorWell*)sender color]];
+}
+
+- (IBAction)changeCursorColor:(id)sender {
+	[Preferences setKey:editorCursorColorKey withArchivedObject:[(NSColorWell*)sender color]];
+}
+
 - (void) updatePreferences
 {
 	NSColor *c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
@@ -214,6 +227,12 @@
 	if (c && ![c isEqualTo:[commentSyntaxColorWell color]]) [commentSyntaxColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[identifierSyntaxColorWell color]]) [identifierSyntaxColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[backgroundSyntaxColorWell color]]) [backgroundSyntaxColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:editorCurrentLineBackgroundColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[currentLineSyntaxColorWell color]]) [currentLineSyntaxColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[cursorSyntaxColorWell color]]) [cursorSyntaxColorWell setColor:c];
 }
 
 - (IBAction) setDefaultSyntaxColors:(id)sender
@@ -230,6 +249,12 @@
 		[NSColor colorWithDeviceRed:0.312 green:0.309 blue:0.309 alpha:1.0]];
 	[Preferences setKey:identifierSyntaxColorKey withArchivedObject:
 		[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
+	[Preferences setKey:editorBackgroundColorKey withArchivedObject:
+		[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]];
+	[Preferences setKey:editorCursorColorKey withArchivedObject:
+		[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
+	[Preferences setKey:editorCurrentLineBackgroundColorKey withArchivedObject:
+		[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8]];
 }
 
 @end

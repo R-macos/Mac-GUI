@@ -30,6 +30,8 @@
 	BOOL _am_delegateRespondsToDisplayNameForCategory;
 }
 
+- (AMPreferencePane *)activePane;
+
 - (id)initWithAutosaveName:(NSString *)name;
 
 - (id)delegate;

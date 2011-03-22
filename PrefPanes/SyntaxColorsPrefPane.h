@@ -47,6 +47,9 @@
     IBOutlet NSColorWell *keywordSyntaxColorWell;
     IBOutlet NSColorWell *commentSyntaxColorWell;
     IBOutlet NSColorWell *identifierSyntaxColorWell;
+    IBOutlet NSColorWell *backgroundSyntaxColorWell;
+    IBOutlet NSColorWell *currentLineSyntaxColorWell;
+    IBOutlet NSColorWell *cursorSyntaxColorWell;
     IBOutlet NSButton *setDefaultSyntaxColors;
 }
 
@@ -75,6 +78,10 @@
 - (IBAction) changeCommentColor:(id)sender;
 - (IBAction) changeIdentifierColor:(id)sender;
 - (IBAction) setDefaultSyntaxColors:(id)sender;
+- (IBAction) changeBackgroundColor:(id)sender;
+- (IBAction) changeCurrentLineColor:(id)sender;
+- (IBAction) changeCursorColor:(id)sender;
+
 - (void) updatePreferences;
 
 @end

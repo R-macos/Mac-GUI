@@ -120,11 +120,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	
 
 	// Set defaults for general usage
-	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
+	braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
 	lineNumberingEnabled = [Preferences flagForKey:showLineNumbersKey withDefault:NO];
 	argsHints = [Preferences flagForKey:prefShowArgsHints withDefault:YES];
 	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault:YES];
-	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault:YES];
 	syntaxHighlightingEnabled = [Preferences flagForKey:showSyntaxColoringKey withDefault:YES];
 
 	deleteBackward = NO;
@@ -202,16 +201,38 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
 	[shColorIdentifier retain]; 
 
+	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:nil];
+	if (c) shColorBackground = c;
+	else shColorBackground=[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+	[shColorBackground retain]; 
+
+	c=[Preferences unarchivedObjectForKey:editorCurrentLineBackgroundColorKey withDefault:nil];
+	if (c) shColorCurrentLine = c;
+	else shColorCurrentLine=[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8];
+	[shColorCurrentLine retain]; 
+
+	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:nil];
+	if (c) shColorCursor = c;
+	else shColorCursor=[NSColor blackColor];
+	[shColorCursor retain]; 
+	[self setInsertionPointColor:shColorCursor];
+
+
 	// Register observers for the when editor background colors preference changes
 	[prefs addObserver:self forKeyPath:normalSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:stringSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:numberSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:keywordSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:commentSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:editorBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:editorCurrentLineBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:identifierSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:editorCursorColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:showSyntaxColoringKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:prefShowArgsHints options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:enableLineWrappingKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:RScriptEditorDefaultFont options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:HighlightIntervalKey options:NSKeyValueObservingOptionNew context:NULL];
 
 	theTextStorage = [self textStorage];
 }
@@ -230,6 +251,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	if(shColorKeyword) [shColorKeyword release];
 	if(shColorComment) [shColorComment release];
 	if(shColorIdentifier) [shColorIdentifier release];
+	if(shColorBackground) [shColorBackground release];
+	if(shColorCurrentLine) [shColorCurrentLine release];
+	if(shColorCursor) [shColorCursor release];
 
 	if(theRulerView) [theRulerView release];
 
@@ -250,33 +274,52 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	if ([keyPath isEqualToString:normalSyntaxColorKey]) {
 		if(shColorNormal) [shColorNormal release];
 		shColorNormal = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		if([[self string] length]<100000 && [self isEditable])
+		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 	} else if ([keyPath isEqualToString:stringSyntaxColorKey]) {
 		if(shColorString) [shColorString release];
 		shColorString = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		if([[self string] length]<100000 && [self isEditable])
+		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 	} else if ([keyPath isEqualToString:numberSyntaxColorKey]) {
 		if(shColorNumber) [shColorNumber release];
 		shColorNumber = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		if([[self string] length]<100000 && [self isEditable])
+		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 	} else if ([keyPath isEqualToString:keywordSyntaxColorKey]) {
 		if(shColorKeyword) [shColorKeyword release];
 		shColorKeyword = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		if([[self string] length]<100000 && [self isEditable])
+		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 	} else if ([keyPath isEqualToString:commentSyntaxColorKey]) {
 		if(shColorComment) [shColorComment release];
 		shColorComment = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		if([[self string] length]<100000 && [self isEditable])
+		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 	} else if ([keyPath isEqualToString:identifierSyntaxColorKey]) {
 		if(shColorIdentifier) [shColorIdentifier release];
 		shColorIdentifier = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		if([[self string] length]<100000 && [self isEditable])
+		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+	} else if ([keyPath isEqualToString:editorCursorColorKey]) {
+		if(shColorCursor) [shColorCursor release];
+		shColorCursor = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+		[self setInsertionPointColor:shColorCursor];
+		[self setNeedsDisplay:YES];
+	} else if ([keyPath isEqualToString:identifierSyntaxColorKey]) {
+		if(shColorIdentifier) [shColorIdentifier release];
+		shColorIdentifier = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+		if([self isEditable])
+			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+	} else if ([keyPath isEqualToString:editorBackgroundColorKey]) {
+		if(shColorBackground) [shColorBackground release];
+		shColorBackground = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+		[self setNeedsDisplay:YES];
+	} else if ([keyPath isEqualToString:editorCurrentLineBackgroundColorKey]) {
+		if(shColorCurrentLine) [shColorCurrentLine release];
+		shColorCurrentLine = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+		[self setNeedsDisplay:YES];
+
 	} else if ([keyPath isEqualToString:showSyntaxColoringKey]) {
 		syntaxHighlightingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		if(syntaxHighlightingEnabled) {
@@ -284,6 +327,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		} else {
 			[theTextStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
 		}
+
 	} else if ([keyPath isEqualToString:enableLineWrappingKey]) {
 		lineWrappingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		NSSize layoutSize = NSMakeSize(10e6,10e6);
@@ -313,8 +357,43 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		if(!argsHints) {
 			[[self delegate] setStatusLineText:@""];
 		}
-	}
 
+	} else if ([keyPath isEqualToString:highlightCurrentLine]) {
+		[self setNeedsDisplay:YES];
+
+	} else if ([keyPath isEqualToString:RScriptEditorDefaultFont]) {
+		[self setFont:[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]]];
+		[self setNeedsDisplay:YES];
+
+	} else if ([keyPath isEqualToString:HighlightIntervalKey]) {
+		braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
+	}
+}
+
+- (void)drawRect:(NSRect)rect
+{
+	// Draw background only for screen display but not while printing
+	if([NSGraphicsContext currentContextDrawingToScreen]) {
+
+		// Draw textview's background
+		[shColorBackground setFill];
+		NSRectFill(rect);
+
+		// Highlightes the current query if set in the Pref
+		// and if nothing is selected in the text view
+		if ([prefs boolForKey:highlightCurrentLine] && ![self selectedRange].length) {
+			NSUInteger rectCount;
+			NSRange curLineRange = [[self string] lineRangeForRange:[self selectedRange]];
+			[theTextStorage ensureAttributesAreFixedInRange:curLineRange];
+			NSRectArray queryRects = [[self layoutManager] rectArrayForCharacterRange: curLineRange
+														 withinSelectedCharacterRange: curLineRange
+																	  inTextContainer: [self textContainer]
+																			rectCount: &rectCount ];
+			[shColorCurrentLine setFill];
+			NSRectFillListUsingOperation(queryRects, rectCount, NSCompositeSourceOver);
+		}
+	}
+	[super drawRect:rect];
 }
 
 #pragma mark -

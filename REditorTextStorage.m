@@ -206,7 +206,7 @@
 	if (highlightColorAttr) [highlightColorAttr release];
 	highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:c, NSBackgroundColorAttributeName, nil];
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
-	braceHighlightInterval = [[Preferences stringForKey:highlightIntervalKey withDefault: @"0.2"] doubleValue];
+	braceHighlightInterval = [Preferences floatForKey:highlightIntervalKey withDefault:0.3f];
 }
 
 @end

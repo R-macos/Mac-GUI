@@ -168,6 +168,7 @@
 {
 	[self updatePreferences];
 	[[Preferences sharedPreferences] addDependent:self];
+
 }
 
 - (void) updatePreferences
@@ -183,6 +184,8 @@
 		[internalOrExternal selectCellAtRow:0 column:0];
 	else
 		[internalOrExternal selectCellAtRow:0 column:1];
+
+	[editorFont setFont:[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:RScriptEditorDefaultFont]]];
 	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[showLineNumbers setEnabled:flag?NSOnState:NSOffState];
@@ -190,8 +193,18 @@
 	[enableLineWrapping setEnabled:flag?NSOnState:NSOffState];
 	[lineNumberGutterWidth setEnabled:flag?NSOnState:NSOffState];
 	[fragmentPaddingWidth setEnabled:flag?NSOnState:NSOffState];
+	[enableIndentNewLines setEnabled:flag?NSOnState:NSOffState];
+	[braceHiliteStepper setEnabled:flag?NSOnState:NSOffState];
+	[editorFont setEnabled:flag?NSOnState:NSOffState];
+	[editorFontSelectButton setEnabled:flag?NSOnState:NSOffState];
+	[showArgsHints setEnabled:flag?NSOnState:NSOffState];
+	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
+	[matchingPairs setEnabled:flag?NSOnState:NSOffState];
+	[hiliteCurrentLine setEnabled:flag?NSOnState:NSOffState];
 	if (flag) {
 		[highlightIntervalText setTextColor:[NSColor blackColor]];
+		[highlightInterval setTextColor:[NSColor blackColor]];
+		[highlightIntervalTextUnit setTextColor:[NSColor blackColor]];
 		[highlightNoteText setTextColor:[NSColor blackColor]];
 		[showLineNumbersText setTextColor:[NSColor blackColor]];
 		[editorText setTextColor:[NSColor grayColor]];
@@ -199,8 +212,11 @@
 		[fragmentPaddingWidthText setTextColor:[NSColor blackColor]];
 		[externalEditorName setTextColor:[NSColor grayColor]];
 		[commandText setTextColor:[NSColor grayColor]];
+		[editorFontLabel setTextColor:[NSColor blackColor]];
 	} else {
 		[highlightIntervalText setTextColor:[NSColor grayColor]];
+		[highlightInterval setTextColor:[NSColor grayColor]];
+		[highlightIntervalTextUnit setTextColor:[NSColor grayColor]];
 		[highlightNoteText setTextColor:[NSColor grayColor]];
 		[showLineNumbersText setTextColor:[NSColor grayColor]];
 		[editorText setTextColor:[NSColor blackColor]];
@@ -208,6 +224,7 @@
 		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
 		[externalEditorName setTextColor:[NSColor blackColor]];
 		[commandText setTextColor:[NSColor blackColor]];
+		[editorFontLabel setTextColor:[NSColor grayColor]];
 	}
 	
 	[changeEditor setEnabled:(flag?NSOffState:NSOnState)];
@@ -227,25 +244,36 @@
 
 	[showBraceHighlighting setState:[Preferences flagForKey:showBraceHighlightingKey withDefault: YES]?NSOnState:NSOffState];
 
-	[highlightInterval setStringValue:[Preferences stringForKey:highlightIntervalKey withDefault: @"0.30"]];
+	// since 1.40 highlightIntervalKey is obsolete since it contains space in its name
+	// which isn't allowed for key-value-bindings; instead using HighlightIntervalKey
+	if([[NSUserDefaults standardUserDefaults] objectForKey:highlightIntervalKey]) {
+		[[NSUserDefaults standardUserDefaults] setFloat:[[Preferences stringForKey:highlightIntervalKey] doubleValue] forKey:HighlightIntervalKey];
+		[[NSUserDefaults standardUserDefaults] removeObjectForKey:highlightIntervalKey];
+	}
 
 	[showLineNumbers setState:[Preferences flagForKey:showLineNumbersKey withDefault: YES]?NSOnState:NSOffState];
 
 	[matchingPairs setState:[Preferences flagForKey:kAutoCloseBrackets withDefault:YES]?NSOnState:NSOffState];
 	
-	if (![Preferences flagForKey:showLineNumbersKey withDefault: YES]) {
-		[enableLineWrapping setEnabled:NSOffState];		
-		[lineNumberGutterWidth setEnabled:NSOffState];
-		[fragmentPaddingWidth setEnabled:NSOffState];
-		[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
-		[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
-	}
+	// if (![Preferences flagForKey:showLineNumbersKey withDefault: YES]) {
+	// 	[enableLineWrapping setEnabled:NSOffState];		
+	// 	[lineNumberGutterWidth setEnabled:NSOffState];
+	// 	[fragmentPaddingWidth setEnabled:NSOffState];
+	// 	[lineNumberGutterWidthText setTextColor:[NSColor grayColor]];
+	// 	[fragmentPaddingWidthText setTextColor:[NSColor grayColor]];
+	// }
 	[enableLineWrapping setState:[Preferences flagForKey:enableLineWrappingKey withDefault: YES]?NSOnState:NSOffState];
 	
 	[lineNumberGutterWidth setStringValue:[Preferences stringForKey:lineNumberGutterWidthKey withDefault: @"16.0"]];
 	
 	[fragmentPaddingWidth setStringValue:[Preferences stringForKey:lineFragmentPaddingWidthKey withDefault: @"6.0"]];
 	
+}
+
+- (IBAction) showFontPanel:(id)sender
+{
+	[[NSFontPanel sharedFontPanel] setPanelFont:[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:RScriptEditorDefaultFont]] isMultiple:NO];
+	[[NSFontPanel sharedFontPanel] makeKeyAndOrderFront:self];
 }
 
 - (IBAction) changeInternalOrExternal:(id)sender
@@ -282,19 +310,19 @@
 	[Preferences setKey:prefShowArgsHints withFlag:flag];
 }
 
-- (IBAction) changeHighlightInterval:(id)sender {
-	NSString *interval = ([[sender stringValue] length] == 0)?@"0.2":[sender stringValue];
-	if ([interval length] == 0) {
-		interval = @"0.2";
-	} else {
-		double value = [interval doubleValue];
-		if (value < 0.1)
-			interval = @"0.1";
-		else if (value > 0.8)
-			interval = @"0.8";
-	}
-	[Preferences setKey:highlightIntervalKey withObject:interval];
-}
+// - (IBAction) changeHighlightInterval:(id)sender {
+// 	NSString *interval = ([[sender stringValue] length] == 0)?@"0.2":[sender stringValue];
+// 	if ([interval length] == 0) {
+// 		interval = @"0.2";
+// 	} else {
+// 		double value = [interval doubleValue];
+// 		if (value < 0.1)
+// 			interval = @"0.1";
+// 		else if (value > 0.8)
+// 			interval = @"0.8";
+// 	}
+// 	[Preferences setKey:highlightIntervalKey withObject:interval];
+// }
 
 - (IBAction) changeShowLineNumbers:(id)sender {
 	int tmp = (int)[sender state];
@@ -362,6 +390,5 @@
 	}
 	[Preferences setKey:lineFragmentPaddingWidthKey withObject:interval];	
 }
-
 
 @end

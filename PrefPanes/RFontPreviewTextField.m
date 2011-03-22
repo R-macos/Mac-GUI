@@ -26,66 +26,48 @@
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
- *  RScriptEditorTextView.h
+ *  RFontPreviewTextField.m
  *
- *  Created by Hans-J. Bibiko on 15/02/2011.
- *
+ *  Created by Hans-J. Bibiko on 20/03/2011.
  */
 
-#import "CCComp.h"
-#import "RTextView.h"
-#import "Preferences.h"
-#import "PreferenceKeys.h"
-#import "RegexKitLite.h"
-#import "NoodleLineNumberView.h"
-#import "REditorToolbar.h"
+#import "RFontPreviewTextField.h"
 
-#define R_TEXT_SIZE_TRIGGER_FOR_PARSING_PARTLY 10000
 
-@interface RScriptEditorTextView : RTextView <PreferencesDependent, NSTextStorageDelegate>
+@implementation RFontPreviewTextField
+
+- (void)setFont:(NSFont *)font 
 {
+	if (!font) return;
 
-	IBOutlet NSScrollView *scrollView;
+	if (_theFont) [_theFont release];
 
-	NSUserDefaults *prefs;
+	_theFont = [font retain];
 
-	NSColor *shColorNormal;
-	NSColor *shColorString;
-	NSColor *shColorNumber;
-	NSColor *shColorKeyword;
-	NSColor *shColorComment;
-	NSColor *shColorIdentifier;
-	NSColor *shColorCursor;
-	NSColor *shColorBackground;
-	NSColor *shColorCurrentLine;
+	[super setFont:[[NSFontManager sharedFontManager] convertFont:font toSize:11.0f]];
 
-	id editorToolbar;
-	NoodleLineNumberView *theRulerView;
+	NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[_theFont displayName]];
+	NSMutableParagraphStyle *paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 
-	BOOL lineNumberingEnabled;
-	BOOL syntaxHighlightingEnabled;
-	BOOL argsHints;
-	BOOL lineWrappingEnabled;
-	BOOL deleteBackward;
-	BOOL startListeningToBoundChanges;
+	[paraStyle setMinimumLineHeight:NSHeight([self bounds])];
+	[paraStyle setMaximumLineHeight:NSHeight([self bounds])];
 
-	int currentHighlight;
-	double braceHighlightInterval; // interval to flash brace highlighting for
+	[text addAttribute:NSParagraphStyleAttributeName value:paraStyle range:NSMakeRange(0, [text length])];
+	[self setStringValue:[NSString stringWithFormat:@"%@, %.1f pt", [_theFont displayName], [_theFont pointSize]]];
 
-	NSTextStorage *theTextStorage;
+	// [self setObjectValue:text];
 
-	NSDictionary *highlightColorAttr;
+	[text release];
+	[paraStyle release];
 }
 
-- (void)setTabStops;
+#pragma mark -
 
-- (void)setDeleteBackward:(BOOL)delBack;
-- (void)doSyntaxHighlighting;
-- (void)highlightCharacter:(int)pos;
-- (void)resetHighlights;
-- (void)resetBackgroundColor:(id)sender;
+- (void)dealloc 
+{
+	if (_theFont) [_theFont release], _theFont = nil;
 
-
-- (void)updatePreferences;
+	[super dealloc];
+}
 
 @end

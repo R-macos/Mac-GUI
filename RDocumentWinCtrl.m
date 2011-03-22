@@ -57,36 +57,6 @@ NSColor *shColorIdentifier;
 
 @implementation RDocumentWinCtrl
 
-+ (void) setDefaultSyntaxHighlightingColors
-{
-	NSColor *c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
-	if (c) shColorNormal = c;
-	else shColorNormal=[NSColor colorWithDeviceRed:0.025 green:0.085 blue:0.600 alpha:1.0];
-	[shColorNormal retain];
-	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
-	if (c) shColorString = c;
-	else shColorString=[NSColor colorWithDeviceRed:0.690 green:0.075 blue:0.000 alpha:1.0];
-	[shColorString retain];	
-	c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];
-	if (c) shColorNumber = c;
-	else shColorNumber=[NSColor colorWithDeviceRed:0.020 green:0.320 blue:0.095 alpha:1.0];
-	[shColorNumber retain];
-	c=[Preferences unarchivedObjectForKey:keywordSyntaxColorKey withDefault:nil];
-	if (c) shColorKeyword = c;
-	else shColorKeyword=[NSColor colorWithDeviceRed:0.765 green:0.535 blue:0.035 alpha:1.0];
-	[shColorKeyword retain];
-	c=[Preferences unarchivedObjectForKey:commentSyntaxColorKey withDefault:nil];
-	if (c) shColorComment = c;
-	else shColorComment=[NSColor colorWithDeviceRed:0.312 green:0.309 blue:0.309 alpha:1.0];
-	[shColorComment retain];
-	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
-	if (c) shColorIdentifier = c;
-	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-	[shColorIdentifier retain]; 
-	//	NSLog(@"shColorIdentifier %f %f %f %f", [c redComponent], [c greenComponent], [c blueComponent], [c alphaComponent]);
-
-}
-
 //- (id)init { // NOTE: init is *not* used! put any initialization in windowDidLoad
 
 static RDocumentWinCtrl *staticCodedRWC = nil;
@@ -121,6 +91,18 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	if (functionMenuInvalidAttribute) [functionMenuInvalidAttribute release];
 	if (functionMenuCommentAttribute) [functionMenuCommentAttribute release];
 	[super dealloc];
+}
+
+/**
+ * This method is called as part of Key Value Observing which is used to watch for prefernce changes which effect the interface.
+ */
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if ([keyPath isEqualToString:prefShowArgsHints])
+		argsHints = [Preferences flagForKey:prefShowArgsHints withDefault:YES];
+	else if ([keyPath isEqualToString:showBraceHighlightingKey])
+		showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault:YES];
+
 }
 
 - (void) replaceContentsWithRtf: (NSData*) rtfContents
@@ -225,6 +207,12 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
 	argsHints = [Preferences flagForKey:prefShowArgsHints withDefault:YES];
+
+	[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:showBraceHighlightingKey options:NSKeyValueObservingOptionNew context:NULL];
+	[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:prefShowArgsHints options:NSKeyValueObservingOptionNew context:NULL];
+
+	[[self window] setBackgroundColor:[NSColor clearColor]];
+	[[self window] setOpaque:NO];
 
 	SLog(@" - load document contents into textView");
 	[(RDocument*)[self document] loadInitialContents];
@@ -425,34 +413,34 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 - (void) updatePreferences {
 	SLog(@"RDocumentWinCtrl.updatePreferences");
 	// for sanity's sake
-	if (!defaultsInitialized) {
-		[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
-		defaultsInitialized=YES;
-	}
-	
-	NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
-	if (c && c != [[self window] backgroundColor]) {
-		[[self window] setBackgroundColor:c];
-		//		[[self window] display];
-	}
-	c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
-	if (c) { [shColorNormal release]; shColorNormal = [c retain]; [textView setInsertionPointColor:c]; }
-	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
-	if (c) { [shColorString release]; shColorString = [c retain]; }
-	c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];
-	if (c) { [shColorNumber release]; shColorNumber = [c retain]; }
-	c=[Preferences unarchivedObjectForKey:keywordSyntaxColorKey withDefault:nil];
-	if (c) { [shColorKeyword release]; shColorKeyword = [c retain]; }
-	c=[Preferences unarchivedObjectForKey:commentSyntaxColorKey withDefault:nil];
-	if (c) { [shColorComment release]; shColorComment = [c retain]; }
-	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
-	if (c) { [shColorIdentifier release]; shColorIdentifier = [c retain]; }
+	// if (!defaultsInitialized) {
+	// 	[RDocumentWinCtrl setDefaultSyntaxHighlightingColors];
+	// 	defaultsInitialized=YES;
+	// }
+	// 
+	// NSColor *c = [Preferences unarchivedObjectForKey: backgColorKey withDefault: nil];
+	// if (c && c != [[self window] backgroundColor]) {
+	// 	[[self window] setBackgroundColor:c];
+	// 	//		[[self window] display];
+	// }
+	// c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
+	// if (c) { [shColorNormal release]; shColorNormal = [c retain]; [textView setInsertionPointColor:c]; }
+	// c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
+	// if (c) { [shColorString release]; shColorString = [c retain]; }
+	// c=[Preferences unarchivedObjectForKey:numberSyntaxColorKey withDefault:nil];
+	// if (c) { [shColorNumber release]; shColorNumber = [c retain]; }
+	// c=[Preferences unarchivedObjectForKey:keywordSyntaxColorKey withDefault:nil];
+	// if (c) { [shColorKeyword release]; shColorKeyword = [c retain]; }
+	// c=[Preferences unarchivedObjectForKey:commentSyntaxColorKey withDefault:nil];
+	// if (c) { [shColorComment release]; shColorComment = [c retain]; }
+	// c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
+	// if (c) { [shColorIdentifier release]; shColorIdentifier = [c retain]; }
 
-	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
-
-	[self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
-	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
-	[textView setNeedsDisplay:YES];
+	// argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
+	// 
+	// [self setHighlighting:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]];
+	// showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
+	// [textView setNeedsDisplay:YES];
 	SLog(@" - preferences updated");
 }
 
@@ -629,14 +617,17 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 }
 
 - (BOOL)textView:(NSTextView *)textViewSrc doCommandBySelector:(SEL)commandSelector {
-    BOOL retval = NO;
+	BOOL retval = NO;
 	if (textViewSrc!=textView) return NO;
 	//NSLog(@"RTextView commandSelector: %@\n", NSStringFromSelector(commandSelector));
-    if (@selector(insertNewline:) == commandSelector && execNewlineFlag) {
+	if (@selector(insertNewline:) == commandSelector && execNewlineFlag) {
 		execNewlineFlag=NO;
 		return YES;
 	}
-    if (@selector(insertNewline:) == commandSelector) {
+	if (@selector(insertNewline:) == commandSelector) {
+
+		if(![[NSUserDefaults standardUserDefaults] boolForKey:indentNewLines]) return NO;
+
 		// handling of indentation
 		// currently we just copy what we get and add tabs for additional non-matched { brackets
 		NSTextStorage *ts = [textView textStorage];
@@ -686,8 +677,8 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 			}
 			return YES;
 		}
-		}
-    if (showMatchingBraces && ![self plain]) {
+	}
+	if (showMatchingBraces && ![self plain]) {
 		if (commandSelector == @selector(deleteBackward:)) {
 			[textView setDeleteBackward:YES];
 		}
@@ -727,6 +718,9 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[tv layoutManager] setAllowsNonContiguousLayout:NO];
 #endif
+
+	if([[NSUserDefaults standardUserDefaults] boolForKey:highlightCurrentLine])
+		[tv setNeedsDisplay:YES];
 
 	if(argsHints && ![[self document] hasREditFlag] && ![self plain]) {
 

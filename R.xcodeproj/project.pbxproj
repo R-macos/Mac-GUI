@@ -194,6 +194,10 @@
 		BCD7EC911301A4950050850E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD7EC901301A4950050850E /* libicucore.dylib */; };
 		BCD7EC951301A5190050850E /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = BCD7EC931301A5190050850E /* RegexKitLite.h */; };
 		BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD7EC941301A5190050850E /* RegexKitLite.m */; };
+		BCEFEBD71336705800CED44F /* RFontPreviewTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBD51336705800CED44F /* RFontPreviewTextField.h */; };
+		BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */; };
+		BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBE01336709A00CED44F /* RColorWellCell.h */; };
+		BCEFEBE31336709A00CED44F /* RColorWellCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBE11336709A00CED44F /* RColorWellCell.m */; };
 		D41DED4C073B3EE400B900F2 /* EditorPrefPane.h in Headers */ = {isa = PBXBuildFile; fileRef = D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */; };
 		D41DED4D073B3EE400B900F2 /* EditorPrefPane.m in Sources */ = {isa = PBXBuildFile; fileRef = D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */; };
 		D41DED59073B3FF700B900F2 /* RDocumentController.h in Headers */ = {isa = PBXBuildFile; fileRef = D41DED57073B3FF700B900F2 /* RDocumentController.h */; };
@@ -453,6 +457,10 @@
 		BCE2529913326919001D3138 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCE5C673133262CC00381F90 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCEEA0EE1332641B00F55604 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BCEFEBD51336705800CED44F /* RFontPreviewTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFontPreviewTextField.h; sourceTree = "<group>"; };
+		BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFontPreviewTextField.m; sourceTree = "<group>"; };
+		BCEFEBE01336709A00CED44F /* RColorWellCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RColorWellCell.h; sourceTree = "<group>"; };
+		BCEFEBE11336709A00CED44F /* RColorWellCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RColorWellCell.m; sourceTree = "<group>"; };
 		D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorPrefPane.h; sourceTree = "<group>"; };
 		D41DED4B073B3EE400B900F2 /* EditorPrefPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorPrefPane.m; sourceTree = "<group>"; };
 		D41DED57073B3FF700B900F2 /* RDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RDocumentController.h; sourceTree = "<group>"; };
@@ -612,6 +620,10 @@
 		16A25F57072AACF40047E009 /* PrefPanes */ = {
 			isa = PBXGroup;
 			children = (
+				BCEFEBE01336709A00CED44F /* RColorWellCell.h */,
+				BCEFEBE11336709A00CED44F /* RColorWellCell.m */,
+				BCEFEBD51336705800CED44F /* RFontPreviewTextField.h */,
+				BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */,
 				16A26031072AB6660047E009 /* ColorsPrefPane.h */,
 				16A26032072AB6660047E009 /* ColorsPrefPane.m */,
 				D41DED4A073B3EE400B900F2 /* EditorPrefPane.h */,
@@ -922,6 +934,8 @@
 				6825104D132F337800367C93 /* CCComp.h in Headers */,
 				BC1952B31330C9D400D52B29 /* RChooseEncodingPopupAccessory.h in Headers */,
 				BC0D319A1334B1410071B76A /* NSTextView_RAdditions.h in Headers */,
+				BCEFEBD71336705800CED44F /* RFontPreviewTextField.h in Headers */,
+				BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1168,6 +1182,8 @@
 				BC12DC4B130EC12900FB39CE /* NoodleLineNumberView.m in Sources */,
 				BC1952B21330C9D400D52B29 /* RChooseEncodingPopupAccessory.m in Sources */,
 				BC0D319B1334B1410071B76A /* NSTextView_RAdditions.m in Sources */,
+				BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */,
+				BCEFEBE31336709A00CED44F /* RColorWellCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

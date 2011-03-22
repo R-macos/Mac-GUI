@@ -56,12 +56,19 @@
 	IBOutlet NSTextField *lineNumberGutterWidth;
 	IBOutlet NSTextField *fragmentPaddingWidth;
 	IBOutlet NSTextField *highlightIntervalText;
+	IBOutlet NSTextField *highlightIntervalTextUnit;
 	IBOutlet NSTextField *highlightNoteText;
 	IBOutlet NSTextField *showLineNumbersText;
 	IBOutlet NSTextField *editorText;
 	IBOutlet NSTextField *commandText;
 	IBOutlet NSTextField *lineNumberGutterWidthText;
 	IBOutlet NSTextField *fragmentPaddingWidthText;
+	IBOutlet NSTextField *editorFont;
+	IBOutlet NSTextField *editorFontLabel;
+	IBOutlet NSButton *editorFontSelectButton;
+	IBOutlet NSButton *enableIndentNewLines;
+	IBOutlet NSButton *hiliteCurrentLine;
+	IBOutlet NSStepper *braceHiliteStepper;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -83,7 +90,7 @@
 - (IBAction) changeExternalEditorName:(id)sender;
 - (IBAction) changeShowSyntaxColoring:(id)sender;
 - (IBAction) changeShowBraceHighlighting:(id)sender;
-- (IBAction) changeHighlightInterval:(id)sender;
+// - (IBAction) changeHighlightInterval:(id)sender;
 - (IBAction) changeShowLineNumbers:(id)sender;
 - (IBAction) changeMatchingPairs:(id)sender;
 - (IBAction) changeAppOrCommand:(id)sender;
@@ -91,6 +98,7 @@
 - (IBAction) changeLineNumberGutterWidth:(id)sender;
 - (IBAction) changeFragmentPaddingWidth:(id)sender;
 - (IBAction) changeShowArgsHints:(id)sender;
+- (IBAction) showFontPanel:(id)sender;
 
 - (void) updatePreferences;
 

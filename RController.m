@@ -1248,12 +1248,19 @@ extern BOOL isTimeToFinish;
 #endif
 	NSString *fn = [NSString stringWithUTF8String:file];
 	if (fn) fn = [fn stringByExpandingTildeInPath];
-	if (!fn) Rf_error("Invalid file name.");
+	if (!fn) {
+#ifdef USE_POOLS
+		[pool release];
+#endif
+		Rf_error("Invalid file name.");
+	}
 
 	SLog(@"RController.handleEdit: %s", file);
 	
 	if (![[NSFileManager defaultManager] isReadableFileAtPath:fn]) {
-		//[pool release];
+#ifdef USE_POOLS
+		[pool release];
+#endif
 		return 0;
 	}
 	NSURL *url = [NSURL fileURLWithPath:fn];

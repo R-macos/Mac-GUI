@@ -1,5 +1,7 @@
 #import "../RGUI.h"
 #import "PrefWindowController.h"
+#import "../PreferenceKeys.h"
+#import "../AMPrefs/AMPreferenceWindowController.h"
 
 @implementation PrefWindowController
 
@@ -71,5 +73,37 @@
 {
 	return category;
 }
+
+/**
+ * Trap window close notifications and use them to ensure changes are saved.
+ */
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[[NSColorPanel sharedColorPanel] close];
+	[[NSFontPanel sharedFontPanel] close];
+	
+	// Mark the currently selected field in the window as having finished editing, to trigger saves.
+	if ([[self window] firstResponder]) {
+		[[self window] endEditingFor:[[self window] firstResponder]];
+	}
+}
+
+- (void)changeFont:(id)sender
+{
+
+	if([self activePane] == (AMPreferencePane*)editorPrefPane) {
+
+		NSFont *font;
+		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+	
+		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
+	
+		[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
+
+		[[editorPrefPane valueForKeyPath:@"editorFont"] setFont:font];
+	}
+
+}
+
 
 @end

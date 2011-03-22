@@ -28,7 +28,6 @@
 
 @interface AMPreferenceWindowController (Private)
 - (void)setPrefPanes:(NSDictionary *)newPrefPanes;
-- (AMPreferencePane *)activePane;
 - (void)setActivePane:(AMPreferencePane *)newActivePane;
 - (void)removeAllPanes;
 - (NSString *)autosaveName;
