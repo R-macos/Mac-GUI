@@ -88,6 +88,8 @@
 #define quartzPrefPaneFontKey @"QuartzPrefPane font"
 #define quartzPrefPaneFontSizeKey @"QuartzPrefPane fontsize"
 
+#define kEditorAutosaveKey @"autosave.scripts"
+
 #define prefShowArgsHints @"Show function args hints"
 
 #define saveOnExitKey @"save.on.exit"

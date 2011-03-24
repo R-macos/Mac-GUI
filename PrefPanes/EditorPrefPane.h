@@ -69,6 +69,7 @@
 	IBOutlet NSButton *enableIndentNewLines;
 	IBOutlet NSButton *hiliteCurrentLine;
 	IBOutlet NSStepper *braceHiliteStepper;
+	IBOutlet NSButton *autosaveDocuments;
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -91,8 +92,7 @@
 - (IBAction) changeShowSyntaxColoring:(id)sender;
 - (IBAction) changeShowBraceHighlighting:(id)sender;
 // - (IBAction) changeHighlightInterval:(id)sender;
-- (IBAction) changeShowLineNumbers:(id)sender;
-- (IBAction) changeMatchingPairs:(id)sender;
+- (IBAction) changeFlag:(id)sender; // general for boolean button senders
 - (IBAction) changeAppOrCommand:(id)sender;
 - (IBAction) changeEnableLineWrapping:(id)sender;
 - (IBAction) changeLineNumberGutterWidth:(id)sender;

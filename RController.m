@@ -288,7 +288,7 @@ static RController* sharedRController;
 	[origTS release];
 
 	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];
-	
+
 	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
 	[consoleTextView setDrawsBackground:NO];

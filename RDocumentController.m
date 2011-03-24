@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-11  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *                     RDocumentController written by Rob Goedman
  *
@@ -36,6 +36,8 @@
 #import "QuartzCocoaDocument.h"
 #import "RChooseEncodingPopupAccessory.h"
 
+// default autosave is 3 minutes
+#define defaultAutosavingDelay (3 * 60.0)
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -55,12 +57,12 @@
 	SLog(@"RDocumentController%@.init", self);
 
 	if(self) {
-
 		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(windowWillCloseNotifications:) 
-													 name:NSWindowWillCloseNotification 
-												   object:nil];
-
+							 selector:@selector(windowWillCloseNotifications:) 
+							     name:NSWindowWillCloseNotification 
+							   object:nil];
+		[self updatePreferences];
+		[[Preferences sharedPreferences] addDependent:self];
 	}
 
 	return self;
@@ -73,6 +75,13 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 	[super dealloc];
 
+}
+
+- (void) updatePreferences
+{
+	BOOL autosaveEnabled = [Preferences flagForKey:kEditorAutosaveKey withDefault:YES];
+	[self setAutosavingDelay: autosaveEnabled ? defaultAutosavingDelay : 0.0];
+	SLog(@"%@ autosave %@", self, autosaveEnabled ? @"ENABLED" : @"DISABLED");
 }
 
 - (void)windowWillCloseNotifications:(NSNotification*) aNotification

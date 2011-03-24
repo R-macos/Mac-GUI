@@ -50,7 +50,7 @@
 }
 @end
 
-@interface RDocumentController : NSDocumentController
+@interface RDocumentController : NSDocumentController <PreferencesDependent>
 
 - (NSWindow*)findLastWindowForDocType:(NSString*)aType;
 - (NSWindow*)findNextWindowForDocType:(NSString*)aType;

@@ -185,7 +185,9 @@
 	else
 		[internalOrExternal selectCellAtRow:0 column:1];
 
-	[editorFont setFont:[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:RScriptEditorDefaultFont]]];
+	NSData *encodedFont = [[NSUserDefaults standardUserDefaults] dataForKey:RScriptEditorDefaultFont];
+	if (encodedFont)
+		[editorFont setFont:[NSUnarchiver unarchiveObjectWithData:encodedFont]];
 	[showSyntaxColoring setEnabled:flag?NSOnState:NSOffState];
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[showLineNumbers setEnabled:flag?NSOnState:NSOffState];
@@ -201,6 +203,7 @@
 	[showBraceHighlighting setEnabled:flag?NSOnState:NSOffState];
 	[matchingPairs setEnabled:flag?NSOnState:NSOffState];
 	[hiliteCurrentLine setEnabled:flag?NSOnState:NSOffState];
+	[autosaveDocuments setEnabled:flag?NSOnState:NSOffState];
 	if (flag) {
 		[highlightIntervalText setTextColor:[NSColor blackColor]];
 		[highlightInterval setTextColor:[NSColor blackColor]];
@@ -243,6 +246,8 @@
 	[showSyntaxColoring setState:[Preferences flagForKey:showSyntaxColoringKey withDefault: YES]?NSOnState:NSOffState];
 
 	[showBraceHighlighting setState:[Preferences flagForKey:showBraceHighlightingKey withDefault: YES]?NSOnState:NSOffState];
+
+	[autosaveDocuments setState:[Preferences flagForKey:kEditorAutosaveKey withDefault: YES] ? NSOnState : NSOffState];
 
 	// since 1.40 highlightIntervalKey is obsolete since it contains space in its name
 	// which isn't allowed for key-value-bindings; instead using HighlightIntervalKey
@@ -324,10 +329,18 @@
 // 	[Preferences setKey:highlightIntervalKey withObject:interval];
 // }
 
-- (IBAction) changeShowLineNumbers:(id)sender {
+- (IBAction) changeFlag:(id)sender {
 	int tmp = (int)[sender state];
-	BOOL flag = tmp?YES:NO;
-	[Preferences setKey:showLineNumbersKey withFlag:flag];
+	BOOL flag = tmp ? YES : NO;
+	NSString *key = nil;
+	if (sender == autosaveDocuments) key = kEditorAutosaveKey;
+	if (sender == showLineNumbers)   key = showLineNumbersKey;
+	if (sender == matchingPairs)     key = kAutoCloseBrackets;
+	if (key)
+		[Preferences setKey:key withFlag:flag];
+	else {
+		SLog(@"WARNING: changeFlag called by %@ which corresponds to no key!", sender);
+	}
 }
 
 - (IBAction) changeMatchingPairs:(id)sender {

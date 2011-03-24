@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-03-24
+*	auto-save is now enabled in the editor by default
+	(period is set to 3 minutes) and can be enabled
+	or disabled in the preferences
+
 Last-update: 2011-03-23 [HJBB]
 *	improved History
 	- added possibility to search in History via
