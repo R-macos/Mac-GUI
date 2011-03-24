@@ -195,7 +195,9 @@ static RController* sharedRController;
 		[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
 		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], nil];
 	consoleColors = [defaultConsoleColors mutableCopy];
-	
+
+	filteredHistory = nil;
+
 	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
 	textFont = [[NSFont userFixedPitchFontOfSize:currentFontSize] retain];
 		
@@ -900,6 +902,44 @@ static RController* sharedRController;
 	}
 }
 
+-(IBAction) activateSearchInHistory:(id)sender
+{
+
+	[HistoryDrawer open];
+	// if currently nothing is selected jump to last row
+	if(![[historyView selectedRowIndexes] count]) {
+		NSInteger lastRowIndex = [self numberOfRowsInTableView:historyView]-1;
+		[historyView reloadData];
+		[historyView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastRowIndex] byExtendingSelection:NO];
+		[historyView scrollRowToVisible:lastRowIndex];
+	}
+	[[NSApp keyWindow] makeFirstResponder:historySearchField];
+
+}
+
+-(IBAction) searchInHistory:(id)sender
+{
+
+	if(filteredHistory) [filteredHistory release], filteredHistory = nil;
+
+	NSString *pattern = [historySearchField stringValue];
+
+	if(![pattern length]) {
+		[historyView reloadData];
+		return;
+	}
+
+	@try{
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES[c] %@", [NSString stringWithFormat:@".*%@.*", pattern]];
+		filteredHistory = [[[hist entries] filteredArrayUsingPredicate:predicate] retain];
+	}
+	@catch(id ae) {
+		filteredHistory = [[NSArray arrayWithObject:NLS(@"…invalid regular expression")] retain];
+	}
+	[historyView reloadData];
+
+}
+
 extern BOOL isTimeToFinish;
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)app {
@@ -937,6 +977,7 @@ extern BOOL isTimeToFinish;
 - (void) dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
+	if(filteredHistory) [filteredHistory release], filteredHistory = nil;
 	if(currentWebViewForFindAction) [currentWebViewForFindAction release];
 	if(searchInWebViewWindow) [searchInWebViewWindow release], searchInWebViewWindow = nil;
 	[defaultConsoleColors release];
@@ -1655,14 +1696,22 @@ The input replaces what the user is currently typing.
 /* These two routines are needed to update the History TableView */
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
-	return [[hist entries] count];
+	return (filteredHistory) ? [filteredHistory count] : [[hist entries] count];
 }
 
 - (id)tableView: (NSTableView *)tableView
 		objectValueForTableColumn: (NSTableColumn *)tableColumn
 			row: (int)row
 {
-	return (NSString*) [[hist entries]  objectAtIndex: row];
+	if(filteredHistory)
+		return [filteredHistory objectAtIndex:row];
+	else
+		return (NSString*) [[hist entries] objectAtIndex:row];
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView shouldEditTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+{
+	return NO;
 }
 
 /*  Clears the history  and updates the TableView */
@@ -1773,20 +1822,37 @@ The input replaces what the user is currently typing.
 at current cursor position
 */
 - (IBAction)historyDoubleClick:(id)sender {
+
 	NSString *cmd;
 	int index = [historyView selectedRow];
 	if(index == -1) return;
 	
-	cmd = [[hist entries] objectAtIndex:index];
+	if(filteredHistory)
+		cmd = [filteredHistory objectAtIndex:index];
+	else
+		cmd = [[hist entries] objectAtIndex:index];
 	[self consoleInput:cmd interactive:NO];
 	[RConsoleWindow makeFirstResponder:consoleTextView];
 }
 
 - (IBAction)historyDeleteEntry:(id)sender {
+
 	int index = [historyView selectedRow];
-	if((index >= 0) && (index < [[hist entries] count]))
-		[hist deleteEntry:index];
+
+	if(filteredHistory) {
+		index = [[hist entries] indexOfObject:[filteredHistory objectAtIndex:index]];
+		if((index >= 0) && (index < [[hist entries] count])) {
+			[hist deleteEntry:index];
+			[self searchInHistory:nil];
+			return;
+		}
+	} else {
+		if((index >= 0) && (index < [[hist entries] count]))
+			[hist deleteEntry:index];
+	}
+
 	[historyView reloadData];
+
 }
 
 /*  This routine is intended to "cat" some text to the R Console without
@@ -2101,6 +2167,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (IBAction)makeConsoleKey:(id)sender
 {
 	[RConsoleWindow makeKeyAndOrderFront:sender];
+	// due to the existance of a drawer set the first responder explicitly
+	[RConsoleWindow makeFirstResponder:consoleTextView];
 }
 
 - (IBAction)makeLastQuartzKey:(id)sender
@@ -2140,6 +2208,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		[HistoryDrawer close];
 	} else {
 		[HistoryDrawer open];
+		NSInteger lastRowIndex = [self numberOfRowsInTableView:historyView]-1;
+		[historyView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastRowIndex] byExtendingSelection:NO];
+		[historyView scrollRowToVisible:lastRowIndex];
+		[[NSApp keyWindow] makeFirstResponder:historyView];
 	}
 }
 

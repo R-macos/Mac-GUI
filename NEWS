@@ -1,5 +1,26 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-03-23 [HJBB]
+*	improved History
+	- added possibility to search in History via
+	regular expression
+	- pressing ENTER or RETURN will insert selected
+	item into RConsole
+	- if History will open for the first time
+	select last item
+	- shortcut SHIFT+CMD+H activates history search
+	field
+
+Last-update: 2011-03-22 [HJBB]
+*	Preferences for Editor and Syntax Highlighting
+	- cleaned preferences
+	- added 'Highlight current line'
+	- added 'Indent New Lines'
+	- added color setting for 'Background' (incl. 
+	transparency)
+	- added color seting for 'Current Line'
+	- added color setting for 'Cursor'
+
 Last-update: 2011-03-21
 *	fixed crash when adding rows in a data frame
 	containing strings (PR#14434)

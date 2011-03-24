@@ -227,11 +227,11 @@
 	if (c && ![c isEqualTo:[commentSyntaxColorWell color]]) [commentSyntaxColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[identifierSyntaxColorWell color]]) [identifierSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:nil];
+	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]];
 	if (c && ![c isEqualTo:[backgroundSyntaxColorWell color]]) [backgroundSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:editorCurrentLineBackgroundColorKey withDefault:nil];
+	c=[Preferences unarchivedObjectForKey:editorCurrentLineBackgroundColorKey withDefault:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8]];
 	if (c && ![c isEqualTo:[currentLineSyntaxColorWell color]]) [currentLineSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:nil];
+	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
 	if (c && ![c isEqualTo:[cursorSyntaxColorWell color]]) [cursorSyntaxColorWell setColor:c];
 }
 

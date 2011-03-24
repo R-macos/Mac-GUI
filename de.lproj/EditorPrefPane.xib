@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">823</string>
@@ -204,7 +204,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 										<object class="NSButtonCell" key="NSCell" id="607892952">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">0</int>
-											<string key="NSContents">Klammernpaare hervorheben</string>
+											<string key="NSContents">Klammerpaare hervorheben</string>
 											<reference key="NSSupport" ref="942505865"/>
 											<reference key="NSControlView" ref="857479191"/>
 											<int key="NSButtonFlags">1211912703</int>
@@ -240,7 +240,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<object class="NSTextField" id="317740929">
 										<reference key="NSNextResponder" ref="16355349"/>
 										<int key="NSvFlags">256</int>
-										<string key="NSFrame">{{40, 165}, {45, 14}}</string>
+										<string key="NSFrame">{{44, 165}, {45, 14}}</string>
 										<reference key="NSSuperview" ref="16355349"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="1030894954">
@@ -688,7 +688,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 									<object class="NSTextField" id="334337334">
 										<reference key="NSNextResponder" ref="580160750"/>
 										<int key="NSvFlags">256</int>
-										<string key="NSFrame">{{36, 152}, {190, 28}}</string>
+										<string key="NSFrame">{{43, 154}, {190, 28}}</string>
 										<reference key="NSSuperview" ref="580160750"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="NSTextFieldCell" key="NSCell" id="305816725">

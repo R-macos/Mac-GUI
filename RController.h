@@ -81,6 +81,7 @@
 	IBOutlet NSSearchField *searchInWebViewSearchField;
 	IBOutlet NSPanel *searchInWebViewSheet;
 	IBOutlet NSMenu *reinterpretEncodingMenu;
+	IBOutlet NSSearchField *historySearchField;
 
 	WebView *currentWebViewForFindAction;
 	id searchInWebViewWindow;
@@ -132,7 +133,9 @@
 	NSMutableArray *consoleColors;
 	NSArray *consoleColorsKeys;
 	NSArray *defaultConsoleColors;
-		
+
+	NSArray *filteredHistory;
+
 	NSMutableArray *consoleInputQueue;
 	NSString *currentConsoleInput;
 	
@@ -195,6 +198,9 @@
 -(IBAction) showVignettes:(id)sender;
 
 -(IBAction) clearConsole:(id)sender;
+
+-(IBAction) searchInHistory:(id)sender;
+-(IBAction) activateSearchInHistory:(id)sender;
 
 - (int) numberOfRowsInTableView: (NSTableView *)tableView;
 - (id) tableView: (NSTableView *)tableView

@@ -110,6 +110,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	prefs = [[NSUserDefaults standardUserDefaults] retain];
 	[[Preferences sharedPreferences] addDependent:self];
 
+	if([prefs objectForKey:highlightCurrentLine] == nil) [prefs setBool:YES forKey:highlightCurrentLine];
+	if([prefs objectForKey:indentNewLines] == nil) [prefs setBool:YES forKey:indentNewLines];
+
 	[self setFont:[Preferences unarchivedObjectForKey:RScriptEditorDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
 
 	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
@@ -233,6 +236,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:enableLineWrappingKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:RScriptEditorDefaultFont options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:HighlightIntervalKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:highlightCurrentLine options:NSKeyValueObservingOptionNew context:NULL];
 
 	theTextStorage = [self textStorage];
 }

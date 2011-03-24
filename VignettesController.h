@@ -4,6 +4,8 @@
 #import "CCComp.h"
 #import "Tools/SortableDataSource.h"
 #import "Tools/PDFImageView.h"
+#import <Quartz/Quartz.h>
+
 
 @interface VignettesController : NSObject
 {
@@ -14,6 +16,7 @@
 	IBOutlet NSWindow *window;
 	IBOutlet NSDrawer *pdfDrawer;
 	IBOutlet PDFImageView *pdfView;
+	IBOutlet PDFView *thePDFView;
 	
 	SortableDataSource *dataSource;
 	

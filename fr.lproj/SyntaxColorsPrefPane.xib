@@ -2,17 +2,17 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10J869</string>
+		<string key="IBDocument.SystemVersion">10J567</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">461.00</string>
+		<string key="IBDocument.HIToolboxVersion">462.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">823</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="5"/>
+			<integer value="26"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -116,7 +116,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="212774620">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Normaal</string>
+											<string key="NSContents">Normal</string>
 											<object class="NSFont" key="NSSupport" id="275138429">
 												<string key="NSName">LucidaGrande</string>
 												<double key="NSSize">13</double>
@@ -144,7 +144,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="13583978">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Tekenreeks</string>
+											<string key="NSContents">String</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="601210809"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -168,7 +168,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="490230771">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Identificatie</string>
+											<string key="NSContents">Identifier</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="822943191"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -205,7 +205,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="64440947">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Trefwoord</string>
+											<string key="NSContents">Keyword</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="216964198"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -242,7 +242,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="612452481">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Opmerking</string>
+											<string key="NSContents">Comment</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="655181806"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -258,7 +258,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="229428978">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Nummer</string>
+											<string key="NSContents">Number</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="800642075"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -352,7 +352,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="761658497">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Achtergrond</string>
+											<string key="NSContents">Background</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="210582542"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -368,7 +368,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="169245839">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Huidige Lijn</string>
+											<string key="NSContents">Current Line</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="396379635"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -433,7 +433,7 @@
 						<object class="NSButtonCell" key="NSCell" id="871260786">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">134217728</int>
-							<string key="NSContents">Standaard</string>
+							<string key="NSContents">Defaults</string>
 							<reference key="NSSupport" ref="275138429"/>
 							<reference key="NSControlView" ref="511299050"/>
 							<int key="NSButtonFlags">-2038284033</int>
@@ -1082,7 +1082,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{132, 459}, {357, 284}}</string>
+					<string>{{354, 472}, {357, 284}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

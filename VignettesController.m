@@ -161,13 +161,21 @@ static VignettesController *vignettesSharedController = nil;
 			[dataSource objectAtColumn:@"vignette" row:sr]];
 		SLog(@"VignettesController.tableViewSelectionDidChange: previewing %@", pdfFile);
 		if ([[NSFileManager defaultManager] fileExistsAtPath:pdfFile]) {
-			[pdfView loadFromPath: pdfFile];
-			[pdfDrawer open];
+			// [pdfView loadFromPath: pdfFile];
+			PDFDocument *pdfDoc = [[[PDFDocument alloc] initWithURL:[NSURL fileURLWithPath:pdfFile]] autorelease];
+			[thePDFView setDocument:pdfDoc];
+			// [pdfDrawer open];
 		} else {
-			[pdfDrawer close];
+			// [pdfDrawer close];
+			NSBeep();
 			[openButton setEnabled:NO];
 		}
 	} else [pdfDrawer close];
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView shouldEditTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+{
+	return NO;
 }
 
 - (void) showVigenttes

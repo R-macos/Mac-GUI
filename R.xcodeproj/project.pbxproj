@@ -179,6 +179,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		BC03E662133AA8E100456B01 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC03E661133AA8E100456B01 /* Quartz.framework */; };
 		BC0D319A1334B1410071B76A /* NSTextView_RAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = BC0D31981334B1410071B76A /* NSTextView_RAdditions.h */; };
 		BC0D319B1334B1410071B76A /* NSTextView_RAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */; };
 		BC12B313130A65CE009F7D3F /* RScriptEditorTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */; };
@@ -188,6 +189,8 @@
 		BC1952B21330C9D400D52B29 /* RChooseEncodingPopupAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */; };
 		BC1952B31330C9D400D52B29 /* RChooseEncodingPopupAccessory.h in Headers */ = {isa = PBXBuildFile; fileRef = BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */; };
 		BC1952B61330CA3500D52B29 /* EncodingPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC1952B41330CA3500D52B29 /* EncodingPopupView.xib */; };
+		BC33799E133A0970006758D9 /* RHistoryTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC33799C133A0970006758D9 /* RHistoryTableView.h */; };
+		BC33799F133A0970006758D9 /* RHistoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC33799D133A0970006758D9 /* RHistoryTableView.m */; };
 		BC81712F13321873004B52A0 /* SelectEncodingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC81712D13321873004B52A0 /* SelectEncodingsPanel.xib */; };
 		BCCE4A38130AB3C6003325EB /* RScriptEditorTokens.h in Headers */ = {isa = PBXBuildFile; fileRef = BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */; };
 		BCCE4A3A130AB3E3003325EB /* RScriptEditorTokens.l in Sources */ = {isa = PBXBuildFile; fileRef = BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */; };
@@ -437,6 +440,7 @@
 		68F84C6109ABB2BF0098D772 /* privateR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = privateR.h; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC03E661133AA8E100456B01 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		BC0D31981334B1410071B76A /* NSTextView_RAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTextView_RAdditions.h; sourceTree = "<group>"; };
 		BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTextView_RAdditions.m; sourceTree = "<group>"; };
 		BC12B311130A65CE009F7D3F /* RScriptEditorTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTextView.h; sourceTree = "<group>"; };
@@ -446,9 +450,16 @@
 		BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RChooseEncodingPopupAccessory.m; sourceTree = "<group>"; };
 		BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RChooseEncodingPopupAccessory.h; sourceTree = "<group>"; };
 		BC1952B51330CA3500D52B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EncodingPopupView.xib; sourceTree = "<group>"; };
+		BC33799C133A0970006758D9 /* RHistoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHistoryTableView.h; sourceTree = "<group>"; };
+		BC33799D133A0970006758D9 /* RHistoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHistoryTableView.m; sourceTree = "<group>"; };
+		BC6682FE13390A06005ACB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		BC6682FF13390A15005ACB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
 		BC6DECCE133267F900C852C1 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BC81712E13321873004B52A0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BC9EF20313326D98005E61C6 /* nl */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = nl; path = nl.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BCB297AD133B7EDD007899E0 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/Vignettes.xib; sourceTree = "<group>"; };
+		BCB297AE133B7EE2007899E0 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/Vignettes.xib; sourceTree = "<group>"; };
+		BCB297AF133B7EF3007899E0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/Vignettes.xib; sourceTree = "<group>"; };
 		BCCE4A37130AB3C6003325EB /* RScriptEditorTokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTokens.h; sourceTree = "<group>"; };
 		BCCE4A39130AB3E3003325EB /* RScriptEditorTokens.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = RScriptEditorTokens.l; sourceTree = "<group>"; };
 		BCD7EC901301A4950050850E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = /usr/lib/libicucore.dylib; sourceTree = "<absolute>"; };
@@ -492,6 +503,7 @@
 				162D387C06F71A3000C0936C /* Security.framework in Frameworks */,
 				6828383907804DFC004617B7 /* ExceptionHandling.framework in Frameworks */,
 				BCD7EC911301A4950050850E /* libicucore.dylib in Frameworks */,
+				BC03E662133AA8E100456B01 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,6 +549,7 @@
 			children = (
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				BC03E661133AA8E100456B01 /* Quartz.framework */,
 			);
 			name = "Other Frameworks";
 			sourceTree = "<group>";
@@ -663,6 +676,8 @@
 		16ABE72706C7512D00815F91 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				BC33799C133A0970006758D9 /* RHistoryTableView.h */,
+				BC33799D133A0970006758D9 /* RHistoryTableView.m */,
 				1C0BD6BD07345B4300D43C33 /* Authorization.h */,
 				1C0BD6BE07345B4300D43C33 /* Authorization.c */,
 				16ABE77F06C7538500815F91 /* CodeCompletion.h */,
@@ -936,6 +951,7 @@
 				BC0D319A1334B1410071B76A /* NSTextView_RAdditions.h in Headers */,
 				BCEFEBD71336705800CED44F /* RFontPreviewTextField.h in Headers */,
 				BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */,
+				BC33799E133A0970006758D9 /* RHistoryTableView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1184,6 +1200,7 @@
 				BC0D319B1334B1410071B76A /* NSTextView_RAdditions.m in Sources */,
 				BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */,
 				BCEFEBE31336709A00CED44F /* RColorWellCell.m in Sources */,
+				BC33799F133A0970006758D9 /* RHistoryTableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1293,6 +1310,9 @@
 				68958954132FAFFA007D8E7B /* English */,
 				68958984132FB273007D8E7B /* ja */,
 				68958985132FB275007D8E7B /* nl */,
+				BCB297AD133B7EDD007899E0 /* de */,
+				BCB297AE133B7EE2007899E0 /* it */,
+				BCB297AF133B7EF3007899E0 /* fr */,
 			);
 			name = Vignettes.xib;
 			sourceTree = "<group>";
@@ -1305,6 +1325,7 @@
 				68958999132FB2E5007D8E7B /* nl */,
 				6895899A132FB2E7007D8E7B /* it */,
 				6895899B132FB2E9007D8E7B /* de */,
+				BC6682FF13390A15005ACB30 /* fr */,
 			);
 			name = SyntaxColorsPrefPane.xib;
 			sourceTree = "<group>";
@@ -1329,6 +1350,7 @@
 				6895898B132FB2A1007D8E7B /* nl */,
 				6895898C132FB2A6007D8E7B /* it */,
 				6895898D132FB2A8007D8E7B /* de */,
+				BC6682FE13390A06005ACB30 /* fr */,
 			);
 			name = EditorPrefPane.xib;
 			sourceTree = "<group>";

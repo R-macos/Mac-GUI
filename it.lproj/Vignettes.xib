@@ -77,7 +77,7 @@
 									<double key="NSSize">11</double>
 									<int key="NSfFlags">3100</int>
 								</object>
-								<string key="NSPlaceholderString">Zoek</string>
+								<string key="NSPlaceholderString">Cerca</string>
 								<reference key="NSControlView" ref="881143962"/>
 								<bool key="NSDrawsBackground">YES</bool>
 								<int key="NSTextBezelStyle">1</int>
@@ -154,7 +154,7 @@
 							<object class="NSButtonCell" key="NSCell" id="316696801">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134348800</int>
-								<string key="NSContents">Open PDF</string>
+								<string key="NSContents">Apri PDF</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="11926370"/>
 								<int key="NSButtonFlags">-2038284033</int>
@@ -178,9 +178,9 @@
 							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="992576087">
-								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags">-2080244224</int>
 								<int key="NSCellFlags2">134348800</int>
-								<string key="NSContents">Open Source</string>
+								<string key="NSContents">Apri Source</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="423538386"/>
 								<int key="NSButtonFlags">-2038284033</int>
@@ -239,7 +239,7 @@
 															<object class="NSTableHeaderCell" key="NSHeaderCell">
 																<int key="NSCellFlags">75628096</int>
 																<int key="NSCellFlags2">2048</int>
-																<string key="NSContents">Pakket</string>
+																<string key="NSContents">Pacchetto</string>
 																<reference key="NSSupport" ref="26"/>
 																<object class="NSColor" key="NSBackgroundColor" id="868503304">
 																	<int key="NSColorSpace">3</int>
@@ -285,7 +285,7 @@
 															<object class="NSTableHeaderCell" key="NSHeaderCell">
 																<int key="NSCellFlags">75628096</int>
 																<int key="NSCellFlags2">2048</int>
-																<string key="NSContents">Vignet</string>
+																<string key="NSContents">Vignette</string>
 																<reference key="NSSupport" ref="26"/>
 																<reference key="NSBackgroundColor" ref="868503304"/>
 																<reference key="NSTextColor" ref="440138685"/>
@@ -311,7 +311,7 @@
 															<object class="NSTableHeaderCell" key="NSHeaderCell">
 																<int key="NSCellFlags">75628096</int>
 																<int key="NSCellFlags2">2048</int>
-																<string key="NSContents">Beschrijving</string>
+																<string key="NSContents">Descrizione</string>
 																<reference key="NSSupport" ref="26"/>
 																<object class="NSColor" key="NSBackgroundColor">
 																	<int key="NSColorSpace">6</int>
