@@ -127,6 +127,10 @@ static RController* sharedRController;
 @interface R_WebViewSearchWindow : NSWindow
 @end
 
+@interface NSDocumentControllerWithAutosave : NSDocumentController
+- (void)_autoreopenDocuments;
+@end
+
 @implementation R_WebViewSearchWindow
 - (BOOL)canBecomeKeyWindow { return YES; }
 - (BOOL)acceptsMouseMovedEvents { return YES; }
@@ -522,7 +526,7 @@ static RController* sharedRController;
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
 		[self doLoadHistory:nil];
 	}
-		
+	
 	SLog(@" - awake is done");
 }
 
@@ -643,6 +647,15 @@ static RController* sharedRController;
 
 	[self updateReInterpretEncodingMenu];
 
+	// for some reason Cocoa never calls this so we have to do it by hand even though it's internal
+	// FIXME: check with OS X version to make sure this doesn't go away
+	if ([[NSDocumentController sharedDocumentController] respondsToSelector:@selector(_autoreopenDocuments)]) {
+		SLog(@" - re-open autosaved documents (if any)");
+		[(NSDocumentControllerWithAutosave*)[NSDocumentController sharedDocumentController] _autoreopenDocuments];
+	} else {
+		SLog(@"WARNING: _autoreopenDocuments is not supported, cannot re-open autosaved documents");
+	}
+	
 	SLog(@" - done, ready to go");
 
 }
