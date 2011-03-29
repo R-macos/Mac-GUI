@@ -156,7 +156,7 @@ add.fn("data.manager", function ()
         aliases <- sub("^.+ +\\((.+)\\)$", "\\1", datanames)
         data(list = ifelse(aliases == "", datanames, aliases))
     }
-    x <- data(package = .packages(all.available = TRUE))
+    x <- suppressWarnings(data(package = .packages(all.available = TRUE)))
     dt <- x$results[, 3]
     pkg <- x$results[, 1]
     desc <- x$results[, 4]
