@@ -216,7 +216,7 @@ NSString *location[4] = {
 			
 			if(current_index == NSNotFound) {
 				[self busy: NO];
-				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"No packages selected, nothing to do."));
+				NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, @selector(sheetDidEnd:returnCode:contextInfo:), @selector(sheetDidEnd:returnCode:contextInfo:), NULL, NLS(@"No packages selected, nothing to do."));
 				break;
 			}
 			
@@ -237,7 +237,7 @@ NSString *location[4] = {
 				
 				case kCRANBin:
 					if([[RController sharedController] getRootFlag]) {
-						NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
+						NSBeginAlertSheet(NLS(@"Package installer"), NLS(@"OK"), nil, nil, [self window], self, @selector(sheetDidEnd:returnCode:contextInfo:), @selector(sheetDidEnd:returnCode:contextInfo:), NULL, NLS(@"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files."));
 						break;
 					}
 					
@@ -280,7 +280,7 @@ NSString *location[4] = {
 		}
 	}
 			
-	if (!success) NSBeginAlertSheet(NLS(@"Package installation failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Package installation was not successful. Please see the R Console for details."));
+	if (!success) NSBeginAlertSheet(NLS(@"Package installation failed"), NLS(@"OK"), nil, nil, [self window], self, @selector(sheetDidEnd:returnCode:contextInfo:), @selector(sheetDidEnd:returnCode:contextInfo:), NULL, NLS(@"Package installation was not successful. Please see the R Console for details."));
 	
 	[self busy:NO];
 	
@@ -384,12 +384,15 @@ NSString *location[4] = {
 			
 	}
 	loadedPkgUrl=pkgUrl; // whether successful or not doesn't mattter - but the load was attempted
-	if ([pkgDataSource numberOfRows]>0) [installButton setEnabled:YES];
+
 	[self reRunFilter];
 	
 	if (!success) NSBeginAlertSheet(NLS(@"Fetching Package List Failed"), NLS(@"OK"), nil, nil, [self window], self, NULL, NULL, NULL, NLS(@"Please consult  R Console output for details."));
 	
 	[self busy:NO];
+
+	[installButton setEnabled:([[pkgDataSource selectedRowIndexes] count])];
+
 }
 
 - (void) mirrorSaveAskSheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
@@ -414,6 +417,9 @@ NSString *location[4] = {
 			default:
 				SLog(@"mirrorSaveAskSheetDidEnd: NO, Don't Save");
 	}
+
+	[[self window] makeKeyAndOrderFront:nil];
+
 }
 
 - (IBAction)setURL:(id)sender
@@ -671,6 +677,7 @@ NSString *location[4] = {
 {
 	[pkgDataSource setHidden:NO];
 	[pkgDataSource reloadData];
+	[installButton setEnabled:([[pkgDataSource selectedRowIndexes] count])];
 }
 
 - (void) show
@@ -700,6 +707,8 @@ NSString *location[4] = {
 	[packages sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	
 	[self show];
+	[installButton setEnabled:([[pkgDataSource selectedRowIndexes] count])];
+
 }
 
 - (IBAction)updateAll:(id)sender
@@ -831,6 +840,8 @@ NSString *location[4] = {
 	[pkgDataSource selectRowIndexes:postIx byExtendingSelection:NO];
 	[absSelIx release];
 	[postIx release];
+
+	[installButton setEnabled:([[pkgDataSource selectedRowIndexes] count])];
 }
 
 - (IBAction)runPkgSearch:(id)sender
@@ -876,6 +887,29 @@ NSString *location[4] = {
 	}
 	[pkgDataSource selectRowIndexes:postIx byExtendingSelection:NO];
 	[postIx release];	
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	// Check our notification object is our table
+	if ([aNotification object] != pkgDataSource) return;
+
+	[installButton setEnabled:([[pkgDataSource selectedRowIndexes] count])?YES:NO];
+}
+
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString*)contextInfo
+{
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	[[self window] makeKeyAndOrderFront:nil];
+
 }
 
 @end

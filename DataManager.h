@@ -30,27 +30,39 @@
 /* DataManager */
 
 #import "CCComp.h"
-#import "Tools/SortableDataSource.h"
 
 @interface DataManager : NSObject
 {
-    IBOutlet NSTableView *RDataSource;
+
+	IBOutlet NSTableView *RDataSource;
 	IBOutlet id dataInfoView;
+	IBOutlet NSSearchField *searchField;
+	IBOutlet NSButton *refreshButton;
+	IBOutlet NSButton *loadButton;
 	NSWindow *DataManagerWindow;
-		
-	SortableDataSource *dataSource;
+
+	NSMutableArray *datasets;
+	NSMutableArray *filteredDatasets;
+
+	NSInteger sortMode;
+	NSString *sortedColumn;
+
 }
 
-- (id) window;
++ (DataManager*) sharedController;
+
 - (IBAction)loadRData:(id)sender;
 - (IBAction)showHelp:(id)sender;
+- (IBAction)reloadDatasets:(id)sender;
+- (IBAction)filterTable:(id)sender;
 
-- (void) show;
+- (void)show;
+- (NSWindow*)window;
 
-- (void) resetDatasets;
-- (void) updateDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url;
-- (int) count;
+- (void)resetDatasets;
+- (void)updateDatasets:(int)count withNames:(char**)name descriptions:(char**)desc packages:(char**)pkg URLs:(char**)url;
+- (NSInteger)count;
+- (void)enableGUIActions:(BOOL)enabled;
 
-+ (DataManager*) sharedController;
 @end
 

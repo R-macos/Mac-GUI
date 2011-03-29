@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-03-28
+*	improved Data Manager
+	- made table sortable and searchable
+	- added Refresh List
+	- now one can select more than one data set to
+	load them into the workspace
+
 Last-update: 2011-03-24
 *	auto-save is now enabled in the editor by default
 	(period is set to 3 minutes) and can be enabled

@@ -34,76 +34,182 @@
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
 
-static id sharedController;
+#define kDataManagerData          @"data"
+#define kDataManagerPackage       @"package"
+#define kDataManagerDescription   @"description"
+#define kDataManagerURL           @"URL"
+
+#define kSortModeNone 0
+#define kSortModeAsc  1
+#define kSortModeDesc 2
+
+static DataManager* sharedController;
 
 @implementation DataManager
-
-- (void)awakeFromNib
-{
-	[RDataSource setDoubleAction:@selector(loadRData:)];
-	[RDataSource setDataSource: dataSource];
-	[dataInfoView setFrameLoadDelegate:self];
-}
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-		sharedController = self;
-		dataSource = [[SortableDataSource alloc] init];
-	}
-	
-    return self;
-}
-
-- (void)dealloc {
-	[super dealloc];
-}
-
-- (void) resetDatasets
-{
-	[dataSource reset];
-}
-
-- (void) updateDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url
-{
-	[dataSource reset];
-	[dataSource addColumnOfLength:count withUTF8Strings:name name:@"data"];
-	[dataSource addColumnOfLength:count withUTF8Strings:desc name:@"description"];
-	[dataSource addColumnOfLength:count withUTF8Strings:pkg name:@"package"];
-	[dataSource addColumnOfLength:count withUTF8Strings:url name:@"URL"];
-	[self show];
-}
-
-- (id) window
-{
-	return DataManagerWindow;
-}
 
 + (DataManager*) sharedController{
 	return sharedController;
 }
 
-- (void) reloadData
+- (void)awakeFromNib
+{
+	[RDataSource setDoubleAction:@selector(loadRData:)];
+	[dataInfoView setFrameLoadDelegate:self];
+	[self enableGUIActions:NO];
+}
+
+- (id)init
+{
+	self = [super init];
+	if (self) {
+		sharedController = self;
+		datasets = [[NSMutableArray alloc] initWithCapacity:500];
+		filteredDatasets = [[NSMutableArray alloc] initWithCapacity:500];
+		sortMode = kSortModeNone;
+		sortedColumn = nil;
+	}
+
+	return self;
+}
+
+- (void)dealloc {
+	if(datasets) [datasets release], datasets = nil;
+	if(filteredDatasets) [filteredDatasets release], filteredDatasets = nil;
+	[super dealloc];
+}
+
+#pragma mark -
+
+- (NSWindow*)window
+{
+	return DataManagerWindow;
+}
+
+- (void)show
 {
 	[RDataSource reloadData];
+	[DataManagerWindow makeKeyAndOrderFront:self];
 }
+
+#pragma mark -
+
+- (void)updateDatasets:(int)count withNames:(char**)name descriptions:(char**)desc packages:(char**)pkg URLs:(char**)url
+{
+
+	[self enableGUIActions:NO];
+	[[self window] display];
+	[self show];
+	[self resetDatasets];
+
+	NSInteger i = 0;
+
+	for(i = 0; i < count; i++) {
+		NSDictionary *entry = [NSDictionary dictionaryWithObjectsAndKeys:
+			[NSString stringWithUTF8String: name[i]], kDataManagerData,
+			[NSString stringWithUTF8String: desc[i]], kDataManagerDescription,
+			[NSString stringWithUTF8String: pkg[i]],  kDataManagerPackage,
+			[NSString stringWithUTF8String: url[i]],  kDataManagerURL,
+			nil
+		];
+		[datasets addObject:entry];
+		[filteredDatasets addObject:entry];
+	}
+
+	[self filterTable:nil];
+	[RDataSource reloadData];
+	[self enableGUIActions:YES];
+
+}
+
+- (void)resetDatasets
+{
+	[datasets removeAllObjects];
+	[filteredDatasets removeAllObjects];
+}
+
+- (NSInteger)count
+{
+	return [datasets count];
+}
+
+- (void)enableGUIActions:(BOOL)enabled
+{
+	[loadButton setEnabled:enabled];
+	[refreshButton setEnabled:enabled];
+	[searchField setEnabled:enabled];
+	[RDataSource setEnabled:enabled];
+}
+
+#pragma mark -
 
 - (IBAction)loadRData:(id)sender
 {
-	int row = [sender selectedRow];
-	if(row>=0)
-		[[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"data(%@,package=\"%@\")",
-			[dataSource objectAtColumn:@"data" row:row], [dataSource objectAtColumn:@"package" row:row]]];
+
+	NSIndexSet *selectedRows = [RDataSource selectedRowIndexes];
+
+	if(![selectedRows count]) return;
+
+	NSInteger anIndex = [selectedRows firstIndex];
+	NSMutableArray *data = [[NSMutableArray alloc] initWithCapacity:[selectedRows count]];
+	NSMutableArray *pkgs = [[NSMutableArray alloc] initWithCapacity:[selectedRows count]];
+	while(anIndex != NSNotFound) {
+		[data addObject:[[filteredDatasets objectAtIndex:anIndex] objectForKey:kDataManagerData]];
+		[pkgs addObject:[[filteredDatasets objectAtIndex:anIndex] objectForKey:kDataManagerPackage]];
+		anIndex = [selectedRows indexGreaterThanIndex:anIndex];
+	}
+	[[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"data(%@,package=c(\"%@\"))",
+		[data componentsJoinedByString:@","], 
+		[pkgs componentsJoinedByString:@"\",\""]]];
+}
+
+- (IBAction)filterTable:(id)sender
+{
+
+	NSString *searchPattern = [searchField stringValue];
+
+	if(![searchPattern length]) {
+		[filteredDatasets setArray:datasets];
+		[RDataSource deselectAll:nil];
+	} else {
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"data CONTAINS[cd] %@ OR package CONTAINS[cd] %@ OR description CONTAINS[cd] %@", 
+			searchPattern, searchPattern, searchPattern];
+		[filteredDatasets setArray:[datasets filteredArrayUsingPredicate:predicate]];
+	}
+
+	if(sortedColumn) {
+		[RDataSource setIndicatorImage:(sortMode == kSortModeAsc) ? [NSImage imageNamed:@"NSAscendingSortIndicator"] : [NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:[RDataSource tableColumnWithIdentifier:sortedColumn]];
+		[RDataSource setHighlightedTableColumn:[RDataSource tableColumnWithIdentifier:sortedColumn]];
+		NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortedColumn ascending:(sortMode == kSortModeAsc) 
+			selector:@selector(localizedCaseInsensitiveCompare:)];
+		[filteredDatasets sortUsingDescriptors:
+			[NSArray arrayWithObjects:sortDescriptor, nil]];
+		[sortDescriptor release];
+	}
+
+
+	[RDataSource reloadData];
+}
+
+- (IBAction)reloadDatasets:(id)sender
+{
+	[self enableGUIActions:NO];
+	[[self window] display];
+	[[REngine mainEngine] executeString:@"data.manager()"];
 }
 
 - (IBAction)showHelp:(id)sender
 {
-	int row = [sender selectedRow];
-	if (row < 0) return;
-	SLog(@"DataManager showHelp: (data=%@, package=%@, static-URL=%@)", [dataSource objectAtColumn:@"data" row:row], [dataSource objectAtColumn:@"package" row:row], [dataSource objectAtColumn:@"URL" row:row]);
+
+	if([RDataSource numberOfSelectedRows] != 1) return;
+
+	NSInteger row = [RDataSource selectedRow];
+
+	NSDictionary *selectedItem = [filteredDatasets objectAtIndex:row];
+
+	SLog(@"DataManager showHelp: %@", selectedItem);
+
 #if R_VERSION < R_Version(2, 10, 0)
-	NSString *urlText = [NSString stringWithFormat:@"file://%@",[dataSource objectAtColumn:@"URL" row:row]];
+	NSString *urlText = [NSString stringWithFormat:@"file://%@", [selectedItem objectForKey:kDataManagerURL]];
 #else
 	NSString *urlText = nil;
 	int port = [[RController sharedController] helpServerPort];
@@ -111,43 +217,17 @@ static id sharedController;
 		NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
 		return;
 	}
-	NSString *topic = [dataSource objectAtColumn:@"data" row:row];
+
+	NSString *topic = [selectedItem objectForKey:kDataManagerData];
 	NSRange r = [topic rangeOfString:@" ("];
 	if (r.length > 0 && [topic length] - r.length > 3) // some datasets have the topic in parents
 		topic = [topic substringWithRange: NSMakeRange(r.location + 2, [topic length] - r.location - 3)];
-	urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, [dataSource objectAtColumn:@"package" row:row], topic];
+
+	urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, [selectedItem objectForKey:kDataManagerPackage], topic];
 #endif
+
 	[[dataInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
-}
 
-- (int) count
-{
-	return [dataSource count];
-}
-
-- (void) show
-{
-	[self reloadData];
-	[DataManagerWindow makeKeyAndOrderFront:self];
-}
-
-- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
-{
-	// Check our notification object is our table
-	if ([aNotification object] != RDataSource) return;
-
-	// Update Info delayed
-	[NSObject cancelPreviousPerformRequestsWithTarget:self 
-							selector:@selector(showHelp:) 
-							object:RDataSource];
-
-	[self performSelector:@selector(showHelp:) withObject:RDataSource afterDelay:0.5];
-	
-}
-
-- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
-{
-	[DataManagerWindow makeKeyAndOrderFront:nil];
 }
 
 - (IBAction)printDocument:(id)sender
@@ -172,6 +252,119 @@ static id sharedController;
 							   delegate:self 
 						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
 						    contextInfo:@""];
+}
+
+#pragma mark -
+#pragma mark tableView delegates
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+	return [filteredDatasets count];
+}
+
+- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)rowIndex
+{
+	if([[tableColumn identifier] isEqualToString:kDataManagerPackage])
+		return [[filteredDatasets objectAtIndex:rowIndex] objectForKey:kDataManagerPackage];
+	else if([[tableColumn identifier] isEqualToString:kDataManagerData])
+		return [[filteredDatasets objectAtIndex:rowIndex] objectForKey:kDataManagerData];
+	else if([[tableColumn identifier] isEqualToString:kDataManagerDescription])
+		return [[filteredDatasets objectAtIndex:rowIndex] objectForKey:kDataManagerDescription];
+	return @"...";
+}
+
+- (BOOL)tableView:(NSTableView *)aTableView shouldEditTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
+{
+	return NO;
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+	// Check our notification object is our table
+	if ([aNotification object] != RDataSource) return;
+
+	// Update Info delayed
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(showHelp:) 
+							object:RDataSource];
+
+	[self performSelector:@selector(showHelp:) withObject:RDataSource afterDelay:0.5];
+	
+}
+
+- (void)tableView:(NSTableView*)tableView didClickTableColumn:(NSTableColumn *)tableColumn
+{
+
+	[tableView deselectAll:nil];
+
+	// Tri-state sorting none -> asc -> desc -> none -> ...
+	if(!sortedColumn || (sortedColumn && [sortedColumn isEqualToString:[tableColumn identifier]])) {
+		sortMode++;
+		if (sortMode > kSortModeDesc) sortMode = kSortModeNone;
+	} else {
+		sortMode = kSortModeAsc;
+	}
+
+	// remove sort indicator of old column
+	if(sortedColumn) {
+		[self filterTable:nil];
+		[tableView setIndicatorImage:nil inTableColumn:[tableView tableColumnWithIdentifier:sortedColumn]];
+	}
+
+	// remember last to be sorted column
+	sortedColumn = [tableColumn identifier];
+
+	NSSortDescriptor* sortDescriptor;
+
+	switch(sortMode) {
+		case kSortModeNone:
+		[tableView setIndicatorImage:nil inTableColumn:tableColumn];
+		[tableView setHighlightedTableColumn:nil];
+		[filteredDatasets removeAllObjects];
+		[filteredDatasets setArray:datasets];
+		sortedColumn = nil;
+		break;
+		case kSortModeAsc:
+		[tableView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] inTableColumn:tableColumn];
+		[tableView setHighlightedTableColumn:tableColumn];
+		sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortedColumn ascending:YES 
+			selector:@selector(localizedCaseInsensitiveCompare:)];
+		[filteredDatasets sortUsingDescriptors:
+			[NSArray arrayWithObjects:sortDescriptor, nil]];
+		[sortDescriptor release];
+		break;
+		case kSortModeDesc:
+		[tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn];
+		[tableView setHighlightedTableColumn:tableColumn];
+		sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortedColumn ascending:NO 
+			selector:@selector(localizedCaseInsensitiveCompare:)];
+		[filteredDatasets sortUsingDescriptors:
+			[NSArray arrayWithObjects:sortDescriptor, nil]];
+		[sortDescriptor release];
+		break;
+	}
+
+	[RDataSource reloadData];
+
+}
+
+#pragma mark -
+
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
+{
+
+	SLog(@"DataManager: sheetDidEnd: returnCode: %d contextInfo: %@", returnCode, contextInfo);
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	[DataManagerWindow makeKeyAndOrderFront:nil];
+
 }
 
 @end

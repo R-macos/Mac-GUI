@@ -304,6 +304,11 @@ BOOL preventReentrance = NO;
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
 	DO_RENG_EVAL_STATUS(str);
+
+	// Run NSDefaultRunLoopMode to allow to update status line
+	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
+							 beforeDate:[NSDate distantPast]];
+
     xr=[self evaluateExpressions: ps];
 	DONE_RENG_EVAL_STATUS();
 	[ps release];
@@ -320,6 +325,11 @@ BOOL preventReentrance = NO;
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
 	DO_RENG_EVAL_STATUS(str);
+
+	// Run NSDefaultRunLoopMode to allow to update status line
+	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
+							 beforeDate:[NSDate distantPast]];
+
     xr=[self evaluateExpressions: ps];
 	DONE_RENG_EVAL_STATUS();
 	[ps release];
@@ -336,6 +346,11 @@ BOOL preventReentrance = NO;
     ps=[self parse: str];
     if (ps==nil) return NO;
 	DO_RENG_EVAL_STATUS(str);
+
+	// Run NSDefaultRunLoopMode to allow to update status line
+	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
+							 beforeDate:[NSDate distantPast]];
+
     xr=[self evaluateExpressions: ps];
 	DONE_RENG_EVAL_STATUS();
 	[ps release];

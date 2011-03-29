@@ -376,12 +376,27 @@ if (!item) { \
 				  [NSString stringWithFormat:NLS(@"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!"), objName]);    
 }
 
-/* this gets called by the "wanna remove object?" sheet */
-- (void) shouldRemoveObj:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
-    if( (returnCode==NSAlertDefaultReturn) && contextInfo!=nil){
+/**
+ * this gets called by the "wanna remove object?" sheet 
+ */
+- (void) shouldRemoveObj:(id)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	if( (returnCode==NSAlertDefaultReturn) && contextInfo != nil ) {
 		[[REngine mainEngine] executeString: [NSString stringWithFormat:@"rm(%@)",contextInfo]];
 		[[WSBrowser getWSBController] reloadWSBData:self];
 	}
+
+	[[self window] makeKeyAndOrderFront:nil];
+
 }
 
 + (void) initData
