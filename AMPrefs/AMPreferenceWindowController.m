@@ -294,7 +294,11 @@
 					[(id)pane willSelect];
 				if ([pane respondsToSelector:@selector(loadMainView)])
 					[(id)pane loadMainView];
-				
+
+				// For some reasons the NSColorPanel pops up while changing the pane;
+				// thus close it explicitly
+				[[NSColorPanel sharedColorPanel] close];
+
 				[[self window] setTitle:[[prefPanes objectForKey:identifier] label]];
 				[self changeContentView:paneView];
 

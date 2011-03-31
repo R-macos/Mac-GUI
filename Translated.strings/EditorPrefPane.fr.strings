@@ -2,49 +2,49 @@
 "0.2" = "0.2";
 
 /* Entry = "49.title"; Class = "NSButtonCell" */
-"Application" = "Programm";
+"Application" = "Application";
 
 /* Entry = "229.title"; Class = "NSButtonCell" */
-"Auto-save documents" = "Dokumente automatisch speichern";
+"Auto-save documents" = "Auto-save documents";
 
 /* Entry = "181.title"; Class = "NSBox" */
 "Box" = "Box";
 
 /* Entry = "96.title"; Class = "NSButtonCell" */
-"Built-in editor" = "Standard Editor";
+"Built-in editor" = "Built-in editor";
 
 /* Entry = "35.title"; Class = "NSBox" */
-"Built-in editor preferences" = "Einstellungen für Standard Editor";
+"Built-in editor preferences" = "Built-in editor preferences";
 
 /* Entry = "47.title"; Class = "NSButtonCell" */
-"Command" = "Kommandozeilenbefehl";
+"Command" = "Command";
 
 /* Entry = "97.title"; Class = "NSButtonCell" */
-"External Editor" = "Externer Editor";
+"External Editor" = "External Editor";
 
 /* Entry = "37.title"; Class = "NSBox" */
-"External editor settings" = "Einstellungen für externen Editor";
+"External editor settings" = "External editor settings";
 
 /* Entry = "177.title"; Class = "NSTextFieldCell" */
-"Font:" = "Schriftart:";
+"Font:" = "Font:";
 
 /* Entry = "147.title"; Class = "NSButtonCell" */
-"Highlight bracket pairs" = "Klammerpaare hervorheben";
+"Highlight bracket pairs" = "Highlight bracket pairs";
 
 /* Entry = "171.title"; Class = "NSButtonCell" */
-"Highlight current line" = "Aktuelle Zeile hervorheben";
+"Highlight current line" = "Highlight current line";
 
 /* Entry = "149.title"; Class = "NSTextFieldCell" */
-"Highlight interval:" = "Dauer:";
+"Highlight interval:" = "Highlight interval:";
 
 /* Entry = "173.title"; Class = "NSButtonCell" */
-"Indent new lines" = "Neue Zeile automatisch einrücken";
+"Indent new lines" = "Indent new lines";
 
 /* Entry = "159.title"; Class = "NSButtonCell" */
-"Match brackets/quotes" = "Klammer automatisch schließen";
+"Match brackets/quotes" = "Match brackets/quotes";
 
 /* Entry = "161.title"; Class = "NSTextFieldCell" */
-"Note:\nCommand is executed in a shell" = "Hinweis:\nDer Befehl wird in der “Shell” ausgeführt.";
+"Note:\nCommand is executed in a shell" = "Note:\nCommand is executed in a shell";
 
 /* Entry = "165.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
@@ -53,25 +53,25 @@
 "Radio" = "Radio";
 
 /* Entry = "179.title"; Class = "NSButtonCell" */
-"Select…" = "Auswählen…";
+"Select…" = "Select…";
 
 /* Entry = "162.title"; Class = "NSButtonCell" */
-"Set Editor" = "Editor auswählen";
+"Set Editor" = "Set Editor";
 
 /* Entry = "158.title"; Class = "NSButtonCell" */
-"Show function hints" = "Funktionsparameter anzeigen";
+"Show function hints" = "Show function hints";
 
 /* Entry = "148.title"; Class = "NSButtonCell" */
-"Show line numbers" = "Zeilennummern anzeigen";
+"Show line numbers" = "Show line numbers";
 
 /* Entry = "146.title"; Class = "NSButtonCell" */
-"Show syntax coloring" = "Syntaxhervorhebung";
+"Show syntax coloring" = "Show syntax coloring";
 
 /* Entry = "163.title"; Class = "NSTextFieldCell" */
 "SubEthaEdit" = "SubEthaEdit";
 
 /* Entry = "153.title"; Class = "NSButtonCell" */
-"Wrap lines" = "Zeilen umbrechen";
+"Wrap lines" = "Wrap lines";
 
 /* Entry = "226.title"; Class = "NSTextFieldCell" */
 "s" = "s";

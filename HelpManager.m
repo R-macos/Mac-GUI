@@ -42,12 +42,15 @@ static id sharedHMController;
     if (self) {
 		sharedHMController = self;
 		home = nil;
+		searchType = kExactMatch;
 	}
 	
     return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver: self];
 	[super dealloc];
 }
 
@@ -113,7 +116,12 @@ static id sharedHMController;
 	charSet = [NSCharacterSet characterSetWithCharactersInString:@"'\""];
 	searchString = [topic stringByTrimmingCharactersInSet:charSet];
 	SLog(@"showHelpFor: <%@>", searchString);
-	
+
+	if(searchType == kFuzzyMatch) {
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"print(help.search(\"%@\"))", searchString]];
+		return;
+	}
+
 	REngine *re = [REngine mainEngine];	
 #if R_VERSION < R_Version(2, 10, 0)
 	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))",searchString]];
@@ -202,20 +210,30 @@ static id sharedHMController;
 
 - (IBAction)whatsNew:(id)sender
 {
-	REngine *re = [REngine mainEngine];	
+
+	SLog(@"What's New");
+
+	REngine *re = [REngine mainEngine];
+
 	/* syntax-highlighting kills us, so we use TextEdit for now */
-	[re executeString:@"system(paste('open -a /Applications/TextEdit.app',file.path(R.home(),'NEWS')))"];
-	{
-		NSBundle* myBundle = [NSBundle mainBundle];
-		if (myBundle)
-			system([[NSString stringWithFormat:@"open -a /Applications/TextEdit.app \"%@/NEWS\"", [myBundle resourcePath]] UTF8String]);
+	// [re executeString:@"system(paste('open -a /Applications/TextEdit.app',file.path(R.home(),'NEWS')))"];
+	// {
+	// 	NSBundle* myBundle = [NSBundle mainBundle];
+	// 	if (myBundle)
+	// 		system([[NSString stringWithFormat:@"open -a /Applications/TextEdit.app \"%@/NEWS\"", [myBundle resourcePath]] UTF8String]);
+	// }
+
+	NSBundle *myBundle = [NSBundle mainBundle];
+	if(myBundle) {
+		SLog(@" - resource path: %@", [myBundle resourcePath]);
+		RSEXP *xx = [re evaluateString:[NSString stringWithFormat:@"file.show('%@/NEWS')", [[myBundle resourcePath] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]]];
+		if(xx) [xx release];
 	}
-	/*
-	 RSEXP *x= [re evaluateString:@"file.show(file.path(R.home(),\"NEWS\"))"];
-	 if(x==nil)
-		return;
-	[x release]; */
-	
+
+	RSEXP *x = [re evaluateString:@"file.show(file.path(R.home(),\"NEWS\"))"];
+	if(!x) return;
+	[x release]; 
+
 }
 
 + (id) sharedController{
@@ -238,26 +256,57 @@ static id sharedHMController;
 	[printOp runOperation];
 }
 
-- (void) setSearchType:(int) type
+- (void) setSearchTypeViaSender:(id)sender
 {
+
+	if(sender == nil) {
+		[self setSearchType:kExactMatch];
+		return;
+	}
+
+	int type = [sender tag];
+
 	if (type==kFuzzyMatch || type==kExactMatch) {
-		NSMenu *m = [(NSSearchFieldCell*)searchField searchMenuTemplate];
-		
-		searchType = type;
+		[self setSearchType:type];
+		NSMenu *m = [(NSSearchFieldCell*)sender menu];
+		if(!m) return;
 		[[m itemWithTag:kFuzzyMatch] setState:(searchType==kFuzzyMatch)?NSOnState:NSOffState];
 		[[m itemWithTag:kExactMatch] setState:(searchType==kExactMatch)?NSOnState:NSOffState];
-		[(NSSearchFieldCell*)searchField setSearchMenuTemplate:m];
 	}
 }
 
 - (void) awakeFromNib
 {
-	[self setSearchType:kExactMatch];
+	[self setSearchTypeViaSender:nil];
 }
 
 - (IBAction)changeSearchType:(id)sender
 {
-	[self setSearchType:[sender tag]];
+	[self setSearchTypeViaSender:sender];
+}
+
+- (void)setSearchType:(int)type
+{
+	if(type == kExactMatch || type == kFuzzyMatch) {
+		if(type != searchType) {
+			SLog(@"HelpManger - searchType was changed from %d to %d", searchType, type);
+			searchType = type;
+
+			// Update searchField's searchMenuTemplate
+			NSMenu *m = [[searchField cell] searchMenuTemplate];
+			[[m itemWithTag:kExactMatch] setState:(type == kExactMatch) ? NSOnState : NSOffState];
+			[[m itemWithTag:kFuzzyMatch] setState:(type == kExactMatch) ? NSOffState : NSOnState];
+			[[searchField cell] setSearchMenuTemplate:m];
+
+			// If searchType was changed notify all other help search fields
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"HelpSearchTypeChanged" object:nil];
+		}
+	}
+}
+
+- (int)searchType
+{
+	return searchType;
 }
 
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame {

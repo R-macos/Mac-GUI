@@ -1,8 +1,17 @@
+/* Entry = "125.title"; Class = "NSTextFieldCell" */
+"Background" = "Background";
+
 /* Entry = "26.title"; Class = "NSBox" */
 "Colors" = "Colori";
 
 /* Entry = "119.title"; Class = "NSTextFieldCell" */
 "Comment" = "Commenti";
+
+/* Entry = "127.title"; Class = "NSTextFieldCell" */
+"Current Line" = "Current Line";
+
+/* Entry = "129.title"; Class = "NSTextFieldCell" */
+"Cursor" = "Cursor";
 
 /* Entry = "120.title"; Class = "NSButtonCell" */
 "Defaults" = "Default";

@@ -521,7 +521,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 	NSString *helpString = [self functionNameForCurrentScope];
 
 	if(helpString) {
+		int oldSearchType = [[HelpManager sharedController] searchType];
+		[[HelpManager sharedController] setSearchType:kExactMatch];
 		[[HelpManager sharedController] showHelpFor:helpString];
+		[[HelpManager sharedController] setSearchType:oldSearchType];
 		return;
 	}
 

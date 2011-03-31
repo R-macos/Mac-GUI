@@ -47,7 +47,7 @@
 /* we should move this to another callback at some point ... it's a bad, bad hack for now */
 #ifndef RENG_STAND_ALONE
 #import "RController.h"
-#define DO_RENG_EVAL_STATUS(S) NSString *lsl = [[RController sharedController] statusLineText]; [[RController sharedController] setStatusLineText:[NSString stringWithFormat:@"executing: %@", S]];
+#define DO_RENG_EVAL_STATUS(S) NSString *lsl = [[RController sharedController] statusLineText]; [[RController sharedController] setStatusLineText:[NSString stringWithFormat:@"%@: %@", NLS(@"executing"), S]];
 #define DONE_RENG_EVAL_STATUS() [[RController sharedController] setStatusLineText: lsl];
 #endif
 
@@ -304,11 +304,6 @@ BOOL preventReentrance = NO;
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
 	DO_RENG_EVAL_STATUS(str);
-
-	// Run NSDefaultRunLoopMode to allow to update status line
-	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
-							 beforeDate:[NSDate distantPast]];
-
     xr=[self evaluateExpressions: ps];
 	DONE_RENG_EVAL_STATUS();
 	[ps release];
@@ -325,11 +320,6 @@ BOOL preventReentrance = NO;
     if (ps==nil) return nil;
 	if([ps type]==NILSXP) { [ps release]; return nil; }
 	DO_RENG_EVAL_STATUS(str);
-
-	// Run NSDefaultRunLoopMode to allow to update status line
-	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
-							 beforeDate:[NSDate distantPast]];
-
     xr=[self evaluateExpressions: ps];
 	DONE_RENG_EVAL_STATUS();
 	[ps release];

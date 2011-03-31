@@ -54,9 +54,14 @@ foreach (sort { $ent{$a} cmp $ent{$b} } keys %ent) {
 }
 
 foreach (keys(%tlt)) {
-    if (!defined $ent{$_}) {
+    if (!defined $ent{$_} && $ent{$_} ne '') { ## orphan non-empty text strings
 	print "/* OrphanEntry = \"$_\"; Class = \"$hc{$_}\"; text = \"$ent{$_}\" */\n";
     }
+}
+
+if ($ENV{KEEP} ne '') {
+    print STDERR "KEEP set, leaving all files in $td\n";
+    exit0;
 }
 
 system "rm -rf '$td'";

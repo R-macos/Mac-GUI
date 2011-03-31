@@ -307,5 +307,7 @@
 
 - (void)updateReInterpretEncodingMenu;
 
+- (void) helpSearchTypeChanged;
+
 @end
 

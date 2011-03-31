@@ -21,17 +21,17 @@ if [ ! -e Localizable.strings ]; then
 fi
 
 # we need to merge that with the available languages
-for LANG in $LANGUAGES; do
-	if [ -e "$LANG.lproj" ]; then
-		if [ -e "$LANG.lproj/Localizable.strings" ]; then
-			echo "Updating $LANG ..."
-			./mergeLS Localizable.strings "$LANG.lproj/Localizable.strings"
+for lang in $LANGUAGES; do
+	if [ -e "$lang.lproj" ]; then
+		if [ -e "$lang.lproj/Localizable.strings" ]; then
+			echo "Updating $lang ..."
+			./mergeLS Localizable.strings "$lang.lproj/Localizable.strings"
 		else
-			echo "-- $LANG has no localizable strings, creating them"
-			cp Localizable.strings "$LANG.lproj/Localizable.strings"
+			echo "-- $lang has no localizable strings, creating them"
+			cp Localizable.strings "$lang.lproj/Localizable.strings"
 		fi
 	else
-		echo "** $LANG is in the language list, but there is no lproj dorectory for it!"
+		echo "** $lang is in the language list, but there is no lproj dorectory for it!"
 	fi
 done
 

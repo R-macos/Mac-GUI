@@ -39,6 +39,7 @@
 #import "Tools/CodeCompletion.h"
 #import "RegexKitLite.h"
 #import "RTextView.h"
+#import "HelpManager.h"
 
 BOOL defaultsInitialized = NO;
 
@@ -48,12 +49,6 @@ NSColor *shColorNumber;
 NSColor *shColorKeyword;
 NSColor *shColorComment;
 NSColor *shColorIdentifier;
-
-// note: those must match tags in the NIB!
-#define hsTypeExact   1
-#define hsTypeApprox  2
-
-#define kMainMenuFileTag 1001
 
 @implementation RDocumentWinCtrl
 
@@ -193,6 +188,12 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 		nil] retain];
 
 		[self setShouldCloseDocument:YES];
+
+		[[NSNotificationCenter defaultCenter] addObserver:self 
+							 selector:@selector(helpSearchTypeChanged) 
+							     name:@"HelpSearchTypeChanged" 
+							   object:nil];
+
 	}
 	return self;
 }
@@ -221,6 +222,8 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	[self functionRescan];
 
 	[[textView undoManager] removeAllActions];
+
+	[self helpSearchTypeChanged];
 
 	[super windowDidLoad];
 
@@ -953,71 +956,82 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 		if (cmi) [cmi setState:NSOnState];
 		// sounds weird, but we have to re-set the tempate to force sf to update the real menu
 		[(NSSearchFieldCell*) searchToolbarField setSearchMenuTemplate:m];
+		[[HelpManager sharedController] setSearchType:hsType];
 	}
 }
 
 - (IBAction)goHelpSearch:(id)sender
 {
-	NSSearchField *sf = (NSSearchField*) sender;
-	NSString *ss = [sf stringValue];
-	SLog(@"RDocumentWinCtrl<%@>.goHelpSearch: \"%@\", type=%d", self, ss, hsType);
-	if ([ss length]<1)
-		[helpDrawer close];
-	else {
-		[helpDrawer open];
-		switch (hsType) {
-			case hsTypeExact: {
-				RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(help(\"%@\"),silent=TRUE)", ss]];
-				if (x) {
-					NSString *path = [[[x string] copy] autorelease];
-					[x release];
-					if (path) {
-#if R_VERSION < R_Version(2, 10, 0)
-						NSString *url = [NSString stringWithFormat:@"file://%@", path];
-#else
-						int port = [[RController sharedController] helpServerPort];
-						if (port == 0) {
-							NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
-							return;
-						}
-						// is will be ..../package/html/topic.html - so extract the package name from there - the internal help relies on the same logic
-						NSArray *pc = [path pathComponents];
-						if ([pc count] < 3) {
-							NSRunInformationalAlertPanel(NLS(@"Cannot determine package for the topic."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
-							return;
-						}
-						NSString *pkg = (NSString*) [pc objectAtIndex:[pc count] - 3];
-						NSString *url = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, pkg, ss];
-#endif
-						[[helpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-					}
-				}
-				break;
-			}
-			case hsTypeApprox: {
-				if (!helpTempFile)
-					helpTempFile = [NSString stringWithFormat:@"/tmp/RguiHS%p", self];
-				SLog(@" - approx search will use %@", helpTempFile);
-#if R_VERSION < R_Version(2, 10, 0)
-				RSEXP * x= [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try({function(a){sink('%@'); cat(paste('<html><table>',paste('<tr><td><b>',a[,1],'</b> (<a href=\"file://',a[,4],'/html/00Index.html\">',a[,3],'</a></td><td>',a[,2],'</td></tr>',sep='',collapse=''),'</table></html>',sep=''));sink();'OK'}}(help.search(\"%@\")$matches),silent=TRUE)", helpTempFile, ss]];
-#else
-				int port = [[RController sharedController] helpServerPort];
-				if (port == 0) {
-					NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
-					return;
-				}
-				RSEXP * x= [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try({function(a){sink('%@'); cat(paste('<html><table>',paste('<tr><td><b>',a[,1],'</b> (<a href=\"http://127.0.0.1:',tools:::httpdPort,'/library/',a[,3],'/html/',a[,1],'.html\">',a[,3],'</a>)</td><td>',a[,2],'</td></tr>',sep='',collapse=''),'</table></html>',sep=''));sink();'OK'}}(help.search(\"%@\")$matches),silent=TRUE)", helpTempFile, ss]];			
-#endif
-				SLog(@" - resulting SEXP=%@", x);
-				if (x && [x string] && [[x string] isEqual:@"OK"]) {
-					NSString *url = [NSString stringWithFormat:@"file://%@",helpTempFile];
-					[[helpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-				}
-				[x release];
-				break;
-			}
-		}
-	}
+
+	NSString *ss = [[(NSSearchField*)sender stringValue] stringByTrimmingCharactersInSet:
+										[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+	SLog(@"%@.goHelpSearch: \"%@\", type=%d", self, ss, hsType);
+
+	if(![ss length]) return;
+
+	SLog(@" - call [HelpManager showHelpFor:]");
+
+	[[HelpManager sharedController] showHelpFor:ss];
+
+// 	if ([ss length]<1)
+// 		[helpDrawer close];
+// 	else {
+// 		[helpDrawer open];
+// 		switch (hsType) {
+// 			case hsTypeExact: {
+// 				RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(help(\"%@\"),silent=TRUE)", ss]];
+// 				if (x) {
+// 					NSString *path = [[[x string] copy] autorelease];
+// 					[x release];
+// 					if (path) {
+// #if R_VERSION < R_Version(2, 10, 0)
+// 						NSString *url = [NSString stringWithFormat:@"file://%@", path];
+// #else
+// 						int port = [[RController sharedController] helpServerPort];
+// 						if (port == 0) {
+// 							NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
+// 							return;
+// 						}
+// 						// is will be ..../package/html/topic.html - so extract the package name from there - the internal help relies on the same logic
+// 						NSArray *pc = [path pathComponents];
+// 						if ([pc count] < 3) {
+// 							NSRunInformationalAlertPanel(NLS(@"Cannot determine package for the topic."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
+// 							return;
+// 						}
+// 						NSString *pkg = (NSString*) [pc objectAtIndex:[pc count] - 3];
+// 						NSString *url = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, pkg, ss];
+// #endif
+// 						[[helpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+// 					}
+// 				}
+// 				break;
+// 			}
+// 			case hsTypeApprox: {
+// 				if (!helpTempFile)
+// 					helpTempFile = [NSString stringWithFormat:@"/tmp/RguiHS%p.html", self];
+// 				SLog(@" - approx search will use %@", helpTempFile);
+// #if R_VERSION < R_Version(2, 10, 0)
+// 				RSEXP * x= [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try({function(a){sink('%@'); cat(paste('<html><table>',paste('<tr><td><b>',a[,1],'</b> (<a href=\"file://',a[,4],'/html/00Index.html\">',a[,3],'</a></td><td>',a[,2],'</td></tr>',sep='',collapse=''),'</table></html>',sep=''));sink();'OK'}}(help.search(\"%@\")$matches),silent=TRUE)", helpTempFile, ss]];
+// #else
+// 				int port = [[RController sharedController] helpServerPort];
+// 				if (port == 0) {
+// 					NSRunInformationalAlertPanel(NLS(@"Cannot start HTML help server."), NLS(@"Help"), NLS(@"Ok"), nil, nil);
+// 					return;
+// 				}
+// 				RSEXP * x= [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try({function(a){sink('%@'); cat(paste('<html><table>',paste('<tr><td><b>',a[,1],'</b> (<a href=\"http://127.0.0.1:',tools:::httpdPort,'/library/',a[,3],'/html/',a[,1],'.html\">',a[,3],'</a>)</td><td>',a[,2],'</td></tr>',sep='',collapse=''),'</table></html>',sep=''));sink();'OK'}}(help.search(\"%@\")$matches),silent=TRUE)", helpTempFile, ss]];			
+// #endif
+// 				SLog(@" - resulting SEXP=%@", x);
+// 				if (x && [x string] && [[x string] isEqual:@"OK"]) {
+// 					NSString *url = [NSString stringWithFormat:@"file://%@",helpTempFile];
+// 					NSLog(@":%@", url);
+// 					[[helpWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+// 				}
+// 				[x release];
+// 				break;
+// 			}
+// 		}
+// 	}
 }
 
 - (NSView*) searchToolbarView
@@ -1044,4 +1058,15 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 	return YES;
 }
+
+- (void) helpSearchTypeChanged
+{
+	int type = [[HelpManager sharedController] searchType];
+	NSMenu *m = [[searchToolbarField cell] searchMenuTemplate];
+	SLog(@"RDocumentWinCtrl - received notification about search type change to %d", type);
+	[[m itemWithTag:kExactMatch] setState:(type == kExactMatch) ? NSOnState : NSOffState];
+	[[m itemWithTag:kFuzzyMatch] setState:(type == kExactMatch) ? NSOffState : NSOnState];
+	[[searchToolbarField cell] setSearchMenuTemplate:m];
+}
+
 @end

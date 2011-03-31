@@ -135,4 +135,6 @@ extern NSColor *shColorIdentifier;
 - (void) functionGo: (id) sender; // invoked by function pop-up, the tag of the sender specifies the position to go to
 - (void) functionReset; // reset all functions (will go away soon, user functionRescan instead)
 
+- (void) helpSearchTypeChanged;
+
 @end

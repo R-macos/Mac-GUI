@@ -8,8 +8,21 @@
    From: RDocumentWinCtrl.m (hintForFunction) */
 "(arguments lookup is disabled while R is busy)" = "(arguments lookup is disabled while R is busy)";
 
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<deleted>";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+"<functions>" = "<functions>";
+
 /* From: SearchTable.m (show) */
 "<unknown>" = "<inconnu>";
+
+/* From: RController.m (applicationDidFinishLaunching) */
+"[History restored from " = "[History restored from ";
+
+/* From: RController.m (application)
+   From: RController.m (applicationDidFinishLaunching) */
+"[Workspace restored from " = "[Workspace restored from ";
 
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "Insérer Col";
@@ -50,13 +63,23 @@
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annuler";
 
+/* From: RDocumentWinCtrl.m (goHelpSearch) */
+"Cannot determine package for the topic." = "Cannot determine package for the topic.";
+
+/* From: DataManager.m (showHelp)
+   From: HelpManager.m (showHelpUsingFile)
+   From: PackageManager.m (showInfo)
+   From: RDocumentWinCtrl.m (goHelpSearch) */
+"Cannot start HTML help server." = "Cannot start HTML help server.";
+
 /* From: main.m (webView) */
 "Cannot start R" = "R ne peux démarrer";
 
 /* From: RController.m (toolbar) */
 "Change the size of R console font" = "Modification de la taile du texte de la console de R";
 
-/* From: RController.m (handleChooseFile) */
+/* From: RController.m (handleChooseFile)
+   From: RController.m (openDocument) */
 "Choose File" = "Sélectionner Fichier";
 
 /* From: RController.m (doLoadHistory) */
@@ -77,12 +100,25 @@
 /* From: RController.m (didCloseAll) */
 "Closing R session" = "Fermeture de la session R";
 
+/* From: RDocument.m (reinterpretInEncoding) */
+"Convertion Error" = "Convertion Error";
+
+/* From: RDocument.m (reinterpretInEncoding) */
+"Couldn't reinterpret the text by using the encoding" = "Couldn't reinterpret the text by using the encoding";
+
+/* From: RDocument.m (revertToContentsOfURL) */
+"Couldn't revert to saved document" = "Couldn't revert to saved document";
+
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Crée un nouveau document vide dans l'editeur";
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files.";
+
+/* From: RChooseEncodingPopupAccessory.m (setupPopUpCell)
+   From: RController.m (updateReInterpretEncodingMenu) */
+"Customize List…" = "Customize List…";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Aimeriez vous que je me souvienne de site mirror pour des sessions futures?";
@@ -99,11 +135,29 @@
 /* From: WSBrowser.m (toolbar) */
 "Edit the selected object" = "Éditer l'objet sélectionné";
 
+/* From: RDocumentController.m (encodingAccessory) */
+"Encoding" = "Encoding";
+
+/* From: RController.m (sheetDidEnd) */
+"Error" = "Error";
+
+/* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
+"executing" = "executing";
+
 /* From: PackageInstaller.m (reloadURL) */
 "Fetching Package List Failed" = "Fetching Package List Failed";
 
 /* From: RController.m (toolbar) */
 "Font Size" = "Taille Police";
+
+/* From: REditorToolbar.m (updatePreferences) */
+"Functions" = "Functions";
+
+/* From: DataManager.m (showHelp)
+   From: HelpManager.m (showHelpUsingFile)
+   From: PackageManager.m (showInfo)
+   From: RDocumentWinCtrl.m (goHelpSearch) */
+"Help" = "Help";
 
 /* From: RController.m (handleCustomPrint) */
 "Help for the topic \"%@\" was not found." = "L'aide sur le sujet \"%@\" n'as pas été trouvé.";
@@ -127,6 +181,9 @@
    From: PackageInstaller.m (updateAll) */
 "Invalid Repository URL" = "Invalid Repository URL";
 
+/* From: REditorToolbar.m (updatePreferences) */
+"List of Functions" = "List of Functions";
+
 /* From: PackageInstaller.m (checkOptions) */
 "Never" = "Jamais";
 
@@ -148,6 +205,15 @@
 /* From: PackageInstaller.m (checkOptions) */
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Pas de mirror CRAN valide sélectionné.\nVous serez incapable d'installer des CRAN packages tant que vous ne sélectionnerez pas une site CRAN valide.";
 
+/* From: RDocument.m (displayName) */
+"Object Editor" = "Object Editor";
+
+/* From: DataManager.m (showHelp)
+   From: HelpManager.m (showHelpUsingFile)
+   From: PackageManager.m (showInfo)
+   From: RDocumentWinCtrl.m (goHelpSearch) */
+"Ok" = "Ok";
+
 /* Global string @ */
 "OK" = "OK";
 
@@ -166,12 +232,12 @@
 /* From: PackageInstaller.m (installSelected) */
 "Package installation was not successful. Please see the R Console for details." = "Package installation was not successful. Please see the R Console for details.";
 
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "Installateur de Package";
-
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Package installer" = "Installateur de Package";
+
+/* From: PackageInstaller.m (installSelected) */
+"Package Installer" = "Installateur de Package";
 
 /* From: PackageInstaller.m (updateAll) */
 "Package update failed" = "Package update failed";
@@ -273,6 +339,9 @@
 /* From: Quartz/RDeviceView.m (drawRect) */
 "Resizing to %g x %g" = "Ajuster la taille à %g x %g";
 
+/* From: RDocument.m (revertToContentsOfURL) */
+"Reverting Document" = "Reverting Document";
+
 /* Global string @ */
 "Save" = "Sauver";
 
@@ -282,7 +351,7 @@
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Sauver le contenu de la fenêtre Quartz dans un fichier PDF";
 
-/* From: REditorToolbar.m (toolbar) */
+/* From: REditorToolbar.m (updatePreferences) */
 "Save current document" = "Sauver le document courant";
 
 /* From: RController.m (doSaveHistory) */
@@ -297,6 +366,15 @@
 /* From: RController.m (didCloseAll) */
 "Save workspace image?" = "Sauver l'image de l'espace de travail?";
 
+/* From: REditorToolbar.m (updatePreferences) */
+"Search" = "Search";
+
+/* From: REditorToolbar.m (updatePreferences) */
+"Search Help" = "Search Help";
+
+/* From: REditorToolbar.m (updatePreferences) */
+"Search Panel" = "Search Panel";
+
 /* From: PrefPanes/EditorPrefPane.m (changeEditor) */
 "Select editor application" = "Sélectionner un éditeur";
 
@@ -304,13 +382,14 @@
    From: PackageInstaller.m (updateAll) */
 "Select Installation Directory" = "Sélectionner le répertoire d'installation";
 
-/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+/* From: REngine/Rcallbacks.m (RKL_METHOD_PREPEND) */
 "Select one" = "Selectionnez en un";
 
-/* From: REngine/Rcallbacks.m (validateToolbarItem) */
+/* From: REngine/Rcallbacks.m (RKL_METHOD_PREPEND) */
 "Select one or more" = "Selectionnez en un ou plus";
 
-/* From: RController.m (installFromDir) */
+/* From: PackageInstaller.m (installSelected)
+   From: RController.m (installFromDir) */
 "Select Package Directory" = "Sélectionner le répertoire de Package";
 
 /* From: PackageInstaller.m (awakeFromNib) */
@@ -328,9 +407,12 @@
 /* From: RController.m (toolbar) */
 "Set R console colors" = "Choisir couleurs de console R";
 
-/* From: PackageInstaller.m (toggleShowInstalled)
-   From: AMPrefs/AMPreferenceWindowController.m (toolbar) */
+/* From: AMPrefs/AMPreferenceWindowController.m (toolbar)
+   From: PackageInstaller.m (toggleShowInstalled) */
 "Show All" = "Afficher Tout";
+
+/* From: RTextView.m (menuForEvent) */
+"Show Help for current Function" = "Show Help for current Function";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
 "Show Installed Only" = "Show Installed Only";
@@ -368,6 +450,12 @@
 /* From: main.m (webView) */
 "Unable to start R: %@" = "Impossible de démarrer R : %@";
 
+/* From: RController.m (applicationDidFinishLaunching) */
+"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n";
+
 /* Global string @ */
 "Yes" = "Oui";
+
+/* From: RController.m (searchInHistory) */
+"…invalid regular expression" = "…invalid regular expression";
 

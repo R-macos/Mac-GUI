@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1305</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSArray" key="dict.sortedKeys">
@@ -229,7 +229,7 @@
 												<int key="NSTCFlags">1</int>
 											</object>
 											<object class="NSTextViewSharedData" key="NSSharedData">
-												<int key="NSFlags">12263</int>
+												<int key="NSFlags">28391</int>
 												<int key="NSTextCheckingTypes">0</int>
 												<nil key="NSMarkedAttributes"/>
 												<reference key="NSBackgroundColor" ref="402332327"/>
@@ -295,7 +295,7 @@
 										<string key="NSHotSpot">{4, -5}</string>
 										<int key="NSCursorType">1</int>
 									</object>
-									<int key="NScvFlags">4</int>
+									<int key="NScvFlags">2</int>
 								</object>
 								<object class="NSScroller" id="401294395">
 									<reference key="NSNextResponder" ref="1041834952"/>
@@ -333,6 +333,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{94, 108}</string>
 				<string key="NSMaxSize">{1e+13, 1e+13}</string>
+				<string key="NSFrameAutosaveName">RScriptEditorWindow</string>
 			</object>
 			<object class="NSCustomView" id="30532834">
 				<nil key="NSNextResponder"/>
@@ -564,7 +565,7 @@
 						<int key="NSState">1</int>
 						<reference key="NSOnImage" ref="331598237"/>
 						<reference key="NSMixedImage" ref="527066141"/>
-						<int key="NSTag">1</int>
+						<int key="NSTag">10</int>
 					</object>
 					<object class="NSMenuItem" id="1009759933">
 						<reference key="NSMenu" ref="425665273"/>
@@ -574,7 +575,7 @@
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="331598237"/>
 						<reference key="NSMixedImage" ref="527066141"/>
-						<int key="NSTag">2</int>
+						<int key="NSTag">11</int>
 					</object>
 					<object class="NSMenuItem" id="412387412">
 						<reference key="NSMenu" ref="425665273"/>
@@ -782,7 +783,7 @@
 							</object>
 							<bool key="NSMenuItemRespectAlignment">YES</bool>
 							<object class="NSMenu" key="NSMenu" id="1061101438">
-								<string key="NSTitle">OtherViews</string>
+								<string key="NSTitle">他のビュー</string>
 								<object class="NSMutableArray" key="NSMenuItems">
 									<bool key="EncodedWithXMLCoder">YES</bool>
 									<reference ref="57169997"/>
@@ -1905,9 +1906,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{331, 273}, {507, 419}}</string>
+					<string>{{164, 290}, {507, 419}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{331, 273}, {507, 419}}</string>
+					<string>{{164, 290}, {507, 419}}</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -1925,9 +1926,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{840, 649}, {262, 107}}</string>
+					<string>{{604, 649}, {262, 107}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{840, 649}, {262, 107}}</string>
+					<string>{{604, 649}, {262, 107}}</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>

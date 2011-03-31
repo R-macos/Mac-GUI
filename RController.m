@@ -212,6 +212,11 @@ static RController* sharedRController;
 												 name:NSWindowWillCloseNotification 
 											   object:nil];
 
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+						 selector:@selector(helpSearchTypeChanged) 
+						     name:@"HelpSearchTypeChanged" 
+						   object:nil];
+
 	return self;
 }
 
@@ -526,7 +531,7 @@ static RController* sharedRController;
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
 		[self doLoadHistory:nil];
 	}
-	
+
 	SLog(@" - awake is done");
 }
 
@@ -2387,8 +2392,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (IBAction)closeFindInWebViewSheet:(id)sender
 {
-
-	[[searchInWebViewWindow parentWindow] removeChildWindow:searchInWebViewWindow];
+	NSWindow *parentWin = [searchInWebViewWindow parentWindow];
+	[parentWin removeChildWindow:searchInWebViewWindow];
 	[[currentWebViewForFindAction windowScriptObject] evaluateWebScript:@"document.body.style.marginBottom='5px';"];
 	[searchInWebViewWindow orderOut:nil];
 	[[NSNotificationCenter defaultCenter] removeObserver:self 
@@ -2396,7 +2401,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			object:[searchInWebViewWindow parentWindow]];
 	if(searchInWebViewWindow) [searchInWebViewWindow release], searchInWebViewWindow = nil;
 	if(currentWebViewForFindAction) [currentWebViewForFindAction release], currentWebViewForFindAction = nil;
-
+	[parentWin makeKeyAndOrderFront:nil];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -2782,9 +2787,12 @@ This method calls the showHelpFor method of the Help Manager which opens
 	int i;
 	
 //	NSLog(@"openHelpFor: <%@>", [NSString stringWithCString:topic]);
-	if(topic[0] == '?' && (strlen(topic)>2))
-		[[HelpManager sharedController] showHelpFor: 
-			[NSString stringWithUTF8String:topic+1]];
+	if(topic[0] == '?' && (strlen(topic)>2)) {
+		int oldSearchType = [[HelpManager sharedController] searchType];
+		[[HelpManager sharedController] setSearchType:kExactMatch];
+		[[HelpManager sharedController] showHelpFor:[NSString stringWithUTF8String:topic+1]];
+		[[HelpManager sharedController] setSearchType:oldSearchType];
+	}
 	if(strncmp("help(",topic,5)==0){
 		for(i=5;i<strlen(topic); i++){
 			if(topic[i]==')')
@@ -2792,7 +2800,10 @@ This method calls the showHelpFor method of the Help Manager which opens
 			tmp[i-5] = topic[i];
 		}
 		tmp[i-5] = '\0';
+		int oldSearchType = [[HelpManager sharedController] searchType];
+		[[HelpManager sharedController] setSearchType:kExactMatch];
 		[[HelpManager sharedController] showHelpFor: [NSString stringWithUTF8String:tmp]];
+		[[HelpManager sharedController] setSearchType:oldSearchType];
 	}
 }
 
@@ -3220,10 +3231,10 @@ This method calls the showHelpFor method of the Help Manager which opens
 }
 
 - (IBAction)performHelpSearch:(id)sender {
-    if ([[sender stringValue] length]>0) {
+	if ([[sender stringValue] length]>0) {
 		[[HelpManager sharedController] showHelpFor:[sender stringValue]];
-        [helpSearch setStringValue:@""];
-    }
+		// [helpSearch setStringValue:@""];
+	}
 	[RConsoleWindow makeKeyWindow];
 }
 
@@ -3393,6 +3404,16 @@ This method calls the showHelpFor method of the Help Manager which opens
 	}
 	return port;
 #endif
+}
+
+- (void) helpSearchTypeChanged
+{
+	int type = [[HelpManager sharedController] searchType];
+	NSMenu *m = [[helpSearch cell] searchMenuTemplate];
+	SLog(@"RController - received notification about search type change to %d", type);
+	[[m itemWithTag:kExactMatch] setState:(type == kExactMatch) ? NSOnState : NSOffState];
+	[[m itemWithTag:kFuzzyMatch] setState:(type == kExactMatch) ? NSOffState : NSOnState];
+	[[helpSearch cell] setSearchMenuTemplate:m];
 }
 
 @end

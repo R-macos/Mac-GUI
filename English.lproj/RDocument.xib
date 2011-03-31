@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<object class="NSArray" key="dict.sortedKeys">
@@ -23,7 +23,7 @@
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="35"/>
 			<integer value="69"/>
-			<integer value="21"/>
+			<integer value="5"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -318,6 +318,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{94, 108}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSFrameAutosaveName">RScriptEditorWindow</string>
 			</object>
 			<object class="NSCustomView" id="30532834">
 				<reference key="NSNextResponder"/>
@@ -478,7 +479,7 @@
 				<nil key="NSDelegate"/>
 			</object>
 			<object class="NSCustomView" id="457572145">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -508,7 +509,6 @@
 						</object>
 						<string key="NSFrameSize">{440, 261}</string>
 						<reference key="NSSuperview" ref="457572145"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
 						<string key="FrameName"/>
 						<string key="GroupName"/>
@@ -535,8 +535,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{440, 261}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<object class="NSMutableString" key="NSClassName">
 					<characters key="NS.bytes">NSView</characters>
 				</object>
@@ -555,7 +553,7 @@
 						<int key="NSState">1</int>
 						<reference key="NSOnImage" ref="331598237"/>
 						<reference key="NSMixedImage" ref="527066141"/>
-						<int key="NSTag">1</int>
+						<int key="NSTag">10</int>
 					</object>
 					<object class="NSMenuItem" id="1009759933">
 						<reference key="NSMenu" ref="425665273"/>
@@ -565,7 +563,7 @@
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="331598237"/>
 						<reference key="NSMixedImage" ref="527066141"/>
-						<int key="NSTag">2</int>
+						<int key="NSTag">11</int>
 					</object>
 					<object class="NSMenuItem" id="412387412">
 						<reference key="NSMenu" ref="425665273"/>
@@ -1904,9 +1902,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{166, 198}, {507, 419}}</string>
+					<string>{{164, 290}, {507, 419}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{166, 198}, {507, 419}}</string>
+					<string>{{164, 290}, {507, 419}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{94, 86}</string>

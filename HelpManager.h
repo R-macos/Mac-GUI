@@ -61,6 +61,9 @@
 - (IBAction)printDocument:(id)sender;
 - (NSWindow*) window;
 
+- (void)setSearchType:(int)type;
+- (int)searchType;
+
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
 
 @end

@@ -1,20 +1,14 @@
-/* Entry = "151.title"; Class = "NSTextFieldCell" */
-"(Valid range is between 0.1 and 0.8 sec.)" = "(有効範囲は0.1-0.8秒です)";
-
-/* Entry = "152.title"; Class = "NSTextFieldCell" */
-"(Wrapping and padding for new windows only)" = "(ラッピング/パディングは新規ウィンドウのみ)";
-
 /* Entry = "150.title"; Class = "NSTextFieldCell" */
 "0.2" = "0.2";
 
-/* Entry = "154.title"; Class = "NSTextFieldCell" */
-"16.0" = "16.0";
-
-/* Entry = "157.title"; Class = "NSTextFieldCell" */
-"5.0" = "5.0";
-
 /* Entry = "49.title"; Class = "NSButtonCell" */
 "Application" = "アプリケーション";
+
+/* Entry = "229.title"; Class = "NSButtonCell" */
+"Auto-save documents" = "Auto-save documents";
+
+/* Entry = "181.title"; Class = "NSBox" */
+"Box" = "Box";
 
 /* Entry = "96.title"; Class = "NSButtonCell" */
 "Built-in editor" = "内蔵エディタ";
@@ -25,29 +19,32 @@
 /* Entry = "47.title"; Class = "NSButtonCell" */
 "Command" = "コマンド";
 
-/* Entry = "160.title"; Class = "NSTextFieldCell" */
-"Editor:\n" = "エディタ:\n";
-
 /* Entry = "97.title"; Class = "NSButtonCell" */
 "External Editor" = "外部エディタ";
 
 /* Entry = "37.title"; Class = "NSBox" */
 "External editor settings" = "外部エディタの設定";
 
+/* Entry = "177.title"; Class = "NSTextFieldCell" */
+"Font:" = "Font:";
+
+/* Entry = "147.title"; Class = "NSButtonCell" */
+"Highlight bracket pairs" = "Highlight bracket pairs";
+
+/* Entry = "171.title"; Class = "NSButtonCell" */
+"Highlight current line" = "Highlight current line";
+
 /* Entry = "149.title"; Class = "NSTextFieldCell" */
 "Highlight interval:" = "ハイライトの間隔:";
 
-/* Entry = "155.title"; Class = "NSTextFieldCell" */
-"Margin width:" = "マージンの幅:";
+/* Entry = "173.title"; Class = "NSButtonCell" */
+"Indent new lines" = "Indent new lines";
 
 /* Entry = "159.title"; Class = "NSButtonCell" */
-"Match braces/quotes" = "Match braces/quotes";
-
-/* Entry = "162.title"; Class = "NSButtonCell" */
-"New editor" = "新規エディタ";
+"Match brackets/quotes" = "Match brackets/quotes";
 
 /* Entry = "161.title"; Class = "NSTextFieldCell" */
-"Note: Command is executed in a shell" = "注: コマンドはシェル内で実行されます";
+"Note:\nCommand is executed in a shell" = "Note:\nCommand is executed in a shell";
 
 /* Entry = "165.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
@@ -55,8 +52,11 @@
 /* Entry = "164.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
 
-/* Entry = "147.title"; Class = "NSButtonCell" */
-"Show brace highlighting" = "対応する括弧をハイライト";
+/* Entry = "179.title"; Class = "NSButtonCell" */
+"Select…" = "Select…";
+
+/* Entry = "162.title"; Class = "NSButtonCell" */
+"Set Editor" = "Set Editor";
 
 /* Entry = "158.title"; Class = "NSButtonCell" */
 "Show function hints" = "関数ヒントを表示";
@@ -70,9 +70,9 @@
 /* Entry = "163.title"; Class = "NSTextFieldCell" */
 "SubEthaEdit" = "SubEthaEdit";
 
-/* Entry = "156.title"; Class = "NSTextFieldCell" */
-"Text padding:" = "テキストのパディング:";
-
 /* Entry = "153.title"; Class = "NSButtonCell" */
 "Wrap lines" = "行をラップする";
+
+/* Entry = "226.title"; Class = "NSTextFieldCell" */
+"s" = "s";
 
