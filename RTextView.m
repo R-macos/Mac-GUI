@@ -530,8 +530,12 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	if(isRConsole)
 		[[NSApp keyWindow] makeFirstResponder:[[self delegate] valueForKeyPath:@"helpSearch"]];
-	else
-		[[NSApp keyWindow] makeFirstResponder:[[self delegate] valueForKeyPath:@"searchToolbarField"]];
+	else {
+		NSWindow *keyWin = [NSApp keyWindow];
+		if(![[keyWin toolbar] isVisible])
+			[keyWin toggleToolbarShown:nil];
+		[keyWin makeFirstResponder:[[self delegate] valueForKeyPath:@"searchToolbarField"]];
+	}
 
 }
 

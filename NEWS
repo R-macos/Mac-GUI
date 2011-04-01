@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-04-01
+*	help view responds to <Cmd><Enter> (execute selection)
+	However, it is only supported for example sections of
+	help files and involves conversion from HTML so there
+	may be cases where some more unusual HTML entities
+	are not converted.
+
 Last-update: 2011-03-29
 *	auto-saved documents are now restored automatically
 	after a crash (even if they were unnamed)

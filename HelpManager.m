@@ -31,6 +31,7 @@
 #import "HelpManager.h"
 #import "RController.h"
 #import "REngine/REngine.h"
+#import "RegexKitLite.h"
 
 static id sharedHMController;
 
@@ -105,6 +106,21 @@ static id sharedHMController;
 			[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
 			[helpWindow makeKeyAndOrderFront:self];
 		}
+	}
+}
+
+- (IBAction)executeSelection:(id)sender
+{
+	DOMRange *dr = [HelpView selectedDOMRange];
+	if (dr) { /* we don't do line-exec since we don't get the text outside the selection */
+		NSString *stx = [dr markupString];
+		// Ok, some simple processing here - it may not work in all cases
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"<[bB][rR]>" withString:@"\n"];
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"<.*?>" withString:@""];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
+		[[RController sharedController] sendInput:stx];
 	}
 }
 
