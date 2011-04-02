@@ -9,20 +9,20 @@
 "(arguments lookup is disabled while R is busy)" = "(het opzoeken van argumenten kan niet als R bezig is)";
 
 /* From: RController.m (showWorkingDir) */
-"<deleted>" = "<deleted>";
+"<deleted>" = "<gewist>";
 
 /* From: RDocumentWinCtrl.m (functionReset) */
-"<functions>" = "<functions>";
+"<functions>" = "<functies>";
 
 /* From: SearchTable.m (show) */
 "<unknown>" = "<ongekend>";
 
 /* From: RController.m (applicationDidFinishLaunching) */
-"[History restored from " = "[History restored from ";
+"[History restored from " = "[Geschiedenis teruggehaald van ";
 
 /* From: RController.m (application)
    From: RController.m (applicationDidFinishLaunching) */
-"[Workspace restored from " = "[Workspace restored from ";
+"[Workspace restored from " = "[Workspace teruggehaald van ";
 
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "Kolom";
@@ -64,13 +64,13 @@
 "Cancel" = "Annuleer";
 
 /* From: RDocumentWinCtrl.m (goHelpSearch) */
-"Cannot determine package for the topic." = "Cannot determine package for the topic.";
+"Cannot determine package for the topic." = "Kan geen pakket vinden voor het onderwerp.";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
-"Cannot start HTML help server." = "Cannot start HTML help server.";
+"Cannot start HTML help server." = "Kan de HTML help server niet starten.";
 
 /* From: main.m (webView) */
 "Cannot start R" = "Kan R niet starten";
@@ -101,13 +101,13 @@
 "Closing R session" = "Sluit R sessie";
 
 /* From: RDocument.m (reinterpretInEncoding) */
-"Convertion Error" = "Convertion Error";
+"Convertion Error" = "Fout opgetreden in conversie";
 
 /* From: RDocument.m (reinterpretInEncoding) */
 "Couldn't reinterpret the text by using the encoding" = "Couldn't reinterpret the text by using the encoding";
 
 /* From: RDocument.m (revertToContentsOfURL) */
-"Couldn't revert to saved document" = "Couldn't revert to saved document";
+"Couldn't revert to saved document" = "Kan niet terug gaan naar opgeslagen bestand";
 
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Maak nieuw, leeg document aan in editor";
@@ -118,7 +118,7 @@
 
 /* From: RChooseEncodingPopupAccessory.m (setupPopUpCell)
    From: RController.m (updateReInterpretEncodingMenu) */
-"Customize List…" = "Customize List…";
+"Customize List…" = "Sorteer encoding lijst…";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Wenst u de geselecteerde mirror te onthouden voor gebruik in de toekomst?";
@@ -142,7 +142,7 @@
 "Error" = "Error";
 
 /* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
-"executing" = "executing";
+"executing" = "aan het uitvoeren";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Fetching Package List Failed" = "Het ophalen van de pakkettenlijst mislukte";
@@ -151,7 +151,7 @@
 "Font Size" = "Lettergrootte";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"Functions" = "Functions";
+"Functions" = "Functies";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
@@ -169,7 +169,7 @@
 "History" = "Geschiedenis";
 
 /* From: PackageInstaller.m (setURL) */
-"Install Selected" = "Installeer geselecteerde";
+"Install Selected" = "Installeer geselecteerde pakketten";
 
 /* From: PackageInstaller.m (setURL) */
 "Install…" = "Installeer…";
@@ -412,7 +412,7 @@
 "Show All" = "Toon alle";
 
 /* From: RTextView.m (menuForEvent) */
-"Show Help for current Function" = "Show Help for current Function";
+"Show Help for current Function" = "Toon Help voor de Function";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
 "Show Installed Only" = "Toon enkel geïnstalleerde";
@@ -457,5 +457,5 @@
 "Yes" = "Ja";
 
 /* From: RController.m (searchInHistory) */
-"…invalid regular expression" = "…invalid regular expression";
+"…invalid regular expression" = "…geen goede reguliere expressie";
 

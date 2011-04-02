@@ -56,7 +56,7 @@
 "Note: This change is effective only after a restart of R.app" = "Opm.: Deze wijziging gaat pas in na het herstarten van R.app";
 
 /* Entry = "141.title"; Class = "NSTextFieldCell" */
-"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Opm.: Gebruik een vast pad naar het geschiedenisbestand, bvb. ~/.Rhistory om altijd (onafhankelijk van de werkmap) dezelfde geschiedenis te zien";
+"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Opm.: Gebruik een vast pad naar het geschiedenisbestand, bvb. ~/.Rapp.history om altijd (onafhankelijk van de werkmap) dezelfde geschiedenis te zien";
 
 /* Entry = "18.title"; Class = "NSButtonCell" */
 "Open file in editor" = "Open bestand in editor";
@@ -89,7 +89,7 @@
 "Strip comments in history entries" = "Wis commentaar uit geschiedenis";
 
 /* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
-"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL voor de default CRAN URL. Indien leeg wordt de gebruiker gevraagd.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */
 "URL:" = "URL:";
