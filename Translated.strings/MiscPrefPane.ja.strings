@@ -14,7 +14,7 @@
 "Always apply" = "常に適用";
 
 /* Entry = "123.title"; Class = "NSButtonCell" */
-"Ask" = "Ask";
+"Ask" = "毎回確認する";
 
 /* Entry = "133.title"; Class = "NSButtonCell" */
 "Change" = "変更";
@@ -77,19 +77,19 @@
 "Remove duplicate entries in history" = "履歴中の重複を除去";
 
 /* Entry = "115.title"; Class = "NSBox" */
-"Save workspace on exit from R" = "Save workspace on exit from R";
+"Save workspace on exit from R" = "Rの終了時にワークスペースを保存";
 
 /* Entry = "149.title"; Class = "NSButtonCell" */
 "Select" = "選択";
 
 /* Entry = "19.title"; Class = "NSButtonCell" */
-"Source input file" = "入力ファイルをソースとして読み込む";
+"Source input file" = "ソースとして読み込む";
 
 /* Entry = "146.title"; Class = "NSButtonCell" */
 "Strip comments in history entries" = "履歴中のコメントを除去";
 
 /* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
-"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "デフォルトとして使われるCRANのURLです. 空白の場合はユーザに質問します.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */
 "URL:" = "URL:";

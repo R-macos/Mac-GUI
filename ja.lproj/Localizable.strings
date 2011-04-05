@@ -9,20 +9,20 @@
 "(arguments lookup is disabled while R is busy)" = "(引数検索はRがビジーの間は無効になります)";
 
 /* From: RController.m (showWorkingDir) */
-"<deleted>" = "<deleted>";
+"<deleted>" = "<削除済み>";
 
 /* From: RDocumentWinCtrl.m (functionReset) */
-"<functions>" = "<functions>";
+"<functions>" = "<関数>";
 
 /* From: SearchTable.m (show) */
 "<unknown>" = "<不明>";
 
 /* From: RController.m (applicationDidFinishLaunching) */
-"[History restored from " = "[History restored from ";
+"[History restored from " = "[履歴が次のファイルから読み込まれました ";
 
 /* From: RController.m (application)
    From: RController.m (applicationDidFinishLaunching) */
-"[Workspace restored from " = "[Workspace restored from ";
+"[Workspace restored from " = "[ワークスペースが次のファイルから読み込まれました ";
 
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "列追加";
@@ -64,13 +64,13 @@
 "Cancel" = "キャンセル";
 
 /* From: RDocumentWinCtrl.m (goHelpSearch) */
-"Cannot determine package for the topic." = "Cannot determine package for the topic.";
+"Cannot determine package for the topic." = "このトピックに関するパッケージを決定できません.";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
-"Cannot start HTML help server." = "Cannot start HTML help server.";
+"Cannot start HTML help server." = "HTMLヘルプサーバを開始できません.";
 
 /* From: main.m (webView) */
 "Cannot start R" = "Rを起動できません";
@@ -101,13 +101,13 @@
 "Closing R session" = "Rセッションを終了";
 
 /* From: RDocument.m (reinterpretInEncoding) */
-"Convertion Error" = "Convertion Error";
+"Convertion Error" = "変換失敗";
 
 /* From: RDocument.m (reinterpretInEncoding) */
-"Couldn't reinterpret the text by using the encoding" = "Couldn't reinterpret the text by using the encoding";
+"Couldn't reinterpret the text by using the encoding" = "テキストをこのエンコーディングで再読み込みできませんでした";
 
 /* From: RDocument.m (revertToContentsOfURL) */
-"Couldn't revert to saved document" = "Couldn't revert to saved document";
+"Couldn't revert to saved document" = "保存された文書に戻すことができませんでした";
 
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "新しい空ファイルをエディタで開く";
@@ -118,7 +118,7 @@
 
 /* From: RChooseEncodingPopupAccessory.m (setupPopUpCell)
    From: RController.m (updateReInterpretEncodingMenu) */
-"Customize List…" = "Customize List…";
+"Customize List…" = "一覧を編集…";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "以後のセッションのために選択されたミラーを記憶しますか?";
@@ -136,13 +136,13 @@
 "Edit the selected object" = "選択されたオブジェクトを編集";
 
 /* From: RDocumentController.m (encodingAccessory) */
-"Encoding" = "Encoding";
+"Encoding" = "エンコーディング";
 
 /* From: RController.m (sheetDidEnd) */
-"Error" = "Error";
+"Error" = "エラー";
 
 /* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
-"executing" = "executing";
+"executing" = "実行中";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Fetching Package List Failed" = "パッケージ一覧の読み込みに失敗しました";
@@ -151,13 +151,13 @@
 "Font Size" = "フォントサイズ";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"Functions" = "Functions";
+"Functions" = "関数一覧";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
-"Help" = "Help";
+"Help" = "ヘルプ";
 
 /* From: RController.m (handleCustomPrint) */
 "Help for the topic \"%@\" was not found." = "トピック \"%@\" に関するヘルプは見つかりません.";
@@ -182,7 +182,7 @@
 "Invalid Repository URL" = "リポジトリURLが不正です";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"List of Functions" = "List of Functions";
+"List of Functions" = "関数の一覧";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Never" = "決してしない";
@@ -206,7 +206,7 @@
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "正しいCRANミラーが選択されていません.\nCRANオプションを正しいミラー先URLに設定しなければ, CRANパッケージをインストールすることはできません.";
 
 /* From: RDocument.m (displayName) */
-"Object Editor" = "Object Editor";
+"Object Editor" = "オブジェクトエディタ";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
@@ -367,13 +367,13 @@
 "Save workspace image?" = "ワークスペースのイメージファイルを保存しますか？";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"Search" = "Search";
+"Search" = "検索";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"Search Help" = "Search Help";
+"Search Help" = "ヘルプを検索";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"Search Panel" = "Search Panel";
+"Search Panel" = "パネルを検索";
 
 /* From: PrefPanes/EditorPrefPane.m (changeEditor) */
 "Select editor application" = "エディタアプリケーションを選択";
@@ -412,7 +412,7 @@
 "Show All" = "すべてを表示";
 
 /* From: RTextView.m (menuForEvent) */
-"Show Help for current Function" = "Show Help for current Function";
+"Show Help for current Function" = "現在位置の関数のヘルプを表示";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
 "Show Installed Only" = "インストール済みのみを表示";
@@ -451,11 +451,11 @@
 "Unable to start R: %@" = "Rを起動できません: %@";
 
 /* From: RController.m (applicationDidFinishLaunching) */
-"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n";
+"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "警告: UTF-8以外のロケールでは、ASCII文字のみが利用可能です. \nヘルプから MacOS X版RのFAQ のセクション9を参照し, システム環境設定を変更してください.\n";
 
 /* Global string @ */
 "Yes" = "はい";
 
 /* From: RController.m (searchInHistory) */
-"…invalid regular expression" = "…invalid regular expression";
+"…invalid regular expression" = "…誤った正規表現です";
 

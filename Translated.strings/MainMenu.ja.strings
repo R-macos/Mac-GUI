@@ -23,7 +23,7 @@
 "Activate Quartz Device Window" = "選択したQuartzデバイスをアクティブ化";
 
 /* Entry = "1671.title"; Class = "NSButtonCell" */
-"Activate SearchField ⇧⌘H" = "Activate SearchField ⇧⌘H";
+"Activate SearchField ⇧⌘H" = "検索フィールドをアクティブ化 ⇧⌘H";
 
 /* Entry = "834.title"; Class = "NSMenuItem" */
 "Align Left" = "左揃え";
@@ -32,7 +32,7 @@
 "Align Right" = "右揃え";
 
 /* Entry = "1634.title"; Class = "NSMenuItem" */
-"All" = "All";
+"All" = "すべてを選択";
 
 /* Entry = "1125.title"; Class = "NSButtonCell" */
 "As defined by .libPaths()" = ".libPaths()での指定に従う";
@@ -47,7 +47,7 @@
 "Back" = "戻る";
 
 /* Entry = "1657.title"; Class = "NSMenuItem" */
-"Balanced Brackets" = "Balanced Brackets";
+"Balanced Brackets" = "括弧の内容を選択";
 
 /* Entry = "844.title"; Class = "NSMenuItem" */
 "Baseline" = "ベースライン";
@@ -122,7 +122,7 @@
 "Close" = "閉じる";
 
 /* Entry = "1577.ibShadowedToolTip"; Class = "NSButton" */
-"Close Find Panel (⎋)" = "Close Find Panel (⎋)";
+"Close Find Panel (⎋)" = "検索パネルを閉じる (⎋)";
 
 /* Entry = "342.headerCell.title"; Class = "NSTableColumn" */
 "Commands" = "コマンド";
@@ -158,7 +158,7 @@
 "Data Manager" = "データマネージャ";
 
 /* Entry = "1651.title"; Class = "NSMenuItem" */
-"Decrease Indent" = "Decrease Indent";
+"Decrease Indent" = "インデントを減らす";
 
 /* Entry = "164.title"; Class = "NSMenuItem" */
 "Delete" = "削除";
@@ -281,10 +281,10 @@
 "In Other Location (Will Be Asked Upon Installation)" = "他の場所(インストール時に指定)";
 
 /* Entry = "1650.title"; Class = "NSMenuItem" */
-"Increase Indent" = "Increase Indent";
+"Increase Indent" = "インデントを増やす";
 
 /* Entry = "1510.title"; Class = "NSButtonCell" */
-"Install Dependencies" = "パッケージの依存関係を解決";
+"Install Dependencies" = "依存パッケージも含める";
 
 /* Entry = "570.title"; Class = "NSBox" */
 "Install Location" = "インストールする場所";
@@ -335,10 +335,10 @@
 "Ligature" = "リガチャ";
 
 /* Entry = "1656.title"; Class = "NSMenuItem" */
-"Line" = "Line";
+"Line" = "行全体";
 
 /* Entry = "1685.title"; Class = "NSButtonCell" */
-"Load Data" = "Load Data";
+"Load Data" = "読み込み";
 
 /* Entry = "247.title"; Class = "NSMenuItem" */
 "Load Default Workspace" = "ワークスペースの読み込み";
@@ -455,7 +455,7 @@
 "Paste" = "ペースト";
 
 /* Entry = "1475.title"; Class = "NSMenuItem" */
-"Paste As Plain Text" = "ペースト (as text)";
+"Paste As Plain Text" = "テキストとしてペースト";
 
 /* Entry = "845.title"; Class = "NSMenuItem" */
 "Paste Ruler" = "ルーラのペースト";
@@ -512,7 +512,7 @@
 "R for Mac OS X FAQ" = "MacOS X版RのFAQ";
 
 /* Entry = "1517.title"; Class = "NSButtonCell" */
-"Radio" = "Radio";
+"Radio" = "ラジオ";
 
 /* Entry = "850.title"; Class = "NSMenuItem" */
 "Raise" = "すべてを手前に移動";
@@ -527,10 +527,10 @@
 "Refresh List" = "一覧の更新";
 
 /* Entry = "1644.title"; Class = "NSMenuItem" */
-"Reinterpret with Encoding" = "Reinterpret with Encoding";
+"Reinterpret with Encoding" = "エンコーディングを指定して再読み込み";
 
 /* Entry = "1645.title"; Class = "NSMenu" */
-"Reinterpret with Encoding" = "Reinterpret with Encoding";
+"Reinterpret with Encoding" = "エンコーディングを指定して再読み込み";
 
 /* Entry = "550.headerCell.title"; Class = "NSTableColumn" */
 "Repository Version" = "リポジトリにあるバージョン";
@@ -563,7 +563,7 @@
 "Search" = "検索";
 
 /* Entry = "1663.placeholderString"; Class = "NSSearchFieldCell" */
-"Search in History [regex] - ⇧⌘H" = "Search in History [regex] - ⇧⌘H";
+"Search in History [regex] - ⇧⌘H" = "履歴を検索 [正規表現] - ⇧⌘H";
 
 /* Entry = "1631.title"; Class = "NSMenuItem" */
 "Select" = "選択";
@@ -710,7 +710,7 @@
 "Window" = "ウィンドウ";
 
 /* Entry = "1655.title"; Class = "NSMenuItem" */
-"Word" = "Word";
+"Word" = "単語";
 
 /* Entry = "245.title"; Class = "NSMenuItem" */
 "Workspace" = "ワークスペース";

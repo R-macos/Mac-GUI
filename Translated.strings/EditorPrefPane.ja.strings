@@ -5,7 +5,7 @@
 "Application" = "アプリケーション";
 
 /* Entry = "229.title"; Class = "NSButtonCell" */
-"Auto-save documents" = "Auto-save documents";
+"Auto-save documents" = "文書を自動的に保存する";
 
 /* Entry = "181.title"; Class = "NSBox" */
 "Box" = "Box";
@@ -29,22 +29,22 @@
 "Font:" = "Font:";
 
 /* Entry = "147.title"; Class = "NSButtonCell" */
-"Highlight bracket pairs" = "Highlight bracket pairs";
+"Highlight bracket pairs" = "対応する括弧をハイライト";
 
 /* Entry = "171.title"; Class = "NSButtonCell" */
-"Highlight current line" = "Highlight current line";
+"Highlight current line" = "現在の行をハイライト";
 
 /* Entry = "149.title"; Class = "NSTextFieldCell" */
 "Highlight interval:" = "ハイライトの間隔:";
 
 /* Entry = "173.title"; Class = "NSButtonCell" */
-"Indent new lines" = "Indent new lines";
+"Indent new lines" = "新しい行をインデント";
 
 /* Entry = "159.title"; Class = "NSButtonCell" */
-"Match brackets/quotes" = "Match brackets/quotes";
+"Match brackets/quotes" = "括弧/引用符の対応表示";
 
 /* Entry = "161.title"; Class = "NSTextFieldCell" */
-"Note:\nCommand is executed in a shell" = "Note:\nCommand is executed in a shell";
+"Note:\nCommand is executed in a shell" = "注:\nコマンドはシェル内で実行されます";
 
 /* Entry = "165.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
@@ -53,10 +53,10 @@
 "Radio" = "Radio";
 
 /* Entry = "179.title"; Class = "NSButtonCell" */
-"Select…" = "Select…";
+"Select…" = "選択…";
 
 /* Entry = "162.title"; Class = "NSButtonCell" */
-"Set Editor" = "Set Editor";
+"Set Editor" = "エディタを設定";
 
 /* Entry = "158.title"; Class = "NSButtonCell" */
 "Show function hints" = "関数ヒントを表示";
