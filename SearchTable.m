@@ -32,6 +32,7 @@
 #import "RController.h"
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
+#import "RegexKitLite.h"
 
 static id sharedHSController;
 
@@ -143,6 +144,21 @@ static id sharedHSController;
 	[searchTableWindow makeKeyAndOrderFront:nil];
 }
 
+- (IBAction)executeSelection:(id)sender
+{
+	DOMRange *dr = [TopicHelpView selectedDOMRange];
+	if (dr) { /* we don't do line-exec since we don't get the text outside the selection */
+		NSString *stx = [dr markupString];
+		// Ok, some simple processing here - it may not work in all cases
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"(?i)<br[^>]*?>" withString:@"\n"];
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"<[^>]*?>" withString:@""];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
+		[[RController sharedController] sendInput:stx];
+	}
+}
+
 - (IBAction)printDocument:(id)sender
 {
 
@@ -165,6 +181,15 @@ static id sharedHSController;
 							   delegate:self 
 						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
 						    contextInfo:@""];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(executeSelection:)) {
+		return ([TopicHelpView selectedDOMRange] == nil) ? NO : YES;
+	}
+
+	return YES;
 }
 
 @end

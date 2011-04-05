@@ -28,6 +28,7 @@
 
 - (IBAction)openVignette:(id)sender;
 - (IBAction)openVignetteSource:(id)sender;
+- (IBAction)executeSelection:(id)sender;
 
 - (IBAction)search:(id)sender;
 

@@ -2,6 +2,7 @@
 
 #import "REngine/REngine.h"
 #import "REngine/RSEXP.h"
+#import "RController.h"
 
 @implementation VignettesController
 
@@ -200,6 +201,24 @@ static VignettesController *vignettesSharedController = nil;
 	[openButton setEnabled: ([tableView selectedRow]!=-1)];
 	[openSourceButton setEnabled: ([tableView selectedRow]!=-1)];
 	vignettesSharedController = self;
+}
+
+- (IBAction)executeSelection:(id)sender
+{
+	PDFSelection *dr = [thePDFView currentSelection];
+	if (dr) { /* we don't do line-exec since we don't get the text outside the selection */
+		NSString *stx = [dr string];
+		[[RController sharedController] sendInput:stx];
+	}
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(executeSelection:)) {
+		return ([thePDFView currentSelection] == nil) ? NO : YES;
+	}
+
+	return YES;
 }
 
 @end

@@ -30,6 +30,7 @@
 #import "DataManager.h"
 #import "RController.h"
 #import "REngine/REngine.h"
+#import "RegexKitLite.h"
 
 #import <WebKit/WebKit.h>
 #import <WebKit/WebFrame.h>
@@ -254,6 +255,21 @@ static DataManager* sharedController;
 						    contextInfo:@""];
 }
 
+- (IBAction)executeSelection:(id)sender
+{
+	DOMRange *dr = [dataInfoView selectedDOMRange];
+	if (dr) { /* we don't do line-exec since we don't get the text outside the selection */
+		NSString *stx = [dr markupString];
+		// Ok, some simple processing here - it may not work in all cases
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"(?i)<br[^>]*?>" withString:@"\n"];
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"<[^>]*?>" withString:@""];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
+		stx = [stx stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
+		[[RController sharedController] sendInput:stx];
+	}
+}
+
 #pragma mark -
 #pragma mark tableView delegates
 
@@ -365,6 +381,15 @@ static DataManager* sharedController;
 
 	[DataManagerWindow makeKeyAndOrderFront:nil];
 
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(executeSelection:)) {
+		return ([dataInfoView selectedDOMRange] == nil) ? NO : YES;
+	}
+
+	return YES;
 }
 
 @end

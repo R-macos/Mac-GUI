@@ -225,6 +225,8 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 	[self helpSearchTypeChanged];
 
+	if(plainFile) [fnListBox setHidden:YES];
+
 	[super windowDidLoad];
 
 	SLog(@" - windowDidLoad is done");
@@ -335,6 +337,12 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 							selector:@selector(functionRescan) 
 							object:nil];
 
+	if(plainFile) {
+		return;
+	}
+
+	[fnListBox setEnabled:NO];
+
 	NSTextStorage *ts = [textView textStorage];
 	NSString *s = [ts string];
 	unsigned long strLength = [s length];
@@ -406,6 +414,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	}
 
 	if (fnf) {
+		[fnListBox setEnabled:YES];
 		[fnListBox removeItemAtIndex:0];
 		[fnListBox selectItemAtIndex:sit];
 	}

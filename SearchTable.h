@@ -47,6 +47,7 @@
 - (id) window;
 - (IBAction) showInfo:(id)sender;
 - (IBAction)printDocument:(id)sender;
+- (IBAction)executeSelection:(id)sender;
 
 - (void) updateHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
 - (int) count;

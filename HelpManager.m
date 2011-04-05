@@ -115,8 +115,8 @@ static id sharedHMController;
 	if (dr) { /* we don't do line-exec since we don't get the text outside the selection */
 		NSString *stx = [dr markupString];
 		// Ok, some simple processing here - it may not work in all cases
-		stx = [stx stringByReplacingOccurrencesOfRegex:@"<[bB][rR]>" withString:@"\n"];
-		stx = [stx stringByReplacingOccurrencesOfRegex:@"<.*?>" withString:@""];
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"(?i)<br[^>]*?>" withString:@"\n"];
+		stx = [stx stringByReplacingOccurrencesOfRegex:@"<[^>]*?>" withString:@""];
 		stx = [stx stringByReplacingOccurrencesOfString:@"&lt;" withString:@"<"];
 		stx = [stx stringByReplacingOccurrencesOfString:@"&gt;" withString:@">"];
 		stx = [stx stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
@@ -269,7 +269,10 @@ static id sharedHMController;
 	printOp = [NSPrintOperation printOperationWithView:[[[HelpView mainFrame] frameView] documentView] 
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
-	[printOp runOperation];
+	[printOp runOperationModalForWindow:[self window] 
+							   delegate:self 
+						 didRunSelector:@selector(sheetDidEnd:returnCode:contextInfo:) 
+						    contextInfo:@""];
 }
 
 - (void) setSearchTypeViaSender:(id)sender
@@ -331,6 +334,32 @@ static id sharedHMController;
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame {
 	[back setEnabled: [sender canGoBack]];
 	[forward setEnabled: [sender canGoForward]];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+	if ([menuItem action] == @selector(executeSelection:)) {
+		return ([HelpView selectedDOMRange] == nil) ? NO : YES;
+	}
+
+	return YES;
+}
+
+- (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo
+{
+
+	SLog(@"HelpManger: sheetDidEnd: returnCode: %d contextInfo: %@", returnCode, contextInfo);
+
+	// Order out the sheet - could be a NSPanel or NSWindow
+	if ([sheet respondsToSelector:@selector(orderOut:)]) {
+		[sheet orderOut:nil];
+	}
+	else if ([sheet respondsToSelector:@selector(window)]) {
+		[[sheet window] orderOut:nil];
+	}
+
+	[helpWindow makeKeyAndOrderFront:nil];
+
 }
 
 @end

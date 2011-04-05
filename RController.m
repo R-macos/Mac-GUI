@@ -2035,6 +2035,30 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return retval;
 }
 
+- (void)textStorageDidProcessEditing:(NSNotification *)notification
+{
+
+	// Make sure that the notification is from the correct textStorage object
+	if ([consoleTextView textStorage] != [notification object]) return;
+
+	NSInteger editedMask = [[consoleTextView textStorage] editedMask];
+
+	SLog(@"RController: textStorageDidProcessEditing <%@> with mask %d", self, editedMask);
+
+	// if the user really changed the text
+	if(editedMask != 1) {
+
+		// Cancel setting undo break point
+		[NSObject cancelPreviousPerformRequestsWithTarget:consoleTextView 
+								selector:@selector(breakUndoCoalescing) 
+								object:nil];
+
+		// Improve undo behaviour, i.e. it depends how fast the user types
+		[consoleTextView performSelector:@selector(breakUndoCoalescing) withObject:nil afterDelay:0.8];
+
+	}
+}
+
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
 

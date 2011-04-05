@@ -68,20 +68,20 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 @implementation RTextView
 
-/* we don't need custom init, but in case it's necessary just uncomment this
 - (id) initWithCoder: (NSCoder*) coder
 {
 	self = [super initWithCoder:coder];
 	if (self) {
+		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
+		undoBreakTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"+- .,|&*/:!?<>=\n"] retain];
 	}
 	return self;
 }
-*/
+
 
 - (void)awakeFromNib
 {
 	SLog(@"RTextView: awakeFromNib %@", self);
-	separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
 	// commentTokensSet    = [[NSCharacterSet characterSetWithCharactersInString: @"#"] retain];
 	console = NO;
 	RTextView_autoCloseBrackets = YES;
@@ -93,6 +93,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 - (void)dealloc
 {
 	if(separatingTokensSet) [separatingTokensSet release];
+	if(undoBreakTokensSet) [undoBreakTokensSet release];
 	// if(commentTokensSet) [commentTokensSet release];
 	[super dealloc];
 }
@@ -146,6 +147,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	SLog(@"RTextView: keyDown: %@ *** \"%@\" %d", theEvent, rc, modFlags);
 
+	if([rc length] && [undoBreakTokensSet characterIsMember:[rc characterAtIndex:0]]) [self breakUndoCoalescing];
+
 	if ([rc isEqual:@"."] && (modFlags&allFlags)==NSControlKeyMask) {
 		SLog(@" - send complete: to self");
 		[self complete:self];
@@ -154,15 +157,18 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if ([rc isEqual:@"="]) {
 		int mf = modFlags&allFlags;
 		if ( mf ==NSControlKeyMask) {
+			[self breakUndoCoalescing];
 			[self insertText:@"<-"];
 			return;
 		}
 		if ( mf == NSAlternateKeyMask ) {
+			[self breakUndoCoalescing];
 			[self insertText:@"!="];
 			return;
 		}
 	}
 	if ([rc isEqual:@"-"] && (modFlags&allFlags)==NSAlternateKeyMask) {
+		[self breakUndoCoalescing];
 		[self insertText:@" <- "];
 		return;
 	}
@@ -399,9 +405,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	if (context == pcComment) return NSMakeRange(NSNotFound,0); // no completion in comments
 
-	if(!separatingTokensSet)
-		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
-
 	if (context == pcStringDQ || context == pcStringSQ) // we're in a string, hence file completion
 														// the beginning of the range doesn't matter, because we're guaranteed to find a string separator on the same line
 		userRange = [string rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:(context == pcStringDQ) ? @"\" /" : @"' /"]
@@ -528,14 +531,20 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return;
 	}
 
+	id aSearchField = nil;
+
 	if(isRConsole)
-		[[NSApp keyWindow] makeFirstResponder:[[self delegate] valueForKeyPath:@"helpSearch"]];
+		aSearchField = [[self delegate] valueForKeyPath:@"helpSearch"];
 	else {
 		NSWindow *keyWin = [NSApp keyWindow];
 		if(![[keyWin toolbar] isVisible])
 			[keyWin toggleToolbarShown:nil];
-		[keyWin makeFirstResponder:[[self delegate] valueForKeyPath:@"searchToolbarField"]];
+		aSearchField = [[self delegate] valueForKeyPath:@"searchToolbarField"];
 	}
+
+	if(aSearchField == nil || ![aSearchField isKindOfClass:[NSSearchField class]]) return;
+	[aSearchField setStringValue:[[self string] substringWithRange:[self getRangeForCurrentWord]]];
+	[[NSApp keyWindow] makeFirstResponder:aSearchField];
 
 }
 

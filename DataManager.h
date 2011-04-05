@@ -55,6 +55,7 @@
 - (IBAction)showHelp:(id)sender;
 - (IBAction)reloadDatasets:(id)sender;
 - (IBAction)filterTable:(id)sender;
+- (IBAction)executeSelection:(id)sender;
 
 - (void)show;
 - (NSWindow*)window;

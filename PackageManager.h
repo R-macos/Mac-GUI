@@ -57,6 +57,7 @@ typedef struct pkgManagerEntry {
 - (id) window;
 - (IBAction) showInfo:(id)sender;
 - (IBAction) reloadPMData:(id)sender;
+- (IBAction)executeSelection:(id)sender;
 
 - (void) show;
 
