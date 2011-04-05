@@ -274,7 +274,7 @@ AAEAAQABA</bytes>
 							<object class="NSButtonCell" key="NSCell" id="170657528">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134348800</int>
-								<string key="NSContents">すべてを選択解除</string>
+								<string key="NSContents">選択解除</string>
 								<reference key="NSSupport" ref="263954720"/>
 								<reference key="NSControlView" ref="138912075"/>
 								<int key="NSButtonFlags">-2038284033</int>

@@ -71,7 +71,7 @@
 								<reference key="NSControlView" ref="598298935"/>
 								<int key="NSButtonFlags">1211912703</int>
 								<int key="NSButtonFlags2">0</int>
-								<object class="NSCustomResource" key="NSNormalImage" id="993868044">
+								<object class="NSCustomResource" key="NSNormalImage" id="531918454">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">NSRadioButton</string>
 								</object>
@@ -94,7 +94,7 @@
 								<int key="NSTag">1</int>
 								<int key="NSButtonFlags">1211912703</int>
 								<int key="NSButtonFlags2">0</int>
-								<reference key="NSNormalImage" ref="993868044"/>
+								<reference key="NSNormalImage" ref="531918454"/>
 								<reference key="NSAlternateImage" ref="450468323"/>
 								<string key="NSAlternateContents"/>
 								<string key="NSKeyEquivalent"/>
@@ -113,7 +113,7 @@
 							<reference key="NSSupport" ref="942505865"/>
 							<int key="NSButtonFlags">1211912703</int>
 							<int key="NSButtonFlags2">0</int>
-							<reference key="NSNormalImage" ref="993868044"/>
+							<reference key="NSNormalImage" ref="531918454"/>
 							<reference key="NSAlternateImage" ref="450468323"/>
 							<string key="NSAlternateContents"/>
 							<string key="NSKeyEquivalent"/>
@@ -160,7 +160,7 @@
 											<reference key="NSControlView" ref="467859425"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<object class="NSCustomResource" key="NSNormalImage" id="90995203">
+											<object class="NSCustomResource" key="NSNormalImage" id="837153897">
 												<string key="NSClassName">NSImage</string>
 												<string key="NSResourceName">NSSwitch</string>
 											</object>
@@ -182,12 +182,12 @@
 										<object class="NSButtonCell" key="NSCell" id="607892952">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">0</int>
-											<string key="NSContents">Highlight bracket pairs</string>
+											<string key="NSContents">対応する括弧をハイライト</string>
 											<reference key="NSSupport" ref="942505865"/>
 											<reference key="NSControlView" ref="857479191"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -209,7 +209,7 @@
 											<reference key="NSControlView" ref="598267823"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -367,7 +367,7 @@
 											<reference key="NSControlView" ref="542486847"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -389,7 +389,7 @@
 											<reference key="NSControlView" ref="522909206"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -406,12 +406,12 @@
 										<object class="NSButtonCell" key="NSCell" id="805682697">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">0</int>
-											<string key="NSContents">Match brackets/quotes</string>
+											<string key="NSContents">括弧/引用符の対応表示</string>
 											<reference key="NSSupport" ref="942505865"/>
 											<reference key="NSControlView" ref="86182398"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -446,12 +446,12 @@
 										<object class="NSButtonCell" key="NSCell" id="480889402">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">0</int>
-											<string key="NSContents">Highlight current line</string>
+											<string key="NSContents">現在の行をハイライト</string>
 											<reference key="NSSupport" ref="942505865"/>
 											<reference key="NSControlView" ref="954429201"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -468,12 +468,12 @@
 										<object class="NSButtonCell" key="NSCell" id="590715081">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">0</int>
-											<string key="NSContents">Indent new lines</string>
+											<string key="NSContents">新しい行をインデント</string>
 											<reference key="NSSupport" ref="942505865"/>
 											<reference key="NSControlView" ref="909633476"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -523,7 +523,7 @@
 										<object class="NSButtonCell" key="NSCell" id="526501032">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134348800</int>
-											<string key="NSContents">Select…</string>
+											<string key="NSContents">選択…</string>
 											<reference key="NSSupport" ref="26"/>
 											<reference key="NSControlView" ref="265240173"/>
 											<int key="NSButtonFlags">-2038284033</int>
@@ -572,12 +572,12 @@
 										<object class="NSButtonCell" key="NSCell" id="749916913">
 											<int key="NSCellFlags">-2080244224</int>
 											<int key="NSCellFlags2">0</int>
-											<string key="NSContents">Auto-save documents</string>
+											<string key="NSContents">文書を自動的に保存する</string>
 											<reference key="NSSupport" ref="942505865"/>
 											<reference key="NSControlView" ref="601854215"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">2</int>
-											<reference key="NSNormalImage" ref="90995203"/>
+											<reference key="NSNormalImage" ref="837153897"/>
 											<reference key="NSAlternateImage" ref="858906704"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -639,7 +639,7 @@
 												<reference key="NSControlView" ref="957610836"/>
 												<int key="NSButtonFlags">1211912703</int>
 												<int key="NSButtonFlags2">0</int>
-												<reference key="NSNormalImage" ref="993868044"/>
+												<reference key="NSNormalImage" ref="531918454"/>
 												<reference key="NSAlternateImage" ref="450468323"/>
 												<string key="NSAlternateContents"/>
 												<object class="NSMutableString" key="NSKeyEquivalent" id="104715862">
@@ -657,7 +657,7 @@
 												<int key="NSTag">1</int>
 												<int key="NSButtonFlags">1211912703</int>
 												<int key="NSButtonFlags2">0</int>
-												<reference key="NSNormalImage" ref="993868044"/>
+												<reference key="NSNormalImage" ref="531918454"/>
 												<reference key="NSAlternateImage" ref="450468323"/>
 												<string key="NSAlternateContents"/>
 												<reference key="NSKeyEquivalent" ref="104715862"/>
@@ -676,7 +676,7 @@
 											<reference key="NSSupport" ref="942505865"/>
 											<int key="NSButtonFlags">1211912703</int>
 											<int key="NSButtonFlags2">0</int>
-											<reference key="NSNormalImage" ref="993868044"/>
+											<reference key="NSNormalImage" ref="531918454"/>
 											<reference key="NSAlternateImage" ref="450468323"/>
 											<string key="NSAlternateContents"/>
 											<string key="NSKeyEquivalent"/>
@@ -697,7 +697,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="305816725">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">4194304</int>
-											<string type="base64-UTF8" key="NSContents">Tm90ZToKQ29tbWFuZCBpcyBleGVjdXRlZCBpbiBhIHNoZWxsA</string>
+											<string type="base64-UTF8" key="NSContents">5rOoOgrjgrPjg57jg7Pjg4njga/jgrfjgqfjg6vlhoXjgaflrp/ooYzjgZXjgozjgb7jgZk</string>
 											<object class="NSFont" key="NSSupport">
 												<string key="NSName">LucidaGrande</string>
 												<double key="NSSize">9</double>
@@ -717,7 +717,7 @@
 										<object class="NSButtonCell" key="NSCell" id="1008780738">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134348800</int>
-											<string key="NSContents">Set Editor</string>
+											<string key="NSContents">エディタを設定</string>
 											<reference key="NSSupport" ref="26"/>
 											<reference key="NSControlView" ref="903417791"/>
 											<int key="NSButtonFlags">-2038284033</int>

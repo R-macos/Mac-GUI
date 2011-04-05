@@ -375,7 +375,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="169245839">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Current Line</string>
+											<string key="NSContents">現在行</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="396379635"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>
@@ -391,7 +391,7 @@
 										<object class="NSTextFieldCell" key="NSCell" id="169097090">
 											<int key="NSCellFlags">67239424</int>
 											<int key="NSCellFlags2">134217728</int>
-											<string key="NSContents">Cursor</string>
+											<string key="NSContents">カーソル</string>
 											<reference key="NSSupport" ref="275138429"/>
 											<reference key="NSControlView" ref="175858893"/>
 											<reference key="NSBackgroundColor" ref="308816525"/>

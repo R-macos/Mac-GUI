@@ -351,7 +351,7 @@
 							<int key="NSCellFlags2">268436480</int>
 							<string key="NSContents"/>
 							<reference key="NSSupport" ref="981385205"/>
-							<string key="NSPlaceholderString">Help search</string>
+							<string key="NSPlaceholderString">ヘルプを検索</string>
 							<reference key="NSControlView" ref="824042169"/>
 							<bool key="NSDrawsBackground">YES</bool>
 							<int key="NSTextBezelStyle">1</int>
@@ -744,7 +744,7 @@
 						<object class="NSTextFieldCell" key="NSCell" id="867347339">
 							<int key="NSCellFlags">68288064</int>
 							<int key="NSCellFlags2">71304192</int>
-							<string key="NSContents">Encoding:</string>
+							<string key="NSContents">エンコーディング:</string>
 							<reference key="NSSupport" ref="981385205"/>
 							<reference key="NSControlView" ref="140776580"/>
 							<reference key="NSBackgroundColor" ref="628252591"/>
