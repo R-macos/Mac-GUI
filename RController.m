@@ -864,6 +864,18 @@ static RController* sharedRController;
 	else if ([RConsoleWindow isKeyWindow]) {
 		[fontSizeStepper setIntValue:[fontSizeStepper intValue]+1];
 		[self changeFontSize:NULL];
+	}
+	else if ([firstResponder isKindOfClass:[RScriptEditorTextView class]] 
+				&& ![firstResponder selectedRange].length
+				&& ![[[NSDocumentController sharedDocumentController] currentDocument] isRTF]) {
+		NSFont *font;
+		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
+		float s = [font pointSize];
+		s = s + 1.0f;
+		font = [NSFont fontWithName:[font fontName] size:s];
+		if(font)
+			[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
 	} else
 		[[NSFontManager sharedFontManager] modifyFont:sender];
 }
@@ -890,7 +902,25 @@ static RController* sharedRController;
 	else if ([RConsoleWindow isKeyWindow]) {
 		[fontSizeStepper setIntValue:[fontSizeStepper intValue]-1];
 		[self changeFontSize:NULL];
-	} else
+	}
+	else if ([firstResponder isKindOfClass:[RScriptEditorTextView class]] 
+				&& ![firstResponder selectedRange].length
+				&& ![[[NSDocumentController sharedDocumentController] currentDocument] isRTF]) {
+		NSFont *font;
+		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
+		float s = [font pointSize];
+		if(s > 5.0f) {
+			s = s - 1.0f;
+		} else {
+			NSBeep();
+			return;
+		}
+		font = [NSFont fontWithName:[font fontName] size:s];
+		if(font)
+			[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
+	}
+	else
 		[[NSFontManager sharedFontManager] modifyFont:sender];
 	
 }

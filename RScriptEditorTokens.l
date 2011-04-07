@@ -49,8 +49,8 @@ size_t yyuoffset, yyuleng;
 %option case-sensitive
 
 s			[ \t\n\r]+
+numeric		((0(x|X)[0-9a-fA-F]*)|([+-]?(([0-9]+\.[0-9]*)|([0-9]*\.[0-9]+)|([0-9]+))(e[+-]?[0-9]+)?(i|L)?))
 alpha		[a-zA-Z_\.À-ﾟ]
-numeric		([+-]?(([0-9]+\.[0-9]+)|([0-9]*\.[0-9]+)|([0-9]+))(e[+-]?[0-9]+)?)
 ops			"+"|"-"|"*"|"/"|^|>|>=|<|<=|==|!=|!|&|\||\|\||~|$|:|@
 fun			[ \t\n\r]*\(
 decl		=|<-|<<-|->|-->
@@ -83,13 +83,12 @@ functions	(if|f(or|unction)|while)
 
 {numeric}/{ops}				{ BEGIN(equation); return RPT_NUMERIC; }			/* numeric before operator        */
 <equation>{ops}				{ BEGIN(INITIAL); return RPT_OTHER; }				/* set operator after a numeric   */
+{numeric}					{ return RPT_NUMERIC; }								/* single numeric value           */
 {numeric}/{alpha}			{ return RPT_WORD; }								/* catch numeric followed by char */
 
 {ops}						{ return RPT_OPERATOR; }							/* all operators                  */
 {decl}						{ return RPT_DECLARATION; }							/* all declarations               */
 {s}+						{ return RPT_WHITESPACE; }							/* ignore spaces                  */
-
-{numeric}					{ return RPT_NUMERIC; }								/* single numeric value           */
 
 {word}+						{ return RPT_WORD; }								/* return any word                */
 

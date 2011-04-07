@@ -220,7 +220,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[shColorCursor retain]; 
 	[self setInsertionPointColor:shColorCursor];
 
-
 	// Register observers for the when editor background colors preference changes
 	[prefs addObserver:self forKeyPath:normalSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:stringSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
@@ -365,11 +364,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:highlightCurrentLine]) {
 		[self setNeedsDisplay:YES];
 
-	} else if ([keyPath isEqualToString:RScriptEditorDefaultFont]) {
-		[self setFont:[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]]];
-		[self setNeedsDisplay:YES];
-
-	} else if ([keyPath isEqualToString:HighlightIntervalKey]) {
+	} else if ([keyPath isEqualToString:RScriptEditorDefaultFont] && ![[[[self window] windowController] document] isRTF] && ![self selectedRange].length) {
+			[self setFont:[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]]];
+			[self setNeedsDisplay:YES];
+	
+		} else if ([keyPath isEqualToString:HighlightIntervalKey]) {
 		braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
 	}
 }
@@ -418,22 +417,22 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// if the user really changed the text
 	if(editedMask != 1) {
 
+		// Cancel calling doSyntaxHighlighting
+		[NSObject cancelPreviousPerformRequestsWithTarget:self 
+								selector:@selector(doSyntaxHighlighting) 
+								object:nil];
+
+		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0f];
+
 		// Cancel setting undo break point
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
 								selector:@selector(breakUndoCoalescing) 
 								object:nil];
 
 		// Cancel calling doSyntaxHighlighting
-		[NSObject cancelPreviousPerformRequestsWithTarget:self 
-								selector:@selector(doSyntaxHighlighting) 
-								object:nil];
-
-		// Cancel calling doSyntaxHighlighting
 		[NSObject cancelPreviousPerformRequestsWithTarget:[self delegate] 
 								selector:@selector(functionRescan) 
 								object:nil];
-
-		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0];
 
 		// Improve undo behaviour, i.e. it depends how fast the user types
 		[self performSelector:@selector(breakUndoCoalescing) withObject:nil afterDelay:0.8];
@@ -597,7 +596,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	[theTextStorage beginEditing];
 
-	NSColor *tokenColor;
+	NSColor *tokenColor = nil;
 
 	size_t tokenEnd, token;
 	NSRange tokenRange;
@@ -670,6 +669,18 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		
 
 	}
+
+	// set current textColor to the color of the caret's position - 1
+	// to try to suppress writing in normalColor before syntax highlighting 
+	NSUInteger ix = [self selectedRange].location;
+	if(ix > 1) {
+		NSMutableDictionary *typeAttr = [NSMutableDictionary dictionary];
+		[typeAttr setDictionary:[self typingAttributes]];
+		NSColor *c = [theTextStorage attribute:NSForegroundColorAttributeName atIndex:ix-1 effectiveRange:nil];
+		if(c) [typeAttr setObject:c forKey:NSForegroundColorAttributeName];
+		[self setTypingAttributes:typeAttr];
+	}
+
 	[theTextStorage endEditing];
 
 }
@@ -739,6 +750,23 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 }
 
 #pragma mark -
+
+- (void)changeFont:(id)sender
+{
+
+	NSFont *font;
+	font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
+
+	if([[[[self window] windowController] document] isRTF] || [self selectedRange].length) {
+		// register font change for undo
+		[self shouldChangeTextInRange:[self selectedRange] replacementString:[[self string] substringWithRange:[self selectedRange]]];
+		[theTextStorage addAttribute:NSFontAttributeName value:font range:[self selectedRange]];
+	} else {
+		[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
+	}
+
+}
+
 
 - (void)updatePreferences
 {

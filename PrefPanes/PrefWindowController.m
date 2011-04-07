@@ -27,12 +27,27 @@
 	
 	editorPrefPane = [[[EditorPrefPane alloc] initWithIdentifier:@"Editor" label:NLSC(@"PrefP-Editor",@"Editor preference pane") category:NLSC(@"PrefG-Editor",@"Editor preference group")] autorelease];
 	[self addPane:editorPrefPane withIdentifier:[editorPrefPane identifier]];
-	
+
+	[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:RScriptEditorDefaultFont options:NSKeyValueObservingOptionNew context:NULL];
+
 	// set up some configuration options
 	[self setUsesConfigurationPane:YES];
 	[self setSortByCategory:YES];
 	// select prefs pane for display
 	[self selectPaneWithIdentifier:@"All"];
+}
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[super dealloc];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if ([keyPath isEqualToString:RScriptEditorDefaultFont]) {
+		[[editorPrefPane valueForKeyPath:@"editorFont"] setFont:[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]]];
+	}
 }
 
 - (IBAction)showPrefsWindow:(id)sender

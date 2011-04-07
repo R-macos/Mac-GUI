@@ -61,6 +61,8 @@
 - (int) fileEncoding;
 - (void) setFileEncoding: (int) encoding;
 
+- (BOOL) isRTF;
+
 - (NSTextView *)textView;
 
 @end

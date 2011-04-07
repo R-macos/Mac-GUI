@@ -160,7 +160,8 @@
 
 	if([[fileName lowercaseString] hasSuffix:@".rtf"]) {
 		SLog(@" - docType was changed to rtf due to file extension");
-		return [super writeToFile:fileName ofType:@"public.rtf"];
+		if(initialContentsType) [initialContentsType release], initialContentsType = nil;
+		initialContentsType = [[NSString stringWithString:@"public.rtf"] retain];
 	}
 
 	SLog(@" - used docType %@", (initialContentsType)?:ftRSource);
@@ -411,6 +412,11 @@ create the UI for the document.
 {
 	if(isREdit) return NLS(@"Object Editor");
 	return [super displayName];
+}
+
+- (BOOL) isRTF
+{
+	return (([self fileName] && [[[self fileName] lowercaseString] hasSuffix:@".rtf"]) || ([self fileType] && [[self fileType] hasSuffix:@".rtf"]));
 }
 
 - (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString*)contextInfo
