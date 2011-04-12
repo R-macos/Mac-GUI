@@ -177,7 +177,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[self showHelpForCurrentFunction];
 		return;
 	}
-	if (cc && [cc length]==1 && RTextView_autoCloseBrackets) {
+	if (cc && [cc length]==1 && [[[NSUserDefaults standardUserDefaults] objectForKey:kAutoCloseBrackets] isEqualToString:@"YES"]) {
 		unichar ck = [cc characterAtIndex:0];
 		NSString *complement = nil;
 		NSRange r = [self selectedRange];

@@ -647,15 +647,16 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 		NSRange csr = [textView selectedRange];
 		NSRange ssr = NSMakeRange(csr.location, 0);
 		NSRange lr = [s lineRangeForRange:ssr];
-		if ([[self statusLineText] length]>0) [self setStatusLineText:@""];
+
+		[self setStatusLineText:@""];
 		// line on which enter was pressed - this will be taken as guide
 		if (csr.location>0) {
-			int i=lr.location;
-			int last=csr.location;
-			int whiteSpaces=0, addShift=0;
+			int i = lr.location;
+			int last = csr.location;
+			int whiteSpaces = 0, addShift = 0;
 			BOOL initial=YES;
 			BOOL caretIsAdjacentCurlyBrackets = NO;
-			NSString *wss=@"\n";
+			NSString *wss = @"\n";
 			NSString *wssForClosingCurlyBracket = @"";
 			while (i<last) {
 				unichar c=[s characterAtIndex:i];
@@ -671,7 +672,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 			}
 			if (whiteSpaces>0)
 				wss = [wss stringByAppendingString:[s substringWithRange:NSMakeRange(lr.location,whiteSpaces)]];
-			if([s characterAtIndex:last-1] == '{' && [s characterAtIndex:last] == '}') {
+			if(last > 0 && [s characterAtIndex:last-1] == '{' && last < NSMaxRange(lr) && [s characterAtIndex:last] == '}') {
 				wssForClosingCurlyBracket = [NSString stringWithString:wss];
 				caretIsAdjacentCurlyBrackets = YES;
 			}
