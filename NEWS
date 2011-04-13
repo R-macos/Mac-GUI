@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.40 (5751) - supplied with R 2.13.0 --
+
 Last-update: 2011-04-01
 *	help view responds to <Cmd><Enter> (execute selection)
 	However, it is only supported for example sections of
@@ -16,7 +18,7 @@ Last-update: 2011-03-28
 	- made table sortable and searchable
 	- added Refresh List
 	- now one can select more than one data set to
-	load them into the workspace
+	  load them into the workspace
 
 Last-update: 2011-03-24
 *	auto-save is now enabled in the editor by default
@@ -26,13 +28,13 @@ Last-update: 2011-03-24
 Last-update: 2011-03-23 [HJBB]
 *	improved History
 	- added possibility to search in History via
-	regular expression
+	  regular expression
 	- pressing ENTER or RETURN will insert selected
-	item into RConsole
+	  item into RConsole
 	- if History will open for the first time
-	select last item
+	  select last item
 	- shortcut SHIFT+CMD+H activates history search
-	field
+	  field
 
 Last-update: 2011-03-22 [HJBB]
 *	Preferences for Editor and Syntax Highlighting
@@ -40,7 +42,7 @@ Last-update: 2011-03-22 [HJBB]
 	- added 'Highlight current line'
 	- added 'Indent New Lines'
 	- added color setting for 'Background' (incl. 
-	transparency)
+	  transparency)
 	- added color seting for 'Current Line'
 	- added color setting for 'Cursor'
 
