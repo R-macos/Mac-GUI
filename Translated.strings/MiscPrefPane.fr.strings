@@ -26,7 +26,7 @@
 "Default" = "Défaut";
 
 /* Entry = "106.title"; Class = "NSBox" */
-"Default CRAN mirror" = "CRAN mirroir par Défaut";
+"Default CRAN mirror" = "Miroir CRAN par Défaut";
 
 /* Entry = "23.title"; Class = "NSBox" */
 "Default Library Paths" = "Chemins par Défaut pour les Librairies";
@@ -56,7 +56,7 @@
 "Note: This change is effective only after a restart of R.app" = "Note: Cette modification ne prendra effet qu'après re-démarrage de R.app";
 
 /* Entry = "141.title"; Class = "NSTextFieldCell" */
-"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Note: Utiliser toujours un chemin fixe pour utiliser le même fichier Historique, e.g. ~/.Rhistory";
+"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Note: Utiliser toujours un chemin fixe pour utiliser le même fichier Historique, par exemple ~/.Rhistory";
 
 /* Entry = "18.title"; Class = "NSButtonCell" */
 "Open file in editor" = "Ouvrir Fichier dans éditeur";
@@ -89,7 +89,7 @@
 "Strip comments in history entries" = "Enlever les commentaires des entrées de l'historique";
 
 /* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
-"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL pour le CRAN par défaut. Si vide, il sera demandé à l'utilisateur.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */
 "URL:" = "URL:";

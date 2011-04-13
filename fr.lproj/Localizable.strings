@@ -6,23 +6,23 @@
 
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
-"(arguments lookup is disabled while R is busy)" = "(arguments lookup is disabled while R is busy)";
+"(arguments lookup is disabled while R is busy)" = "(la recherche d'arguments est désactivée quand R est occupé)";
 
 /* From: RController.m (showWorkingDir) */
-"<deleted>" = "<deleted>";
+"<deleted>" = "<supprimé>";
 
 /* From: RDocumentWinCtrl.m (functionReset) */
-"<functions>" = "<functions>";
+"<functions>" = "<fonctions>";
 
 /* From: SearchTable.m (show) */
 "<unknown>" = "<inconnu>";
 
 /* From: RController.m (applicationDidFinishLaunching) */
-"[History restored from " = "[History restored from ";
+"[History restored from " = "[Historique recherché depuis ";
 
 /* From: RController.m (application)
    From: RController.m (applicationDidFinishLaunching) */
-"[Workspace restored from " = "[Workspace restored from ";
+"[Workspace restored from " = "[Espace de Travail restauré depuis ";
 
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "Insérer Col";
@@ -58,19 +58,19 @@
 "Can't find help for topic, would you like to expand the search?" = "Ne peut trouver d'aide sur le sujet, voulez vous étendre la recherche?";
 
 /* From: RController.m (doLoadHistory) */
-"Can't open history file %@" = "Can't open history file %@";
+"Can't open history file %@" = "Impossible d'ouvrir le fichier d'historique %@";
 
 /* From: RController.m (didCloseAll) */
 "Cancel" = "Annuler";
 
 /* From: RDocumentWinCtrl.m (goHelpSearch) */
-"Cannot determine package for the topic." = "Cannot determine package for the topic.";
+"Cannot determine package for the topic." = "Impossible de déterminer un package pour le thème.";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
-"Cannot start HTML help server." = "Cannot start HTML help server.";
+"Cannot start HTML help server." = "Impossible de démarrer le serveur d'aide HTML.";
 
 /* From: main.m (webView) */
 "Cannot start R" = "R ne peux démarrer";
@@ -101,24 +101,24 @@
 "Closing R session" = "Fermeture de la session R";
 
 /* From: RDocument.m (reinterpretInEncoding) */
-"Convertion Error" = "Convertion Error";
+"Convertion Error" = "Erreur de Convestion";
 
 /* From: RDocument.m (reinterpretInEncoding) */
-"Couldn't reinterpret the text by using the encoding" = "Couldn't reinterpret the text by using the encoding";
+"Couldn't reinterpret the text by using the encoding" = "Impossible de réinterprêter le texte avec cet encodage";
 
 /* From: RDocument.m (revertToContentsOfURL) */
-"Couldn't revert to saved document" = "Couldn't revert to saved document";
+"Couldn't revert to saved document" = "Impossible de revenir au document sauvegardé";
 
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Crée un nouveau document vide dans l'editeur";
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
-"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files.";
+"Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Il n'est actuellement pas possible d'installer des package binaires depuis des dépôts à distance en tant qu'utilisateur root.\nMerci d'utiliser le binaire de R qui provient du CRAN afin d'autoriser aux administrateurs l'installation de packages au niveau système sans passer par l'utilisateur root. Sinon, vous pouvez utiliser R en ligne de commande en tant que root ou installer les packages depuis des fichiers locaux.";
 
 /* From: RChooseEncodingPopupAccessory.m (setupPopUpCell)
    From: RController.m (updateReInterpretEncodingMenu) */
-"Customize List…" = "Customize List…";
+"Customize List…" = "Personnaliser la Liste…";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Aimeriez vous que je me souvienne de site mirror pour des sessions futures?";
@@ -136,28 +136,28 @@
 "Edit the selected object" = "Éditer l'objet sélectionné";
 
 /* From: RDocumentController.m (encodingAccessory) */
-"Encoding" = "Encoding";
+"Encoding" = "Encodage";
 
 /* From: RController.m (sheetDidEnd) */
-"Error" = "Error";
+"Error" = "Erreur";
 
 /* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
 "executing" = "executing";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Fetching Package List Failed" = "Fetching Package List Failed";
+"Fetching Package List Failed" = "Echec de la récupération de la liste des packages";
 
 /* From: RController.m (toolbar) */
 "Font Size" = "Taille Police";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"Functions" = "Functions";
+"Functions" = "Fonctions";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
-"Help" = "Help";
+"Help" = "Aide";
 
 /* From: RController.m (handleCustomPrint) */
 "Help for the topic \"%@\" was not found." = "L'aide sur le sujet \"%@\" n'as pas été trouvé.";
@@ -169,20 +169,20 @@
 "History" = "Historique";
 
 /* From: PackageInstaller.m (setURL) */
-"Install Selected" = "Install Selected";
+"Install Selected" = "Installer les elements sélectionnés";
 
 /* From: PackageInstaller.m (setURL) */
-"Install…" = "Install…";
+"Install…" = "Installer…";
 
 /* From: RController.m (toolbar) */
 "Interrupt current R computation" = "Interrompre le calcul courant de R";
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
-"Invalid Repository URL" = "Invalid Repository URL";
+"Invalid Repository URL" = "URL de dépôt invalide";
 
 /* From: REditorToolbar.m (updatePreferences) */
-"List of Functions" = "List of Functions";
+"List of Functions" = "Liste des Fonctions";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Never" = "Jamais";
@@ -197,16 +197,16 @@
 "No" = "Non";
 
 /* From: PackageInstaller.m (checkOptions) */
-"No CRAN Mirror Found" = "No CRAN Mirror Found";
+"No CRAN Mirror Found" = "Aucun miroir CRAN trouvé";
 
 /* From: PackageInstaller.m (installSelected) */
-"No packages selected, nothing to do." = "No packages selected, nothing to do.";
+"No packages selected, nothing to do." = "Aucun package sélectionné, rien à faire.";
 
 /* From: PackageInstaller.m (checkOptions) */
-"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Pas de mirror CRAN valide sélectionné.\nVous serez incapable d'installer des CRAN packages tant que vous ne sélectionnerez pas une site CRAN valide.";
+"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Pas de mirror CRAN valide sélectionné.\nVous serez incapable d'installer des packages CRAN tant que vous ne sélectionnerez pas une site CRAN valide.";
 
 /* From: RDocument.m (displayName) */
-"Object Editor" = "Object Editor";
+"Object Editor" = "Editeur d'Objets";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
@@ -227,10 +227,10 @@
 "Open In Editor" = "Ouvrir dans Éditeur";
 
 /* From: PackageInstaller.m (installSelected) */
-"Package installation failed" = "Package installation failed";
+"Package installation failed" = "Echec de l'Installation du Package";
 
 /* From: PackageInstaller.m (installSelected) */
-"Package installation was not successful. Please see the R Console for details." = "Package installation was not successful. Please see the R Console for details.";
+"Package installation was not successful. Please see the R Console for details." = "L'installation du package a échouée. Plus de détails dans la Console R.";
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
@@ -240,13 +240,13 @@
 "Package Installer" = "Installateur de Package";
 
 /* From: PackageInstaller.m (updateAll) */
-"Package update failed" = "Package update failed";
+"Package update failed" = "Echec de la mise à jour de package";
 
 /* From: PackageInstaller.m (updateAll) */
-"Package update was not successful. Please see the R Console for details." = "Package update was not successful. Please see the R Console for details.";
+"Package update was not successful. Please see the R Console for details." = "La mise à jour du package a échoué. Plus de détails dans la Console R.";
 
 /* From: PackageInstaller.m (reloadURL) */
-"Please consult  R Console output for details." = "Please consult  R Console output for details.";
+"Please consult  R Console output for details." = "Merci de consulter la Console R pour plus de détails.";
 
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */

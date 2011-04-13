@@ -1,8 +1,8 @@
 /* Entry = "45.title"; Class = "NSMenuItem" */
-"<functions>" = "<functions>";
+"<functions>" = "<fonctions>";
 
 /* Entry = "87.title"; Class = "NSBox" */
-"Box" = "Box";
+"Box" = "Boite";
 
 /* Entry = "115.title"; Class = "NSMenuItem" */
 "CP1250" = "CP1250";
@@ -23,28 +23,28 @@
 "Cancel" = "Cancel";
 
 /* Entry = "83.title"; Class = "NSMenuItem" */
-"Clear" = "Clear";
+"Clear" = "Effacer";
 
 /* Entry = "110.title"; Class = "NSMenuItem" */
 "EUC (jp)" = "EUC (jp)";
 
 /* Entry = "82.title"; Class = "NSMenuItem" */
-"Empty" = "Empty";
+"Empty" = "Vide";
 
 /* Entry = "108.title"; Class = "NSTextFieldCell" */
-"Encoding:" = "Encoding:";
+"Encoding:" = "Encodage:";
 
 /* Entry = "59.title"; Class = "NSMenuItem" */
-"Exact Search" = "Exact Search";
+"Exact Search" = "Recherche exacte";
 
 /* Entry = "60.title"; Class = "NSMenuItem" */
-"Fuzzy Search" = "Fuzzy Search";
+"Fuzzy Search" = "Recherche floue";
 
 /* Entry = "96.title"; Class = "NSTextFieldCell" */
-"Go to line:" = "Go to line:";
+"Go to line:" = "Aller à la ligne:";
 
 /* Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
-"Help search" = "Help search";
+"Help search" = "Recherche d'aide";
 
 /* Entry = "120.title"; Class = "NSMenuItem" */
 "ISO2022-JP" = "ISO2022-JP";
@@ -68,10 +68,10 @@
 "OK" = "OK";
 
 /* Entry = "44.title"; Class = "NSMenu" */
-"OtherViews" = "OtherViews";
+"OtherViews" = "AutreVues";
 
 /* Entry = "103.title"; Class = "NSMenu" */
-"OtherViews" = "OtherViews";
+"OtherViews" = "AutreVues";
 
 /* Entry = "68.title"; Class = "NSPanel" */
 "Panel" = "Panel";
@@ -86,5 +86,5 @@
 "Unicode" = "Unicode";
 
 /* Entry = "5.title"; Class = "NSWindow" */
-"Window" = "Window";
+"Window" = "Fenêtre";
 
