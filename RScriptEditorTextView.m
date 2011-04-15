@@ -106,7 +106,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 {
 
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
-
+	isSyntaxHighlighting = NO;
 	prefs = [[NSUserDefaults standardUserDefaults] retain];
 	[[Preferences sharedPreferences] addDependent:self];
 
@@ -151,24 +151,14 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[self setAllowsDocumentBackgroundColorChange:YES];
 	[self setContinuousSpellCheckingEnabled:NO];
 
+	if(![Preferences flagForKey:enableLineWrappingKey withDefault: YES])
+		[scrollView setHasHorizontalScroller:YES];
+
 	// Re-define tab stops for a better editing
 	[self setTabStops];
 
 	// disabled to get the current text range in textView safer
 	[[self layoutManager] setBackgroundLayoutEnabled:NO];
-
-	NSSize layoutSize = [self maxSize];
-	[self setHorizontallyResizable:YES];
-	[self setMaxSize: layoutSize];
-	if (!lineWrappingEnabled) {
-		[scrollView setHasHorizontalScroller:YES];
-		[[self textContainer] setWidthTracksTextView:NO];
-	} else {
-		[scrollView setHasHorizontalScroller:NO];
-		[[self textContainer] setWidthTracksTextView:YES];
-	}
-	[[self textContainer] setHeightTracksTextView: NO];
-	[[self textContainer] setContainerSize:layoutSize];
 
 	// add NSViewBoundsDidChangeNotification to scrollView
 	[scrollView setPostsBoundsChangedNotifications:YES];
@@ -332,28 +322,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		}
 
 	} else if ([keyPath isEqualToString:enableLineWrappingKey]) {
-		lineWrappingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-		NSSize layoutSize = NSMakeSize(10e6,10e6);
-		[self setHorizontallyResizable:YES];
-		[self setMaxSize: layoutSize];
-		[[self textContainer] setContainerSize:layoutSize];
-		if (!lineWrappingEnabled) {
-			[scrollView setHasHorizontalScroller:YES];
-			[[self textContainer] setWidthTracksTextView:NO];
-		} else {
-			[[self textContainer] setContainerSize:[self bounds].size];
-			[scrollView setHasHorizontalScroller:NO];
-			[[self textContainer] setWidthTracksTextView:YES];
-			// Enforce view to be re-layouted correctly
-			[[self undoManager] disableUndoRegistration];
-			[self selectAll:nil];
-			[self cut:nil];
-			[self paste:nil];
-			[[self undoManager] enableUndoRegistration];
-		}
-		[[self textContainer] setHeightTracksTextView:NO];
-
-		[[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidResizeNotification object:[[self delegate] window]];
+		[self updateLineWrappingMode];
 
 	} else if ([keyPath isEqualToString:prefShowArgsHints]) {
 		argsHints = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
@@ -371,6 +340,37 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		} else if ([keyPath isEqualToString:HighlightIntervalKey]) {
 		braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
 	}
+}
+
+- (void)updateLineWrappingMode
+{
+
+	NSSize layoutSize;
+
+	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
+	[self setHorizontallyResizable:YES];
+	if (!lineWrappingEnabled) {
+		layoutSize = NSMakeSize(10e6,10e6);
+		[scrollView setHasHorizontalScroller:YES];
+		[self setMaxSize:layoutSize];
+		[[self textContainer] setContainerSize:layoutSize];
+		[[self textContainer] setWidthTracksTextView:NO];
+	} else {
+		[scrollView setHasHorizontalScroller:NO];
+		layoutSize = [self maxSize];
+		[self setMaxSize:layoutSize];
+		[[self textContainer] setContainerSize:layoutSize];
+		[[self textContainer] setWidthTracksTextView:YES];
+		// Enforce view to be re-layouted correctly
+		[[self undoManager] disableUndoRegistration];
+		[self selectAll:nil];
+		[self cut:nil];
+		[self paste:nil];
+		[[self undoManager] enableUndoRegistration];
+	}
+	[[self textContainer] setHeightTracksTextView:NO];
+
+	[[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidResizeNotification object:[[self delegate] window]];
 }
 
 - (void)drawRect:(NSRect)rect
@@ -518,10 +518,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 - (void)doSyntaxHighlighting
 {
 
-	if (!syntaxHighlightingEnabled || [[self delegate] plain] || [theTextStorage length] > 40000000) return;
+	if (isSyntaxHighlighting || !syntaxHighlightingEnabled || [[self delegate] plain] || [theTextStorage length] > 40000000) return;
 
-	NSString *selfstr        = [theTextStorage string];
-	NSUInteger strlength     = [selfstr length];
+	NSString *selfstr    = [theTextStorage string];
+	NSInteger strlength  = (NSInteger)[selfstr length];
 
 	// Avoid syntax highlighting of a big change but re-trigger it for highlighting it partly
 	if([theTextStorage editedRange].length > (int)(R_SYNTAX_HILITE_BIAS * 4)) {
@@ -531,10 +531,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		return;
 	}
 
-	// Do highlighting partly (max R_SYNTAX_HILITE_BIAS*2).
-	// The approach is to take the middle position of the current view port
-	// and highlight only ±R_SYNTAX_HILITE_BIAS of that middle position
-	// considering of line starts resp. ends
+	// == Do highlighting partly (max R_SYNTAX_HILITE_BIAS*2 around visibleRange
+	// by considering entire lines).
 
 	// Get the text range currently displayed in the view port
 	NSRect visibleRect = [[[self enclosingScrollView] contentView] documentVisibleRect];
@@ -542,45 +540,24 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	if(!visibleRange.length) return;
 
-	// Take roughly the middle position in the current view port
-	NSUInteger curPos = visibleRange.location+(NSUInteger)(visibleRange.length/2);
-
-	// get the last line to parse due to R_SYNTAX_HILITE_BIAS
-	// but look for only R_SYNTAX_HILITE_BIAS chars forwards
-	NSUInteger end = curPos + R_SYNTAX_HILITE_BIAS;
-	NSInteger lengthChecker = R_SYNTAX_HILITE_BIAS;
-	if (end > strlength ) {
-		end = strlength;
-	} else {
-		while(end < strlength && lengthChecker > 0) {
-			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, end)=='\n')
-				break;
-			end++;
-			lengthChecker--;
-		}
-	}
-	if(lengthChecker <= 0)
-		end = curPos + R_SYNTAX_HILITE_BIAS;
-
-	// get the first line to parse due to R_SYNTAX_HILITE_BIAS
-	// but look for only R_SYNTAX_HILITE_BIAS chars backwards
-	NSUInteger start, start_temp;
-	if(end <= (R_SYNTAX_HILITE_BIAS*2))
-	 	start = 0;
-	else
-	 	start = end - (R_SYNTAX_HILITE_BIAS*2);
-
-	start_temp = start;
-	lengthChecker = R_SYNTAX_HILITE_BIAS;
+	NSInteger start = visibleRange.location - R_SYNTAX_HILITE_BIAS;
 	if (start > 0)
-		while(start>0 && lengthChecker > 0) {
+		while(start > 0) {
 			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, start)=='\n')
 				break;
 			start--;
-			lengthChecker--;
 		}
-	if(lengthChecker <= 0)
-		start = start_temp;
+	if(start < 0) start = 0;
+	NSInteger end = NSMaxRange(visibleRange) + R_SYNTAX_HILITE_BIAS;
+	if (end > strlength) {
+		end = strlength;
+	} else {
+		while(end < strlength) {
+			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, end)=='\n')
+				break;
+			end++;
+		}
+	}
 
 	NSRange textRange = NSMakeRange(start, end-start);
 
@@ -593,7 +570,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	if (!textRange.length)
 		return;
-
+	isSyntaxHighlighting = YES;
 	[theTextStorage beginEditing];
 
 	NSColor *tokenColor = nil;
@@ -653,8 +630,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
 		
-		// if(!allowToCheckForUpperCase) continue;
-		
 		// Add an attribute to be used in the auto-pairing (keyDown:)
 		// to disable auto-pairing if caret is inside of any token found by lex.
 		// For discussion: maybe change it later (only for quotes not keywords?)
@@ -682,6 +657,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	}
 
 	[theTextStorage endEditing];
+	isSyntaxHighlighting = NO;
 
 }
 
@@ -741,7 +717,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 									selector:@selector(doSyntaxHighlighting) 
 									object:nil];
 
-		if(![theTextStorage changeInLength]) {
+		if(![theTextStorage changeInLength] && ![self selectedRange].length) {
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
 
 		}

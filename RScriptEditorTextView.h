@@ -68,6 +68,7 @@
 	BOOL lineWrappingEnabled;
 	BOOL deleteBackward;
 	BOOL startListeningToBoundChanges;
+	BOOL isSyntaxHighlighting;
 
 	int currentHighlight;
 	double braceHighlightInterval; // interval to flash brace highlighting for
@@ -84,7 +85,7 @@
 - (void)highlightCharacter:(int)pos;
 - (void)resetHighlights;
 - (void)resetBackgroundColor:(id)sender;
-
+- (void)updateLineWrappingMode;
 
 - (void)updatePreferences;
 

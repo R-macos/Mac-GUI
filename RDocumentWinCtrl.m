@@ -218,6 +218,10 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	SLog(@" - load document contents into textView");
 	[(RDocument*)[self document] loadInitialContents];
 
+	// If not line wrapping update textView explicitly in order to set scrollView correctly
+	if(![Preferences flagForKey:enableLineWrappingKey withDefault: YES])
+		[textView updateLineWrappingMode];
+
 	SLog(@" - scan document for functions");
 	[self functionRescan];
 
