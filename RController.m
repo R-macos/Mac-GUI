@@ -2208,6 +2208,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 
 - (IBAction)newQuartzDevice:(id)sender {
+
+	NSWindow *currentKeyWindow = [NSApp keyWindow];
+
 	NSString *cmd;
 	BOOL flag=[Preferences flagForKey:useQuartzPrefPaneSettingsKey withDefault: NO];
 	if (flag) {
@@ -2219,8 +2222,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		cmd = @"quartz()";
 	
 	[[REngine mainEngine] executeString:cmd];
-	// set focus to RConsole
-	[self makeConsoleKey:nil];
+
+	// set focus back to last key window
+	[currentKeyWindow makeKeyWindow];
 }
 
 - (IBAction)breakR:(id)sender{

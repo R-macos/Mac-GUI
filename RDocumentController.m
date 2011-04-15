@@ -146,6 +146,7 @@
 {
 	SLog(@"RDocumentController%@.findWindowForDocType: %@ getLast: %d", self, aType, getLast);
 
+	BOOL getLastOrg = getLast;
 	NSArray *appWindows = [NSApp orderedWindows]; // Get all windows
 	int i;
 	Class searchClass = nil;
@@ -166,6 +167,20 @@
 	for(i=0; i<[appWindows count]; i++) {
 		id win = [appWindows objectAtIndex:i];
 		if([win isVisible] && [[win delegate] isKindOfClass:searchClass]) {
+			if(getLast) {
+				SLog(@" - found window with title '%@'", [win title]);
+				return win;
+			}
+			getLast = YES;
+		}
+	}
+
+	// if no window was found for docType
+	// try to get the last window
+	getLast = getLastOrg;
+	for(i=0; i<[appWindows count]; i++) {
+		id win = [appWindows objectAtIndex:i];
+		if([win isVisible]) {
 			if(getLast) {
 				SLog(@" - found window with title '%@'", [win title]);
 				return win;
