@@ -187,6 +187,7 @@ static RController* sharedRController;
 	forceStdFlush = NO;
 	writeBufferLen = DEFAULT_WRITE_BUFFER_SIZE;
 	writeBufferPos = writeBuffer = (char*) malloc(writeBufferLen);
+    writeBufferType = 0;
 	readConsTransBufferSize = 1024; // initial size - will grow as needed
 	readConsTransBuffer = (char*) malloc(readConsTransBufferSize);
 	textViewSync = [[NSString alloc] initWithString:@"consoleTextViewSemahphore"];
@@ -1043,9 +1044,10 @@ extern BOOL isTimeToFinish;
 }
 
 - (void) flushROutput {
-	if (writeBuffer!=writeBufferPos) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
-		writeBufferPos=writeBuffer;
+	if (writeBuffer != writeBufferPos) {
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]
+                         withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+		writeBufferPos = writeBuffer;
 	}
 }
 
@@ -1055,37 +1057,49 @@ extern BOOL isTimeToFinish;
 }
 
 /* this writes R output to the Console window, but indirectly by using a buffer */
-- (void) handleWriteConsole: (NSString*) txt {
+- (void) handleWriteConsole: (NSString*) txt withType: (int) oType {
 	if (!txt) return;
 	const char *s = [txt UTF8String];
+    // NSLog(@"handleWriteConsole[%d(%d,%d)] %@", oType, writeBufferType, writeBufferPos - writeBuffer, txt);
 	int sl = strlen(s);
-	int fits = writeBufferLen-(writeBufferPos-writeBuffer)-1;
+	int fits = writeBufferLen - (writeBufferPos - writeBuffer) - 1;
 	
 	// let's flush the buffer if the new string is large and it would, but the buffer should be occupied
-	if (fits<sl && fits>writeBufferHighWaterMark) {
+    // also flush if the type doesn't match the type
+	if (writeBuffer != writeBufferPos && (writeBufferType != oType || (fits < sl && fits > writeBufferHighWaterMark))) {
 		// for efficiency we're not using handleFlushConsole, because that would trigger stdxx flush, too
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
-		writeBufferPos=writeBuffer;
-		fits = writeBufferLen-1;
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]
+                         withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+		writeBufferPos = writeBuffer;
+		fits = writeBufferLen - 1;
 	}
-	
-	while (fits<sl) {	// ok, we're in a situation where we must split the string
+
+	writeBufferType = oType;
+
+    // this seems a bit insane given that we could just pass the string as a whole, but it should be exteremely rare
+    // since we are dealing with small strings most of the time
+	while (fits < sl) {	// ok, we're in a situation where we must split the string
 		memcpy(writeBufferPos, s, fits);
-		writeBufferPos[writeBufferLen-1]=0;
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
-		sl-=fits; s+=fits;
-		writeBufferPos=writeBuffer;
-		fits=writeBufferLen-1;
+		writeBufferPos[writeBufferLen - 1] = 0;
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+		sl -= fits; s += fits;
+		writeBufferPos = writeBuffer;
+		fits = writeBufferLen - 1;
 	}
 	
 	strcpy(writeBufferPos, s);
-	writeBufferPos+=sl;
-	
+	writeBufferPos += sl;
+
 	// flush the buffer if the low watermark is reached
-	if (fits-sl<writeBufferLowWaterMark) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:iOutputColor]];
-		writeBufferPos=writeBuffer;
+	if (fits - sl < writeBufferLowWaterMark) {
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+		writeBufferPos = writeBuffer;
 	}
+}
+
+// compatibility wrapper for older code
+- (void) handleWriteConsole: (NSString*) txt {
+    [self handleWriteConsole:txt withType:0];
 }
 
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */

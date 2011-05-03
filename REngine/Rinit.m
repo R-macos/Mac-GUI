@@ -111,6 +111,7 @@ extern void (*ptr_R_Suicide)(char *);
 extern void (*ptr_R_ShowMessage)();
 extern int  (*ptr_R_ReadConsole)(char *, unsigned char *, int, int);
 extern void (*ptr_R_WriteConsole)(char *, int);
+extern void (*ptr_R_WriteConsoleEx)(char *, int, int);
 extern void (*ptr_R_ResetConsole)();
 extern void (*ptr_R_ClearerrConsole)();
 extern void (*ptr_R_Busy)(int);
@@ -218,7 +219,8 @@ int initR(int argc, char **argv, int save_action) {
     /* ptr_R_CleanUp = Re_CleanUp; */
     ptr_R_ShowMessage = Re_ShowMessage;
     ptr_R_ReadConsole =  Re_ReadConsole;
-    ptr_R_WriteConsole = Re_WriteConsole;
+    ptr_R_WriteConsole = NULL;
+    ptr_R_WriteConsoleEx = Re_WriteConsoleEx;
     ptr_R_ResetConsole = Re_ResetConsole;
     ptr_do_flushconsole = Re_FlushConsole;
     ptr_R_ClearerrConsole = Re_ClearerrConsole;

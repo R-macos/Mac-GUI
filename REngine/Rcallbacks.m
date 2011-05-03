@@ -181,7 +181,7 @@ void Re_RBusy(int which)
 }
 
 
-void Re_WriteConsole(char *buf, int len)
+void Re_WriteConsoleEx(char *buf, int len, int otype)
 {
 	NSString *s = nil;
 	if (buf[len]) { /* well, this is an ultima ratio, we are assuming null-terminated string, but one never knows ... */
@@ -197,9 +197,14 @@ void Re_WriteConsole(char *buf, int len)
 		SLog(@"Rcallbacks:Re_WriteConsole: string parsed as \"%@\"", s);
 	}
     if (s) {
-		[[REngine mainHandler] handleWriteConsole: s];
+		[[REngine mainHandler] handleWriteConsole: s withType: otype];
 		[s release];
 	}
+}
+
+void Re_WriteConsole(char *buf, int len)
+{
+    Re_WriteConsoleEx(buf, len, 0);
 }
 
 /* Indicate that input is coming from the console */

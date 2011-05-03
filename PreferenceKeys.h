@@ -111,4 +111,4 @@
 #define iStderrColor     4
 #define iStdoutColor     5
 #define iRootColor       6
-
+#define iErrorColor      iStderrColor

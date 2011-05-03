@@ -148,7 +148,8 @@
 	char *writeBuffer;
 	char *writeBufferPos;
 	int  writeBufferLen;
-	
+	int writeBufferType;
+    
 	NSCharacterSet *specialCharacters;
 	
 	NSString *lastShownWD; // holds current directory after it has been shown (in non-abreviated form)
