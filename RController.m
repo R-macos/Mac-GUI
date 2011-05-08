@@ -251,15 +251,27 @@ static RController* sharedRController;
 	return textFont;
 }
 
-/* before NSApplication is ready, we need to catch any odoc events that arrive, otherwise we lose them */
-- (void)handleAppleEvent:(NSAppleEventDescriptor *)event 
-		  withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+/**
+ * AppleScript handler for kAEOpenDocuments
+ * before NSApplication is ready, we need to catch any odoc events that arrive, otherwise we loose them
+ */ 
+- (void)handleAppleEventAEOpenDocuments:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 {
-	int docs = [event numberOfItems];
-	int i = 1;
-	SLog(@"RController.handleAppleEvent:%@ withReplyEvent:%@", event, replyEvent);
-	while (i <= docs) {		
-		NSAppleEventDescriptor *d = [event descriptorAtIndex:i];
+
+	SLog(@"RController.handleAppleEvent is called");
+
+	NSAppleEventDescriptor *openEvents = [event descriptorAtIndex:1];
+
+	if(!openEvents) {
+		NSLog(@" - no open events found");
+		return;
+	}
+
+	int docs = [openEvents numberOfItems];
+	int i = 0;
+	SLog(@" - %d files to open", docs);
+	while (i <= docs) {
+		NSAppleEventDescriptor *d = [openEvents descriptorAtIndex:i];
 		if (d) {
 			CFURLRef url;
 			d = [d coerceToDescriptorType:typeFSRef];
@@ -267,10 +279,13 @@ static RController* sharedRController;
 			if (url) {
 				NSString *pathName = (NSString *)CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
 				[pathName autorelease];
-				if (!appLaunched)
-					[pendingDocsToOpen addObject: pathName];
-				else
+				if (!appLaunched) {
+					[pendingDocsToOpen addObject:pathName];
+					SLog(@"    appending %@ to open after launching", pathName);
+				} else {
+					SLog(@"    openFile %@", pathName);
 					[self application:NSApp openFile:pathName];
+				}
 				CFRelease(url);
 			}
 		}
@@ -287,7 +302,13 @@ static RController* sharedRController;
 	
 	sharedRController = self;
 	pendingDocsToOpen = [[NSMutableArray alloc] init];
-	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleAppleEvent:withReplyEvent:) forEventClass:kCoreEventClass andEventID:kAEOpenDocuments];
+
+	// Register AppleScript handler for kAEOpenDocuments eventID
+	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self 
+													   andSelector:@selector(handleAppleEventAEOpenDocuments:withReplyEvent:) 
+													 forEventClass:kCoreEventClass 
+														andEventID:kAEOpenDocuments];
+
 	[consoleTextView setConsoleMode: YES];
 	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
 	NSTextStorage *origTS = [[consoleTextView textStorage] retain];
