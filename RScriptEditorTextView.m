@@ -328,6 +328,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		argsHints = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		if(!argsHints) {
 			[[self delegate] setStatusLineText:@""];
+		} else {
+			[self currentFunctionHint];
 		}
 
 	} else if ([keyPath isEqualToString:highlightCurrentLine]) {

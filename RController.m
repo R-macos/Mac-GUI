@@ -2127,24 +2127,21 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
 
-	if(argsHints) {
+	// show functions hints in RConsole due to current caret position or selection
 
-		// show functions hints due to current caret position or selection
+	SLog(@"RController: textViewDidChangeSelection");
+	RTextView *tv = [aNotification object];
 
-		SLog(@"RController: textViewDidChangeSelection");
-		RTextView *tv = [aNotification object];
+	// Cancel pending currentFunctionHint calls
+	[NSObject cancelPreviousPerformRequestsWithTarget:tv 
+							selector:@selector(currentFunctionHint) 
+							object:nil];
 
-		// Cancel pending currentFunctionHint calls
-		[NSObject cancelPreviousPerformRequestsWithTarget:tv 
-								selector:@selector(currentFunctionHint) 
-								object:nil];
-
-		if([tv selectedRange].location >= committedLength && !busyRFlag && [[[tv textStorage] string] lineRangeForRange:[tv selectedRange]].length > 2) {
-			SLog(@"RController: textViewDidChangeSelection called textView's currentFunctionHint");
-			[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
-		}
-	
+	if([tv selectedRange].location >= committedLength && !busyRFlag && [[[tv textStorage] string] lineRangeForRange:[tv selectedRange]].length > 2) {
+		SLog(@"RController: textViewDidChangeSelection called textView's currentFunctionHint");
+		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
 	}
+
 }
 
 - (BOOL)isREditMode
