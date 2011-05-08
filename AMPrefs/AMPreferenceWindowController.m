@@ -266,6 +266,7 @@
 		}
 		[self setActivePane:nil];
 	}
+	[[NSColorPanel sharedColorPanel] close];
 	return result;
 }
 
