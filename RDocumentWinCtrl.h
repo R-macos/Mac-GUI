@@ -137,4 +137,6 @@ extern NSColor *shColorIdentifier;
 
 - (void) helpSearchTypeChanged;
 
+- (void) RDocumentDidResize: (NSNotification *)notification;
+
 @end

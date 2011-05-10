@@ -594,7 +594,7 @@ static RController* sharedRController;
 		   selector:@selector(RConsoleDidResize:)
 			   name:NSWindowDidResizeNotification
 			 object: RConsoleWindow];
-	
+
 	timer = [NSTimer scheduledTimerWithTimeInterval:0.05
 											 target:self
 										   selector:@selector(otherEventLoops:)
@@ -3125,6 +3125,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 /* This is needed to force the NSDocument to know when edited windows are dirty */
 - (void) RConsoleDidResize: (NSNotification *)notification{
+	[self setStatusLineText:[self statusLineText]];
 	[self setOptionWidth:NO];
 }
 
@@ -3455,9 +3456,30 @@ This method calls the showHelpFor method of the Help Manager which opens
 	return RConsoleWindow;
 }
 
-- (void) setStatusLineText: (NSString*) text {
-	SLog(@"RController.setStatusLine: \"%@\"", text);
-	[statusLine setStringValue:text?text:@""];
+- (void)setStatusLineText:(NSString*)text
+{
+
+	SLog(@"RController.setStatusLine: \"%@\"", [text description]);
+
+	if(text == nil || ![text length]) {
+		[statusLine setStringValue:@""];
+		[statusLine setToolTip:@""];
+		return;
+	}
+
+	// Adjust status line to show a single line in the middle of the status bar
+	// otherwise to come up with at least two visible lines
+	float w = NSSizeToCGSize([text sizeWithAttributes:[NSDictionary dictionaryWithObject:[statusLine font] forKey:NSFontAttributeName]]).width + 2.0f;
+	NSSize p = [statusLine frame].size;
+	p.height = (w > p.width) ? 22 : 17;
+	[statusLine setFrameSize:p];
+	[statusLine setNeedsDisplay:YES];
+	// Run NSDefaultRunLoopMode to allow to update status line
+	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
+							 beforeDate:[NSDate distantPast]];
+	[statusLine setToolTip:text];
+	[statusLine setStringValue:text];
+
 }
 
 - (NSString*) statusLineText {

@@ -194,6 +194,12 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 							     name:@"HelpSearchTypeChanged" 
 							   object:nil];
 
+		[[NSNotificationCenter defaultCenter] 
+			addObserver:self
+			   selector:@selector(RDocumentDidResize:)
+				   name:NSWindowDidResizeNotification
+				 object:nil];
+
 	}
 	return self;
 }
@@ -239,6 +245,11 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 }
 
+- (void) RDocumentDidResize: (NSNotification *)notification
+{
+	[self setStatusLineText:[self statusLineText]];
+}
+
 - (NSView*) saveOpenAccView
 {
 	return saveOpenAccView;
@@ -251,7 +262,28 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (void) setStatusLineText: (NSString*) text
 {
-	[statusLine setStringValue:text?text:@""];
+
+	SLog(@"RDocumentWinCtrl.setStatusLine: \"%@\"", [text description]);
+
+	if(text == nil || ![text length]) {
+		[statusLine setStringValue:@""];
+		[statusLine setToolTip:@""];
+		return;
+	}
+
+	// Adjust status line to show a single line in the middle of the status bar
+	// otherwise to come up with at least two visible lines
+	float w = NSSizeToCGSize([text sizeWithAttributes:[NSDictionary dictionaryWithObject:[statusLine font] forKey:NSFontAttributeName]]).width + 2.0f;
+	NSSize p = [statusLine frame].size;
+	p.height = (w > p.width) ? 22 : 17;
+	[statusLine setFrameSize:p];
+	[statusLine setNeedsDisplay:YES];
+	// Run NSDefaultRunLoopMode to allow to update status line
+	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
+							 beforeDate:[NSDate distantPast]];
+	[statusLine setToolTip:text];
+	[statusLine setStringValue:text];
+
 }
 
 - (BOOL) hintForFunction: (NSString*) fn
