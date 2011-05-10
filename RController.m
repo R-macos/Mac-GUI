@@ -218,6 +218,8 @@ static RController* sharedRController;
 						     name:@"HelpSearchTypeChanged" 
 						   object:nil];
 
+	lastFunctionForHint = [[NSString stringWithString:@""] retain];
+
 	return self;
 }
 
@@ -1044,7 +1046,9 @@ extern BOOL isTimeToFinish;
 }
 
 
-- (void) dealloc {
+- (void) dealloc
+{
+	if(lastFunctionForHint) [lastFunctionForHint release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
 	if(filteredHistory) [filteredHistory release], filteredHistory = nil;
@@ -2149,8 +2153,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return isREditMode;
 }
 
-- (BOOL) hintForFunction: (NSString*) fn
+- (BOOL)hintForFunction: (NSString*) fn
 {
+
+	if([fn isEqualToString:lastFunctionForHint]) return NO;
+	if(lastFunctionForHint) [lastFunctionForHint release];
+	lastFunctionForHint = [[NSString stringWithString:fn] retain];
+
 	BOOL success = NO;
 	if (insideR>0) {
 		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
@@ -2158,7 +2167,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	}
 	if (![[REngine mainEngine] beginProtected]) {
 		[self setStatusLineText:NLS(@"(arguments lookup is disabled while R is busy)")];
-		return NO;		
+		return NO;
 	}
 	RSEXP *x = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"try(gsub('\\\\s+',' ',paste(capture.output(print(args(%@))),collapse='')),silent=TRUE)", fn]];
 	if (x) {
@@ -3461,11 +3470,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 	SLog(@"RController.setStatusLine: \"%@\"", [text description]);
 
-	if(text == nil || ![text length]) {
-		[statusLine setStringValue:@""];
-		[statusLine setToolTip:@""];
-		return;
-	}
+	if(text == nil) text = @"";
 
 	// Adjust status line to show a single line in the middle of the status bar
 	// otherwise to come up with at least two visible lines
@@ -3474,9 +3479,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 	p.height = (w > p.width) ? 22 : 17;
 	[statusLine setFrameSize:p];
 	[statusLine setNeedsDisplay:YES];
-	// Run NSDefaultRunLoopMode to allow to update status line
-	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
-							 beforeDate:[NSDate distantPast]];
 	[statusLine setToolTip:text];
 	[statusLine setStringValue:text];
 

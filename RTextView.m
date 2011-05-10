@@ -554,7 +554,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	NSString *helpString = [self functionNameForCurrentScope];
 
-	if(helpString && ![helpString isMatchedByRegex:@"(?s)[^\\w\\d_\\.]"] && [[self delegate] respondsToSelector:@selector(hintForFunction:)]) {
+	if(helpString && ![helpString isMatchedByRegex:@"(?s)[\\s\\[\\]\\(\\)\\{\\};\\?!]"] && [[self delegate] respondsToSelector:@selector(hintForFunction:)]) {
 		SLog(@"RTextView: currentFunctionHint for '%@'", helpString);
 		[(RController*)[self delegate] hintForFunction:helpString];
 	}

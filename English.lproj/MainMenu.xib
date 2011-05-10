@@ -21,8 +21,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2"/>
 			<integer value="717"/>
-			<integer value="727"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -59,7 +59,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="186451207">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -362,7 +362,7 @@
 						<object class="NSTextField" id="879693717">
 							<reference key="NSNextResponder" ref="186451207"/>
 							<int key="NSvFlags">290</int>
-							<string key="NSFrame">{{12, 0}, {530, 21}}</string>
+							<string key="NSFrame">{{12, 0}, {530, 17}}</string>
 							<reference key="NSSuperview" ref="186451207"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="410931072">
@@ -380,6 +380,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{550, 458}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -4340,7 +4341,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{344, 464}</string>
 				<object class="NSView" key="NSWindowView" id="899669578">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4577,7 +4578,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{344, 464}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{344, 486}</string>
@@ -11611,9 +11611,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
-					<string>{{43, 0}, {550, 458}}</string>
+					<string>{{163, 217}, {550, 458}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{43, 0}, {550, 458}}</string>
+					<string>{{163, 217}, {550, 458}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
@@ -11922,9 +11922,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{518, -122}, {508, 579}}</string>
+					<string>{{289, 0}, {508, 579}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{518, -122}, {508, 579}}</string>
+					<string>{{289, 0}, {508, 579}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{213, 107}</string>
@@ -11957,9 +11957,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{-200, 232}, {344, 464}}</string>
+					<string>{{41, 232}, {344, 464}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{-200, 232}, {344, 464}}</string>
+					<string>{{41, 232}, {344, 464}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{344, 464}</string>

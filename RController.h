@@ -157,6 +157,7 @@
 	NSMutableArray *pendingDocsToOpen; // paths of documents to open once initialized
 	
 	NSString *home;
+	NSString *lastFunctionForHint;
 }
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
