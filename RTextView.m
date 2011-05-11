@@ -36,6 +36,7 @@
 #import "RegexKitLite.h"
 #import "RController.h"
 #import "NSTextView_RAdditions.h"
+#import "RDocumentWinCtrl.h"
 
 // linked character attributes
 #define kTALinked    @"link"
@@ -145,6 +146,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	unsigned int modFlags = [theEvent modifierFlags];
 	long allFlags = (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask);
 
+	BOOL hilite = NO;
+
 	SLog(@"RTextView: keyDown: %@ *** \"%@\" %d", theEvent, rc, modFlags);
 
 	if([rc length] && [undoBreakTokensSet characterIsMember:[rc characterAtIndex:0]]) [self breakUndoCoalescing];
@@ -176,6 +179,18 @@ BOOL RTextView_autoCloseBrackets = YES;
 		SLog(@" - send showHelpForCurrentFunction to self");
 		[self showHelpForCurrentFunction];
 		return;
+	}
+	// Detect if matching bracket should be highlighted
+	if(cc && [cc length]==1 && [[[NSUserDefaults standardUserDefaults] objectForKey:showBraceHighlightingKey] isEqualToString:@"YES"]) {
+		switch([cc characterAtIndex:0]) {
+			case '(':
+			case '[':
+			case '{':
+			case ')':
+			case ']':
+			case '}':
+			hilite = YES;
+		}
 	}
 	if (cc && [cc length]==1 && [[[NSUserDefaults standardUserDefaults] objectForKey:kAutoCloseBrackets] isEqualToString:@"YES"]) {
 		unichar ck = [cc characterAtIndex:0];
@@ -220,6 +235,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 				if( ([self isCursorAdjacentToAlphanumCharWithInsertionOf:ck] && ![self isNextCharMarkedBy:kTALinked withValue:kTAVal] && ![self selectedRange].length) ){ 
 					SLog(@"RTextView: suppressed auto-pairing");
 					[super keyDown:theEvent];
+					if(hilite && [[self delegate] respondsToSelector:@selector(highlightBracesWithShift:andWarn:)])
+						[[self delegate] highlightBracesWithShift:-1 andWarn:YES];
 					return;
 				}
 
@@ -277,6 +294,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 	// 	}
 	// }
 	[super keyDown:theEvent];
+
+	if(hilite && [[self delegate] respondsToSelector:@selector(highlightBracesWithShift:andWarn:)])
+		[[self delegate] highlightBracesWithShift:-1 andWarn:YES];
 }
 
 - (void)deleteBackward:(id)sender
