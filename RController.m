@@ -1346,7 +1346,11 @@ extern BOOL isTimeToFinish;
 	if (addtohist) {
 //		Figure out how to get hold of ParseStatus here!
 		[hist commit:currentConsoleInput];
-		[historyView reloadData];
+		// Update filtered list if active
+		if([[historySearchField stringValue] length])
+			[self searchInHistory:nil];
+		else
+			[historyView reloadData];
 	}
 	
 	{
