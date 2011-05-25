@@ -2085,10 +2085,17 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
         retval = YES;
     }
 	
-	if (@selector(moveWordLeft:) == commandSelector || @selector(moveLeft:) == commandSelector ||
-		@selector(moveWordLeftAndModifySelection:) == commandSelector || @selector(moveLeftAndModifySelection:) == commandSelector) {
-        NSRange sr=[textView selectedRange];
-		if (sr.location==committedLength) return YES;
+	if (@selector(moveWordLeft:) == commandSelector || @selector(moveLeft:) == commandSelector) {
+		NSRange sr = [textView selectedRange];
+		if (sr.location == committedLength) {
+			// if there is a selection, we have to remove it
+			if (sr.length) [textView setSelectedRange:NSMakeRange(sr.location, 0)];
+			return YES;
+		}
+	}
+	if (@selector(moveWordLeftAndModifySelection:) == commandSelector || @selector(moveLeftAndModifySelection:) == commandSelector) {
+		NSRange sr = [textView selectedRange];
+		if (sr.location == committedLength) return YES;
 	}
 	
 	// ---- code/file completion ----

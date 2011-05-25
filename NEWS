@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-05-25
+*	fix: using moveLeft: or moveWordLeft: in the console
+	while there is a non-empty selection starting at the
+	beginning of the command line now correctly cancels
+	the selection.
+
 Last-update: 2011-05-03
 *	errors in the console are shown in a separate color
 
