@@ -1,11 +1,11 @@
 ## R GUI supplementary code and tools (loaded since R 2.9.0)
 
 ## target environment for all this
-e<-attach(NULL,name="tools:RGUI")
+.e <- attach(NULL,name="tools:RGUI")
 
 rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
 
-add.fn <- function(name, FN) { assign(name, FN, e); environment(e[[name]]) <- e }
+add.fn <- function(name, FN) { assign(name, FN, .e); environment(.e[[name]]) <- .e }
 
 ## quartz.save
 add.fn("quartz.save", function(file, type='png', device=dev.cur(), dpi=100, ...) {
