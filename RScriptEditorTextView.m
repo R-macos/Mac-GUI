@@ -68,7 +68,7 @@ YY_BUFFER_STATE yy_scan_string (const char *);
 
 #pragma mark -
 
-#define R_SYNTAX_HILITE_BIAS 2000
+#define R_SYNTAX_HILITE_BIAS 3000
 #define R_MAX_TEXT_SIZE_FOR_SYNTAX_HIGHLIGHTING 20000000
 
 
@@ -121,7 +121,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[[self layoutManager] setAllowsNonContiguousLayout:YES];
 #endif
 	
-
 	// Set defaults for general usage
 	braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
 	lineNumberingEnabled = [Preferences flagForKey:showLineNumbersKey withDefault:NO];
@@ -154,6 +153,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	if(![Preferences flagForKey:enableLineWrappingKey withDefault: YES])
 		[scrollView setHasHorizontalScroller:YES];
 
+	if(!lineWrappingEnabled)
+		[self updateLineWrappingMode];
+
 	// Re-define tab stops for a better editing
 	[self setTabStops];
 
@@ -161,7 +163,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[[self layoutManager] setBackgroundLayoutEnabled:NO];
 
 	// add NSViewBoundsDidChangeNotification to scrollView
-	[scrollView setPostsBoundsChangedNotifications:YES];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChangeNotification:) name:NSViewBoundsDidChangeNotification object:[scrollView contentView]];
 
 	NSColor *c = [Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
@@ -226,13 +227,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:RScriptEditorDefaultFont options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:HighlightIntervalKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:highlightCurrentLine options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:showLineNumbersKey options:NSKeyValueObservingOptionNew context:NULL];
 
 	theTextStorage = [self textStorage];
 }
 
 - (void)dealloc {
 	SLog(@"RScriptEditorTextView: dealloc <%@>", self);
-
 
 	if(editorToolbar) [editorToolbar release];
 
@@ -298,7 +299,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		if(shColorCursor) [shColorCursor release];
 		shColorCursor = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
 		[self setInsertionPointColor:shColorCursor];
-		[self setNeedsDisplay:YES];
+		[self setNeedsDisplayInRect:[self bounds]];
 	} else if ([keyPath isEqualToString:identifierSyntaxColorKey]) {
 		if(shColorIdentifier) [shColorIdentifier release];
 		shColorIdentifier = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
@@ -307,11 +308,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:editorBackgroundColorKey]) {
 		if(shColorBackground) [shColorBackground release];
 		shColorBackground = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		[self setNeedsDisplay:YES];
+		[self setNeedsDisplayInRect:[self bounds]];
 	} else if ([keyPath isEqualToString:editorCurrentLineBackgroundColorKey]) {
 		if(shColorCurrentLine) [shColorCurrentLine release];
 		shColorCurrentLine = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		[self setNeedsDisplay:YES];
+		[self setNeedsDisplayInRect:[self bounds]];
 
 	} else if ([keyPath isEqualToString:showSyntaxColoringKey]) {
 		syntaxHighlightingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
@@ -324,6 +325,26 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:enableLineWrappingKey]) {
 		[self updateLineWrappingMode];
 
+	} else if ([keyPath isEqualToString:showLineNumbersKey]) {
+		lineNumberingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+		//TODO implement
+		if(lineNumberingEnabled) {
+			if(!theRulerView) {
+				theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
+				[scrollView setVerticalRulerView:theRulerView];
+			}
+			[scrollView setHasHorizontalRuler:NO];
+			[scrollView setHasVerticalRuler:YES];
+			[scrollView setRulersVisible:YES];
+		} else {
+			[theRulerView release];
+			theRulerView = nil;
+			[scrollView setHasHorizontalRuler:NO];
+			[scrollView setHasVerticalRuler:NO];
+			[scrollView setRulersVisible:NO];
+		}
+		[self setNeedsDisplay:YES];
+
 	} else if ([keyPath isEqualToString:prefShowArgsHints]) {
 		argsHints = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		if(!argsHints) {
@@ -333,11 +354,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		}
 
 	} else if ([keyPath isEqualToString:highlightCurrentLine]) {
-		[self setNeedsDisplay:YES];
+		[self setNeedsDisplayInRect:[self bounds]];
 
 	} else if ([keyPath isEqualToString:RScriptEditorDefaultFont] && ![[[[self window] windowController] document] isRTF] && ![self selectedRange].length) {
 			[self setFont:[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]]];
-			[self setNeedsDisplay:YES];
+			[self setNeedsDisplayInRect:[self bounds]];
 	
 		} else if ([keyPath isEqualToString:HighlightIntervalKey]) {
 		braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
@@ -431,7 +452,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 								selector:@selector(breakUndoCoalescing) 
 								object:nil];
 
-		// Cancel calling doSyntaxHighlighting
+		// Cancel calling functionRescan
 		[NSObject cancelPreviousPerformRequestsWithTarget:[self delegate] 
 								selector:@selector(functionRescan) 
 								object:nil];
@@ -449,6 +470,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 }
 
 #pragma mark -
+
+- (BOOL)lineNumberingEnabled
+{
+	return lineNumberingEnabled;
+}
 
 - (void)setDeleteBackward:(BOOL)delBack
 {
@@ -520,18 +546,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 - (void)doSyntaxHighlighting
 {
 
-	if (isSyntaxHighlighting || !syntaxHighlightingEnabled || [[self delegate] plain] || [theTextStorage length] > 40000000) return;
+	if (!syntaxHighlightingEnabled || [[self delegate] plain]) return;
+
+	isSyntaxHighlighting = YES;
 
 	NSString *selfstr    = [theTextStorage string];
 	NSInteger strlength  = (NSInteger)[selfstr length];
-
-	// Avoid syntax highlighting of a big change but re-trigger it for highlighting it partly
-	if([theTextStorage editedRange].length > (int)(R_SYNTAX_HILITE_BIAS * 4)) {
-		[self insertText:@""];
-		// remove inserting action from undo manager is keep edit status
-		[[self undoManager] undo];
-		return;
-	}
 
 	// == Do highlighting partly (max R_SYNTAX_HILITE_BIAS*2 around visibleRange
 	// by considering entire lines).
@@ -540,7 +560,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	NSRect visibleRect = [[[self enclosingScrollView] contentView] documentVisibleRect];
 	NSRange visibleRange = [[self layoutManager] glyphRangeForBoundingRectWithoutAdditionalLayout:visibleRect inTextContainer:[self textContainer]];
 
-	if(!visibleRange.length) return;
+	if(!visibleRange.length) {
+		isSyntaxHighlighting = NO;
+		return;
+	}
 
 	NSInteger start = visibleRange.location - R_SYNTAX_HILITE_BIAS;
 	if (start > 0)
@@ -570,9 +593,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// only to be sure that nothing went wrongly
 	textRange = NSIntersectionRange(textRange, NSMakeRange(0, [theTextStorage length])); 
 
-	if (!textRange.length)
+	if (!textRange.length) {
+		isSyntaxHighlighting = NO;
 		return;
-	isSyntaxHighlighting = YES;
+	}
+
 	[theTextStorage beginEditing];
 
 	NSColor *tokenColor = nil;
@@ -661,6 +686,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[theTextStorage endEditing];
 	isSyntaxHighlighting = NO;
 
+	[self setNeedsDisplay:YES];
+
 }
 
 -(void)resetHighlights
@@ -715,14 +742,15 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 {
 
 	if(startListeningToBoundChanges) {
+
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
 									selector:@selector(doSyntaxHighlighting) 
 									object:nil];
 
-		if(![theTextStorage changeInLength] && ![self selectedRange].length) {
+		if(![theTextStorage changeInLength]) {
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
-
 		}
+
 	}
 
 }

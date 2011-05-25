@@ -110,17 +110,17 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 
 - (void)layoutTextView
 {
-	[[textView layoutManager] ensureLayoutForCharacterRange:NSMakeRange(0, [[textView string] length])];
+	[[textView layoutManager] ensureLayoutForCharacterRange:NSMakeRange([[textView string] length],0)];
 }
 
 - (void) replaceContentsWithString: (NSString*) strContents
 {
 	[textView setString:strContents];
-
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[textView setSelectedRange:NSMakeRange(0,0)];
-	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.3];
+	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.5];
 #endif
+	[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
 
 }
 
@@ -765,11 +765,13 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	RTextView *tv = [aNotification object];
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+	// TODO set it to YES for fast editing of very large docs
+	// but there're issues for syntax hiliting and scrollview stability
 	[[tv layoutManager] setAllowsNonContiguousLayout:NO];
 #endif
 
 	if([[NSUserDefaults standardUserDefaults] boolForKey:highlightCurrentLine])
-		[tv setNeedsDisplay:YES];
+		[tv setNeedsDisplayInRect:[tv bounds] avoidAdditionalLayout:YES];
 
 	if(argsHints && ![[self document] hasREditFlag] && ![self plain]) {
 

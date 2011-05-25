@@ -39,6 +39,8 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 
 	// Array of character indices for the beginning of each line
 	NSMutableArray  *lineIndices;
+	NSMutableArray  *tempLineIndices;
+	NSUInteger      currentNumberOfLines;
 
 	NSFont          *font;
 	NSColor         *textColor;
@@ -66,9 +68,11 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 	IMP numberWithUnsignedIntegerIMP;
 	SEL addObjectSel;
 	IMP addObjectIMP;
+	SEL rangeOfLineSel;
 
 	NSLayoutManager  *layoutManager;
 	NSTextContainer  *container;
+	NSTextView       *clientView;
 
 }
 

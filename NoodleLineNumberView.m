@@ -92,7 +92,9 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 		addObjectSel = @selector(addObject:);
 		numberWithUnsignedIntegerSel = @selector(numberWithUnsignedInteger:);
 		numberWithUnsignedIntegerIMP = [NSNumber methodForSelector:numberWithUnsignedIntegerSel];
+		rangeOfLineSel = @selector(getLineStart:end:contentsEnd:forRange:);
 
+		currentNumberOfLines = 1;
 
 	}
 
@@ -178,8 +180,9 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 	{
 		layoutManager  = [(NSTextView *)aView layoutManager];
 		container      = [(NSTextView *)aView textContainer];
+		clientView     = (NSTextView*)[self clientView];
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:NSTextStorageDidProcessEditingNotification object:[(NSTextView *)aView textStorage]];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:NSTextStorageDidProcessEditingNotification object:[clientView textStorage]];
 		[self invalidateLineIndices];
 	}
 
@@ -190,16 +193,16 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 - (void)textDidChange:(NSNotification *)notification
 {
 
-	if(![self clientView]) return;
+	if(!clientView) return;
 
-	NSUInteger editMask = [[(NSTextView *)[self clientView] textStorage] editedMask];
+	if(![clientView lineNumberingEnabled]) return;
 
 	// Invalidate the line indices only if text view was changed in length but not if the font was changed.
 	// They will be recalculated and recached on demand.
-	if(editMask != 1)
+	if([[clientView textStorage] editedMask] != 1) {
 		[self invalidateLineIndices];
-
-	[self setNeedsDisplay:YES];
+		[self setNeedsDisplay:YES];
+	}
 
 }
 
@@ -210,43 +213,38 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 	NSRect          visibleRect;
 	NSRange         nullRange;
 	NSArray         *lines;
-	id              view;
 
-	view = [self clientView];
 	visibleRect = [[[self scrollView] contentView] bounds];
 
 	lines = [self lineIndices];
 
 	location += NSMinY(visibleRect);
 	
-	if ([view isKindOfClass:[NSTextView class]])
+	nullRange = NSMakeRange(NSNotFound, 0);
+	count = [lines count];
+
+	// Find the characters that are currently visible
+	NSRange range = [layoutManager characterRangeForGlyphRange:[layoutManager glyphRangeForBoundingRect:visibleRect inTextContainer:container] actualGlyphRange:NULL];
+
+	// Fudge the range a tad in case there is an extra new line at end.
+	// It doesn't show up in the glyphs so would not be accounted for.
+	range.length++;
+
+	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
 
-		nullRange = NSMakeRange(NSNotFound, 0);
-		count = [lines count];
+		rects = [layoutManager rectArrayForCharacterRange:NSMakeRange([NSArrayObjectAtIndex(lines, line) unsignedIntegerValue], 0)
+							 withinSelectedCharacterRange:nullRange
+										  inTextContainer:container
+												rectCount:&rectCount];
 
-		// Find the characters that are currently visible
-		NSRange range = [layoutManager characterRangeForGlyphRange:[layoutManager glyphRangeForBoundingRect:visibleRect inTextContainer:container] actualGlyphRange:NULL];
+		if(!rectCount) return NSNotFound;
 
-		// Fudge the range a tad in case there is an extra new line at end.
-		// It doesn't show up in the glyphs so would not be accounted for.
-		range.length++;
+		if ((location >= NSMinY(rects[0])) && (location < NSMaxY(rects[0])))
+			return line + 1;
 
-		for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
-		{
-
-			rects = [layoutManager rectArrayForCharacterRange:NSMakeRange([NSArrayObjectAtIndex(lines, line) unsignedIntegerValue], 0)
-								 withinSelectedCharacterRange:nullRange
-											  inTextContainer:container
-													rectCount:&rectCount];
-
-			if(!rectCount) return NSNotFound;
-
-			if ((location >= NSMinY(rects[0])) && (location < NSMaxY(rects[0])))
-				return line + 1;
-
-		}
 	}
+
 	return NSNotFound;
 }
 
@@ -280,10 +278,8 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 
 - (void)drawHashMarksAndLabelsInRect:(NSRect)aRect
 {
-	id     view;
-	NSRect bounds;
 
-	bounds = [self bounds];
+	NSRect bounds = [self bounds];
 
 	// if (backgroundColor != nil)
 	// {
@@ -294,77 +290,74 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 	// 	[NSBezierPath strokeLineFromPoint:NSMakePoint(NSMaxX(bounds) - 0.5, NSMinY(bounds)) toPoint:NSMakePoint(NSMaxX(bounds) - 0.5, NSMaxY(bounds))];
 	// }
 
-	view = [self clientView];
+	NSRect           visibleRect;
+	NSRange          range, nullRange;
+	NSString         *labelText;
+	NSUInteger       rectCount, index, line, count;
+	NSRectArray      rects;
+	CGFloat          yinset;
+	NSSize           stringSize;
+	NSArray          *lines;
 
-	if ([view isKindOfClass:[NSTextView class]])
+	nullRange      = NSMakeRange(NSNotFound, 0);
+
+	yinset         = [clientView textContainerInset].height;
+	visibleRect    = [[[self scrollView] contentView] bounds];
+
+	lines          = [self lineIndices];
+	count          = [lines count];
+
+	if(!count) return;
+
+	// Find the characters that are currently visible
+	range = [layoutManager characterRangeForGlyphRange:[layoutManager glyphRangeForBoundingRect:visibleRect inTextContainer:container] actualGlyphRange:NULL];
+
+	// Fudge the range a tad in case there is an extra new line at end.
+	// It doesn't show up in the glyphs so would not be accounted for.
+	range.length++;
+
+	CGFloat boundsRULERMargin2 = NSWidth(bounds) - RULER_MARGIN2;
+	CGFloat boundsWidthRULER   = NSWidth(bounds) - RULER_MARGIN;
+	CGFloat yinsetMinY         = yinset - NSMinY(visibleRect);
+	CGFloat rectHeight;
+
+
+	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
-		NSRect           visibleRect;
-		NSRange          range, nullRange;
-		NSString         *labelText;
-		NSUInteger       rectCount, index, line, count;
-		NSRectArray      rects;
-		CGFloat          yinset;
-		NSSize           stringSize;
-		NSArray          *lines;
+		index = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue];
 
-		nullRange      = NSMakeRange(NSNotFound, 0);
-
-		yinset         = [view textContainerInset].height;
-		visibleRect    = [[[self scrollView] contentView] bounds];
-
-		lines          = [self lineIndices];
-
-		// Find the characters that are currently visible
-		range = [layoutManager characterRangeForGlyphRange:[layoutManager glyphRangeForBoundingRect:visibleRect inTextContainer:container] actualGlyphRange:NULL];
-
-		// Fudge the range a tad in case there is an extra new line at end.
-		// It doesn't show up in the glyphs so would not be accounted for.
-		range.length++;
-
-		count = [lines count];
-
-		CGFloat boundsRULERMargin2 = NSWidth(bounds) - RULER_MARGIN2;
-		CGFloat boundsWidthRULER   = NSWidth(bounds) - RULER_MARGIN;
-		CGFloat yinsetMinY         = yinset - NSMinY(visibleRect);
-		CGFloat rectHeight;
-
-
-		for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
+		if (NSLocationInRange(index, range))
 		{
-			index = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue];
+			rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(index, 0)
+				withinSelectedCharacterRange:nullRange
+				inTextContainer:container
+				rectCount:&rectCount];
 
-			if (NSLocationInRange(index, range))
+			if (rectCount > 0)
 			{
-				rects = [layoutManager rectArrayForCharacterRange:NSMakeRange(index, 0)
-					withinSelectedCharacterRange:nullRange
-					inTextContainer:container
-					rectCount:&rectCount];
+				// Note that the ruler view is only as tall as the visible
+				// portion. Need to compensate for the clipview's coordinates.
 
-				if (rectCount > 0)
-				{
-					// Note that the ruler view is only as tall as the visible
-					// portion. Need to compensate for the clipview's coordinates.
+				// Line numbers are internally stored starting at 0
+				labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
 
-					// Line numbers are internally stored starting at 0
-					labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
+				stringSize = [labelText sizeWithAttributes:textAttributes];
 
-					stringSize = [labelText sizeWithAttributes:textAttributes];
-
-					rectHeight = NSHeight(rects[0]);
-					// Draw string flush right, centered vertically within the line
-					[labelText drawInRect:
-					NSMakeRect(boundsWidthRULER - stringSize.width,
-						yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - stringSize.height) >> 1),
-						boundsRULERMargin2, rectHeight)
-						withAttributes:textAttributes];
-				}
+				rectHeight = NSHeight(rects[0]);
+				// Draw string flush right, centered vertically within the line
+				[labelText drawInRect:
+				NSMakeRect(boundsWidthRULER - stringSize.width,
+					yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - stringSize.height) >> 1),
+					boundsRULERMargin2, rectHeight)
+					withAttributes:textAttributes];
 			}
-
-			if (index > NSMaxRange(range))
-				break;
-
 		}
+
+		if (index > NSMaxRange(range))
+			break;
+
 	}
+
 }
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -495,87 +488,80 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 
 - (void)calculateLines
 {
-	id view = [self clientView];
 
-	if ([view isKindOfClass:[NSTextView class]])
+	NSUInteger index, stringLength, lineEnd, contentEnd;
+	NSString   *textString;
+	CGFloat    newThickness;
+
+	textString   = [clientView string];
+	stringLength = [textString length];
+
+	// Switch off line numbering if text larger than 6MB
+	// for performance reasons.
+	// TODO improve performance maybe via threading
+	if(stringLength>3000000)
+		return;
+
+	lineIndices = [[NSMutableArray alloc] initWithCapacity:currentNumberOfLines];
+
+	index = 0;
+
+	// Cache loop methods for speed
+	IMP rangeOfLineIMP = [textString methodForSelector:rangeOfLineSel];
+	addObjectIMP = [lineIndices methodForSelector:addObjectSel];
+
+	do
+	{
+		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)([NSNumber class], numberWithUnsignedIntegerSel, index));
+		(*rangeOfLineIMP)(textString, rangeOfLineSel, NULL, &index, NULL, NSMakeRange(index, 0));
+	}
+	while (index < stringLength);
+
+	// Check if text ends with a new line.
+	(*rangeOfLineIMP)(textString, rangeOfLineSel, NULL, &lineEnd, &contentEnd, NSMakeRange([[lineIndices lastObject] intValue], 0));
+	if (contentEnd < lineEnd)
+		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)([NSNumber class], numberWithUnsignedIntegerSel, index));
+
+	NSUInteger lineCount = [lineIndices count];
+	if(lineCount < 100)
+		newThickness = maxWidthOfGlyph2;
+	else if(lineCount < 1000)
+		newThickness = maxWidthOfGlyph3;
+	else if(lineCount < 10000)
+		newThickness = maxWidthOfGlyph4;
+	else if(lineCount < 100000)
+		newThickness = maxWidthOfGlyph5;
+	else if(lineCount < 1000000)
+		newThickness = maxWidthOfGlyph6;
+	else if(lineCount < 10000000)
+		newThickness = maxWidthOfGlyph7;
+	else if(lineCount < 100000000)
+		newThickness = maxWidthOfGlyph8;
+	else
+		newThickness = 100;
+
+	currentNumberOfLines = lineCount;
+
+	if (currentRuleThickness != newThickness)
 	{
 
-		NSUInteger index, stringLength, lineEnd, contentEnd, lastLine;
-		NSString   *textString;
-		CGFloat    newThickness;
+		currentRuleThickness = newThickness;
 
-		textString   = [view string];
-		stringLength = [textString length];
+		// Not a good idea to resize the view during calculations (which can happen during
+		// display). Do a delayed perform (using NSInvocation since arg is a float).
+		NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(setRuleThickness:)]];
+		[invocation setSelector:@selector(setRuleThickness:)];
+		[invocation setTarget:self];
+		[invocation setArgument:&newThickness atIndex:2];
 
-		// Switch off line numbering if text larger than 6MB
-		// for performance reasons.
-		// TODO improve performance maybe via threading
-		if(stringLength>6000000)
-			return;
-
-		if (lineIndices) [lineIndices release], lineIndices = nil;
-		// Init lineIndices with text length / 16 + 1
-		lineIndices = [[NSMutableArray alloc] initWithCapacity:((NSUInteger)stringLength>>4)+1];
-
-		index = 0;
-
-		// Cache loop methods for speed
-		RangeOfLineIMP rangeOfLineIMP = (RangeOfLineIMP)[textString methodForSelector:lineRangeForRangeSel];
-		addObjectIMP = [lineIndices methodForSelector:addObjectSel];
-		
-		do
-		{
-			(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)([NSNumber class], numberWithUnsignedIntegerSel, index));
-			lastLine = index;
-			index = NSMaxRange((*rangeOfLineIMP)(textString, lineRangeForRangeSel, NSMakeRange(index, 0)));
-		}
-		while (index < stringLength);
-
-		// Check if text ends with a new line.
-		[textString getLineStart:NULL end:&lineEnd contentsEnd:&contentEnd forRange:NSMakeRange(lastLine, 0)];
-		if (contentEnd < lineEnd)
-			(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)([NSNumber class], numberWithUnsignedIntegerSel, index));
-
-		NSUInteger lineCount = [lineIndices count];
-		if(lineCount < 10)
-			newThickness = maxWidthOfGlyph1;
-		else if(lineCount < 100)
-			newThickness = maxWidthOfGlyph2;
-		else if(lineCount < 1000)
-			newThickness = maxWidthOfGlyph3;
-		else if(lineCount < 10000)
-			newThickness = maxWidthOfGlyph4;
-		else if(lineCount < 100000)
-			newThickness = maxWidthOfGlyph5;
-		else if(lineCount < 1000000)
-			newThickness = maxWidthOfGlyph6;
-		else if(lineCount < 10000000)
-			newThickness = maxWidthOfGlyph7;
-		else if(lineCount < 100000000)
-			newThickness = maxWidthOfGlyph8;
-		else
-			newThickness = 100;
-
-		if (fabs(currentRuleThickness - newThickness) > 1)
-		{
-
-			currentRuleThickness = newThickness;
-
-			// Not a good idea to resize the view during calculations (which can happen during
-			// display). Do a delayed perform (using NSInvocation since arg is a float).
-			NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(setRuleThickness:)]];
-			[invocation setSelector:@selector(setRuleThickness:)];
-			[invocation setTarget:self];
-			[invocation setArgument:&newThickness atIndex:2];
-
-			[invocation performSelector:@selector(invoke) withObject:nil afterDelay:0.0];
-		}
+		[invocation performSelector:@selector(invoke) withObject:nil afterDelay:0.0];
 	}
+
 }
 
 - (void)updateGutterThicknessConstants
 {
-	maxWidthOfGlyph1 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph     + RULER_MARGIN2));
+	// maxWidthOfGlyph1 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph     + RULER_MARGIN2));
 	maxWidthOfGlyph2 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph * 2 + RULER_MARGIN2));
 	maxWidthOfGlyph3 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph * 3 + RULER_MARGIN2));
 	maxWidthOfGlyph4 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph * 4 + RULER_MARGIN2));

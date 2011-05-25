@@ -21,9 +21,9 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="35"/>
 			<integer value="69"/>
-			<integer value="5"/>
+			<integer value="35"/>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -279,7 +279,7 @@
 										<string key="NSHotSpot">{4, -5}</string>
 										<int key="NSCursorType">1</int>
 									</object>
-									<int key="NScvFlags">2</int>
+									<int key="NScvFlags">6</int>
 								</object>
 								<object class="NSScroller" id="401294395">
 									<reference key="NSNextResponder" ref="1041834952"/>
@@ -1924,9 +1924,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{604, 649}, {262, 107}}</string>
+					<string>{{535, 649}, {262, 107}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{604, 649}, {262, 107}}</string>
+					<string>{{535, 649}, {262, 107}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{213, 107}</string>

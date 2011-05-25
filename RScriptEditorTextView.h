@@ -76,6 +76,7 @@
 	NSTextStorage *theTextStorage;
 
 	NSDictionary *highlightColorAttr;
+
 }
 
 - (void)setTabStops;
@@ -86,6 +87,7 @@
 - (void)resetHighlights;
 - (void)resetBackgroundColor:(id)sender;
 - (void)updateLineWrappingMode;
+- (BOOL)lineNumberingEnabled;
 
 - (void)updatePreferences;
 
