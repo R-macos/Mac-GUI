@@ -365,6 +365,10 @@ if (!item) { \
 
 	[[REngine mainEngine] executeString: [NSString stringWithFormat:@"%@ <- edit(%@)", objName, objName]];
 	[[WSBrowser getWSBController] reloadWSBData:self];
+
+	// Remain key window status
+	[[self window] makeKeyAndOrderFront:nil];
+
 }
 
 -(IBAction) remObject:(id)sender{

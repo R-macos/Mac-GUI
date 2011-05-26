@@ -1395,7 +1395,21 @@ extern BOOL isTimeToFinish;
 #endif
 		return 0;
 	}
-	NSURL *url = [NSURL fileURLWithPath:fn];
+
+	// If user called "... edit (...)" from WSBrowser or Console 
+	// append the extension .R to the temp file
+	// in order to open the to be edited file syntax highlighted
+	NSString *fn_temp = [NSString stringWithString:fn];
+	BOOL renamed = NO;
+	if([[[NSApp keyWindow] delegate] isKindOfClass:[WSBrowser class]] 
+			||[currentConsoleInput rangeOfString:@"edit"].length) {
+		NSFileManager *fm = [[NSFileManager alloc] init];
+		renamed = [fm moveItemAtPath:fn toPath:[NSString stringWithFormat:@"%@.R", fn] error:nil];
+		if(renamed)
+		    fn_temp = [NSString stringWithFormat:@"%@.R", fn];
+		[fm release];
+	}
+	NSURL *url = [NSURL fileURLWithPath:fn_temp];
 	NSError *theError;
 	isREditMode = YES;
 
@@ -1428,6 +1442,16 @@ extern BOOL isTimeToFinish;
 									 beforeDate:[NSDate distantFuture]];
 
 		}
+		// If temp file name was changed to *.R rename it to its original
+		if(renamed) {
+			NSFileManager *fm = [[NSFileManager alloc] init];
+			renamed = [fm moveItemAtPath:fn_temp toPath:fn error:nil];
+			if(!renamed) {
+				NSBeep();
+				NSLog(@"Couldn't rename temporay edit file to its original file name.");
+			}
+			[fm release];
+		}
 		[NSApp endModalSession:session];
 
 	} else {
@@ -1442,6 +1466,7 @@ extern BOOL isTimeToFinish;
 #ifdef USE_POOLS
 	[pool release];
 #endif
+
 	return(0);
 }
 
