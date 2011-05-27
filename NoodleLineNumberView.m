@@ -33,6 +33,7 @@
 // it was optimised for speed.
 
 #import "NoodleLineNumberView.h"
+#import "RScriptEditorTextView.h"
 
 #include <tgmath.h>
 
@@ -194,7 +195,7 @@
 
 	if(!clientView) return;
 
-	if(![clientView lineNumberingEnabled]) return;
+	if(![(RScriptEditorTextView*)clientView lineNumberingEnabled]) return;
 
 	// Invalidate the line indices only if text view was changed in length but not if the font was changed.
 	// They will be recalculated and recached on demand.
