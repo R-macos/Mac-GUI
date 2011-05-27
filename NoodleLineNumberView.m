@@ -45,11 +45,9 @@
 
 #pragma mark -
 
-#define DEFAULT_THICKNESS  22.0
-#define RULER_MARGIN        5.0
+#define DEFAULT_THICKNESS  22.0f
+#define RULER_MARGIN        5.0f
 #define RULER_MARGIN2       RULER_MARGIN * 2
-
-typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 
 // Cache loop methods for speed
 
@@ -95,6 +93,7 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 		rangeOfLineSel = @selector(getLineStart:end:contentsEnd:forRange:);
 
 		currentNumberOfLines = 1;
+		numberClass = [NSNumber class];
 
 	}
 
@@ -512,7 +511,7 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 
 	do
 	{
-		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)([NSNumber class], numberWithUnsignedIntegerSel, index));
+		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)(numberClass, numberWithUnsignedIntegerSel, index));
 		(*rangeOfLineIMP)(textString, rangeOfLineSel, NULL, &index, NULL, NSMakeRange(index, 0));
 	}
 	while (index < stringLength);
@@ -520,7 +519,7 @@ typedef NSRange (*RangeOfLineIMP)(id object, SEL selector, NSRange range);
 	// Check if text ends with a new line.
 	(*rangeOfLineIMP)(textString, rangeOfLineSel, NULL, &lineEnd, &contentEnd, NSMakeRange([[lineIndices lastObject] intValue], 0));
 	if (contentEnd < lineEnd)
-		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)([NSNumber class], numberWithUnsignedIntegerSel, index));
+		(void)(*addObjectIMP)(lineIndices, addObjectSel, (*numberWithUnsignedIntegerIMP)(numberClass, numberWithUnsignedIntegerSel, index));
 
 	NSUInteger lineCount = [lineIndices count];
 	if(lineCount < 100)

@@ -69,6 +69,7 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 	SEL addObjectSel;
 	IMP addObjectIMP;
 	SEL rangeOfLineSel;
+	Class numberClass;
 
 	NSLayoutManager  *layoutManager;
 	NSTextContainer  *container;
