@@ -127,8 +127,25 @@
 	NSMutableString *parserString = [NSMutableString string];
 	[parserString setString:[self string]];
 
-	//delete all comments but remain the string length
 	NSRange commentRange = NSMakeRange(0, 0);
+
+	//delete all quotes by firstly deleting all escaped '"
+	while(1) {
+		commentRange = [parserString rangeOfRegex:@"\\\\['\"]" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
+		if(!commentRange.length) break;
+		// replace the found range by coment's length zeros
+		[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+	}
+	commentRange = NSMakeRange(0, 0);
+	while(1) {
+		commentRange = [parserString rangeOfRegex:@"([\"']).*?\\1" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
+		if(!commentRange.length) break;
+		// replace the found range by coment's length zeros
+		[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+	}
+
+	//delete all comments but remain the string length
+	commentRange = NSMakeRange(0, 0);
 	while(1) {
 		commentRange = [parserString rangeOfRegex:@"#.*" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
 		if(!commentRange.length) break;

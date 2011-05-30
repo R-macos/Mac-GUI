@@ -553,6 +553,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	NSString *selfstr    = [theTextStorage string];
 	NSInteger strlength  = (NSInteger)[selfstr length];
 
+
+	// do not highlight if text larger than 10MB
+	if(strlength > 10000000) return;
+
 	// == Do highlighting partly (max R_SYNTAX_HILITE_BIAS*2 around visibleRange
 	// by considering entire lines).
 
