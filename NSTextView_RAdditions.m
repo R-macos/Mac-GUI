@@ -34,6 +34,7 @@
 
 #import "NSTextView_RAdditions.h"
 #import "RTextView.h"
+#import "RegexKitLite.h"
 #import "RGUI.h"
 
 
@@ -122,18 +123,31 @@
 {
 	NSUInteger caretPosition = [self selectedRange].location;
 	NSUInteger stringLength = [[self string] length];
-	unichar co = ' ';
-	unichar cc = ' ';
+
+	NSMutableString *parserString = [NSMutableString string];
+	[parserString setString:[self string]];
+
+	//delete all comments but remain the string length
+	NSRange commentRange = NSMakeRange(0, 0);
+	while(1) {
+		commentRange = [parserString rangeOfRegex:@"#.*" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
+		if(!commentRange.length) break;
+		// replace the found range by coment's length zeros
+		[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+	}
+
+	unichar co = ' '; // opening char
+	unichar cc = ' '; // closing char
 	
 	if(caretPosition == 0 || caretPosition >= stringLength) return;
 	
-	NSInteger pcnt = 0;
-	NSInteger bcnt = 0;
-	NSInteger scnt = 0;
+	NSInteger pcnt = 0; // ) counter
+	NSInteger bcnt = 0; // ] counter
+	NSInteger scnt = 0; // } counter
 	
 	// look for the first non-balanced closing bracket
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
-		switch([[self string] characterAtIndex:i]) {
+		switch(CFStringGetCharacterAtIndex((CFStringRef)parserString, i)) {
 			case ')': 
 				if(!pcnt) {
 					co='(';cc=')';
@@ -162,20 +176,22 @@
 	NSInteger end = -1;
 	NSInteger bracketCounter = 0;
 	
-	if([[self string] characterAtIndex:caretPosition] == cc)
+	if([parserString characterAtIndex:caretPosition] == cc)
 		bracketCounter--;
-	if([[self string] characterAtIndex:caretPosition] == co)
+	if([parserString characterAtIndex:caretPosition] == co)
 		bracketCounter++;
-	
+
+	unichar c;
 	for(NSInteger i=caretPosition; i>=0; i--) {
-		if([[self string] characterAtIndex:i] == co) {
+		c = CFStringGetCharacterAtIndex((CFStringRef)parserString, i);
+		if(c == co) {
 			if(!bracketCounter) {
 				start = i;
 				break;
 			}
 			bracketCounter--;
 		}
-		if([[self string] characterAtIndex:i] == cc) {
+		if(c == cc) {
 			bracketCounter++;
 		}
 	}
@@ -183,10 +199,11 @@
 	
 	bracketCounter = 0;
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
-		if([[self string] characterAtIndex:i] == co) {
+		c = CFStringGetCharacterAtIndex((CFStringRef)parserString, i);
+		if(c == co) {
 			bracketCounter++;
 		}
-		if([[self string] characterAtIndex:i] == cc) {
+		if(c == cc) {
 			if(!bracketCounter) {
 				end = i+1;
 				break;
