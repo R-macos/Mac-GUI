@@ -877,7 +877,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		// Check if we're not inside of quotes or comments
 		if( ( closed || opened)
 			&& (index > parseRange.location)
-			&& [self parserContextForPosition:(index-1)] != pcExpression) {
+			&& [self parserContextForPosition:(index)] != pcExpression) {
 			continue;
 		}
 		if(closed) parentheses--;
