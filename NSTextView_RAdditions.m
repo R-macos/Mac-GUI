@@ -134,14 +134,34 @@
 		commentRange = [parserString rangeOfRegex:@"\\\\['\"]" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
 		if(!commentRange.length) break;
 		// replace the found range by coment's length zeros
-		[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+		if(commentRange.length < 256) {
+			[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+		} else {
+			NSMutableString *s = [[NSMutableString alloc] initWithCapacity:300];
+			[s setString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+			NSInteger i;
+			for(i=255; i<=commentRange.length; i++)
+				[s appendString:@"0"];
+			[parserString replaceCharactersInRange:commentRange withString:s];
+			[s release];
+		}
 	}
 	commentRange = NSMakeRange(0, 0);
 	while(1) {
 		commentRange = [parserString rangeOfRegex:@"([\"']).*?\\1" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
 		if(!commentRange.length) break;
 		// replace the found range by coment's length zeros
-		[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+		if(commentRange.length < 256) {
+			[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+		} else {
+			NSMutableString *s = [[NSMutableString alloc] initWithCapacity:300];
+			[s setString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+			NSInteger i;
+			for(i=255; i<=commentRange.length; i++)
+				[s appendString:@"0"];
+			[parserString replaceCharactersInRange:commentRange withString:s];
+			[s release];
+		}
 	}
 
 	//delete all comments but remain the string length
@@ -150,7 +170,17 @@
 		commentRange = [parserString rangeOfRegex:@"#.*" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
 		if(!commentRange.length) break;
 		// replace the found range by coment's length zeros
-		[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+		if(commentRange.length < 256) {
+			[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+		} else {
+			NSMutableString *s = [[NSMutableString alloc] initWithCapacity:300];
+			[s setString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
+			NSInteger i;
+			for(i=255; i<=commentRange.length; i++)
+				[s appendString:@"0"];
+			[parserString replaceCharactersInRange:commentRange withString:s];
+			[s release];
+		}
 	}
 
 	unichar co = ' '; // opening char
