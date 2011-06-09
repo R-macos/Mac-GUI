@@ -129,9 +129,9 @@
 
 	NSRange commentRange = NSMakeRange(0, 0);
 
-	//delete all quotes by firstly deleting all escaped '"
+	//delete all quotes by firstly deleting all escaped '" if the escape sign \ by itself is not escaped
 	while(1) {
-		commentRange = [parserString rangeOfRegex:@"\\\\['\"]" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
+		commentRange = [parserString rangeOfRegex:@"(?<!\\\\)\\\\['\"]" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
 		if(!commentRange.length) break;
 		// replace the found range by coment's length zeros
 		if(commentRange.length < 256) {
