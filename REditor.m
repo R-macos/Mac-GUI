@@ -166,37 +166,47 @@ void printelt(SEXP invec, int vrow, char *strp)
 	if(i > xmaxused)
 		return @"";
 	
- 	SEXP tmp = VECTOR_ELT(work, i-1);
- 	char buf[1025];
- 	buf[0] = '\0';
- 	if (!isNull(tmp)) {
-	 		if(LENGTH(tmp)>row){
-		 			printelt(tmp, row, buf);
-		 			return [NSString stringWithUTF8String:buf];
-		 		} else return @"";
-	 	} else return @"";
- 
- 
+	SEXP tmp = VECTOR_ELT(work, i-1);
+
+	if (!isNull(tmp)) {
+		if(LENGTH(tmp)>row) {
+			int buflen = 1025;
+			// get the number of utf-8 bytes
+			if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, row)))
+				buflen = strlen(CHAR(STRING_ELT(tmp, row))+1);
+			char buf[buflen];
+			buf[0] = '\0';
+			printelt(tmp, row, buf);
+			return [NSString stringWithUTF8String:buf];
+		} else return @"";
+	} else return @"";
+
 }
 
 
 - (void)tableView:(NSTableView *)aTableView
-	setObjectValue:anObject
+	setObjectValue:(id)anObject
 	forTableColumn:(NSTableColumn *)tableColumn
 	row:(NSInteger)row
 {
 	int col;
 	if(row<0) return;
 	SEXP tmp;
-	char buf[256];
 	
-	buf[0] = '\0';
+	int buflen = 256;
 
 	col = [[tableColumn identifier] intValue];
-	
+
+	// get the number of utf-8 bytes for CHARACTER type
+	if(get_col_type(col) == CHARACTER && [anObject isKindOfClass:[NSString class]])
+		buflen = strlen([(NSString*)anObject UTF8String])+2;
+
+	char buf[buflen];
+	buf[0] = '\0';
+
 	tmp = VECTOR_ELT(work, col-1);
 	
- 	CFStringGetCString((CFStringRef)anObject, buf, 255,  kCFStringEncodingUTF8);
+ 	CFStringGetCString((CFStringRef)anObject, buf, buflen-1,  kCFStringEncodingUTF8);
 
 	switch(get_col_type(col)){
 		case NUMERIC:

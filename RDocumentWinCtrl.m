@@ -50,6 +50,8 @@ NSColor *shColorKeyword;
 NSColor *shColorComment;
 NSColor *shColorIdentifier;
 
+NSInteger _alphabeticSort(id string1, id string2, void *reverse);
+
 @implementation RDocumentWinCtrl
 
 //- (id)init { // NOTE: init is *not* used! put any initialization in windowDidLoad
@@ -86,6 +88,14 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	if (functionMenuInvalidAttribute) [functionMenuInvalidAttribute release];
 	if (functionMenuCommentAttribute) [functionMenuCommentAttribute release];
 	[super dealloc];
+}
+
+/**
+ * Sort function (mainly used to sort the words in the textView)
+ */
+NSInteger _alphabeticSort(id string1, id string2, void *reverse)
+{
+	return [string1 localizedCaseInsensitiveCompare:string2];
 }
 
 /**
@@ -754,9 +764,32 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	[textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
 
 	// For better current function detection we pass maximal 1000 left from caret
-	return [CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
-												 inTextView:aTextView];
+	NSMutableSet *uniqueArray = [NSMutableSet setWithCapacity:100];
+	[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
+												 inTextView:aTextView]];
 
+	// Only parse for words if text size is less than 3MB
+	NSString *currentWord = [[aTextView string] substringWithRange:charRange];
+	if([currentWord length]>1 && [[aTextView string] length] && [[aTextView string] length]<3000000) {
+		NSMutableString *parserString = [NSMutableString string];
+		[parserString setString:[aTextView string]];
+		// ignore any words in quotes or comments
+		[parserString replaceOccurrencesOfRegex:@"(?<!\\\\)\\\\['\"]" withString:@""];
+		[parserString replaceOccurrencesOfRegex:@"([\"']).*?\\1" withString:@""];
+		[parserString replaceOccurrencesOfRegex:@"#.*" withString:@""];
+		NSString *re = [NSString stringWithFormat:@"(?<!\\.)\\b%@[\\w\\d\\.:_]+", currentWord];
+		if([re isRegexValid]) {
+			NSArray *words = [parserString componentsMatchedByRegex:re];
+			if(words && [words count]) {
+				[uniqueArray addObjectsFromArray:words];
+				[uniqueArray removeObject:currentWord];
+			}
+		}
+	}
+
+	NSInteger reverseSort = NO;
+
+	return [[uniqueArray allObjects] sortedArrayUsingFunction:_alphabeticSort context:&reverseSort];
 }
 
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification

@@ -1,5 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-06-10 [HJBB]
+*	fixed R Data Editor to display and edit strings of
+	any size
+*	R Script Editor completion now suggests var, function,
+	parameter, etc. names even if they aren't defined
+	in R's workspace (by parsing the R script buffer if
+	it is not larger the 3MB)
+
 Last-update: 2011-05-25
 *	fix: using moveLeft: or moveWordLeft: in the console
 	while there is a non-empty selection starting at the
