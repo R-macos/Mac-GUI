@@ -173,7 +173,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 			int buflen = 1025;
 			// get the number of utf-8 bytes
 			if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, row)))
-				buflen = strlen(CHAR(STRING_ELT(tmp, row))+1);
+				buflen = strlen(CHAR(STRING_ELT(tmp, row)))+1;
 			char buf[buflen];
 			buf[0] = '\0';
 			printelt(tmp, row, buf);
