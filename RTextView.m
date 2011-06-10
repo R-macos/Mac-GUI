@@ -73,7 +73,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t[]{}^|&!:;<>?`\n"] retain];
+		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t]{}^|&!;<>?`\n"] retain];
 		undoBreakTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"+- .,|&*/:!?<>=\n"] retain];
 	}
 	return self;
