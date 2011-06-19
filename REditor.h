@@ -36,23 +36,25 @@
 #define RemoveColsToolbarItemIdentifier  @"Remove Columns"
 #define AddRowToolbarItemIdentifier      @"Add Row"
 #define RemoveRowsToolbarItemIdentifier  @"Remove Rows"
+#define CancelEditToolbarItemIdentifier  @"Cancel Edit"
 
 @interface REditor : NSObject <NSToolbarDelegate>
 {
-    IBOutlet NSTableView *editorSource;
-    IBOutlet NSWindow *dataWindow;
+	IBOutlet NSTableView *editorSource;
+	IBOutlet NSWindow *dataWindow;
 	NSToolbar *toolbar;
 }
 
 - (id) window;
 - (void)setDatas:(BOOL)removeAll;
 - (void) setupToolbar;
-	
--(IBAction) addCol:(id)sender;
--(IBAction) remCols:(id)sender;
--(IBAction) addRow:(id)sender;
--(IBAction) remRows:(id)sender;
-	
+
+- (IBAction)addCol:(id)sender;
+- (IBAction)remCols:(id)sender;
+- (IBAction)addRow:(id)sender;
+- (IBAction)remRows:(id)sender;
+- (IBAction)cancelEditing:(id)sender;
+
 + (id) getDEController;
 + (void)startDataEntry;
 

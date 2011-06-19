@@ -296,83 +296,96 @@ void printelt(SEXP invec, int vrow, char *strp)
 }
  
 - (NSToolbarItem *) toolbar: (NSToolbar *)toolbar itemForItemIdentifier: (NSString *) itemIdent willBeInsertedIntoToolbar:(BOOL) willBeInserted {
-    // Required delegate method:  Given an item identifier, this method returns an item 
-    // The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
+	// Required delegate method:  Given an item identifier, this method returns an item 
+	// The toolbar will use this method to obtain toolbar items that can be displayed in the customization sheet, or in the toolbar itself 
 	// NSLog(@"toolbar: %@ itemForItemIdentifier:%@ willBeInsertedIntoToolbar:%d\n", toolbar, itemIdent, willBeInserted);
-    NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
-    
-    if ([itemIdent isEqual: AddColToolbarItemIdentifier]) {
+	NSToolbarItem *toolbarItem = [[[NSToolbarItem alloc] initWithItemIdentifier: itemIdent] autorelease];
+
+	if ([itemIdent isEqual: AddColToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
 		[toolbarItem setLabel: NLSC(@"Add Col",@"Add column - label for a toolbar, keep short!")];
 		[toolbarItem setPaletteLabel: NLS(@"Add Column")];
-		
+
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
 		[toolbarItem setToolTip: NLS(@"Adds a new columns to the right of a group of selected colums or just at the end of the data")];
 		[toolbarItem setImage: [NSImage imageNamed: @"add_col"]];
-		
+
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(addCol:)];
-    } else  if ([itemIdent isEqual: RemoveColsToolbarItemIdentifier]) {
+	} else  if ([itemIdent isEqual: RemoveColsToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
 		[toolbarItem setLabel: NLSC(@"Remove Col",@"Remove columns - label for a toolbar, keep short!")];
 		[toolbarItem setPaletteLabel: NLS(@"Remove Columns")];
-		
+
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
 		[toolbarItem setToolTip: NLS(@"Remove selected columns")];
 		[toolbarItem setImage: [NSImage imageNamed: @"rem_col"]];
-		
+
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(remCols:)];
-    } else  if ([itemIdent isEqual: AddRowToolbarItemIdentifier]) {
+	} else  if ([itemIdent isEqual: AddRowToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
 		[toolbarItem setLabel: NLSC(@"Add Row",@"Add row - label for a toolbar, keep short!")];
 		[toolbarItem setPaletteLabel: NLS(@"Add New Row")];
-		
+
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
 		[toolbarItem setToolTip: NLS(@"Adds a row below a group of selected rows or at the bottom of the data")];
 		[toolbarItem setImage: [NSImage imageNamed: @"add_row"]];
-		
+
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(addRow:)];
-    } else  if ([itemIdent isEqual: RemoveRowsToolbarItemIdentifier]) {
+	} else  if ([itemIdent isEqual: RemoveRowsToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette 
 		[toolbarItem setLabel: NLSC(@"Remove Row",@"Remove row - label for a toolbar, keep short!")];
 		[toolbarItem setPaletteLabel: NLS(@"Remove Rows")];
-		
+
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
 		[toolbarItem setToolTip: NLS(@"Removes selected rows")];
 		[toolbarItem setImage: [NSImage imageNamed: @"rem_row"]];
-		
+
 		// Tell the item what message to send when it is clicked 
 		[toolbarItem setTarget: self];
 		[toolbarItem setAction: @selector(remRows:)];
-    } else {
+	} else  if ([itemIdent isEqual: CancelEditToolbarItemIdentifier]) {
+		// Set the text label to be displayed in the toolbar and customization palette 
+		[toolbarItem setLabel: NLSC(@"Cancel Editing",@"Remove row - label for a toolbar, keep short!")];
+		[toolbarItem setPaletteLabel: NLS(@"Cancel Editing")];
+
+		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
+		[toolbarItem setToolTip: NLS(@"Cancel Editing")];
+		[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
+
+		// Tell the item what message to send when it is clicked 
+		[toolbarItem setTarget: self];
+		[toolbarItem setAction: @selector(cancelEditing:)];
+	} else {
 		// itemIdent refered to a toolbar item that is not provide or supported by us or cocoa 
 		// Returning nil will inform the toolbar this kind of item is not supported 
 		toolbarItem = nil;
-    }
-    return toolbarItem;
+	}
+	return toolbarItem;
 }
 
 
 - (NSArray *) toolbarDefaultItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
-    // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
-    // user chooses to revert to the default items this set will be used 
-    return [NSArray arrayWithObjects:	AddColToolbarItemIdentifier,  RemoveColsToolbarItemIdentifier, 
-		AddRowToolbarItemIdentifier,  RemoveRowsToolbarItemIdentifier, nil];
+	// Required delegate method:  Returns the ordered list of items to be shown in the toolbar by default    
+	// If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
+	// user chooses to revert to the default items this set will be used 
+	return [NSArray arrayWithObjects:	AddColToolbarItemIdentifier,  RemoveColsToolbarItemIdentifier, 
+		AddRowToolbarItemIdentifier,  RemoveRowsToolbarItemIdentifier, CancelEditToolbarItemIdentifier 
+		, nil];
 }
 
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar {
-    // Required delegate method:  Returns the list of all allowed items by identifier.  By default, the toolbar 
-    // does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
-    // The set of allowed items is used to construct the customization palette 
-    return [NSArray arrayWithObjects: 	AddColToolbarItemIdentifier,  RemoveColsToolbarItemIdentifier, 
-		AddRowToolbarItemIdentifier,  RemoveRowsToolbarItemIdentifier
+	// Required delegate method:  Returns the list of all allowed items by identifier.  By default, the toolbar 
+	// does not assume any items are allowed, even the separator.  So, every allowed item must be explicitly listed   
+	// The set of allowed items is used to construct the customization palette 
+	return [NSArray arrayWithObjects: 	AddColToolbarItemIdentifier,  RemoveColsToolbarItemIdentifier, 
+		AddRowToolbarItemIdentifier,  RemoveRowsToolbarItemIdentifier, CancelEditToolbarItemIdentifier 
 		, nil];
 }
 
@@ -396,20 +409,23 @@ void printelt(SEXP invec, int vrow, char *strp)
 }
 
 - (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
-    // Optional method:  This message is sent to us since we are the target of some toolbar item actions 
-    // (for example:  of the save items action) 
-    BOOL enable = NO;
+	// Optional method:  This message is sent to us since we are the target of some toolbar item actions 
+	// (for example:  of the save items action) 
 
-	if ([[toolbarItem itemIdentifier] isEqual: AddColToolbarItemIdentifier]) {
-		enable = YES;
-    } else if ([[toolbarItem itemIdentifier] isEqual: RemoveColsToolbarItemIdentifier]) {
-		enable = YES;
-    } else if ([[toolbarItem itemIdentifier] isEqual: AddRowToolbarItemIdentifier]) {
-		enable = YES;
-    } else if ([[toolbarItem itemIdentifier] isEqual: RemoveRowsToolbarItemIdentifier]) {
-		enable = YES;
-    }		
-    return enable;
+	if ([[toolbarItem itemIdentifier] isEqualToString:AddColToolbarItemIdentifier]) {
+		return(YES);
+	} else if ([[toolbarItem itemIdentifier] isEqualToString:RemoveColsToolbarItemIdentifier]) {
+		return([[editorSource selectedColumnIndexes] count]);
+	} else if ([[toolbarItem itemIdentifier] isEqualToString:AddRowToolbarItemIdentifier]) {
+		return(YES);
+	} else if ([[toolbarItem itemIdentifier] isEqualToString:RemoveRowsToolbarItemIdentifier]) {
+		return([[editorSource selectedRowIndexes] count]);
+	} else if ([[toolbarItem itemIdentifier] isEqualToString:CancelEditToolbarItemIdentifier]) {
+		return(YES);
+	}
+
+	return NO;
+
 }
 
 /* Adds a column to the data either at the end or after the last columns selected by the user */
@@ -608,21 +624,42 @@ void printelt(SEXP invec, int vrow, char *strp)
  
 }
 
-+ (id) getDEController{
+- (IBAction)cancelEditing:(id)sender
+{
+
+	// sending abort signal to startDataEntry's runModalForWindow
+	// to cancel the edit() by sending an error() message back to R
+	[NSApp abortModal];
+
+	[[[REditor getDEController] window] orderOut:self];
+	[[[REditor getDEController] window] close];
+
+}
+
++ (id) getDEController
+{
 	return sharedDEController;
 }
 
 
 + (void)startDataEntry
 {
+
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
+
 	newvar = 0;
-	[[REditor getDEController] setDatas:YES];	
+
+	[[REditor getDEController] setDatas:YES];
 	[[[REditor getDEController] window] orderFront:self];
-	[NSApp runModalForWindow:[[REditor getDEController] window]];
+
+	NSInteger ret = [NSApp runModalForWindow:[[REditor getDEController] window]];
+
+	// if modal session was aborted cancel edit()
+	if( ret == NSRunAbortedResponse )
+		error([NLS(@"editing cancelled") UTF8String]);
 
 	[pool release];
-}
 
+}
 
 @end

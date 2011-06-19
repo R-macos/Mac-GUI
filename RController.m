@@ -3278,8 +3278,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (IBAction)toggleWSBrowser:(id)sender
 {
 	[WSBrowser toggleWorkspaceBrowser];
-	[[REngine mainEngine] executeString:@"browseEnv(html=F)"];	
-	[RConsoleWindow makeKeyWindow];
+	[[REngine mainEngine] executeString:@"browseEnv(html=F)"];
 }
 
 - (IBAction)loadWorkSpace:(id)sender

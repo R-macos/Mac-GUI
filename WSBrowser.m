@@ -411,8 +411,8 @@ if (!item) { \
 
 + (void)toggleWorkspaceBrowser
 {
-	[WSBrowser  initData];
-	[[[WSBrowser getWSBController] window] orderFront:self];	
+	[WSBrowser initData];
+	[[[WSBrowser getWSBController] window] makeKeyAndOrderFront:self];
 }
 
 @end
