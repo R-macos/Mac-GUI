@@ -342,9 +342,9 @@ SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 
 	i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
 	while (i<len) {
-		sName[i] = CHAR(STRING_ELT(pkgname, i));
-		sDesc[i] = CHAR(STRING_ELT(pkgdesc, i));
-		sURL [i] = CHAR(STRING_ELT(pkgurl, i));
+		sName[i] = (char*)CHAR(STRING_ELT(pkgname, i));
+		sDesc[i] = (char*)CHAR(STRING_ELT(pkgdesc, i));
+		sURL [i] = (char*)CHAR(STRING_ELT(pkgurl, i));
 		bStat[i] = (BOOL)LOGICAL(pkgstatus)[i];
 		i++;
 	}
@@ -402,10 +402,10 @@ SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
   
   i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
   while (i<len) {
-	  sName[i] = CHAR(STRING_ELT(dsets, i));
-	  sDesc[i] = CHAR(STRING_ELT(ddesc, i));
-	  sURL [i] = CHAR(STRING_ELT(durl, i));
-	  sPkg [i] = CHAR(STRING_ELT(dpkg, i));
+	  sName[i] = (char*)CHAR(STRING_ELT(dsets, i));
+	  sDesc[i] = (char*)CHAR(STRING_ELT(ddesc, i));
+	  sURL [i] = (char*)CHAR(STRING_ELT(durl, i));
+	  sPkg [i] = (char*)CHAR(STRING_ELT(dpkg, i));
 	  i++;
   }
 
@@ -474,15 +474,15 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
   
   i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
   while (i<len) {
-	  sName[i] = CHAR(STRING_ELT(rpkgs, i));
-	  sIVer[i] = CHAR(STRING_ELT(ivers, i));
-	  sRVer[i] = CHAR(STRING_ELT(rvers, i));
+	  sName[i] = (char*)CHAR(STRING_ELT(rpkgs, i));
+	  sIVer[i] = (char*)CHAR(STRING_ELT(ivers, i));
+	  sRVer[i] = (char*)CHAR(STRING_ELT(rvers, i));
 	  bStat[i] = (BOOL)LOGICAL(install_dflt)[i];
 	  i++;
   }
   
   insideR--;
-  [[REngine cocoaHandler] handleInstalledPackages: len withNames: sName installedVersions: sIVer repositoryVersions: sRVer update: bStat label:CHAR(STRING_ELT(wwwhere,0))];
+  [[REngine cocoaHandler] handleInstalledPackages: len withNames: sName installedVersions: sIVer repositoryVersions: sRVer update: bStat label:(char*)CHAR(STRING_ELT(wwwhere,0))];
   insideR++;
   free(sName); free(sIVer); free(sRVer); free(bStat);
     
@@ -529,15 +529,15 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 	
 	i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
 	while (i<len) {
-		sTopic[i] = CHAR(STRING_ELT(h_topic, i));
-		sDesc[i]  = CHAR(STRING_ELT(h_desc, i));
-		sPkg[i]   = CHAR(STRING_ELT(h_pkg, i));
-		sURL[i]   = CHAR(STRING_ELT(h_url, i));
+		sTopic[i] = (char*)CHAR(STRING_ELT(h_topic, i));
+		sDesc[i]  = (char*)CHAR(STRING_ELT(h_desc, i));
+		sPkg[i]   = (char*)CHAR(STRING_ELT(h_pkg, i));
+		sURL[i]   = (char*)CHAR(STRING_ELT(h_url, i));
 		i++;
 	}
 	
 	insideR--;
-	[[REngine cocoaHandler] handleHelpSearch: len withTopics: sTopic packages: sPkg descriptions: sDesc urls: sURL title:CHAR(STRING_ELT(h_wtitle,0))];
+	[[REngine cocoaHandler] handleHelpSearch: len withTopics: sTopic packages: sPkg descriptions: sDesc urls: sURL title:(char*)CHAR(STRING_ELT(h_wtitle,0))];
 	insideR++;
 	free(sTopic); free(sDesc); free(sPkg); free(sURL);
 	
@@ -576,7 +576,7 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
     clist = (char **) R_alloc(n + 1, sizeof(char *));
     itemStatus = (BOOL *) R_alloc(n + 1, sizeof(BOOL));
     for(i = 0; i < n; i++) {
-		clist[i] = CHAR(STRING_ELT(list, i));
+		clist[i] = (char*)CHAR(STRING_ELT(list, i));
 		itemStatus[i] = NO;
     }
     clist[n] = NULL;
