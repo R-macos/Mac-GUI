@@ -30,6 +30,7 @@
 /* REditor */
 
 #import "CCComp.h"
+#import "Tools/RDataEditorTableView.h"
 
 #define DataEditorToolbarIdentifier      @"DataEditor Toolbar Identifier"
 #define AddColToolbarItemIdentifier      @"Add Column"
@@ -40,7 +41,7 @@
 
 @interface REditor : NSObject <NSToolbarDelegate>
 {
-	IBOutlet NSTableView *editorSource;
+	IBOutlet RDataEditorTableView *editorSource;
 	IBOutlet NSWindow *dataWindow;
 	NSToolbar *toolbar;
 }

@@ -137,7 +137,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 		// Add your subclass-specific initialization here.
         // If an error occurs here, send a [self release] message and return nil.
 		toolbar = nil;
-
     }
 	
     return self;
@@ -148,7 +147,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 	[self setupToolbar];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
 	[super dealloc];
 }
 
@@ -189,6 +189,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	forTableColumn:(NSTableColumn *)tableColumn
 	row:(NSInteger)row
 {
+
 	int col;
 	if(row<0) return;
 	SEXP tmp;
@@ -231,35 +232,44 @@ void printelt(SEXP invec, int vrow, char *strp)
 		default:
 		break;
 	}
+
+	// resize column width
+	CGFloat newSize = [editorSource widthForColumn:col andHeaderName:(NSString *)anObject];
+	if(newSize > [tableColumn width]) [tableColumn setWidth:newSize];
+
 	return;
 }
 
-
 - (void)setDatas:(BOOL)removeAll
 {
-	int i;
-    NSArray		*theColumns;
-	
-	if(removeAll){
-		theColumns = [editorSource tableColumns];
+
+	NSInteger i;
+
+	if(removeAll) {
+		NSArray *theColumns = [editorSource tableColumns];
 		while ([theColumns count]) 
 			[editorSource removeTableColumn:[theColumns objectAtIndex:0]];
 	}
 
-    for (i = 1; i <= xmaxused ; i++) {
-		NSTableColumn *col;
-		col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
-		[[col headerCell] setTitle:[NSString stringWithUTF8String:get_col_name(i)]];
-        [col setWidth: 50];
-        [col setMaxWidth: 300];
-		[col sizeToFit];
-        [editorSource addTableColumn: col];
+	for (i = 1; i <= xmaxused; i++) {
+		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
+		NSString *colName = [NSString stringWithUTF8String:get_col_name(i)];
+		if(colName) {
+			[[col headerCell] setTitle:colName];
+			[[col headerCell] setAlignment:NSCenterTextAlignment];
+			[col setHeaderToolTip:[NSString stringWithFormat:@"%@\n  (%@)", colName, (get_col_type(i) == NUMERIC) ? @"numeric" : @"character"]];
+		}
+		[col setMinWidth:18.0f];
+		if(get_col_type(i) == NUMERIC) [[col dataCell] setAlignment:NSRightTextAlignment];
+		[col setWidth:[editorSource widthForColumn:i andHeaderName:colName]];
+		[editorSource addTableColumn:col];
 		[col release];
 	}
+
+	[editorSource setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
 	[editorSource reloadData];
 
 }
-
 
 - (id) window
 {
@@ -435,13 +445,20 @@ void printelt(SEXP invec, int vrow, char *strp)
 	NSUInteger lastcol, i;
 	BOOL isEmpty = NO;
 	SEXP names2, work2;
+	SEXPTYPE newColType = STRSXP;
+
 	/* extend work, names and lens */
-	NSIndexSet *cols =  [editorSource selectedColumnIndexes];			
+
+	NSIndexSet *cols =  [editorSource selectedColumnIndexes];
 	lastcol = [cols lastIndex];
 	if(lastcol == NSNotFound) {
 		isEmpty = (xmaxused == 0);
 		lastcol = !isEmpty ? (xmaxused - 1) : 0;
 	}
+
+	// add a column of type of last selected column or last
+	if(!isEmpty && get_col_type(lastcol+1) == NUMERIC)
+		newColType = REALSXP;
 
 	xmaxused++;
 	newvar++;
@@ -463,7 +480,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 	sprintf(clab, "var%d", newvar);
 	SET_STRING_ELT(names, lastcol, mkChar(clab));
 	INTEGER(lens)[lastcol] = ymaxused;
-    SET_VECTOR_ELT(work, lastcol, ssNewVector(REALSXP, ymaxused));
+	
+    SET_VECTOR_ELT(work, lastcol, ssNewVector(newColType, ymaxused));
 
 	for (i = lastcol+1; i <xmaxused; i++) {
 		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2,i-1));
@@ -633,6 +651,30 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	[[[REditor getDEController] window] orderOut:self];
 	[[[REditor getDEController] window] close];
+
+}
+
+- (BOOL)control:(NSControl*)control textView:(NSTextView*)aTextView doCommandBySelector:(SEL)command
+{
+
+	if([control isKindOfClass:[RDataEditorTableView class]]) {
+
+		// Check firstly if RDataEditorTableView can handle command
+		if([editorSource control:control textView:aTextView doCommandBySelector:(SEL)command])
+			return YES;
+
+		// Trap the escape key
+		if ([[control window] methodForSelector:command] == [[control window] methodForSelector:@selector(cancelOperation:)])
+		{
+			// Abort editing
+			[control abortEditing];
+			[[[REditor getDEController] window] makeFirstResponder:editorSource];
+			return YES;
+		}
+
+	}
+
+	return NO;
 
 }
 

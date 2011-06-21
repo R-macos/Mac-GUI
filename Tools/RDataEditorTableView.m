@@ -32,8 +32,13 @@
  *
  */
 
-
 #import "RDataEditorTableView.h"
+#import "RGUI.h"
+
+extern SEXP ssNA_STRING;
+extern double ssNA_REAL;
+extern SEXP work;
+extern printelt(SEXP invec, int vrow, char *strp);
 
 
 @implementation RDataEditorTableView
@@ -64,18 +69,127 @@
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
 {
+
+	SLog(@"RDataEditorTableView received selector %@", NSStringFromSelector(command));
+
+	NSInteger row, column;
+
+	row = [self editedRow];
+	column = [self editedColumn];
+
+	// Trap down arrow key
+	if ( [textView methodForSelector:command] == [textView methodForSelector:@selector(moveDown:)] )
+	{
+
+		NSInteger newRow = row+1;
+		if (newRow >= [[self delegate] numberOfRowsInTableView:self]) return YES; //check if we're already at the end of the list
+
+		[[control window] makeFirstResponder:control];
+
+		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:newRow] byExtendingSelection:NO];
+		[self editColumn:column row:newRow withEvent:nil select:YES];
+		return YES;
+
+	}
+
+	// Trap up arrow key
+	else if ( [textView methodForSelector:command] == [textView methodForSelector:@selector(moveUp:)] )
+	{
+
+		if (row==0) return YES; //already at the beginning of the list
+		NSInteger newRow = row-1;
+
+		if (newRow>=[[self delegate] numberOfRowsInTableView:self]) return YES; // saveRowToTable could reload the table and change the number of rows
+		[[control window] makeFirstResponder:control];
+
+		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:newRow] byExtendingSelection:NO];
+		[self editColumn:column row:newRow withEvent:nil select:YES];
+		return YES;
+	}
+
 	return NO;
+
 }
 
-- (NSDictionary *)autodetectColumnWidths
+- (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName
 {
-	return nil;
-}
 
-- (NSUInteger)autodetectWidthForColumnDefinition:(NSDictionary *)columnDefinition maxRows:(NSUInteger)rowsToCheck
-{
-	return 50;
-}
+	CGFloat        columnBaseWidth;
+	NSString       *contentString;
+	NSUInteger     cellWidth, maxCellWidth, i;
+	NSRange        linebreakRange;
+	double         rowStep;
 
+	NSDictionary *stringAttributes = [NSDictionary dictionaryWithObject:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
+	 															 forKey:NSFontAttributeName];
+
+	NSCharacterSet *newLineCharSet = [NSCharacterSet newlineCharacterSet];
+
+	NSInteger rowsToCheck = 100;
+	NSUInteger maxRows = [[self delegate] numberOfRowsInTableView:self];
+
+	// Check the number of rows available to check, sampling every n rows
+	if (maxRows < rowsToCheck)
+		rowStep = 1;
+	else
+		rowStep = floor(maxRows / rowsToCheck);
+
+	rowsToCheck = (rowsToCheck > maxRows) ? maxRows : rowsToCheck;
+
+	// Set a default padding for this column
+	columnBaseWidth = 32;
+
+	// Iterate through the data store rows, checking widths
+	maxCellWidth = 0;
+	for (i = 0; i < rowsToCheck; i += rowStep) {
+
+		// Retrieve the cell's content
+		SEXP tmp = VECTOR_ELT(work, columnIndex-1);
+
+		contentString = @"";
+		if (!isNull(tmp)) {
+			if(LENGTH(tmp)>i) {
+				int buflen = 1025;
+				// get the number of utf-8 bytes
+				if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, i)))
+					buflen = strlen(CHAR(STRING_ELT(tmp, i)))+1;
+				char buf[buflen];
+				buf[0] = '\0';
+				printelt(tmp, (int)i, buf);
+				contentString = [NSString stringWithUTF8String:buf];
+			}
+		}
+
+		if ([(NSString *)contentString length] > 500) {
+			contentString = [contentString substringToIndex:500];
+		}
+
+		// If any linebreaks are present, use only the visible part of the string
+		linebreakRange = [contentString rangeOfCharacterFromSet:newLineCharSet];
+		if (linebreakRange.location != NSNotFound) {
+			contentString = [contentString substringToIndex:linebreakRange.location];
+		}
+
+		// Calculate the width, using it if it's higher than the current stored width
+		cellWidth = [contentString sizeWithAttributes:stringAttributes].width;
+		if (cellWidth > maxCellWidth) maxCellWidth = cellWidth;
+		if (maxCellWidth > 400) {
+			maxCellWidth = 400;
+			break;
+		}
+	}
+
+	// Add the padding
+	maxCellWidth += columnBaseWidth;
+
+	// If the header width is wider than this expanded width, use it instead
+	if(colName) {
+		cellWidth = [colName sizeWithAttributes:[NSDictionary dictionaryWithObject:[NSFont labelFontOfSize:[NSFont smallSystemFontSize]] forKey:NSFontAttributeName]].width;
+		if (cellWidth + columnBaseWidth > maxCellWidth) maxCellWidth = cellWidth + columnBaseWidth;
+		if (maxCellWidth > 400) maxCellWidth = 400;
+	}
+
+	return maxCellWidth;
+}
 
 @end

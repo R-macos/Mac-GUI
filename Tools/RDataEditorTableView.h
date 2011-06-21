@@ -34,6 +34,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include <R.h>
+#include "privateR.h"
 
 @interface RDataEditorTableView : NSTableView
 {
@@ -46,7 +48,7 @@
 - (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders;
 - (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders;
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command;
-- (NSDictionary *)autodetectColumnWidths;
-- (NSUInteger)autodetectWidthForColumnDefinition:(NSDictionary *)columnDefinition maxRows:(NSUInteger)rowsToCheck;
+
+- (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName;
 
 @end
