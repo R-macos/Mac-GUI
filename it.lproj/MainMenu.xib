@@ -4591,7 +4591,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="465510747">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4610,12 +4610,14 @@
 											<int key="NSvFlags">8511</int>
 											<string key="NSFrameSize">{478, 342}</string>
 											<reference key="NSSuperview" ref="576351995"/>
+											<reference key="NSWindow"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTableHeaderView" key="NSHeaderView" id="272087171">
 												<reference key="NSNextResponder" ref="305743904"/>
 												<int key="NSvFlags">256</int>
 												<string key="NSFrameSize">{478, 17}</string>
 												<reference key="NSSuperview" ref="305743904"/>
+												<reference key="NSWindow"/>
 												<reference key="NSTableView" ref="783549011"/>
 											</object>
 											<object class="_NSCornerView" key="NSCornerView" id="957123096">
@@ -4623,6 +4625,7 @@
 												<int key="NSvFlags">-2147483392</int>
 												<string key="NSFrame">{{-26, 0}, {16, 17}}</string>
 												<reference key="NSSuperview" ref="49354047"/>
+												<reference key="NSWindow"/>
 											</object>
 											<object class="NSMutableArray" key="NSTableColumns">
 												<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4773,6 +4776,7 @@
 									</object>
 									<string key="NSFrame">{{1, 17}, {478, 342}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="783549011"/>
 									<reference key="NSDocView" ref="783549011"/>
 									<reference key="NSBGColor" ref="650509342"/>
@@ -4783,6 +4787,7 @@
 									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{-30, 17}, {15, 327}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSWindow"/>
 									<reference key="NSTarget" ref="49354047"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSPercent">0.95614033937454224</double>
@@ -4792,6 +4797,7 @@
 									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{1, -30}, {463, 15}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSWindow"/>
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="49354047"/>
 									<string key="NSAction">_doScroller:</string>
@@ -4806,6 +4812,7 @@
 									</object>
 									<string key="NSFrame">{{1, 0}, {478, 17}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="272087171"/>
 									<reference key="NSDocView" ref="272087171"/>
 									<reference key="NSBGColor" ref="650509342"/>
@@ -4815,6 +4822,7 @@
 							</object>
 							<string key="NSFrameSize">{480, 360}</string>
 							<reference key="NSSuperview" ref="465510747"/>
+							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="576351995"/>
 							<int key="NSsFlags">562</int>
 							<reference key="NSVScroller" ref="850038370"/>
@@ -4825,7 +4833,9 @@
 							<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 						</object>
 					</object>
-					<string key="NSFrame">{{1, 9}, {480, 360}}</string>
+					<string key="NSFrameSize">{480, 360}</string>
+					<reference key="NSSuperview"/>
+					<reference key="NSWindow"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -11013,12 +11023,15 @@
 					<string>780.ImportedFromIB2</string>
 					<string>79.IBPluginDependency</string>
 					<string>79.ImportedFromIB2</string>
+					<string>794.IBEditorWindowLastContentRect</string>
 					<string>794.IBPluginDependency</string>
+					<string>794.IBWindowTemplateEditedContentRect</string>
 					<string>794.ImportedFromIB2</string>
 					<string>794.windowTemplate.hasMinSize</string>
 					<string>794.windowTemplate.minSize</string>
 					<string>795.IBPluginDependency</string>
 					<string>795.ImportedFromIB2</string>
+					<string>796.CustomClassName</string>
 					<string>796.IBPluginDependency</string>
 					<string>796.ImportedFromIB2</string>
 					<string>797.IBPluginDependency</string>
@@ -11602,9 +11615,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
-					<string>{{43, 0}, {550, 458}}</string>
+					<string>{{488, 90}, {550, 458}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{43, 0}, {550, 458}}</string>
+					<string>{{488, 90}, {550, 458}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
@@ -11967,12 +11980,15 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>{{488, 585}, {480, 360}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{488, 585}, {480, 360}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{213, 107}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>RDataEditorTableView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -14343,6 +14359,28 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WebView.h</string>
+					</object>
+				</object>
+			</object>
+			<object class="NSMutableArray" key="referencedPartialClassDescriptionsV3.1+">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">RDataEditorTableView</string>
+					<string key="superclassName">NSTableView</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">copy:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">copy:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">copy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBDocumentRelativeSource</string>
+						<string key="minorKey">../Tools/RDataEditorTableView.h</string>
 					</object>
 				</object>
 			</object>
