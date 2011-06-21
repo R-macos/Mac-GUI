@@ -142,8 +142,9 @@ void printelt(SEXP invec, int vrow, char *strp)
     return self;
 }
 
-- (void) awakeFromNib {
-	
+- (void) awakeFromNib
+{
+	[editorSource setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
 	[self setupToolbar];
 }
 
@@ -240,33 +241,75 @@ void printelt(SEXP invec, int vrow, char *strp)
 	return;
 }
 
+/**
+ * Enable drag from tableview
+ */
+- (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rows toPasteboard:(NSPasteboard*)pboard
+{
+	if (aTableView == editorSource) {
+		NSString *tmp;
+
+		// By holding ⌘, ⇧, or/and ⌥ copies selected rows as CSV
+		// otherwise \t delimited lines
+		if([[NSApp currentEvent] modifierFlags] & (NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask))
+			tmp = [editorSource rowsAsCsvStringWithHeaders:YES];
+		else
+			tmp = [editorSource rowsAsTabStringWithHeaders:YES];
+
+		if ( nil != tmp && [tmp length] )
+		{
+			[pboard declareTypes:[NSArray arrayWithObjects: NSTabularTextPboardType,
+								  NSStringPboardType, nil]
+						   owner:nil];
+
+			[pboard setString:tmp forType:NSStringPboardType];
+			[pboard setString:tmp forType:NSTabularTextPboardType];
+			return YES;
+		}
+	}
+
+	return NO;
+}
+
 - (void)setDatas:(BOOL)removeAll
 {
 
 	NSInteger i;
+	NSArray *theColumns = [editorSource tableColumns];
 
 	if(removeAll) {
-		NSArray *theColumns = [editorSource tableColumns];
 		while ([theColumns count]) 
 			[editorSource removeTableColumn:[theColumns objectAtIndex:0]];
 	}
 
 	for (i = 1; i <= xmaxused; i++) {
 		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
-		NSString *colName = [NSString stringWithUTF8String:get_col_name(i)];
+		NSString *colName  = [NSString stringWithUTF8String:get_col_name(i)];
 		if(colName) {
 			[[col headerCell] setTitle:colName];
 			[[col headerCell] setAlignment:NSCenterTextAlignment];
 			[col setHeaderToolTip:[NSString stringWithFormat:@"%@\n  (%@)", colName, (get_col_type(i) == NUMERIC) ? @"numeric" : @"character"]];
 		}
-		[col setMinWidth:18.0f];
+		[col setResizingMask:NSTableColumnUserResizingMask];
+		[col setEditable:YES];
 		if(get_col_type(i) == NUMERIC) [[col dataCell] setAlignment:NSRightTextAlignment];
-		[col setWidth:[editorSource widthForColumn:i andHeaderName:colName]];
+		[col setMinWidth:18.0f];
+		[col setMaxWidth:1000.0f];
 		[editorSource addTableColumn:col];
 		[col release];
 	}
 
-	[editorSource setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
+	// column auto-sizing
+	for(i = 1; i <= xmaxused; i++)
+		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] setWidth:[editorSource widthForColumn:i andHeaderName:[NSString stringWithUTF8String:get_col_name(i)]]];
+
+	[editorSource sizeLastColumnToFit];
+
+	//tries to fix problem with last row
+	if ( [[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:[theColumns count]-1]] width] < 30 )
+		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:[theColumns count]-1]]
+				setWidth:[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:0]] width]];
+
 	[editorSource reloadData];
 
 }
@@ -294,7 +337,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	toolbar = [[NSToolbar alloc] initWithIdentifier: DataEditorToolbarIdentifier];
     
     // Set up toolbar properties: Allow customization, give a default display mode, and remember state in user defaults 
-    [toolbar setAllowsUserCustomization: NO];
+    [toolbar setAllowsUserCustomization: YES];
     [toolbar setAutosavesConfiguration: YES];
     [toolbar setDisplayMode: NSToolbarDisplayModeIconOnly];
     

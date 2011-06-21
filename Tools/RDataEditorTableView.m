@@ -38,33 +38,121 @@
 extern SEXP ssNA_STRING;
 extern double ssNA_REAL;
 extern SEXP work;
-extern printelt(SEXP invec, int vrow, char *strp);
-
+extern void printelt(SEXP invec, int vrow, char *strp);
+extern const char *get_col_name(int col);
 
 @implementation RDataEditorTableView
 
+
+/**
+ * Handles the general Copy action of selected rows as tab delimited data
+ */
 - (void)copy:(id)sender
 {
+	NSString *tmp = nil;
+
+	tmp = [self rowsAsTabStringWithHeaders:YES];
+	if ( nil != tmp )
+	{
+		NSPasteboard *pb = [NSPasteboard generalPasteboard];
+
+		[pb declareTypes:[NSArray arrayWithObjects:
+								NSTabularTextPboardType,
+								NSStringPboardType,
+								nil]
+				   owner:nil];
+
+		[pb setString:tmp forType:NSStringPboardType];
+		[pb setString:tmp forType:NSTabularTextPboardType];
+	}
+
 }
 
-- (NSString *)draggedRowsAsTabString
+- (NSString *)draggedRowsAsTabStringWithHeaders:(BOOL)withHeaders
 {
-	return nil;
+
+	if (![self numberOfSelectedRows]) return @"";
+	return [self rowsAsTabStringWithHeaders:withHeaders];
+
 }
 
 - (NSUInteger)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-	return 0;
+	return NSDragOperationCopy;
 }
 
 - (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders
 {
-	return nil;
+	if (![self numberOfSelectedRows]) return nil;
+
+	NSIndexSet *selectedRows = [self selectedRowIndexes];
+
+	NSArray *columns = [self tableColumns];
+	NSUInteger numColumns = [columns count];
+	NSMutableString *result = [NSMutableString stringWithCapacity:2000];
+
+	// Add the table headers if requested to do so
+	if (withHeaders) {
+		NSUInteger i;
+		for( i = 1; i <= numColumns; i++ ){
+			if([result length])
+				[result appendString:@"\t"];
+			[result appendString:[NSString stringWithUTF8String:get_col_name(i)]];
+		}
+		[result appendString:@"\n"];
+	}
+
+	NSUInteger i;
+	NSString *cellData = nil;
+		
+	// Loop through the rows, adding their descriptive contents
+	NSUInteger rowIndex = [selectedRows firstIndex];
+	
+	while ( rowIndex != NSNotFound )
+	{
+		for ( i = 0; i < numColumns; i++ ) {
+
+			SEXP tmp = VECTOR_ELT(work, i);
+			cellData = @"";
+			if (!isNull(tmp)) {
+				if(LENGTH(tmp)>rowIndex) {
+					int buflen = 1025;
+					// get the number of utf-8 bytes
+					if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, rowIndex)))
+						buflen = strlen(CHAR(STRING_ELT(tmp, rowIndex)))+1;
+					char buf[buflen];
+					buf[0] = '\0';
+					printelt(tmp, rowIndex, buf);
+					cellData = [NSString stringWithUTF8String:buf];
+				}
+			}
+
+			[result appendFormat:@"%@\t", cellData];
+
+		}
+
+		// Remove the trailing tab and add the linebreak
+		if ([result length])
+			[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+
+		[result appendString:@"\n"];
+	
+		// Select the next row index
+		rowIndex = [selectedRows indexGreaterThanIndex:rowIndex];
+	}
+	
+	// Remove the trailing line end
+	if ([result length]) {
+		[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+	}
+
+	return result;
+
 }
 
 - (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders
 {
-	return nil;
+	return @"...not yet implemented...";
 }
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
@@ -192,4 +280,13 @@ extern printelt(SEXP invec, int vrow, char *strp);
 	return maxCellWidth;
 }
 
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem
+{
+	if ([menuItem action] == @selector(copy:)) {
+		return ([self numberOfSelectedRows] > 0);;
+	}
+
+	return YES;
+
+}
 @end

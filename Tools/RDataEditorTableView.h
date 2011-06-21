@@ -43,7 +43,7 @@
 }
 
 - (void)copy:(id)sender;
-- (NSString *)draggedRowsAsTabString;
+- (NSString *)draggedRowsAsTabStringWithHeaders:(BOOL)withHeaders;
 - (NSUInteger)draggingSourceOperationMaskForLocal:(BOOL)isLocal;
 - (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders;
 - (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders;
