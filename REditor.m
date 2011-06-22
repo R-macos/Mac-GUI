@@ -360,7 +360,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setPaletteLabel: NLS(@"Add Column")];
 
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: NLS(@"Adds a new columns to the right of a group of selected colums or just at the end of the data")];
+		[toolbarItem setToolTip:  [NSString stringWithFormat:NLS(@"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’"), @"⇧⌥⌘C", @"⌥⌘C"]];
 		[toolbarItem setImage: [NSImage imageNamed: @"add_col"]];
 
 		// Tell the item what message to send when it is clicked 
@@ -372,7 +372,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setPaletteLabel: NLS(@"Remove Columns")];
 
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: NLS(@"Remove selected columns")];
+		[toolbarItem setToolTip: [NSString stringWithFormat:@"%@ (⌘⌫)", NLS(@"Remove selected columns")]];
 		[toolbarItem setImage: [NSImage imageNamed: @"rem_col"]];
 
 		// Tell the item what message to send when it is clicked 
@@ -384,7 +384,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setPaletteLabel: NLS(@"Add New Row")];
 
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: NLS(@"Adds a row below a group of selected rows or at the bottom of the data")];
+		[toolbarItem setToolTip: [NSString stringWithFormat:@"%@ (⌥⌘A)", NLS(@"Adds a row below a group of selected rows or at the bottom of the data")]];
 		[toolbarItem setImage: [NSImage imageNamed: @"add_row"]];
 
 		// Tell the item what message to send when it is clicked 
@@ -396,7 +396,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setPaletteLabel: NLS(@"Remove Rows")];
 
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: NLS(@"Removes selected rows")];
+		[toolbarItem setToolTip: [NSString stringWithFormat:@"%@ (⌘⌫)", NLS(@"Removes selected rows")]];
 		[toolbarItem setImage: [NSImage imageNamed: @"rem_row"]];
 
 		// Tell the item what message to send when it is clicked 
@@ -408,7 +408,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setPaletteLabel: NLS(@"Cancel Editing")];
 
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties 
-		[toolbarItem setToolTip: NLS(@"Cancel Editing")];
+		[toolbarItem setToolTip: [NSString stringWithFormat:@"%@ (⌃⌥⌘⎋)", NLS(@"Cancels editing without passing data back to R and closes the editor window")]];
 		[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
 
 		// Tell the item what message to send when it is clicked 
@@ -481,14 +481,34 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 }
 
-/* Adds a column to the data either at the end or after the last columns selected by the user */
-
--(IBAction) addCol:(id)sender{
+/**
+ * Adds a column to the data either at the end or after the last columns selected by the user.
+ * If sender is of class NSNumber then passed integer value will choose column type
+ *   1 = CHARACTER
+ *   2 = NUMERIC
+ */
+-(IBAction) addCol:(id)sender
+{
 	char clab[25];
 	NSUInteger lastcol, i;
 	BOOL isEmpty = NO;
+	BOOL typeWasPassed = NO;
 	SEXP names2, work2;
 	SEXPTYPE newColType = STRSXP;
+
+	// if sender is a NSNumber object pre-set type of to be added columns
+	if([sender isKindOfClass:[NSNumber class]]) {
+		switch([sender intValue]) {
+			case 1:
+			newColType = STRSXP;
+			typeWasPassed = YES;
+			break;
+			case 2:
+			newColType = REALSXP;
+			typeWasPassed = YES;
+			break;
+		}
+	}
 
 	/* extend work, names and lens */
 
@@ -500,7 +520,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	}
 
 	// add a column of type of last selected column or last
-	if(!isEmpty && get_col_type(lastcol+1) == NUMERIC)
+	if(!typeWasPassed && !isEmpty && get_col_type(lastcol+1) == NUMERIC)
 		newColType = REALSXP;
 
 	xmaxused++;
@@ -680,8 +700,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	ymaxused -= nrows;
 
-	[[REditor getDEController] setDatas:YES];	
-	
+	[[REditor getDEController] setDatas:YES];
+
+	// Check last selected rows to reset selection if user deleted last row
+	NSIndexSet *s = [NSIndexSet indexSetWithIndex:([rows firstIndex] >= ymaxused) ? ymaxused-1 : [rows firstIndex]];
+	[editorSource selectRowIndexes:s byExtendingSelection:NO];
  
 }
 

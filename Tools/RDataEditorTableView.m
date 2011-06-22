@@ -327,6 +327,61 @@ extern const char *get_col_name(int col);
 	return maxCellWidth;
 }
 
+- (void)keyDown:(NSEvent*)theEvent
+{
+	long allFlags = (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask);
+	long curFlags = ([theEvent modifierFlags] & allFlags);
+
+	// Check if user pressed ⌥ to allow composing of accented characters.
+	// e.g. for US keyboard "⌥u a" to insert ä
+	// or for non-US keyboards to allow to enter dead keys
+	// e.g. for German keyboard ` is a dead key, press space to enter `
+	if ((curFlags & allFlags) == NSAlternateKeyMask || [[theEvent characters] length] == 0) {
+		[super keyDown:theEvent];
+		return;
+	}
+
+	NSString *charactersIgnMod = [theEvent charactersIgnoringModifiers];
+
+	// ⇧⌥⌘C - add col as CHARACTER
+	if(((curFlags & allFlags) == (NSCommandKeyMask|NSAlternateKeyMask|NSShiftKeyMask)) && [charactersIgnMod isEqualToString:@"C"]) {
+		[[self delegate] addCol:[NSNumber numberWithInt:1]];
+		return;
+	}
+
+	// ⌥⌘C - add col as NUMERIC
+	if(((curFlags & allFlags) == (NSCommandKeyMask|NSAlternateKeyMask)) && [charactersIgnMod isEqualToString:@"c"]) {
+		[[self delegate] addCol:[NSNumber numberWithInt:2]];
+		return;
+	}
+
+	// ⌥⌘A - add row
+	if(((curFlags & allFlags) == (NSCommandKeyMask|NSAlternateKeyMask)) && [charactersIgnMod isEqualToString:@"a"]) {
+		[[self delegate] addRow:nil];
+		return;
+	}
+
+	// ^⌥⌘⎋ cancel editing without saving data
+	if(((curFlags & allFlags) == (NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask)) && [theEvent keyCode] == 51) {
+		[[self delegate] cancelEditing:nil];
+		return;
+	}
+
+	// ⌘⌫ delete selected rows or columns according to selection
+	if((curFlags & allFlags) == NSCommandKeyMask && [theEvent keyCode] == 51) {
+		if([[self selectedColumnIndexes] count])
+			[[self delegate] remCols:nil];
+		else if([[self selectedRowIndexes] count])
+			[[self delegate] remRows:nil];
+		else
+			NSBeep();
+		return;
+	}
+
+	[super keyDown:theEvent];
+
+}
+
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem
 {
 	if ([menuItem action] == @selector(copy:)) {
