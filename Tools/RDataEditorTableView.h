@@ -43,10 +43,10 @@
 }
 
 - (void)copy:(id)sender;
-- (NSString *)draggedRowsAsTabStringWithHeaders:(BOOL)withHeaders;
-- (NSUInteger)draggingSourceOperationMaskForLocal:(BOOL)isLocal;
+
 - (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders;
 - (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders;
+
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command;
 
 - (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName;

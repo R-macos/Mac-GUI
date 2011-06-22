@@ -41,6 +41,40 @@ extern SEXP work;
 extern void printelt(SEXP invec, int vrow, char *strp);
 extern const char *get_col_name(int col);
 
+#pragma mark -
+#pragma mark Private API
+
+@interface RDataEditorTableView (PrivateAPI)
+
+- (NSString*) _getStringDataForColumn:(NSInteger)col andRow:(NSInteger)row;
+
+@end
+
+@implementation  RDataEditorTableView (PrivateAPI)
+
+- (NSString*) _getStringDataForColumn:(NSInteger)col andRow:(NSInteger)row
+{
+	SEXP tmp = VECTOR_ELT(work, col);
+	NSString *cellData = @"";
+	if (!isNull(tmp)) {
+		if(LENGTH(tmp)>row) {
+			int buflen = 1025;
+			// get the number of utf-8 bytes
+			if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, row)))
+				buflen = strlen(CHAR(STRING_ELT(tmp, row)))+1;
+			char buf[buflen];
+			buf[0] = '\0';
+			printelt(tmp, row, buf);
+			cellData = [NSString stringWithUTF8String:buf];
+		}
+	}
+	return cellData;
+}
+
+@end
+
+#pragma mark -
+
 @implementation RDataEditorTableView
 
 
@@ -68,14 +102,6 @@ extern const char *get_col_name(int col);
 
 }
 
-- (NSString *)draggedRowsAsTabStringWithHeaders:(BOOL)withHeaders
-{
-
-	if (![self numberOfSelectedRows]) return @"";
-	return [self rowsAsTabStringWithHeaders:withHeaders];
-
-}
-
 - (NSUInteger)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
 	return NSDragOperationCopy;
@@ -87,13 +113,13 @@ extern const char *get_col_name(int col);
 
 	NSIndexSet *selectedRows = [self selectedRowIndexes];
 
+	NSUInteger i;
 	NSArray *columns = [self tableColumns];
 	NSUInteger numColumns = [columns count];
 	NSMutableString *result = [NSMutableString stringWithCapacity:2000];
 
 	// Add the table headers if requested to do so
 	if (withHeaders) {
-		NSUInteger i;
 		for( i = 1; i <= numColumns; i++ ){
 			if([result length])
 				[result appendString:@"\t"];
@@ -102,34 +128,13 @@ extern const char *get_col_name(int col);
 		[result appendString:@"\n"];
 	}
 
-	NSUInteger i;
-	NSString *cellData = nil;
-		
 	// Loop through the rows, adding their descriptive contents
 	NSUInteger rowIndex = [selectedRows firstIndex];
 	
 	while ( rowIndex != NSNotFound )
 	{
-		for ( i = 0; i < numColumns; i++ ) {
-
-			SEXP tmp = VECTOR_ELT(work, i);
-			cellData = @"";
-			if (!isNull(tmp)) {
-				if(LENGTH(tmp)>rowIndex) {
-					int buflen = 1025;
-					// get the number of utf-8 bytes
-					if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, rowIndex)))
-						buflen = strlen(CHAR(STRING_ELT(tmp, rowIndex)))+1;
-					char buf[buflen];
-					buf[0] = '\0';
-					printelt(tmp, rowIndex, buf);
-					cellData = [NSString stringWithUTF8String:buf];
-				}
-			}
-
-			[result appendFormat:@"%@\t", cellData];
-
-		}
+		for ( i = 0; i < numColumns; i++ )
+			[result appendFormat:@"%@\t", [self _getStringDataForColumn:i andRow:rowIndex]];
 
 		// Remove the trailing tab and add the linebreak
 		if ([result length])
@@ -152,7 +157,49 @@ extern const char *get_col_name(int col);
 
 - (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders
 {
-	return @"...not yet implemented...";
+	if (![self numberOfSelectedRows]) return nil;
+
+	NSIndexSet *selectedRows = [self selectedRowIndexes];
+
+	NSUInteger i;
+	NSArray *columns = [self tableColumns];
+	NSUInteger numColumns = [columns count];
+	NSMutableString *result = [NSMutableString stringWithCapacity:2000];
+
+	// Add the table headers if requested to do so
+	if (withHeaders) {
+		for( i = 1; i <= numColumns; i++ ){
+			if([result length])
+				[result appendString:@","];
+			[result appendFormat:@"\"%@\"", [[NSString stringWithUTF8String:get_col_name(i)] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
+		}
+		[result appendString:@"\n"];
+	}
+
+	// Loop through the rows, adding their descriptive contents
+	NSUInteger rowIndex = [selectedRows firstIndex];
+	
+	while ( rowIndex != NSNotFound )
+	{
+		for ( i = 0; i < numColumns; i++ )
+			[result appendFormat:@"\"%@\",", [[self _getStringDataForColumn:i andRow:rowIndex] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
+
+		// Remove the trailing comma and add the linebreak
+		if ([result length]){
+			[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+		}
+		[result appendString:@"\n"];
+
+		// Select the next row index
+		rowIndex = [selectedRows indexGreaterThanIndex:rowIndex];
+	}
+
+	// Remove the trailing line end
+	if ([result length]) {
+		[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+	}
+
+	return result;
 }
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command

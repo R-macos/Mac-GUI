@@ -249,9 +249,9 @@ void printelt(SEXP invec, int vrow, char *strp)
 	if (aTableView == editorSource) {
 		NSString *tmp;
 
-		// By holding ⌘, ⇧, or/and ⌥ copies selected rows as CSV
+		// By holding ⌘ or/and ⌥ copies selected rows as CSV
 		// otherwise \t delimited lines
-		if([[NSApp currentEvent] modifierFlags] & (NSCommandKeyMask|NSShiftKeyMask|NSAlternateKeyMask))
+		if([[NSApp currentEvent] modifierFlags] & (NSCommandKeyMask|NSAlternateKeyMask))
 			tmp = [editorSource rowsAsCsvStringWithHeaders:YES];
 		else
 			tmp = [editorSource rowsAsTabStringWithHeaders:YES];
