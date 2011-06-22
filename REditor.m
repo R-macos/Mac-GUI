@@ -320,11 +320,15 @@ void printelt(SEXP invec, int vrow, char *strp)
 }
 
 - (BOOL)windowShouldClose:(id)sender{
-	
+
+	// Make sure that any pending changes will be stored before closing
+	[[[REditor getDEController] window] makeFirstResponder:editorSource];
+
 	if(IsDataEntry){
 		[NSApp stopModal];
 		IsDataEntry = NO;
 	}
+
 	return YES;
 
 }
