@@ -3333,6 +3333,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 	if (returnCode==NSAlertDefaultReturn)
 		[[REngine mainEngine] executeString: @"rm(list=ls(all=TRUE))"];
 
+	[[WSBrowser getWSBController] reloadWSBData:nil];
+
 	[RConsoleWindow makeKeyWindow];
 
 }

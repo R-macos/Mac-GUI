@@ -74,7 +74,11 @@ static id sharedWSBController;
     return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:NSWindowDidBecomeKeyNotification 
+												  object:WSBWindow];
 	[super dealloc];
 }
 
@@ -124,7 +128,8 @@ if (!item) { \
 	return WSBWindow;
 }
 
-+ (id) getWSBController{
++ (WSBrowser*) getWSBController
+{
 	return sharedWSBController;
 }
 
@@ -223,11 +228,17 @@ if (!item) { \
 	[WSBDataSource reloadData];
 }
 
+- (void) awakeFromNib
+{
 
-- (void) awakeFromNib {
-	
+	// if WSBWindow became first responder refresh data
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(reloadWSBData:) 
+												 name:NSWindowDidBecomeKeyNotification 
+											   object:WSBWindow];
+
 	[self setupToolbar];
-	//	[self showWindow];
+
 }
 
 - (void) setupToolbar {
@@ -331,13 +342,18 @@ if (!item) { \
     return enable;
 }
 
-
-
 - (IBAction) reloadWSBData:(id)sender
 {
+
+	// Avoid refreshing if not visible
+	if(![[[WSBrowser getWSBController] window] isVisible]) return;
+
+	SLog(@"Workspace Browser data will be updated");
+
 	NumOfWSObjects = 0;
 	[[REngine mainEngine] executeString:@"capture.output(browseEnv(html=F))"];
 	[self  doInitWSData];
+
 }
 
 
