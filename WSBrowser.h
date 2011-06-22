@@ -45,6 +45,7 @@
 	NSToolbar *toolbar;
 }
 
++ (WSBrowser*)getWSBController;
 
 - (void)initWSData;
 - (void) doInitWSData;

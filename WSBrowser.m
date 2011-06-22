@@ -128,7 +128,7 @@ if (!item) { \
 	return WSBWindow;
 }
 
-+ (WSBrowser*) getWSBController
++ (WSBrowser*)getWSBController
 {
 	return sharedWSBController;
 }
