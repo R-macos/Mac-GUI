@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-11  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
@@ -25,9 +25,11 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  REditor.h
+ *
  */
 
-/* REditor */
 
 #import "CCComp.h"
 #import "Tools/RDataEditorTableView.h"
@@ -46,17 +48,19 @@
 	NSToolbar *toolbar;
 }
 
-- (id) window;
++ (id) getDEController;
++ (void)startDataEntry;
+
+- (id)window;
+
 - (void)setDatas:(BOOL)removeAll;
-- (void) setupToolbar;
+
+- (void)setupToolbar;
 
 - (IBAction)addCol:(id)sender;
 - (IBAction)remCols:(id)sender;
 - (IBAction)addRow:(id)sender;
 - (IBAction)remRows:(id)sender;
 - (IBAction)cancelEditing:(id)sender;
-
-+ (id) getDEController;
-+ (void)startDataEntry;
 
 @end
