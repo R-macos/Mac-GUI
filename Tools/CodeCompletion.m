@@ -210,6 +210,9 @@
 		return nil;
 	}
 
+	// delete all comments
+	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"(?sm)#.*?$" withString:@""];
+
 	// convert scope string to single line
 	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"[\n\r\t]+" withString:@" "];
 
