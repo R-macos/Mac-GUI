@@ -46,9 +46,9 @@
 
 - (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders;
 - (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders;
+- (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName;
+- (void)setFont:(NSFont *)font;
 
 - (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command;
-
-- (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName;
 
 @end

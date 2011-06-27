@@ -46,6 +46,7 @@
 	IBOutlet RDataEditorTableView *editorSource;
 	IBOutlet NSWindow *dataWindow;
 	NSToolbar *toolbar;
+	NSInteger editedColumnNameIndex;
 }
 
 + (id) getDEController;
@@ -54,6 +55,7 @@
 - (id)window;
 
 - (void)setDatas:(BOOL)removeAll;
+- (void)editColumnNameOfTableColumn:(NSTableColumn *)aTableColumn;
 
 - (void)setupToolbar;
 
@@ -61,6 +63,8 @@
 - (IBAction)remCols:(id)sender;
 - (IBAction)addRow:(id)sender;
 - (IBAction)remRows:(id)sender;
+- (IBAction)remSelection:(id)sender;
+- (IBAction)editColumnNames:(id)sender;
 - (IBAction)cancelEditing:(id)sender;
 
 @end

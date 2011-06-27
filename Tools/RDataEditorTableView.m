@@ -34,10 +34,11 @@
 
 #import "RDataEditorTableView.h"
 #import "RGUI.h"
+#import "../REditor.h"
 
 extern SEXP ssNA_STRING;
 extern double ssNA_REAL;
-extern SEXP work;
+extern SEXP work, names;
 extern void printelt(SEXP invec, int vrow, char *strp);
 extern const char *get_col_name(int col);
 
@@ -85,7 +86,18 @@ extern const char *get_col_name(int col);
 {
 	NSString *tmp = nil;
 
-	tmp = [self rowsAsTabStringWithHeaders:YES];
+	switch([sender tag]) {
+		case 0:
+		tmp = [self rowsAsTabStringWithHeaders:YES];
+		break;
+		case 1:
+		tmp = [self rowsAsCsvStringWithHeaders:YES];
+		break;
+		default:
+		NSBeep();
+		return;
+	}
+
 	if ( nil != tmp )
 	{
 		NSPasteboard *pb = [NSPasteboard generalPasteboard];
@@ -202,50 +214,6 @@ extern const char *get_col_name(int col);
 	return result;
 }
 
-- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
-{
-
-	SLog(@"RDataEditorTableView received selector %@", NSStringFromSelector(command));
-
-	NSInteger row, column;
-
-	row = [self editedRow];
-	column = [self editedColumn];
-
-	// Trap down arrow key
-	if ( [textView methodForSelector:command] == [textView methodForSelector:@selector(moveDown:)] )
-	{
-
-		NSInteger newRow = row+1;
-		if (newRow >= [[self delegate] numberOfRowsInTableView:self]) return YES; //check if we're already at the end of the list
-
-		[[control window] makeFirstResponder:control];
-
-		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:newRow] byExtendingSelection:NO];
-		[self editColumn:column row:newRow withEvent:nil select:YES];
-		return YES;
-
-	}
-
-	// Trap up arrow key
-	else if ( [textView methodForSelector:command] == [textView methodForSelector:@selector(moveUp:)] )
-	{
-
-		if (row==0) return YES; //already at the beginning of the list
-		NSInteger newRow = row-1;
-
-		if (newRow>=[[self delegate] numberOfRowsInTableView:self]) return YES; // saveRowToTable could reload the table and change the number of rows
-		[[control window] makeFirstResponder:control];
-
-		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:newRow] byExtendingSelection:NO];
-		[self editColumn:column row:newRow withEvent:nil select:YES];
-		return YES;
-	}
-
-	return NO;
-
-}
-
 - (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName
 {
 
@@ -272,7 +240,7 @@ extern const char *get_col_name(int col);
 	rowsToCheck = (rowsToCheck > maxRows) ? maxRows : rowsToCheck;
 
 	// Set a default padding for this column
-	columnBaseWidth = 32;
+	columnBaseWidth = 32.0f;
 
 	// Iterate through the data store rows, checking widths
 	maxCellWidth = 0;
@@ -327,6 +295,61 @@ extern const char *get_col_name(int col);
 	return maxCellWidth;
 }
 
+- (void)setFont:(NSFont *)font;
+{
+	NSArray *tableColumns = [self tableColumns];
+	NSUInteger columnIndex = [tableColumns count];
+	
+	while (columnIndex--) 
+	{
+		[[(NSTableColumn *)[tableColumns objectAtIndex:columnIndex] dataCell] setFont:font];
+	}
+}
+
+- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command
+{
+
+	SLog(@"RDataEditorTableView received selector %@", NSStringFromSelector(command));
+
+	NSInteger row, column;
+
+	row = [self editedRow];
+	column = [self editedColumn];
+
+	// Trap down arrow key
+	if ( [textView methodForSelector:command] == [textView methodForSelector:@selector(moveDown:)] )
+	{
+
+		NSInteger newRow = row+1;
+		if (newRow >= [[self delegate] numberOfRowsInTableView:self]) return YES; //check if we're already at the end of the list
+
+		[[control window] makeFirstResponder:control];
+
+		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:newRow] byExtendingSelection:NO];
+		[self editColumn:column row:newRow withEvent:nil select:YES];
+		return YES;
+
+	}
+
+	// Trap up arrow key
+	else if ( [textView methodForSelector:command] == [textView methodForSelector:@selector(moveUp:)] )
+	{
+
+		if (row==0) return YES; //already at the beginning of the list
+		NSInteger newRow = row-1;
+
+		if (newRow>=[[self delegate] numberOfRowsInTableView:self]) return YES; // saveRowToTable could reload the table and change the number of rows
+		[[control window] makeFirstResponder:control];
+
+		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:newRow] byExtendingSelection:NO];
+		[self editColumn:column row:newRow withEvent:nil select:YES];
+		return YES;
+	}
+
+	return NO;
+
+}
+
 - (void)keyDown:(NSEvent*)theEvent
 {
 	long allFlags = (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask);
@@ -345,13 +368,19 @@ extern const char *get_col_name(int col);
 
 	// ⇧⌥⌘C - add col as CHARACTER
 	if(((curFlags & allFlags) == (NSCommandKeyMask|NSAlternateKeyMask|NSShiftKeyMask)) && [charactersIgnMod isEqualToString:@"C"]) {
-		[[self delegate] addCol:[NSNumber numberWithInt:1]];
+		NSMenuItem *m = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+		[m setTag:2];
+		[[self delegate] addCol:m];
+		[m release];
 		return;
 	}
 
 	// ⌥⌘C - add col as NUMERIC
 	if(((curFlags & allFlags) == (NSCommandKeyMask|NSAlternateKeyMask)) && [charactersIgnMod isEqualToString:@"c"]) {
-		[[self delegate] addCol:[NSNumber numberWithInt:2]];
+		NSMenuItem *m = [[NSMenuItem alloc] initWithTitle:@"" action:nil keyEquivalent:@""];
+		[m setTag:1];
+		[[self delegate] addCol:m];
+		[m release];
 		return;
 	}
 
@@ -385,10 +414,14 @@ extern const char *get_col_name(int col);
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem
 {
 	if ([menuItem action] == @selector(copy:)) {
-		return ([self numberOfSelectedRows] > 0);;
+		return ([self numberOfSelectedRows] > 0);
+	}
+	if ([menuItem action] == @selector(remSelection:)) {
+		return ([[self selectedColumnIndexes] count] || [[self selectedRowIndexes] count]);
 	}
 
 	return YES;
 
 }
+
 @end

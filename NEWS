@@ -1,5 +1,19 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-06-27 [HJBB]
+*	R Data Editor
+	- after initialising resize columns due content
+	- added table context menu
+	- added key equivalents to each command (see context
+	menu or toolbar tooltip)
+	- added chance to cancel the entire object editing
+	- added chance to edit column names (via context menu
+	or double-click into column header - (SHIFT+)TAB for
+	navigation, ESC for cancelling)
+	- type of added column comply with column type left
+	of the new one (can be explicitly chosen via context
+	menu)
+
 Last-update: 2011-06-10 [HJBB]
 *	fixed R Data Editor to display and edit strings of
 	any size

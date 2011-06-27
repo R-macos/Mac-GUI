@@ -41,6 +41,7 @@
 
 #import "RGUI.h"
 #import "REditor.h"
+#import "Tools/RDataEditorTableHeaderCell.h"
 
 #ifndef max
 #define max(x,y) x<y?y:x;
@@ -137,6 +138,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		// If an error occurs here, send a [self release] message and return nil.
 
 		toolbar = nil;
+		editedColumnNameIndex = -1;
 	}
 
 	return self;
@@ -193,7 +195,9 @@ void printelt(SEXP invec, int vrow, char *strp)
 		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
 		NSString *colName  = [NSString stringWithUTF8String:get_col_name(i)];
 		if(colName) {
-			[[col headerCell] setTitle:colName];
+			RDataEditorTableHeaderCell *c = [[RDataEditorTableHeaderCell alloc] initTextCell:colName];
+			[col setHeaderCell:c];
+			[c release];
 			[[col headerCell] setAlignment:NSCenterTextAlignment];
 			[col setHeaderToolTip:[NSString stringWithFormat:@"%@\n  (%@)", colName,
 				(get_col_type(i) == NUMERIC) ? @"numeric" : @"character"]];
@@ -209,9 +213,14 @@ void printelt(SEXP invec, int vrow, char *strp)
 	}
 
 	// column auto-sizing
-	for(i = 1; i <= xmaxused; i++)
+	for(i = 1; i <= xmaxused; i++) {
 		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] setWidth:
 				[editorSource widthForColumn:i andHeaderName:[NSString stringWithUTF8String:get_col_name(i)]]];
+		if(i<xmaxused)
+			[[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] headerCell] controlView] setNextKeyView:[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i+1]] headerCell] controlView]];
+		if(i==xmaxused)
+			[[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] headerCell] controlView] setNextKeyView:editorSource];
+	}
 
 	[editorSource sizeLastColumnToFit];
 
@@ -221,6 +230,26 @@ void printelt(SEXP invec, int vrow, char *strp)
 				setWidth:[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:0]] width]];
 
 	[editorSource reloadData];
+
+}
+
+- (void)editColumnNameOfTableColumn:(NSTableColumn *)aTableColumn
+{
+
+	RDataEditorTableHeaderCell *headerCellEditor = [aTableColumn headerCell];
+	NSText *editor = [[[REditor getDEController] window] fieldEditor:YES forObject:headerCellEditor];
+	editedColumnNameIndex = [[aTableColumn identifier] intValue];
+	[editor setFieldEditor:YES];
+	NSRect r = [[editorSource headerView] headerRectOfColumn:editedColumnNameIndex-1];
+	r = NSInsetRect(r, 0.0f, 1.0f);
+	[headerCellEditor editWithFrame: r
+							 inView:[editorSource headerView] 
+							 editor:editor 
+						   delegate:self 
+							  event:nil];
+
+	[headerCellEditor hideTitle];
+	[editor selectAll:nil];
 
 }
 
@@ -243,6 +272,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 {
 
 	// Make sure that any pending changes will be stored before closing
+	if(editedColumnNameIndex > -1)
+		[self textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
 	[[[REditor getDEController] window] makeFirstResponder:editorSource];
 
 	if(IsDataEntry){
@@ -260,6 +291,22 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
 	return ymaxused;
+}
+
+- (void)tableViewSelectionIsChanging:(NSNotification *)aNotification
+{
+	if([[[NSApp keyWindow] firstResponder] isKindOfClass:[NSTableView class]] && editedColumnNameIndex > -1) {
+		// Submit pending changes
+		[self textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
+		editedColumnNameIndex = -1;
+	}
+}
+
+- (void)tableViewColumnDidResize:(NSNotification *)aNotification
+{
+	if(editedColumnNameIndex > -1)
+		// Submit editing for safty reasons otherwise the editor's frame won't be updated
+		[self textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
@@ -286,7 +333,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 	return @"";
 
 }
-
 
 - (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
@@ -369,19 +415,122 @@ void printelt(SEXP invec, int vrow, char *strp)
 	return NO;
 }
 
-#pragma mark -
-#pragma mark NSTextView delegates
+- (void)tableView:(NSTableView *)tableView mouseDownInHeaderOfTableColumn:(NSTableColumn *)tableColumn
+{
+	// Go into column name editing mode if user did a double-click at the column's header
+	if([[NSApp currentEvent] clickCount] > 1) {
+		[self editColumnNameOfTableColumn:tableColumn];
+	}
 
+}
+
+#pragma mark -
+#pragma mark NSText delegates
+
+- (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)commandSelector
+{
+
+	SLog(@"REditor:textView:doCommandBySelector: %@ %@", [aTextView class], NSStringFromSelector(commandSelector));
+
+	if(editedColumnNameIndex < 1) return NO;
+
+	// Trap ESC while editing column names to cancel editing
+	if (@selector(cancelOperation:) == commandSelector) {
+		NSTableColumn *col = [editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:editedColumnNameIndex]];
+		[[col headerCell] setTitle:[[col headerCell] titleBeforeEditing]];
+		editedColumnNameIndex = -1;
+		[[[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]] setFieldEditor:YES];
+		[[[REditor getDEController] window] makeFirstResponder:editorSource];
+		[[[REditor getDEController] window] endEditingFor:[col headerCell]];
+		[[editorSource headerView] setNeedsDisplay:YES];
+		return YES;
+	}
+
+	// Trap RETURN, TAB, SHIFT+TAB while editing column names to end editing and 
+	// storing the new column name after validation; in addition for TABs edit
+	// the next/previous column name if possible
+	if (   @selector(insertNewline:) == commandSelector
+		|| @selector(insertTab:)     == commandSelector
+		|| @selector(insertBacktab:) == commandSelector
+		) {
+
+		NSTableColumn *col = [editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:editedColumnNameIndex]];
+		if(![[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]]) return NO;
+		NSString *newColumnName = [[[[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]] string] copy];
+
+		// validate newColumnName
+		BOOL newNameIsValid = YES;
+		if(!newColumnName || ![newColumnName length]) newNameIsValid = NO;
+		if(newNameIsValid) {
+			NSArray *allCols = [editorSource tableColumns];
+			NSInteger i;
+			for(i = 0; i < [allCols count]; i++) {
+				if([[[[allCols objectAtIndex:i] headerCell] title] isEqualToString:newColumnName]) {
+					newNameIsValid = NO;
+					break;
+				}
+			}
+		}
+
+		if(newNameIsValid) {
+			[[col headerCell] setTitle:newColumnName];
+			[col setHeaderToolTip:[NSString stringWithFormat:@"%@\n  (%@)", newColumnName,
+				(get_col_type(editedColumnNameIndex) == NUMERIC) ? @"numeric" : @"character"]];
+			SET_STRING_ELT(names, editedColumnNameIndex - 1, mkChar([newColumnName UTF8String]));
+		} else {
+			[[col headerCell] setTitle:[[col headerCell] titleBeforeEditing]];
+			if([aTextView isKindOfClass:[NSTextView class]] && ![[[col headerCell] title] isEqualToString:newColumnName])
+				NSBeep();
+		}
+
+		[[[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]] setFieldEditor:YES];
+		[[[REditor getDEController] window] makeFirstResponder:editorSource];
+		[[[REditor getDEController] window] endEditingFor:[col headerCell]];
+
+		[[[col headerCell] controlView] display];
+		[[editorSource headerView] display];
+		[newColumnName release];
+		// TAB select next column name if any
+		if(@selector(insertTab:) == commandSelector) {
+			if(editedColumnNameIndex < [[editorSource tableColumns] count]) {
+				NSInteger i = editedColumnNameIndex;
+				editedColumnNameIndex = -1;
+				[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:i]];
+				return YES;
+			}
+		}
+		// SHIFT+TAB select previous column name if any
+		else if(@selector(insertBacktab:) == commandSelector) {
+			if(editedColumnNameIndex > 1) {
+				NSInteger i = editedColumnNameIndex;
+				editedColumnNameIndex = -1;
+				[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:i-2]];
+				return YES;
+			}
+		}
+
+		editedColumnNameIndex = -1;
+
+		return (![aTextView isKindOfClass:[NSTextView class]]);
+	}
+
+	return NO;
+
+}
+
+/**
+ * Trap ESC,⇡, and ⇣ inside TableView
+ */
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)aTextView doCommandBySelector:(SEL)command
 {
 
 	if([control isKindOfClass:[RDataEditorTableView class]]) {
 
-		// Check firstly if RDataEditorTableView can handle command
+		// Check firstly if RDataEditorTableView can handle command (handle ⇡ ⇣)
 		if([editorSource control:control textView:aTextView doCommandBySelector:(SEL)command])
 			return YES;
 
-		// Trap the escape key
+		// Trap the escape key to abort editing
 		if ([[control window] methodForSelector:command] == [[control window] methodForSelector:@selector(cancelOperation:)])
 		{
 			// Abort editing
@@ -475,11 +624,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[toolbarItem setAction:@selector(remRows:)];
 	} else  if ([itemIdent isEqual:CancelEditToolbarItemIdentifier]) {
 		// Set the text label to be displayed in the toolbar and customization palette
-		[toolbarItem setLabel:NLSC(@"Cancel Editing", @"Remove row - label for a toolbar, keep short!")];
+		[toolbarItem setLabel:NLSC(@"Cancel Editing", @"Cancel Editing - label for a toolbar, keep short!")];
 		[toolbarItem setPaletteLabel:NLS(@"Cancel Editing")];
 
 		// Set up a reasonable tooltip, and image   Note, these aren't localized, but you will likely want to localize many of the item's properties
-		[toolbarItem setToolTip:[NSString stringWithFormat:@"%@ (⌃⌥⌘⎋)", NLS(@"Cancels editing without passing data back to R and closes the editor window")]];
+		[toolbarItem setToolTip:[NSString stringWithFormat:@"%@ (⌃⌥⌘⎋)", NLS(@"Cancels object editing without passing data back to R and closes the editor window")]];
 		[toolbarItem setImage:[NSImage imageNamed:@"stop"]];
 
 		// Tell the item what message to send when it is clicked
@@ -542,13 +691,13 @@ void printelt(SEXP invec, int vrow, char *strp)
 	// (for example:  of the save items action)
 
 	if ([[toolbarItem itemIdentifier] isEqualToString:AddColToolbarItemIdentifier])
-		return(YES);
+		return(editedColumnNameIndex < 0);
 	else if ([[toolbarItem itemIdentifier] isEqualToString:RemoveColsToolbarItemIdentifier])
-		return([[editorSource selectedColumnIndexes] count]);
+		return(editedColumnNameIndex < 0 && [[editorSource selectedColumnIndexes] count]);
 	else if ([[toolbarItem itemIdentifier] isEqualToString:AddRowToolbarItemIdentifier])
-		return(YES);
+		return(editedColumnNameIndex < 0);
 	else if ([[toolbarItem itemIdentifier] isEqualToString:RemoveRowsToolbarItemIdentifier])
-		return([[editorSource selectedRowIndexes] count]);
+		return(editedColumnNameIndex < 0 && [[editorSource selectedRowIndexes] count]);
 	else if ([[toolbarItem itemIdentifier] isEqualToString:CancelEditToolbarItemIdentifier])
 		return(YES);
 
@@ -561,7 +710,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 /**
  * Adds a column to the data either at the end or after the last columns selected by the user.
- * If sender is of class NSNumber then passed integer value will choose column type
+ * sender's tag will choose column type
+ *   0 = type of column left of it
  *   1 = CHARACTER
  *   2 = NUMERIC
  */
@@ -574,18 +724,16 @@ void printelt(SEXP invec, int vrow, char *strp)
 	SEXP names2, work2;
 	SEXPTYPE newColType = STRSXP;
 
-	// if sender is a NSNumber object pre-set type of to be added columns
-	if([sender isKindOfClass:[NSNumber class]]) {
-		switch([sender intValue]) {
-			case 1:
-			newColType = STRSXP;
-			typeWasPassed = YES;
-			break;
-			case 2:
-			newColType = REALSXP;
-			typeWasPassed = YES;
-			break;
-		}
+	// if sender's tag pre-set type of to be added columns
+	switch([sender tag]) {
+		case 1:
+		newColType = REALSXP;
+		typeWasPassed = YES;
+		break;
+		case 2:
+		newColType = STRSXP;
+		typeWasPassed = YES;
+		break;
 	}
 
 	/* extend work, names and lens */
@@ -751,6 +899,10 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	[[REditor getDEController] setDatas:YES];
 
+	// set number of rows to 0 if table has no columns
+	if(![[editorSource tableColumns] count])
+		ymaxused = 0;
+
 }
 
 /**
@@ -799,12 +951,26 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	ymaxused -= nrows;
 
-	[[REditor getDEController] setDatas:YES];
+	// [[REditor getDEController] setDatas:YES];
+	[editorSource reloadData];
 
 	// Check last selected rows to reset selection if user deleted last row
 	NSIndexSet *s = [NSIndexSet indexSetWithIndex:([rows firstIndex] >= ymaxused) ? ymaxused-1 : [rows firstIndex]];
 	[editorSource selectRowIndexes:s byExtendingSelection:NO];
 
+}
+
+- (IBAction)remSelection:(id)sender
+{
+	if([[editorSource selectedColumnIndexes] count])
+		[self remCols:nil];
+	else if([[editorSource selectedRowIndexes] count])
+		[self remRows:nil];
+}
+
+- (IBAction)editColumnNames:(id)sender
+{
+	[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:0]];
 }
 
 /**
@@ -819,6 +985,23 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	[[[REditor getDEController] window] orderOut:self];
 	[[[REditor getDEController] window] close];
+
+}
+
+#pragma mark -
+
+- (BOOL)validateMenuItem:(NSMenuItem*)menuItem
+{
+
+	if ([menuItem action] == @selector(remSelection:)) {
+		return ([[editorSource selectedColumnIndexes] count] || [[editorSource selectedRowIndexes] count]);
+	}
+
+	if ([menuItem action] == @selector(editColumnNames:)) {
+		return ([[editorSource tableColumns] count] && editedColumnNameIndex < 0);
+	}
+
+	return YES;
 
 }
 

@@ -191,6 +191,8 @@
 		BC1952B61330CA3500D52B29 /* EncodingPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC1952B41330CA3500D52B29 /* EncodingPopupView.xib */; };
 		BC33799E133A0970006758D9 /* RHistoryTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC33799C133A0970006758D9 /* RHistoryTableView.h */; };
 		BC33799F133A0970006758D9 /* RHistoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC33799D133A0970006758D9 /* RHistoryTableView.m */; };
+		BC469AED13B655270079D4E9 /* RDataEditorTableHeaderCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BC469AEB13B655270079D4E9 /* RDataEditorTableHeaderCell.h */; };
+		BC469AEE13B655270079D4E9 /* RDataEditorTableHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BC469AEC13B655270079D4E9 /* RDataEditorTableHeaderCell.m */; };
 		BC81712F13321873004B52A0 /* SelectEncodingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC81712D13321873004B52A0 /* SelectEncodingsPanel.xib */; };
 		BCBA744713B089D8001B440B /* RDataEditorTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = BCBA744513B089D8001B440B /* RDataEditorTableView.h */; };
 		BCBA744813B089D8001B440B /* RDataEditorTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCBA744613B089D8001B440B /* RDataEditorTableView.m */; };
@@ -454,6 +456,8 @@
 		BC1952B51330CA3500D52B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EncodingPopupView.xib; sourceTree = "<group>"; };
 		BC33799C133A0970006758D9 /* RHistoryTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHistoryTableView.h; sourceTree = "<group>"; };
 		BC33799D133A0970006758D9 /* RHistoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHistoryTableView.m; sourceTree = "<group>"; };
+		BC469AEB13B655270079D4E9 /* RDataEditorTableHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDataEditorTableHeaderCell.h; sourceTree = "<group>"; };
+		BC469AEC13B655270079D4E9 /* RDataEditorTableHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDataEditorTableHeaderCell.m; sourceTree = "<group>"; };
 		BC6682FE13390A06005ACB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
 		BC6682FF13390A15005ACB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
 		BC6DECCE133267F900C852C1 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
@@ -684,6 +688,8 @@
 				BC33799D133A0970006758D9 /* RHistoryTableView.m */,
 				BCBA744513B089D8001B440B /* RDataEditorTableView.h */,
 				BCBA744613B089D8001B440B /* RDataEditorTableView.m */,
+				BC469AEB13B655270079D4E9 /* RDataEditorTableHeaderCell.h */,
+				BC469AEC13B655270079D4E9 /* RDataEditorTableHeaderCell.m */,
 				1C0BD6BD07345B4300D43C33 /* Authorization.h */,
 				1C0BD6BE07345B4300D43C33 /* Authorization.c */,
 				16ABE77F06C7538500815F91 /* CodeCompletion.h */,
@@ -959,6 +965,7 @@
 				BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */,
 				BC33799E133A0970006758D9 /* RHistoryTableView.h in Headers */,
 				BCBA744713B089D8001B440B /* RDataEditorTableView.h in Headers */,
+				BC469AED13B655270079D4E9 /* RDataEditorTableHeaderCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1209,6 +1216,7 @@
 				BCEFEBE31336709A00CED44F /* RColorWellCell.m in Sources */,
 				BC33799F133A0970006758D9 /* RHistoryTableView.m in Sources */,
 				BCBA744813B089D8001B440B /* RDataEditorTableView.m in Sources */,
+				BC469AEE13B655270079D4E9 /* RDataEditorTableHeaderCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
