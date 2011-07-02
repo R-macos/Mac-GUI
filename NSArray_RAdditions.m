@@ -26,63 +26,32 @@
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
- *  RDataEditorTableHeaderCell.m
+ *  NSArray_RAdditions.h
  *
- *  Created by Hans-J. Bibiko on 24/06/2011.
+ *  Created by Hans-J. Bibiko on 01/07/2011.
  *
  */
 
-#import "RDataEditorTableHeaderCell.h"
+#import "NSArray_RAdditions.h"
 
 
-@implementation RDataEditorTableHeaderCell
+@implementation NSArray (NSArray_RAdditions)
 
-- (id)initTextCell:(NSString *)aString
+- (NSArray *)subarrayWithIndexes:(NSIndexSet *)indexes
 {
-	if(orgTitle) [orgTitle release];
-	if(!aString) aString = @"";
-	orgTitle = [aString copy];
-	return [super initTextCell:aString];
-}
+	NSMutableArray *subArray  = [NSMutableArray arrayWithCapacity:[indexes count]];
+	NSUInteger count = [self count];
 
-- (BOOL)isEditable
-{
-	return YES;
-}
+	NSUInteger index = [indexes firstIndex];
+	while ( index != NSNotFound )
+	{
+		if ( index < count )
+			[subArray addObject: [self objectAtIndex: index]];
 
-- (BOOL)acceptsFirstResponder
-{
-	return YES;
-}
+		index = [indexes indexGreaterThanIndex: index];
+	}
 
-- (BOOL)refusesFirstResponder
-{
-	return NO;
-}
-
-- (NSString*)titleBeforeEditing
-{
-	return (orgTitle) ? orgTitle : @"";
-}
-
-- (void)hideTitle
-{
-	if(orgTitle) [orgTitle release];
-	orgTitle = [[self title] retain];
-	[self setTitle:@""];
-}
-
-- (void)dealloc
-{
-	if(orgTitle) [orgTitle release];
-	[super dealloc];
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-	id newCopy = [super copyWithZone:zone];
-	[orgTitle retain];
-	return newCopy;
+	return subArray;
 }
 
 @end

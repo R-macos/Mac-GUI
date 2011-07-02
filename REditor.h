@@ -47,6 +47,11 @@
 	IBOutlet NSWindow *dataWindow;
 	NSToolbar *toolbar;
 	NSInteger editedColumnNameIndex;
+	NSMutableArray *objectData;
+	NSMutableArray *objectColumnNames;
+	NSMutableArray *objectColumnTypes;
+	NSInteger numberOfRows;
+	NSInteger numberOfColumns;
 }
 
 + (id) getDEController;
@@ -54,7 +59,12 @@
 
 - (id)window;
 
-- (void)setDatas:(BOOL)removeAll;
+- (BOOL)initData;
+- (BOOL)writeDataBackToObject;
+- (NSArray*)objectData;
+- (NSArray*)objectColumnTypes;
+- (void)clearData;
+- (void)setDataTable:(BOOL)removeAll;
 - (void)editColumnNameOfTableColumn:(NSTableColumn *)aTableColumn;
 
 - (void)setupToolbar;

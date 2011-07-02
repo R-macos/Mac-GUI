@@ -26,63 +26,21 @@
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
- *  RDataEditorTableHeaderCell.m
+ *  NSArray_RAdditions.h
  *
- *  Created by Hans-J. Bibiko on 24/06/2011.
+ *  Created by Hans-J. Bibiko on 01/07/2011.
  *
  */
 
-#import "RDataEditorTableHeaderCell.h"
+#import <Cocoa/Cocoa.h>
 
-
-@implementation RDataEditorTableHeaderCell
-
-- (id)initTextCell:(NSString *)aString
+static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i) 
 {
-	if(orgTitle) [orgTitle release];
-	if(!aString) aString = @"";
-	orgTitle = [aString copy];
-	return [super initTextCell:aString];
+	return (id)CFArrayGetValueAtIndex((CFArrayRef)self, (long)i);
 }
 
-- (BOOL)isEditable
-{
-	return YES;
-}
+@interface NSArray (NSArray_RAdditions)
 
-- (BOOL)acceptsFirstResponder
-{
-	return YES;
-}
-
-- (BOOL)refusesFirstResponder
-{
-	return NO;
-}
-
-- (NSString*)titleBeforeEditing
-{
-	return (orgTitle) ? orgTitle : @"";
-}
-
-- (void)hideTitle
-{
-	if(orgTitle) [orgTitle release];
-	orgTitle = [[self title] retain];
-	[self setTitle:@""];
-}
-
-- (void)dealloc
-{
-	if(orgTitle) [orgTitle release];
-	[super dealloc];
-}
-
-- (id)copyWithZone:(NSZone *)zone
-{
-	id newCopy = [super copyWithZone:zone];
-	[orgTitle retain];
-	return newCopy;
-}
+- (NSArray *)subarrayWithIndexes:(NSIndexSet *)indexes;
 
 @end

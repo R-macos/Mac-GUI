@@ -193,6 +193,8 @@
 		BC33799F133A0970006758D9 /* RHistoryTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC33799D133A0970006758D9 /* RHistoryTableView.m */; };
 		BC469AED13B655270079D4E9 /* RDataEditorTableHeaderCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BC469AEB13B655270079D4E9 /* RDataEditorTableHeaderCell.h */; };
 		BC469AEE13B655270079D4E9 /* RDataEditorTableHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BC469AEC13B655270079D4E9 /* RDataEditorTableHeaderCell.m */; };
+		BC53A82013BDB5ED009488EE /* NSArray_RAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = BC53A81E13BDB5ED009488EE /* NSArray_RAdditions.h */; };
+		BC53A82113BDB5ED009488EE /* NSArray_RAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BC53A81F13BDB5ED009488EE /* NSArray_RAdditions.m */; };
 		BC81712F13321873004B52A0 /* SelectEncodingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC81712D13321873004B52A0 /* SelectEncodingsPanel.xib */; };
 		BCBA744713B089D8001B440B /* RDataEditorTableView.h in Headers */ = {isa = PBXBuildFile; fileRef = BCBA744513B089D8001B440B /* RDataEditorTableView.h */; };
 		BCBA744813B089D8001B440B /* RDataEditorTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCBA744613B089D8001B440B /* RDataEditorTableView.m */; };
@@ -458,6 +460,8 @@
 		BC33799D133A0970006758D9 /* RHistoryTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHistoryTableView.m; sourceTree = "<group>"; };
 		BC469AEB13B655270079D4E9 /* RDataEditorTableHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDataEditorTableHeaderCell.h; sourceTree = "<group>"; };
 		BC469AEC13B655270079D4E9 /* RDataEditorTableHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDataEditorTableHeaderCell.m; sourceTree = "<group>"; };
+		BC53A81E13BDB5ED009488EE /* NSArray_RAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArray_RAdditions.h; sourceTree = "<group>"; };
+		BC53A81F13BDB5ED009488EE /* NSArray_RAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArray_RAdditions.m; sourceTree = "<group>"; };
 		BC6682FE13390A06005ACB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
 		BC6682FF13390A15005ACB30 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
 		BC6DECCE133267F900C852C1 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = it; path = it.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
@@ -879,6 +883,8 @@
 			children = (
 				BC0D31981334B1410071B76A /* NSTextView_RAdditions.h */,
 				BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */,
+				BC53A81E13BDB5ED009488EE /* NSArray_RAdditions.h */,
+				BC53A81F13BDB5ED009488EE /* NSArray_RAdditions.m */,
 			);
 			name = "Category Additions";
 			sourceTree = "<group>";
@@ -966,6 +972,7 @@
 				BC33799E133A0970006758D9 /* RHistoryTableView.h in Headers */,
 				BCBA744713B089D8001B440B /* RDataEditorTableView.h in Headers */,
 				BC469AED13B655270079D4E9 /* RDataEditorTableHeaderCell.h in Headers */,
+				BC53A82013BDB5ED009488EE /* NSArray_RAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1217,6 +1224,7 @@
 				BC33799F133A0970006758D9 /* RHistoryTableView.m in Sources */,
 				BCBA744813B089D8001B440B /* RDataEditorTableView.m in Sources */,
 				BC469AEE13B655270079D4E9 /* RDataEditorTableHeaderCell.m in Sources */,
+				BC53A82113BDB5ED009488EE /* NSArray_RAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

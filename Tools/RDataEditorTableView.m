@@ -35,46 +35,7 @@
 #import "RDataEditorTableView.h"
 #import "RGUI.h"
 #import "../REditor.h"
-
-extern SEXP ssNA_STRING;
-extern double ssNA_REAL;
-extern SEXP work, names;
-extern void printelt(SEXP invec, int vrow, char *strp);
-extern const char *get_col_name(int col);
-
-#pragma mark -
-#pragma mark Private API
-
-@interface RDataEditorTableView (PrivateAPI)
-
-- (NSString*) _getStringDataForColumn:(NSInteger)col andRow:(NSInteger)row;
-
-@end
-
-@implementation  RDataEditorTableView (PrivateAPI)
-
-- (NSString*) _getStringDataForColumn:(NSInteger)col andRow:(NSInteger)row
-{
-	SEXP tmp = VECTOR_ELT(work, col);
-	NSString *cellData = @"";
-	if (!isNull(tmp)) {
-		if(LENGTH(tmp)>row) {
-			int buflen = 1025;
-			// get the number of utf-8 bytes
-			if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, row)))
-				buflen = strlen(CHAR(STRING_ELT(tmp, row)))+1;
-			char buf[buflen];
-			buf[0] = '\0';
-			printelt(tmp, row, buf);
-			cellData = [NSString stringWithUTF8String:buf];
-		}
-	}
-	return cellData;
-}
-
-@end
-
-#pragma mark -
+#import "../NSArray_RAdditions.h"
 
 @implementation RDataEditorTableView
 
@@ -132,21 +93,21 @@ extern const char *get_col_name(int col);
 
 	// Add the table headers if requested to do so
 	if (withHeaders) {
-		for( i = 1; i <= numColumns; i++ ){
+		for(i = 0; i < numColumns; i++ ){
 			if([result length])
 				[result appendString:@"\t"];
-			[result appendString:[NSString stringWithUTF8String:get_col_name(i)]];
+			[result appendString:[[NSArrayObjectAtIndex([self tableColumns], i) headerCell] title]];
 		}
 		[result appendString:@"\n"];
 	}
 
 	// Loop through the rows, adding their descriptive contents
 	NSUInteger rowIndex = [selectedRows firstIndex];
-	
+	NSArray *ds = [[self delegate] objectData];
 	while ( rowIndex != NSNotFound )
 	{
 		for ( i = 0; i < numColumns; i++ )
-			[result appendFormat:@"%@\t", [self _getStringDataForColumn:i andRow:rowIndex]];
+			[result appendFormat:@"%@\t", NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, i), rowIndex)];
 
 		// Remove the trailing tab and add the linebreak
 		if ([result length])
@@ -180,21 +141,32 @@ extern const char *get_col_name(int col);
 
 	// Add the table headers if requested to do so
 	if (withHeaders) {
-		for( i = 1; i <= numColumns; i++ ){
+		for( i = 0; i < numColumns; i++ ){
 			if([result length])
 				[result appendString:@","];
-			[result appendFormat:@"\"%@\"", [[NSString stringWithUTF8String:get_col_name(i)] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
+			[result appendFormat:@"\"%@\"", [[[NSArrayObjectAtIndex([self tableColumns], i) headerCell] title] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
 		}
 		[result appendString:@"\n"];
 	}
 
 	// Loop through the rows, adding their descriptive contents
 	NSUInteger rowIndex = [selectedRows firstIndex];
-	
+	NSArray *ds = [[self delegate] objectData];
+	NSArray *columnTypes = [[self delegate] objectColumnTypes];
+
+	NSInteger types[[columnTypes count]];
+
+	for( i = 0; i < numColumns; i++ )
+		types[i] = [NSArrayObjectAtIndex(columnTypes, i) intValue];
+
 	while ( rowIndex != NSNotFound )
 	{
+
 		for ( i = 0; i < numColumns; i++ )
-			[result appendFormat:@"\"%@\",", [[self _getStringDataForColumn:i andRow:rowIndex] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
+			if(types[i] == 1)
+				[result appendFormat:@"%@,", NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, i), rowIndex)];
+			else
+				[result appendFormat:@"\"%@\",", [NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, i), rowIndex) stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
 
 		// Remove the trailing comma and add the linebreak
 		if ([result length]){
@@ -243,27 +215,12 @@ extern const char *get_col_name(int col);
 	columnBaseWidth = 32.0f;
 
 	// Iterate through the data store rows, checking widths
+	id ds = [[self delegate] objectData];
 	maxCellWidth = 0;
-	for (i = 0; i < rowsToCheck; i += rowStep) {
+	for (i = 0; i < maxRows; i += rowStep) {
 
-		// Retrieve the cell's content
-		SEXP tmp = VECTOR_ELT(work, columnIndex-1);
-
-		contentString = @"";
-		if (!isNull(tmp)) {
-			if(LENGTH(tmp)>i) {
-				int buflen = 1025;
-				// get the number of utf-8 bytes
-				if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, i)))
-					buflen = strlen(CHAR(STRING_ELT(tmp, i)))+1;
-				char buf[buflen];
-				buf[0] = '\0';
-				printelt(tmp, (int)i, buf);
-				contentString = [NSString stringWithUTF8String:buf];
-			}
-		}
-
-		if ([(NSString *)contentString length] > 500) {
+		contentString = NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, columnIndex), i);
+		if ([contentString length] > 500) {
 			contentString = [contentString substringToIndex:500];
 		}
 

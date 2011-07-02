@@ -42,6 +42,7 @@
 #import "RGUI.h"
 #import "REditor.h"
 #import "Tools/RDataEditorTableHeaderCell.h"
+#import "NSArray_RAdditions.h"
 
 #ifndef max
 #define max(x,y) x<y?y:x;
@@ -67,24 +68,11 @@ const char *get_col_name(int col)
 	static char clab[25];
 	if (col <= xmaxused) {
 		// don't use NA labels
-		SEXP tmp = STRING_ELT(names, col - 1);
+		SEXP tmp = STRING_ELT(names, col);
 		if(tmp != NA_STRING) return(CHAR(tmp));
 	}
 	sprintf(clab, "var%d", col);
 	return clab;
-}
-
-CellType get_col_type(int col)
-{
-	SEXP tmp;
-	CellType res = UNKNOWNN;
-
-	if (col <= xmaxused) {
-		tmp = VECTOR_ELT(work, col - 1);
-		if(TYPEOF(tmp) == REALSXP) res = NUMERIC;
-		if(TYPEOF(tmp) == STRSXP) res = CHARACTER;
-	}
-	return res;
 }
 
 void printelt(SEXP invec, int vrow, char *strp)
@@ -139,6 +127,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 		toolbar = nil;
 		editedColumnNameIndex = -1;
+		objectData = [[NSMutableArray alloc] initWithCapacity:10];
+		objectColumnNames = [[NSMutableArray alloc] initWithCapacity:10];
+		objectColumnTypes = [[NSMutableArray alloc] initWithCapacity:10];
+		numberOfColumns = 0;
+		numberOfRows = 0;
 	}
 
 	return self;
@@ -168,7 +161,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	newvar = 0;
 
-	[[REditor getDEController] setDatas:YES];
+	[[REditor getDEController] setDataTable:YES];
 	[[[REditor getDEController] window] orderFront:self];
 
 	NSInteger ret = [NSApp runModalForWindow:[[REditor getDEController] window]];
@@ -181,31 +174,197 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 }
 
-- (void)setDatas:(BOOL)removeAll
+- (BOOL)writeDataBackToObject
 {
+	NSInteger buflen = 256;
+	NSInteger i, j;
+	NSInteger nCols = [[editorSource tableColumns] count];
+	NSInteger nRows = (nCols) ? [[objectData objectAtIndex:0] count] : 0;
+	NSInteger colType;
+	SEXP work3, names3;
+
+	numberOfRows = 0;
+
+	PROTECT(work3  = allocVector(VECSXP, nCols)); nprotect++;
+	PROTECT(names3 = allocVector(STRSXP, nCols)); nprotect++;
+
+	for(i = 0; i < nCols; i++) {
+
+		SET_VECTOR_ELT(work3, i, ssNewVector(([NSArrayObjectAtIndex(objectColumnTypes, i) intValue] == NUMERIC) ? REALSXP : STRSXP, nRows));
+
+		SEXP tmp = VECTOR_ELT(work3, i);
+		SET_STRING_ELT(names3, i, mkChar([NSArrayObjectAtIndex(objectColumnNames, i) UTF8String]));
+
+		colType = [NSArrayObjectAtIndex(objectColumnTypes, i) intValue];
+		for(j = 0; j < nRows; j++) {
+
+			NSString *anObject = NSArrayObjectAtIndex(NSArrayObjectAtIndex(objectData, i), j);
+			buflen = 256;
+
+			// get the number of utf-8 bytes for CHARACTER type
+			if(colType == CHARACTER)
+				buflen = strlen([anObject UTF8String])+2;
+
+			char buf[buflen];
+			buf[0] = '\0';
+
+			CFStringGetCString((CFStringRef)anObject, buf, buflen-1, kCFStringEncodingUTF8);
+
+			switch(colType) {
+
+				case NUMERIC:
+				if(buf[0] == '\0')
+					REAL(tmp)[j] = NA_REAL;
+				 else {
+					char *endp;
+					double new = R_strtod(buf, &endp);
+					REAL(tmp)[j] = new;
+				 }
+				break;
+
+				case CHARACTER:
+				if(buf[0] == '\0')
+					SET_STRING_ELT(tmp, j, NA_STRING);
+				 else
+					SET_STRING_ELT(tmp, j, mkChar(buf));
+
+				break;
+
+				default:
+				return NO;
+				break;
+
+			}
+		}
+	}
+	
+	REPROTECT(work  = allocVector(VECSXP, nCols), wpi);
+	REPROTECT(names = allocVector(STRSXP, nCols), npi);
+
+	xmaxused = nCols;
+
+	for (i = 0; i < nCols; i++) {
+		SET_VECTOR_ELT(work,  i, VECTOR_ELT(work3,  i));
+		SET_STRING_ELT(names, i, STRING_ELT(names3, i));
+		INTEGER(lens)[i] = nRows;
+	}
+
+	return YES;
+}
+
+- (BOOL)initData
+{
+
+	numberOfRows = 0;
+	numberOfColumns = 0;
+
+	if(objectData) [objectData release], objectData = nil;
+	if(objectColumnNames) [objectColumnNames release], objectColumnNames = nil;
+	if(objectColumnTypes) [objectColumnTypes release], objectColumnTypes = nil;
+	objectData = (NSMutableArray*)CFArrayCreateMutable(NULL, xmaxused, NULL);
+	objectColumnNames = (NSMutableArray*)CFArrayCreateMutable(NULL, xmaxused, NULL);
+	objectColumnTypes = (NSMutableArray*)CFArrayCreateMutable(NULL, xmaxused, NULL);
+
+	numberOfRows = ymaxused;
+
+	NSInteger i;
+	NSNumber *charNumber = [NSNumber numberWithInt:CHARACTER];
+	NSNumber *numNumber  = [NSNumber numberWithInt:NUMERIC];
+
+	for(i = 0; i < xmaxused; i++) {
+		SEXP tmp = VECTOR_ELT(work, i);
+		if (isNull(tmp)) {
+			NSBeep();
+			error([NLS(@"R Data Editor - error while reading object data") UTF8String]);
+			return NO;
+			break;
+		}
+		CFArrayAppendValue((CFMutableArrayRef)objectColumnTypes, (TYPEOF(tmp) == STRSXP) ? charNumber : numNumber);
+		CFArrayAppendValue((CFMutableArrayRef)objectColumnNames, CFStringCreateWithCString(NULL, get_col_name(i), kCFStringEncodingUTF8));
+		if(TYPEOF(tmp) == STRSXP) {
+
+			NSUInteger k=0, l=LENGTH(tmp);
+			id *cont=(id *)malloc(sizeof(id)*l);
+			while (k<l) {
+				if ( !streql( CHAR(STRING_ELT(tmp, k)), CHAR(STRING_ELT(ssNA_STRING, 0)) ) )
+					cont[k] = (NSString*)CFStringCreateWithCString(NULL, CHAR(STRING_ELT(tmp, k)), kCFStringEncodingUTF8);
+				else
+					cont[k] = @"";
+				k++;
+			}
+			NSArray *a = [NSArray arrayWithObjects:cont count:l];
+			k=0;
+			while (k<l) [cont[k++] release];
+			free(cont);
+
+			CFArrayAppendValue((CFMutableArrayRef)objectData, [a mutableCopy]);
+
+		}
+		else if(TYPEOF(tmp) == REALSXP){
+
+			NSUInteger k=0, l=LENGTH(tmp);
+			id *cont = malloc(sizeof(id)*l);
+			while (k<l) {
+
+#if (R_VERSION >= R_Version(2,2,0))
+				cont[k] = (NSString*)CFStringCreateWithCString(NULL, EncodeElement(tmp, k, 0, '.'), kCFStringEncodingASCII);
+#else
+				cont[k] = (NSString*)CFStringCreateWithCString(NULL, EncodeElement(tmp, k, 0), kCFStringEncodingASCII);
+#endif
+
+				k++;
+			}
+			NSArray *a = [NSArray arrayWithObjects:cont count:l];
+			k=0;
+			while (k<l) [cont[k++] release];
+			free(cont);
+
+			CFArrayAppendValue((CFMutableArrayRef)objectData, [a mutableCopy]);
+
+		}
+		else {
+			NSBeep();
+			error([NLS(@"R Data Editor - error while reading object data") UTF8String]);
+			return NO;
+		}
+	}
+
+	numberOfColumns = xmaxused;
+
+	return YES;
+
+}
+
+- (void)setDataTable:(BOOL)removeAll
+{
+
+	if(removeAll)
+		if(![self initData]) return;
 
 	NSInteger i;
 	NSArray *theColumns = [editorSource tableColumns];
 
-	if(removeAll)
-		while ([theColumns count])
-			[editorSource removeTableColumn:[theColumns objectAtIndex:0]];
+	while ([theColumns count])
+		[editorSource removeTableColumn:NSArrayObjectAtIndex(theColumns ,0)];
 
-	for (i = 1; i <= xmaxused; i++) {
+	if(!objectData) return;
+
+	for (i = 0; i < numberOfColumns; i++) {
 		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
-		NSString *colName  = [NSString stringWithUTF8String:get_col_name(i)];
+		NSString *colName  = NSArrayObjectAtIndex(objectColumnNames, i);
+		NSInteger colType  = [NSArrayObjectAtIndex(objectColumnTypes, i) intValue];
 		if(colName) {
 			RDataEditorTableHeaderCell *c = [[RDataEditorTableHeaderCell alloc] initTextCell:colName];
 			[col setHeaderCell:c];
 			[c release];
 			[[col headerCell] setAlignment:NSCenterTextAlignment];
 			[col setHeaderToolTip:[NSString stringWithFormat:@"%@\n  (%@)", colName,
-				(get_col_type(i) == NUMERIC) ? @"numeric" : @"character"]];
+				(colType == NUMERIC) ? @"numeric" : @"character"]];
 		}
 		[col setResizingMask:NSTableColumnUserResizingMask];
 		[col setEditable:YES];
 		// set text cell alignment to 'right' for numeric values
-		if(get_col_type(i) == NUMERIC) [[col dataCell] setAlignment:NSRightTextAlignment];
+		if(colType == NUMERIC) [[col dataCell] setAlignment:NSRightTextAlignment];
 		[col setMinWidth:18.0f];
 		[col setMaxWidth:1000.0f];
 		[editorSource addTableColumn:col];
@@ -213,20 +372,20 @@ void printelt(SEXP invec, int vrow, char *strp)
 	}
 
 	// column auto-sizing
-	for(i = 1; i <= xmaxused; i++) {
+	for(i = 0; i < numberOfColumns; i++) {
 		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] setWidth:
-				[editorSource widthForColumn:i andHeaderName:[NSString stringWithUTF8String:get_col_name(i)]]];
-		if(i<xmaxused)
+				[editorSource widthForColumn:i andHeaderName:NSArrayObjectAtIndex(objectColumnNames, i)]];
+		if(i+1 < numberOfColumns)
 			[[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] headerCell] controlView] setNextKeyView:[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i+1]] headerCell] controlView]];
-		if(i==xmaxused)
+		else if(i-1 == numberOfColumns)
 			[[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] headerCell] controlView] setNextKeyView:editorSource];
 	}
 
 	[editorSource sizeLastColumnToFit];
 
 	//tries to fix problem with last row
-	if ( [[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:[theColumns count]-1]] width] < 30 )
-		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:[theColumns count]-1]]
+	if ( [[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:numberOfColumns-1]] width] < 30 )
+		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:numberOfColumns-1]]
 				setWidth:[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:0]] width]];
 
 	[editorSource reloadData];
@@ -240,7 +399,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	NSText *editor = [[[REditor getDEController] window] fieldEditor:YES forObject:headerCellEditor];
 	editedColumnNameIndex = [[aTableColumn identifier] intValue];
 	[editor setFieldEditor:YES];
-	NSRect r = [[editorSource headerView] headerRectOfColumn:editedColumnNameIndex-1];
+	NSRect r = [[editorSource headerView] headerRectOfColumn:editedColumnNameIndex];
 	r = NSInsetRect(r, 0.0f, 1.0f);
 	[headerCellEditor editWithFrame: r
 							 inView:[editorSource headerView] 
@@ -253,8 +412,28 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 }
 
+- (NSArray*)objectData
+{
+	return objectData;
+}
+
+- (NSArray*)objectColumnTypes
+{
+	return objectColumnTypes;
+}
+
+- (void)clearData
+{
+	[objectColumnTypes removeAllObjects];
+	[objectColumnNames removeAllObjects];
+	[objectData removeAllObjects];
+}
+
 - (void)dealloc
 {
+	if(objectColumnTypes) [objectColumnTypes release];
+	if(objectColumnNames) [objectColumnNames release];
+	if(objectData) [objectData release];
 	[super dealloc];
 }
 
@@ -276,6 +455,10 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[self textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
 	[[[REditor getDEController] window] makeFirstResponder:editorSource];
 
+	if(![self writeDataBackToObject]) {
+		error([NLS(@"R Data Editor couldn't write object data") UTF8String]);
+	}
+
 	if(IsDataEntry){
 		[NSApp stopModal];
 		IsDataEntry = NO;
@@ -290,7 +473,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-	return ymaxused;
+	return numberOfRows;
 }
 
 - (void)tableViewSelectionIsChanging:(NSNotification *)aNotification
@@ -312,25 +495,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 
-	NSInteger i = [[tableColumn identifier] intValue];
-	if(i > xmaxused) return @"";
-
-	SEXP tmp = VECTOR_ELT(work, i-1);
-
-	if (!isNull(tmp)) {
-		if(LENGTH(tmp)>row) {
-			int buflen = 1025;
-			// get the number of utf-8 bytes
-			if (TYPEOF(tmp) == STRSXP && CHAR(STRING_ELT(tmp, row)))
-				buflen = strlen(CHAR(STRING_ELT(tmp, row)))+1;
-			char buf[buflen];
-			buf[0] = '\0';
-			printelt(tmp, row, buf);
-			return [NSString stringWithUTF8String:buf];
-		}
-	}
-
-	return @"";
+	if(row < 0) return @"…";
+	return NSArrayObjectAtIndex(NSArrayObjectAtIndex(objectData, [[tableColumn identifier] intValue]), row);
 
 }
 
@@ -339,49 +505,26 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	if(row < 0) return;
 
-	NSInteger buflen = 256;
 	NSInteger col = [[tableColumn identifier] intValue];
 
-	// get the number of utf-8 bytes for CHARACTER type
-	if(get_col_type(col) == CHARACTER && [anObject isKindOfClass:[NSString class]])
-		buflen = strlen([(NSString*)anObject UTF8String])+2;
-
-	char buf[buflen];
-	buf[0] = '\0';
-
-	SEXP tmp = VECTOR_ELT(work, col-1);
-
-	CFStringGetCString((CFStringRef)anObject, buf, buflen-1, kCFStringEncodingUTF8);
-
-	switch(get_col_type(col)) {
-
-		case NUMERIC:
-		if(buf[0] == '\0')
-			REAL(tmp)[row] = NA_REAL;
-		 else {
-			char *endp;
-			double new = R_strtod(buf, &endp);
-			REAL(tmp)[row] = new;
-			INTEGER(lens)[col-1] = max(INTEGER(lens)[col-1], row+1);
-		 }
-		break;
-
-		case CHARACTER:
-		if(buf[0] == '\0')
-			SET_STRING_ELT(tmp, row, NA_STRING);
-		 else
-			SET_STRING_ELT(tmp, row, mkChar(buf));
-		INTEGER(lens)[col-1] = max(INTEGER(lens)[col-1], row+1);
-		break;
-
-		default:
-		break;
-
+	if([[objectColumnTypes objectAtIndex:col] intValue] == NUMERIC) {
+		// validate NUMERIC value
+		char *endp;
+		(void)R_strtod([anObject UTF8String], &endp);
+		if(strlen(endp))
+			[[objectData objectAtIndex:col] replaceObjectAtIndex:row withObject:@"NA"];
+		else {
+			[[objectData objectAtIndex:col] replaceObjectAtIndex:row withObject:anObject];
+		}
+	} else {
+		[[objectData objectAtIndex:col] replaceObjectAtIndex:row withObject:anObject];
 	}
 
 	// resize column width
-	CGFloat newSize = [editorSource widthForColumn:col andHeaderName:(NSString *)anObject];
+	CGFloat newSize = [editorSource widthForColumn:col andHeaderName:(NSString*)anObject];
 	if(newSize > [tableColumn width]) [tableColumn setWidth:newSize];
+
+	return;
 
 }
 
@@ -432,7 +575,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	SLog(@"REditor:textView:doCommandBySelector: %@ %@", [aTextView class], NSStringFromSelector(commandSelector));
 
-	if(editedColumnNameIndex < 1) return NO;
+	if(editedColumnNameIndex < 0) return NO;
 
 	// Trap ESC while editing column names to cancel editing
 	if (@selector(cancelOperation:) == commandSelector) {
@@ -475,8 +618,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 		if(newNameIsValid) {
 			[[col headerCell] setTitle:newColumnName];
 			[col setHeaderToolTip:[NSString stringWithFormat:@"%@\n  (%@)", newColumnName,
-				(get_col_type(editedColumnNameIndex) == NUMERIC) ? @"numeric" : @"character"]];
-			SET_STRING_ELT(names, editedColumnNameIndex - 1, mkChar([newColumnName UTF8String]));
+				([[objectColumnTypes objectAtIndex:editedColumnNameIndex] intValue] == NUMERIC) ? @"numeric" : @"character"]];
+			[objectColumnNames replaceObjectAtIndex:[[col identifier] intValue] withObject:newColumnName];
 		} else {
 			[[col headerCell] setTitle:[[col headerCell] titleBeforeEditing]];
 			if([aTextView isKindOfClass:[NSTextView class]] && ![[[col headerCell] title] isEqualToString:newColumnName])
@@ -492,19 +635,19 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[newColumnName release];
 		// TAB select next column name if any
 		if(@selector(insertTab:) == commandSelector) {
-			if(editedColumnNameIndex < [[editorSource tableColumns] count]) {
+			if(editedColumnNameIndex + 1 < [[editorSource tableColumns] count]) {
 				NSInteger i = editedColumnNameIndex;
 				editedColumnNameIndex = -1;
-				[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:i]];
+				[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:i+1]];
 				return YES;
 			}
 		}
 		// SHIFT+TAB select previous column name if any
 		else if(@selector(insertBacktab:) == commandSelector) {
-			if(editedColumnNameIndex > 1) {
+			if(editedColumnNameIndex > 0) {
 				NSInteger i = editedColumnNameIndex;
 				editedColumnNameIndex = -1;
-				[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:i-2]];
+				[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:i-1]];
 				return YES;
 			}
 		}
@@ -717,67 +860,56 @@ void printelt(SEXP invec, int vrow, char *strp)
  */
 - (IBAction)addCol:(id)sender
 {
-	char clab[25];
+
 	NSUInteger lastcol, i;
 	BOOL isEmpty = NO;
 	BOOL typeWasPassed = NO;
-	SEXP names2, work2;
-	SEXPTYPE newColType = STRSXP;
+	NSInteger newColType = CHARACTER;
 
 	// if sender's tag pre-set type of to be added columns
 	switch([sender tag]) {
 		case 1:
-		newColType = REALSXP;
+		newColType = NUMERIC;
 		typeWasPassed = YES;
 		break;
 		case 2:
-		newColType = STRSXP;
+		newColType = CHARACTER;
 		typeWasPassed = YES;
 		break;
 	}
 
-	/* extend work, names and lens */
-
 	NSIndexSet *cols =  [editorSource selectedColumnIndexes];
+	NSInteger nCols = [[editorSource tableColumns] count];
 	lastcol = [cols lastIndex];
 	if(lastcol == NSNotFound) {
-		isEmpty = (xmaxused == 0);
-		lastcol = !isEmpty ? (xmaxused - 1) : 0;
+		isEmpty = (nCols == 0);
+		lastcol = !isEmpty ? (nCols - 1) : 0;
 	}
 
 	// add a column of type of last selected column or last
-	if(!typeWasPassed && !isEmpty && get_col_type(lastcol+1) == NUMERIC)
-		newColType = REALSXP;
+	if(!typeWasPassed && !isEmpty)
+		newColType = [[objectColumnTypes objectAtIndex:lastcol] intValue];
 
-	xmaxused++;
 	newvar++;
-	PROTECT(names2 = duplicate(names)); nprotect++;
-	PROTECT(work2 = duplicate(work)); nprotect++;
 
-	REPROTECT(work = allocVector(VECSXP, xmaxused), wpi);
-	REPROTECT(names = allocVector(STRSXP, xmaxused), npi);
-	REPROTECT(lens = allocVector(INTSXP, xmaxused), lpi);
-
-	if (!isEmpty) for (i = 0; i <= lastcol; i++) {
-		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2, i));
-		SET_STRING_ELT(names, i, STRING_ELT(names2, i));
-		INTEGER(lens)[i] = ymaxused;
+	if(nCols == lastcol) {
+		[objectColumnNames addObject:[NSString stringWithFormat:@"var %d", newvar]];
+		[objectColumnTypes addObject:[NSNumber numberWithInteger:newColType]];
+		[objectData addObject:[NSMutableArray array]];
+	} else {
+		[objectColumnNames insertObject:[NSString stringWithFormat:@"var %d", newvar] atIndex:lastcol+1];
+		[objectColumnTypes insertObject:[NSNumber numberWithInteger:newColType] atIndex:lastcol+1];
+		[objectData insertObject:[NSMutableArray array] atIndex:lastcol+1];
 	}
 
-	if (!isEmpty) lastcol++;
-	sprintf(clab, "var%d", newvar);
-	SET_STRING_ELT(names, lastcol, mkChar(clab));
-	INTEGER(lens)[lastcol] = ymaxused;
+	if(!isEmpty) 
+		for(i = 0; i < [[objectData objectAtIndex:lastcol] count]; i++)
+			[[objectData objectAtIndex:lastcol+1] addObject:(newColType == NUMERIC) ? @"NA" : @""];
 
-	SET_VECTOR_ELT(work, lastcol, ssNewVector(newColType, ymaxused));
+	numberOfColumns++;
 
-	for (i = lastcol+1; i <xmaxused; i++) {
-		SET_VECTOR_ELT(work, i, VECTOR_ELT(work2, i-1));
-		SET_STRING_ELT(names, i, STRING_ELT(names2, i-1));
-		INTEGER(lens)[i] = ymaxused;
-	}
+	[self setDataTable:NO];
 
-	[[REditor getDEController] setDatas:YES];
 }
 
 /**
@@ -790,62 +922,35 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (IBAction)addRow:(id)sender
 {
 
-	NSUInteger col, row, lastrow;
-	SEXP tmp, tmp2, work2;
-	SEXPTYPE type;
+	NSUInteger col, lastrow;
 	BOOL isEmpty = NO;
 
+	if(![[editorSource tableColumns] count]) return;
+
 	NSIndexSet *rows =  [editorSource selectedRowIndexes];
+	NSInteger nRows = ([objectData count]) ? [[objectData objectAtIndex:0] count] : 0;
 	lastrow = [rows lastIndex]; // last row selected by the user
 
 	if(lastrow == NSNotFound) {
-		isEmpty = (ymaxused == 0);
-		lastrow = isEmpty ? 0 : (ymaxused - 1);
+		isEmpty = (nRows == 0);
+		lastrow = isEmpty ? 0 : (nRows - 1);
 	}
 
-	ymaxused++;
-	PROTECT(work2 = allocVector(VECSXP, xmaxused)); nprotect++;
+	if(lastrow == nRows)
+		for(col = 0; col < [[editorSource tableColumns] count]; col++)
+			[[objectData objectAtIndex:col] addObject:([[objectColumnTypes objectAtIndex:col] intValue] == NUMERIC) ? @"NA" : @""];
+	else
+		for(col = 0; col < [[editorSource tableColumns] count]; col++)
+			[[objectData objectAtIndex:col] insertObject:([[objectColumnTypes objectAtIndex:col] intValue] == NUMERIC) ? @"NA" : @"" atIndex:lastrow+1];
 
-	for(col = 1; col <= xmaxused; col++) {
+	numberOfRows++;
 
-		tmp = VECTOR_ELT(work, col-1);
+	[editorSource reloadData];
 
-		// the user started off with an empty list so we have to decide what to create
-		if (tmp == R_NilValue)
-			type = REALSXP;
-		else {
-			if (!isVector(tmp))
-			error("internal type error in dataentry");
-			type = TYPEOF(tmp);
-		}
+	if([rows count] == 1)
+		[editorSource selectRowIndexes:[NSIndexSet indexSetWithIndex:lastrow+1] byExtendingSelection:NO];
 
-		tmp2 = ssNewVector(type, ymaxused);
-		if (tmp != R_NilValue && !isEmpty) {
-			for (row = 0; row <= lastrow; row++){
-				if (type == REALSXP)
-					REAL(tmp2)[row] = REAL(tmp)[row];
-				else if (type == STRSXP)
-					SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row));
-				else
-					error("internal type error in dataentry");
-			}
-
-			for (row = lastrow+2; row < ymaxused; row++)
-				if (type == REALSXP)
-					REAL(tmp2)[row] = REAL(tmp)[row - 1];
-				else if (type == STRSXP)
-					SET_STRING_ELT(tmp2, row, STRING_ELT(tmp, row - 1));
-				else
-					error("internal type error in dataentry");
-		}
-
-		SET_VECTOR_ELT(work2, col-1, tmp2);
-		INTEGER(lens)[col - 1] = ymaxused;
-
-	}
-
-	REPROTECT(work = duplicate(work2), wpi);
-	[[REditor getDEController] setDatas:YES];
+	return;
 
 }
 
@@ -854,54 +959,43 @@ void printelt(SEXP invec, int vrow, char *strp)
  */
 - (IBAction)remCols:(id)sender
 {
-	SEXP work2, names2;
-	NSUInteger i, j, ncols;
-	int *colidx;
+
+	NSUInteger i;
 
 	NSIndexSet *cols =  [editorSource selectedColumnIndexes];
 	NSUInteger current_index = [cols firstIndex];
 	if(current_index == NSNotFound)
 		return;
 
-	ncols = [editorSource numberOfSelectedColumns];
-	colidx = (int *)malloc(xmaxused);
-
-	if(!colidx) return;
-
-	for( i = 0; i < xmaxused; i++ ) colidx[i] = i;
-
 	while (current_index != NSNotFound) {
-		colidx[current_index] = -1;
+		[editorSource removeTableColumn:[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:current_index]]];
 		current_index = [cols indexGreaterThanIndex:current_index];
 	}
 
-	PROTECT(work2 = allocVector(VECSXP, xmaxused-ncols)); nprotect++;
-	PROTECT(names2 = allocVector(STRSXP, xmaxused-ncols)); nprotect++;
+	[objectData removeObjectsAtIndexes:cols];
+	[objectColumnTypes removeObjectsAtIndexes:cols];
+	[objectColumnNames removeObjectsAtIndexes:cols];
 
-	for(i = 0, j = 0; i < xmaxused; i++) {
-		if(!isNull(VECTOR_ELT(work, i))  && (colidx[i] != -1)) {
-			SET_VECTOR_ELT(work2, j, VECTOR_ELT(work, i));
-			INTEGER(lens)[j] = INTEGER(lens)[i];
-			SET_STRING_ELT(names2, j, STRING_ELT(names, i));
-			j++;
-	    }
+	numberOfColumns -= [cols count];
+
+	// if no column is given create a matrix 1 x 1 of value NA
+	if(!numberOfColumns) {
+		[objectData addObject:[NSMutableArray array]];
+		[[objectData objectAtIndex:0] addObject:@"NA"];
+		[objectColumnNames addObject:@"var1"];
+		[objectColumnTypes addObject:[NSNumber numberWithInteger:NUMERIC]];
+		numberOfRows = 1;
+		numberOfColumns++;
+		[self setDataTable:NO];
+	} else {
+
+		for(i = 0; i < numberOfColumns; i++)
+			[[[editorSource tableColumns] objectAtIndex:i] setIdentifier:[NSNumber numberWithInteger:i]];
+
+		[editorSource reloadData];
+
+		[editorSource selectColumnIndexes:[NSIndexSet indexSetWithIndex:([cols lastIndex] < [[editorSource tableColumns] count]) ? [cols lastIndex] : [[editorSource tableColumns] count]-1] byExtendingSelection:NO];
 	}
-
-	REPROTECT(names = duplicate(names2), npi);
-	REPROTECT(work = duplicate(work2), wpi);
-
-	xmaxused = xmaxused - ncols;
-	REPROTECT(lens = allocVector(INTSXP, xmaxused), lpi);
-	for(i=0; i < xmaxused; i++)
-		INTEGER(lens)[i] = ymaxused;
-
-	if(colidx) free(colidx);
-
-	[[REditor getDEController] setDatas:YES];
-
-	// set number of rows to 0 if table has no columns
-	if(![[editorSource tableColumns] count])
-		ymaxused = 0;
 
 }
 
@@ -911,52 +1005,22 @@ void printelt(SEXP invec, int vrow, char *strp)
 - (IBAction)remRows:(id)sender
 {
 
-	SEXP tmp, newc;
-	SEXPTYPE type;
-	NSUInteger idx, col, row, nrows;
+	NSUInteger col, nrows;
 
 	NSIndexSet *rows =  [editorSource selectedRowIndexes];
 	nrows = [rows count];
 
-	if (nrows<1) return;
+	if (nrows < 1) return;
 
-	for(col = 1; col <= xmaxused; col++) {
+	numberOfRows -= nrows;
 
-		idx = 0;
+	for(col = 0; col < numberOfColumns; col++)
+		[[objectData objectAtIndex:col] removeObjectsAtIndexes:rows];
 
-		if (!isVector(tmp = VECTOR_ELT(work, col-1)))
-			error("internal type error in dataentry");
-		if (LENGTH(tmp)!=ymaxused)
-			error("a data vector is of different length than the table");
-
-		type = TYPEOF(tmp);
-
-		PROTECT(newc = allocVector(type, ymaxused - nrows));
-		for(row=0; row<ymaxused; row++) {
-			if(![rows containsIndex:row]) {
-				if (type == REALSXP)
-					REAL(newc)[idx] = REAL(tmp)[row];
-				else if (type == STRSXP)
-					SET_STRING_ELT(newc, idx, duplicate(STRING_ELT(tmp, row)));
-				else
-					error("internal type error in dataentry");
-				idx++;
-			}
-		}
-		UNPROTECT(1);
-
-		INTEGER(lens)[col - 1] -= nrows;
-		SET_VECTOR_ELT(work, col-1, newc);
-	}
-
-	ymaxused -= nrows;
-
-	// [[REditor getDEController] setDatas:YES];
 	[editorSource reloadData];
 
 	// Check last selected rows to reset selection if user deleted last row
-	NSIndexSet *s = [NSIndexSet indexSetWithIndex:([rows firstIndex] >= ymaxused) ? ymaxused-1 : [rows firstIndex]];
-	[editorSource selectRowIndexes:s byExtendingSelection:NO];
+	[editorSource selectRowIndexes:[NSIndexSet indexSetWithIndex:([rows firstIndex] < numberOfRows) ? [rows firstIndex] : numberOfRows-1] byExtendingSelection:NO];
 
 }
 
@@ -970,7 +1034,10 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 - (IBAction)editColumnNames:(id)sender
 {
-	[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:0]];
+	if([[editorSource tableColumns] count])
+		[self editColumnNameOfTableColumn:[[editorSource tableColumns] objectAtIndex:0]];
+	else
+		NSBeep();
 }
 
 /**

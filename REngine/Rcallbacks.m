@@ -813,65 +813,61 @@ SEXP ssNewVector(SEXPTYPE type, int vlen)
 int nprotect;
 SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
 {
-    SEXP colmodes, tnames, tvec, tvec2, work2;
-    SEXPTYPE type;
-    int i, j, cnt, len;
-    char clab[25];
 
-	
-    nprotect = 0;/* count the PROTECT()s */
-    PROTECT_WITH_INDEX(work = duplicate(CAR(args)), &wpi); nprotect++;
-    colmodes = CADR(args);
-    tnames = getAttrib(work, R_NamesSymbol);
+	SEXP colmodes, tnames, tvec, work2;
+	SEXPTYPE type;
+	int i, j, cnt;
+	char clab[25];
 
-    if (TYPEOF(work) != VECSXP || TYPEOF(colmodes) != VECSXP)
-	errorcall(call, "invalid argument");
+	nprotect = 0; /* count the PROTECT()s */
+	PROTECT_WITH_INDEX(work = duplicate(CAR(args)), &wpi); nprotect++;
 
-    /* initialize the constants */
+	colmodes = CADR(args);
+	tnames = getAttrib(work, R_NamesSymbol);
 
-    ssNA_REAL = -NA_REAL;
-    tvec = allocVector(REALSXP, 1);
-    REAL(tvec)[0] = ssNA_REAL;
-    PROTECT(ssNA_STRING = coerceVector(tvec, STRSXP)); nprotect++;
-    
-    /* setup work, names, lens  */
-    xmaxused = length(work); ymaxused = 0;
-    PROTECT_WITH_INDEX(lens = allocVector(INTSXP, xmaxused), &lpi);
-    nprotect++;
+	if (TYPEOF(work) != VECSXP || TYPEOF(colmodes) != VECSXP)
+		errorcall(call, "invalid argument");
 
-    if (isNull(tnames)) {
+	/* initialize the constants */
+	ssNA_REAL = -NA_REAL;
+	tvec = allocVector(REALSXP, 1);
+	REAL(tvec)[0] = ssNA_REAL;
+	PROTECT(ssNA_STRING = coerceVector(tvec, STRSXP)); nprotect++;
+
+	/* setup work, names, lens */
+	xmaxused = length(work); ymaxused = 0;
+	PROTECT_WITH_INDEX(lens = allocVector(INTSXP, xmaxused), &lpi);
+	nprotect++;
+	if (isNull(tnames)) {
 		PROTECT_WITH_INDEX(names = allocVector(STRSXP, xmaxused), &npi);
 		for(i = 0; i < xmaxused; i++) {
 			sprintf(clab, "var%d", i);
 			SET_STRING_ELT(names, i, mkChar(clab));
 		}
-    } else 
+	} else 
 		PROTECT_WITH_INDEX(names = duplicate(tnames), &npi);
-    nprotect++;
+	nprotect++;
 
-    for (i = 0; i < xmaxused; i++) {
-	int len = LENGTH(VECTOR_ELT(work, i));
-	INTEGER(lens)[i] = len;
-	ymaxused = max(len, ymaxused);
-        type = TYPEOF(VECTOR_ELT(work, i));
-    if (LENGTH(colmodes) > 0 && !isNull(VECTOR_ELT(colmodes, i)))
-	    type = str2type(CHAR(STRING_ELT(VECTOR_ELT(colmodes, i), 0)));
-	if (type != STRSXP) type = REALSXP;
-	if (isNull(VECTOR_ELT(work, i))) {
-	    if (type == NILSXP) type = REALSXP;
-	    SET_VECTOR_ELT(work, i, ssNewVector(type, 100));
-	} else if (!isVector(VECTOR_ELT(work, i)))
-	    errorcall(call, "invalid type for value");
-	else {
-	    if (TYPEOF(VECTOR_ELT(work, i)) != type)
-		SET_VECTOR_ELT(work, i, 
-			       coerceVector(VECTOR_ELT(work, i), type));
+	for (i = 0; i < xmaxused; i++) {
+		int len = LENGTH(VECTOR_ELT(work, i));
+		INTEGER(lens)[i] = len;
+		ymaxused = max(len, ymaxused);
+		type = TYPEOF(VECTOR_ELT(work, i));
+		if (LENGTH(colmodes) > 0 && !isNull(VECTOR_ELT(colmodes, i)))
+			type = str2type(CHAR(STRING_ELT(VECTOR_ELT(colmodes, i), 0)));
+		if (type != STRSXP) type = REALSXP;
+		if (isNull(VECTOR_ELT(work, i))) {
+			if (type == NILSXP) type = REALSXP;
+			SET_VECTOR_ELT(work, i, ssNewVector(type, 100));
+		} else if (!isVector(VECTOR_ELT(work, i)))
+			errorcall(call, "invalid type for value");
+		else {
+			if (TYPEOF(VECTOR_ELT(work, i)) != type)
+				SET_VECTOR_ELT(work, i, coerceVector(VECTOR_ELT(work, i), type));
+		}
 	}
-    }
 
-
-    /* start up the window, more initializing in here */
-
+	/* start up the window, more initializing in here */
 	IsDataEntry = YES;
 	insideR--;
 	[REditor startDataEntry];
@@ -879,47 +875,26 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
 	IsDataEntry = NO;
 
 	/* drop out unused columns */
-    for(i = 0, cnt = 0; i < xmaxused; i++)
-	if(!isNull(VECTOR_ELT(work, i))) cnt++;
-    if (cnt < xmaxused) {
-	PROTECT(work2 = allocVector(VECSXP, cnt)); nprotect++;
-	for(i = 0, j = 0; i < xmaxused; i++) {
-	    if(!isNull(VECTOR_ELT(work, i))) {
-		SET_VECTOR_ELT(work2, j, VECTOR_ELT(work, i));
-		INTEGER(lens)[j] = INTEGER(lens)[i];
-		SET_STRING_ELT(names, j, STRING_ELT(names, i));
-		j++;
-	    }
-	}
-	REPROTECT(names = lengthgets(names, cnt), npi);
-    } else work2 = work;
+	for(i = 0, cnt = 0; i < xmaxused; i++)
+		if(!isNull(VECTOR_ELT(work, i))) cnt++;
+	if (cnt < xmaxused) {
+		PROTECT(work2 = allocVector(VECSXP, cnt)); nprotect++;
+		for(i = 0, j = 0; i < xmaxused; i++) {
+			if(!isNull(VECTOR_ELT(work, i))) {
+				SET_VECTOR_ELT(work2, j, VECTOR_ELT(work, i));
+				INTEGER(lens)[j] = INTEGER(lens)[i];
+				SET_STRING_ELT(names, j, STRING_ELT(names, i));
+				j++;
+			}
+		}
+		REPROTECT(names = lengthgets(names, cnt), npi);
+	} else work2 = work;
 
-    for (i = 0; i < LENGTH(work2); i++) {
-	len = INTEGER(lens)[i];
-	tvec = VECTOR_ELT(work2, i);
-	if (LENGTH(tvec) != len) {
-	    tvec2 = ssNewVector(TYPEOF(tvec), len);
-	    for (j = 0; j < len; j++) {
-		if (TYPEOF(tvec) == REALSXP) {
-		    if (REAL(tvec)[j] != ssNA_REAL)
-			REAL(tvec2)[j] = REAL(tvec)[j];
-		    else
-			REAL(tvec2)[j] = NA_REAL;
-		} else if (TYPEOF(tvec) == STRSXP) {
-		    if (!streql(CHAR(STRING_ELT(tvec, j)),
-				CHAR(STRING_ELT(ssNA_STRING, 0))))
-			SET_STRING_ELT(tvec2, j, STRING_ELT(tvec, j));
-		    else
-			SET_STRING_ELT(tvec2, j, NA_STRING);
-		} else
-		    error("dataentry: internal memory problem");
-	    }
-	    SET_VECTOR_ELT(work2, i, tvec2);
-	}
-    }
+	setAttrib(work2, R_NamesSymbol, names);
+	UNPROTECT(nprotect);
 
-    setAttrib(work2, R_NamesSymbol, names);    
-    UNPROTECT(nprotect);
+	[[REditor getDEController] clearData];
 
-    return work2;
+	return work2;
+
 }
