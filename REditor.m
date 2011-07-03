@@ -261,9 +261,9 @@ void printelt(SEXP invec, int vrow, char *strp)
 	if(objectData) [objectData release], objectData = nil;
 	if(objectColumnNames) [objectColumnNames release], objectColumnNames = nil;
 	if(objectColumnTypes) [objectColumnTypes release], objectColumnTypes = nil;
-	objectData = (NSMutableArray*)CFArrayCreateMutable(NULL, xmaxused, NULL);
-	objectColumnNames = (NSMutableArray*)CFArrayCreateMutable(NULL, xmaxused, NULL);
-	objectColumnTypes = (NSMutableArray*)CFArrayCreateMutable(NULL, xmaxused, NULL);
+	objectData = [[NSMutableArray alloc] initWithCapacity:xmaxused];
+	objectColumnNames = [[NSMutableArray alloc] initWithCapacity:xmaxused];
+	objectColumnTypes = [[NSMutableArray alloc] initWithCapacity:xmaxused];
 
 	numberOfRows = ymaxused;
 
@@ -891,8 +891,9 @@ void printelt(SEXP invec, int vrow, char *strp)
 		newColType = [[objectColumnTypes objectAtIndex:lastcol] intValue];
 
 	newvar++;
+NSLog(@"%d %d %d", nCols, lastcol, newColType);
 
-	if(nCols == lastcol) {
+	if((nCols-1) == lastcol) {
 		[objectColumnNames addObject:[NSString stringWithFormat:@"var %d", newvar]];
 		[objectColumnTypes addObject:[NSNumber numberWithInteger:newColType]];
 		[objectData addObject:[NSMutableArray array]];
@@ -902,11 +903,11 @@ void printelt(SEXP invec, int vrow, char *strp)
 		[objectData insertObject:[NSMutableArray array] atIndex:lastcol+1];
 	}
 
-	if(!isEmpty) 
-		for(i = 0; i < [[objectData objectAtIndex:lastcol] count]; i++)
-			[[objectData objectAtIndex:lastcol+1] addObject:(newColType == NUMERIC) ? @"NA" : @""];
-
 	numberOfColumns++;
+
+	if(!isEmpty) 
+		for(i = 0; i < numberOfRows; i++)
+			[NSArrayObjectAtIndex(objectData, (lastcol+1)) addObject:(newColType == NUMERIC) ? @"NA" : @""];
 
 	[self setDataTable:NO];
 

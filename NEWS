@@ -1,5 +1,16 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-07-03 [HJBB]
+*	Edit Object <SHIFT+COMMAND+E>
+	- in Workspace Browser is invokes editing of selected
+	item
+	- in any editor if something is selected it takes the
+	selection as object name and invokes obj <- edit(obj)
+	- in any editor if nothing is selected it takes the
+	current word due to cursor position, checks if found
+	word is a valid object name in ls(), and if so invokes
+	obj <- edit(obj)
+
 Last-update: 2011-06-27 [HJBB]
 *	R Data Editor
 	- after initialising resize columns due content

@@ -244,6 +244,7 @@
 - (IBAction)toggleDataManager:(id)sender;
 - (IBAction)toggleWSBrowser:(id)sender;
 - (IBAction)performHelpSearch:(id)sender;
+- (IBAction)editObject:(id)sender;
 
 - (IBAction)sourceFile:(id)sender;
 - (IBAction)sourceOrLoadFile:(id)sender;

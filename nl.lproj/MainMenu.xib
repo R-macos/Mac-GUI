@@ -164,6 +164,7 @@
 									</object>
 									<string key="NSFrame">{{1, 1}, {548, 412}}</string>
 									<reference key="NSSuperview" ref="343940978"/>
+									<reference key="NSNextKeyView" ref="781119707"/>
 									<reference key="NSDocView" ref="781119707"/>
 									<reference key="NSBGColor" ref="266515385"/>
 									<object class="NSCursor" key="NSCursor">
@@ -195,6 +196,7 @@
 							</object>
 							<string key="NSFrame">{{0, 20}, {550, 414}}</string>
 							<reference key="NSSuperview" ref="186451207"/>
+							<reference key="NSNextKeyView" ref="469120998"/>
 							<int key="NSsFlags">530</int>
 							<reference key="NSVScroller" ref="204246707"/>
 							<reference key="NSHScroller" ref="234796342"/>
@@ -4744,6 +4746,7 @@
 									</object>
 									<string key="NSFrame">{{1, 17}, {478, 342}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSNextKeyView" ref="783549011"/>
 									<reference key="NSDocView" ref="783549011"/>
 									<reference key="NSBGColor" ref="650509342"/>
 									<int key="NScvFlags">4</int>
@@ -4776,6 +4779,7 @@
 									</object>
 									<string key="NSFrame">{{1, 0}, {478, 17}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSNextKeyView" ref="272087171"/>
 									<reference key="NSDocView" ref="272087171"/>
 									<reference key="NSBGColor" ref="650509342"/>
 									<int key="NScvFlags">4</int>
@@ -4784,6 +4788,7 @@
 							</object>
 							<string key="NSFrameSize">{480, 360}</string>
 							<reference key="NSSuperview" ref="465510747"/>
+							<reference key="NSNextKeyView" ref="576351995"/>
 							<int key="NSsFlags">562</int>
 							<reference key="NSVScroller" ref="850038370"/>
 							<reference key="NSHScroller" ref="698895697"/>
@@ -7540,6 +7545,14 @@
 						<reference key="destination" ref="487934542"/>
 					</object>
 					<int key="connectionID">1735</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">editObject:</string>
+						<reference key="source" ref="841731700"/>
+						<reference key="destination" ref="625211532"/>
+					</object>
+					<int key="connectionID">1736</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -11837,7 +11850,7 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABBmAAAxAQAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{156, 298}, {223, 393}}</string>
+					<string>{{181, 298}, {220, 393}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11933,7 +11946,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{74, 691}, {596, 20}}</string>
+					<string>{{74, 691}, {669, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12429,7 +12442,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1735</int>
+			<int key="maxID">1736</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

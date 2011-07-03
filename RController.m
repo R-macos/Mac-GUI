@@ -63,6 +63,7 @@
 #import "Quartz/QuartzDevice.h"
 #import "Tools/Authorization.h"
 #import "RChooseEncodingPopupAccessory.h"
+#import "NSTextView_RAdditions.h"
 
 #import "Preferences.h"
 #import "SearchTable.h"
@@ -2611,6 +2612,35 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 	}
 
+	if ([menuItem action] == @selector(editObject:)) {
+		id fr = [[NSApp keyWindow] firstResponder];
+		if([fr respondsToSelector:@selector(getRangeForCurrentWord)]) {
+
+			NSString *objName = nil;
+
+			// if user selected something allow it since s/he is responsible
+			// otherwise take the current word due to cursor position and 
+			// check if it is a valid object name in the workspace “ls()”
+			if([(NSTextView*)fr selectedRange].length)
+				return YES;
+			else if([(NSTextView*)fr getRangeForCurrentWord].length)
+				objName = [[(NSTextView*)fr string] substringWithRange:[(RTextView*)fr getRangeForCurrentWord]];
+			else
+				return NO;
+
+			if(!objName) return NO;
+
+			// check if found object name is defined in workspace “ls()”
+			RSEXP *check = [[REngine mainEngine] evaluateString:[NSString stringWithFormat:@"ifelse(\"%@\" %%in%% ls(), '1', '')", objName]];
+			if(check && [check string].length) {
+				[check release];
+				return YES;
+			}
+			return NO;
+		}
+		return NO;
+	}
+
 	return YES;
 
 }
@@ -3398,6 +3428,31 @@ This method calls the showHelpFor method of the Help Manager which opens
 	
 	if (answer==NSOKButton)
 		[self sendInput:[NSString stringWithFormat:@"source(\"%@\")",[op filename]]];
+
+}
+
+- (IBAction)editObject:(id)sender
+{
+	id fr = [[NSApp keyWindow] firstResponder];
+
+	if([fr respondsToSelector:@selector(getRangeForCurrentWord)]) {
+
+		NSString *objName = nil;
+
+		// take the selected word if any otherwise the current word due to cursor position
+		if([(NSTextView*)fr selectedRange].length)
+			objName = [[(NSTextView*)fr string] substringWithRange:[(RTextView*)fr selectedRange]];
+		else if([(NSTextView*)fr getRangeForCurrentWord].length)
+			objName = [[(NSTextView*)fr string] substringWithRange:[(RTextView*)fr getRangeForCurrentWord]];
+
+		if(!objName) {
+			NSBeep();
+			return;
+		}
+
+		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"%@ <- edit(%@)", objName, objName]];
+
+	}
 
 }
 

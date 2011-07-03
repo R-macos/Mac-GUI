@@ -21,8 +21,9 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1714"/>
 			<integer value="798"/>
+			<integer value="1714"/>
+			<integer value="169"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -7553,6 +7554,14 @@
 					</object>
 					<int key="connectionID">1735</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">editObject:</string>
+						<reference key="source" ref="841731700"/>
+						<reference key="destination" ref="625211532"/>
+					</object>
+					<int key="connectionID">1736</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -11849,7 +11858,7 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABBmAAAxAQAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{156, 298}, {223, 393}}</string>
+					<string>{{199, 145}, {320, 393}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11945,7 +11954,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{74, 4}, {798, 20}}</string>
+					<string>{{94, 538}, {798, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12441,7 +12450,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1735</int>
+			<int key="maxID">1736</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

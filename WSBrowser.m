@@ -342,6 +342,17 @@ if (!item) { \
     return enable;
 }
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+
+	if ([menuItem action] == @selector(editObject:)) {
+		return ([WSBDataSource numberOfSelectedRows] == 1);
+	}
+
+	return YES;
+
+}
+
 - (IBAction) reloadWSBData:(id)sender
 {
 

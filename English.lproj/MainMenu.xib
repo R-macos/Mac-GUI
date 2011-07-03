@@ -21,8 +21,9 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1717"/>
 			<integer value="795"/>
+			<integer value="1717"/>
+			<integer value="169"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4757,6 +4758,7 @@
 									</object>
 									<string key="NSFrame">{{1, 17}, {478, 342}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSNextKeyView" ref="783549011"/>
 									<reference key="NSDocView" ref="783549011"/>
 									<reference key="NSBGColor" ref="650509342"/>
 									<int key="NScvFlags">4</int>
@@ -4789,6 +4791,7 @@
 									</object>
 									<string key="NSFrame">{{1, 0}, {478, 17}}</string>
 									<reference key="NSSuperview" ref="49354047"/>
+									<reference key="NSNextKeyView" ref="272087171"/>
 									<reference key="NSDocView" ref="272087171"/>
 									<reference key="NSBGColor" ref="650509342"/>
 									<int key="NScvFlags">4</int>
@@ -4797,6 +4800,7 @@
 							</object>
 							<string key="NSFrameSize">{480, 360}</string>
 							<reference key="NSSuperview" ref="465510747"/>
+							<reference key="NSNextKeyView" ref="576351995"/>
 							<int key="NSsFlags">562</int>
 							<reference key="NSVScroller" ref="850038370"/>
 							<reference key="NSHScroller" ref="698895697"/>
@@ -7554,6 +7558,14 @@
 						<reference key="destination" ref="953083575"/>
 					</object>
 					<int key="connectionID">1741</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">editObject:</string>
+						<reference key="source" ref="841731700"/>
+						<reference key="destination" ref="625211532"/>
+					</object>
+					<int key="connectionID">1742</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -12263,9 +12275,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{721, 396}, {480, 360}}</string>
+					<string>{{472, 396}, {480, 360}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{721, 396}, {480, 360}}</string>
+					<string>{{472, 396}, {480, 360}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{213, 107}</string>
@@ -12445,7 +12457,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1741</int>
+			<int key="maxID">1742</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
