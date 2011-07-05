@@ -49,10 +49,10 @@
 
 	switch([sender tag]) {
 		case 0:
-		tmp = [self rowsAsTabStringWithHeaders:YES];
+		tmp = ([self numberOfSelectedRows]) ? [self rowsAsTabStringWithHeaders:YES] : [self columnsAsTabStringWithHeaders:YES];
 		break;
 		case 1:
-		tmp = [self rowsAsCsvStringWithHeaders:YES];
+		tmp = ([self numberOfSelectedRows]) ? [self rowsAsCsvStringWithHeaders:YES] : [self columnsAsCsvStringWithHeaders:YES];
 		break;
 		default:
 		NSBeep();
@@ -77,7 +77,7 @@
 
 - (NSUInteger)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
-	return NSDragOperationCopy;
+	return ([[self selectedRowIndexes] count]) ? NSDragOperationCopy : NSDragOperationNone;
 }
 
 - (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders
@@ -184,6 +184,121 @@
 	}
 
 	return result;
+}
+
+- (NSString *)columnsAsTabStringWithHeaders:(BOOL)withHeaders
+{
+	if (![self numberOfSelectedColumns]) return nil;
+
+	NSIndexSet *selectedCols = [self selectedColumnIndexes];
+	NSUInteger colIndex = [selectedCols firstIndex];
+
+	NSUInteger i;
+	NSMutableString *result = [NSMutableString stringWithCapacity:2000];
+
+	// Add the table headers if requested to do so
+	if (withHeaders) {
+		while ( colIndex != NSNotFound ) {
+			if([result length])
+				[result appendString:@"\t"];
+			[result appendString:[[NSArrayObjectAtIndex([self tableColumns], colIndex) headerCell] title]];
+
+			// Select the next column index
+			colIndex = [selectedCols indexGreaterThanIndex:colIndex];
+		}
+		[result appendString:@"\n"];
+	}
+
+	// Loop through the rows, adding their descriptive contents
+	NSArray *ds = [[self delegate] objectData];
+	for ( i = 0; i < [NSArrayObjectAtIndex(ds, 0) count]; i++ )
+	{
+		colIndex = [selectedCols firstIndex];
+		while ( colIndex != NSNotFound ) {
+			[result appendFormat:@"%@\t", NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, colIndex), i)];
+			// Select the next column index
+			colIndex = [selectedCols indexGreaterThanIndex:colIndex];
+		}
+
+		// Remove the trailing tab and add the linebreak
+		if ([result length])
+			[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+
+		[result appendString:@"\n"];
+	
+	}
+	
+	// Remove the trailing line end
+	if ([result length]) {
+		[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+	}
+
+	return result;
+
+}
+
+- (NSString *)columnsAsCsvStringWithHeaders:(BOOL)withHeaders
+{
+	if (![self numberOfSelectedColumns]) return nil;
+
+	NSIndexSet *selectedCols = [self selectedColumnIndexes];
+	NSUInteger colIndex = [selectedCols firstIndex];
+
+	NSUInteger i;
+	NSMutableString *result = [NSMutableString stringWithCapacity:2000];
+
+	// Add the table headers if requested to do so
+	if (withHeaders) {
+		while ( colIndex != NSNotFound ) {
+			if([result length])
+				[result appendString:@","];
+
+			[result appendString:[NSString stringWithFormat:@"\"%@\"",[[[NSArrayObjectAtIndex([self tableColumns], colIndex) headerCell] title] stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]]];
+
+			// Select the next column index
+			colIndex = [selectedCols indexGreaterThanIndex:colIndex];
+		}
+		[result appendString:@"\n"];
+	}
+
+	// Loop through the rows, adding their descriptive contents
+	NSArray *ds = [[self delegate] objectData];
+	NSArray *columnTypes = [[self delegate] objectColumnTypes];
+
+	NSInteger types[[columnTypes count]];
+
+	for( i = 0; i < [columnTypes count]; i++ )
+		types[i] = [NSArrayObjectAtIndex(columnTypes, i) intValue];
+
+	for ( i = 0; i < [NSArrayObjectAtIndex(ds, 0) count]; i++ )
+	{
+		colIndex = [selectedCols firstIndex];
+		while ( colIndex != NSNotFound ) {
+
+			if(types[colIndex] == 1)
+				[result appendFormat:@"%@,", NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, colIndex), i)];
+			else
+				[result appendFormat:@"\"%@\",", [NSArrayObjectAtIndex(NSArrayObjectAtIndex(ds, colIndex), i) stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""]];
+
+			// Select the next column index
+			colIndex = [selectedCols indexGreaterThanIndex:colIndex];
+		}
+
+		// Remove the trailing comma and add the linebreak
+		if ([result length]){
+			[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+		}
+		[result appendString:@"\n"];
+
+	}
+	
+	// Remove the trailing line end
+	if ([result length]) {
+		[result deleteCharactersInRange:NSMakeRange([result length]-1, 1)];
+	}
+
+	return result;
+
 }
 
 - (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName
@@ -371,7 +486,7 @@
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem
 {
 	if ([menuItem action] == @selector(copy:)) {
-		return ([self numberOfSelectedRows] > 0);
+		return ([self numberOfSelectedRows] > 0 || [self numberOfSelectedColumns] > 0);
 	}
 	if ([menuItem action] == @selector(remSelection:)) {
 		return ([[self selectedColumnIndexes] count] || [[self selectedRowIndexes] count]);

@@ -203,6 +203,8 @@
 		BCD7EC911301A4950050850E /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD7EC901301A4950050850E /* libicucore.dylib */; };
 		BCD7EC951301A5190050850E /* RegexKitLite.h in Headers */ = {isa = PBXBuildFile; fileRef = BCD7EC931301A5190050850E /* RegexKitLite.h */; };
 		BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD7EC941301A5190050850E /* RegexKitLite.m */; };
+		BCDF1C9113C2F160001216D9 /* RDataEditorTableHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = BCDF1C8F13C2F160001216D9 /* RDataEditorTableHeaderView.h */; };
+		BCDF1C9213C2F160001216D9 /* RDataEditorTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */; };
 		BCEFEBD71336705800CED44F /* RFontPreviewTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBD51336705800CED44F /* RFontPreviewTextField.h */; };
 		BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */; };
 		BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBE01336709A00CED44F /* RColorWellCell.h */; };
@@ -477,6 +479,8 @@
 		BCD7EC901301A4950050850E /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = /usr/lib/libicucore.dylib; sourceTree = "<absolute>"; };
 		BCD7EC931301A5190050850E /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		BCD7EC941301A5190050850E /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		BCDF1C8F13C2F160001216D9 /* RDataEditorTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDataEditorTableHeaderView.h; sourceTree = "<group>"; };
+		BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDataEditorTableHeaderView.m; sourceTree = "<group>"; };
 		BCE2529913326919001D3138 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCE5C673133262CC00381F90 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCEEA0EE1332641B00F55604 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
@@ -694,6 +698,8 @@
 				BCBA744613B089D8001B440B /* RDataEditorTableView.m */,
 				BC469AEB13B655270079D4E9 /* RDataEditorTableHeaderCell.h */,
 				BC469AEC13B655270079D4E9 /* RDataEditorTableHeaderCell.m */,
+				BCDF1C8F13C2F160001216D9 /* RDataEditorTableHeaderView.h */,
+				BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */,
 				1C0BD6BD07345B4300D43C33 /* Authorization.h */,
 				1C0BD6BE07345B4300D43C33 /* Authorization.c */,
 				16ABE77F06C7538500815F91 /* CodeCompletion.h */,
@@ -973,6 +979,7 @@
 				BCBA744713B089D8001B440B /* RDataEditorTableView.h in Headers */,
 				BC469AED13B655270079D4E9 /* RDataEditorTableHeaderCell.h in Headers */,
 				BC53A82013BDB5ED009488EE /* NSArray_RAdditions.h in Headers */,
+				BCDF1C9113C2F160001216D9 /* RDataEditorTableHeaderView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1225,6 +1232,7 @@
 				BCBA744813B089D8001B440B /* RDataEditorTableView.m in Sources */,
 				BC469AEE13B655270079D4E9 /* RDataEditorTableHeaderCell.m in Sources */,
 				BC53A82113BDB5ED009488EE /* NSArray_RAdditions.m in Sources */,
+				BCDF1C9213C2F160001216D9 /* RDataEditorTableHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

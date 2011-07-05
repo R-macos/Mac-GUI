@@ -1,6 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
 Last-update: 2011-07-03 [HJBB]
+*	R Data Editor
+	- added possibility to (de)select non-contiguous
+	columns via holding down <COMMAND> key while
+	mouse click
+	- "Copy (as CSV)" now copies selected row or column
+	data
+Last-update: 2011-07-03 [HJBB]
 *	Edit Object <SHIFT+COMMAND+E>
 	- in Workspace Browser is invokes editing of selected
 	item

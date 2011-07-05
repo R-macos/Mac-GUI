@@ -26,31 +26,18 @@
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
- *  RDataEditorTableView.h
+ *  RDataEditorTableHeaderView.h
  *
- *  Created by Hans-J. Bibiko on 21/06/2011.
+ *  Created by Hans-J. Bibiko on 05/07/2011.
  *
  */
 
 #import <Cocoa/Cocoa.h>
 
-#include <R.h>
-#include "privateR.h"
 
-@interface RDataEditorTableView : NSTableView
+@interface RDataEditorTableHeaderView : NSTableHeaderView
 {
 
 }
-
-- (void)copy:(id)sender;
-
-- (NSString *)rowsAsTabStringWithHeaders:(BOOL)withHeaders;
-- (NSString *)rowsAsCsvStringWithHeaders:(BOOL)withHeaders;
-- (NSString *)columnsAsTabStringWithHeaders:(BOOL)withHeaders;
-- (NSString *)columnsAsCsvStringWithHeaders:(BOOL)withHeaders;
-- (CGFloat)widthForColumn:(NSInteger)columnIndex andHeaderName:(NSString*)colName;
-- (void)setFont:(NSFont *)font;
-
-- (BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)command;
 
 @end

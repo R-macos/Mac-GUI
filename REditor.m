@@ -485,13 +485,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 	}
 }
 
-- (void)tableViewColumnDidResize:(NSNotification *)aNotification
-{
-	if(editedColumnNameIndex > -1)
-		// Submit editing for safty reasons otherwise the editor's frame won't be updated
-		[self textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
-}
-
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
 
@@ -533,6 +526,7 @@ void printelt(SEXP invec, int vrow, char *strp)
  */
 - (BOOL)tableView:(NSTableView *)aTableView writeRowsWithIndexes:(NSIndexSet *)rows toPasteboard:(NSPasteboard*)pboard
 {
+
 	if (aTableView == editorSource) {
 		NSString *tmp;
 

@@ -22,8 +22,6 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="798"/>
-			<integer value="1714"/>
-			<integer value="169"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -10870,6 +10868,7 @@
 					<string>156.ImportedFromIB2</string>
 					<string>1560.IBPluginDependency</string>
 					<string>1560.ImportedFromIB2</string>
+					<string>1561.CustomClassName</string>
 					<string>1561.IBPluginDependency</string>
 					<string>1561.ImportedFromIB2</string>
 					<string>1562.IBPluginDependency</string>
@@ -11751,6 +11750,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>RDataEditorTableHeaderView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12268,9 +12268,9 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{488, 396}, {480, 360}}</string>
+					<string>{{488, 369}, {480, 360}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{488, 396}, {480, 360}}</string>
+					<string>{{488, 369}, {480, 360}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<string>{213, 107}</string>
@@ -14652,6 +14652,14 @@
 			</object>
 			<object class="NSMutableArray" key="referencedPartialClassDescriptionsV3.1+">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">RDataEditorTableHeaderView</string>
+					<string key="superclassName">NSTableHeaderView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBDocumentRelativeSource</string>
+						<string key="minorKey">../Tools/RDataEditorTableHeaderView.h</string>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">RDataEditorTableView</string>
 					<string key="superclassName">NSTableView</string>
