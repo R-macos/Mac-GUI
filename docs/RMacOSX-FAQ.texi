@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2011
-@set FAQ-VERSION 2.12-2 @value{FAQ-YEAR}-02-25
-@set REL-VERSION 2.12.2
-@set GUI-VERSION 1.36
+@set FAQ-VERSION 2.14-0 @value{FAQ-YEAR}-02-25
+@set REL-VERSION 2.14.0
+@set GUI-VERSION 1.41
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -701,7 +701,7 @@ of duplicate entries and strip comments.
 
 Note: R itself sometimes stores history in a file usually called .Rhistory. It is suggested to use a different name for the R.app history file.
 
-@node Authentication and .libPath, , History, General Features
+@node Authentication and .libPath,  , History, General Features
 @subsection Authentication and .libPath
 The official CRAN binaries come pre-packaged in such a way that administrator have sufficient privileges to update R and install packages system-wide. However, the default unix build requires root-authentication for package instllation and other administrative tasks. As it is not feasible to run the GUI as root, we provide the possibility to authenticate system commands issued from the GUI. The authentication requires an administrator login and causes all subsequent system commands to be executed as root. Use with care!
 
@@ -806,7 +806,7 @@ You can set several aspects of the @R{} GUI via preferences. You can access the 
 * Quartz window::               
 @end menu
 
-@node Startup, Editor Preferences, , Preferences
+@node Startup, Editor Preferences, Preferences, Preferences
 @subsubsection Startup
 The Drag & drop section defines drag & drop behaviour during R start-up. Options are to open
 file in an editor or to source file. Default is to source the file.
@@ -1222,6 +1222,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * R.app GUI crashes on startup!::  
 * R.app GUI does not save the workspace!::  
 * Why is the GUI not saving my history?::  
+* I get ``command not found'' in the GUI yet it works in the Terminal - why?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1375,10 +1376,19 @@ If you did both of the above and @Rapp{} still crashes, please select `1' in the
 
 When you quit the R.app GUI it asks you whether to save the workspace or not. There was a bug in R.app GUI 1.32 (shipped with the initial release of R 2.11.0) that did not save the workspace even if told to. If you use R.app GUI version 1.32 please make sure you upgrade to 1.33 (or higher) to avoid this bug. The current R on CRAN ships with the more recent R.app GUI version that does not exhibit the problem.
 
-@node Why is the GUI not saving my history?,  , R.app GUI does not save the workspace!, Sparse questions
+@node Why is the GUI not saving my history?, I get ``command not found'' in the GUI yet it works in the Terminal - why?, R.app GUI does not save the workspace!, Sparse questions
 @section Why is the GUI not saving my history?
 
 In some recent versions of R there is a conflict between the history of R itself and the GUI such that the history file will be always empty. In R 2.11.1 the default has been changed such that the GUI will use @code{.Rapp.history} file whereas command line R will use @code{.Rhistory} so that they will not collide. If you have old preferences, go to Preferences -> Startup in the GUI and click on the Default button next to the R history file text box and close the preferences. This is a work-around until the internal R history and the history of the GUI are synchronized properly.
+
+@node I get ``command not found'' in the GUI yet it works in the Terminal - why?,  , Why is the GUI not saving my history?, Sparse questions
+@section I get ``command not found'' in the GUI yet it works in the Terminal - why?
+
+When executing system commands (for example directly via @code{system} or indirectly via functions that call other programs such as @code{install.packages}) the locations in which the shell is looking for programs is governed by the @code{PATH} environment variable. That variable may be set differently for R started from an interactive shell and for R started in the GUI. You can use @code{Sys.getenv("PATH")} to verify the current setting.
+
+When R is started from a shell (e.g., on the command line of the Terminal), it will inherit settings from that shell. Those are typically modified by shell-specific configuration files, such as @code{.profile} or @code{.bashrc}. Those apply only to the shell, not to the system as a whole. In addition, some installers (such as MacTeX) will modify global shell settings to make user's life more comfortable on the command line, but, again, those do not apply to programs not started from the shell - such as GUIs.
+
+In order to standardize your @code{PATH} setting in R, you can set it in your @code{.Renviron} file (in your home - see @code{?Startup} in R for details on how R uses configuration files on startup). This setting will apply to R regardless of how it is started. You can also add more elaborate constructs to @code{.Rprofile} instead if you wish to selectively modify the existing @code{PATH} variable via @code{Sys.getenv} and @code{Sys.setenv}.
 
 @bye
 
