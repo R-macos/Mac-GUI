@@ -63,17 +63,21 @@
 
 @implementation RDataEditorTableHeaderView
 
+// -(void)mouseDown:(NSEvent *)theEvent
+// {
+// 	// Submit pending changes of column names
+// 	if([[[NSApp keyWindow] firstResponder] isKindOfClass:[NSTextView class]])
+// 		[[_tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
+// }
+// 
 -(void)mouseDown:(NSEvent *)theEvent
-{
-	// Submit pending changes of column names
-	if([[[NSApp keyWindow] firstResponder] isKindOfClass:[NSTextView class]])
-		[[_tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
-}
-
--(void)mouseUp:(NSEvent *)theEvent
 {
 	NSPoint location = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	NSInteger clickedColumn = [self columnAtPoint:location];
+
+	// Submit pending changes of column names
+	if([[[NSApp keyWindow] firstResponder] isKindOfClass:[NSTextView class]])
+		[[_tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
 
 	// check if delegate implemented tableView:mouseDownInHeaderOfTableColumn:
 	if ([[_tableView delegate] respondsToSelector:@selector(tableView:mouseDownInHeaderOfTableColumn:)]) {
