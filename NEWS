@@ -1,36 +1,39 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.41 (5874) - supplied with R 2.13.1 --
+
 Last-update: 2011-07-03 [HJBB]
 *	R Data Editor
 	- added possibility to (de)select non-contiguous
-	columns via holding down <COMMAND> key while
-	mouse click
+	  columns via holding down <COMMAND> key while
+	  mouse click
 	- "Copy (as CSV)" now copies selected row or column
-	data
+	  data
+
 Last-update: 2011-07-03 [HJBB]
 *	Edit Object <SHIFT+COMMAND+E>
 	- in Workspace Browser is invokes editing of selected
-	item
+	  item
 	- in any editor if something is selected it takes the
-	selection as object name and invokes obj <- edit(obj)
+	  selection as object name and invokes obj <- edit(obj)
 	- in any editor if nothing is selected it takes the
-	current word due to cursor position, checks if found
-	word is a valid object name in ls(), and if so invokes
-	obj <- edit(obj)
+	  current word due to cursor position, checks if found
+	  word is a valid object name in ls(), and if so invokes
+	  obj <- edit(obj)
 
 Last-update: 2011-06-27 [HJBB]
 *	R Data Editor
 	- after initialising resize columns due content
 	- added table context menu
 	- added key equivalents to each command (see context
-	menu or toolbar tooltip)
+	  menu or toolbar tooltip)
 	- added chance to cancel the entire object editing
 	- added chance to edit column names (via context menu
-	or double-click into column header - (SHIFT+)TAB for
-	navigation, ESC for cancelling)
+	  or double-click into column header - (SHIFT+)TAB for
+	  navigation, ESC for cancelling)
 	- type of added column comply with column type left
-	of the new one (can be explicitly chosen via context
-	menu)
+	  of the new one (can be explicitly chosen via context
+	  menu)
 
 Last-update: 2011-06-10 [HJBB]
 *	fixed R Data Editor to display and edit strings of
@@ -546,7 +549,7 @@ Last-update: 2007-05-17 [SU]
 
 *	improve auto-completion: it uses different tokens for file completion
 	and expression completion
-	(partially based on suggestions by Hans-Jšrg Bibiko)
+	(partially based on suggestions by Hans-JÃ¶rg Bibiko)
 
 Last-update: 2007-05-06 [RG]
 *	Window menu cleanup and a few more dangling windows. Most of the
