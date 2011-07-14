@@ -41,6 +41,8 @@
 #import "RTextView.h"
 #import "HelpManager.h"
 
+#define pcExpression 5
+
 BOOL defaultsInitialized = NO;
 
 NSColor *shColorNormal;
@@ -627,7 +629,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	NSInteger cursorLocation = selRange.location;
 	cursorLocation += shift; // add any shift as cursor movement guys need it
 	if (cursorLocation < 0 || cursorLocation >= completeStringLength) return;
-	
+
+	// bail if current character is in quotes or comments
+	if([textView parserContextForPosition:cursorLocation] != pcExpression) return;
+
 	unichar characterToCheck;
 	unichar openingChar = 0;
 	characterToCheck = [completeString characterAtIndex:cursorLocation];
@@ -642,25 +647,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if (openingChar) {
 		while (cursorLocation--) {
 			unichar c = [completeString characterAtIndex:cursorLocation];
-			if (c == openingChar) {
-				if (!skipMatchingBrace) {
-					[textView highlightCharacter:cursorLocation];
-					return;
-				} else
-					skipMatchingBrace--;
-			} else if (c == characterToCheck)
-				skipMatchingBrace++;
-		}
-		if (warn) NSBeep();
-	} else { // ok, now reverse the roles and find the closing brace (if any)
-		unsigned maxLimit=completeStringLength;
-		//if (cursorLocation-maxLimit>4000) maxLimit=cursorLocation+4000; // just a soft limit to not search too far (but I think we're fast enough...)
-		if (characterToCheck == '(') openingChar=')';
-		else if (characterToCheck == '[') openingChar=']';
-		else if (characterToCheck == '{') openingChar='}';		
-		if (openingChar) {
-			while ((++cursorLocation)<maxLimit) {
-				unichar c = [completeString characterAtIndex:cursorLocation];
+			if([textView parserContextForPosition:cursorLocation] == pcExpression) {
 				if (c == openingChar) {
 					if (!skipMatchingBrace) {
 						[textView highlightCharacter:cursorLocation];
@@ -669,6 +656,28 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 						skipMatchingBrace--;
 				} else if (c == characterToCheck)
 					skipMatchingBrace++;
+			}
+		}
+		if (warn) NSBeep();
+	} else { // ok, now reverse the roles and find the closing brace (if any)
+		unsigned maxLimit=completeStringLength;
+		//if (cursorLocation-maxLimit>4000) maxLimit=cursorLocation+4000; // just a soft limit to not search too far (but I think we're fast enough...)
+		if (characterToCheck == '(') openingChar=')';
+		else if (characterToCheck == '[') openingChar=']';
+		else if (characterToCheck == '{') openingChar='}';
+		if (openingChar) {
+			while ((++cursorLocation)<maxLimit) {
+				unichar c = [completeString characterAtIndex:cursorLocation];
+				if([textView parserContextForPosition:cursorLocation] == pcExpression) {
+					if (c == openingChar) {
+						if (!skipMatchingBrace) {
+							[textView highlightCharacter:cursorLocation];
+							return;
+						} else
+							skipMatchingBrace--;
+					} else if (c == characterToCheck)
+						skipMatchingBrace++;
+				}
 			}
 		}
 	}

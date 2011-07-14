@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-07-14 [HJBB]
+*	R Script Editor
+	- fixed: ignore quoted brackets for highlighting
+	balanced brackets
+
 -- Release Version 1.41 (5874) - supplied with R 2.13.1 --
 
 Last-update: 2011-07-03 [HJBB]
