@@ -41,6 +41,13 @@
 
  */
 
+// parser context in text
+#define pcStringSQ   1
+#define pcStringDQ   2
+#define pcStringBQ   3
+#define pcComment    4
+#define pcExpression 5
+
 extern BOOL RTextView_autoCloseBrackets;
 
 @interface RTextView : NSTextView

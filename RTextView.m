@@ -45,13 +45,6 @@
 // context menu tags
 #define kShowHelpContextMenuItemTag 10001
 
-// parser context in text
-#define pcStringSQ   1
-#define pcStringDQ   2
-#define pcStringBQ   3
-#define pcComment    4
-#define pcExpression 5
-
 // declared external
 BOOL RTextView_autoCloseBrackets = YES;
 

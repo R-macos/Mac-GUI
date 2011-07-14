@@ -41,7 +41,6 @@
 #import "RTextView.h"
 #import "HelpManager.h"
 
-#define pcExpression 5
 
 BOOL defaultsInitialized = NO;
 
