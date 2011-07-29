@@ -42,12 +42,19 @@
 #import <ExceptionHandling/NSExceptionHandler.h>
 #import "Tools/GlobalExHandler.h"
 
+#include <string.h>
+#include <stdlib.h>
+#include <sys/utsname.h> /* for uname */
+
 /* we need teh following two to implement RappQuit and register it with R */
 #include "Startup.h"
 #include "R_ext/Rdynload.h"
 
+/* those are exported in RGUI.h */
 NSString *Rapp_R_version_short;
 NSString *Rapp_R_version;
+double    os_version;
+char     *os_version_string;
 
 /* this is called by the R.app q/quit function */
 static SEXP RappQuit(SEXP save, SEXP status, SEXP runLast) {
@@ -72,9 +79,15 @@ static R_CallMethodDef mainCallMethods[]  = {
 	{NULL, NULL, 0}
 };
 
+static struct utsname os_uname;
+
 int main(int argc, const char *argv[])
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	uname(&os_uname);
+	os_version_string = strdup(os_uname.release);
+	os_version = atof(os_uname.release);
 
 	if ([Preferences flagForKey:@"Debug all exceptions"] == YES) {
 		// add an independent exception handler

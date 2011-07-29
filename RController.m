@@ -2250,7 +2250,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	*index=0;
 
 	// avoid selecting of token if nothing was found
-	[textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
+	// FIXME: do we need it?
+	if (os_version < 11.0)
+		[textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
 
 	return [CodeCompletion retrieveSuggestionsForScopeRange:er inTextView:textView];
 

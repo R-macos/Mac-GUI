@@ -443,7 +443,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 		userRange.location++; // skip past first bad one
 		userRange.length = selection.location - userRange.location;
 		SLog(@" - returned range: %d:%d", userRange.location, userRange.length);
-		[self setSelectedRange:userRange];
+
+		// FIXME: do we really need to change it? Cocoa should be doing it .. (and does in Lion)
+		if (os_version < 11.0)
+			[self setSelectedRange:userRange];
 	}
 
 	return userRange;

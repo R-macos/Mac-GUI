@@ -52,4 +52,7 @@
 extern NSString *Rapp_R_version_short;
 extern NSString *Rapp_R_version;
 
+extern double os_version;
+extern char *os_version_string;
+
 #endif
