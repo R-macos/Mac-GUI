@@ -82,6 +82,20 @@ BOOL RTextView_autoCloseBrackets = YES;
     SLog(@" - delegate: %@", [self delegate]);
     // FIXME: this is a really ugly hack ... behavior should not depend on class names ...
 	isRConsole = ([(NSObject*)[self delegate] isKindOfClass:[RController class]]) ? YES : NO;
+	
+	// work-arounds for brain-dead "features" in Lion
+	if ([self respondsToSelector:@selector(setAutomaticQuoteSubstitutionEnabled:)])
+		[self setAutomaticQuoteSubstitutionEnabled:NO];
+	if ([self respondsToSelector:@selector(setAutomaticTextReplacementEnabled:)])
+		[self setAutomaticTextReplacementEnabled:NO];
+	if ([self respondsToSelector:@selector(setAutomaticSpellingCorrectionEnabled:)])
+		[self setAutomaticSpellingCorrectionEnabled:NO];
+	if ([self respondsToSelector:@selector(setAutomaticLinkDetectionEnabled:)])
+		[self setAutomaticLinkDetectionEnabled:NO];
+	if ([self respondsToSelector:@selector(setAutomaticDataDetectionEnabled:)])
+		[self setAutomaticDataDetectionEnabled:NO];
+	if ([self respondsToSelector:@selector(setAutomaticDashSubstitutionEnabled:)])
+		[self setAutomaticDashSubstitutionEnabled:NO];
 }
 
 - (void)dealloc

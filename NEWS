@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2001-10-03
+*	disable all automatic features in text views
+
 Last-update: 2011-07-29
 *	Work around auto-completion changes in
 	Mac OS X 10.7 (Lion)
@@ -7,7 +10,7 @@ Last-update: 2011-07-29
 Last-update: 2011-07-14 [HJBB]
 *	R Script Editor
 	- fixed: ignore quoted brackets for highlighting
-	balanced brackets
+	  balanced brackets
 
 -- Release Version 1.41 (5874) - supplied with R 2.13.1 --
 
