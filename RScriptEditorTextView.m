@@ -104,7 +104,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 - (void)awakeFromNib
 {
-
+	// we are a subclass of RTextView which has its own awake and we must call it
+	[super awakeFromNib];
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
 	isSyntaxHighlighting = NO;
 	prefs = [[NSUserDefaults standardUserDefaults] retain];
