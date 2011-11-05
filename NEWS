@@ -1,9 +1,14 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-11-05
+*	enable support for R framework inside the R.app
+	bundle (via @rpath), allowing for relocatable
+	self-contained R
+
 -- Release Version 1.42 (5933) - supplied with R 2.14.0 --
 -- Release Version 1.42 (5910) - supplied with R 2.13.2 --
 
-Last-update: 2001-10-03
+Last-update: 2011-10-03
 *	disable all automatic features in text views
 
 Last-update: 2011-07-29
