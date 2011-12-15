@@ -132,7 +132,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.5];
 #endif
 	[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
-
+	[[self window] setDocumentEdited:NO];
 }
 
 - (NSData*) contentsAsRtf

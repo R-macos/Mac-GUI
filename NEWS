@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-12-15 [HJBB]
+*	fixed issue after opening a script file or
+	creating a new empty one that the edit status
+	was set to "was edited"
+
 Last-update: 2011-11-05
 *	enable support for R framework inside the R.app
 	bundle (via @rpath), allowing for relocatable
