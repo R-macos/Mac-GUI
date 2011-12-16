@@ -321,10 +321,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 		} else {
 			[theTextStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
+			[self setNeedsDisplayInRect:[self bounds]];
 		}
 
 	} else if ([keyPath isEqualToString:enableLineWrappingKey]) {
 		[self updateLineWrappingMode];
+		[self setNeedsDisplayInRect:[self bounds]];
 
 	} else if ([keyPath isEqualToString:showLineNumbersKey]) {
 		lineNumberingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];

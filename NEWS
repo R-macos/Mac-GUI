@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-12-17 [HJBB]
+*	Switching off syntax colouring and toggling wrap
+	text in Preferences will update all open script
+	editor documents
+*	Fixed user range for completion in a case where 
+	there's no string to complete
+
 Last-update: 2011-12-16
 *	fix function argument hint not showing up for
 	the same function when used twice in sequence

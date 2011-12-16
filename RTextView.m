@@ -452,7 +452,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	if( userRange.location == selection.location - 1 ) { // just before cursor means empty completion
 		userRange.location++;
-		userRange.length = 1;
+		userRange.length = 0;
 	} else { // normal completion
 		userRange.location++; // skip past first bad one
 		userRange.length = selection.location - userRange.location;
