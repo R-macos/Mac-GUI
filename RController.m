@@ -220,6 +220,7 @@ static RController* sharedRController;
 						   object:nil];
 
 	lastFunctionForHint = [[NSString stringWithString:@""] retain];
+	lastFunctionHintText = nil;
 
 	return self;
 }
@@ -2192,10 +2193,13 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (BOOL)hintForFunction: (NSString*) fn
 {
-
-	if([fn isEqualToString:lastFunctionForHint]) return NO;
+	if ([fn isEqualToString:lastFunctionForHint]) {
+		if (lastFunctionHintText)
+			[self setStatusLineText:lastFunctionHintText];
+		return lastFunctionHintText ? YES : NO;
+	}
 	if(lastFunctionForHint) [lastFunctionForHint release];
-	lastFunctionForHint = [[NSString stringWithString:fn] retain];
+	lastFunctionForHint = [fn retain];
 
 	BOOL success = NO;
 	if (insideR>0) {
@@ -2214,6 +2218,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			res = [fn stringByAppendingString:[res substringFromIndex:9]];
 			success = YES;
 			[self setStatusLineText:res];
+			if (lastFunctionHintText) [lastFunctionHintText release];
+			lastFunctionHintText = [res retain];
 		}
 		[x release];
 	}

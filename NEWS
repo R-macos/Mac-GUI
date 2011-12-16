@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-12-16
+*	fix function argument hint not showing up for
+	the same function when used twice in sequence
+	(thanks to David Winsemius for reporting)
+
 Last-update: 2011-12-15 [HJBB]
 *	fixed issue after opening a script file or
 	creating a new empty one that the edit status
