@@ -6,6 +6,9 @@ Last-update: 2011-12-17 [HJBB]
 	editor documents
 *	Fixed user range for completion in a case where 
 	there's no string to complete
+*	Fixed issue for main menu commands which execute
+	R code such as "Show Workspace" etc. if user invoked
+	these commands by using the mouse only
 
 Last-update: 2011-12-16
 *	fix function argument hint not showing up for

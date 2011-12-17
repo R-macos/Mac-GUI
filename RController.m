@@ -2011,9 +2011,15 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			[consoleTextView insertText: cmd];
 			textLength = [[consoleTextView textStorage] length];
 			[consoleTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength,textLength-committedLength)];
-		}
-		
-		if (inter) {
+		} else {
+			// Create a dummy key event (SHIFT keyUp) to let cmd be processed
+			// since the interaction between R and consoleTextView is key event based.
+			// This is needed for cmd sent by mouse events only like "Show Workspace" etc.
+			if([[NSApp currentEvent] type] != NSKeyDown) {
+				CGEventRef e1 = CGEventCreateKeyboardEvent(NULL, (CGKeyCode)56, false);
+				CGEventPost(kCGSessionEventTap, e1);
+				CFRelease(e1);
+			}
 			if ([cmd characterAtIndex:[cmd length]-1]!='\n') cmd=[cmd stringByAppendingString: @"\n"];
 			[consoleInputQueue addObject:[cmd copy]];
 			[self setStatusLineText:@""];
