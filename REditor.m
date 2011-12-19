@@ -143,6 +143,10 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	[editorSource setColumnAutoresizingStyle:NSTableViewUniformColumnAutoresizingStyle];
 	[self setupToolbar];
+	// Since the window will be listed in the main menu > windows after closing
+	// let it not listed there at all (and due to the fact that it's a modal window
+	// it's not needed to have it there)
+	[dataWindow setExcludedFromWindowsMenu:YES];
 
 }
 
@@ -885,7 +889,6 @@ void printelt(SEXP invec, int vrow, char *strp)
 		newColType = [[objectColumnTypes objectAtIndex:lastcol] intValue];
 
 	newvar++;
-NSLog(@"%d %d %d", nCols, lastcol, newColType);
 
 	if((nCols-1) == lastcol) {
 		[objectColumnNames addObject:[NSString stringWithFormat:@"var %d", newvar]];
