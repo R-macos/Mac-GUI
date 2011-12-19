@@ -35,6 +35,7 @@
 	[self setSortByCategory:YES];
 	// select prefs pane for display
 	[self selectPaneWithIdentifier:@"All"];
+	[[self window] setExcludedFromWindowsMenu:YES];
 }
 
 - (void)dealloc
