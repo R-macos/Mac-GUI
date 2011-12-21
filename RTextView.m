@@ -80,9 +80,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	console = NO;
 	RTextView_autoCloseBrackets = YES;
     SLog(@" - delegate: %@", [self delegate]);
-    // FIXME: this is a really ugly hack ... behavior should not depend on class names ...
-	isRConsole = ([(NSObject*)[self delegate] isKindOfClass:[RController class]]) ? YES : NO;
-	
+
 	// work-arounds for brain-dead "features" in Lion
 	if ([self respondsToSelector:@selector(setAutomaticQuoteSubstitutionEnabled:)])
 		[self setAutomaticQuoteSubstitutionEnabled:NO];
@@ -232,7 +230,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 				// Check if something is selected and wrap it into matching pair characters and preserve the selection
 				// - in RConsole only if selection is in the last line
-				if(((isRConsole && [[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || !isRConsole) 
+				if(((console && [[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || !console) 
 					&& [self wrapSelectionWithPrefix:[NSString stringWithFormat:@"%c", ck] suffix:complement]) {
 					SLog(@"RTextView: selection was wrapped with auto-pairs");
 					return;
@@ -563,7 +561,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	id aSearchField = nil;
 
-	if(isRConsole)
+	if(console)
 		aSearchField = [[self delegate] valueForKeyPath:@"helpSearch"];
 	else {
 		NSWindow *keyWin = [NSApp keyWindow];
@@ -859,7 +857,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	SLog(@" - invalid current word -> start parsing for current function scope");
 
 	// if we're in the RConsole do parse the current line only
-	if(isRConsole) {
+	if(console) {
 		parseRange = [parseString lineRangeForRange:NSMakeRange(selectedRange.location, 0)];
 		// ignore any prompt signs
 		parseRange.location += 1;
@@ -948,7 +946,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 - (BOOL) isRConsole
 {
-	return isRConsole;
+	return console;
 }
 
 @end
