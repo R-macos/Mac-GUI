@@ -1050,6 +1050,7 @@ extern BOOL isTimeToFinish;
 
 - (void) dealloc
 {
+	if(toolbarStopItem) [toolbarStopItem release];
 	if(lastFunctionForHint) [lastFunctionForHint release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
@@ -1623,7 +1624,7 @@ extern BOOL isTimeToFinish;
 	{
 		while (1) {
 			pid_t w = waitpid(pid, &cstat, WNOHANG);
-			if (w!=0) break;
+			if (w!=0 || breakPending) break;
 			// NOTE: this deliberately circumvents doProcessEvents: since we need events
 			// to be processed in all cases, even if system was called from within
 			// the event handler and as such can run recursively
@@ -1633,6 +1634,10 @@ extern BOOL isTimeToFinish;
 											   inMode:NSDefaultRunLoopMode 
 											  dequeue:YES]))
 				[NSApp sendEvent:event];
+		}
+		if(breakPending) {
+			kill(pid, SIGINT);
+			breakPending = NO;
 		}
 	}
 	[[RController sharedController] rmChildProcess: pid];
@@ -2141,8 +2146,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	// ---- cancel ---
 	
 	if (@selector(cancel:) == commandSelector || @selector(cancelOperation:) == commandSelector) {
-		[self breakR:self];
-		retval = YES;
+		if(busyRFlag || childPID>0) {
+			[self breakR:self];
+			retval = YES;
+		}
 	}
     
 	return retval;
@@ -3068,7 +3075,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	} else if([itemIdent isEqual: InterruptToolbarItemIdentifier]) {
 		[toolbarItem setLabel: NLS(@"Stop")];
 		[toolbarItem setPaletteLabel: NLS(@"Stop")];
-		toolbarStopItem = toolbarItem;
+		if(!toolbarStopItem) toolbarStopItem = [toolbarItem retain];
 		[toolbarItem setToolTip: NLS(@"Interrupt current R computation")];
 		[toolbarItem setImage: [NSImage imageNamed: @"stop"]];
 		[toolbarItem setTarget: self];
@@ -3155,7 +3162,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, 
 		NSToolbarSeparatorItemIdentifier, X11ToolbarItemIdentifier,
 		SetColorsToolbarItemIdentifier,
-		FontSizeToolbarItemIdentifier, SourceRCodeToolbarIdentifier, nil];
+		/*FontSizeToolbarItemIdentifier,*/ SourceRCodeToolbarIdentifier, nil];
 }
 
 - (void) toolbarWillAddItem: (NSNotification *) notif {
@@ -3208,6 +3215,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 	} else if ([[toolbarItem itemIdentifier] isEqual: QuitRToolbarItemIdentifier]) {
 		enable = YES;
     }		
+
     return enable;
 }
 

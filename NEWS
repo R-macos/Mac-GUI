@@ -1,5 +1,14 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-12-22 [HJBB]
+*	In RConsole pressing the ESC key will invoke
+	"completion" as in standard application if no
+	R command runs including system(..., wait=TRUE)
+	otherwise pressing ESC key or STOP button will
+	try to terminate the running R command and, if
+	a system(..., wait=TRUE) runs, it will kill the
+	system command
+
 Last-update: 2011-12-17 [HJBB]
 *	Switching off syntax colouring and toggling wrap
 	text in Preferences will update all open script
