@@ -2039,6 +2039,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	
     if (@selector(insertNewline:) == commandSelector) {
         unsigned textLength = [[textView textStorage] length];
+		if(lastFunctionHintText) [lastFunctionHintText release], lastFunctionHintText=nil;
 		[textView setSelectedRange:NSMakeRange(textLength,0)];
         if (textLength >= committedLength) {
 			[textView insertText:@"\n"];
