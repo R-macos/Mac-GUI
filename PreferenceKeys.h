@@ -54,6 +54,7 @@
 #define FontSizeKey    @"Console Font Size"
 #define RScriptEditorTabWidth    @"R Script Editor tab width"
 #define RScriptEditorDefaultFont    @"R Script Editor default font"
+#define RConsoleDefaultFont    @"R Console default font"
 #define internalOrExternalKey  @"Use Internal Editor"
 #define indentNewLines  @"RScriptEditorIndentNewLines"
 #define highlightCurrentLine  @"RScriptEditorHighlightCurrentLine"

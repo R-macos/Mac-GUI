@@ -762,25 +762,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 }
 
-#pragma mark -
-
-- (void)changeFont:(id)sender
-{
-
-	NSFont *font;
-	font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
-
-	if([[[[self window] windowController] document] isRTF] || [self selectedRange].length) {
-		// register font change for undo
-		[self shouldChangeTextInRange:[self selectedRange] replacementString:[[self string] substringWithRange:[self selectedRange]]];
-		[theTextStorage addAttribute:NSFontAttributeName value:font range:[self selectedRange]];
-	} else {
-		[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
-	}
-
-}
-
-
 - (void)updatePreferences
 {
 	

@@ -168,7 +168,7 @@ static RController* sharedRController;
 
 - (id) init {
 	self = [super init];
-	
+
 	runSystemAsRoot = NO;
 	toolbar = nil;
 	toolbarStopItem = nil;
@@ -204,9 +204,6 @@ static RController* sharedRController;
 
 	filteredHistory = nil;
 
-	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
-	textFont = [[NSFont userFixedPitchFontOfSize:currentFontSize] retain];
-		
 	specialCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"\r\b\a"] retain];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self 
@@ -223,6 +220,7 @@ static RController* sharedRController;
 	lastFunctionHintText = nil;
 
 	return self;
+
 }
 
 - (void) setRootFlag: (BOOL) flag
@@ -252,7 +250,7 @@ static RController* sharedRController;
 
 - (NSFont*) currentFont
 {
-	return textFont;
+	return ([consoleTextView font]) ? [consoleTextView font] : [Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]];
 }
 
 /**
@@ -301,7 +299,10 @@ static RController* sharedRController;
 - (void) awakeFromNib {
 	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
-	
+
+	[consoleTextView setEditable:YES];
+	[consoleTextView setFont:[Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
+
 	requestSaveAction = nil;
 	
 	sharedRController = self;
@@ -494,10 +495,7 @@ static RController* sharedRController;
 #endif
 		]];
 
-	SLog(@" - font and other widgets");
-	[consoleTextView setFont:textFont];
-	[fontSizeStepper setIntValue:currentFontSize];
-    [fontSizeField takeIntValueFrom:fontSizeStepper];
+	SLog(@" - other widgets");
 	{
 		NSMutableDictionary *md = [[consoleTextView typingAttributes] mutableCopy];
 		[md setObject: [consoleColors objectAtIndex:iInputColor] forKey: @"NSColor"];
@@ -550,8 +548,6 @@ static RController* sharedRController;
 	SLog(@" - set cwd and load history");
 	[historyView setDoubleAction: @selector(historyDoubleClick:)];
 	
-	currentSize = [[consoleTextView textContainer] containerSize].width;
-	//currentFontSize = [[consoleTextView font] pointSize];
 	currentConsoleWidth = -1;
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByExpandingTildeInPath]];
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
@@ -571,8 +567,6 @@ static RController* sharedRController;
 	NSString *fname = nil;
 	SLog(@"RController:applicationDidFinishLaunching");
 	SLog(@" - clean up and flush console");
-	[self setOptionWidth:YES];
-	[consoleTextView setEditable:YES];
 	[self flushROutput];
 	
 	RSEXP *xPT = [[REngine mainEngine] evaluateString:@".Platform$pkgType"];
@@ -686,7 +680,9 @@ static RController* sharedRController;
 	} else {
 		SLog(@"WARNING: _autoreopenDocuments is not supported, cannot re-open autosaved documents");
 	}
-	
+
+	[self performSelector:@selector(setOptionWidth:) withObject:nil afterDelay:0.0];
+
 	SLog(@" - done, ready to go");
 
 }
@@ -868,11 +864,12 @@ static RController* sharedRController;
 	[self flushStdConsole];
 }
 
-// When you have the toolbar in text-only mode, this action is called
-// by the toolbar item's menu to make the font bigger.  We just change the stepper control and
-// call our -changeFontSize: action.
--(IBAction) fontSizeBigger:(id)sender
+- (void) fontSizeChangedBy:(float)delta withSender:(id)sender
 {
+
+	SLog(@"RController - fontSizeChangedBy:%f", delta);
+
+	NSFont *font;
 
 	id firstResponder = [[NSApp keyWindow] firstResponder];
 
@@ -883,88 +880,63 @@ static RController* sharedRController;
 		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
 			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
 			if(aWebView) {
-				[aWebView makeTextLarger:sender];
+				if(delta > 0)
+					[aWebView makeTextLarger:sender];
+				else if(delta < 0)
+					[aWebView makeTextSmaller:sender];
 			}
 		}
 	}
+	// Change size for RConsole
 	else if ([RConsoleWindow isKeyWindow]) {
-		[fontSizeStepper setIntValue:[fontSizeStepper intValue]+1];
-		[self changeFontSize:NULL];
+		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:RConsoleDefaultFont]]];
+		float s = [font pointSize];
+		s = s + delta;
+		font = [NSFont fontWithName:[font fontName] size:s];
+		if(font) {
+			[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RConsoleDefaultFont];
+			[consoleTextView setFont:font];
+			[consoleTextView scrollRangeToVisible:[firstResponder selectedRange]];
+		}
+		[self setOptionWidth:YES];
 	}
+	// Change size in R script windows
 	else if ([firstResponder isKindOfClass:[RScriptEditorTextView class]] 
 				&& ![firstResponder selectedRange].length
 				&& ![[[NSDocumentController sharedDocumentController] currentDocument] isRTF]) {
-		NSFont *font;
-		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
+		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:RScriptEditorDefaultFont]]];
 		float s = [font pointSize];
-		s = s + 1.0f;
+		s = s + delta;
 		font = [NSFont fontWithName:[font fontName] size:s];
-		if(font)
-			[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
-	} else
-		[[NSFontManager sharedFontManager] modifyFont:sender];
-}
-
-// When you have the toolbar in text-only mode, this action is called
-// by the toolbar item's menu to make the font smaller.  We just change the stepper control and
-// call our -changeFontSize: action.
--(IBAction) fontSizeSmaller:(id)sender
-{
-
-	id firstResponder = [[NSApp keyWindow] firstResponder];
-
-	// Check if first responder is a WebView
-	if([[[firstResponder class] description] isEqualToString:@"WebHTMLView"]) {
-		// Try to get the corresponding WebView
-		id aWebFrameView = [[[firstResponder superview] superview] superview];
-		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
-			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
-			if(aWebView) {
-				[aWebView makeTextSmaller:sender];
+		if(font) {
+			[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
+			// TODO: Invoke refreshing line numbering; no other way found yet
+			if([firstResponder lineNumberingEnabled]) {
+				[firstResponder setAllowsUndo:NO];
+				[firstResponder insertText:@""];
+				[firstResponder setAllowsUndo:YES];
 			}
+			[firstResponder scrollRangeToVisible:[firstResponder selectedRange]];
 		}
-	}
-	else if ([RConsoleWindow isKeyWindow]) {
-		[fontSizeStepper setIntValue:[fontSizeStepper intValue]-1];
-		[self changeFontSize:NULL];
-	}
-	else if ([firstResponder isKindOfClass:[RScriptEditorTextView class]] 
-				&& ![firstResponder selectedRange].length
-				&& ![[[NSDocumentController sharedDocumentController] currentDocument] isRTF]) {
-		NSFont *font;
-		NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[prefs dataForKey:RScriptEditorDefaultFont]]];
-		float s = [font pointSize];
-		if(s > 5.0f) {
-			s = s - 1.0f;
-		} else {
-			NSBeep();
-			return;
-		}
-		font = [NSFont fontWithName:[font fontName] size:s];
-		if(font)
-			[prefs setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
 	}
 	else
 		[[NSFontManager sharedFontManager] modifyFont:sender];
-	
+
 }
 
-// This action is called to change the font size.  It's called by the NSPopUpButton in the toolbar item's 
-// custom view, and also by the above routines called from the toolbar item's menu (in text-only mode).
+-(IBAction) fontSizeBigger:(id)sender
+{
+	[self fontSizeChangedBy:1.0f withSender:sender];
+}
+
+-(IBAction) fontSizeSmaller:(id)sender
+{
+	[self fontSizeChangedBy:-1.0f withSender:sender];
+}
+
 -(IBAction) changeFontSize:(id)sender
 {
-	int newFontSize = [fontSizeStepper intValue];   
-    [fontSizeField takeIntValueFrom:fontSizeStepper];
-	/*
-    theFont=[consoleTextView font];
-    theFont=[[NSFontManager sharedFontManager] convertFont:theFont toSize:[fontSizeStepper intValue]];
-    [consoleTextView setFont:theFont];
-	[self setOptionWidth:NO];
-	[[NSUserDefaults standardUserDefaults] setFloat: [fontSizeStepper intValue] forKey:FontSizeKey];
-	 */
-	[Preferences setKey:FontSizeKey withFloat:(float) newFontSize];
+	
 }
 
 -(IBAction) clearConsole:(id)sender {
@@ -2033,21 +2005,19 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
-    BOOL retval = NO;
-	
+
 	SLog(@"RController.textView doCommandBySelector: %@\n", NSStringFromSelector(commandSelector));
 	
-    if (@selector(insertNewline:) == commandSelector) {
-        unsigned textLength = [[textView textStorage] length];
+	if (@selector(insertNewline:) == commandSelector) {
+		unsigned textLength = [[textView textStorage] length];
 		if(lastFunctionHintText) [lastFunctionHintText release], lastFunctionHintText=nil;
 		[textView setSelectedRange:NSMakeRange(textLength,0)];
         if (textLength >= committedLength) {
 			[textView insertText:@"\n"];
 			textLength = [[textView textStorage] length];
 			[self consoleInput: [[textView attributedSubstringFromRange:NSMakeRange(committedLength, textLength - committedLength)] string] interactive: YES];
-			return(YES);
-        }
-        retval = YES;
+		}
+		return(YES);
     }
 
 	// ---- history browsing ----
@@ -2069,7 +2039,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
                 [textView insertText:@""];
                 [news release];
             }
-            retval = YES;
+			return(YES);
         }
     }
     if (@selector(moveDown:) == commandSelector) {
@@ -2084,18 +2054,18 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
             [textView replaceCharactersInRange:rr withString:news];
             [textView insertText:@""];
             [news release];
-            retval = YES;
+			return(YES);
         }
     }
     
 	// ---- make sure the user won't accidentally get out of the input line ----
 	// FIXME: essentially everything here behaves the same for a paragraph and line, but we should be making a distinction because of multi-line commands
-	if (@selector(moveToBeginningOfParagraph:) == commandSelector 
+	if ([textView selectedRange].location >= committedLength && (@selector(moveToBeginningOfParagraph:) == commandSelector 
 			|| @selector(moveToBeginningOfLine:) == commandSelector
-			|| @selector(moveToLeftEndOfLine:) == commandSelector) {
+			|| @selector(moveToLeftEndOfLine:) == commandSelector)) {
 
         [textView setSelectedRange: NSMakeRange(committedLength,0)];
-        retval = YES;
+		return(YES);
     }
 	
 	if (@selector(deleteToBeginningOfLine:) == commandSelector || @selector(deleteToBeginningOfParagraph:) == commandSelector) {
@@ -2110,18 +2080,18 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 				[textView insertText:@""];
 			}
 		}
-		retval = YES;
+		return(YES);
 	}
     
-	if (@selector(moveToBeginningOfParagraphAndModifySelection:) == commandSelector 
+	if ([textView selectedRange].location >= committedLength && (@selector(moveToBeginningOfParagraphAndModifySelection:) == commandSelector 
 			|| @selector(moveToLeftEndOfLineAndModifySelection:) == commandSelector
-			|| @selector(moveToBeginningOfLineAndModifySelection:) == commandSelector) {
+			|| @selector(moveToBeginningOfLineAndModifySelection:) == commandSelector)) {
 		NSRange r = [textView selectedRange];
 		r.length = r.location + r.length - committedLength;
 		r.location = committedLength;
 		if (r.length < 0) r.length = 0;
         [textView setSelectedRange: r];
-        retval = YES;
+		return(YES);
     }
 	
 	if (@selector(moveWordLeft:) == commandSelector || @selector(moveLeft:) == commandSelector) {
@@ -2141,7 +2111,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	
 	if (@selector(insertTab:) == commandSelector) {
 		[textView complete:self];
-		retval = YES;
+		return(YES);
 	}
 	
 	// ---- cancel ---
@@ -2149,11 +2119,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	if (@selector(cancel:) == commandSelector || @selector(cancelOperation:) == commandSelector) {
 		if(busyRFlag || childPID>0) {
 			[self breakR:self];
-			retval = YES;
+			return(YES);
 		}
 	}
     
-	return retval;
+	return NO;
 }
 
 - (void)textStorageDidProcessEditing:(NSNotification *)notification
@@ -3220,26 +3190,56 @@ This method calls the showHelpFor method of the Help Manager which opens
     return enable;
 }
 
+/**
+* This is needed to resize RConsole's content of the status bar and
+* to set options()'s width
+*/
+- (void) RConsoleDidResize: (NSNotification *)notification
+{
 
-/* This is needed to force the NSDocument to know when edited windows are dirty */
-- (void) RConsoleDidResize: (NSNotification *)notification{
 	[self setStatusLineText:[self statusLineText]];
-	[self setOptionWidth:NO];
+	// perform setOptionWidth: delayed to allow the textContainer to be rendered
+	// and set withObject:nil because we do not force setOptionWidth:
+	[self performSelector:@selector(setOptionWidth:) withObject:nil afterDelay:0.1];
+
 }
 
-- (void) setOptionWidth:(BOOL)force;
+- (void) setOptionWidth:(BOOL)force
 {
-	float newSize = [[consoleTextView textContainer] containerSize].width;
-	float newFontSize = [[consoleTextView font] pointSize];
-	if((newSize != currentSize) | (newFontSize != currentFontSize) | force){
-		float newConsoleWidth = 1.5*newSize/newFontSize-1.0;
-		if((int)newConsoleWidth != (int)currentConsoleWidth){
-			R_SetOptionWidth(newConsoleWidth);
-			currentSize = newSize;	
-			currentFontSize = newFontSize;
-			currentConsoleWidth = newConsoleWidth;
+
+	SLog(@"RController - setOptionWidth was called with force:%d", force);
+
+	// We assume that a 'W' is the widest character and get its width
+	NSAttributedString *s = [[NSAttributedString alloc] initWithString:@"W" attributes:
+		[NSDictionary dictionaryWithObject:[consoleTextView font] forKey:NSFontAttributeName]];
+	float char_maxWidth = [s size].width;
+	[s release];
+
+	// Get the max container size and keep a margin
+	int newSize = (int)[[consoleTextView textContainer] containerSize].width-(int)(2*char_maxWidth);
+
+	// Check if vertical scrollbar is visible, if no we assume that it will be
+	// displayed thus decrease newSize by 15
+	id scrollView = (NSScrollView *)consoleTextView.superview.superview;
+	if ([scrollView isKindOfClass:[NSScrollView class]]) {
+		if([consoleTextView frame].size.width+10 > [scrollView frame].size.width) {
+			SLog(@" - vertical scrollbar not yet visible");
+			newSize -= 15;
 		}
 	}
+
+	// How many chars can be displayed without line breaking?
+	int newConsoleWidth = (int)(newSize/char_maxWidth);
+
+	SLog(@" - container:%f - char:%f - width old:%d new:%d",
+		[[consoleTextView textContainer] containerSize].width, char_maxWidth, currentConsoleWidth, newConsoleWidth);
+
+	// Set the options' width if forced or a new one was calculated
+	if(force | (currentConsoleWidth != newConsoleWidth)) {
+		currentConsoleWidth = newConsoleWidth;
+		R_SetOptionWidth(newConsoleWidth);
+	}
+
 }
 
 -(IBAction) checkForUpdates:(id)sender{
@@ -3249,8 +3249,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 -(IBAction) getWorkingDir:(id)sender
 {
 	[self sendInput:@"getwd()"];
-	//	[[REngine mainEngine] evaluateString: @"getwd()"];
-	
 }
 
 -(IBAction) resetWorkingDir:(id)sender
@@ -3537,15 +3535,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (void) updatePreferences {
 	SLog(@"RController.updatePreferences");
-	currentFontSize = [Preferences floatForKey: FontSizeKey withDefault: 11.0];
-	NSFont *newFont = [NSFont userFixedPitchFontOfSize:currentFontSize];
-	if (newFont!=textFont) {
-		SLog(@" - releasing %@", textFont);
-		[textFont release];
-		SLog(@" - using new %@", textFont);
-		textFont = [newFont retain];
-		[consoleTextView setFont:textFont];
-	}
 
 	argsHints=[Preferences flagForKey:prefShowArgsHints withDefault:YES];
 	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];

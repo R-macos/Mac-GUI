@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2011-12-24 [HJBB]
+*	Font setting in RConsole will now be stored
+	persistently
+
 Last-update: 2011-12-22 [HJBB]
 *	In RConsole pressing the ESC key will invoke
 	"completion" as in standard application if no

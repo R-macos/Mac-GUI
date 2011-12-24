@@ -94,6 +94,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[self setAutomaticDataDetectionEnabled:NO];
 	if ([self respondsToSelector:@selector(setAutomaticDashSubstitutionEnabled:)])
 		[self setAutomaticDashSubstitutionEnabled:NO];
+
 }
 
 - (void)dealloc
@@ -947,6 +948,29 @@ BOOL RTextView_autoCloseBrackets = YES;
 - (BOOL) isRConsole
 {
 	return console;
+}
+
+#pragma mark -
+
+- (void)changeFont:(id)sender
+{
+
+	NSFont *font= [[NSFontPanel sharedFontPanel] panelConvertFont:
+			[NSUnarchiver unarchiveObjectWithData:
+				[[NSUserDefaults standardUserDefaults] dataForKey:console ? RConsoleDefaultFont : RScriptEditorDefaultFont]]];
+
+	if(!font) return;
+
+	// If user selected something change the selection's font only
+	if(!console && ([[[[self window] windowController] document] isRTF] || [self selectedRange].length)) {
+		// register font change for undo
+		[self shouldChangeTextInRange:[self selectedRange] replacementString:[[self string] substringWithRange:[self selectedRange]]];
+		[[self textStorage] addAttribute:NSFontAttributeName value:font range:[self selectedRange]];
+	// otherwise update view and save new font in Preferences
+	} else {
+		[[RController sharedController] fontSizeChangedBy:0.0f withSender:nil];
+	}
+
 }
 
 @end

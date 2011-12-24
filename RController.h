@@ -97,8 +97,6 @@
 	
 	NSString *textViewSync;
 	
-	NSFont *textFont;
-	
 	NSString *requestSaveAction;
 	
     IBOutlet NSStepper *fontSizeStepper;
@@ -122,10 +120,8 @@
 	BOOL busyRFlag;
 	BOOL appLaunched;
 	BOOL argsHints;
-	
-	float currentSize;
-	float currentFontSize;
-	float currentConsoleWidth;
+
+	int currentConsoleWidth;
 	
 	char *readConsTransBuffer; // transfer buffer returned by handeReadConsole
 	int readConsTransBufferSize; // size of the above buffer
@@ -189,6 +185,7 @@
 -(IBAction) fontSizeBigger:(id)sender;
 -(IBAction) fontSizeSmaller:(id)sender;
 -(IBAction) changeFontSize:(id)sender;
+- (void) fontSizeChangedBy:(float)delta withSender:(id)sender;
 
 -(IBAction) getWorkingDir:(id)sender;
 -(IBAction) resetWorkingDir:(id)sender;
