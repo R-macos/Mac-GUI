@@ -964,8 +964,15 @@ BOOL RTextView_autoCloseBrackets = YES;
 	// If user selected something change the selection's font only
 	if(!console && ([[[[self window] windowController] document] isRTF] || [self selectedRange].length)) {
 		// register font change for undo
-		[self shouldChangeTextInRange:[self selectedRange] replacementString:[[self string] substringWithRange:[self selectedRange]]];
-		[[self textStorage] addAttribute:NSFontAttributeName value:font range:[self selectedRange]];
+		NSRange r = [self selectedRange];
+		[self shouldChangeTextInRange:r replacementString:[[self string] substringWithRange:r]];
+		[[self textStorage] addAttribute:NSFontAttributeName value:font range:r];
+		[self setAllowsUndo:NO];
+		[self setSelectedRange:NSMakeRange(r.location, 0)];
+		[self insertText:@""];
+		[self setSelectedRange:r];
+		[self setAllowsUndo:YES];
+		[self setNeedsDisplay:YES];
 	// otherwise update view and save new font in Preferences
 	} else {
 		[[RController sharedController] fontSizeChangedBy:0.0f withSender:nil];

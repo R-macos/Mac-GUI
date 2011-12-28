@@ -896,27 +896,41 @@ static RController* sharedRController;
 		if(font) {
 			[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RConsoleDefaultFont];
 			[consoleTextView setFont:font];
-			[consoleTextView scrollRangeToVisible:[firstResponder selectedRange]];
+			// Force to scroll view to cursor
+			[consoleTextView insertText:@""];
 		}
 		[self setOptionWidth:YES];
 	}
 	// Change size in R script windows
-	else if ([firstResponder isKindOfClass:[RScriptEditorTextView class]] 
-				&& ![firstResponder selectedRange].length
-				&& ![[[NSDocumentController sharedDocumentController] currentDocument] isRTF]) {
+	else if ([firstResponder isKindOfClass:[RScriptEditorTextView class]]) {
+
 		font = [[NSFontPanel sharedFontPanel] panelConvertFont:[NSUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:RScriptEditorDefaultFont]]];
 		float s = [font pointSize];
 		s = s + delta;
 		font = [NSFont fontWithName:[font fontName] size:s];
-		if(font) {
+
+		if(!font) return;
+
+		if([firstResponder selectedRange].length ||[[[NSDocumentController sharedDocumentController] currentDocument] isRTF]) {
+			// register font change for undo
+			NSRange r = [firstResponder selectedRange];
+			[firstResponder shouldChangeTextInRange:r replacementString:[[firstResponder string] substringWithRange:r]];
+			[[firstResponder textStorage] addAttribute:NSFontAttributeName value:font range:r];
+			// TODO: Invoke refreshing line numbering and view; no other way found yet
+			[firstResponder setAllowsUndo:NO];
+			[firstResponder setSelectedRange:NSMakeRange(r.location, 0)];
+			[firstResponder insertText:@""];
+			[firstResponder setSelectedRange:r];
+			[firstResponder setAllowsUndo:YES];
+		} else {
 			[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
 			// TODO: Invoke refreshing line numbering; no other way found yet
+			// and force to scroll view to cursor
 			if([firstResponder lineNumberingEnabled]) {
 				[firstResponder setAllowsUndo:NO];
 				[firstResponder insertText:@""];
 				[firstResponder setAllowsUndo:YES];
 			}
-			[firstResponder scrollRangeToVisible:[firstResponder selectedRange]];
 		}
 	}
 	else
