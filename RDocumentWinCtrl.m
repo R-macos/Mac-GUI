@@ -319,10 +319,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if (x) {
 		NSString *res = [x string];
 		if (res && [res length]>10 && [res hasPrefix:@"function"]) {
-			if ([res hasSuffix:@" NULL"]) res=[res substringToIndex:[res length]-5];
-			res = [fn stringByAppendingString:[res substringFromIndex:9]];
-			success = YES;
-			[self setStatusLineText:res];
+			NSRange lastClosingParenthesis = [res rangeOfString:@")" options:NSBackwardsSearch];
+			if(lastClosingParenthesis.length) {
+				res = [res substringToIndex:NSMaxRange(lastClosingParenthesis)];
+				res = [fn stringByAppendingString:[res substringFromIndex:9]];
+				success = YES;
+				[self setStatusLineText:res];
+			}
 		}
 		[x release];
 	}

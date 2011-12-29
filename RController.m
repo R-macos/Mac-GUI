@@ -2212,12 +2212,15 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	if (x) {
 		NSString *res = [x string];
 		if (res && [res length]>10 && [res hasPrefix:@"function"]) {
-			if ([res hasSuffix:@" NULL"]) res=[res substringToIndex:[res length]-5];
-			res = [fn stringByAppendingString:[res substringFromIndex:9]];
-			success = YES;
-			[self setStatusLineText:res];
-			if (lastFunctionHintText) [lastFunctionHintText release];
-			lastFunctionHintText = [res retain];
+			NSRange lastClosingParenthesis = [res rangeOfString:@")" options:NSBackwardsSearch];
+			if(lastClosingParenthesis.length) {
+				res = [res substringToIndex:NSMaxRange(lastClosingParenthesis)];
+				res = [fn stringByAppendingString:[res substringFromIndex:9]];
+				success = YES;
+				[self setStatusLineText:res];
+				if (lastFunctionHintText) [lastFunctionHintText release];
+				lastFunctionHintText = [res retain];
+			}
 		}
 		[x release];
 	}
