@@ -37,156 +37,157 @@
 
 @implementation CodeCompletion
 
-+ (NSString*) complete: (NSString*) part {
-	if (preventReentrance && insideR>0) {
-		SLog(@"CodeCompletion.complete: returning nil completion to prevent R re-entrance [***]");
-		return nil;
-	}
-    REngine *re = [REngine mainEngine];
-	if (![re beginProtected]) {
-		SLog(@"CodeCompletion.complete: returning nil completion because protected REngine entry failed [***]");
-		return nil;
-	}
-    // first get the length of the search path so we can go environment by environment
-    RSEXP *x = [re evaluateString:@"length(search())"];
-    int pos=1, maxpos;
-    if (x==nil || ((maxpos = [x integer])==0)) { [re endProtected]; return nil; }
-
-    // ok, we got the search path length; search in each environment and if something matches, get it, otherwise go to the next one
-    while (pos<=maxpos) {
-        // use ls to get the names of the objects in the specific environment
-        NSString *ls=[NSString stringWithFormat:@"ls(pos=%d, all.names=TRUE, pattern=\"^%@.*\")", pos, part];
-        RSEXP *x = [re evaluateString:ls];
-        //NSLog(@"attepmting to find %@ via %@", part, ls);
-        if (x==nil) {
-			[re endProtected];
-            return nil;
-		}
-        NSArray *a = [x array];
-        if (a == nil) {
-            [x release];
-			[re endProtected];
-            return nil;
-        }
-        
-        { // the following code works also if pattern is not specified; with pattern present we could make it even easier, but currently we use it just to narrow the search (e.g. "." could still be matched by something else ...)
-            int i=0, matches=0;
-            NSString *common=nil;
-            while (i<[a count]) {
-                NSString *sx = (NSString*) [a objectAtIndex:i];
-                if ([sx hasPrefix: part]) {
-                    if (matches==0)
-                        common = [[NSString alloc] initWithString: sx];
-                    else {
-                        NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
-                        [common release];
-                        common = cpref;
-                    }
-                    matches++;
-                }
-                i++;
-            }
-            if (common) { // attempt to get class of the object - it will fail if that's just a partial object, but who cares..
-                    x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
-                    [re endProtected];
-                if (x && [x string] && [[x string] isEqualToString:@"function"])
-                    return [[common autorelease] stringByAppendingString:@"("];
-                else
-                    return [common autorelease];
-            }
-        }
-        pos++;
-    }
-	[re endProtected];
-    return nil;
-}
-
-+ (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix {
-	if (preventReentrance && insideR>0) {
-		SLog(@"CodeCompletion.completeAll: returning nil completion to prevent R re-entrance [***]");
-		return nil;
-	}
-	
-    REngine *re = [REngine mainEngine];
-	if (![re beginProtected]) {
-		SLog(@"CodeCompletion.completeAll: returning nil completion because protected REngine entry failed [***]");
-		return nil;
-	}
-	
-    // first get the length of the search path so we can go environment by environment
-    RSEXP *x = [re evaluateString:@"length(search())"];
-    int pos=1, maxpos, matches=0;
-	NSMutableArray *ca = nil;
-	NSString *common=nil;
-
-    if (x==nil || ((maxpos = [x integer])==0)) { [re endProtected]; return nil; }
-	
-	ca = [[NSMutableArray alloc] initWithCapacity: 8];
-	
-    // ok, we got the search path length; search in each environment and if something matches, get it, otherwise go to the next one
-    while (pos<=maxpos) {
-        // use ls to get the names of the objects in the specific environment
-        NSString *ls=[NSString stringWithFormat:@"ls(pos=%d, all.names=TRUE, pattern=\"^%@.*\")", pos, part];
-        RSEXP *x = [re evaluateString:ls];
-        //NSLog(@"attepmting to find %@ via %@", part, ls);
-        if (x==nil) {
-			[re endProtected];
-            return nil;
-		}
-		
-        NSArray *a = [x array];
-		
-        if (a == nil) {
-            [x release];
-			[re endProtected];
-            return nil;
-        }
-        
-        { // the following code works also if pattern is not specified; with pattern present we could make it even easier, but currently we use it just to narrow the search (e.g. "." could still be matched by something else ...)
-            int i=0, firstMatch=-1;
-            while (i<[a count]) {
-                NSString *sx = (NSString*) [a objectAtIndex:i];
-                if ([sx hasPrefix: part]) {
-                    if (matches==0) {
-                        firstMatch=i;
-                        common=[[NSString alloc] initWithString: sx];
-                    } else {
-                        NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
-                        [common release];
-                        common=cpref;
-                    }
-					if (prefix<[sx length]) {
-						[ca addObject: [sx substringFromIndex:prefix]];
-						matches++;
-					}
-                }
-                i++;
-            }
-        }
-        pos++;
-    }
-	if (common) { 
-		if (matches==1) {
-			// attempt to get class of the object - it will fail if that's just a partial object, but who cares..
-			x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
-			[ca release];
-			if (x!=nil && [x string]!=nil && [[x string] isEqualToString:@"function"]) {
-				[re endProtected];
-				return [NSArray arrayWithObject: [[[common autorelease] stringByAppendingString:@"("] substringFromIndex:prefix]];
-			} else {
-				[re endProtected];
-				return [NSArray arrayWithObject: [[common autorelease] substringFromIndex:prefix]];
-			}
-		} else {
-			[common release];
-			[re endProtected];
-			return ca;
-		}
-	}
-	[re endProtected];
-	[ca release];
-    return nil;
-}
+// + (NSString*) complete: (NSString*) part {
+// 	return nil;
+// 	if (preventReentrance && insideR>0) {
+// 		SLog(@"CodeCompletion.complete: returning nil completion to prevent R re-entrance [***]");
+// 		return nil;
+// 	}
+//     REngine *re = [REngine mainEngine];
+// 	if (![re beginProtected]) {
+// 		SLog(@"CodeCompletion.complete: returning nil completion because protected REngine entry failed [***]");
+// 		return nil;
+// 	}
+//     // first get the length of the search path so we can go environment by environment
+//     RSEXP *x = [re evaluateString:@"length(search())"];
+//     int pos=1, maxpos;
+//     if (x==nil || ((maxpos = [x integer])==0)) { [re endProtected]; return nil; }
+// 
+//     // ok, we got the search path length; search in each environment and if something matches, get it, otherwise go to the next one
+//     while (pos<=maxpos) {
+//         // use ls to get the names of the objects in the specific environment
+//         NSString *ls=[NSString stringWithFormat:@"ls(pos=%d, all.names=TRUE, pattern=\"^%@.*\")", pos, part];
+//         RSEXP *x = [re evaluateString:ls];
+//         //NSLog(@"attepmting to find %@ via %@", part, ls);
+//         if (x==nil) {
+// 			[re endProtected];
+//             return nil;
+// 		}
+//         NSArray *a = [x array];
+//         if (a == nil) {
+//             [x release];
+// 			[re endProtected];
+//             return nil;
+//         }
+//         
+//         { // the following code works also if pattern is not specified; with pattern present we could make it even easier, but currently we use it just to narrow the search (e.g. "." could still be matched by something else ...)
+//             int i=0, matches=0;
+//             NSString *common=nil;
+//             while (i<[a count]) {
+//                 NSString *sx = (NSString*) [a objectAtIndex:i];
+//                 if ([sx hasPrefix: part]) {
+//                     if (matches==0)
+//                         common = [[NSString alloc] initWithString: sx];
+//                     else {
+//                         NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
+//                         [common release];
+//                         common = cpref;
+//                     }
+//                     matches++;
+//                 }
+//                 i++;
+//             }
+//             if (common) { // attempt to get class of the object - it will fail if that's just a partial object, but who cares..
+//                     x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
+//                     [re endProtected];
+//                 if (x && [x string] && [[x string] isEqualToString:@"function"])
+//                     return [[common autorelease] stringByAppendingString:@"("];
+//                 else
+//                     return [common autorelease];
+//             }
+//         }
+//         pos++;
+//     }
+// 	[re endProtected];
+//     return nil;
+// }
+// 
+// + (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix {
+// 	if (preventReentrance && insideR>0) {
+// 		SLog(@"CodeCompletion.completeAll: returning nil completion to prevent R re-entrance [***]");
+// 		return nil;
+// 	}
+// 	
+//     REngine *re = [REngine mainEngine];
+// 	if (![re beginProtected]) {
+// 		SLog(@"CodeCompletion.completeAll: returning nil completion because protected REngine entry failed [***]");
+// 		return nil;
+// 	}
+// 	
+//     // first get the length of the search path so we can go environment by environment
+//     RSEXP *x = [re evaluateString:@"length(search())"];
+//     int pos=1, maxpos, matches=0;
+// 	NSMutableArray *ca = nil;
+// 	NSString *common=nil;
+// 
+//     if (x==nil || ((maxpos = [x integer])==0)) { [re endProtected]; return nil; }
+// 	
+// 	ca = [[NSMutableArray alloc] initWithCapacity: 8];
+// 	
+//     // ok, we got the search path length; search in each environment and if something matches, get it, otherwise go to the next one
+//     while (pos<=maxpos) {
+//         // use ls to get the names of the objects in the specific environment
+//         NSString *ls=[NSString stringWithFormat:@"ls(pos=%d, all.names=TRUE, pattern=\"^%@.*\")", pos, part];
+//         RSEXP *x = [re evaluateString:ls];
+//         //NSLog(@"attepmting to find %@ via %@", part, ls);
+//         if (x==nil) {
+// 			[re endProtected];
+//             return nil;
+// 		}
+// 		
+//         NSArray *a = [x array];
+// 		
+//         if (a == nil) {
+//             [x release];
+// 			[re endProtected];
+//             return nil;
+//         }
+//         
+//         { // the following code works also if pattern is not specified; with pattern present we could make it even easier, but currently we use it just to narrow the search (e.g. "." could still be matched by something else ...)
+//             int i=0, firstMatch=-1;
+//             while (i<[a count]) {
+//                 NSString *sx = (NSString*) [a objectAtIndex:i];
+//                 if ([sx hasPrefix: part]) {
+//                     if (matches==0) {
+//                         firstMatch=i;
+//                         common=[[NSString alloc] initWithString: sx];
+//                     } else {
+//                         NSString *cpref=[[NSString alloc] initWithString:[common commonPrefixWithString:sx options:0]];
+//                         [common release];
+//                         common=cpref;
+//                     }
+// 					if (prefix<[sx length]) {
+// 						[ca addObject: [sx substringFromIndex:prefix]];
+// 						matches++;
+// 					}
+//                 }
+//                 i++;
+//             }
+//         }
+//         pos++;
+//     }
+// 	if (common) { 
+// 		if (matches==1) {
+// 			// attempt to get class of the object - it will fail if that's just a partial object, but who cares..
+// 			x = [re evaluateString:[NSString stringWithFormat:@"try(class(%@),silent=TRUE)",common]];
+// 			[ca release];
+// 			if (x!=nil && [x string]!=nil && [[x string] isEqualToString:@"function"]) {
+// 				[re endProtected];
+// 				return [NSArray arrayWithObject: [[[common autorelease] stringByAppendingString:@"("] substringFromIndex:prefix]];
+// 			} else {
+// 				[re endProtected];
+// 				return [NSArray arrayWithObject: [[common autorelease] substringFromIndex:prefix]];
+// 			}
+// 		} else {
+// 			[common release];
+// 			[re endProtected];
+// 			return ca;
+// 		}
+// 	}
+// 	[re endProtected];
+// 	[ca release];
+//     return nil;
+// }
 
 + (NSArray*) retrieveSuggestionsForScopeRange:(NSRange)scopeRange inTextView:(NSTextView*)textView
 {

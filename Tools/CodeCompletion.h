@@ -33,8 +33,8 @@
 @interface CodeCompletion : NSObject {
 
 }
-+ (NSString*) complete: (NSString*) part;
-+ (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix;
+// + (NSString*) complete: (NSString*) part;
+// + (NSArray*) completeAll: (NSString*) part cutPrefix: (int) prefix;
 + (NSArray*) retrieveSuggestionsForScopeRange:(NSRange)scopeRange inTextView:(NSTextView*)textView;
 
 @end
