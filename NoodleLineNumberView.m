@@ -80,7 +80,9 @@
 			[self font], NSFontAttributeName, 
 			[self textColor], NSForegroundColorAttributeName,
 			nil] retain];
-		maxWidthOfGlyph = [[NSString stringWithString:@"8"] sizeWithAttributes:textAttributes].width;
+		NSSize s = [[NSString stringWithString:@"8"] sizeWithAttributes:textAttributes];
+		maxWidthOfGlyph = s.width;
+		maxHeightOfGlyph = s.height;
 		[self updateGutterThicknessConstants];
 		currentRuleThickness = 0.0f;
 
@@ -130,7 +132,9 @@
 			font, NSFontAttributeName, 
 			[self textColor], NSForegroundColorAttributeName,
 			nil] retain];
-		maxWidthOfGlyph = [[NSString stringWithString:@"8"] sizeWithAttributes:textAttributes].width;
+		NSSize s = [[NSString stringWithString:@"8"] sizeWithAttributes:textAttributes];
+		maxWidthOfGlyph = s.width;
+		maxHeightOfGlyph = s.height;
 		[self updateGutterThicknessConstants];
 	}
 }
@@ -154,7 +158,9 @@
 			[self font], NSFontAttributeName, 
 			textColor, NSForegroundColorAttributeName,
 			nil] retain];
-		maxWidthOfGlyph = [[NSString stringWithString:@"8"] sizeWithAttributes:textAttributes].width;
+		NSSize s = [[NSString stringWithString:@"8"] sizeWithAttributes:textAttributes];
+		maxWidthOfGlyph = s.width;
+		maxHeightOfGlyph = s.height;
 		[self updateGutterThicknessConstants];
 	}
 }
@@ -296,7 +302,6 @@
 	NSUInteger       rectCount, index, line, count;
 	NSRectArray      rects;
 	CGFloat          yinset;
-	NSSize           stringSize;
 	NSArray          *lines;
 
 	nullRange      = NSMakeRange(NSNotFound, 0);
@@ -321,7 +326,6 @@
 	CGFloat yinsetMinY         = yinset - NSMinY(visibleRect);
 	CGFloat rectHeight;
 
-
 	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
 		index = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue];
@@ -341,13 +345,16 @@
 				// Line numbers are internally stored starting at 0
 				labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
 
-				stringSize = [labelText sizeWithAttributes:textAttributes];
+				// How many digits has the current line number?
+				NSUInteger idx = line + 1;
+				NSInteger numOfDigits = 0;
+				while(idx) { numOfDigits++; idx/=10; }
 
 				rectHeight = NSHeight(rects[0]);
 				// Draw string flush right, centered vertically within the line
 				[labelText drawInRect:
-				NSMakeRect(boundsWidthRULER - stringSize.width,
-					yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - stringSize.height) >> 1),
+				NSMakeRect(boundsWidthRULER - (maxWidthOfGlyph * numOfDigits),
+					yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - maxHeightOfGlyph) >> 1),
 					boundsRULERMargin2, rectHeight)
 					withAttributes:textAttributes];
 			}
