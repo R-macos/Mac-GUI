@@ -1,5 +1,18 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-09 [HJBB]
+*	In RConsole pressing the ESC key will invoke
+	"completion" as in standard application if no
+	R command runs including system(..., wait=TRUE)
+	and if current console input line is not empty
+	otherwise pressing ESC key or STOP button will
+	try to terminate the running R command and, if
+	a system(..., wait=TRUE) runs, it will kill the
+	system command, or if current console input line
+	is empty it will send CTRL+D to R in order to be
+	able to jump out from uncompleted commands like
+	"3+"
+
 -- Release Version 1.43 (5989) - supplied with R 2.14.1 --
 
 Last-update: 2011-12-24 [HJBB]

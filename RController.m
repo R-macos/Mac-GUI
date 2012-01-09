@@ -1118,7 +1118,11 @@ extern BOOL isTimeToFinish;
 
 /* this writes R output to the Console window directly, i.e. without using a buffer. Use handleWriteConsole: for the regular way. */
 - (void) writeConsoleDirectly: (NSString*) txt withColor: (NSColor*) color{
-	if (!txt) return;
+
+	if (!txt || 
+		(writeBufferType && [txt isEqualToString:@"\n"]) // suppress the output of an error message containing only a new line
+		) return;
+
 	NSRange scr = [txt rangeOfCharacterFromSet:specialCharacters];
 	if (scr.location != NSNotFound) { /* at least one special character */
 		int tl = [txt length], cl = scr.location;
@@ -2021,7 +2025,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 - (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
 
 	SLog(@"RController.textView doCommandBySelector: %@\n", NSStringFromSelector(commandSelector));
-	
+
+	if(textView != consoleTextView) return NO;
+
 	if (@selector(insertNewline:) == commandSelector) {
 		unsigned textLength = [[textView textStorage] length];
 		if(lastFunctionHintText) [lastFunctionHintText release], lastFunctionHintText=nil;
@@ -2131,7 +2137,14 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	// ---- cancel ---
 	
 	if (@selector(cancel:) == commandSelector || @selector(cancelOperation:) == commandSelector) {
-		if(busyRFlag || childPID>0) {
+		NSString *contStr = @"";
+		RSEXP *xx = [[REngine mainEngine] evaluateString:@"getOption('continue)"];
+		if(xx) {
+			contStr = [xx string];
+			NSLog(@"%@", contStr);
+			[xx release];
+		}
+		if( busyRFlag || childPID>0 || [textView selectedRange].location == committedLength ) {
 			[self breakR:self];
 			return(YES);
 		}
@@ -3195,7 +3208,7 @@ This method calls the showHelpFor method of the Help Manager which opens
     } else if ([[toolbarItem itemIdentifier] isEqual: NewQuartzToolbarItemIdentifier]) {
 		enable = YES;
     } else if ([[toolbarItem itemIdentifier] isEqual: InterruptToolbarItemIdentifier]) {
-		enable = (busyRFlag || (childPID>0));
+		enable = (busyRFlag || (childPID>0) || [consoleTextView selectedRange].location == committedLength);
 	} else if ([[toolbarItem itemIdentifier] isEqual: ShowHistoryToolbarItemIdentifier]) {
 		enable = YES;
 	} else if ([[toolbarItem itemIdentifier] isEqual: AuthenticationToolbarItemIdentifier]) {
