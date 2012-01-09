@@ -41,6 +41,10 @@
 #import "RTextView.h"
 #import "HelpManager.h"
 
+// R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
+#ifdef error
+#undef error
+#endif
 
 BOOL defaultsInitialized = NO;
 
@@ -162,6 +166,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (BOOL) plain
 {
 	return plainFile;
+}
+
+- (BOOL) isRdDocument
+{
+	return ([[[self document] fileType] isEqualToString:ftRdDoc]) ? YES : NO;
 }
 
 // fileEncoding is passed through to the document - bound by the save box
@@ -342,9 +351,20 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 {
 	SLog(@"RDocumentWinCtrl.functionReset");
 	if (fnListBox) {
-		NSMenuItem *fmi = [[NSMenuItem alloc] initWithTitle:NLS(@"<functions>") action:nil keyEquivalent:@""];
+		NSString *placeHolderStr = @"";
+		NSString *tooltipStr = @"";
+		if([[[self document] fileType] isEqualToString:ftRSource]) {
+			placeHolderStr = NLS(@"<functions>");
+			tooltipStr = NLS(@"List of Functions");
+		}
+		else if([[[self document] fileType] isEqualToString:ftRdDoc]) {
+			placeHolderStr = NLS(@"<sections>");
+			tooltipStr = NLS(@"List of Sections");
+		}
+		NSMenuItem *fmi = [[NSMenuItem alloc] initWithTitle:placeHolderStr action:nil keyEquivalent:@""];
 		[fmi setTag:-1];
 		[fnListBox removeAllItems];
+		[fnListBox setToolTip:tooltipStr];
 		[[fnListBox menu] addItem:fmi];
 		[fmi release];
 	}
@@ -407,69 +427,110 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if([s length]<8) return;
 
 	SLog(@"RDoumentWinCtrl.functionRescan");
-	while (1) {
-		NSRange r = [s rangeOfRegex:@"\\bfunction\\s*\\(" inRange:NSMakeRange(oix,strLength-oix)];
-		if (r.length<8) break;
-		oix=NSMaxRange(r);
-		int li = r.location-1;
-		SLog(@" - potential function at %d", li);
-		unichar fc;
-		while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
-		if (li>0) {
-			fc=CFStringGetCharacterAtIndex((CFStringRef)s, li);
-			if (fc=='=' || (fc=='-' && CFStringGetCharacterAtIndex((CFStringRef)s, --li)=='<')) {
-				int lci;
-				li--;
-				SLog(@" - matched =/<- at %d", li);
-				while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
-				lci=li;
-				// while (li>=0 && (((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li))>='0' && fc<='9')||(fc>='a' && fc<='z')||(fc>='A' && fc<='Z')|| //(fc>=0x00C && fc<=0xFF9F)||
-				// 				 fc=='.'||fc=='_')) li--;
-				while (li>=0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) !='\n' && fc!=' ' && fc!='\r' && fc!='\t' && fc!=';' && fc!='#')) li--;
-				if (lci!=li) {
+	if([[[self document] fileType] isEqualToString:ftRSource]) {
+		while (1) {
+			NSRange r = [s rangeOfRegex:@"\\bfunction\\s*\\(" inRange:NSMakeRange(oix,strLength-oix)];
+			if (r.length<8) break;
+			oix=NSMaxRange(r);
+			int li = r.location-1;
+			SLog(@" - potential function at %d", li);
+			unichar fc;
+			while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+			if (li>0) {
+				fc=CFStringGetCharacterAtIndex((CFStringRef)s, li);
+				if (fc=='=' || (fc=='-' && CFStringGetCharacterAtIndex((CFStringRef)s, --li)=='<')) {
+					int lci;
+					li--;
+					SLog(@" - matched =/<- at %d", li);
+					while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+					lci=li;
+					// while (li>=0 && (((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li))>='0' && fc<='9')||(fc>='a' && fc<='z')||(fc>='A' && fc<='Z')|| //(fc>=0x00C && fc<=0xFF9F)||
+					// 				 fc=='.'||fc=='_')) li--;
+					while (li>=0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) !='\n' && fc!=' ' && fc!='\r' && fc!='\t' && fc!=';' && fc!='#')) li--;
+					if (lci!=li) {
 
-					NSString *fn = [s substringWithRange:NSMakeRange(li+1,lci-li)];
+						NSString *fn = [s substringWithRange:NSMakeRange(li+1,lci-li)];
 
-					int type = 1; // invalid function name
-					if([textView parserContextForPosition:li+2] == 4)
-						type = 2; // function declaration is commented out
-					else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
-						type = 0; // function name is valid
+						int type = 1; // invalid function name
+						if([textView parserContextForPosition:li+2] == 4)
+							type = 2; // function declaration is commented out
+						else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
+							type = 0; // function name is valid
 
-					int fp = li+1;
+						int fp = li+1;
 
-					NSMenuItem *mi = nil;
-					SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
-					fnf++;
-					if (fp<=sr.location) sit=pim;
-					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-					if(type == 1) {
-						NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
-						[mi setAttributedTitle:fna];
-						[fna release];
+						NSMenuItem *mi = nil;
+						SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
+						fnf++;
+						if (fp<=sr.location) sit=pim;
+						mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+						if(type == 1) {
+							NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
+							[mi setAttributedTitle:fna];
+							[fna release];
+						}
+						else if(type == 2) {
+							NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
+							[mi setAttributedTitle:fna];
+							[fna release];
+						}
+						[mi setTag:fp];
+						[mi setTarget:self];
+						[fnm addItem:mi];
+						[mi release];
+						pim++;
 					}
-					else if(type == 2) {
-						NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
-						[mi setAttributedTitle:fna];
-						[fna release];
-					}
-					[mi setTag:fp];
-					[mi setTarget:self];
-					[fnm addItem:mi];
-					[mi release];
-					pim++;
 				}
 			}
 		}
 	}
+	else if([[[self document] fileType] isEqualToString:ftRdDoc]) {
+		while (1) {
+			NSError *err = nil;
+			NSRange r = [s rangeOfRegex:@"\\\\((s(ynopsis|ource|e(ction|ealso))|Rd(Opts|version)|n(ote|ame)|concept|title|Sexpr|d(ocType|e(scription|tails))|usage|e(ncoding|xamples)|value|keyword|format|a(uthor|lias|rguments)|references))\\s*\\{|\\\\Sexpr\\s*\\[" options:0 inRange:NSMakeRange(oix,strLength-oix) capture:1 error:&err];
+			//RdOpts, Rdversion, Sexpr, alias, arguments, author, concept, description, details, docType, encoding, examples, format, keyword, name, note, references, section, seealso, source, synopsis, title, usage, value
+			if (!r.length) break;
+			oix=NSMaxRange(r);
+			SLog(@" - potential section at %d", r.location);
+			NSString *fn = [s substringWithRange:r];
 
+			int type = 0; // invalid function name
+			// if([textView parserContextForPosition:li+2] == 4)
+			// 	type = 2; // function declaration is commented out
+			// else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
+			// 	type = 0; // function name is valid
+
+			int fp = r.location-1;
+			
+			NSMenuItem *mi = nil;
+			// SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
+			fnf++;
+			if (fp<=sr.location) sit=pim;
+			mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+			if(type == 1) {
+				NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
+				[mi setAttributedTitle:fna];
+				[fna release];
+			}
+			// else if(type == 2) {
+			// 	NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
+			// 	[mi setAttributedTitle:fna];
+			// 	[fna release];
+			// }
+			[mi setTag:fp];
+			[mi setTarget:self];
+			[fnm addItem:mi];
+			[mi release];
+			pim++;
+		}
+	}
 	if (fnf) {
 		[fnListBox setEnabled:YES];
 		[fnListBox removeItemAtIndex:0];
 		[fnListBox selectItemAtIndex:sit];
 	}
 
-	SLog(@" - rescan finished (%d functions)", fnf);
+	SLog(@" - rescan finished (%d sections)", fnf);
 }
 
 - (void) updatePreferences {

@@ -65,6 +65,8 @@
 - (void)setSearchType:(int)type;
 - (int)searchType;
 
+- (void)showHelpFileForURL:(NSURL*)url;
+
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
 
 @end

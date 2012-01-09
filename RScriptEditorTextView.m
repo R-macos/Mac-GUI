@@ -136,7 +136,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// For now replaced selectedTextBackgroundColor by redColor
 	highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
 
-	editorToolbar = [[REditorToolbar alloc] initWithEditor:[self delegate]];
+	if([[self delegate] isRdDocument])
+		editorToolbar = [[RdEditorToolbar alloc] initWithEditor:[self delegate]];
+	else
+		editorToolbar = [[REditorToolbar alloc] initWithEditor:[self delegate]];
 
 	if(lineNumberingEnabled) {
 

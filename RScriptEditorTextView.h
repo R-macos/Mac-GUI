@@ -39,6 +39,7 @@
 #import "RegexKitLite.h"
 #import "NoodleLineNumberView.h"
 #import "REditorToolbar.h"
+#import "RdEditorToolbar.h"
 
 #define R_TEXT_SIZE_TRIGGER_FOR_PARSING_PARTLY 10000
 

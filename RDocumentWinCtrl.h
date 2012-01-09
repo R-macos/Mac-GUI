@@ -116,6 +116,8 @@ extern NSColor *shColorIdentifier;
 - (void) setPlain: (BOOL) plain; // plain = don't use highlighting even if preferences say so
 - (BOOL) plain;
 
+- (BOOL) isRdDocument;
+
 - (int) fileEncoding;
 - (void) setFileEncoding: (int) encoding;
 

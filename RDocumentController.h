@@ -34,6 +34,7 @@
 #import "RDocument.h"
 
 #define ftRSource @"R Source File"
+#define ftRdDoc @"Rd Documentation File"
 #define ftQuartz @"Quartz Graphics"
 
 #define defaultDocumentType ftRSource

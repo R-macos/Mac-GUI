@@ -63,6 +63,8 @@
 
 - (BOOL) isRTF;
 
+- (BOOL) convertRd2HTML;
+
 - (NSTextView *)textView;
 
 @end

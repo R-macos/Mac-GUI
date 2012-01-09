@@ -35,6 +35,8 @@
 #import "RController.h"
 #import "Preferences.h"
 #import "RChooseEncodingPopupAccessory.h"
+#import "REngine.h"
+#import "HelpManager.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -213,7 +215,7 @@
 				SLog(@" - new string contents (%d chars) for window controller %@", [cs length], wc);
 				// Important! otherwise the save box won't know
 				[wc setFileEncoding:documentEncoding];
-				if(![initialContentsType isEqualToString:ftRSource]) {
+				if(![initialContentsType isEqualToString:ftRSource] && ![initialContentsType isEqualToString:ftRdDoc]) {
 					SLog(@" - set plain text mode");
 					[wc setPlain:YES];
 				}
@@ -417,6 +419,75 @@ create the UI for the document.
 - (BOOL) isRTF
 {
 	return (([self fileName] && [[[self fileName] lowercaseString] hasSuffix:@".rtf"]) || ([self fileType] && [[self fileType] hasSuffix:@".rtf"]));
+}
+
+- (BOOL) convertRd2HTML
+{
+
+	REngine *re = [REngine mainEngine];
+
+	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
+	NSString *RhomeCSS = @"R.css";
+	RSEXP *xx = [re evaluateString:@"R.home()"];
+	if(xx) {
+		NSString *Rhome = [xx string];
+		if(Rhome) {
+			RhomeCSS = [NSString stringWithFormat:@"file://%@/doc/html/R.css", Rhome];
+		}
+		[xx release];
+	}
+	
+
+	NSError *error;
+	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
+	NSString *htmlOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"html"];
+	NSString *errorOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"txt"];
+
+	NSURL *htmlOutputFileURL = [NSURL URLWithString:htmlOutputFile];
+
+	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
+
+	NSString *convCmd = [NSString stringWithFormat:@"system(\"R CMD Rdconv -t html '%@' 2> '%@' | perl -pe 's!R.css!%@!'> '%@'\", intern=TRUE, wait=TRUE)", inputFile, errorOutputFile, RhomeCSS, htmlOutputFile];
+
+	if (![re beginProtected]) {
+		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed [***]");
+		return NO;
+	}
+	xx = [re evaluateString:convCmd];
+	[re endProtected];
+	if(xx) {
+		[xx release];
+		NSString *errMessage = [[NSString alloc] initWithContentsOfFile:errorOutputFile encoding:NSUTF8StringEncoding error:nil];
+		if(errMessage && [errMessage length]) {
+
+			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:@"Rd file"];
+
+			NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Rd convertion warnings") 
+					defaultButton:NLS(@"OK") 
+					alternateButton:nil 
+					otherButton:nil 
+					informativeTextWithFormat:errMessage];
+
+			[alert setAlertStyle:NSWarningAlertStyle];
+			[alert runModal];
+
+		}
+
+		[[HelpManager sharedController] showHelpFileForURL:htmlOutputFileURL];
+
+		if (![re beginProtected]) {
+			SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed for removing temporary files[***]");
+			return NO;
+		}
+		// After 200 secs all temporary files will be deleted even if R was quitted meanwhile
+		[re executeString:[NSString stringWithFormat:@"system(\"sleep 200 && rm -f '%@' && rm -f '%@' && rm -f '%@'\", wait=FALSE)", inputFile, htmlOutputFile, errorOutputFile]];
+		[re endProtected];
+
+		return YES;
+	}
+
+	return NO;
+
 }
 
 - (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString*)contextInfo

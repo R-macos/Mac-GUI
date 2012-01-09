@@ -29,6 +29,27 @@
 			<string>RDocument</string>
 		</dict>
 		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>Rd</string>
+				<string>rd</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Rdoc.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Rd Documentation File</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>****</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
+			<key>NSDocumentClass</key>
+			<string>RDocument</string>
+		</dict>
+		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Quartz Graphics</string>
 			<key>CFBundleTypeRole</key>

@@ -256,6 +256,16 @@ static id sharedHMController;
 	return sharedHMController;
 }
 
+- (void)showHelpFileForURL:(NSURL*)url
+{
+	if(url != nil) {
+		[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
+		[helpWindow makeKeyAndOrderFront:self];
+		return;
+	}
+	NSBeep();
+}
+
 - (IBAction)printDocument:(id)sender
 {
 	NSPrintInfo *printInfo;
