@@ -460,7 +460,7 @@ create the UI for the document.
 		NSString *errMessage = [[NSString alloc] initWithContentsOfFile:errorOutputFile encoding:NSUTF8StringEncoding error:nil];
 		if(errMessage && [errMessage length]) {
 
-			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:@"Rd file"];
+			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
 
 			NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Rd convertion warnings") 
 					defaultButton:NLS(@"OK") 
@@ -473,6 +473,21 @@ create the UI for the document.
 
 		}
 
+
+		// Try to check if htmlOutputFile has content; if not don't come up with an empty window
+		BOOL fsizeChecked = NO;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+		UInt32 fsize = 0;
+		NSFileManager *man = [[NSFileManager alloc] init];
+		NSDictionary *attrs = [man attributesOfItemAtPath:htmlOutputFile error:nil];
+		if(attrs) {
+			fsize = [attrs fileSize];
+			fsizeChecked = YES;
+		}
+		[man release];
+#endif
+
+		if(!fsizeChecked || (fsizeChecked && fsize > 0))
 		[[HelpManager sharedController] showHelpFileForURL:htmlOutputFileURL];
 
 		if (![re beginProtected]) {

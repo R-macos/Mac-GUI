@@ -66,7 +66,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 {
 	self = [super initWithCoder:coder];
 	if (self) {
-		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t]{}^|&!;<>?`\n"] retain];
+		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t]{}^|&!;<>?`\n\\"] retain];
 		undoBreakTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"+- .,|&*/:!?<>=\n"] retain];
 	}
 	return self;
@@ -80,6 +80,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 	console = NO;
 	RTextView_autoCloseBrackets = YES;
     SLog(@" - delegate: %@", [self delegate]);
+
+	isRdDocument = NO;
+	if([[self window] windowController] && [[[self window] windowController] respondsToSelector:@selector(isRdDocument)])
+		isRdDocument = ([[[self window] windowController] isRdDocument]);
 
 	// work-arounds for brain-dead "features" in Lion
 	if ([self respondsToSelector:@selector(setAutomaticQuoteSubstitutionEnabled:)])
@@ -238,7 +242,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 				}
 
 				// Try to suppress unnecessary auto-pairing
-				if( ([self isCursorAdjacentToAlphanumCharWithInsertionOf:ck] && ![self isNextCharMarkedBy:kTALinked withValue:kTAVal] && ![self selectedRange].length) ){ 
+				if( !isRdDocument && [self isCursorAdjacentToAlphanumCharWithInsertionOf:ck] && ![self isNextCharMarkedBy:kTALinked withValue:kTAVal] && ![self selectedRange].length ){ 
 					SLog(@"RTextView: suppressed auto-pairing");
 					[super keyDown:theEvent];
 					if(hilite && [[self delegate] respondsToSelector:@selector(highlightBracesWithShift:andWarn:)])
@@ -405,8 +409,14 @@ BOOL RTextView_autoCloseBrackets = YES;
 					context = pcExpression;
 				else if (context == pcExpression)
 					context = pcStringBQ;
-			} else if (c == '#' && context == pcExpression)
-				return pcComment;
+			}
+			else if(context == pcExpression) {
+				if(isRdDocument && c == '%')
+					return pcComment;
+				else if(c == '#')
+					return pcComment;
+			}
+
 		}
 		i++;
 	}

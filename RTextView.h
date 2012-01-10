@@ -53,6 +53,7 @@ extern BOOL RTextView_autoCloseBrackets;
 @interface RTextView : NSTextView
 {
 	BOOL isRConsole;
+	BOOL isRdDocument;
 @private
 	BOOL console;
 	NSCharacterSet *separatingTokensSet;

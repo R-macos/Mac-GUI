@@ -45,12 +45,21 @@
  */
 
 #import "RScriptEditorTokens.h"
+#import "RdScriptEditorTokens.h"
 
+// R lexer
 extern NSUInteger yylex();
 extern NSUInteger yyuoffset, yyuleng;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 void yy_switch_to_buffer(YY_BUFFER_STATE);
 YY_BUFFER_STATE yy_scan_string (const char *);
+
+// Rd lexer
+extern NSUInteger rdlex();
+typedef struct rd_buffer_state *RD_BUFFER_STATE;
+void rd_switch_to_buffer(RD_BUFFER_STATE);
+RD_BUFFER_STATE rd_scan_string (const char *);
+
 
 #pragma mark -
 #pragma mark attribute definition 
@@ -622,64 +631,119 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// initialise flex
 	yyuoffset = textRange.location; yyuleng = 0;
-	yy_switch_to_buffer(yy_scan_string(NSStringUTF8String([selfstr substringWithRange:textRange])));
 
-	// now loop through all the tokens
-	while ((token = yylex())) {
-// NSLog(@"t %d", token);
-		switch (token) {
-			case RPT_SINGLE_QUOTED_TEXT:
-			case RPT_DOUBLE_QUOTED_TEXT:
-			    tokenColor = shColorString;
-			    break;
-			case RPT_RESERVED_WORD:
-			    tokenColor = shColorKeyword;
-			    break;
-			case RPT_NUMERIC:
-				tokenColor = shColorNumber;
-				break;
-			case RPT_BACKTICK_QUOTED_TEXT:
-			    tokenColor = shColorString;
-			    break;
-			case RPT_COMMENT:
-			    tokenColor = shColorComment;
-			    break;
-			case RPT_VARIABLE:
-			    tokenColor = shColorIdentifier;
-			    break;
-			case RPT_WHITESPACE:
-			    continue;
-			    break;
-			default:
-			    tokenColor = shColorNormal;
+	if([[self delegate] isRdDocument]) {
+
+			rd_switch_to_buffer(rd_scan_string(NSStringUTF8String([selfstr substringWithRange:textRange])));
+
+			// now loop through all the tokens
+			while ((token = rdlex())) {
+		// NSLog(@"t %d", token);
+				switch (token) {
+					case RDPT_COMMENT:
+					    tokenColor = shColorComment;
+					    break;
+					case RDPT_SECTION:
+					    tokenColor = shColorNumber;
+					    break;
+					case RDPT_MACRO_ARG:
+					    tokenColor = shColorKeyword;
+					    break;
+					case RDPT_MACRO_GEN:
+					    tokenColor = shColorIdentifier;
+					    break;
+					default:
+					    tokenColor = shColorNormal;
+				}
+
+				tokenRange = NSMakeRange(yyuoffset, yyuleng);
+
+				// make sure that tokenRange is valid (and therefore within textRange)
+				// otherwise a bug in the lex code could cause the the TextView to crash
+				// NOTE Disabled for testing purposes for speed it up
+				tokenRange = NSIntersectionRange(tokenRange, textRange);
+				if (!tokenRange.length) continue;
+
+				// If the current token is marked as SQL keyword, uppercase it if required.
+				tokenEnd = NSMaxRange(tokenRange) - 1;
+
+				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
+
+				// Add an attribute to be used in the auto-pairing (keyDown:)
+				// to disable auto-pairing if caret is inside of any token found by lex.
+				// For discussion: maybe change it later (only for quotes not keywords?)
+				if(token < 6)
+					NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
+
+
+				// Add an attribute to be used to distinguish quotes from keywords etc.
+				// used e.g. in completion suggestions
+				else if(token < 4)
+					NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
+
+			}
+
+	} else {
+
+		yy_switch_to_buffer(yy_scan_string(NSStringUTF8String([selfstr substringWithRange:textRange])));
+
+		// now loop through all the tokens
+		while ((token = yylex())) {
+	// NSLog(@"t %d", token);
+			switch (token) {
+				case RPT_SINGLE_QUOTED_TEXT:
+				case RPT_DOUBLE_QUOTED_TEXT:
+				    tokenColor = shColorString;
+				    break;
+				case RPT_RESERVED_WORD:
+				    tokenColor = shColorKeyword;
+				    break;
+				case RPT_NUMERIC:
+					tokenColor = shColorNumber;
+					break;
+				case RPT_BACKTICK_QUOTED_TEXT:
+				    tokenColor = shColorString;
+				    break;
+				case RPT_COMMENT:
+				    tokenColor = shColorComment;
+				    break;
+				case RPT_VARIABLE:
+				    tokenColor = shColorIdentifier;
+				    break;
+				case RPT_WHITESPACE:
+				    continue;
+				    break;
+				default:
+				    tokenColor = shColorNormal;
+			}
+
+			tokenRange = NSMakeRange(yyuoffset, yyuleng);
+
+			// make sure that tokenRange is valid (and therefore within textRange)
+			// otherwise a bug in the lex code could cause the the TextView to crash
+			// NOTE Disabled for testing purposes for speed it up
+			tokenRange = NSIntersectionRange(tokenRange, textRange);
+			if (!tokenRange.length) continue;
+
+			// If the current token is marked as SQL keyword, uppercase it if required.
+			tokenEnd = NSMaxRange(tokenRange) - 1;
+
+			NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
+		
+			// Add an attribute to be used in the auto-pairing (keyDown:)
+			// to disable auto-pairing if caret is inside of any token found by lex.
+			// For discussion: maybe change it later (only for quotes not keywords?)
+			if(token < 6)
+				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
+		
+
+			// Add an attribute to be used to distinguish quotes from keywords etc.
+			// used e.g. in completion suggestions
+			else if(token < 4)
+				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
+		
+
 		}
-
-		tokenRange = NSMakeRange(yyuoffset, yyuleng);
-
-		// make sure that tokenRange is valid (and therefore within textRange)
-		// otherwise a bug in the lex code could cause the the TextView to crash
-		// NOTE Disabled for testing purposes for speed it up
-		tokenRange = NSIntersectionRange(tokenRange, textRange);
-		if (!tokenRange.length) continue;
-
-		// If the current token is marked as SQL keyword, uppercase it if required.
-		tokenEnd = NSMaxRange(tokenRange) - 1;
-
-		NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
-		
-		// Add an attribute to be used in the auto-pairing (keyDown:)
-		// to disable auto-pairing if caret is inside of any token found by lex.
-		// For discussion: maybe change it later (only for quotes not keywords?)
-		if(token < 6)
-			NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
-		
-
-		// Add an attribute to be used to distinguish quotes from keywords etc.
-		// used e.g. in completion suggestions
-		else if(token < 4)
-			NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
-		
-
 	}
 
 	// set current textColor to the color of the caret's position - 1

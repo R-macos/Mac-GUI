@@ -249,6 +249,10 @@
 
 	// escape ' since we pass it via @" '...' "
 	linebuffer = [linebuffer stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+
+	// escape backslashes
+	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"\\\\" withString:@"\\"];
+
 	SLog(@" - rcompgen completion will be invoked with:\n%@", linebuffer);
 	RSEXP *xx = [re evaluateString:[NSString stringWithFormat:@"rcompgen.completion('%@')", linebuffer]];
 	[re endProtected];

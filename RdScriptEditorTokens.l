@@ -43,20 +43,34 @@ size_t yyuoffset, yyuleng;
 
 //keep track of the current utf-8 character (not byte) offset and token length
 #define YY_USER_ACTION { yyuoffset += yyuleng; yyuleng = utf8strlenRd(yytext); }
+//ignore the output of unmatched characters
+#define ECHO {}
 %}
 %option prefix="rd"
 %option noyywrap
 %option nounput
 %option case-sensitive
 
+
+s				[ \t\n\r]+
+break			[^a-zA-Z_0-9À-ﾟ]
+
+section		\\(s(ynopsis|ource|e(ction|ealso))|Rd(Opts|version)|n(ote|ame)|concept|title|Sexpr|d(ocType|e(scription|tails))|usage|e(ncoding|xamples)|value|keyword|format|a(uthor|lias|rguments)|references)
+macrowarg	\\(s(trong|ubsection|pecial|amp|Quote)|href|newcommand|c(ite|o(de|mmand))|t(estonly|abular)|i(tem(ize)?|f(else)?)|S(3method|4method)|o(ut|ption)|d(ont(show|test|run)|e(scribe|qn)|fn|Quote)|url|p(kg|reformatted)|e(n(c|d|umerate|v)|qn|m(ph|ail))|v(erb|ar)|kbd|file|link(S4class)?|acronym|renewcommand|method|b(old|egin))
+macrowoarg	\\(R|cr|tab|dots|l(dots|eft)|right|ge)
+macrogen		\\[a-zA-Z0-9]+
+
 %%
 
 
 
-%[^\n\r]*(\n|\r)?			{ return 0; }								/* % Comments                     */
-
-
-
+%[^\n\r]*(\n|\r)?						{ return RDPT_COMMENT; }				/* % Comments                     */
+{section}/\{							{ return RDPT_SECTION; }				/* section macros                 */
+\\Sexpr/\[								{ return RDPT_SECTION; }				/* section macros                 */
+{macrowarg}/\{							{ return RDPT_MACRO_ARG; }				/* macros with arguments          */
+\\link/\[								{ return RDPT_MACRO_ARG; }				/* macros with arguments          */
+{macrowoarg}/(\\|{s}|%|{break})	{ return RDPT_MACRO_ARG; }				/* macros without arguments       */
+{macrogen}								{ return RDPT_MACRO_GEN; }				/* unknown macros                 */
 
 <<EOF>>   						{
 	BEGIN(INITIAL);   /* make sure we return to initial state when finished! */
@@ -119,3 +133,91 @@ done:
 	return ((s - _s) - count);
 }
 
+/*
+
+section:
+RdOpts
+Rdversion
+Sexpr
+alias
+arguments
+author
+concept
+description
+details
+docType
+encoding
+examples
+format
+keyword
+name
+note
+references
+section
+seealso
+source
+synopsis
+title
+usage
+value
+
+macros with argument:
+S3method
+S4method
+acronym
+begin
+bold
+cite
+code
+command
+dQuote
+deqn
+describe
+dfn
+dontrun
+dontshow
+donttest
+email
+emph
+enc
+end
+enumerate
+env
+eqn
+file
+href
+if
+ifelse
+item
+itemize
+kbd
+link
+linkS4class
+method
+newcommand
+option
+out
+pkg
+preformatted
+renewcommand
+sQuote
+samp
+special
+strong
+subsection
+tabular
+testonly
+url
+var
+verb
+
+macro without argument:
+R
+cr
+dots
+ge
+ldots
+left
+right
+tab
+*/

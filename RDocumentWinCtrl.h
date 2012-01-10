@@ -80,7 +80,9 @@ extern NSColor *shColorIdentifier;
 	BOOL execNewlineFlag; // this flag is set to YES when <cmd><Enter> execute is used, becuase the <enter> must be ignored as an event
 	
 	NSString *helpTempFile; // path to temporary file used for help
-	
+
+	NSArray *texItems; // array of known tex macros for Rd file completion
+
 	int currentHighlight; // currently highlighted character
 
 	NSDictionary *functionMenuInvalidAttribute;

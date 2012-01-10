@@ -89,6 +89,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	SLog(@"RDocumentWinCtrl.dealloc<%@>", self);
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
+	[texItems release];
 	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	if (functionMenuInvalidAttribute) [functionMenuInvalidAttribute release];
 	if (functionMenuCommentAttribute) [functionMenuCommentAttribute release];
@@ -198,6 +199,90 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		helpTempFile=nil;
 		execNewlineFlag=NO;
 
+		texItems = [[NSArray arrayWithObjects:
+			@"R",
+			@"RdOpts",
+			@"Rdversion",
+			@"S3method",
+			@"S4method",
+			@"Sexpr",
+			@"acronym",
+			@"alias",
+			@"arguments",
+			@"author",
+			@"begin",
+			@"bold",
+			@"cite",
+			@"code",
+			@"command",
+			@"concept",
+			@"cr",
+			@"dQuote",
+			@"deqn",
+			@"describe",
+			@"description",
+			@"details",
+			@"dfn",
+			@"docType",
+			@"dontrun",
+			@"dontshow",
+			@"donttest",
+			@"dots",
+			@"email",
+			@"emph",
+			@"enc",
+			@"encoding",
+			@"end",
+			@"enumerate",
+			@"env",
+			@"eqn",
+			@"examples",
+			@"file",
+			@"format",
+			@"ge",
+			@"href",
+			@"if",
+			@"ifelse",
+			@"item",
+			@"itemize",
+			@"kbd",
+			@"keyword",
+			@"ldots",
+			@"left",
+			@"link",
+			@"linkS4class",
+			@"method",
+			@"name",
+			@"newcommand",
+			@"note",
+			@"option",
+			@"out",
+			@"pkg",
+			@"preformatted",
+			@"references",
+			@"renewcommand",
+			@"right",
+			@"sQuote",
+			@"samp",
+			@"section",
+			@"seealso",
+			@"source",
+			@"special",
+			@"strong",
+			@"subsection",
+			@"synopsis",
+			@"tab",
+			@"tabular",
+			@"testonly",
+			@"title",
+			@"url",
+			@"usage",
+			@"value",
+			@"var",
+			@"verb",
+			nil] retain];
+
+		// TODO control font size due to tollbar setting small or normal
 		functionMenuInvalidAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
 			[NSColor redColor], NSForegroundColorAttributeName,
 			[NSFont menuFontOfSize:0], NSFontAttributeName,
@@ -487,16 +572,23 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	else if([[[self document] fileType] isEqualToString:ftRdDoc]) {
 		while (1) {
 			NSError *err = nil;
-			NSRange r = [s rangeOfRegex:@"\\\\((s(ynopsis|ource|e(ction|ealso))|Rd(Opts|version)|n(ote|ame)|concept|title|Sexpr|d(ocType|e(scription|tails))|usage|e(ncoding|xamples)|value|keyword|format|a(uthor|lias|rguments)|references))\\s*\\{|\\\\Sexpr\\s*\\[" options:0 inRange:NSMakeRange(oix,strLength-oix) capture:1 error:&err];
-			//RdOpts, Rdversion, Sexpr, alias, arguments, author, concept, description, details, docType, encoding, examples, format, keyword, name, note, references, section, seealso, source, synopsis, title, usage, value
+			NSRange r = [s rangeOfRegex:@"\\\\(s(ynopsis\\{|ource\\{|e(ction\\{|ealso\\{))|Rd(Opts\\{|version\\{)|n(ote\\{|ame\\{)|concept\\{|title\\{|Sexpr(\\{|\\[)|d(ocType\\{|e(scription\\{|tails\\{))|usage\\{|e(ncoding\\{|xamples\\{)|value\\{|keyword\\{|format\\{|a(uthor\\{|lias\\{|rguments\\{)|references\\{)" options:0 inRange:NSMakeRange(oix,strLength-oix) capture:1 error:&err];
+			// RdOpts{, Rdversion{, Sexpr[, Sexpr{, alias{, arguments{, author{, concept{, description{, details{, docType{, encoding{, examples{, format{, keyword{, name{, note{, references{, section{, seealso{, source{, synopsis{, title{, usage{, value{
 			if (!r.length) break;
 			oix=NSMaxRange(r);
 			SLog(@" - potential section at %d", r.location);
+			// due to finial bracket decrease range length by 1
+			r.length--;
 			NSString *fn = [s substringWithRange:r];
 
+			int li = r.location-1;
+
+			unichar fc;
+			while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
+
 			int type = 0; // invalid function name
-			// if([textView parserContextForPosition:li+2] == 4)
-			// 	type = 2; // function declaration is commented out
+			if([textView parserContextForPosition:li+2] == 4)
+				type = 2; // function declaration is commented out
 			// else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
 			// 	type = 0; // function name is valid
 
@@ -507,16 +599,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			fnf++;
 			if (fp<=sr.location) sit=pim;
 			mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-			if(type == 1) {
-				NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
+			if(type == 2) { // section was commented out
+				NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
 				[mi setAttributedTitle:fna];
 				[fna release];
 			}
-			// else if(type == 2) {
-			// 	NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
-			// 	[mi setAttributedTitle:fna];
-			// 	[fna release];
-			// }
 			[mi setTag:fp];
 			[mi setTarget:self];
 			[fnm addItem:mi];
@@ -825,6 +912,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 {
 
 	NSRange sr = [aTextView selectedRange];
+	BOOL texMode = (sr.location && [[textView string] characterAtIndex:sr.location-1] == '\\') ? YES : NO;
 
 	unsigned caretPosition = NSMaxRange(sr);
 
@@ -833,31 +921,58 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	*index=0;
 
 	// avoid selecting of token if nothing was found
-	[textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
+	// [textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
 
-	// For better current function detection we pass maximal 1000 left from caret
 	NSMutableSet *uniqueArray = [NSMutableSet setWithCapacity:100];
-	[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
-												 inTextView:aTextView]];
+
+	NSString *currentWord = [[aTextView string] substringWithRange:charRange];
+
+	if([self isRdDocument]) {
+		if(texMode) {
+			if(sr.length) {
+				NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH %@", currentWord];
+				NSArray *result = [texItems filteredArrayUsingPredicate:predicate];
+				if(result && [result count])
+					[uniqueArray addObjectsFromArray:result];
+			} else {
+				[uniqueArray addObjectsFromArray:texItems];
+			}
+		} else {
+			// For better current function detection we pass maximal 1000 left from caret
+			[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
+														 inTextView:aTextView]];
+			[uniqueArray addObjectsFromArray:words];
+		}
+	} else {
+		// For better current function detection we pass maximal 1000 left from caret
+		[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
+													 inTextView:aTextView]];
+	}
 
 	// Only parse for words if text size is less than 3MB
-	NSString *currentWord = [[aTextView string] substringWithRange:charRange];
 	if([currentWord length]>1 && [[aTextView string] length] && [[aTextView string] length]<3000000) {
 		NSMutableString *parserString = [NSMutableString string];
 		[parserString setString:[aTextView string]];
 		// ignore any words in quotes or comments
 		[parserString replaceOccurrencesOfRegex:@"(?<!\\\\)\\\\['\"]" withString:@""];
 		[parserString replaceOccurrencesOfRegex:@"([\"']).*?\\1" withString:@""];
-		[parserString replaceOccurrencesOfRegex:@"#.*" withString:@""];
-		NSString *re = [NSString stringWithFormat:@"(?<!\\.)\\b%@[\\w\\d\\.:_]+", currentWord];
+		if(![self isRdDocument])
+			[parserString replaceOccurrencesOfRegex:@"#.*" withString:@""];
+		NSString *re;
+		if(texMode && [self isRdDocument])
+			re = [NSString stringWithFormat:@"(?<=\\\\)%@[\\w\\d]+", currentWord];
+		else
+		 	re = [NSString stringWithFormat:@"(?<!\\.)\\b%@[\\w\\d\\.:_]+", currentWord];
+
 		if([re isRegexValid]) {
 			NSArray *words = [parserString componentsMatchedByRegex:re];
 			if(words && [words count]) {
 				[uniqueArray addObjectsFromArray:words];
-				[uniqueArray removeObject:currentWord];
 			}
 		}
 	}
+
+	[uniqueArray removeObject:currentWord];
 
 	NSInteger reverseSort = NO;
 
@@ -969,6 +1084,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (IBAction)comment: (id)sender
 {
 
+	NSString *commentString = @"#";
+	if([self isRdDocument])
+		commentString = @"%";
+
 	NSRange sr = [textView selectedRange];
 
 	if (sr.length == 0) { // comment out the current line only by inserting a "# " after the indention
@@ -978,7 +1097,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// for empty line simply insert "# "
 		if(!lineRange.length) {
 			SLog(@" - empty line thus insert # only");
-			[textView insertText:@"# "];
+			[textView insertText:[NSString stringWithFormat:@"%@ ", commentString]];
 			return;
 		}
 		[textView setSelectedRange:lineRange];
@@ -988,7 +1107,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// insert commented string
 		[textView insertText:
 			[[[textView string] substringWithRange:lineRange] stringByReplacingOccurrencesOfRegex:@"^(\\s*)(.*)" 
-					withString:[NSString stringWithFormat:@"%@# %@", @"$1", @"$2"]]
+					withString:[NSString stringWithFormat:@"%@%@ %@", @"$1", commentString, @"$2"]]
 			];
 		// restore cursor position
 		sr.location+=2;
@@ -1005,10 +1124,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	// handle first line separately since it doesn't start with a \n or \r
 	NSRange firstLineRange = [selectedString lineRangeForRange:NSMakeRange(0,0)];
 	NSString *firstLineString = [[selectedString substringWithRange:firstLineRange] stringByReplacingOccurrencesOfRegex:@"^(\\s*)(.*)" 
-		withString:[NSString stringWithFormat:@"%@# %@", @"$1", @"$2"]];
+		withString:[NSString stringWithFormat:@"%@%@ %@", @"$1", commentString, @"$2"]];
 	[selectedString replaceCharactersInRange:firstLineRange withString:firstLineString];
 	NSString *commentedString = [selectedString stringByReplacingOccurrencesOfRegex:@"(?m)([\r\n]+)(\\s*)(?=\\S)" 
-			withString:[NSString stringWithFormat:@"%@%@# ", @"$1", @"$2"]];
+			withString:[NSString stringWithFormat:@"%@%@%@ ", @"$1", @"$2", commentString]];
 	[textView setSelectedRange:sr];
 
 	// set undo break point
@@ -1022,6 +1141,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 - (IBAction)uncomment: (id)sender
 {
+
+	NSString *commentString = @"#";
+	if([self isRdDocument])
+		commentString = @"%";
 
 	NSRange sr = [textView selectedRange];
 
@@ -1039,7 +1162,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// set undo break point
 		[textView breakUndoCoalescing];
 		NSString *uncommentedString = [[[textView string] substringWithRange:lineRange] stringByReplacingOccurrencesOfRegex:
-			@"^(\\s*)(# ?)" withString:@"$1"];
+			[NSString stringWithFormat:@"^(\\s*)(%@ ?)", commentString] withString:@"$1"];
 		[textView insertText:uncommentedString];
 		// restore cursor position
 		[textView setSelectedRange:NSMakeRange(sr.location - lineRange.length + [uncommentedString length], 0)];
@@ -1050,7 +1173,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	// uncomment selected block
 	NSString *uncommentedString = [[[textView string] substringWithRange:sr] stringByReplacingOccurrencesOfRegex:
-		@"(?m)^(\\s*)(# ?)" withString:@"$1"];
+		[NSString stringWithFormat:@"(?m)^(\\s*)(%@ ?)", commentString] withString:@"$1"];
 	// set undo break point
 	[textView breakUndoCoalescing];
 	[textView insertText:uncommentedString];

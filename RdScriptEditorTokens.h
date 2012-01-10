@@ -34,3 +34,9 @@
  *  via a lexer.
  *
  */
+
+#define RDPT_COMMENT             1
+#define RDPT_SECTION             2
+#define RDPT_MACRO_ARG           3
+#define RDPT_MACRO_GEN           4
+#define RDPT_OTHER               10
