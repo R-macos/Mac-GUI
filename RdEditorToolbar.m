@@ -92,7 +92,7 @@
 		tiSecList = [[NSToolbarItem alloc] initWithItemIdentifier: RDETI_SecList];
 		[tiSecList setLabel:NLS(@"Sections")];
 		[tiSecList setPaletteLabel:NLS(@"Sections")];
-		[tiSecList setToolTip:NLS(@"List of Secctions")];
+		[tiSecList setToolTip:NLS(@"List of Sections")];
 		SLog(@" - tiSecList=%@, view=%@", tiSecList, myView);
 		[tiSecList setView:myView];
 		[tiSecList setMinSize:NSMakeSize(100,NSHeight([myView frame]))];

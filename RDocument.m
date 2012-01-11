@@ -56,6 +56,7 @@
 		isEditable=YES;
 		isREdit=NO;
 		myWinCtrl=nil;
+		fileTypeWasChangedWhileSaving = NO;
     }
     return self;
 }
@@ -120,9 +121,24 @@
 
 - (void)didSaveSelector
 {
+
+	// Reopen file if file type was changed while saving
+	if(fileTypeWasChangedWhileSaving) {
+		NSError *theError = nil;
+		fileTypeWasChangedWhileSaving = NO;
+		[myWinCtrl close];
+		[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[self fileURL] display:YES error:&theError];
+		if (theError) {
+			NSLog(@"*** openDocumentWithContentsOfURL: failed with %@", theError);
+			NSBeep();
+		}
+		return;
+	}
+
 	// Remain focus on current document after closing SaveAs panel
 	[[myWinCtrl window] makeKeyWindow];
 	encodingPopUp = nil;
+
 }
 
 - (void)runModalSavePanelForSaveOperation:(NSSaveOperationType)saveOperation delegate:(id)delegate didSaveSelector:(SEL)didSaveSelector contextInfo:(void *)contextInfo
@@ -144,6 +160,15 @@
 		if(encodingPopUp) [encodingPopUp setEnabled:YES];
 		[savePanel setAllowsOtherFileTypes:YES];
 	}
+	else if(initialContentsType && [initialContentsType isEqualToString:ftRdDoc]) {
+		[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"Rd"]];
+		if (myWinCtrl)
+			[savePanel setAccessoryView:[[[NSDocumentController sharedDocumentController] class] encodingAccessory:(NSStringEncoding)documentEncoding 
+																							   includeDefaultEntry:NO 
+																									 encodingPopUp:&encodingPopUp]];
+		if(encodingPopUp) [encodingPopUp setEnabled:YES];
+		[savePanel setAllowsOtherFileTypes:YES];
+	}
 	else if(initialContentsType && [initialContentsType hasSuffix:@".rtf"]) {
 		[savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"rtf"]];
 		[savePanel setAllowsOtherFileTypes:NO];
@@ -156,19 +181,35 @@
 
 }
 
-- (BOOL)writeToFile:(NSString *)fileName ofType:(NSString *)docType {
+- (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)docType error:(NSError **)outError
+{
 
 	SLog(@"RDocument.writeToFile: %@ ofType: %@ ", fileName, docType);
 
-	if([[fileName lowercaseString] hasSuffix:@".rtf"]) {
+	NSString *oldFileType = (initialContentsType)?:ftRSource; 
+
+	if([[[absoluteURL absoluteString] lowercaseString] hasSuffix:@".rtf"]) {
 		SLog(@" - docType was changed to rtf due to file extension");
 		if(initialContentsType) [initialContentsType release], initialContentsType = nil;
 		initialContentsType = [[NSString stringWithString:@"public.rtf"] retain];
 	}
+	else if([[[absoluteURL absoluteString] lowercaseString] hasSuffix:@".rd"]) {
+		SLog(@" - docType was changed to Rd due to file extension");
+		if(initialContentsType) [initialContentsType release], initialContentsType = nil;
+		initialContentsType = [[NSString stringWithString:ftRdDoc] retain];
+		[self setFileType:ftRdDoc];
+	}
+	else {
+		if(initialContentsType) [initialContentsType release], initialContentsType = nil;
+		initialContentsType = [[NSString stringWithString:ftRSource] retain];
+		[self setFileType:ftRSource];
+	}
 
 	SLog(@" - used docType %@", (initialContentsType)?:ftRSource);
 
-	return [super writeToFile:fileName ofType:(initialContentsType)?:ftRSource];
+	fileTypeWasChangedWhileSaving = ([initialContentsType isEqualToString:oldFileType]) ? NO : YES;
+
+	return [super writeToURL:absoluteURL ofType:(initialContentsType)?:ftRSource error:outError];
 
 }
 
