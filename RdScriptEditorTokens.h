@@ -39,4 +39,5 @@
 #define RDPT_SECTION             2
 #define RDPT_MACRO_ARG           3
 #define RDPT_MACRO_GEN           4
+#define RDPT_DIRECTIVE           5
 #define RDPT_OTHER               10

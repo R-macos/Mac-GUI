@@ -203,6 +203,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			@"R",
 			@"RdOpts",
 			@"Rdversion",
+			@"CRANpkg",
 			@"S3method",
 			@"S4method",
 			@"Sexpr",

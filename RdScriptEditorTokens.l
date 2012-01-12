@@ -56,20 +56,29 @@ s				[ \t\n\r]+
 break			[^a-zA-Z_0-9À-ﾟ]
 
 section		\\(s(ynopsis|ource|e(ction|ealso))|Rd(Opts|version)|n(ote|ame)|concept|title|Sexpr|d(ocType|e(scription|tails))|usage|e(ncoding|xamples)|value|keyword|format|a(uthor|lias|rguments)|references)
-macrowarg	\\(s(trong|ubsection|pecial|amp|Quote)|href|newcommand|c(ite|o(de|mmand))|t(estonly|abular)|i(tem(ize)?|f(else)?)|S(3method|4method)|o(ut|ption)|d(ont(show|test|run)|e(scribe|qn)|fn|Quote)|url|p(kg|reformatted)|e(n(c|d|umerate|v)|qn|m(ph|ail))|v(erb|ar)|kbd|file|link(S4class)?|acronym|renewcommand|method|b(old|egin))
-macrowoarg	\\(R|cr|tab|dots|l(dots|eft)|right|ge)
+macrowarg	\\(s(trong|ubsection|pecial|amp|Quote)|href|newcommand|c(ite|o(de|mmand))|t(estonly|abular)|i(tem(ize)?|f(else)?)|S(3method|4method)|o(ut|ption)|d(ont(show|test|run)|e(scribe|qn)|fn|Quote)|CRANpkg|url|p(kg|reformatted)|e(n(c|d|umerate|v)|qn|m(ph|ail))|v(erb|ar)|kbd|file|link(S4class)?|acronym|renewcommand|method|b(old|egin))
+macrowoarg	\\(R|cr|tab|item|dots|l(dots|eft)|right|ge)
 macrogen		\\[a-zA-Z0-9]+
+
+%x verbatim
 
 %%
 
-
-
+\\(%)																			/* ignore escaped comment sign */
 %[^\n\r]*(\n|\r)?						{ return RDPT_COMMENT; }				/* % Comments                     */
+^#ifn?def/[ \t]							{ return RDPT_DIRECTIVE; }
+^#endif/[ \t\n\r]								{ return RDPT_DIRECTIVE; }
+\\verb/\{								{ BEGIN(verbatim); return RDPT_MACRO_ARG; }
+<verbatim>[^\}]																	/* ignore everything inside \verb{} */
+<verbatim>\\\}																	/* ignore everything inside \verb{} */
+<verbatim>\\(%)																	/* ignore everything inside \verb{} */
+<verbatim>%[^\n\r]*(\n|\r)?				{ return RDPT_COMMENT; }				/* % sign is valid inside \verb{}   */
+<verbatim>\}							{ BEGIN(INITIAL); }						/* verbatim end */
 {section}/\{							{ return RDPT_SECTION; }				/* section macros                 */
 \\Sexpr/\[								{ return RDPT_SECTION; }				/* section macros                 */
 {macrowarg}/\{							{ return RDPT_MACRO_ARG; }				/* macros with arguments          */
 \\link/\[								{ return RDPT_MACRO_ARG; }				/* macros with arguments          */
-{macrowoarg}/(\\|{s}|%|{break})	{ return RDPT_MACRO_ARG; }				/* macros without arguments       */
+{macrowoarg}/(\\|{s}|%|{break})			{ return RDPT_MACRO_ARG; }				/* macros without arguments       */
 {macrogen}								{ return RDPT_MACRO_GEN; }				/* unknown macros                 */
 
 <<EOF>>   						{
@@ -162,6 +171,7 @@ usage
 value
 
 macros with argument:
+CRANpkg
 S3method
 S4method
 acronym
@@ -216,6 +226,7 @@ R
 cr
 dots
 ge
+item
 ldots
 left
 right

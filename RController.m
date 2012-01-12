@@ -3664,6 +3664,11 @@ This method calls the showHelpFor method of the Help Manager which opens
 	[[helpSearch cell] setSearchMenuTemplate:m];
 }
 
+- (NSView*) searchToolbarView
+{
+	return helpSearch;
+}
+
 @end
 
 

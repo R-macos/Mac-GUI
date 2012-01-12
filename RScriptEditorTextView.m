@@ -652,6 +652,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 					case RDPT_MACRO_GEN:
 					    tokenColor = shColorIdentifier;
 					    break;
+					case RDPT_DIRECTIVE:
+					    tokenColor = shColorString;
+					    break;
+					case RDPT_OTHER:
+					    tokenColor = shColorNormal;
+					    break;
 					default:
 					    tokenColor = shColorNormal;
 				}

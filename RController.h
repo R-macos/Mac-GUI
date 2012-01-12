@@ -269,6 +269,7 @@
 - (IBAction) setDefaultColors:(id)sender;
 
 + (RController*) sharedController;
+- (NSView*) searchToolbarView;
 
 - (void) flushROutput;
 - (void) flushTimerHook: (NSTimer*) source; // hook for flush timer

@@ -562,7 +562,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	NSString *helpString = [self functionNameForCurrentScope];
 
-	if(helpString) {
+	if(helpString && [helpString length]) {
 		int oldSearchType = [[HelpManager sharedController] searchType];
 		[[HelpManager sharedController] setSearchType:kExactMatch];
 		[[HelpManager sharedController] showHelpFor:helpString];
@@ -572,18 +572,22 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	id aSearchField = nil;
 
-	if(console)
-		aSearchField = [[self delegate] valueForKeyPath:@"helpSearch"];
-	else {
-		NSWindow *keyWin = [NSApp keyWindow];
-		if(![[keyWin toolbar] isVisible])
-			[keyWin toggleToolbarShown:nil];
-		aSearchField = [[self delegate] valueForKeyPath:@"searchToolbarField"];
-	}
+	NSWindow *keyWin = [NSApp keyWindow];
+
+	if(![[keyWin toolbar] isVisible])
+		[keyWin toggleToolbarShown:nil];
+
+	if([[self delegate] respondsToSelector:@selector(searchToolbarView)])
+		aSearchField = [[self delegate] searchToolbarView];
 
 	if(aSearchField == nil || ![aSearchField isKindOfClass:[NSSearchField class]]) return;
+
 	[aSearchField setStringValue:[[self string] substringWithRange:[self getRangeForCurrentWord]]];
-	[[NSApp keyWindow] makeFirstResponder:aSearchField];
+
+	if([[aSearchField stringValue] length])
+		[[HelpManager sharedController] showHelpFor:[aSearchField stringValue]];
+	else
+		[[NSApp keyWindow] makeFirstResponder:aSearchField];
 
 }
 
