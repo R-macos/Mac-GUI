@@ -1333,6 +1333,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		return ([firstResponder respondsToSelector:@selector(isEditable)] && [firstResponder isEditable]);
 	}
 
+	if ([menuItem action] == @selector(sourceCurrentDocument:)) {
+		id firstResponder = [[NSApp keyWindow] firstResponder];
+		if([[firstResponder delegate] respondsToSelector:@selector(isRdDocument)])
+			return ![[firstResponder delegate] isRdDocument];
+		return YES;
+	}
+
+
 	return YES;
 }
 
