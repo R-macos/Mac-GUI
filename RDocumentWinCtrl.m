@@ -239,6 +239,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			@"eqn",
 			@"examples",
 			@"file",
+			@"figure",
 			@"format",
 			@"ge",
 			@"href",
