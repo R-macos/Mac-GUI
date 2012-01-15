@@ -37,6 +37,13 @@
 #define promptColorKey @"Prompt Color"
 #define rootColorKey   @"Root Color"
 
+#define normalRdSyntaxColorKey @"Normal RdSyntax Color"
+#define sectionRdSyntaxColorKey @"Section RdSyntax Color"
+#define macroArgRdSyntaxColorKey @"MacroArg RdSyntax Color"
+#define macroGenRdSyntaxColorKey @"MacroGen RdSyntax Color"
+#define commentRdSyntaxColorKey @"Comment RdSyntax Color"
+#define directiveRdSyntaxColorKey @"Directive RdSyntax Color"
+
 #define normalSyntaxColorKey @"Normal Syntax Color"
 #define stringSyntaxColorKey @"String Syntax Color"
 #define numberSyntaxColorKey @"Number Syntax Color"

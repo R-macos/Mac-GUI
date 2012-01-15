@@ -208,6 +208,44 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
 	[shColorIdentifier retain]; 
 
+	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
+	if (c) shColorIdentifier = c;
+	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+	[shColorIdentifier retain]; 
+
+
+	c=[Preferences unarchivedObjectForKey:commentRdSyntaxColorKey withDefault:nil];
+	if (c) rdColorComment = c;
+	else rdColorComment=[NSColor colorWithDeviceRed:0.1 green:0.55 blue:0.05 alpha:1.0];
+	[rdColorComment retain];
+
+	c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];
+	if (c) rdColorSection = c;
+	else rdColorSection=[NSColor colorWithDeviceRed:0.8 green:0.0353 blue:0.02 alpha:1.0];
+	[rdColorSection retain];
+
+	c=[Preferences unarchivedObjectForKey:macroArgRdSyntaxColorKey withDefault:nil];
+	if (c) rdColorMacroArg = c;
+	else rdColorMacroArg=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.98 alpha:1.0];
+	[rdColorMacroArg retain];
+
+	c=[Preferences unarchivedObjectForKey:macroGenRdSyntaxColorKey withDefault:nil];
+	if (c) rdColorMacroGen = c;
+	else rdColorMacroGen=[NSColor colorWithDeviceRed:0.4 green:0.78 blue:0.98 alpha:1.0];
+	[rdColorMacroGen retain]; 
+
+	c=[Preferences unarchivedObjectForKey:directiveRdSyntaxColorKey withDefault:nil];
+	if (c) rdColorDirective = c;
+	else rdColorDirective=[NSColor colorWithDeviceRed:0.0 green:0.785 blue:0.0 alpha:1.0];
+	[rdColorDirective retain]; 
+
+	c=[Preferences unarchivedObjectForKey:normalRdSyntaxColorKey withDefault:nil];
+	if (c) rdColorNormal = c;
+	else rdColorNormal=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+	[rdColorNormal retain]; 
+
+
+
 	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:nil];
 	if (c) shColorBackground = c;
 	else shColorBackground=[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0];
@@ -230,6 +268,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:numberSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:keywordSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:commentSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:normalRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:sectionRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:macroArgRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:macroGenRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:commentRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:directiveRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:editorBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:editorCurrentLineBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:identifierSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
@@ -261,6 +305,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	if(shColorBackground) [shColorBackground release];
 	if(shColorCurrentLine) [shColorCurrentLine release];
 	if(shColorCursor) [shColorCursor release];
+
+	if(rdColorNormal) [rdColorNormal release];
+	if(rdColorSection) [rdColorSection release];
+	if(rdColorMacroArg) [rdColorMacroArg release];
+	if(rdColorMacroGen) [rdColorMacroGen release];
+	if(rdColorComment) [rdColorComment release];
+	if(rdColorDirective) [rdColorDirective release];
 
 	if(theRulerView) [theRulerView release];
 
@@ -641,25 +692,25 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		// NSLog(@"t %d", token);
 				switch (token) {
 					case RDPT_COMMENT:
-					    tokenColor = shColorComment;
+					    tokenColor = rdColorComment;
 					    break;
 					case RDPT_SECTION:
-					    tokenColor = shColorNumber;
+					    tokenColor = rdColorSection;
 					    break;
 					case RDPT_MACRO_ARG:
-					    tokenColor = shColorKeyword;
+					    tokenColor = rdColorMacroArg;
 					    break;
 					case RDPT_MACRO_GEN:
-					    tokenColor = shColorIdentifier;
+					    tokenColor = rdColorMacroGen;
 					    break;
 					case RDPT_DIRECTIVE:
-					    tokenColor = shColorString;
+					    tokenColor = rdColorDirective;
 					    break;
 					case RDPT_OTHER:
-					    tokenColor = shColorNormal;
+					    tokenColor = rdColorNormal;
 					    break;
 					default:
-					    tokenColor = shColorNormal;
+					    tokenColor = rdColorNormal;
 				}
 
 				tokenRange = NSMakeRange(yyuoffset, yyuleng);
