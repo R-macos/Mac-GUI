@@ -658,6 +658,15 @@ create the UI for the document.
 	[[(RDocumentController*)[NSDocumentController sharedDocumentController] findLastWindowForDocType:ftRSource] makeKeyAndOrderFront:nil];
 
 }
+- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
+{
+
+	NSString *iid = [toolbarItem itemIdentifier];
+	if ([iid isEqualToString: RETI_Save ] || [iid isEqualToString: RDETI_Save ])
+		return [self isDocumentEdited];
+
+	return YES;
+}
 
 @end
 

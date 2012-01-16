@@ -60,6 +60,5 @@ NSToolbarPrintItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarFlexibl
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar;
 - (void) toolbarWillAddItem: (NSNotification *) notif;
 - (void) toolbarDidRemoveItem: (NSNotification *) notif;
-- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem;
 
 @end

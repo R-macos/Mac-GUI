@@ -152,14 +152,4 @@
 	// NSToolbarItem *removedItem = [[notif userInfo] objectForKey: @"item"];
 }
 
-- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem {
-	NSString *iid = [toolbarItem itemIdentifier];
-    BOOL enable = YES; // default is YES, if there are any that need to be disabled - check for them
-    
-	if ([iid isEqual: RETI_Save ])
-		enable = [[winCtrl document] isDocumentEdited];
-	
-    return enable;
-}
-
 @end

@@ -181,15 +181,4 @@
 	// NSToolbarItem *removedItem = [[notification userInfo] objectForKey: @"item"];
 }
 
-- (BOOL) validateToolbarItem: (NSToolbarItem *) toolbarItem
-{
-
-	NSString *iid = [toolbarItem itemIdentifier];
-
-	if ([iid isEqual: RETI_Save ])
-		return [[winCtrl document] isDocumentEdited];
-
-	return YES;
-}
-
 @end
