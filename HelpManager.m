@@ -268,14 +268,29 @@ static id sharedHMController;
 
 - (IBAction)printDocument:(id)sender
 {
+
+	//TODO: for now, if displayed doc is a PDF open it via "Preview" for printing
+	NSString *currentURL = [[HelpView mainFrameURL] lowercaseString];
+	if([currentURL hasSuffix:@".pdf"]) {
+		REngine *re = [REngine mainEngine];
+		if (![re beginProtected]) {
+			SLog(@"HelpManager.printPDF bailed because protected REngine entry failed [***]");
+			return;
+		}
+		[re executeString:[NSString stringWithFormat:@"system('open \"%@\"', intern=TRUE, wait=FALSE)", currentURL]];
+		[re endProtected];
+		return;
+	}
+
+
 	NSPrintInfo *printInfo;
 	NSPrintOperation *printOp;
-	
+
 	printInfo = [NSPrintInfo sharedPrintInfo];
 	[printInfo setHorizontalPagination: NSFitPagination];
 	[printInfo setVerticalPagination: NSAutoPagination];
 	[printInfo setVerticallyCentered:NO];
-	
+
 	printOp = [NSPrintOperation printOperationWithView:[[[HelpView mainFrame] frameView] documentView] 
 											 printInfo:printInfo];
 	[printOp setShowPanels:YES];
