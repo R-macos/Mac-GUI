@@ -284,16 +284,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			@"verb",
 			nil] retain];
 
-		// TODO control font size due to tollbar setting small or normal
-		functionMenuInvalidAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
-			[NSColor redColor], NSForegroundColorAttributeName,
-			[NSFont menuFontOfSize:0], NSFontAttributeName,
-		nil] retain];
-		functionMenuCommentAttribute =[[NSDictionary dictionaryWithObjectsAndKeys:
-			[NSColor grayColor], NSForegroundColorAttributeName,
-			[NSFont menuFontOfSize:0], NSFontAttributeName,
-		nil] retain];
-
 		[self setShouldCloseDocument:YES];
 
 		[[NSNotificationCenter defaultCenter] addObserver:self 
@@ -345,6 +335,17 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if(plainFile) [fnListBox setHidden:YES];
 
 	[super windowDidLoad];
+
+	// TODO control font size due to tollbar setting small or normal
+	// now the new size will set for any new opened doc
+	functionMenuInvalidAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
+		[NSColor redColor], NSForegroundColorAttributeName,
+		[fnListBox font], NSFontAttributeName,
+	nil] retain];
+	functionMenuCommentAttribute =[[NSDictionary dictionaryWithObjectsAndKeys:
+		[NSColor grayColor], NSForegroundColorAttributeName,
+		[fnListBox font], NSFontAttributeName,
+	nil] retain];
 
 	SLog(@" - windowDidLoad is done");
 
@@ -588,11 +589,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			unichar fc;
 			while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
 
-			int type = 0; // invalid function name
 			if([textView parserContextForPosition:li+2] == 4)
-				type = 2; // function declaration is commented out
-			// else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
-			// 	type = 0; // function name is valid
+				continue; // section declaration is commented out
 
 			int fp = r.location-1;
 			
@@ -601,11 +599,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			fnf++;
 			if (fp<=sr.location) sit=pim;
 			mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-			if(type == 2) { // section was commented out
-				NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
-				[mi setAttributedTitle:fna];
-				[fna release];
-			}
 			[mi setTag:fp];
 			[mi setTarget:self];
 			[fnm addItem:mi];
