@@ -462,6 +462,100 @@ create the UI for the document.
 	return (([self fileName] && [[[self fileName] lowercaseString] hasSuffix:@".rtf"]) || ([self fileType] && [[self fileType] hasSuffix:@".rtf"]));
 }
 
+- (BOOL) convertRd2PDF
+{
+
+	REngine *re = [REngine mainEngine];
+	BOOL success = YES;
+
+	// Try to find the path to the default tex distribution
+	NSString *texPath = @"";
+	if (![re beginProtected]) {
+		SLog(@"RDocument.convertRd2PDF bailed because protected REngine entry failed [***]");
+		return NO;
+	}
+	RSEXP *xx = [re evaluateString:@"system('which tex', intern=TRUE)"];
+	[re endProtected];
+	if(xx) {
+		NSString *aPath = [xx string];
+		if(aPath && [aPath length]) {
+			[xx release];
+		} else {
+			[xx release];
+			if (![re beginProtected]) {
+				SLog(@"RDocument.convertRd2PDF bailed because protected REngine entry failed [***]");
+				return NO;
+			}
+			xx = [re evaluateString:@"system('which /usr/libexec/path_helper > /dev/null && eval `/usr/libexec/path_helper -s` && dirname `which tex`', intern=TRUE)"];
+			[re endProtected];
+			if(xx) {
+				aPath = [xx string];
+				if(aPath && [aPath length]) {
+					texPath = [NSString stringWithFormat:@"export PATH=$PATH:%@ && ", aPath];
+				}
+				[xx release];
+			}
+		}
+
+	}
+
+
+	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
+	NSError *error;
+	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
+	NSString *pdfOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"pdf"];
+	NSString *errorOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"txt"];
+
+	NSURL *pdfOutputFileURL = [NSURL URLWithString:pdfOutputFile];
+
+	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
+
+	NSString *convCmd = [NSString stringWithFormat:@"system(\"%@R CMD Rd2pdf --no-preview --title='%@' --force --output='%@' '%@' 2> '%@'\", intern=TRUE, wait=TRUE)", texPath, [self displayName], pdfOutputFile, inputFile, errorOutputFile];
+
+	if (![re beginProtected]) {
+		SLog(@"RDocument.convertRdPDF bailed because protected REngine entry failed [***]");
+		return NO;
+	}
+	xx = [re evaluateString:convCmd];
+	[re endProtected];
+	if(xx) {
+		[xx release];
+		NSFileManager *man = [[NSFileManager alloc] init];
+		if([man fileExistsAtPath:pdfOutputFile])
+			[[HelpManager sharedController] showHelpFileForURL:pdfOutputFileURL];
+		else {
+			NSString *errMessage = [[[NSString alloc] initWithContentsOfFile:errorOutputFile encoding:NSUTF8StringEncoding error:nil] autorelease];
+			if(errMessage && [errMessage length]) {
+
+				errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
+
+				NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Rd convertion warnings") 
+						defaultButton:NLS(@"OK") 
+						alternateButton:nil 
+						otherButton:nil 
+						informativeTextWithFormat:errMessage];
+
+				[alert setAlertStyle:NSWarningAlertStyle];
+				[alert runModal];
+
+				success = NO;
+
+			}
+		}
+
+	}
+
+	if (![re beginProtected]) {
+		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed for removing temporary files[***]");
+		return NO;
+	}
+	// After 200 secs all temporary files will be deleted even if R was quitted meanwhile
+	[re executeString:[NSString stringWithFormat:@"system(\"sleep 200 && rm -f '%@' && rm -f '%@' && rm -f '%@'\", wait=FALSE)", inputFile, pdfOutputFile, errorOutputFile]];
+	[re endProtected];
+
+	return success;
+}
+
 - (BOOL) convertRd2HTML
 {
 
@@ -469,7 +563,12 @@ create the UI for the document.
 
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
 	NSString *RhomeCSS = @"R.css";
+	if (![re beginProtected]) {
+		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed [***]");
+		return NO;
+	}
 	RSEXP *xx = [re evaluateString:@"R.home()"];
+	[re endProtected];
 	if(xx) {
 		NSString *Rhome = [xx string];
 		if(Rhome) {
@@ -498,7 +597,7 @@ create the UI for the document.
 	[re endProtected];
 	if(xx) {
 		[xx release];
-		NSString *errMessage = [[NSString alloc] initWithContentsOfFile:errorOutputFile encoding:NSUTF8StringEncoding error:nil];
+		NSString *errMessage = [[[NSString alloc] initWithContentsOfFile:errorOutputFile encoding:NSUTF8StringEncoding error:nil] autorelease];
 		if(errMessage && [errMessage length]) {
 
 			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
@@ -511,7 +610,6 @@ create the UI for the document.
 
 			[alert setAlertStyle:NSWarningAlertStyle];
 			[alert runModal];
-
 		}
 
 
@@ -529,7 +627,7 @@ create the UI for the document.
 #endif
 
 		if(!fsizeChecked || (fsizeChecked && fsize > 0))
-		[[HelpManager sharedController] showHelpFileForURL:htmlOutputFileURL];
+			[[HelpManager sharedController] showHelpFileForURL:htmlOutputFileURL];
 
 		if (![re beginProtected]) {
 			SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed for removing temporary files[***]");
