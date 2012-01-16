@@ -1322,6 +1322,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	return fnListView;
 }
 
+- (NSView*) rdToolboxView
+{
+	return rdToolboxView;
+}
+
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
 
@@ -1353,6 +1358,16 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	[[m itemWithTag:kExactMatch] setState:(type == kExactMatch) ? NSOnState : NSOffState];
 	[[m itemWithTag:kFuzzyMatch] setState:(type == kExactMatch) ? NSOffState : NSOnState];
 	[[searchToolbarField cell] setSearchMenuTemplate:m];
+}
+
+- (IBAction)convertRd2HTML:(id)sender
+{
+	[[self document] convertRd2HTML];
+}
+
+- (IBAction)convertRd2PDF:(id)sender
+{
+	[[self document] convertRd2PDF];
 }
 
 @end

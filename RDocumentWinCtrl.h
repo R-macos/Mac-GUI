@@ -54,6 +54,7 @@ extern NSColor *shColorIdentifier;
 	IBOutlet NSSearchField *searchToolbarField;
 	
 	IBOutlet NSView *fnListView;
+	IBOutlet NSView *rdToolboxView;
 	IBOutlet NSPopUpButton *fnListBox;
 	
 	IBOutlet NSDrawer *helpDrawer;
@@ -109,6 +110,9 @@ extern NSColor *shColorIdentifier;
 - (IBAction)shiftRight:(id)sender;
 - (IBAction)shiftLeft:(id)sender;
 
+- (IBAction)convertRd2HTML:(id)sender;
+- (IBAction)convertRd2PDF:(id)sender;
+
 - (void) setEditable: (BOOL) editable;
 
 - (void) setStatusLineText: (NSString*) text;
@@ -132,6 +136,7 @@ extern NSColor *shColorIdentifier;
 - (NSTextView *) textView;
 - (NSView*) searchToolbarView;
 - (NSView*) fnListView;
+- (NSView*) rdToolboxView;
 
 - (NSView*) saveOpenAccView;
 

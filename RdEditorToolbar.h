@@ -36,19 +36,19 @@
 #import "RDocumentWinCtrl.h"
 
 #define	RDETI_Save       @"RDETI Save Document"
-#define	RDETI_RdHTML     @"RDETI Rd2HTML"
+#define	RDETI_RdTools    @"RDETI RdToolbox"
 #define	RDETI_HelpSearch @"RDETI Help Search"
 #define RDETI_SecList    @"RDETI SecList"
 
-#define RDET_ListAll RDETI_Save, RDETI_HelpSearch, RDETI_SecList, RDETI_RdHTML, \
+#define RDET_ListAll RDETI_Save, RDETI_HelpSearch, RDETI_SecList, RDETI_RdTools, \
 NSToolbarPrintItemIdentifier, NSToolbarSeparatorItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier
-#define RDET_ListDefault RDETI_Save, NSToolbarPrintItemIdentifier, RDETI_RdHTML, NSToolbarFlexibleSpaceItemIdentifier, RDETI_SecList, RETI_HelpSearch
+#define RDET_ListDefault RDETI_Save, NSToolbarPrintItemIdentifier, RDETI_RdTools, NSToolbarFlexibleSpaceItemIdentifier, RDETI_SecList, RETI_HelpSearch
 
 @interface RdEditorToolbar : NSObject <NSToolbarDelegate> {
 
 	RDocumentWinCtrl *winCtrl;
 	NSToolbar *toolbar;
-	NSToolbarItem *tiSave, *tiHelpSearch, *tiSecList, *tiRd2HTML;
+	NSToolbarItem *tiSave, *tiHelpSearch, *tiSecList, *tiRdTools;
 
 }
 

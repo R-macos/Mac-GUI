@@ -54,14 +54,6 @@
 		[tiSave setTarget: [winCtrl document]];
 		[tiSave setAction: @selector(saveDocument:)];
 
-		tiRd2HTML = [[NSToolbarItem alloc] initWithItemIdentifier: RDETI_RdHTML];
-		[tiRd2HTML setLabel: NLS(@"HTML Preview")];
-		[tiRd2HTML setPaletteLabel: NLS(@"HTML Preview")];
-		[tiRd2HTML setToolTip: NLS(@"HTML Preview")];
-		[tiRd2HTML setImage: [NSImage imageNamed: @"Rdoc"]];
-		[tiRd2HTML setTarget: [winCtrl document]];
-		[tiRd2HTML setAction: @selector(convertRd2HTML)];
-
 		tiHelpSearch = [[NSToolbarItem alloc] initWithItemIdentifier: RDETI_HelpSearch];
 		NSView *myView = [winCtrl searchToolbarView];
 		// Set up the standard properties 
@@ -98,6 +90,16 @@
 		[tiSecList setMinSize:NSMakeSize(100,NSHeight([myView frame]))];
 		[tiSecList setMaxSize:NSMakeSize(200,NSHeight([myView frame]))];
 
+		myView = [winCtrl rdToolboxView];
+		tiRdTools = [[NSToolbarItem alloc] initWithItemIdentifier: RDETI_RdTools];
+		[tiRdTools setLabel:NLS(@"Rd Toolbox")];
+		[tiRdTools setPaletteLabel:NLS(@"Rd Toolbox")];
+		[tiRdTools setToolTip:NLS(@"Rd Toolbox")];
+		SLog(@" - tiRdTools=%@, view=%@", tiRdTools, myView);
+		[tiRdTools setView:myView];
+		[tiRdTools setMinSize:NSMakeSize(60,NSHeight([myView frame]))];
+		[tiRdTools setMaxSize:NSMakeSize(60,NSHeight([myView frame]))];
+
 		toolbar = [[NSToolbar alloc] initWithIdentifier: @"RdEditorToolbar"];
 
 		[toolbar setAllowsUserCustomization: YES];
@@ -122,7 +124,7 @@
 	[tiSecList release];
 	[tiHelpSearch release];
 	[tiSave release];
-	[tiRd2HTML release];
+	[tiRdTools release];
 	[winCtrl release];
 
 	[super dealloc];
@@ -142,8 +144,8 @@
 		return tiHelpSearch;
 	else if ([itemIdent isEqual: RDETI_SecList]) 
 		return tiSecList;
-	else if ([itemIdent isEqual: RDETI_RdHTML]) 
-		return tiRd2HTML;
+	else if ([itemIdent isEqual: RDETI_RdTools]) 
+		return tiRdTools;
 
 	return toolbarItem;
 
