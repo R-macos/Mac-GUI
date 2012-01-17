@@ -1,5 +1,19 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-17 [HJBB]
+*	Improved function name parsing for toolbar list:
+	- invalid function names were displayed in red
+	- trial to avoid listing of function declarations
+	  inside argument lists
+	- hierarchic indentations for function declarations
+	  inside other functions
+	- added two pragma marker for structuring the 
+	  function list:
+	  "#pragma mark -" will insert a separator line
+	  "#pragma mark foo" will insert "foo" in blue
+	  [note: both pragma marker have to be typed at
+	  the beginning of a line]
+
 Last-update: 2012-01-09 [HJBB]
 *	In RConsole pressing the ESC key will invoke
 	"completion" as in standard application if no

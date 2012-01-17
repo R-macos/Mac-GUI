@@ -46,6 +46,19 @@
 #undef error
 #endif
 
+/**
+ * Include all the extern variables and prototypes required for flex (used for symbol parsing)
+ */
+
+#import "RSymbolTokens.h"
+
+// Symbol lexer
+extern NSUInteger symlex();
+extern NSUInteger yyuoffset, yyuleng;
+typedef struct sym_buffer_state *SYM_BUFFER_STATE;
+void sym_switch_to_buffer(SYM_BUFFER_STATE);
+SYM_BUFFER_STATE sym_scan_string (const char *);
+
 BOOL defaultsInitialized = NO;
 
 NSColor *shColorNormal;
@@ -56,6 +69,15 @@ NSColor *shColorComment;
 NSColor *shColorIdentifier;
 
 NSInteger _alphabeticSort(id string1, id string2, void *reverse);
+
+static inline const char* NSStringUTF8String(NSString* self) 
+{
+	typedef const char* (*SPUTF8StringMethodPtr)(NSString*, SEL);
+	static SPUTF8StringMethodPtr SPNSStringGetUTF8String;
+	if (!SPNSStringGetUTF8String) SPNSStringGetUTF8String = (SPUTF8StringMethodPtr)[NSString instanceMethodForSelector:@selector(UTF8String)];
+	const char* to_return = SPNSStringGetUTF8String(self, @selector(UTF8String));
+	return to_return;
+}
 
 @implementation RDocumentWinCtrl
 
@@ -92,6 +114,7 @@ static RDocumentWinCtrl *staticCodedRWC = nil;
 	[texItems release];
 	if (helpTempFile) [[NSFileManager defaultManager] removeFileAtPath:helpTempFile handler:nil];
 	if (functionMenuInvalidAttribute) [functionMenuInvalidAttribute release];
+	if (pragmaMenuAttribute) [pragmaMenuAttribute release];
 	if (functionMenuCommentAttribute) [functionMenuCommentAttribute release];
 	[super dealloc];
 }
@@ -338,7 +361,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	// TODO control font size due to tollbar setting small or normal
 	// now the new size will set for any new opened doc
-	functionMenuInvalidAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
+	pragmaMenuAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
+		[NSColor blueColor], NSForegroundColorAttributeName,
+		[fnListBox font], NSFontAttributeName,
+	nil] retain];
+		functionMenuInvalidAttribute = [[NSDictionary dictionaryWithObjectsAndKeys:
 		[NSColor redColor], NSForegroundColorAttributeName,
 		[fnListBox font], NSFontAttributeName,
 	nil] retain];
@@ -514,75 +541,133 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	if([s length]<8) return;
 
+	NSRange textRange = NSMakeRange(0, [s length]);
+	NSString *fn = nil;
+	NSMenuItem *mi = nil;
+	NSAttributedString *fna = nil;
+
 	SLog(@"RDoumentWinCtrl.functionRescan");
 	if([[[self document] fileType] isEqualToString:ftRSource]) {
-		while (1) {
-			NSRange r = [s rangeOfRegex:@"\\bfunction\\s*\\(" inRange:NSMakeRange(oix,strLength-oix)];
-			if (r.length<8) break;
-			oix=NSMaxRange(r);
-			int li = r.location-1;
-			SLog(@" - potential function at %d", li);
-			unichar fc;
-			while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
-			if (li>0) {
-				fc=CFStringGetCharacterAtIndex((CFStringRef)s, li);
-				if (fc=='=' || (fc=='-' && CFStringGetCharacterAtIndex((CFStringRef)s, --li)=='<')) {
-					int lci;
-					li--;
-					SLog(@" - matched =/<- at %d", li);
-					while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
-					lci=li;
-					// while (li>=0 && (((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li))>='0' && fc<='9')||(fc>='a' && fc<='z')||(fc>='A' && fc<='Z')|| //(fc>=0x00C && fc<=0xFF9F)||
-					// 				 fc=='.'||fc=='_')) li--;
-					while (li>=0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) !='\n' && fc!=' ' && fc!='\r' && fc!='\t' && fc!=';' && fc!='#')) li--;
-					if (lci!=li) {
 
-						NSString *fn = [s substringWithRange:NSMakeRange(li+1,lci-li)];
+		NSInteger level = 0;        // counter for function declaration inside a function declaration
+		NSInteger levelChecked = 0; // checked level counter if level > 16
+		// Dummy string for generating n times the string "   " for structuring the menu
+		NSString *levelTemplate = @"                                                ";
 
-						int type = 1; // invalid function name
-						if([textView parserContextForPosition:li+2] == 4)
-							type = 2; // function declaration is commented out
-						else if([fn isMatchedByRegex:@"^[[:alpha:]\\.]"])
-							type = 0; // function name is valid
+		// initialise flex
+		size_t tokenEnd, token;
+		NSRange tokenRange;
+		yyuoffset = 0; yyuleng = 0;
+		sym_switch_to_buffer(sym_scan_string(NSStringUTF8String(s)));
 
-						int fp = li+1;
-
-						NSMenuItem *mi = nil;
-						SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
-						fnf++;
-						if (fp<=sr.location) sit=pim;
-						mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-						if(type == 1) {
-							NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
-							[mi setAttributedTitle:fna];
-							[fna release];
-						}
-						else if(type == 2) {
-							NSAttributedString *fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuCommentAttribute];
-							[mi setAttributedTitle:fna];
-							[fna release];
-						}
-						[mi setTag:fp];
-						[mi setTarget:self];
-						[fnm addItem:mi];
-						[mi release];
-						pim++;
-					}
-				}
+		// now loop through all the tokens
+		while ((token = symlex())) {
+			// NSLog(@"t %d",token);
+			switch (token) {
+				case RSYM_FUNCTION: // a valid function name was found
+					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+					levelChecked = (level>16) ? 48 : (level*3);
+					fn = [NSString stringWithFormat:@" %@%@%@", [levelTemplate substringWithRange:NSMakeRange(0,levelChecked)], (level)?@" └ ":@"", [s substringWithRange:tokenRange]];
+					mi = nil;
+					SLog(@" - found identifier %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					fnf++;
+					if (yyuoffset<=sr.location) sit=pim;
+					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+					[mi setTag:yyuoffset];
+					[mi setTarget:self];
+					[fnm addItem:mi];
+					[mi release];
+					pim++;
+				    break;
+				case RSYM_INV_FUNCTION: // an invalid function name was found
+					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+					levelChecked = (level>16) ? 48 : (level*3);
+					fn = [NSString stringWithFormat:@" %@%@%@", [levelTemplate substringWithRange:NSMakeRange(0,levelChecked)], (level)?@" └ ":@"", [s substringWithRange:tokenRange]];
+					mi = nil;
+					SLog(@" - found identifier %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					fnf++;
+					if (yyuoffset<=sr.location) sit=pim;
+					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+					fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
+					[mi setAttributedTitle:fna];
+					[fna release];
+					[mi setTag:yyuoffset];
+					[mi setTarget:self];
+					[fnm addItem:mi];
+					[mi release];
+					pim++;
+					break;
+				case RSYM_METHOD: // not yet implemented
+					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+				    break;
+				case RSYM_PRAGMA: // a literal pragma mark was found; it will displayed in blue to structure large R scripts
+					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+					fn = [s substringWithRange:tokenRange];
+					NSRange r = [fn rangeOfRegex:@"^(#pragma\\s+mark\\s+)(.*?)\\s*$" capture:2L];
+					fn = [fn substringWithRange:r];
+					mi = nil;
+					SLog(@" - found pragma %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					fnf++;
+					if (yyuoffset<=sr.location) sit=pim;
+					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+					fna = [[NSAttributedString alloc] initWithString:fn attributes:pragmaMenuAttribute];
+					[mi setAttributedTitle:fna];
+					[fna release];
+					[mi setTag:yyuoffset];
+					[mi setTarget:self];
+					[fnm addItem:mi];
+					[mi release];
+					pim++;
+					break;
+				case RSYM_PRAGMA_LINE: // insert a menu separator line
+					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+					mi = nil;
+					SLog(@" - found identifier for separator");
+					fnf++;
+					if (yyuoffset<=sr.location) sit=pim;
+					[fnm addItem:[NSMenuItem separatorItem]];
+					pim++;
+					break;
+				case RSYM_LEVEL_DOWN: // { was found; increase level
+					level++;
+					break;
+				case RSYM_LEVEL_UP: // } was found; decrease level
+					level--;
+					if(level<0) level = 0;
+					break;
+				default:
+					;
 			}
+			tokenRange = NSMakeRange(yyuoffset, yyuleng);
+
+			// make sure that tokenRange is valid (and therefore within textRange)
+			// otherwise a bug in the lex code could cause the the TextView to crash
+			tokenRange = NSIntersectionRange(tokenRange, textRange);
+			if (!tokenRange.length) continue;
+
+			tokenEnd = NSMaxRange(tokenRange) - 1;
+
 		}
+		
 	}
 	else if([[[self document] fileType] isEqualToString:ftRdDoc]) {
 		while (1) {
+
 			NSError *err = nil;
+
 			NSRange r = [s rangeOfRegex:@"\\\\(s(ynopsis\\{|ource\\{|e(ction\\{|ealso\\{))|Rd(Opts\\{|version\\{)|n(ote\\{|ame\\{)|concept\\{|title\\{|Sexpr(\\{|\\[)|d(ocType\\{|e(scription\\{|tails\\{))|usage\\{|e(ncoding\\{|xamples\\{)|value\\{|keyword\\{|format\\{|a(uthor\\{|lias\\{|rguments\\{)|references\\{)" options:0 inRange:NSMakeRange(oix,strLength-oix) capture:1 error:&err];
 			// RdOpts{, Rdversion{, Sexpr[, Sexpr{, alias{, arguments{, author{, concept{, description{, details{, docType{, encoding{, examples{, format{, keyword{, name{, note{, references{, section{, seealso{, source{, synopsis{, title{, usage{, value{
+
+			// Break if nothing is found
 			if (!r.length) break;
+
 			oix=NSMaxRange(r);
-			SLog(@" - potential section at %d", r.location);
+
 			// due to finial bracket decrease range length by 1
 			r.length--;
-			NSString *fn = [s substringWithRange:r];
+			fn = [s substringWithRange:r];
+
+			SLog(@" - potential section at %d \"\"", r.location, fn);
 
 			int li = r.location-1;
 
@@ -594,8 +679,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 			int fp = r.location-1;
 			
-			NSMenuItem *mi = nil;
-			// SLog(@" - found identifier %d:%d \"%@\"", li+1, lci-li, fn);
+			mi = nil;
 			fnf++;
 			if (fp<=sr.location) sit=pim;
 			mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];

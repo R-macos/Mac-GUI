@@ -88,6 +88,7 @@ extern NSColor *shColorIdentifier;
 
 	NSDictionary *functionMenuInvalidAttribute;
 	NSDictionary *functionMenuCommentAttribute;
+	NSDictionary *pragmaMenuAttribute;
 
 }
 
