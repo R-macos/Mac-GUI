@@ -1284,8 +1284,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		RSEXP *x=[[REngine mainEngine] evaluateString:@"tempfile()"];
 		NSString *fn=nil;
 		if (x && (fn=[x string])) {
-			if ([[self document] writeToFile:fn ofType:@"R"]) {
-				[[RController sharedController] sendInput:[NSString stringWithFormat:@"source(\"%@\")\nunlink(\"%@\")", fn, fn]];
+			NSString *str = [textView string];
+			if ([str length]) {
+				if ([str characterAtIndex:[str length]-1] != '\n') 
+					str = [str stringByAppendingString: @"\n"];
+				if ([str writeToFile:fn atomically:YES encoding:NSUTF8StringEncoding error:nil])
+					[[RController sharedController] sendInput:[NSString stringWithFormat:@"source(\"%@\")\nunlink(\"%@\")", fn, fn]];
+				else
+					NSLog(@"Temporary file for “source current document” couldn't be saved.");
 			}
 		}
 	} else {
@@ -1417,9 +1423,18 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	}
 
 	if ([menuItem action] == @selector(sourceCurrentDocument:)) {
+
 		id firstResponder = [[NSApp keyWindow] firstResponder];
+
+		// disable for empty docs
+		if([[RDocumentController sharedDocumentController] currentDocument] 
+			&& ![[[[[RDocumentController sharedDocumentController] currentDocument] textView] string] length])
+				return NO;
+
+		// disable for Rd docs
 		if([[firstResponder delegate] respondsToSelector:@selector(isRdDocument)])
 			return ![[firstResponder delegate] isRdDocument];
+
 		return YES;
 	}
 
