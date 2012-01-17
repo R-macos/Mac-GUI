@@ -348,9 +348,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if(![Preferences flagForKey:enableLineWrappingKey withDefault: YES])
 		[textView updateLineWrappingMode];
 
-	SLog(@" - scan document for functions");
-	[self functionRescan];
-
 	[[textView undoManager] removeAllActions];
 
 	[self helpSearchTypeChanged];
@@ -373,6 +370,9 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[NSColor grayColor], NSForegroundColorAttributeName,
 		[fnListBox font], NSFontAttributeName,
 	nil] retain];
+
+	SLog(@" - scan document for functions");
+	[self functionRescan];
 
 	SLog(@" - windowDidLoad is done");
 
