@@ -182,7 +182,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	}
 	if ([rc isEqual:@"-"] && (modFlags&allFlags)==NSAlternateKeyMask) {
 		[self breakUndoCoalescing];
-		[self insertText:@" <- "];
+		[self insertText:[NSString stringWithFormat:@"%@<- ", 
+			([self selectedRange].location && [[self string] characterAtIndex:[self selectedRange].location-1] != ' ')?@" ":@""]];
 		return;
 	}
 	if ([rc isEqual:@"h"] && (modFlags&allFlags)==NSControlKeyMask) {
