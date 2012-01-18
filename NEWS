@@ -1,5 +1,21 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-18 [HJBB]
+*	Added R services to Apple's services
+	- "Run selection in R Console"
+	-- for a text selection in any app:
+	    take the selected text and execute it
+		in the R Console
+	-- for selected R files
+	    source these selected R files in R
+		Console one by one
+	- "Open selection in R"
+	-- opens a new untitled R script document
+	   and pastes the selected text coming from
+	   any app into that new document
+	[note: these have to be enabled in Preferences >
+	Keyboard > Services after re-logging in]
+
 Last-update: 2012-01-17 [HJBB]
 *	Improved function name parsing for toolbar list:
 	- invalid function names were displayed in red

@@ -685,6 +685,9 @@ static RController* sharedRController;
 
 	SLog(@" - done, ready to go");
 
+	// Register us as service provider
+	[NSApp setServicesProvider:self];
+
 }
 
 - (void)updateReInterpretEncodingMenu
@@ -3669,6 +3672,89 @@ This method calls the showHelpFor method of the Help Manager which opens
 	return helpSearch;
 }
 
+#pragma mark -
+#pragma mark Services menu methods
+
+/**
+ * Run selection in R Console
+ **/
+- (void)doPerformServiceRunInConsole:(NSPasteboard *)pboard userData:(NSString *)data error:(NSString **)error
+{
+
+	SLog(@"Service: 'Run in console' was called.");
+
+	NSString *pboardString;
+
+	NSArray *types = [pboard types];
+	
+	// if file urls were passed source('...') them one by one
+	if([types containsObject:NSURLPboardType] && (pboardString = [pboard stringForType:NSURLPboardType])) {
+
+		NSArray *fileArray = [pboard propertyListForType:NSURLPboardType];
+		
+		if([fileArray count]) {
+
+			SLog(@" - source %d files", [fileArray count]);
+
+			NSInteger i =0;
+			for(i=0; i<[fileArray count]; i++) {
+				NSString *fn = [fileArray objectAtIndex:i];
+				if([fn length]) {
+					NSURL *url = [[NSURL alloc] initWithString:fn];
+					[self sendInput:[NSString stringWithFormat:@"source(\"%@\")", [url path]]];
+					[url release];
+				}
+				[RConsoleWindow makeKeyWindow];
+			}
+		}
+
+		return;
+
+	}
+	// if text selection was passed run the text in R Console
+	else if([types containsObject:NSStringPboardType] && (pboardString = [pboard stringForType:NSStringPboardType])) {
+
+		SLog(@" - execute:%@", pboardString);
+
+		[self sendInput:pboardString];
+		[RConsoleWindow makeKeyWindow];
+		return;
+
+	}
+
+	NSLog(@"R Service: Pasteboard couldn't give string or URL for service 'Run in console'");
+	NSBeep();
+
+}
+
+/**
+ * Open selection in a new R script doc
+ **/
+- (void)doPerformServiceOpenRScript:(NSPasteboard *)pboard userData:(NSString *)data error:(NSString **)error
+{
+
+	SLog(@"Service: 'Open as R script' was called.");
+
+	NSString *pboardString;
+
+	NSArray *types = [pboard types];
+	
+	if([types containsObject:NSStringPboardType] && (pboardString = [pboard stringForType:NSStringPboardType])) {
+
+		SLog(@" - open:%@", pboardString);
+		RDocument *doc = (RDocument*)[[NSDocumentController sharedDocumentController] openUntitledDocumentAndDisplay:YES error:nil];
+		if(doc) {
+			[[doc textView] insertText:pboardString];
+		} else {
+			NSLog(@"R Service: service 'Open as R script' couldn't open a new R script document");
+			NSBeep();
+		}
+		return;
+	}
+
+	NSLog(@"R Service: Pasteboard couldn't give string for service 'Open as R script'");
+	NSBeep();
+
+}
+
 @end
-
-

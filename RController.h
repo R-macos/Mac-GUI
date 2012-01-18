@@ -64,6 +64,11 @@
 #import "RTextView.h"
 #import "RConsoleTextStorage.h"
 
+// R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
+#ifdef error
+#undef error
+#endif
+
 @interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent, NSTextStorageDelegate, NSToolbarDelegate>
 {
 	IBOutlet RTextView *consoleTextView;
@@ -310,6 +315,11 @@
 - (void)updateReInterpretEncodingMenu;
 
 - (void) helpSearchTypeChanged;
+
+// Service methods
+- (void)doPerformServiceRunInConsole:(NSPasteboard *)pboard userData:(NSString *)data error:(NSString **)error;
+- (void)doPerformServiceOpenRScript:(NSPasteboard *)pboard userData:(NSString *)data error:(NSString **)error;
+
 
 @end
 
