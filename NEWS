@@ -5,17 +5,20 @@ Last-update: 2012-01-19 [HJBB]
 	the current task or will clear the command
 	line if no task is running [removed completion
 	invocation]
+*	Assigned standard key equivalent CMD+D for 
+	"Don't Save" button while quitting R for all
+	localized R.app GUI versions
 
 Last-update: 2012-01-18 [HJBB]
 *	Added R services to Apple's services
-	- "Run selection in R Console"
+	- "R – Run selection in Console"
 	-- for a text selection in any app:
 	    take the selected text and execute it
 		in the R Console
 	-- for selected R files
 	    source these selected R files in R
 		Console one by one
-	- "Open selection in R"
+	- "R – Open selection"
 	-- opens a new untitled R script document
 	   and pastes the selected text coming from
 	   any app into that new document

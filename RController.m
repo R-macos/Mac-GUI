@@ -1698,11 +1698,28 @@ extern BOOL isTimeToFinish;
 	[Preferences commit];
 	[self doSaveHistory:nil];
 	NSString *sa = [Preferences stringForKey:@"saveOnExit" withDefault:@"ask"];
-	if ([sa isEqualToString: @"ask"])
-		NSBeginAlertSheet(NLS(@"Closing R session"),NLS(@"Save"),NLS(@"Don't Save"),NLS(@"Cancel"),
-			[consoleTextView window],self,@selector(shouldCloseDidEnd:returnCode:contextInfo:),NULL,NULL,
-			NLS(@"Save workspace image?"));
-	else {
+	if ([sa isEqualToString: @"ask"]) {
+
+		NSAlert *alert = [[NSAlert alloc] init];
+
+		[alert addButtonWithTitle:NLS(@"Save")];
+		[alert addButtonWithTitle:NLS(@"Cancel")];
+		[alert addButtonWithTitle:NLS(@"Don't Save")];
+		[alert setInformativeText:NLS(@"Save workspace image?")];
+		[alert setMessageText:NLS(@"Closing R session")];
+
+		// Set standard key equivalent ⌘D to "Don't Save" for localization as well
+		NSButton *dontSaveButton = [[alert buttons] objectAtIndex:2];
+		[dontSaveButton setKeyEquivalent:@"d"];
+		[dontSaveButton setKeyEquivalentModifierMask:NSCommandKeyMask];
+
+		[alert beginSheetModalForWindow:[consoleTextView window] 
+				modalDelegate:self 
+			   didEndSelector:@selector(shouldCloseDidEnd:returnCode:contextInfo:) 
+				  contextInfo:nil];
+		[alert release];
+
+	} else {
 		terminating = YES;
 		[self windowShouldClose:self];
 	}
@@ -1744,16 +1761,21 @@ extern BOOL isTimeToFinish;
 }	
 	
 /* this gets called by the "wanna save?" sheet on window close */
-- (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode 
-		contextInfo:(void *)contextInfo {
+- (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
+
 	[Preferences commit];
+	NSLog(@"%d", returnCode);
 	// the code specifies whether it's ok for the application to close in response to windowShouldClose:
 	[[NSApplication sharedApplication] stopModalWithCode: 
-		(returnCode==NSAlertDefaultReturn || returnCode==NSAlertAlternateReturn)?YES:NO];
-    if (returnCode==NSAlertDefaultReturn)
+		(returnCode==NSAlertFirstButtonReturn || returnCode==NSAlertThirdButtonReturn)?YES:NO];
+    if (returnCode==NSAlertFirstButtonReturn) {
+		NSLog(@"YES");
 		[[REngine mainEngine] executeString:@"base::quit(\"yes\")"];
-    if (returnCode==NSAlertAlternateReturn)
+	}
+    if (returnCode==NSAlertThirdButtonReturn) {
+		NSLog(@"NO");
 		[[REngine mainEngine] executeString:@"base::quit(\"no\")"];
+	}
 }
 
 
