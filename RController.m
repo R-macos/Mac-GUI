@@ -3702,7 +3702,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 				NSString *fn = [fileArray objectAtIndex:i];
 				if([fn length]) {
 					NSURL *url = [[NSURL alloc] initWithString:fn];
-					[self loadFile:[url path]]];
+					[self loadFile:[url path]];
 					[url release];
 				}
 				[RConsoleWindow makeKeyWindow];
