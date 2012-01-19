@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-19 [HJBB]
+*	In R Console ESC will only try to interrupt
+	the current task or will clear the command
+	line if no task is running [removed completion
+	invocation]
+
 Last-update: 2012-01-18 [HJBB]
 *	Added R services to Apple's services
 	- "Run selection in R Console"

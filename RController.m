@@ -2141,17 +2141,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	// ---- cancel ---
 	
 	if (@selector(cancel:) == commandSelector || @selector(cancelOperation:) == commandSelector) {
-		NSString *contStr = @"";
-		RSEXP *xx = [[REngine mainEngine] evaluateString:@"getOption('continue)"];
-		if(xx) {
-			contStr = [xx string];
-			NSLog(@"%@", contStr);
-			[xx release];
-		}
-		if( busyRFlag || childPID>0 || [textView selectedRange].location == committedLength ) {
-			[self breakR:self];
-			return(YES);
-		}
+		[self breakR:self];
+		return(YES);
 	}
     
 	return NO;
@@ -3212,7 +3203,7 @@ This method calls the showHelpFor method of the Help Manager which opens
     } else if ([[toolbarItem itemIdentifier] isEqual: NewQuartzToolbarItemIdentifier]) {
 		enable = YES;
     } else if ([[toolbarItem itemIdentifier] isEqual: InterruptToolbarItemIdentifier]) {
-		enable = (busyRFlag || (childPID>0) || [consoleTextView selectedRange].location == committedLength);
+		enable = (busyRFlag || (childPID>0));
 	} else if ([[toolbarItem itemIdentifier] isEqual: ShowHistoryToolbarItemIdentifier]) {
 		enable = YES;
 	} else if ([[toolbarItem itemIdentifier] isEqual: AuthenticationToolbarItemIdentifier]) {
