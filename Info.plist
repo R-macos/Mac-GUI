@@ -170,19 +170,19 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>R/Run selection in R Console</string>
+				<string>R/R – Run selection in Console</string>
 				<key>English</key>
-				<string>R/Run selection in R Console</string>
+				<string>R/R – Run selection in Console</string>
 				<key>de</key>
-				<string>R/Führe Auswahl in der R Konsole aus</string>
+				<string>R/R – Führe Auswahl in der Konsole aus</string>
 				<key>nl</key>
-				<string>R/Run selection in R console</string>
+				<string>R/R – Run selection in Console</string>
 				<key>it</key>
-				<string>R/Run selection in R console</string>
+				<string>R/R – Run selection in Console</string>
 				<key>ja</key>
-				<string>R/Run selection in R console</string>
+				<string>R/R – Run selection in Console</string>
 				<key>fr</key>
-				<string>R/Run selection in R console</string>
+				<string>R/R – Run selection in Console</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>doPerformServiceRunInConsole</string>
@@ -203,19 +203,19 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>R/Open selection in R</string>
+				<string>R/R – Open selection</string>
 				<key>English</key>
-				<string>R/Open selection in R</string>
+				<string>R/R – Open selection</string>
 				<key>de</key>
-				<string>R/Öffne Auswahl in R</string>
+				<string>R/R – Öffne Auswahl</string>
 				<key>nl</key>
-				<string>R/Open selection in R</string>
+				<string>R/R – Open selection</string>
 				<key>it</key>
-				<string>R/Open selection in R</string>
+				<string>R/R – Open selection</string>
 				<key>ja</key>
-				<string>R/Open selection in R</string>
+				<string>R/R – Open selection</string>
 				<key>fr</key>
-				<string>R/Open selection in R</string>
+				<string>R/R – Open selection</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>doPerformServiceOpenRScript</string>

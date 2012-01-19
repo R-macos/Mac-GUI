@@ -1043,6 +1043,7 @@ extern BOOL isTimeToFinish;
 	if(lastFunctionForHint) [lastFunctionForHint release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
+	if(home) [home release];
 	if(filteredHistory) [filteredHistory release], filteredHistory = nil;
 	if(currentWebViewForFindAction) [currentWebViewForFindAction release];
 	if(searchInWebViewWindow) [searchInWebViewWindow release], searchInWebViewWindow = nil;
@@ -3701,7 +3702,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 				NSString *fn = [fileArray objectAtIndex:i];
 				if([fn length]) {
 					NSURL *url = [[NSURL alloc] initWithString:fn];
-					[self sendInput:[NSString stringWithFormat:@"source(\"%@\")", [url path]]];
+					[self loadFile:[url path]]];
 					[url release];
 				}
 				[RConsoleWindow makeKeyWindow];
