@@ -29,6 +29,9 @@
  *  Created by Simon Urbanek on 12/5/04.
  */
 
+// context menu tags
+#define kShowHelpContextMenuItemTag 10001
+
 #define backgColorKey @"Background Color"
 #define inputColorKey @"Input Color"
 #define outputColorKey @"Output Color"

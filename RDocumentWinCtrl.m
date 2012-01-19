@@ -46,6 +46,7 @@
 #undef error
 #endif
 
+
 /**
  * Include all the extern variables and prototypes required for flex (used for symbol parsing)
  */
@@ -985,6 +986,37 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			[self highlightBracesWithShift: 0 andWarn:NO];
 	}
 	return retval;
+}
+
+- (NSMenu *)textView:(NSTextView *)view menu:(NSMenu *)menu forEvent:(NSEvent *)event atIndex:(NSUInteger)charIndex
+{
+
+	if(view != textView) return menu;
+
+	NSArray* items = [menu itemArray];
+	NSInteger insertionIndex;
+
+	// Check if context menu additions were added already
+	for(insertionIndex = 0; insertionIndex < [items count]; insertionIndex++) {
+		if([[items objectAtIndex:insertionIndex] tag] == kShowHelpContextMenuItemTag)
+			return menu;
+	}
+
+	// Add additional menu items at the end
+
+	SLog(@"RTextView: add additional menu items at the end of the context menu");
+
+	[menu addItem:[NSMenuItem separatorItem]];
+
+	NSMenuItem *anItem;
+	anItem = [[NSMenuItem alloc] initWithTitle:NLS(@"Show Help for current Function") action:@selector(showHelpForCurrentFunction) keyEquivalent:@"h"];
+	[anItem setKeyEquivalentModifierMask:NSControlKeyMask];
+	[anItem setTag:kShowHelpContextMenuItemTag];
+	[menu addItem:anItem];
+	[anItem release];
+
+	return menu;
+
 }
 
 - (NSArray *)textView:(NSTextView *)aTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index 

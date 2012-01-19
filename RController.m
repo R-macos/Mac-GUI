@@ -3758,4 +3758,37 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 }
 
+- (NSMenu *)textView:(NSTextView *)view menu:(NSMenu *)menu forEvent:(NSEvent *)event atIndex:(NSUInteger)charIndex
+{
+
+	if(view != consoleTextView) return menu;
+
+	NSArray* items = [menu itemArray];
+	NSInteger insertionIndex;
+
+	// Check if context menu additions were added already
+	for(insertionIndex = 0; insertionIndex < [items count]; insertionIndex++) {
+		if([[items objectAtIndex:insertionIndex] tag] == kShowHelpContextMenuItemTag)
+			return menu;
+	}
+
+	// Add additional menu items at the end
+
+	SLog(@"RTextView: add additional menu items at the end of the context menu");
+
+	[menu addItem:[NSMenuItem separatorItem]];
+	
+	NSMenuItem *anItem;
+	anItem = [[NSMenuItem alloc] initWithTitle:NLS(@"Show Help for current Function") action:@selector(showHelpForCurrentFunction) keyEquivalent:@"h"];
+	[anItem setKeyEquivalentModifierMask:NSControlKeyMask];
+	[anItem setTag:kShowHelpContextMenuItemTag];
+	[menu addItem:anItem];
+	[anItem release];
+
+	return menu;
+
+}
+
+
+
 @end

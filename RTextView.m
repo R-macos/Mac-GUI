@@ -42,8 +42,6 @@
 #define kTALinked    @"link"
 #define kTAVal       @"x"
 
-// context menu tags
-#define kShowHelpContextMenuItemTag 10001
 
 // declared external
 BOOL RTextView_autoCloseBrackets = YES;
@@ -107,40 +105,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if(undoBreakTokensSet) [undoBreakTokensSet release];
 	// if(commentTokensSet) [commentTokensSet release];
 	[super dealloc];
-}
-
-- (NSMenu *)menuForEvent:(NSEvent *)event
-{
-	NSMenu *menu = [[self class] defaultMenu];
-	int insertionIndex = 0;
-	NSArray* items = [menu itemArray];
-
-	// Check if context menu additions were added already
-	for(insertionIndex = 0; insertionIndex < [items count]; insertionIndex++) {
-		if([[items objectAtIndex:insertionIndex] tag] == kShowHelpContextMenuItemTag)
-			return menu;
-	}
-
-	// Add additional menu items
-	// Look for insertion index (after the first separator)
-	for(insertionIndex = 0; insertionIndex < [items count]; insertionIndex++) {
-		if([[items objectAtIndex:insertionIndex] isSeparatorItem])
-			break;
-	}
-	insertionIndex++;
-
-	SLog(@"RTextView: add additional menu items at postion %d to context menu", insertionIndex);
-
-	NSMenuItem *anItem;
-	anItem = [[NSMenuItem alloc] initWithTitle:NLS(@"Show Help for current Function") action:@selector(showHelpForCurrentFunction) keyEquivalent:@"h"];
-	[anItem setKeyEquivalentModifierMask:NSControlKeyMask];
-	[anItem setTag:kShowHelpContextMenuItemTag];
-	[menu insertItem:anItem atIndex:insertionIndex++];
-	[anItem release];
-	[menu insertItem:[NSMenuItem separatorItem] atIndex:insertionIndex++];
-
-	return menu;
-
 }
 
 - (void)keyDown:(NSEvent *)theEvent
