@@ -1764,18 +1764,14 @@ extern BOOL isTimeToFinish;
 - (void) shouldCloseDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo {
 
 	[Preferences commit];
-	NSLog(@"%d", returnCode);
 	// the code specifies whether it's ok for the application to close in response to windowShouldClose:
 	[[NSApplication sharedApplication] stopModalWithCode: 
 		(returnCode==NSAlertFirstButtonReturn || returnCode==NSAlertThirdButtonReturn)?YES:NO];
-    if (returnCode==NSAlertFirstButtonReturn) {
-		NSLog(@"YES");
+    if (returnCode==NSAlertFirstButtonReturn)
 		[[REngine mainEngine] executeString:@"base::quit(\"yes\")"];
-	}
-    if (returnCode==NSAlertThirdButtonReturn) {
-		NSLog(@"NO");
+    if (returnCode==NSAlertThirdButtonReturn)
 		[[REngine mainEngine] executeString:@"base::quit(\"no\")"];
-	}
+
 }
 
 

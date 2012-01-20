@@ -63,6 +63,7 @@
 							   object:nil];
 		[self updatePreferences];
 		[[Preferences sharedPreferences] addDependent:self];
+		activeFileType = ftRSource;
 	}
 
 	return self;
@@ -195,12 +196,31 @@
 
 }
 
+- (NSString *)defaultType
+{
+	return activeFileType;
+}
+
+- (IBAction)newRdDocument:(id)sender
+{
+	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
+	if (!useInternalEditor) {
+		[self invokeExternalForFile: @""];
+		return;
+	}
+	
+	activeFileType = ftRdDoc;
+	[super newDocument:sender];
+}
+
+
 - (IBAction)newDocument:(id)sender {
 	BOOL useInternalEditor = [Preferences flagForKey:internalOrExternalKey withDefault: YES];
 	if (!useInternalEditor) {
 		[self invokeExternalForFile: @""];
 		return;
 	}
+	activeFileType = ftRSource;
 	[super newDocument:sender];
 }
 

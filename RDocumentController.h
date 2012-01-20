@@ -53,6 +53,8 @@
 
 @interface RDocumentController : NSDocumentController <PreferencesDependent>
 
+	NSString *activeFileType;
+
 - (NSWindow*)findLastWindowForDocType:(NSString*)aType;
 - (NSWindow*)findNextWindowForDocType:(NSString*)aType;
 - (NSWindow*)findWindowForDocType:(NSString*)aType getLast:(BOOL)getLast;
@@ -60,4 +62,7 @@
 // starts external editor with the specified file (regardless of prefs)
 - (void) invokeExternalForFile:(NSString*)aFile;
 + (NSView *)encodingAccessory:(NSStringEncoding)encoding includeDefaultEntry:(BOOL)includeDefaultItem encodingPopUp:(NSPopUpButton **)popup;
+
+- (IBAction)newRdDocument:(id)sender;
+
 @end

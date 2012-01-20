@@ -1148,8 +1148,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			[textView setSelectedRange:currentLineRange];
 			// scroll to found line
 			[textView centerSelectionInVisibleArea:nil];
-			// remove selection after 300ms
-			[textView performSelector:@selector(moveLeft:) withObject:nil afterDelay:0.3];
+			// remove selection after 500ms
+			[textView performSelector:@selector(moveLeft:) withObject:nil afterDelay:0.5];
 
 		}
 	}
@@ -1484,6 +1484,21 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	[[searchToolbarField cell] setSearchMenuTemplate:m];
 }
 
+- (IBAction)insertRdFunctionTemplate:(id)sender
+{
+	[[self document] insertRdFunctionTemplate];
+}
+
+- (IBAction)insertRdDataTemplate:(id)sender
+{
+	[[self document] insertRdDataTemplate];
+}
+
+- (IBAction)insertRdTempalte:(id)sender
+{
+	[[self document] convertRd2HTML];
+}
+
 - (IBAction)convertRd2HTML:(id)sender
 {
 	[[self document] convertRd2HTML];
@@ -1492,6 +1507,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (IBAction)convertRd2PDF:(id)sender
 {
 	[[self document] convertRd2PDF];
+}
+
+- (IBAction)checkRdDocument:(id)sender
+{
+	[[self document] checkRdDocument];
 }
 
 @end

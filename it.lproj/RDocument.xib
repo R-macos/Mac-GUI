@@ -990,11 +990,68 @@
 								<object class="NSMutableArray" key="NSMenuItems">
 									<bool key="EncodedWithXMLCoder">YES</bool>
 									<reference ref="1037500470"/>
+									<object class="NSMenuItem" id="274904877">
+										<reference key="NSMenu" ref="919251189"/>
+										<string key="NSTitle">Insert Function Rd Template</string>
+										<string key="NSKeyEquiv">f</string>
+										<int key="NSKeyEquivModMask">1835008</int>
+										<int key="NSMnemonicLoc">2147483647</int>
+										<reference key="NSOnImage" ref="331598237"/>
+										<reference key="NSMixedImage" ref="527066141"/>
+										<string key="NSAction">_popUpItemAction:</string>
+										<reference key="NSTarget" ref="532953934"/>
+									</object>
+									<object class="NSMenuItem" id="564993253">
+										<reference key="NSMenu" ref="919251189"/>
+										<string key="NSTitle">Insert Data Rd Template</string>
+										<string key="NSKeyEquiv">d</string>
+										<int key="NSKeyEquivModMask">1835008</int>
+										<int key="NSMnemonicLoc">2147483647</int>
+										<reference key="NSOnImage" ref="331598237"/>
+										<reference key="NSMixedImage" ref="527066141"/>
+										<string key="NSAction">_popUpItemAction:</string>
+										<reference key="NSTarget" ref="532953934"/>
+									</object>
+									<object class="NSMenuItem" id="206670133">
+										<reference key="NSMenu" ref="919251189"/>
+										<bool key="NSIsDisabled">YES</bool>
+										<bool key="NSIsSeparator">YES</bool>
+										<string key="NSTitle"/>
+										<string key="NSKeyEquiv"/>
+										<int key="NSMnemonicLoc">2147483647</int>
+										<reference key="NSOnImage" ref="331598237"/>
+										<reference key="NSMixedImage" ref="527066141"/>
+										<string key="NSAction">_popUpItemAction:</string>
+										<reference key="NSTarget" ref="532953934"/>
+									</object>
+									<object class="NSMenuItem" id="1007443982">
+										<reference key="NSMenu" ref="919251189"/>
+										<string key="NSTitle">Check Rd Document</string>
+										<string key="NSKeyEquiv">c</string>
+										<int key="NSKeyEquivModMask">1835008</int>
+										<int key="NSMnemonicLoc">2147483647</int>
+										<reference key="NSOnImage" ref="331598237"/>
+										<reference key="NSMixedImage" ref="527066141"/>
+										<string key="NSAction">_popUpItemAction:</string>
+										<reference key="NSTarget" ref="532953934"/>
+									</object>
+									<object class="NSMenuItem" id="187279538">
+										<reference key="NSMenu" ref="919251189"/>
+										<bool key="NSIsDisabled">YES</bool>
+										<bool key="NSIsSeparator">YES</bool>
+										<string key="NSTitle"/>
+										<string key="NSKeyEquiv"/>
+										<int key="NSMnemonicLoc">2147483647</int>
+										<reference key="NSOnImage" ref="331598237"/>
+										<reference key="NSMixedImage" ref="527066141"/>
+										<string key="NSAction">_popUpItemAction:</string>
+										<reference key="NSTarget" ref="532953934"/>
+									</object>
 									<object class="NSMenuItem" id="797811194">
 										<reference key="NSMenu" ref="919251189"/>
 										<string key="NSTitle">Anteprima HTML</string>
-										<string key="NSKeyEquiv"/>
-										<int key="NSKeyEquivModMask">1048576</int>
+										<string key="NSKeyEquiv">h</string>
+										<int key="NSKeyEquivModMask">1835008</int>
 										<int key="NSMnemonicLoc">2147483647</int>
 										<reference key="NSOnImage" ref="331598237"/>
 										<reference key="NSMixedImage" ref="527066141"/>
@@ -1004,7 +1061,8 @@
 									<object class="NSMenuItem" id="342001491">
 										<reference key="NSMenu" ref="919251189"/>
 										<string key="NSTitle">Anteprima PDF</string>
-										<string key="NSKeyEquiv"/>
+										<string key="NSKeyEquiv">p</string>
+										<int key="NSKeyEquivModMask">1835008</int>
 										<int key="NSMnemonicLoc">2147483647</int>
 										<reference key="NSOnImage" ref="331598237"/>
 										<reference key="NSMixedImage" ref="527066141"/>
@@ -1014,7 +1072,7 @@
 								</object>
 								<reference key="NSMenuFont" ref="981385205"/>
 							</object>
-							<int key="NSSelectedIndex">1</int>
+							<int key="NSSelectedIndex">7</int>
 							<bool key="NSPullDown">YES</bool>
 							<int key="NSPreferredEdge">1</int>
 							<bool key="NSUsesItemFromMenu">YES</bool>
@@ -1342,6 +1400,30 @@
 						<reference key="destination" ref="797811194"/>
 					</object>
 					<int key="connectionID">152</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">insertRdFunctionTemplate:</string>
+						<reference key="source" ref="304110915"/>
+						<reference key="destination" ref="274904877"/>
+					</object>
+					<int key="connectionID">158</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">insertRdDataTemplate:</string>
+						<reference key="source" ref="304110915"/>
+						<reference key="destination" ref="564993253"/>
+					</object>
+					<int key="connectionID">159</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">checkRdDocument:</string>
+						<reference key="source" ref="304110915"/>
+						<reference key="destination" ref="1007443982"/>
+					</object>
+					<int key="connectionID">160</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1862,6 +1944,11 @@
 							<reference ref="342001491"/>
 							<reference ref="797811194"/>
 							<reference ref="1037500470"/>
+							<reference ref="274904877"/>
+							<reference ref="564993253"/>
+							<reference ref="206670133"/>
+							<reference ref="1007443982"/>
+							<reference ref="187279538"/>
 						</object>
 						<reference key="parent" ref="532953934"/>
 					</object>
@@ -1878,6 +1965,31 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">149</int>
 						<reference key="object" ref="1037500470"/>
+						<reference key="parent" ref="919251189"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">153</int>
+						<reference key="object" ref="274904877"/>
+						<reference key="parent" ref="919251189"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">154</int>
+						<reference key="object" ref="564993253"/>
+						<reference key="parent" ref="919251189"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">155</int>
+						<reference key="object" ref="206670133"/>
+						<reference key="parent" ref="919251189"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">156</int>
+						<reference key="object" ref="1007443982"/>
+						<reference key="parent" ref="919251189"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">157</int>
+						<reference key="object" ref="187279538"/>
 						<reference key="parent" ref="919251189"/>
 					</object>
 				</object>
@@ -1921,6 +2033,11 @@
 					<string>147.IBPluginDependency</string>
 					<string>148.IBPluginDependency</string>
 					<string>149.IBPluginDependency</string>
+					<string>153.IBPluginDependency</string>
+					<string>154.IBPluginDependency</string>
+					<string>155.IBPluginDependency</string>
+					<string>156.IBPluginDependency</string>
+					<string>157.IBPluginDependency</string>
 					<string>21.IBPluginDependency</string>
 					<string>21.IBViewBoundsToFrameTransform</string>
 					<string>21.ImportedFromIB2</string>
@@ -2042,14 +2159,19 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{524, 948}, {60, 35}}</string>
+					<string>{{238, 720}, {60, 35}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAweAAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{515, 903}, {180, 77}}</string>
+					<string>{{229, 595}, {296, 157}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2181,7 +2303,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">152</int>
+			<int key="maxID">160</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2464,6 +2586,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>checkRdDocument:</string>
 							<string>convertRd2HTML:</string>
 							<string>convertRd2PDF:</string>
 							<string>executeSelection:</string>
@@ -2471,6 +2594,8 @@
 							<string>goHelpSearch:</string>
 							<string>goToLine:</string>
 							<string>goToLineCloseSheet:</string>
+							<string>insertRdDataTemplate:</string>
+							<string>insertRdFunctionTemplate:</string>
 							<string>printDocument:</string>
 							<string>reInterpretDocument:</string>
 							<string>setHelpSearchType:</string>
@@ -2480,6 +2605,9 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2499,6 +2627,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>checkRdDocument:</string>
 							<string>convertRd2HTML:</string>
 							<string>convertRd2PDF:</string>
 							<string>executeSelection:</string>
@@ -2506,6 +2635,8 @@
 							<string>goHelpSearch:</string>
 							<string>goToLine:</string>
 							<string>goToLineCloseSheet:</string>
+							<string>insertRdDataTemplate:</string>
+							<string>insertRdFunctionTemplate:</string>
 							<string>printDocument:</string>
 							<string>reInterpretDocument:</string>
 							<string>setHelpSearchType:</string>
@@ -2515,6 +2646,10 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">checkRdDocument:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">convertRd2HTML:</string>
 								<string key="candidateClassName">id</string>
@@ -2541,6 +2676,14 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">goToLineCloseSheet:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">insertRdDataTemplate:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">insertRdFunctionTemplate:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

@@ -66,6 +66,10 @@
 
 - (BOOL) convertRd2HTML;
 - (BOOL) convertRd2PDF;
+- (BOOL) checkRdDocument;
+- (BOOL) checkRdDocumentWithFilePath:(NSString*)inputFile;
+- (void) insertRdFunctionTemplate;
+- (void) insertRdDataTemplate;
 
 - (NSTextView *)textView;
 

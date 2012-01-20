@@ -21,6 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="81"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -529,6 +530,15 @@
 									<string key="NSTitle">Neues Dokument</string>
 									<string key="NSKeyEquiv">n</string>
 									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="213717426"/>
+									<reference key="NSMixedImage" ref="299594582"/>
+								</object>
+								<object class="NSMenuItem" id="1072952442">
+									<reference key="NSMenu" ref="3535262"/>
+									<string key="NSTitle">Neues Rd Dokument</string>
+									<string key="NSKeyEquiv">n</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="213717426"/>
 									<reference key="NSMixedImage" ref="299594582"/>
@@ -7558,6 +7568,14 @@
 					</object>
 					<int key="connectionID">1742</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">newRdDocument:</string>
+						<reference key="source" ref="841731700"/>
+						<reference key="destination" ref="1072952442"/>
+					</object>
+					<int key="connectionID">1744</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -7925,6 +7943,7 @@
 							<reference ref="279303990"/>
 							<reference ref="193906946"/>
 							<reference ref="928143246"/>
+							<reference ref="1072952442"/>
 						</object>
 						<reference key="parent" ref="746875021"/>
 					</object>
@@ -10565,6 +10584,11 @@
 						<reference key="object" ref="953083575"/>
 						<reference key="parent" ref="576074116"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1743</int>
+						<reference key="object" ref="1072952442"/>
+						<reference key="parent" ref="3535262"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -10972,6 +10996,7 @@
 					<string>174.IBPluginDependency</string>
 					<string>174.ImportedFromIB2</string>
 					<string>1740.IBPluginDependency</string>
+					<string>1743.IBPluginDependency</string>
 					<string>19.IBPluginDependency</string>
 					<string>19.ImportedFromIB2</string>
 					<string>196.IBPluginDependency</string>
@@ -11890,6 +11915,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -11954,7 +11980,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{74, 837}, {798, 20}}</string>
+					<string>{{108, 714}, {798, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12294,7 +12320,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{114, 458}, {215, 233}}</string>
+					<string>{{148, 461}, {234, 253}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12450,7 +12476,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1742</int>
+			<int key="maxID">1744</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -14852,6 +14878,28 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/WebView.h</string>
+					</object>
+				</object>
+			</object>
+			<object class="NSMutableArray" key="referencedPartialClassDescriptionsV3.1+">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">RDocumentController</string>
+					<string key="superclassName">NSDocumentController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">newRdDocument:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">newRdDocument:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">newRdDocument:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBDocumentRelativeSource</string>
+						<string key="minorKey">../RDocumentController.h</string>
 					</object>
 				</object>
 			</object>

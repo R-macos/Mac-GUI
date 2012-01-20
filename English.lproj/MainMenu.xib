@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">10K540</string>
+		<string key="IBDocument.SystemVersion">10K549</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.36</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
@@ -21,6 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="81"/>
 			<integer value="798"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -534,6 +535,15 @@
 									<string key="NSTitle">New Document</string>
 									<string key="NSKeyEquiv">n</string>
 									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="213717426"/>
+									<reference key="NSMixedImage" ref="299594582"/>
+								</object>
+								<object class="NSMenuItem" id="260255497">
+									<reference key="NSMenu" ref="3535262"/>
+									<string key="NSTitle">New Rd Document</string>
+									<string key="NSKeyEquiv">n</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="213717426"/>
 									<reference key="NSMixedImage" ref="299594582"/>
@@ -7565,6 +7575,14 @@
 					</object>
 					<int key="connectionID">1742</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">newRdDocument:</string>
+						<reference key="source" ref="841731700"/>
+						<reference key="destination" ref="260255497"/>
+					</object>
+					<int key="connectionID">1744</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -7932,6 +7950,7 @@
 							<reference ref="279303990"/>
 							<reference ref="193906946"/>
 							<reference ref="928143246"/>
+							<reference ref="260255497"/>
 						</object>
 						<reference key="parent" ref="746875021"/>
 					</object>
@@ -10572,6 +10591,11 @@
 						<reference key="object" ref="953083575"/>
 						<reference key="parent" ref="576074116"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1743</int>
+						<reference key="object" ref="260255497"/>
+						<reference key="parent" ref="3535262"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -10979,6 +11003,7 @@
 					<string>174.IBPluginDependency</string>
 					<string>174.ImportedFromIB2</string>
 					<string>1740.IBPluginDependency</string>
+					<string>1743.IBPluginDependency</string>
 					<string>19.IBPluginDependency</string>
 					<string>19.ImportedFromIB2</string>
 					<string>196.IBPluginDependency</string>
@@ -11897,6 +11922,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
@@ -12301,7 +12327,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{114, 458}, {215, 233}}</string>
+					<string>{{114, 438}, {217, 253}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12457,7 +12483,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1742</int>
+			<int key="maxID">1744</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -14968,6 +14994,25 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBDocumentRelativeSource</string>
 						<string key="minorKey">../Tools/RDataEditorTableView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">RDocumentController</string>
+					<string key="superclassName">NSDocumentController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">newRdDocument:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">newRdDocument:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">newRdDocument:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBDocumentRelativeSource</string>
+						<string key="minorKey">../RDocumentController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

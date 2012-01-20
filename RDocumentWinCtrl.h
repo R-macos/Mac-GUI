@@ -113,6 +113,9 @@ extern NSColor *shColorIdentifier;
 
 - (IBAction)convertRd2HTML:(id)sender;
 - (IBAction)convertRd2PDF:(id)sender;
+- (IBAction)checkRdDocument:(id)sender;
+- (IBAction)insertRdFunctionTemplate:(id)sender;
+- (IBAction)insertRdDataTemplate:(id)sender;
 
 - (void) setEditable: (BOOL) editable;
 
