@@ -232,7 +232,6 @@
 
 - (IBAction)togglePackageInstaller:(id)sender;
 
-- (IBAction)newDocument:(id)sender;
 - (IBAction)openDocument:(id)sender;
 - (IBAction)customizeEncodingList:(id)sender;
 

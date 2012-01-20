@@ -2680,10 +2680,6 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 }
 
-- (IBAction)newDocument:(id)sender{
-	[[NSDocumentController sharedDocumentController] newDocument: sender];
-}
-
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
 	SLog(@" - application:openFile:%@ called", (NSString *)filename);
 	NSString *dirname = @"";
