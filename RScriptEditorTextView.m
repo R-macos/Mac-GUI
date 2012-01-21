@@ -213,37 +213,36 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
 	[shColorIdentifier retain]; 
 
+	// Rd stuff
+	// c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];
+	// if (c) rdColorSection = c;
+	// else rdColorSection=[NSColor colorWithDeviceRed:0.8 green:0.0353 blue:0.02 alpha:1.0];
+	// [rdColorSection retain];
+	// 
+	// c=[Preferences unarchivedObjectForKey:macroArgRdSyntaxColorKey withDefault:nil];
+	// if (c) rdColorMacroArg = c;
+	// else rdColorMacroArg=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.98 alpha:1.0];
+	// [rdColorMacroArg retain];
+	// 
+	// c=[Preferences unarchivedObjectForKey:macroGenRdSyntaxColorKey withDefault:nil];
+	// if (c) rdColorMacroGen = c;
+	// else rdColorMacroGen=[NSColor colorWithDeviceRed:0.4 green:0.78 blue:0.98 alpha:1.0];
+	// [rdColorMacroGen retain]; 
+	// 
+	// c=[Preferences unarchivedObjectForKey:directiveRdSyntaxColorKey withDefault:nil];
+	// if (c) rdColorDirective = c;
+	// else rdColorDirective=[NSColor colorWithDeviceRed:0.0 green:0.785 blue:0.0 alpha:1.0];
+	// [rdColorDirective retain]; 
 
-	c=[Preferences unarchivedObjectForKey:commentRdSyntaxColorKey withDefault:nil];
-	if (c) rdColorComment = c;
-	else rdColorComment=[NSColor colorWithDeviceRed:0.1 green:0.55 blue:0.05 alpha:1.0];
-	[rdColorComment retain];
+	// c=[Preferences unarchivedObjectForKey:commentRdSyntaxColorKey withDefault:nil];
+	// if (c) rdColorComment = c;
+	// else rdColorComment=[NSColor colorWithDeviceRed:0.1 green:0.55 blue:0.05 alpha:1.0];
+	// [rdColorComment retain];
 
-	c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];
-	if (c) rdColorSection = c;
-	else rdColorSection=[NSColor colorWithDeviceRed:0.8 green:0.0353 blue:0.02 alpha:1.0];
-	[rdColorSection retain];
-
-	c=[Preferences unarchivedObjectForKey:macroArgRdSyntaxColorKey withDefault:nil];
-	if (c) rdColorMacroArg = c;
-	else rdColorMacroArg=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.98 alpha:1.0];
-	[rdColorMacroArg retain];
-
-	c=[Preferences unarchivedObjectForKey:macroGenRdSyntaxColorKey withDefault:nil];
-	if (c) rdColorMacroGen = c;
-	else rdColorMacroGen=[NSColor colorWithDeviceRed:0.4 green:0.78 blue:0.98 alpha:1.0];
-	[rdColorMacroGen retain]; 
-
-	c=[Preferences unarchivedObjectForKey:directiveRdSyntaxColorKey withDefault:nil];
-	if (c) rdColorDirective = c;
-	else rdColorDirective=[NSColor colorWithDeviceRed:0.0 green:0.785 blue:0.0 alpha:1.0];
-	[rdColorDirective retain]; 
-
-	c=[Preferences unarchivedObjectForKey:normalRdSyntaxColorKey withDefault:nil];
-	if (c) rdColorNormal = c;
-	else rdColorNormal=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-	[rdColorNormal retain]; 
-
+	// c=[Preferences unarchivedObjectForKey:normalRdSyntaxColorKey withDefault:nil];
+	// if (c) rdColorNormal = c;
+	// else rdColorNormal=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+	// [rdColorNormal retain]; 
 
 
 	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:nil];
@@ -268,12 +267,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:numberSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:keywordSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:commentSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
-	[prefs addObserver:self forKeyPath:normalRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
-	[prefs addObserver:self forKeyPath:sectionRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
-	[prefs addObserver:self forKeyPath:macroArgRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
-	[prefs addObserver:self forKeyPath:macroGenRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
-	[prefs addObserver:self forKeyPath:commentRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
-	[prefs addObserver:self forKeyPath:directiveRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	// [prefs addObserver:self forKeyPath:normalRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	// [prefs addObserver:self forKeyPath:commentRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	// [prefs addObserver:self forKeyPath:sectionRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	// [prefs addObserver:self forKeyPath:macroArgRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	// [prefs addObserver:self forKeyPath:macroGenRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
+	// [prefs addObserver:self forKeyPath:directiveRdSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:editorBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:editorCurrentLineBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:identifierSyntaxColorKey options:NSKeyValueObservingOptionNew context:NULL];
@@ -285,6 +284,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:HighlightIntervalKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:highlightCurrentLine options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:showLineNumbersKey options:NSKeyValueObservingOptionNew context:NULL];
+
+	[self setTextColor:shColorNormal];
+	[self setInsertionPointColor:shColorCursor];
 
 	theTextStorage = [self textStorage];
 }
@@ -306,12 +308,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	if(shColorCurrentLine) [shColorCurrentLine release];
 	if(shColorCursor) [shColorCursor release];
 
-	if(rdColorNormal) [rdColorNormal release];
-	if(rdColorSection) [rdColorSection release];
-	if(rdColorMacroArg) [rdColorMacroArg release];
-	if(rdColorMacroGen) [rdColorMacroGen release];
-	if(rdColorComment) [rdColorComment release];
-	if(rdColorDirective) [rdColorDirective release];
+	// if(rdColorNormal) [rdColorNormal release];
+	// if(rdColorComment) [rdColorComment release];
+	// if(rdColorSection) [rdColorSection release];
+	// if(rdColorMacroArg) [rdColorMacroArg release];
+	// if(rdColorMacroGen) [rdColorMacroGen release];
+	// if(rdColorDirective) [rdColorDirective release];
 
 	if(theRulerView) [theRulerView release];
 
@@ -359,6 +361,26 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		shColorIdentifier = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
 		if([self isEditable])
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+	// } else if ([keyPath isEqualToString:sectionRdSyntaxColorKey]) {
+	// 	if(rdColorSection) [rdColorSection release];
+	// 	rdColorSection = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+	// 	if([self isEditable])
+	// 		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+	// } else if ([keyPath isEqualToString:macroArgRdSyntaxColorKey]) {
+	// 	if(rdColorMacroArg) [rdColorMacroArg release];
+	// 	rdColorMacroArg = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+	// 	if([self isEditable])
+	// 		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+	// } else if ([keyPath isEqualToString:macroGenRdSyntaxColorKey]) {
+	// 	if(rdColorMacroGen) [rdColorMacroGen release];
+	// 	rdColorMacroGen = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+	// 	if([self isEditable])
+	// 		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+	// } else if ([keyPath isEqualToString:directiveRdSyntaxColorKey]) {
+	// 	if(rdColorDirective) [rdColorDirective release];
+	// 	rdColorDirective = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+	// 	if([self isEditable])
+	// 		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
 	} else if ([keyPath isEqualToString:editorCursorColorKey]) {
 		if(shColorCursor) [shColorCursor release];
 		shColorCursor = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
@@ -692,25 +714,25 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		// NSLog(@"t %d", token);
 				switch (token) {
 					case RDPT_COMMENT:
-					    tokenColor = rdColorComment;
+					    tokenColor = shColorComment;
 					    break;
 					case RDPT_SECTION:
-					    tokenColor = rdColorSection;
+					    tokenColor = shColorKeyword;
 					    break;
 					case RDPT_MACRO_ARG:
-					    tokenColor = rdColorMacroArg;
+					    tokenColor = shColorNumber;
 					    break;
 					case RDPT_MACRO_GEN:
-					    tokenColor = rdColorMacroGen;
+					    tokenColor = shColorNumber;
 					    break;
 					case RDPT_DIRECTIVE:
-					    tokenColor = rdColorDirective;
+					    tokenColor = shColorString;
 					    break;
 					case RDPT_OTHER:
-					    tokenColor = rdColorNormal;
+					    tokenColor = shColorNormal;
 					    break;
 					default:
-					    tokenColor = rdColorNormal;
+					    tokenColor = shColorNormal;
 				}
 
 				tokenRange = NSMakeRange(yyuoffset, yyuleng);

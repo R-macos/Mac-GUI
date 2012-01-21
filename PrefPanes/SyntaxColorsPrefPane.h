@@ -50,6 +50,10 @@
     IBOutlet NSColorWell *backgroundSyntaxColorWell;
     IBOutlet NSColorWell *currentLineSyntaxColorWell;
     IBOutlet NSColorWell *cursorSyntaxColorWell;
+    // IBOutlet NSColorWell *sectionRdSyntaxColorWell;
+    // IBOutlet NSColorWell *macroArgRdSyntaxColorWell;
+    // IBOutlet NSColorWell *macroGenRdSyntaxColorWell;
+    // IBOutlet NSColorWell *directiveRdSyntaxColorWell;
     IBOutlet NSButton *setDefaultSyntaxColors;
 }
 
@@ -81,6 +85,10 @@
 - (IBAction) changeBackgroundColor:(id)sender;
 - (IBAction) changeCurrentLineColor:(id)sender;
 - (IBAction) changeCursorColor:(id)sender;
+// - (IBAction) changeRdSectionColor:(id)sender;
+// - (IBAction) changeRdMacroGenColor:(id)sender;
+// - (IBAction) changeRdMacroArgColor:(id)sender;
+// - (IBAction) changeRdDirectiveColor:(id)sender;
 
 - (void) updatePreferences;
 

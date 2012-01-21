@@ -57,12 +57,12 @@
 	NSColor *shColorComment;
 	NSColor *shColorIdentifier;
 
-	NSColor *rdColorNormal;
-	NSColor *rdColorSection;
-	NSColor *rdColorMacroArg;
-	NSColor *rdColorMacroGen;
-	NSColor *rdColorComment;
-	NSColor *rdColorDirective;
+	// NSColor *rdColorNormal;
+	// NSColor *rdColorSection;
+	// NSColor *rdColorMacroArg;
+	// NSColor *rdColorMacroGen;
+	// NSColor *rdColorComment;
+	// NSColor *rdColorDirective;
 
 	NSColor *shColorCursor;
 	NSColor *shColorBackground;

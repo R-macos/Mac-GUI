@@ -81,6 +81,7 @@ macrogen		\\[a-zA-Z0-9_]+
 \\link/\[								{ return RDPT_MACRO_ARG; }				/* macros with arguments          */
 {macrowoarg}/(\\|{s}|%|{break})			{ return RDPT_MACRO_ARG; }				/* macros without arguments       */
 {macrogen}								{ return RDPT_MACRO_GEN; }				/* unknown macros                 */
+.										{ return RDPT_OTHER; }
 
 <<EOF>>   						{
 	BEGIN(INITIAL);   /* make sure we return to initial state when finished! */
