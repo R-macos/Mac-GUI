@@ -21,7 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="81"/>
+			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -58,13 +58,13 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="186451207">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSScrollView" id="343940978">
 							<reference key="NSNextResponder" ref="186451207"/>
-							<int key="NSvFlags">279</int>
+							<int key="NSvFlags">274</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSClipView" id="469120998">
@@ -75,7 +75,30 @@
 										<object class="NSTextView" id="781119707">
 											<reference key="NSNextResponder" ref="469120998"/>
 											<int key="NSvFlags">2322</int>
-											<string key="NSFrameSize">{548, 14}</string>
+											<object class="NSMutableSet" key="NSDragTypes">
+												<bool key="EncodedWithXMLCoder">YES</bool>
+												<object class="NSArray" key="set.sortedObjects">
+													<bool key="EncodedWithXMLCoder">YES</bool>
+													<string>Apple HTML pasteboard type</string>
+													<string>Apple PDF pasteboard type</string>
+													<string>Apple PICT pasteboard type</string>
+													<string>Apple PNG pasteboard type</string>
+													<string>Apple URL pasteboard type</string>
+													<string>CorePasteboardFlavorType 0x6D6F6F76</string>
+													<string>NSColor pasteboard type</string>
+													<string>NSFilenamesPboardType</string>
+													<string>NSStringPboardType</string>
+													<string>NeXT Encapsulated PostScript v1.2 pasteboard type</string>
+													<string>NeXT RTFD pasteboard type</string>
+													<string>NeXT Rich Text Format v1.0 pasteboard type</string>
+													<string>NeXT TIFF v4.0 pasteboard type</string>
+													<string>NeXT font pasteboard type</string>
+													<string>NeXT ruler pasteboard type</string>
+													<string>WebURLsWithTitlesPboardType</string>
+													<string>public.url</string>
+												</object>
+											</object>
+											<string key="NSFrameSize">{550, 14}</string>
 											<reference key="NSSuperview" ref="469120998"/>
 											<object class="NSTextContainer" key="NSTextContainer" id="338871382">
 												<object class="NSLayoutManager" key="NSLayoutManager">
@@ -93,7 +116,7 @@
 													<nil key="NSDelegate"/>
 												</object>
 												<reference key="NSTextView" ref="781119707"/>
-												<double key="NSWidth">548</double>
+												<double key="NSWidth">550</double>
 												<int key="NSTCFlags">1</int>
 											</object>
 											<object class="NSTextViewSharedData" key="NSSharedData">
@@ -163,7 +186,7 @@
 											<nil key="NSDelegate"/>
 										</object>
 									</object>
-									<string key="NSFrame">{{1, 1}, {548, 412}}</string>
+									<string key="NSFrame">{{1, 1}, {550, 412}}</string>
 									<reference key="NSSuperview" ref="343940978"/>
 									<reference key="NSNextKeyView" ref="781119707"/>
 									<reference key="NSDocView" ref="781119707"/>
@@ -195,7 +218,7 @@
 									<double key="NSPercent">0.94565218687057495</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{0, 20}, {550, 414}}</string>
+							<string key="NSFrame">{{-1, 20}, {552, 414}}</string>
 							<reference key="NSSuperview" ref="186451207"/>
 							<reference key="NSNextKeyView" ref="469120998"/>
 							<int key="NSsFlags">530</int>
@@ -206,7 +229,7 @@
 						<object class="NSTextField" id="662079330">
 							<reference key="NSNextResponder" ref="186451207"/>
 							<int key="NSvFlags">270</int>
-							<string key="NSFrame">{{11, 438}, {263, 15}}</string>
+							<string key="NSFrame">{{14.5, 438}, {263, 15}}</string>
 							<reference key="NSSuperview" ref="186451207"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="58452196">
@@ -237,7 +260,7 @@
 						<object class="NSSearchField" id="187706828">
 							<reference key="NSNextResponder" ref="186451207"/>
 							<int key="NSvFlags">267</int>
-							<string key="NSFrame">{{326, 437}, {177, 19}}</string>
+							<string key="NSFrame">{{326, 436}, {188, 19}}</string>
 							<reference key="NSSuperview" ref="186451207"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSSearchFieldCell" key="NSCell" id="89866838">
@@ -310,7 +333,7 @@
 							<reference key="NSNextResponder" ref="186451207"/>
 							<int key="NSvFlags">1289</int>
 							<object class="NSPSMatrix" key="NSDrawMatrix"/>
-							<string key="NSFrame">{{522, 438}, {16, 16}}</string>
+							<string key="NSFrame">{{523, 438}, {16, 16}}</string>
 							<reference key="NSSuperview" ref="186451207"/>
 							<int key="NSpiFlags">28938</int>
 							<double key="NSMaxValue">100</double>
@@ -356,6 +379,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{550, 458}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -11118,6 +11142,7 @@
 					<string>396.IBPluginDependency</string>
 					<string>396.IBViewBoundsToFrameTransform</string>
 					<string>396.ImportedFromIB2</string>
+					<string>405.IBAttributePlaceholdersKey</string>
 					<string>405.IBPluginDependency</string>
 					<string>405.ImportedFromIB2</string>
 					<string>412.IBPluginDependency</string>
@@ -11931,9 +11956,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
-					<string>{{721, 217}, {550, 458}}</string>
+					<string>{{426, 161}, {550, 458}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{721, 217}, {550, 458}}</string>
+					<string>{{426, 161}, {550, 458}}</string>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
 					<boolean value="YES"/>
@@ -12042,6 +12067,13 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABCxgAAwdAAAA</bytes>
 					</object>
 					<boolean value="YES"/>
+					<object class="NSMutableDictionary">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<reference key="dict.sortedKeys" ref="0"/>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

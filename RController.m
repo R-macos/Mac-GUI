@@ -303,6 +303,8 @@ static RController* sharedRController;
 	[consoleTextView setEditable:YES];
 	[consoleTextView setFont:[Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
 
+	[WDirView setToolTip:[NSString stringWithFormat:@"%@ (⌘D)", [WDirView stringValue]]];
+
 	requestSaveAction = nil;
 	
 	sharedRController = self;
