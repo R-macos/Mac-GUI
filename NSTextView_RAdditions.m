@@ -61,7 +61,7 @@
 	int end = curLocation;
 	unsigned int strLen = [[self string] length];
 	NSMutableCharacterSet *wordCharSet = [NSMutableCharacterSet alphanumericCharacterSet];
-	[wordCharSet addCharactersInString:@"_."];
+	[wordCharSet addCharactersInString:@"_.\\"];
 
 	if(start) {
 		start--;
