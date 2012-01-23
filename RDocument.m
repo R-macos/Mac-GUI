@@ -462,7 +462,7 @@ create the UI for the document.
 	return (([self fileName] && [[[self fileName] lowercaseString] hasSuffix:@".rtf"]) || ([self fileType] && [[self fileType] hasSuffix:@".rtf"]));
 }
 
-- (BOOL) checkRdDocumentWithFilePath:(NSString*)inputFile
+- (BOOL) checkRdDocumentWithFilePath:(NSString*)inputFile reportSuccess:(BOOL)reportSuccess
 {
 	REngine *re = [REngine mainEngine];
 
@@ -500,9 +500,14 @@ create the UI for the document.
 		NSInteger errorMessageMaxLength = 900;
 
 		if(![errMessage length] || [errMessage isEqualToString:@"• "])
-			errMessage = NLS(@"Check was successful.");
+			errMessage = (reportSuccess) ? NLS(@"Check was successful.") : @"";
 		else
 			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
+
+		if(![errMessage length]) {
+			[xx release];
+			return YES;
+		}
 
 		if([errMessage length] > errorMessageMaxLength)
 			errMessage = [[errMessage substringWithRange:NSMakeRange(0,errorMessageMaxLength)] stringByAppendingString:@"\n…"];
@@ -570,7 +575,7 @@ create the UI for the document.
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
 	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
 
-	BOOL success = [self checkRdDocumentWithFilePath:inputFile];
+	BOOL success = [self checkRdDocumentWithFilePath:inputFile reportSuccess:YES];
 
 	REngine *re = [REngine mainEngine];
 
@@ -699,7 +704,7 @@ create the UI for the document.
 
 	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
 
-	if(![self checkRdDocumentWithFilePath:inputFile])
+	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO])
 		return NO;
 
 	NSString *convCmd = [NSString stringWithFormat:@"system(\"%@R CMD Rd2pdf --no-preview --title='%@' --force --output='%@' '%@' 2>/dev/null\", intern=TRUE, wait=TRUE)", texPath, [self displayName], pdfOutputFile, inputFile];
@@ -758,7 +763,7 @@ create the UI for the document.
 
 	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
 
-	if(![self checkRdDocumentWithFilePath:inputFile])
+	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO])
 		return NO;
 
 	NSString *convCmd = [NSString stringWithFormat:@"system(\"R CMD Rdconv -t html '%@' 2>/dev/null | perl -pe 's!R.css!%@!'> '%@'\", intern=TRUE, wait=TRUE)", inputFile, RhomeCSS, htmlOutputFile];
