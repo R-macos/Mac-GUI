@@ -33,8 +33,11 @@
 
 @interface RConsoleTextStorage : NSTextStorage {
 	NSMutableAttributedString* cont;
+	NSFont* theFont;
+	NSColor* lastUsedColor;
 }
 
 - (void) insertText: (NSString*) text atIndex: (int) index withColor: (NSColor*) color;
+- (void)setFont:(NSFont*)aFont;
 
 @end

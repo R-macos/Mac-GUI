@@ -209,7 +209,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 				// Check if something is selected and wrap it into matching pair characters and preserve the selection
 				// - in RConsole only if selection is in the last line
-				if((([self isRConsole] && [[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || ![self isRConsole]) 
+				if((([self isRConsole] & ([[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || ![self isRConsole])) 
 					&& [self wrapSelectionWithPrefix:[NSString stringWithFormat:@"%c", ck] suffix:complement]) {
 					SLog(@"RTextView: selection was wrapped with auto-pairs");
 					return;
@@ -848,10 +848,13 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	SLog(@" - invalid current word -> start parsing for current function scope");
 
-	// if we're in the RConsole do parse the current line only
-	if([self isRConsole] && ([[self delegate] lastCommittedLength] <= selectedRange.location))
+	// if we're in the RConsole don't parse beyond committedLength
+	//  we have to check class since it runs in its own thread (but not sure - if one uses
+	//  [self isRConsole] it doesn't work)
+	if([[self delegate] isKindOfClass:[RController class]] & ([[RController sharedController] lastCommittedLength] <= selectedRange.location)) {
 		parseRange = NSMakeRange([[self delegate] lastCommittedLength], 
 				[parseString length]-[[self delegate] lastCommittedLength]);
+	}
 
 	// sanety check; if it fails bail
 	if(selectedRange.location - parseRange.location <= 0) {
@@ -950,7 +953,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return;
 
 	// for Rconsole only allow non-committed strings
-	if([(RTextView*)self isRConsole] && ([[RController sharedController] lastCommittedLength] > replaceRange.location)) {
+	if([self isRConsole] & ([[RController sharedController] lastCommittedLength] > replaceRange.location)) {
 		NSUInteger cl = [[RController sharedController] lastCommittedLength];
 		if(NSMaxRange(replaceRange) < cl) {
 			NSBeep();
@@ -995,8 +998,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return;
 
 	// for Rconsole only allow non-committed strings
-	if([(RTextView*)self isRConsole] && ([[self delegate] lastCommittedLength] > replaceRange.location)) {
-		NSUInteger cl = [[self delegate] lastCommittedLength];
+	if([self isRConsole] & ([[RController sharedController] lastCommittedLength] > replaceRange.location)) {
+		NSUInteger cl = [[RController sharedController] lastCommittedLength];
 		if(NSMaxRange(replaceRange) < cl) {
 			NSBeep();
 			return;
@@ -1049,7 +1052,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if(!font) return;
 
 	// If user selected something change the selection's font only
-	if(![self isRConsole] && ([[[[self window] windowController] document] isRTF] || [self selectedRange].length)) {
+	if(![self isRConsole] & ([[[[self window] windowController] document] isRTF] || [self selectedRange].length)) {
 		// register font change for undo
 		NSRange r = [self selectedRange];
 		[self shouldChangeTextInRange:r replacementString:[[self string] substringWithRange:r]];

@@ -125,6 +125,15 @@ int R_SetOptionWidth(int);
 
 static RController* sharedRController;
 
+static inline const char* NSStringUTF8String(NSString* self) 
+{
+	typedef const char* (*SPUTF8StringMethodPtr)(NSString*, SEL);
+	static SPUTF8StringMethodPtr SPNSStringGetUTF8String;
+	if (!SPNSStringGetUTF8String) SPNSStringGetUTF8String = (SPUTF8StringMethodPtr)[NSString instanceMethodForSelector:@selector(UTF8String)];
+	const char* to_return = SPNSStringGetUTF8String(self, @selector(UTF8String));
+	return to_return;
+}
+
 @interface R_WebViewSearchWindow : NSWindow
 @end
 
@@ -300,6 +309,7 @@ static RController* sharedRController;
 	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
 	SLog(@"RController.awakeFromNib");
 
+	[consoleTextView setConsoleMode: YES];
 	[consoleTextView setEditable:YES];
 	[consoleTextView setFont:[Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
 
@@ -316,8 +326,10 @@ static RController* sharedRController;
 													 forEventClass:kCoreEventClass 
 														andEventID:kAEOpenDocuments];
 
-	[consoleTextView setConsoleMode: YES];
 	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+	[lm setAllowsNonContiguousLayout:YES];
+#endif
 	NSTextStorage *origTS = [[consoleTextView textStorage] retain];
 	textStorage = [[RConsoleTextStorage alloc] init];
 	[origTS removeLayoutManager:lm];
@@ -902,8 +914,9 @@ static RController* sharedRController;
 			[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RConsoleDefaultFont];
 			[consoleTextView setFont:font];
 			// Force to scroll view to cursor
-			[consoleTextView insertText:@""];
+			[consoleTextView scrollRangeToVisible:[consoleTextView selectedRange]];
 		}
+		[[consoleTextView textStorage] setFont:font];
 		[self setOptionWidth:YES];
 	}
 	// Change size in R script windows
@@ -1079,8 +1092,10 @@ extern BOOL isTimeToFinish;
 
 /* this writes R output to the Console window, but indirectly by using a buffer */
 - (void) handleWriteConsole: (NSString*) txt withType: (int) oType {
+
 	if (!txt) return;
-	const char *s = [txt UTF8String];
+
+	const char *s = NSStringUTF8String(txt);
     // NSLog(@"handleWriteConsole[%d(%d,%d)] %@", oType, writeBufferType, writeBufferPos - writeBuffer, txt);
 	int sl = strlen(s);
 	int fits = writeBufferLen - (writeBufferPos - writeBuffer) - 1;
@@ -1090,19 +1105,20 @@ extern BOOL isTimeToFinish;
 	if (writeBuffer != writeBufferPos && (writeBufferType != oType || (fits < sl && fits > writeBufferHighWaterMark))) {
 		// for efficiency we're not using handleFlushConsole, because that would trigger stdxx flush, too
 		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer]
-                         withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+                         withColor:(NSColor*)CFArrayGetValueAtIndex((CFArrayRef)consoleColors, writeBufferType ? iErrorColor : iOutputColor)];
 		writeBufferPos = writeBuffer;
 		fits = writeBufferLen - 1;
 	}
 
 	writeBufferType = oType;
+	NSColor *writingColor = (NSColor*)CFArrayGetValueAtIndex((CFArrayRef)consoleColors, writeBufferType ? iErrorColor : iOutputColor);
 
     // this seems a bit insane given that we could just pass the string as a whole, but it should be exteremely rare
     // since we are dealing with small strings most of the time
 	while (fits < sl) {	// ok, we're in a situation where we must split the string
 		memcpy(writeBufferPos, s, fits);
 		writeBufferPos[writeBufferLen - 1] = 0;
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:writingColor];
 		sl -= fits; s += fits;
 		writeBufferPos = writeBuffer;
 		fits = writeBufferLen - 1;
@@ -1113,7 +1129,7 @@ extern BOOL isTimeToFinish;
 
 	// flush the buffer if the low watermark is reached
 	if (fits - sl < writeBufferLowWaterMark) {
-		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:[consoleColors objectAtIndex:writeBufferType ? iErrorColor : iOutputColor]];
+		[self writeConsoleDirectly:[NSString stringWithUTF8String:writeBuffer] withColor:writingColor];
 		writeBufferPos = writeBuffer;
 	}
 }
@@ -1286,8 +1302,9 @@ extern BOOL isTimeToFinish;
 		if (promptLength>0) {
 			[textStorage insertText:prompt atIndex: textLength withColor:[consoleColors objectAtIndex:iPromptColor]];
 			if (promptLength>1) // this is a trick to make sure that the insertion color doesn't change at the prompt
-				[textStorage addAttribute:@"NSColor" value:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(promptPosition+promptLength-1, 1)];
+				[textStorage insertText:@"" atIndex:promptPosition+promptLength withColor:[consoleColors objectAtIndex:iInputColor]];
 			committedLength=promptPosition+promptLength;
+			
 		}
 		committedLength=promptPosition+promptLength;
 		lastCommittedLength = committedLength;

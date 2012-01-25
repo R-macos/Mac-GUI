@@ -39,6 +39,8 @@
 	self = [super init];
 	if (self) {
 		cont = [[NSMutableAttributedString alloc] init];
+		theFont = [[[RController sharedController] currentFont] retain];
+		lastUsedColor = nil;
 	}
 	return self;
 }
@@ -46,6 +48,8 @@
 - (void) dealloc
 {
 	[cont release];
+	[theFont release];
+	if(lastUsedColor) [lastUsedColor release];
 	[super dealloc];
 }
 
@@ -82,9 +86,23 @@
 {
 	//NSLog(@"insert %d chars at %d to result in %d length", [text length], index, [cont length]+[text length]);
 	[cont replaceCharactersInRange: NSMakeRange(index,0) withString: text];
-	[cont addAttribute:@"NSColor" value:color range: NSMakeRange(index, [text length])];
-	[cont addAttribute:@"NSFont" value:[[RController sharedController] currentFont] range: NSMakeRange(index, [text length])];
+	// cont will use the current attributes at cursor location, change them only if color or font were changed
+	if(!lastUsedColor || lastUsedColor != color) {
+		if(lastUsedColor) [lastUsedColor release];
+		lastUsedColor = [color retain];
+		[cont addAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+				theFont, NSFontAttributeName, 
+				color, NSForegroundColorAttributeName,
+			nil] range:NSMakeRange(index, [text length])];
+	}
 	[self edited:NSTextStorageEditedCharacters|NSTextStorageEditedAttributes range: NSMakeRange(index,0) changeInLength:[text length]];
+}
+
+- (void)setFont:(NSFont*)aFont
+{
+	if(theFont) [theFont release], theFont = nil;
+	theFont = [aFont retain];
+	if(lastUsedColor) [lastUsedColor release], lastUsedColor = nil;
 }
 
 @end
