@@ -306,25 +306,31 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 
 - (void) awakeFromNib {
-	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
+
 	SLog(@"RController.awakeFromNib");
 
-	[consoleTextView setConsoleMode: YES];
-	[consoleTextView setEditable:YES];
-	[consoleTextView setFont:[Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
-
-	[WDirView setToolTip:[NSString stringWithFormat:@"%@ (⌘D)", [WDirView stringValue]]];
+	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
 
 	requestSaveAction = nil;
-	
 	sharedRController = self;
+	currentConsoleWidth = -1;
 	pendingDocsToOpen = [[NSMutableArray alloc] init];
+
+	NSFileManager *fm = [NSFileManager defaultManager];
 
 	// Register AppleScript handler for kAEOpenDocuments eventID
 	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self 
 													   andSelector:@selector(handleAppleEventAEOpenDocuments:withReplyEvent:) 
 													 forEventClass:kCoreEventClass 
 														andEventID:kAEOpenDocuments];
+
+	[WDirView setToolTip:[NSString stringWithFormat:@"%@ (⌘D)", [WDirView stringValue]]];
+
+	[consoleTextView setConsoleMode: YES];
+	[consoleTextView setEditable:YES];
+	[consoleTextView setFont:[Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
+	[consoleTextView setDrawsBackground:NO];
+	[[consoleTextView enclosingScrollView] setDrawsBackground:NO];
 
 	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
@@ -337,17 +343,30 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[lm release];
 	[origTS release];
 
+	[consoleTextView setTextColor:[consoleColors objectAtIndex:iInputColor]];
+	[consoleTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
+	[[consoleTextView textStorage] setDelegate:self];
+
+
 	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];
 
-	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
+	[self setupToolbar];
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
-	[consoleTextView setDrawsBackground:NO];
-	[[consoleTextView enclosingScrollView] setDrawsBackground:NO];
-	
+	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
+	[RConsoleWindow setDocumentEdited:YES];
+
+	SLog(@" - working directory setup timer");
+	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+												 target:self
+											   selector:@selector(showWorkingDir:)
+											   userInfo:0
+												repeats:YES];
+
+
 	SLog(@" - load preferences");
 	[self updatePreferences]; // first update, then add self
 	[[Preferences sharedPreferences] addDependent: self];
-	
+
 	SLog(@" - init R_LIBS");	
 	{ // first initialize R_LIBS if necessary
 		NSString *prefStr = [Preferences stringForKey:miscRAquaLibPathKey withDefault:nil];
@@ -357,10 +376,10 @@ static inline const char* NSStringUTF8String(NSString* self)
 		if (flag) {
 			char *cRLIBS = getenv("R_LIBS");
 			NSString *addPath = [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath];
-			if (![[NSFileManager defaultManager] fileExistsAtPath:addPath]) { // make sure the directory exists
-				[[NSFileManager defaultManager] createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
-				[[NSFileManager defaultManager] createDirectoryAtPath:[[NSString stringWithFormat:@"~/Library/R/%@", Rapp_R_version_short] stringByExpandingTildeInPath] attributes:nil];
-				[[NSFileManager defaultManager] createDirectoryAtPath:addPath attributes:nil];
+			if (![fm fileExistsAtPath:addPath]) { // make sure the directory exists
+				[fm createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
+				[fm createDirectoryAtPath:[[NSString stringWithFormat:@"~/Library/R/%@", Rapp_R_version_short] stringByExpandingTildeInPath] attributes:nil];
+				[fm createDirectoryAtPath:addPath attributes:nil];
 			}
 			if (cRLIBS && *cRLIBS)
 				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
@@ -378,7 +397,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 		NSBundle *rfb = [NSBundle bundleWithIdentifier:@"org.r-project.R-framework"];
 		if (!rfb) {
 			SLog(@" * problem: R_HOME is not set and I can't find the framework bundle");
-			if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/Frameworks/R.framework/Resources/bin/R"]) {
+			if ([fm fileExistsAtPath:@"/Library/Frameworks/R.framework/Resources/bin/R"]) {
 				SLog(@" * I'm being desperate and I found R at /Library/Frameworks/R.framework - so I'll use it, wish me luck");
 				setenv("R_HOME", "/Library/Frameworks/R.framework/Resources", 1);
 			} else
@@ -436,7 +455,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 #endif
 #ifdef arch_lib_nss
 	if (!getenv("R_ARCH")) {
-		if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString stringWithUTF8String:getenv("R_HOME")] stringByAppendingString: arch_lib_nss]])
+		if ([fm fileExistsAtPath:[[NSString stringWithUTF8String:getenv("R_HOME")] stringByAppendingString: arch_lib_nss]])
 			setenv("R_ARCH", arch_str, 1);
 	}
 #else
@@ -495,7 +514,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 	BOOL noReenter = [Preferences flagForKey:@"REngine prevent reentrance"];
 	if (noReenter == YES) preventReentrance = YES;
-	
+
 	SLog(@" - init R");
 	[[[REngine alloc] initWithHandler:self arguments:args] setCocoaHandler:self];
 
@@ -510,65 +529,42 @@ static inline const char* NSStringUTF8String(NSString* self)
 		]];
 
 	SLog(@" - other widgets");
-	{
-		NSMutableDictionary *md = [[consoleTextView typingAttributes] mutableCopy];
-		[md setObject: [consoleColors objectAtIndex:iInputColor] forKey: @"NSColor"];
-		[consoleTextView setTypingAttributes:[NSDictionary dictionaryWithDictionary:md]];
-		[md release];
-	}
-	[consoleTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
-	[[consoleTextView textStorage] setDelegate:self];
-		
-	//	[consoleTextView changeColor: inputColor];
-	[consoleTextView display];
-	[self setupToolbar];
 
-	[RConsoleWindow setDocumentEdited:YES];
-	
-	SLog(@" - setup timer");
-	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
-												 target:self
-											   selector:@selector(showWorkingDir:)
-											   userInfo:0
-												repeats:YES];
-	
 	hist=[[History alloc] init];
-	
-	
+
     BOOL WantThread = ([Preferences flagForKey:@"Redirect stdout/err"] != NO);
-	
 	SLog(@" - setup stdout/err grabber");
-    if (WantThread){ // re-route the stdout to our own file descriptor and use ConnectionCache on it
-        int pfd[2];
-        pipe(pfd);
-        dup2(pfd[1], STDOUT_FILENO);
-        close(pfd[1]);
+	if (WantThread){ // re-route the stdout to our own file descriptor and use ConnectionCache on it
+		int pfd[2];
+		pipe(pfd);
+		dup2(pfd[1], STDOUT_FILENO);
+		close(pfd[1]);
         
-        stdoutFD=pfd[0];
-		
-        pipe(pfd);
+		stdoutFD=pfd[0];
+
+		pipe(pfd);
 #ifndef PLAIN_STDERR
 		if ([Preferences flagForKey:@"Ignore stderr"] != YES) {
 			dup2(pfd[1], STDERR_FILENO);
 			close(pfd[1]);
 		}
 #endif
-        
-        stderrFD=pfd[0];
-		
+
+		stderrFD=pfd[0];
+
 		[self addConnectionLog];
-    }
+	}
 	
 	SLog(@" - set cwd and load history");
 	[historyView setDoubleAction: @selector(historyDoubleClick:)];
-	
-	currentConsoleWidth = -1;
-	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByExpandingTildeInPath]];
+
+	[fm changeCurrentDirectoryPath: [[Preferences stringForKey:initialWorkingDirectoryKey withDefault:@"~"] stringByExpandingTildeInPath]];
 	if ([Preferences flagForKey:importOnStartupKey withDefault:YES]) {
 		[self doLoadHistory:nil];
 	}
 
 	SLog(@" - awake is done");
+
 }
 
 - (NSString*) home
@@ -578,6 +574,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
 {
+
 	NSString *fname = nil;
 	SLog(@"RController:applicationDidFinishLaunching");
 	SLog(@" - clean up and flush console");
@@ -640,9 +637,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 		SLog(@"RController.applicationDidFinishLaunching - load history file %@", fname);
 	}
     
-	SLog(@"RController.applicationDidFinishLaunching - show main window");
-	[RConsoleWindow makeKeyAndOrderFront:self];
-
 	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
 	if ([pendingDocsToOpen count] > 0) {
 		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
@@ -701,6 +695,9 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 	// Register us as service provider
 	[NSApp setServicesProvider:self];
+
+	SLog(@"RController.applicationDidFinishLaunching - show main window");
+	[RConsoleWindow makeKeyAndOrderFront:self];
 
 }
 
