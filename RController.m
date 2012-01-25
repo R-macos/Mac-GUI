@@ -697,7 +697,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[NSApp setServicesProvider:self];
 
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
-	[RConsoleWindow makeKeyAndOrderFront:self];
 
 }
 
