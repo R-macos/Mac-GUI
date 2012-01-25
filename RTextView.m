@@ -42,6 +42,15 @@
 #define kTALinked    @"link"
 #define kTAVal       @"x"
 
+static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
+{
+	typedef int (*RPARSERCONTEXTFORPOSITIONMethodPtr)(RTextView*, SEL, NSUInteger);
+	static RPARSERCONTEXTFORPOSITIONMethodPtr _RPARSERCONTEXTFORPOSITION;
+	if (!_RPARSERCONTEXTFORPOSITION) _RPARSERCONTEXTFORPOSITION = (RPARSERCONTEXTFORPOSITIONMethodPtr)[self methodForSelector:@selector(parserContextForPosition:)];
+	int r = _RPARSERCONTEXTFORPOSITION(self, @selector(parserContextForPosition:), index);
+	return r;
+}
+
 
 // declared external
 BOOL RTextView_autoCloseBrackets = YES;
@@ -200,7 +209,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 				// Check if something is selected and wrap it into matching pair characters and preserve the selection
 				// - in RConsole only if selection is in the last line
-				if(((console && [[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || !console) 
+				if((([self isRConsole] && [[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || ![self isRConsole]) 
 					&& [self wrapSelectionWithPrefix:[NSString stringWithFormat:@"%c", ck] suffix:complement]) {
 					SLog(@"RTextView: selection was wrapped with auto-pairs");
 					return;
@@ -352,24 +361,27 @@ BOOL RTextView_autoCloseBrackets = YES;
 	int i = thisLine.location;
 	BOOL skip = NO;
 	unichar c;
-	while (i < position && i >= 0) {
+	while (i < position) {
 		c = CFStringGetCharacterAtIndex((CFStringRef)string, i);
 		if (skip) {
 			skip = NO;
 		} else {
-			if (c == '\\' && (context == pcStringDQ || context == pcStringSQ || context == pcStringBQ)) {
+			if (c == '\\' && (context < pcComment)) {
 				skip = YES;
-			} else if (c == '"') {
+			}
+			else if (c == '"') {
 				if (context == pcStringDQ)
 					context = pcExpression;
 				else if (context == pcExpression)
 					context = pcStringDQ;
-			} else if (c == '\'') {
+			}
+			else if (c == '\'') {
 				if (context == pcStringSQ)
 					context = pcExpression;
 				else if (context == pcExpression)
 					context = pcStringSQ;
-			} else if (c == '`') {
+			}
+			else if (c == '`') {
 				if (context == pcStringBQ)
 					context = pcExpression;
 				else if (context == pcExpression)
@@ -377,9 +389,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 			}
 			else if(context == pcExpression) {
 				if(isRdDocument && c == '%')
-					return pcComment;
+					context = pcComment;
 				else if(c == '#')
-					return pcComment;
+					context = pcComment;
 			}
 
 		}
@@ -793,7 +805,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	NSString *helpString;
 	NSString *parseString = [self string];
 	NSRange  selectedRange = [self selectedRange];
-	NSRange parseRange;
+	NSRange parseRange = NSMakeRange(0, [parseString length]);
 
 	int parentheses = 0;
 	int index       = 0;
@@ -837,14 +849,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 	SLog(@" - invalid current word -> start parsing for current function scope");
 
 	// if we're in the RConsole do parse the current line only
-	if(console) {
-		parseRange = [parseString lineRangeForRange:NSMakeRange(selectedRange.location, 0)];
-		// ignore any prompt signs
-		parseRange.location += 1;
-		parseRange.length -= 1;
-	} else {
-		parseRange = NSMakeRange(0, [parseString length]);
-	}
+	if([self isRConsole] && ([[self delegate] lastCommittedLength] <= selectedRange.location))
+		parseRange = NSMakeRange([[self delegate] lastCommittedLength], 
+				[parseString length]-[[self delegate] lastCommittedLength]);
 
 	// sanety check; if it fails bail
 	if(selectedRange.location - parseRange.location <= 0) {
@@ -929,6 +936,107 @@ BOOL RTextView_autoCloseBrackets = YES;
 	return console;
 }
 
+- (IBAction)makeASCIIconform:(id)sender
+{
+
+	
+	NSString *strToConvert = nil;
+	NSRange replaceRange;
+	if([self selectedRange].length)
+		replaceRange = [self selectedRange];
+	else if([self getRangeForCurrentWord].length)
+		replaceRange = [self getRangeForCurrentWord];
+	else
+		return;
+
+	// for Rconsole only allow non-committed strings
+	if([(RTextView*)self isRConsole] && ([[RController sharedController] lastCommittedLength] > replaceRange.location)) {
+		NSUInteger cl = [[RController sharedController] lastCommittedLength];
+		if(NSMaxRange(replaceRange) < cl) {
+			NSBeep();
+			return;
+		}
+		replaceRange = NSMakeRange(cl, NSMaxRange(replaceRange) - cl);
+	}
+
+	strToConvert = [[self string] substringWithRange:replaceRange];
+
+	NSMutableString *theEncodedString = [NSMutableString stringWithString:@""];
+	unichar c;
+	NSInteger theCharIndex;
+	NSInteger theCharIndexInTextView = replaceRange.location;
+	for (theCharIndex=0; theCharIndex<[strToConvert length]; theCharIndex++, theCharIndexInTextView++) {
+
+		c = CFStringGetCharacterAtIndex((CFStringRef)strToConvert, theCharIndex);
+		// if c is non-ASCII and inside of "" or '' quotes transform it
+		//  - this ignores all c inside of comments
+		if (c > 127 && RPARSERCONTEXTFORPOSITION((RTextView*)self, theCharIndexInTextView) < pcStringBQ)
+			[theEncodedString appendFormat: @"\\u%04x", c];
+		else
+			[theEncodedString appendFormat: @"%C", c];
+
+	}
+
+	// register for undo
+	[self shouldChangeTextInRange:replaceRange replacementString:theEncodedString];
+	[self replaceCharactersInRange:replaceRange withString:theEncodedString];
+
+}
+
+- (IBAction)unescapeUnicode:(id)sender
+{
+
+	NSRange replaceRange;
+	if([self selectedRange].length)
+		replaceRange = [self selectedRange];
+	else if([self getRangeForCurrentWord].length)
+		replaceRange = [self getRangeForCurrentWord];
+	else
+		return;
+
+	// for Rconsole only allow non-committed strings
+	if([(RTextView*)self isRConsole] && ([[self delegate] lastCommittedLength] > replaceRange.location)) {
+		NSUInteger cl = [[self delegate] lastCommittedLength];
+		if(NSMaxRange(replaceRange) < cl) {
+			NSBeep();
+			return;
+		}
+		replaceRange = NSMakeRange(cl, NSMaxRange(replaceRange) - cl);
+	}
+
+	NSMutableString *strToConvert = [NSMutableString stringWithString:[[self string] substringWithRange:replaceRange]];
+
+	NSString *re = @"(\\\\[uU]([0-9a-fA-F]{1,4}))";
+	NSRange searchRange = NSMakeRange(0, [strToConvert length]);
+	while([strToConvert isMatchedByRegex:re inRange:searchRange]) {
+		[strToConvert flushCachedRegexData];
+		NSRange replaceRange = [strToConvert rangeOfRegex:re capture:0L];
+		NSRange escSeqRange  = [strToConvert rangeOfRegex:re capture:2L];
+		[strToConvert replaceCharactersInRange:replaceRange withString:
+			[NSString stringWithFormat:@"%C", (unichar) strtol([[strToConvert substringWithRange:escSeqRange] UTF8String], NULL, 16)]];
+		[strToConvert flushCachedRegexData];
+		searchRange = NSMakeRange(replaceRange.location, [strToConvert length]-replaceRange.location);
+	}
+
+	[self shouldChangeTextInRange:replaceRange replacementString:strToConvert];
+	[self replaceCharactersInRange:replaceRange withString:strToConvert];
+
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+
+	if ([menuItem action] == @selector(makeASCIIconform:))
+		return ([self selectedRange].length || (([(RTextView*)self getRangeForCurrentWord].length) && RPARSERCONTEXTFORPOSITION((RTextView*)self, [self selectedRange].location) < pcStringBQ)) ? YES : NO;
+
+	if ([menuItem action] == @selector(unescapeUnicode:))
+		return ([self selectedRange].length || ([(RTextView*)self getRangeForCurrentWord].length)) ? YES : NO;
+
+	return YES;
+
+}
+
+
 #pragma mark -
 
 - (void)changeFont:(id)sender
@@ -936,12 +1044,12 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	NSFont *font= [[NSFontPanel sharedFontPanel] panelConvertFont:
 			[NSUnarchiver unarchiveObjectWithData:
-				[[NSUserDefaults standardUserDefaults] dataForKey:console ? RConsoleDefaultFont : RScriptEditorDefaultFont]]];
+				[[NSUserDefaults standardUserDefaults] dataForKey:[self isRConsole] ? RConsoleDefaultFont : RScriptEditorDefaultFont]]];
 
 	if(!font) return;
 
 	// If user selected something change the selection's font only
-	if(!console && ([[[[self window] windowController] document] isRTF] || [self selectedRange].length)) {
+	if(![self isRConsole] && ([[[[self window] windowController] document] isRTF] || [self selectedRange].length)) {
 		// register font change for undo
 		NSRange r = [self selectedRange];
 		[self shouldChangeTextInRange:r replacementString:[[self string] substringWithRange:r]];

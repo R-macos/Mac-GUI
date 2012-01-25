@@ -182,7 +182,7 @@ static RController* sharedRController;
 	processingEvents = NO;
 	breakPending = NO;
 	isREditMode = NO;
-	outputPosition = promptPosition = committedLength = 0;
+	outputPosition = promptPosition = committedLength = lastCommittedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
 	forceStdFlush = NO;
@@ -961,6 +961,7 @@ static RController* sharedRController;
 -(IBAction) clearConsole:(id)sender {
 	if (promptPosition > 0) {
 		committedLength -= promptPosition;
+		lastCommittedLength = committedLength;
 		outputPosition = 0;
 		[consoleTextView replaceCharactersInRange: NSMakeRange(0,promptPosition) withString:@""];
 		promptPosition = 0;
@@ -1181,6 +1182,7 @@ extern BOOL isTimeToFinish;
 				if (tsc == '\a')
 					NSBeep();
 				else if (tsc == '\b' && outputPosition > 0) {
+					lastCommittedLength = committedLength;
 					int ocl = committedLength;
 					committedLength = 0;
 					[consoleTextView deleteBackward:self];
@@ -1189,6 +1191,7 @@ extern BOOL isTimeToFinish;
 					if (outputPosition <= promptPosition) promptPosition--;
 					if (outputPosition <= csr.location) csr.location--;
 					outputPosition--;
+					lastCommittedLength = committedLength;
 				}
 				else break;
 				cl++;
@@ -1216,6 +1219,7 @@ extern BOOL isTimeToFinish;
 				SLog(@"RController writeConsoleDirectly, beginEditing");
 				[textStorage beginEditing];
 				inEditing = YES;
+				lastCommittedLength = committedLength;
 				committedLength=0;
 				if (outputOverwrite) {
 					int otl = [txt length];
@@ -1247,6 +1251,7 @@ extern BOOL isTimeToFinish;
 				if (outputPosition <= origSel.location) origSel.location += tl + delta;
 				outputPosition += tl;
 				[textStorage endEditing];
+				lastCommittedLength = committedLength;
 				inEditing = NO;
 				SLog(@"RController writeConsoleDirectly, endEditing");
 				[consoleTextView setSelectedRange:origSel];
@@ -1285,6 +1290,7 @@ extern BOOL isTimeToFinish;
 			committedLength=promptPosition+promptLength;
 		}
 		committedLength=promptPosition+promptLength;
+		lastCommittedLength = committedLength;
 		[textStorage endEditing];
 		SLog(@"RController handleWritePrompt: '%@', endEditing", prompt);
 		{
@@ -1307,7 +1313,7 @@ extern BOOL isTimeToFinish;
 		textLength = [[consoleTextView textStorage] length];
 		[consoleTextView setTextColor:[consoleColors objectAtIndex:iInputColor] range:NSMakeRange(committedLength, textLength-committedLength)];
 		outputPosition=committedLength=textLength;
-		
+		lastCommittedLength = committedLength;
 		// remove undo actions to prevent undo across prompts
 		[[consoleTextView undoManager] removeAllActions];
 	}
@@ -3617,6 +3623,11 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 	if(text == nil) text = @"";
 
+	if(![[self statusLineText] isEqualToString:text]) {
+		if(lastFunctionForHint) [lastFunctionForHint release];
+		lastFunctionForHint = nil;
+	}
+
 	// Adjust status line to show a single line in the middle of the status bar
 	// otherwise to come up with at least two visible lines
 	float w = NSSizeToCGSize([text sizeWithAttributes:[NSDictionary dictionaryWithObject:[statusLine font] forKey:NSFontAttributeName]]).width + 2.0f;
@@ -3678,6 +3689,11 @@ This method calls the showHelpFor method of the Help Manager which opens
 - (NSView*) searchToolbarView
 {
 	return helpSearch;
+}
+
+- (NSUInteger)lastCommittedLength
+{
+	return lastCommittedLength;
 }
 
 #pragma mark -

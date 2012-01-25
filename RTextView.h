@@ -52,25 +52,26 @@ extern BOOL RTextView_autoCloseBrackets;
 
 @interface RTextView : NSTextView
 {
-	BOOL isRConsole;
+	BOOL console;
 	BOOL isRdDocument;
 @private
-	BOOL console;
 	NSCharacterSet *separatingTokensSet;
 	NSCharacterSet *undoBreakTokensSet;
-	// NSCharacterSet *commentTokensSet;
 }
 
 - (void)setConsoleMode:(BOOL)isConsole;
 
 - (int)parserContextForPosition:(int)position;
-- (void)showHelpForCurrentFunction;
-- (void)currentFunctionHint;
+- (void) showHelpForCurrentFunction;
+- (void) currentFunctionHint;
 - (BOOL) wrapSelectionWithPrefix:(NSString *)prefix suffix:(NSString *)suffix;
 - (BOOL) isNextCharMarkedBy:(id)attribute withValue:(id)aValue;
 - (BOOL) isCursorAdjacentToAlphanumCharWithInsertionOf:(unichar)aChar;
 - (BOOL) shiftSelectionRight;
 - (BOOL) shiftSelectionLeft;
 - (BOOL) isRConsole;
+
+- (IBAction)makeASCIIconform:(id)sender;
+- (IBAction)unescapeUnicode:(id)sender;
 
 @end

@@ -114,7 +114,9 @@
     unsigned promptPosition;  // the last prompt is positioned at this position
 	unsigned outputPosition;  // any output (stdxx or consWrite) is to be place here, if -1 then the text can be appended
 	int outputOverwrite;      // length of text that can be overwriten on output
-	
+
+	NSUInteger lastCommittedLength;
+
     int stdoutFD;
     int stderrFD;
 	int rootFD;
@@ -314,6 +316,8 @@
 - (void)updateReInterpretEncodingMenu;
 
 - (void) helpSearchTypeChanged;
+
+- (NSUInteger)lastCommittedLength;
 
 // Service methods
 - (void)doPerformServiceRunInConsole:(NSPasteboard *)pboard userData:(NSString *)data error:(NSString **)error;

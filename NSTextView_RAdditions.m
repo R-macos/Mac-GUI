@@ -37,6 +37,14 @@
 #import "RegexKitLite.h"
 #import "RGUI.h"
 
+static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
+{
+	typedef int (*RPARSERCONTEXTFORPOSITIONMethodPtr)(RTextView*, SEL, NSUInteger);
+	static RPARSERCONTEXTFORPOSITIONMethodPtr _RPARSERCONTEXTFORPOSITION;
+	if (!_RPARSERCONTEXTFORPOSITION) _RPARSERCONTEXTFORPOSITION = (RPARSERCONTEXTFORPOSITIONMethodPtr)[self methodForSelector:@selector(parserContextForPosition:)];
+	int r = _RPARSERCONTEXTFORPOSITION(self, @selector(parserContextForPosition:), index);
+	return r;
+}
 
 @implementation NSTextView (NSTextView_RAdditions)
 
@@ -105,7 +113,7 @@
 {
 	NSRange lineRange = [[self string] lineRangeForRange:[self selectedRange]];
 	if(lineRange.location != NSNotFound && lineRange.length) {
-		if([self isKindOfClass:[RTextView class]] && [(RTextView*)self isRConsole]
+		if([(RTextView*)self isRConsole]
 			&& ([[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < [self selectedRange].location)) {
 			lineRange.location+=2;
 			lineRange.length-=2;
@@ -121,67 +129,11 @@
  */
 - (IBAction)selectEnclosingBrackets:(id)sender
 {
+
 	NSUInteger caretPosition = [self selectedRange].location;
 	NSUInteger stringLength = [[self string] length];
 
-	NSMutableString *parserString = [NSMutableString string];
-	[parserString setString:[self string]];
-
-	NSRange commentRange = NSMakeRange(0, 0);
-
-	//delete all quotes by firstly deleting all escaped '" if the escape sign \ by itself is not escaped
-	while(1) {
-		commentRange = [parserString rangeOfRegex:@"(?<!\\\\)\\\\['\"]" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
-		if(!commentRange.length) break;
-		// replace the found range by coment's length zeros
-		if(commentRange.length < 256) {
-			[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
-		} else {
-			NSMutableString *s = [[NSMutableString alloc] initWithCapacity:300];
-			[s setString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
-			NSInteger i;
-			for(i=255; i<=commentRange.length; i++)
-				[s appendString:@"0"];
-			[parserString replaceCharactersInRange:commentRange withString:s];
-			[s release];
-		}
-	}
-	commentRange = NSMakeRange(0, 0);
-	while(1) {
-		commentRange = [parserString rangeOfRegex:@"([\"']).*?\\1" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
-		if(!commentRange.length) break;
-		// replace the found range by coment's length zeros
-		if(commentRange.length < 256) {
-			[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
-		} else {
-			NSMutableString *s = [[NSMutableString alloc] initWithCapacity:300];
-			[s setString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
-			NSInteger i;
-			for(i=255; i<=commentRange.length; i++)
-				[s appendString:@"0"];
-			[parserString replaceCharactersInRange:commentRange withString:s];
-			[s release];
-		}
-	}
-
-	//delete all comments but remain the string length
-	commentRange = NSMakeRange(0, 0);
-	while(1) {
-		commentRange = [parserString rangeOfRegex:@"#.*" inRange:NSMakeRange(NSMaxRange(commentRange), stringLength-NSMaxRange(commentRange))];
-		if(!commentRange.length) break;
-		// replace the found range by coment's length zeros
-		if(commentRange.length < 256) {
-			[parserString replaceCharactersInRange:commentRange withString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
-		} else {
-			NSMutableString *s = [[NSMutableString alloc] initWithCapacity:300];
-			[s setString:[NSString stringWithFormat:[NSString stringWithFormat:@"%%.%dd", commentRange.length], 0]];
-			NSInteger i;
-			for(i=255; i<=commentRange.length; i++)
-				[s appendString:@"0"];
-			[parserString replaceCharactersInRange:commentRange withString:s];
-			[s release];
-		}
-	}
+	CFStringRef parserStringRef = (CFStringRef)[self string];
 
 	unichar co = ' '; // opening char
 	unichar cc = ' '; // closing char
@@ -191,10 +143,11 @@
 	NSInteger pcnt = 0; // ) counter
 	NSInteger bcnt = 0; // ] counter
 	NSInteger scnt = 0; // } counter
-	
+
 	// look for the first non-balanced closing bracket
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
-		switch(CFStringGetCharacterAtIndex((CFStringRef)parserString, i)) {
+		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
+		switch(CFStringGetCharacterAtIndex(parserStringRef, i)) {
 			case ')': 
 				if(!pcnt) {
 					co='(';cc=')';
@@ -218,19 +171,20 @@
 			case '{': scnt--; break;
 		}
 	}
-	
+
 	NSInteger start = -1;
 	NSInteger end = -1;
 	NSInteger bracketCounter = 0;
-	
-	if([parserString characterAtIndex:caretPosition] == cc)
+
+	unichar c = CFStringGetCharacterAtIndex(parserStringRef, caretPosition);
+	if(c == cc)
 		bracketCounter--;
-	if([parserString characterAtIndex:caretPosition] == co)
+	if(c == co)
 		bracketCounter++;
 
-	unichar c;
 	for(NSInteger i=caretPosition; i>=0; i--) {
-		c = CFStringGetCharacterAtIndex((CFStringRef)parserString, i);
+		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
+		c = CFStringGetCharacterAtIndex(parserStringRef, i);
 		if(c == co) {
 			if(!bracketCounter) {
 				start = i;
@@ -243,10 +197,11 @@
 		}
 	}
 	if(start < 0 ) return;
-	
+
 	bracketCounter = 0;
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
-		c = CFStringGetCharacterAtIndex((CFStringRef)parserString, i);
+		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
+		c = CFStringGetCharacterAtIndex(parserStringRef, i);
 		if(c == co) {
 			bracketCounter++;
 		}
@@ -258,10 +213,11 @@
 			bracketCounter--;
 		}
 	}
+
 	if(end < 0 || bracketCounter || end-start < 1) return;
-	
+
 	[self setSelectedRange:NSMakeRange(start, end-start)];
-	
+
 }
 
 /*
@@ -552,6 +508,7 @@
 
 
 
+
 #pragma mark -
 #pragma mark multi-touch trackpad support
 
@@ -562,7 +519,7 @@
 {
 	
 	//Font resizing for RTextViews only
-	if(![self isKindOfClass:[RTextView class]]) return;
+	if([(RTextView*)self isRConsole]) return;
 	
 	if([anEvent deltaZ]>5.0)
 		[self makeTextSizeLarger];

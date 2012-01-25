@@ -40,6 +40,7 @@
 #import "RegexKitLite.h"
 #import "RTextView.h"
 #import "HelpManager.h"
+#import "NSTextView_RAdditions.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -79,6 +80,16 @@ static inline const char* NSStringUTF8String(NSString* self)
 	const char* to_return = SPNSStringGetUTF8String(self, @selector(UTF8String));
 	return to_return;
 }
+
+static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
+{
+	typedef int (*RPARSERCONTEXTFORPOSITIONMethodPtr)(RTextView*, SEL, NSUInteger);
+	static RPARSERCONTEXTFORPOSITIONMethodPtr _RPARSERCONTEXTFORPOSITION;
+	if (!_RPARSERCONTEXTFORPOSITION) _RPARSERCONTEXTFORPOSITION = (RPARSERCONTEXTFORPOSITIONMethodPtr)[self methodForSelector:@selector(parserContextForPosition:)];
+	int r = _RPARSERCONTEXTFORPOSITION(self, @selector(parserContextForPosition:), index);
+	return r;
+}
+
 
 @implementation RDocumentWinCtrl
 
@@ -675,7 +686,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			unichar fc;
 			while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
 
-			if([textView parserContextForPosition:li+2] == 4)
+			if(RPARSERCONTEXTFORPOSITION(textView, (li+2)) == pcComment)
 				continue; // section declaration is commented out
 
 			int fp = r.location-1;
@@ -861,23 +872,24 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if (cursorLocation < 0 || cursorLocation >= completeStringLength) return;
 
 	// bail if current character is in quotes or comments
-	if([textView parserContextForPosition:cursorLocation] != pcExpression) return;
+	if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) != pcExpression) return;
 
 	unichar characterToCheck;
 	unichar openingChar = 0;
-	characterToCheck = [completeString characterAtIndex:cursorLocation];
+	characterToCheck = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 	int skipMatchingBrace = 0;
 	
 	[textView resetHighlights];
 	if (characterToCheck == ')') openingChar='(';
 	else if (characterToCheck == ']') openingChar='[';
 	else if (characterToCheck == '}') openingChar='{';
-	
+
+	unichar c;
 	// well, this is rather simple so far, because it ignores cross-quoting, but for a first shot it's not too bad ;)
 	if (openingChar) {
 		while (cursorLocation--) {
-			unichar c = [completeString characterAtIndex:cursorLocation];
-			if([textView parserContextForPosition:cursorLocation] == pcExpression) {
+			if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) == pcExpression) {
+				c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 				if (c == openingChar) {
 					if (!skipMatchingBrace) {
 						[textView highlightCharacter:cursorLocation];
@@ -897,8 +909,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		else if (characterToCheck == '{') openingChar='}';
 		if (openingChar) {
 			while ((++cursorLocation)<maxLimit) {
-				unichar c = [completeString characterAtIndex:cursorLocation];
-				if([textView parserContextForPosition:cursorLocation] == pcExpression) {
+				if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) == pcExpression) {
+					c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 					if (c == openingChar) {
 						if (!skipMatchingBrace) {
 							[textView highlightCharacter:cursorLocation];
@@ -1295,6 +1307,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 - (IBAction)executeSelection:(id)sender
 {
+
 	NSRange sr = [textView selectedRange];
 	if (sr.length>0) {
 		NSString *stx = [[[textView textStorage] string] substringWithRange:sr];
@@ -1305,7 +1318,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			NSBeep(); // nothing to execute
 		else
 			[[RController sharedController] sendInput:
-			 [[[textView textStorage] string] substringWithRange: lineRange]];
+			[[[textView textStorage] string] substringWithRange: lineRange]];
 	}
 	execNewlineFlag=YES;
 }
@@ -1470,6 +1483,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		return YES;
 	}
 
+	if ([menuItem action] == @selector(makeASCIIconform:) || [menuItem action] == @selector(unescapeUnicode:))
+		return ([textView selectedRange].length || [textView getRangeForCurrentWord].length) ? YES : NO;
 
 	return YES;
 }

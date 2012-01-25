@@ -1,5 +1,15 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-24 [HJBB]
+*	Added Format > Transformation >
+	- "Unicode Characters in R Strings to \uxxxx"
+	-- converts all non-ASCII characters inside of
+	   R strings of the selected text or current
+	   word to \uxxxx sequences
+	- "\uxxxx to Characters"
+	-- converts all \uxxxx sequences of the selected
+	   text or current word to according characters
+
 Last-update: 2012-01-19 [HJBB]
 *	In R Console ESC will only try to interrupt
 	the current task or will clear the command
