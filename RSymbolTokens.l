@@ -40,6 +40,7 @@
 
 size_t utf8strlenSym(const char * _s);
 size_t yyuoffset, yyuleng;
+int bcnt = 0;
 
 //keep track of the current utf-8 character (not byte) offset and token length
 #define YY_USER_ACTION { yyuoffset += yyuleng; yyuleng = utf8strlenSym(yytext); }
@@ -54,6 +55,8 @@ size_t yyuoffset, yyuleng;
 
 s				[ \t\n\r]
 sw				[ \t]
+nf				[\(,]
+alphanum		[0-9a-zA-Z_\.À-ﾟ]
 finv1			\.?[0-9]+[0-9a-zA-Z_\.À-ﾟ]*
 finv2			[0-9]+\.[0-9a-zA-Z_\.À-ﾟ]*
 finv3			_[0-9a-zA-Z_\.À-ﾟ]*
@@ -62,6 +65,7 @@ assign			[ \t\n\r]*(<<?-|=)[ \t\n\r]*
 line			[\-]+
 
 %x paren
+%x classparen
 
 %%
 
@@ -76,21 +80,41 @@ line			[\-]+
 
 #.*															;
 
+;															;
+{s}															;
+
 \(													{ BEGIN(paren); }
 <paren>\"([^"\\]|\\(.|[\n\r]))*\"?							;			    	/* ignore double quoted strings          */
 <paren>'([^'\\]|\\(.|[\n\r]))*'?							;			    	/* ignore single quoted strings          */
 <paren>`[^`]*`?												;			    	/* ignore backtick quoted string         */
 <paren>#.*													;
-<paren>[^\)"'`#]+												;
+<paren>[^\)"'`#]+											;
 <paren>\)											{ BEGIN(INITIAL); }
+
+<classparen>\"([^"\\]|\\(.|[\n\r]))*\"?						;			    	/* ignore double quoted strings          */
+<classparen>'([^'\\]|\\(.|[\n\r]))*'?						;			    	/* ignore single quoted strings          */
+<classparen>`[^`]*`?										;			    	/* ignore backtick quoted string         */
+<classparen>#.*												;
+<classparen>\(											{ bcnt++; }
+<classparen>[^\(\)"'`#]+									;
+<classparen>\)										{ bcnt--; if(bcnt <= 0)BEGIN(INITIAL); }
+
 \{													{ return RSYM_LEVEL_DOWN; }
 \}													{ return RSYM_LEVEL_UP; }
+
 {finv1}/{assign}function{s}*\(						{ return RSYM_INV_FUNCTION; }
 {finv2}/{assign}function{s}*\(						{ return RSYM_INV_FUNCTION; }
 {finv3}/{assign}function{s}*\(						{ return RSYM_INV_FUNCTION; }
-{fname}/{assign}function{s}*\(						{ return RSYM_FUNCTION;	}
-;															;
-{s}															;
+{nf}{s}*{fname}/{assign}function{s}*\(							;
+{fname}/{assign}function{s}*\(						{ return RSYM_FUNCTION; }
+
+set(Replace)?Method{s}*\({s}*(f{s}*=)?.*{s}*,{s}*(signature{s}*=)?.*{s}*,	{ bcnt=1; BEGIN(classparen); return RSYM_METHOD1; }
+set(Replace)?Method{s}*\({s}*signature{s}*=.*{s}*,{s}*f{s}*=.*{s}*,			{ bcnt=1; BEGIN(classparen); return RSYM_METHOD2; }
+
+setClass{s}*\({s}*(Class{s}*=)?{s}*["][^"]+["]{s}*\)		{ return RSYM_CLASS; }
+setClass{s}*\({s}*(Class{s}*=)?{s}*['][^']+[']{s}*\)		{ return RSYM_CLASS; }
+setClass{s}*\({s}*(Class{s}*=)?{s}*["][^"]+["]{s}*,			{ bcnt=1; BEGIN(classparen); return RSYM_CLASS; }
+setClass{s}*\({s}*(Class{s}*=)?{s}*['][^']+[']{s}*,			{ bcnt=1; BEGIN(classparen); return RSYM_CLASS; }
 
 <<EOF>>   						{
 	BEGIN(INITIAL);   /* make sure we return to initial state when finished! */

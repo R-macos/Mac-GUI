@@ -36,10 +36,12 @@
  */
 
 #define RSYM_FUNCTION             1
-#define RSYM_METHOD               2
-#define RSYM_PRAGMA               3
-#define RSYM_PRAGMA_LINE          4
-#define RSYM_INV_FUNCTION         5
-#define RSYM_LEVEL_UP             6
-#define RSYM_LEVEL_DOWN           7
+#define RSYM_METHOD1              2
+#define RSYM_METHOD2              3
+#define RSYM_CLASS                4
+#define RSYM_PRAGMA               5
+#define RSYM_PRAGMA_LINE          6
+#define RSYM_INV_FUNCTION         7
+#define RSYM_LEVEL_UP             8
+#define RSYM_LEVEL_DOWN           9
 #define RSYM_OTHER               10

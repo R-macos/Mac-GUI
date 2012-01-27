@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-27 [HJBB]
+*	Improved "function list" for R scripts to list
+	object declarations for setMethod, setReplaceMethod,
+	setClass as "- a_method (a_class)" and "- (a_class)"
+	resp.
+
 Last-update: 2012-01-24 [HJBB]
 *	Added Format > Transformation >
 	- "Unicode Characters in R Strings to \uxxxx"

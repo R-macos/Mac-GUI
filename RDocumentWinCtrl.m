@@ -562,9 +562,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if([[[self document] fileType] isEqualToString:ftRSource]) {
 
 		NSInteger level = 0;        // counter for function declaration inside a function declaration
-		NSInteger levelChecked = 0; // checked level counter if level > 16
+
 		// Dummy string for generating n times the string "   " for structuring the menu
 		NSString *levelTemplate = @"                                                ";
+		NSArray *d = nil;
 
 		// initialise flex
 		size_t tokenEnd, token;
@@ -577,11 +578,12 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			// NSLog(@"t %d",token);
 			switch (token) {
 				case RSYM_FUNCTION: // a valid function name was found
-					tokenRange = NSMakeRange(yyuoffset, yyuleng);
-					levelChecked = (level>16) ? 48 : (level*3);
-					fn = [NSString stringWithFormat:@" %@%@%@", [levelTemplate substringWithRange:NSMakeRange(0,levelChecked)], (level)?@" └ ":@"", [s substringWithRange:tokenRange]];
+					fn = [NSString stringWithFormat:@" %@%@%@", 
+						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
+						(level)?@" └ ":@"", 
+						[s substringWithRange:NSMakeRange(yyuoffset, yyuleng)]];
 					mi = nil;
-					SLog(@" - found identifier %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					SLog(@" - found function %d:%d \"%@\"", yyuoffset, yyuleng, fn);
 					fnf++;
 					if (yyuoffset<=sr.location) sit=pim;
 					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
@@ -592,11 +594,12 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					pim++;
 				    break;
 				case RSYM_INV_FUNCTION: // an invalid function name was found
-					tokenRange = NSMakeRange(yyuoffset, yyuleng);
-					levelChecked = (level>16) ? 48 : (level*3);
-					fn = [NSString stringWithFormat:@" %@%@%@", [levelTemplate substringWithRange:NSMakeRange(0,levelChecked)], (level)?@" └ ":@"", [s substringWithRange:tokenRange]];
+					fn = [NSString stringWithFormat:@" %@%@%@", 
+						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
+						(level)?@" └ ":@"", 
+						[s substringWithRange:NSMakeRange(yyuoffset, yyuleng)]];
 					mi = nil;
-					SLog(@" - found identifier %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					SLog(@" - found invalid function %d:%d \"%@\"", yyuoffset, yyuleng, fn);
 					fnf++;
 					if (yyuoffset<=sr.location) sit=pim;
 					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
@@ -609,14 +612,65 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					[mi release];
 					pim++;
 					break;
-				case RSYM_METHOD: // not yet implemented
+				case RSYM_METHOD1: // setMethod(f, sig)
+					d = [s captureComponentsMatchedByRegex:@"(?m)([\"'])([^\"']+)\\1[^\"']+?([\"'])([^\"']+)\\3" range:NSMakeRange(yyuoffset, yyuleng)];
+					if(d && [d count] == 5) {
+						fn = [NSString stringWithFormat:@" %@%@- %@ (%@)", 
+							[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
+							(level)?@" └ ":@"", 
+							[d objectAtIndex:2], 
+							[d lastObject]];
+						mi = nil;
+						SLog(@" - found method1 %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+						fnf++;
+						if (yyuoffset<=sr.location) sit=pim;
+						mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+						[mi setTag:yyuoffset];
+						[mi setTarget:self];
+						[fnm addItem:mi];
+						[mi release];
+						pim++;
+					}
+				    break;
+				case RSYM_METHOD2: // setMethod(sig, f)
+					d = [s captureComponentsMatchedByRegex:@"(?m)([\"'])([^\"']+)\\1[^\"']+?([\"'])([^\"']+)\\3" range:NSMakeRange(yyuoffset, yyuleng)];
+					if(d && [d count] == 5) {
+						fn = [NSString stringWithFormat:@" %@%@- %@ (%@)", 
+							[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
+							(level)?@" └ ":@"", 
+							[d lastObject], 
+							[d objectAtIndex:2]];
+						mi = nil;
+						SLog(@" - found method2 %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+						fnf++;
+						if (yyuoffset<=sr.location) sit=pim;
+						mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+						[mi setTag:yyuoffset];
+						[mi setTarget:self];
+						[fnm addItem:mi];
+						[mi release];
+						pim++;
+					}
+				    break;
+				case RSYM_CLASS: // setClass
 					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+					fn = [NSString stringWithFormat:@" %@%@- (%@)", 
+						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
+						(level)?@" └ ":@"", 
+						[[s substringWithRange:tokenRange] stringByMatching:@"([\"'])([^\"']+)\\1" capture:2L]];
+					mi = nil;
+					SLog(@" - found class %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					fnf++;
+					if (yyuoffset<=sr.location) sit=pim;
+					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
+					[mi setTag:yyuoffset];
+					[mi setTarget:self];
+					[fnm addItem:mi];
+					[mi release];
+					pim++;
 				    break;
 				case RSYM_PRAGMA: // a literal pragma mark was found; it will displayed in blue to structure large R scripts
-					tokenRange = NSMakeRange(yyuoffset, yyuleng);
-					fn = [s substringWithRange:tokenRange];
-					NSRange r = [fn rangeOfRegex:@"^(#pragma\\s+mark\\s+)(.*?)\\s*$" capture:2L];
-					fn = [fn substringWithRange:r];
+					fn = [[s substringWithRange:NSMakeRange(yyuoffset, yyuleng)] stringByMatching:@"^(#pragma\\s+mark\\s+)(.*?)\\s*$" capture:2L];
 					mi = nil;
 					SLog(@" - found pragma %d:%d \"%@\"", yyuoffset, yyuleng, fn);
 					fnf++;
@@ -632,7 +686,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					pim++;
 					break;
 				case RSYM_PRAGMA_LINE: // insert a menu separator line
-					tokenRange = NSMakeRange(yyuoffset, yyuleng);
 					mi = nil;
 					SLog(@" - found identifier for separator");
 					fnf++;
@@ -660,7 +713,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			tokenEnd = NSMaxRange(tokenRange) - 1;
 
 		}
-		
+
 	}
 	else if([[[self document] fileType] isEqualToString:ftRdDoc]) {
 		while (1) {
