@@ -44,7 +44,7 @@
 
 	_theFont = [font retain];
 
-	[super setFont:[[NSFontManager sharedFontManager] convertFont:font toSize:11.0f]];
+	[super setFont:[[NSFontManager sharedFontManager] convertFont:font toSize:9.0f]];
 
 	NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:[_theFont displayName]];
 	NSMutableParagraphStyle *paraStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
