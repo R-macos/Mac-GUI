@@ -501,8 +501,10 @@ create the UI for the document.
 
 		if(![errMessage length] || [errMessage isEqualToString:@"• "])
 			errMessage = (reportSuccess) ? NLS(@"Check was successful.") : @"";
-		else
+		else {
 			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
+			errMessage = [errMessage stringByReplacingOccurrencesOfString:[inputFile lastPathComponent] withString:NLS(@"Rd file")];
+		}
 
 		if(![errMessage length]) {
 			[xx release];

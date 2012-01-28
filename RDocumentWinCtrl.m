@@ -720,17 +720,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 			NSError *err = nil;
 
-			NSRange r = [s rangeOfRegex:@"\\\\(s(ynopsis\\{|ource\\{|e(ction\\{|ealso\\{))|Rd(Opts\\{|version\\{)|n(ote\\{|ame\\{)|concept\\{|title\\{|Sexpr(\\{|\\[)|d(ocType\\{|e(scription\\{|tails\\{))|usage\\{|e(ncoding\\{|xamples\\{)|value\\{|keyword\\{|format\\{|a(uthor\\{|lias\\{|rguments\\{)|references\\{)" options:0 inRange:NSMakeRange(oix,strLength-oix) capture:1 error:&err];
+			NSRange r = [s rangeOfRegex:@"\\\\(s(ynopsis\\{|ource\\{|ubsection\\{|e(ction\\{|ealso\\{))|Rd(Opts\\{|version\\{)|n(ote\\{|ame\\{)|concept\\{|title\\{|Sexpr(\\{|\\[)|d(ocType\\{|e(scription\\{|tails\\{))|usage\\{|e(ncoding\\{|xamples\\{)|value\\{|keyword\\{|format\\{|a(uthor\\{|lias\\{|rguments\\{)|references\\{)" options:0 inRange:NSMakeRange(oix,strLength-oix) capture:1 error:&err];
 			// RdOpts{, Rdversion{, Sexpr[, Sexpr{, alias{, arguments{, author{, concept{, description{, details{, docType{, encoding{, examples{, format{, keyword{, name{, note{, references{, section{, seealso{, source{, synopsis{, title{, usage{, value{
 
 			// Break if nothing is found
 			if (!r.length) break;
+			if (err) break;
 
-			oix=NSMaxRange(r);
-
-			// due to finial bracket decrease range length by 1
-			r.length--;
-			fn = [s substringWithRange:r];
+			oix = NSMaxRange(r);
 
 			SLog(@" - potential section at %d \"\"", r.location, fn);
 
@@ -741,6 +738,33 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 			if(RPARSERCONTEXTFORPOSITION(textView, (li+2)) == pcComment)
 				continue; // section declaration is commented out
+
+			// due to finial bracket decrease range length by 1
+			r.length--;
+			fn = [s substringWithRange:r];
+
+			// get (sub)section name
+			if([fn isEqualToString:@"section"] || [fn isEqualToString:@"subsection"]) {
+				BOOL found = NO;
+				NSInteger start = oix;
+				NSInteger i = start;
+				NSInteger nameLen = 0;
+				while(i < strLength) {
+					if( CFStringGetCharacterAtIndex((CFStringRef)s,i) == '}' ) {
+						found = YES;
+						break;
+					}
+					i++;
+					nameLen++;
+					if( nameLen > 99 ) {
+						break;
+					}
+				}
+				fn = [NSString stringWithFormat:@"%@ - %@%@", 
+					fn, 
+					[s substringWithRange:NSMakeRange(start, nameLen)], 
+					(found) ? @"" : (nameLen<100) ? @"~" : @"…"];
+			}
 
 			int fp = r.location-1;
 			

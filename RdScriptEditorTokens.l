@@ -55,8 +55,8 @@ size_t yyuoffset, yyuleng;
 s				[ \t\n\r]+
 break			[^a-zA-Z_0-9À-ﾟ]
 
-section			\\(s(ynopsis|ource|e(ction|ealso))|Rd(Opts|version)|n(ote|ame)|concept|title|Sexpr|d(ocType|e(scription|tails))|usage|e(ncoding|xamples)|value|keyword|format|a(uthor|lias|rguments)|references)
-macrowarg		\\(s(trong|ubsection|pecial|amp|Quote)|href|newcommand|c(ite|o(de|mmand))|t(estonly|abular)|i(tem(ize)?|f(else)?)|S(3method|4method)|o(ut|ption)|d(ont(show|test|run)|e(scribe|qn)|fn|Quote)|CRANpkg|url|p(kg|reformatted)|e(n(c|d|umerate|v)|qn|m(ph|ail))|v(erb|ar)|kbd|fi(le|gure)|link(S4class)?|acronym|renewcommand|method|b(old|egin))
+section			\\(s(ynopsis|ource|ubsection|e(ction|ealso))|Rd(Opts|version)|n(ote|ame)|concept|title|Sexpr|d(ocType|e(scription|tails))|usage|e(ncoding|xamples)|value|keyword|format|a(uthor|lias|rguments)|references)
+macrowarg		\\(s(trong|pecial|amp|Quote)|href|newcommand|c(ite|o(de|mmand))|t(estonly|abular)|i(tem(ize)?|f(else)?)|S(3method|4method)|o(ut|ption)|d(ont(show|test|run)|e(scribe|qn)|fn|Quote)|CRANpkg|url|p(kg|reformatted)|e(n(c|d|umerate|v)|qn|m(ph|ail))|v(erb|ar)|kbd|fi(le|gure)|link(S4class)?|acronym|renewcommand|method|b(old|egin))
 macrowoarg		\\(R|cr|tab|item|dots|l(dots|eft)|right|ge)
 macrogen		\\[a-zA-Z0-9_]+
 
@@ -167,6 +167,7 @@ references
 section
 seealso
 source
+subsection
 synopsis
 title
 usage
@@ -217,7 +218,6 @@ sQuote
 samp
 special
 strong
-subsection
 tabular
 testonly
 url
