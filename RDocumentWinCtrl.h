@@ -74,7 +74,8 @@ extern NSColor *shColorIdentifier;
 	BOOL deleteBackward;
 	BOOL plainFile; // overriders preferences - if YES syntax HL is disabled
 	BOOL argsHints; // fn args hinting
-	
+	BOOL lastLineWasCodeIndented;
+
 	int hsType; // help search type
 	
 	BOOL updating; // this flag is set while syntax coloring is changed to prevent recursive changes
@@ -110,6 +111,8 @@ extern NSColor *shColorIdentifier;
 
 - (IBAction)shiftRight:(id)sender;
 - (IBAction)shiftLeft:(id)sender;
+
+- (IBAction)tidyRCode: (id)sender;
 
 - (IBAction)convertRd2HTML:(id)sender;
 - (IBAction)convertRd2PDF:(id)sender;

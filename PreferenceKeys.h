@@ -67,6 +67,7 @@
 #define RConsoleDefaultFont    @"R Console default font"
 #define internalOrExternalKey  @"Use Internal Editor"
 #define indentNewLines  @"RScriptEditorIndentNewLines"
+#define indentNewLineAfterSimpleClause  @"RScriptEditorIndentNewLineAfterSimpleClause"
 #define highlightCurrentLine  @"RScriptEditorHighlightCurrentLine"
 #define showSyntaxColoringKey  @"Show syntax coloring"
 #define showBraceHighlightingKey  @"Show brace highlighting"

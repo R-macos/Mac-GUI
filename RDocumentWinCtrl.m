@@ -233,6 +233,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		updating=NO;
 		helpTempFile=nil;
 		execNewlineFlag=NO;
+		lastLineWasCodeIndented = NO;
 
 		texItems = [[NSArray arrayWithObjects:
 			@"R",
@@ -1033,7 +1034,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			NSString *wss = @"\n";
 			NSString *wssForClosingCurlyBracket = @"";
 			while (i<last) {
-				unichar c=[s characterAtIndex:i];
+				unichar c=CFStringGetCharacterAtIndex((CFStringRef)s,i);
 				if (initial) {
 					if (c=='\t' || c==' ') {
 						whiteSpaces++;
@@ -1044,9 +1045,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				if (c=='}' && addShift>0) addShift--;
 				i++;
 			}
+			if(lastLineWasCodeIndented && [textView parserContextForPosition:NSMaxRange(lr)] != pcComment) {
+				lastLineWasCodeIndented = NO;
+				whiteSpaces--;
+			}
 			if (whiteSpaces>0)
 				wss = [wss stringByAppendingString:[s substringWithRange:NSMakeRange(lr.location,whiteSpaces)]];
-			if(last > 0 && [s characterAtIndex:last-1] == '{' && last < NSMaxRange(lr) && [s characterAtIndex:last] == '}') {
+			if(last > 0 && CFStringGetCharacterAtIndex((CFStringRef)s,last-1) == '{' && last < NSMaxRange(lr) && [s characterAtIndex:last] == '}') {
 				wssForClosingCurlyBracket = [NSString stringWithString:wss];
 				caretIsAdjacentCurlyBrackets = YES;
 			}
@@ -1062,12 +1067,43 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				[textView doCommandBySelector:@selector(moveUp:)];
 				[textView doCommandBySelector:@selector(moveToEndOfLine:)];
 			}
+
+
+			if([Preferences flagForKey:indentNewLineAfterSimpleClause withDefault:YES]) {
+
+				// indent only next line after simple if,for,while,function commands without trailing {
+				// and if line has more opened ( than )
+				NSString *line = [[textView string] substringWithRange:lr];
+				NSInteger openedP = 0;
+				NSInteger closedP = 0;
+				unichar c;
+				for(i=0; i<[line length]; i++) {
+					if(RPARSERCONTEXTFORPOSITION(textView, i) == pcExpression) {
+						c=CFStringGetCharacterAtIndex((CFStringRef)line,i);
+						switch(c){
+							case ')':closedP++;break;
+							case '(':openedP++;break;
+						}
+					}
+				}
+				if(openedP>closedP 
+					|| [line isMatchedByRegex:@"^\\s*(if|for|while)\\s*\\([^\\)]+?\\)\\s*$"]
+					|| [line isMatchedByRegex:@"(<-|=)\\s*function\\s*\\([^\\)]+?\\)\\s*$"]) {
+
+					[textView breakUndoCoalescing];
+					[textView insertText:@"\t"];
+					lastLineWasCodeIndented = YES;
+				}
+			}
+
+			[textView setNeedsDisplayInRect:[textView frame]];
 			return YES;
 		}
 	}
 	if (showMatchingBraces && ![self plain]) {
 		if (commandSelector == @selector(deleteBackward:)) {
 			[textView setDeleteBackward:YES];
+			lastLineWasCodeIndented = NO;
 		}
 		if (commandSelector == @selector(moveLeft:))
 			[self highlightBracesWithShift: -1 andWarn:NO];
@@ -1279,6 +1315,125 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (void) setEditable: (BOOL) editable
 {
 	[textView setEditable:editable];
+}
+
+- (IBAction)tidyRCode: (id)sender
+{
+
+	NSMutableString *tidyStr = [NSMutableString string];
+	NSString *startIndentation = @"";
+
+	NSString *tempRFuncFile = [NSString stringWithFormat:@"%@/RGUI_Rtidy_func.R", NSTemporaryDirectory()];
+	NSString *tempRFile = [NSString stringWithFormat:@"%@/RGUI_Rtidy.R", NSTemporaryDirectory()];
+	NSString *tempErrFile = [NSString stringWithFormat:@"%@/RGUI_Rtidy_func_error.txt", NSTemporaryDirectory()];
+
+	if([textView selectedRange].length) {
+		[tidyStr setString:[[textView string] substringWithRange:[textView selectedRange]]];
+		startIndentation = [tidyStr stringByMatching:@"^(\\s*)" capture:1L];
+	} else
+		[tidyStr setString:[textView string]];
+
+	[tidyStr setString:[NSString stringWithFormat:@"dummy<-function(){\n%@\n}\n", tidyStr]];
+	NSString *rs = nil;
+	NSRange r;
+	NSString *comre = @"\n\\s*(#[^\n]*)";
+	while([tidyStr isMatchedByRegex:comre]) {
+		r = [tidyStr rangeOfRegex:comre capture:1L];
+		rs = [tidyStr substringWithRange:r];
+		rs = [rs stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+		[tidyStr replaceCharactersInRange:r withString:[NSString stringWithFormat:@"if(\"@_@_@_@%@\"){;}", rs]];
+		[tidyStr flushCachedRegexData];
+	}
+	[tidyStr writeToFile:tempRFuncFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
+	NSString *tidyR = [NSString stringWithFormat:
+		@"options(keep.source = FALSE)\n"
+		"options(warn = -1)\n"
+		"options(show.error.messages = TRUE)\n"
+		"source(\"%@\")\n"
+		"dump(ls(all = TRUE), file = \"%@\", control = c(\"keepInteger\", \"keepNA\", \"quoteExpressions\"))",
+			tempRFuncFile, tempRFuncFile];
+	[tidyR writeToFile:tempRFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
+
+	NSString *tidyCmd = [NSString stringWithFormat:@"system(\"R --vanilla --slave --encoding=UTF-8 < %@ 2> %@\", intern=F, wait=TRUE)", tempRFile, tempErrFile];
+
+	REngine *re = [REngine mainEngine];
+	if (![re beginProtected]) {
+		SLog(@"RDocumentWinCtrl.tidyRCode bailed because protected REngine entry failed [***]");
+		return;
+	}
+	[re executeString:tidyCmd];
+	[re endProtected];
+	
+	NSError *error1 = nil;
+	NSError *error2 = nil;
+	NSString *tidiedStr = [[[NSString alloc]
+		initWithContentsOfFile:tempRFuncFile
+			encoding:NSUTF8StringEncoding
+				error:&error1] autorelease];
+	NSString *errMessages = [[[NSString alloc]
+		initWithContentsOfFile:tempErrFile
+			encoding:NSUTF8StringEncoding
+				error:&error2] autorelease];
+
+	if(error1 != nil || error2 != nil) {
+		NSBeep();
+		NSLog(@"RDocumentWinCtrl.tidyRCode read error.");
+		return;
+	}
+	if([errMessages length]) {
+		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"(?s)^.*?\n" withString:@""];
+		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"dummy<-function\\(\\)\\{" withString:@""];
+		NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Syntax Error") 
+				defaultButton:NLS(@"OK") 
+				alternateButton:nil 
+				otherButton:nil 
+				informativeTextWithFormat:errMessages];
+
+		[alert setAlertStyle:NSWarningAlertStyle];
+		[alert runModal];
+		[[self window] makeKeyAndOrderFront:self];
+		[[self window] makeFirstResponder:textView];
+		[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+		[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+		[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+		return;
+	}
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"(?s)\\s*dummy\\s*<-\\s*function\\s*\\(\\)\\s*\\{\n" withString:@""];
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\\s*\\}\\s*$" withString:@""];
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\\}\\s*else" withString:@"} else"];
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"^ {4}" withString:startIndentation];
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\n {4}" withString:[NSString stringWithFormat:@"\n%@", startIndentation]];
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@" {4}" withString:@"\t"];
+	tidiedStr = [@"\n" stringByAppendingString:tidiedStr];
+
+	[tidyStr setString:tidiedStr];
+	[tidyStr flushCachedRegexData];
+	comre = @"(?s)(\n\\s*)(if\\s*\\(\"@_@_@_@([^\n]*?)\"\\)\\s*\\{\n\\s*\\}\n\\s*)";
+	NSRange r2;
+	NSRange r3;
+	while([tidyStr isMatchedByRegex:comre]) {
+		r  = [tidyStr rangeOfRegex:comre capture:1L];
+		r2 = [tidyStr rangeOfRegex:comre capture:2L];
+		r3 = [tidyStr rangeOfRegex:comre capture:3L];
+		rs = [[[tidyStr substringWithRange:r3] stringByReplacingOccurrencesOfString:@"\\t" withString:@"\t"] 
+			stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
+		rs = [rs stringByAppendingString:[tidyStr substringWithRange:r]];
+		[tidyStr replaceCharactersInRange:r2 withString:rs];
+		[tidyStr flushCachedRegexData];
+	}
+	if([tidyStr length])
+		[tidyStr replaceCharactersInRange:NSMakeRange(0,1) withString:@""];
+
+	if(![textView selectedRange].length)
+		[textView setSelectedRange:NSMakeRange(0, [[textView string] length])];
+	[textView insertText:tidyStr];
+
+	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+
 }
 
 - (IBAction)comment: (id)sender

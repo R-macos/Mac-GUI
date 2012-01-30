@@ -1,5 +1,17 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-01-30 [HJBB]
+*	In R Script editor pressing ENTER after a simple
+	if(), for(), while(), or function() clause or if
+	current line has more opened parenthesis than
+	closed will only indent the next line. This behavior
+	is active for preference setting "Indent new lines".
+	In addition it can be explicitly disabled if you
+	execute the following command as one line and no
+	quotes in the Terminal:
+	"defaults write org.R-project.R 
+	RScriptEditorIndentNewLineAfterSimpleClause -string NO"
+
 Last-update: 2012-01-27 [HJBB]
 *	Improved "function list" for R scripts to list
 	object declarations for setMethod, setReplaceMethod,
