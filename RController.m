@@ -1306,11 +1306,11 @@ extern BOOL isTimeToFinish;
 		lastCommittedLength = committedLength;
 		[textStorage endEditing];
 		SLog(@"RController handleWritePrompt: '%@', endEditing", prompt);
-		{
-			NSRange targetRange = NSMakeRange(committedLength,0);
-			[consoleTextView setSelectedRange:targetRange];
-			[consoleTextView scrollRangeToVisible:targetRange];
-		}
+
+		NSRange targetRange = NSMakeRange(committedLength,0);
+		[consoleTextView setSelectedRange:targetRange];
+		[consoleTextView scrollRangeToVisible:targetRange];
+
 	}
 }
 
@@ -3612,6 +3612,10 @@ This method calls the showHelpFor method of the Help Manager which opens
 			i++;
 		}
 		[consoleTextView setInsertionPointColor:[consoleColors objectAtIndex:iInputColor]];
+		NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+		[attr setDictionary:[consoleTextView typingAttributes]];
+		[attr setObject:[consoleColors objectAtIndex:iInputColor] forKey:NSForegroundColorAttributeName];
+		[consoleTextView setTypingAttributes:attr];
 	}
 	[consoleTextView setNeedsDisplay:YES];
 	SLog(@" - done, preferences updated");
