@@ -114,6 +114,30 @@
 
 #define kDefaultHistoryFile @".Rapp.history"
 
+// NSString runBash constants
+#define kBASHFileInternalexecutionUUID @"bashexeUUID"
+#define kBASHTaskOutputFilePath  @"/tmp/R_BASH_OUTPUT"
+#define kBASHTaskScriptCommandFilePath @"/tmp/R_BASH_SCRIPT_COMMAND"
+#define kBASHTaskShellVariableInputFilePathh @"/tmp/R_BASH_INPUT"
+#define kBASHTaskRedirectActionNone                 200
+#define kBASHTaskRedirectActionReplaceSection       201
+#define kBASHTaskRedirectActionReplaceContent       202
+#define kBASHTaskRedirectActionInsertAsText         203
+#define kBASHTaskRedirectActionInsertAsSnippet      204
+#define kBASHTaskRedirectActionShowAsHTML           205
+#define kBASHTaskRedirectActionShowAsTextTooltip    207
+#define kBASHTaskRedirectActionShowAsHTMLTooltip    208
+#define kBASHTaskRedirectActionLastCode             208
+#define kBASHTaskShellVariableExitShowAsHTML           @"R_TASK_EXIT_SHOW_AS_HTML"
+#define kBASHTaskShellVariableExitShowAsHTMLTooltip    @"R_TASK_EXIT_SHOW_AS_HTML_TOOLTIP"
+#define kBASHTaskShellVariableExitInsertAsSnippet      @"R_TASK_EXIT_INSERT_AS_SNIPPET"
+#define kBASHTaskShellVariableExitInsertAsText         @"R_TASK_EXIT_INSERT_AS_TEXT"
+#define kBASHTaskShellVariableExitShowAsTextTooltip    @"R_TASK_EXIT_SHOW_AS_TEXT_TOOLTIP"
+#define kBASHTaskShellVariableExitNone                 @"R_TASK_EXIT_NONE"
+#define kBASHTaskShellVariableExitReplaceContent       @"R_TASK_EXIT_REPLACE_CONTENT"
+#define kBASHTaskShellVariableExitReplaceSelection     @"R_TASK_EXIT_REPLACE_SELECTION"
+
+
 // other constants
 
 #define iBackgroundColor 0

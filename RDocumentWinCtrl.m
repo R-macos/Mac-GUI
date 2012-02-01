@@ -41,6 +41,7 @@
 #import "RTextView.h"
 #import "HelpManager.h"
 #import "NSTextView_RAdditions.h"
+#import "NSString_RAdditions.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -1024,6 +1025,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		NSRange lr = [s lineRangeForRange:ssr];
 
 		[self setStatusLineText:@""];
+
 		// line on which enter was pressed - this will be taken as guide
 		if (csr.location>0) {
 			int i = lr.location;
@@ -1031,6 +1033,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			int whiteSpaces = 0, addShift = 0;
 			BOOL initial=YES;
 			BOOL caretIsAdjacentCurlyBrackets = NO;
+			NSString *indentString = @"\t";
 			NSString *wss = @"\n";
 			NSString *wssForClosingCurlyBracket = @"";
 			while (i<last) {
@@ -1055,7 +1058,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				wssForClosingCurlyBracket = [NSString stringWithString:wss];
 				caretIsAdjacentCurlyBrackets = YES;
 			}
-			while (addShift>0) { wss=[wss stringByAppendingString:@"\t"]; addShift--; }
+			while (addShift>0) { wss=[wss stringByAppendingString:indentString]; addShift--; }
 			// add an undo checkpoint before actually committing the changes
 			[textView breakUndoCoalescing];
 			[textView insertText:wss];
@@ -1086,12 +1089,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 						}
 					}
 				}
-				if(openedP>closedP 
-					|| [line isMatchedByRegex:@"^\\s*(if|for|while)\\s*\\([^\\)]+?\\)\\s*$"]
-					|| [line isMatchedByRegex:@"(<-|=)\\s*function\\s*\\([^\\)]+?\\)\\s*$"]) {
-
+				if(openedP>closedP) {
 					[textView breakUndoCoalescing];
-					[textView insertText:@"\t"];
+					[textView insertText:indentString];
+				} 
+				else if([line isMatchedByRegex:@"^\\s*(if|for|while)\\s*\\([^\\)]+?\\)\\s*$"]
+						|| [line isMatchedByRegex:@"(<-|=)\\s*function\\s*\\([^\\)]+?\\)\\s*$"]) {
+					[textView breakUndoCoalescing];
+					[textView insertText:indentString];
 					lastLineWasCodeIndented = YES;
 				}
 			}
@@ -1320,7 +1325,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (IBAction)tidyRCode: (id)sender
 {
 
-	[self setStatusLineText:NLS(@"Formatting…")];
+	[self setStatusLineText:[NSString stringWithFormat:@"%@ (%@)", NLS(@"Formatting…"), NLS(@"press ⌘. to cancel")]];
 
 	NSMutableString *tidyStr = [NSMutableString string];
 	NSString *startIndentation = @"";
@@ -1339,6 +1344,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// get start indention for selected text
 		startIndentation = [tidyStr stringByMatching:@"^([ \t]*)" capture:1L];
 
+		// go through all empty lines and replace them by "....e_m_p_t_y....=0"
+		// to preserve the user's structure
+		[tidyStr replaceOccurrencesOfRegex:@"^[ \t]*?(?=\n)" withString:@"....e_m_p_t_y....=0"];
+		[tidyStr replaceOccurrencesOfRegex:@"\n[ \t]*?(?=\n)" withString:@"\n....e_m_p_t_y....=0"];
+
 		// prefix the selected text with n empty lines according
 		// the cursor location for possible line numbers in error message
 		NSString *string = [textView string];
@@ -1353,8 +1363,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		}
 		[tidyStr insertString:prefix atIndex:0];
 
-	} else
+	} else {
 		[tidyStr setString:[textView string]];
+		// go through all empty lines and replace them by "....e_m_p_t_y....=0"
+		// to preserve the user's structure
+		[tidyStr replaceOccurrencesOfRegex:@"\\s+$" withString:@"\n"];
+		[tidyStr replaceOccurrencesOfRegex:@"^[ \t]*?(?=\n)" withString:@"....e_m_p_t_y....=0"];
+		[tidyStr replaceOccurrencesOfRegex:@"\n[ \t]*?(?=\n)" withString:@"\n....e_m_p_t_y....=0"];
+	}
 
 
 	NSString *rs = nil;
@@ -1445,18 +1461,15 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 
 	// run tidy command as separate R session
-	NSString *tidyCmd = [NSString stringWithFormat:@"system(\"R --vanilla --slave --encoding=UTF-8 < %@ 2> %@\", intern=F, wait=TRUE)", tempRFile, tempErrFile];
-	REngine *re = [REngine mainEngine];
-	if (![re beginProtected]) {
-		SLog(@"RDocumentWinCtrl.tidyRCode bailed because protected REngine entry failed [***]");
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		[self setStatusLineText:@""];
-		return;
+	NSString *tidyCmd = [NSString stringWithFormat:@"R --vanilla --slave --encoding=UTF-8 < %@ 2> %@", tempRFile, tempErrFile];
+	NSError *bashError = nil;
+	(void)[tidyCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+
+	NSString *errMessage = @"";
+
+	if(bashError != nil) {
+		errMessage = [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey];
 	}
-	[re executeString:tidyCmd];
-	[re endProtected];
 
 	// read outputted data
 	NSError *error1 = nil;
@@ -1479,6 +1492,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[self setStatusLineText:@""];
 		return;
 	}
+	if([errMessage length])
+		errMessages = [NSString stringWithFormat:@"%@\n%@", errMessage, errMessages];
 	if([errMessages length]) {
 		// Clean error message
 		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"(?s)^.*?\n" withString:@""];
@@ -1539,14 +1554,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"(?s)^function\\s*\\(\\)\\s*\\{\n" withString:@""];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\\s*\\}\\s*$" withString:@""];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\\}\\s*else" withString:@"} else"];
+	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"[ \t]*\\.{4}e_m_p_t_y\\.{4} = 0[ \t]*" withString:@""];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"^ {4}" withString:startIndentation];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\n {4}" withString:[NSString stringWithFormat:@"\n%@", startIndentation]];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@" {4}  (?=\\S)" withString:@"\t\t"];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@" {4}" withString:@"\t"];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\n  " withString:@"\n"];
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"(\n\t+)  " withString:@"$1"];
-	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"(?s)^(\\s*if.*?\\) )(\n.*?\n\\s*)else" withString:@"$1{$2} else"];
-	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"(?s)(\n\\s*if.*?\\) )(\n.*?\n\\s*)else" withString:@"$1{$2} else"];
 	tidiedStr = [@"\n" stringByAppendingString:tidiedStr];
 
 	// Re-convert comment lines
@@ -1587,53 +1601,57 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[tidyStr replaceCharactersInRange:NSMakeRange(0,1) withString:@""];
 
 	// Re-check after formatting for parsing errors within that method ... one never knows
-	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-	[[NSString stringWithFormat:@"dummy<-function(){\n%@}\n",tidyStr] writeToFile:tempRFuncFile 
-		atomically:YES encoding:NSUTF8StringEncoding error:nil];
-	// for re-checking try only to source the formatted R code
-	tidyR = [NSString stringWithFormat:
-			@"options(keep.source = FALSE)\n"
-			"options(warn = -1)\n"
-			"options(show.error.messages = TRUE)\n"
-			"source(\"%@\")",
-				tempRFuncFile];
-	[tidyR writeToFile:tempRFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
-	if (![re beginProtected]) {
-		SLog(@"RDocumentWinCtrl.tidyRCode re-checking bailed because protected REngine entry failed [***]");
-		// Remove temporary files
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		return;
-	}
-	[re executeString:tidyCmd];
-	[re endProtected];
-	error2 = nil;
-	errMessages = [[[NSString alloc]
-		initWithContentsOfFile:tempErrFile
-			encoding:NSUTF8StringEncoding
-				error:&error2] autorelease];
-	if(error2 != nil) {
-		NSBeep();
-		NSLog(@"RDocumentWinCtrl.tidyRCode re-checking read error.");
-		// Remove temporary files
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		return;
-	}
-	if([errMessages length]) {
-		NSRunInformationalAlertPanel(NLS(@"Format R Code"), NLS(@"Sorry, formatting caused errors."), NLS(@"Ok"), nil, nil);
-		[[self window] makeKeyAndOrderFront:self];
-		[[self window] makeFirstResponder:textView];
-		// Remove temporary files
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		return;
-	}
+	// [[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+	// [[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+	// [[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+	// [[NSString stringWithFormat:@"dummy<-function(){\n%@}\n",tidyStr] writeToFile:tempRFuncFile 
+	// 	atomically:YES encoding:NSUTF8StringEncoding error:nil];
+	// // for re-checking try only to source the formatted R code
+	// tidyR = [NSString stringWithFormat:
+	// 		@"options(keep.source = FALSE)\n"
+	// 		"options(warn = -1)\n"
+	// 		"options(show.error.messages = TRUE)\n"
+	// 		"source(\"%@\")",
+	// 			tempRFuncFile];
+	// [tidyR writeToFile:tempRFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
+	//
+	// bashError = nil;
+	// (void)[tidyCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	// 
+	// if(bashError != nil) {
+	// 	NSBeep();
+	// 	NSLog(@"RDocumentWinCtrl.tidyRCode for re-checking bailed due to BASH error:\n%@", bashError);
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+	// 	[self setStatusLineText:@""];
+	// 	return;
+	// }
+	// 
+	// error2 = nil;
+	// errMessages = [[[NSString alloc]
+	// 	initWithContentsOfFile:tempErrFile
+	// 		encoding:NSUTF8StringEncoding
+	// 			error:&error2] autorelease];
+	// if(error2 != nil) {
+	// 	NSBeep();
+	// 	NSLog(@"RDocumentWinCtrl.tidyRCode re-checking read error.");
+	// 	// Remove temporary files
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+	// 	return;
+	// }
+	// if([errMessages length]) {
+	// 	NSRunInformationalAlertPanel(NLS(@"Format R Code"), [NSString stringWithFormat:@"%@", NLS(@"Sorry, formatting caused errors.")], NLS(@"Ok"), nil, nil);
+	// 	[[self window] makeKeyAndOrderFront:self];
+	// 	[[self window] makeFirstResponder:textView];
+	// 	// Remove temporary files
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+	// 	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+	// 	return;
+	// }
 
 
 	// Insert formatted R code
@@ -1915,22 +1933,21 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	if ([menuItem action] == @selector(sourceCurrentDocument:)) {
 
-		id firstResponder = [[NSApp keyWindow] firstResponder];
-
 		// disable for empty docs
 		if([[RDocumentController sharedDocumentController] currentDocument] 
-			&& ![[[[[RDocumentController sharedDocumentController] currentDocument] textView] string] length])
+			&& ![[textView string] length])
 				return NO;
 
 		// disable for Rd docs
-		if([[firstResponder delegate] respondsToSelector:@selector(isRdDocument)])
-			return ![[firstResponder delegate] isRdDocument];
-
-		return YES;
+		return ![self isRdDocument];
 	}
 
 	if ([menuItem action] == @selector(makeASCIIconform:) || [menuItem action] == @selector(unescapeUnicode:))
 		return ([textView selectedRange].length || [textView getRangeForCurrentWord].length) ? YES : NO;
+
+	if ([menuItem action] == @selector(tidyRCode:))
+		// disable for Rd docs
+		return ![self isRdDocument];
 
 	return YES;
 }

@@ -42,7 +42,7 @@
 	BOOL isEditable; // determines whether this document can be edited
 	BOOL isREdit; // set to YES by R_Edit to exit modal state on close
 	BOOL fileTypeWasChangedWhileSaving;
-
+	
 	NSPopUpButton *encodingPopUp;
 
 	NSStringEncoding documentEncoding;
@@ -70,6 +70,8 @@
 - (BOOL) checkRdDocumentWithFilePath:(NSString*)inputFile reportSuccess:(BOOL)reportSuccess;
 - (void) insertRdFunctionTemplate;
 - (void) insertRdDataTemplate;
+
+- (void) removeFiles:(NSArray*)files;
 
 - (NSTextView *)textView;
 

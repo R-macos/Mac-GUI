@@ -211,6 +211,8 @@
 		BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */; };
 		BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBE01336709A00CED44F /* RColorWellCell.h */; };
 		BCEFEBE31336709A00CED44F /* RColorWellCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBE11336709A00CED44F /* RColorWellCell.m */; };
+		BCF4B2C114D9815400F14715 /* NSString_RAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF4B2BF14D9815400F14715 /* NSString_RAdditions.h */; };
+		BCF4B2C214D9815400F14715 /* NSString_RAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF4B2C014D9815400F14715 /* NSString_RAdditions.m */; };
 		BCF5D88A14BB564A000A71F6 /* RdScriptEditorTokens.l in Sources */ = {isa = PBXBuildFile; fileRef = BCF5D88914BB564A000A71F6 /* RdScriptEditorTokens.l */; };
 		BCF5D88C14BB5666000A71F6 /* RdScriptEditorTokens.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF5D88B14BB5666000A71F6 /* RdScriptEditorTokens.h */; };
 		BCFAE71A14C5835B008762EE /* RSymbolTokens.l in Sources */ = {isa = PBXBuildFile; fileRef = BCFAE71914C5835B008762EE /* RSymbolTokens.l */; };
@@ -496,6 +498,8 @@
 		BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFontPreviewTextField.m; sourceTree = "<group>"; };
 		BCEFEBE01336709A00CED44F /* RColorWellCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RColorWellCell.h; sourceTree = "<group>"; };
 		BCEFEBE11336709A00CED44F /* RColorWellCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RColorWellCell.m; sourceTree = "<group>"; };
+		BCF4B2BF14D9815400F14715 /* NSString_RAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_RAdditions.h; sourceTree = "<group>"; };
+		BCF4B2C014D9815400F14715 /* NSString_RAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_RAdditions.m; sourceTree = "<group>"; };
 		BCF5D88914BB564A000A71F6 /* RdScriptEditorTokens.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = RdScriptEditorTokens.l; sourceTree = "<group>"; };
 		BCF5D88B14BB5666000A71F6 /* RdScriptEditorTokens.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RdScriptEditorTokens.h; sourceTree = "<group>"; };
 		BCFAE71914C5835B008762EE /* RSymbolTokens.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = RSymbolTokens.l; sourceTree = "<group>"; };
@@ -909,6 +913,8 @@
 				BC0D31991334B1410071B76A /* NSTextView_RAdditions.m */,
 				BC53A81E13BDB5ED009488EE /* NSArray_RAdditions.h */,
 				BC53A81F13BDB5ED009488EE /* NSArray_RAdditions.m */,
+				BCF4B2BF14D9815400F14715 /* NSString_RAdditions.h */,
+				BCF4B2C014D9815400F14715 /* NSString_RAdditions.m */,
 			);
 			name = "Category Additions";
 			sourceTree = "<group>";
@@ -1001,6 +1007,7 @@
 				BC884B6B14BAD86C00DEFFE0 /* RdEditorToolbar.h in Headers */,
 				BCF5D88C14BB5666000A71F6 /* RdScriptEditorTokens.h in Headers */,
 				BCFAE71C14C58372008762EE /* RSymbolTokens.h in Headers */,
+				BCF4B2C114D9815400F14715 /* NSString_RAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1257,6 +1264,7 @@
 				BC884B6C14BAD86C00DEFFE0 /* RdEditorToolbar.m in Sources */,
 				BCF5D88A14BB564A000A71F6 /* RdScriptEditorTokens.l in Sources */,
 				BCFAE71A14C5835B008762EE /* RSymbolTokens.l in Sources */,
+				BCF4B2C214D9815400F14715 /* NSString_RAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

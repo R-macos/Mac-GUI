@@ -37,6 +37,7 @@
 #import "RChooseEncodingPopupAccessory.h"
 #import "REngine.h"
 #import "HelpManager.h"
+#import "NSString_RAdditions.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -464,7 +465,8 @@ create the UI for the document.
 
 - (BOOL) checkRdDocumentWithFilePath:(NSString*)inputFile reportSuccess:(BOOL)reportSuccess
 {
-	REngine *re = [REngine mainEngine];
+
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@ (%@)", NLS(@"Check Rd document…"), NLS(@"press ⌘. to cancel")]];
 
 	NSError *error = nil;
 	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
@@ -472,103 +474,92 @@ create the UI for the document.
 	if(error != nil){
 		NSBeep();
 		NSLog(@"RDocument.checkRdDocument couldn't save a temporary file");
+		[myWinCtrl setStatusLineText:@""];
 		return NO;
 	}
 
-	if (![re beginProtected]) {
-		SLog(@"RDocument.checkRdDocument bailed because protected REngine entry failed [***]");
-		return NO;
-	}
+	NSString *convCmd = [NSString stringWithFormat:@"R --vanilla -q --slave --encoding=UTF-8 -e 'tools:::checkRd(\"%@\")'", inputFile];
+	NSError *bashError = nil;
+	NSString *errMessage = [convCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
 
-	// One could execute tools:::checkRd in the R.app directly but for some reasons
-	// it could happen that parse_rd fails or freezes. Then at least the user has the
-	// chance to kill that R process by using the Activity Monitor e.g. and not the
-	// entire R.app
-	NSString *convCmd = [NSString stringWithFormat:@"system(\"R --vanilla -q --slave --encoding=UTF-8 -e 'cat(paste(\\\"•\\\", gsub(\\\"\\\\\\\\n|\\\\\\\\r\\\",\\\"﹨n\\\",tools:::checkRd(\\\"%@\\\")), collapse=\\\"\\\\\\\\n\\\"))' 2>&1\", intern=TRUE, wait=TRUE)", inputFile];
-
-	RSEXP *xx = [re evaluateString:convCmd];
-	[re endProtected];
-	if(xx) {
-
-		NSArray *errMessageArr = [xx array];
-		if(!errMessageArr || ![errMessageArr count]) {
-			[xx release];
-			SLog(@"RDocument.checkRdDocument bailed because nothing was returned");
+	if(bashError != nil) {
+		if([bashError code] == 1) {
+			errMessage = [NSString stringWithFormat:@"%@%@%@", errMessage, ([errMessage length])?@"\n":@"", [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey]];
+		} else {
+			NSBeep();
+			NSLog(@"RDocument.checkRdDocument bailed due to BASH error:\n%@", bashError);
+			[myWinCtrl setStatusLineText:@""];
 			return NO;
 		}
-		NSString *errMessage = [errMessageArr componentsJoinedByString:@"\n"];
-		NSInteger errorMessageMaxLength = 900;
-
-		if(![errMessage length] || [errMessage isEqualToString:@"• "])
-			errMessage = (reportSuccess) ? NLS(@"Check was successful.") : @"";
-		else {
-			errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
-			errMessage = [errMessage stringByReplacingOccurrencesOfString:[inputFile lastPathComponent] withString:NLS(@"Rd file")];
-		}
-
-		if(![errMessage length]) {
-			[xx release];
-			return YES;
-		}
-
-		if([errMessage length] > errorMessageMaxLength)
-			errMessage = [[errMessage substringWithRange:NSMakeRange(0,errorMessageMaxLength)] stringByAppendingString:@"\n…"];
-
-		NSArray *errorLines = [errMessage componentsMatchedByRegex:[NSString stringWithFormat:@"%@:\\s*\\(?(\\d+)(\\)|-)?\\s*:?", NLS(@"Rd file")] capture:1L];
-
-		// Find first error line number since checkRd messages are appended and in
-		// most cases more precise
-		NSInteger errorLineNumber = -1;
-		if([errorLines count]) {
-			NSInteger i;
-			NSInteger firstErrorLine = 10000000;
-			NSInteger anErrorLine;
-			for(i=0; i<[errorLines count]; i++) {
-				anErrorLine = [(NSString*)[errorLines objectAtIndex:i] integerValue];
-				if(anErrorLine > 0 && (anErrorLine < firstErrorLine))
-					firstErrorLine = anErrorLine;
-			}
-			errorLineNumber = firstErrorLine;
-		}
-
-		NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Rd Check") 
-				defaultButton:NLS(@"OK") 
-				alternateButton:nil 
-				otherButton:nil 
-				informativeTextWithFormat:errMessage];
-
-		[alert setAlertStyle:NSWarningAlertStyle];
-		[alert runModal];
-
-		[[myWinCtrl window] makeKeyAndOrderFront:self];
-		[[myWinCtrl window] makeFirstResponder:[myWinCtrl textView]];
-
-		if(errorLineNumber >=0) {
-			NSRange currentLineRange = NSMakeRange(0, 0);
-			NSString *s = [[[myWinCtrl textView] textStorage] string];
-			NSInteger lineCounter = 0;
-
-			while(lineCounter++ < errorLineNumber)
-				currentLineRange = [s lineRangeForRange:NSMakeRange(NSMaxRange(currentLineRange), 0)];
-
-			SLog(@" - go to error line number %d", errorLineNumber);
-			// select found line
-			[[myWinCtrl textView] setSelectedRange:currentLineRange];
-			// scroll to found line
-			[[myWinCtrl textView] centerSelectionInVisibleArea:nil];
-			// remove selection after 500ms
-			[[myWinCtrl textView] performSelector:@selector(moveLeft:) withObject:nil afterDelay:0.5];
-		}
-
-		[xx release];
-
-	} else {
-		NSBeep();
-		NSLog(@"Error while checking Rd Document");
-		return NO;
 	}
 
-	return YES;
+	NSInteger errorMessageMaxLength = 900;
+
+	if(![errMessage length])
+		errMessage = (reportSuccess) ? NLS(@"Check was successful.") : @"";
+	else {
+		errMessage = [errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")];
+		errMessage = [errMessage stringByReplacingOccurrencesOfString:[inputFile lastPathComponent] withString:NLS(@"Rd file")];
+	}
+
+	if(![errMessage length]) {
+		[myWinCtrl setStatusLineText:@""];
+		return YES;
+	}
+
+	if([errMessage length] > errorMessageMaxLength)
+		errMessage = [[errMessage substringWithRange:NSMakeRange(0,errorMessageMaxLength)] stringByAppendingString:@"\n…"];
+
+	NSArray *errorLines = [errMessage componentsMatchedByRegex:[NSString stringWithFormat:@"%@:\\s*\\(?(\\d+)(\\)|-)?\\s*:?", NLS(@"Rd file")] capture:1L];
+
+	// Find first error line number since checkRd messages are appended and in
+	// most cases more precise
+	NSInteger errorLineNumber = -1;
+	if([errorLines count]) {
+		NSInteger i;
+		NSInteger firstErrorLine = 10000000;
+		NSInteger anErrorLine;
+		for(i=0; i<[errorLines count]; i++) {
+			anErrorLine = [(NSString*)[errorLines objectAtIndex:i] integerValue];
+			if(anErrorLine > 0 && (anErrorLine < firstErrorLine))
+				firstErrorLine = anErrorLine;
+		}
+		errorLineNumber = firstErrorLine;
+	}
+
+	[myWinCtrl setStatusLineText:@""];
+
+	NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Rd Check") 
+			defaultButton:NLS(@"OK") 
+			alternateButton:nil 
+			otherButton:nil 
+			informativeTextWithFormat:errMessage];
+
+	[alert setAlertStyle:NSWarningAlertStyle];
+	[alert runModal];
+
+	[[myWinCtrl window] makeKeyAndOrderFront:self];
+	[[myWinCtrl window] makeFirstResponder:[myWinCtrl textView]];
+
+	if(errorLineNumber >=0) {
+		NSRange currentLineRange = NSMakeRange(0, 0);
+		NSString *s = [[[myWinCtrl textView] textStorage] string];
+		NSInteger lineCounter = 0;
+
+		while(lineCounter++ < errorLineNumber)
+			currentLineRange = [s lineRangeForRange:NSMakeRange(NSMaxRange(currentLineRange), 0)];
+
+		SLog(@" - go to error line number %d", errorLineNumber);
+		// select found line
+		[[myWinCtrl textView] setSelectedRange:currentLineRange];
+		// scroll to found line
+		[[myWinCtrl textView] centerSelectionInVisibleArea:nil];
+		// remove selection after 500ms
+		[[myWinCtrl textView] performSelector:@selector(moveLeft:) withObject:nil afterDelay:0.5];
+	}
+
+	return NO;
+
 }
 
 - (BOOL) checkRdDocument
@@ -579,158 +570,164 @@ create the UI for the document.
 
 	BOOL success = [self checkRdDocumentWithFilePath:inputFile reportSuccess:YES];
 
-	REngine *re = [REngine mainEngine];
-
-	if (![re beginProtected]) {
-		SLog(@"RDocument.checkRdDocument bailed because protected REngine entry failed for removing temporary files[***]");
-		return NO;
-	}
-	// After 200 secs all temporary files will be deleted even if R was quitted meanwhile
-	[re executeString:[NSString stringWithFormat:@"system(\"sleep 200 && rm -f '%@'\", wait=FALSE)", inputFile]];
-	[re endProtected];
-
+	[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
+	
 	return success;
 
 }
 
 - (void) insertRdDataTemplate
 {
-	REngine *re = [REngine mainEngine];
 
-	if (![re beginProtected]) {
-		SLog(@"RDocument.insertRdDataTemplate bailed because protected REngine entry failed [***]");
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
+
+	NSError *bashError = nil;
+	NSString *templateStr = [@"R --vanilla --slave -e 'cat(unlist(prompt(Formaldehyde,NA)), sep=\"§\")'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+
+	[myWinCtrl setStatusLineText:@""];
+
+	if(bashError != nil) {
+		NSBeep();
+		NSLog(@"RDocumentWinCtrl.insertRdDataTemplate bailed due to BASH error:\n%@", bashError);
 		return;
 	}
 
-	RSEXP *xx = [re evaluateString:@"unlist(prompt(Formaldehyde,NA))"];
-	[re endProtected];
-	if(xx) {
-		NSArray *templateArr = [xx array];
-		if(!templateArr || ![templateArr count]) {
-			[xx release];
-			SLog(@"RDocument.insertRdDataTemplate bailed because nothing was returned");
-			return;
-		}
-		NSString *templateStr = [templateArr componentsJoinedByString:@"\n"];
-
-		templateStr = [templateStr stringByReplacingOccurrencesOfString:@"Formaldehyde" withString:NLS(@"DATA_NAME")];
-		templateStr = [templateStr stringByReplacingOccurrencesOfString:@"carb" withString:NLS(@"VAR_NAME_1")];
-		templateStr = [templateStr stringByReplacingOccurrencesOfString:@"optden" withString:NLS(@"VAR_NAME_2")];
-		[[myWinCtrl textView] insertText:templateStr];
-
-		NSRange newFunRange = [templateStr rangeOfString:NLS(@"DATA_NAME")];
-		[[myWinCtrl textView] setSelectedRange:newFunRange];
-		[[myWinCtrl textView] scrollRangeToVisible:newFunRange];
-
-		[xx release];
+	if(!templateStr) {
+		NSBeep();
+		NSLog(@"RDocumentWinCtrl.insertRdDataTemplate bailed; no response from called R session");
+		return;
 	}
+
+	templateStr = [templateStr stringByReplacingOccurrencesOfString:@"§" withString:@"\n"];
+	templateStr = [templateStr stringByReplacingOccurrencesOfString:@"Formaldehyde" withString:NLS(@"DATA_NAME")];
+	templateStr = [templateStr stringByReplacingOccurrencesOfString:@"carb" withString:NLS(@"VAR_NAME_1")];
+	templateStr = [templateStr stringByReplacingOccurrencesOfString:@"optden" withString:NLS(@"VAR_NAME_2")];
+	[[myWinCtrl textView] insertText:templateStr];
+
+	NSRange newFunRange = [templateStr rangeOfString:NLS(@"DATA_NAME")];
+	[[myWinCtrl textView] setSelectedRange:newFunRange];
+	[[myWinCtrl textView] scrollRangeToVisible:newFunRange];
 }
 
 - (void) insertRdFunctionTemplate
 {
-	REngine *re = [REngine mainEngine];
 
-	if (![re beginProtected]) {
-		SLog(@"RDocument.insertRdFunctionTemplate bailed because protected REngine entry failed [***]");
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
+
+	NSError *bashError = nil;
+	NSString *templateStr = [@"R --vanilla --slave -e 'cat(unlist(prompt(mean.POSIXct,NA)), sep=\"§\")'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+
+	[myWinCtrl setStatusLineText:@""];
+
+	if(bashError != nil) {
+		NSBeep();
+		NSLog(@"RDocumentWinCtrl.insertRdFunctionTemplate bailed due to BASH error:\n%@", bashError);
 		return;
 	}
 
-	RSEXP *xx = [re evaluateString:@"unlist(prompt(mean.POSIXct,NA))"];
-	[re endProtected];
-	if(xx) {
-		NSArray *templateArr = [xx array];
-		if(!templateArr || ![templateArr count]) {
-			[xx release];
-			SLog(@"RDocument.insertRdFunctionTemplate bailed because nothing was returned");
-			return;
-		}
-		NSString *templateStr = [templateArr componentsJoinedByString:@"\n"];
-
-		templateStr = [templateStr stringByReplacingOccurrencesOfString:@"mean.POSIXct" withString:NLS(@"FUNCTION_NAME")];
-		templateStr = [templateStr stringByReplacingOccurrencesOfRegex:@"\\n\\.POSIXct[^\\n]+" withString:@""];
-		
-		[[myWinCtrl textView] insertText:templateStr];
-
-		NSRange newFunRange = [templateStr rangeOfString:NLS(@"FUNCTION_NAME")];
-		[[myWinCtrl textView] setSelectedRange:newFunRange];
-		[[myWinCtrl textView] scrollRangeToVisible:newFunRange];
-		
-		[xx release];
+	if(!templateStr) {
+		NSBeep();
+		NSLog(@"RDocumentWinCtrl.insertRdFunctionTemplate bailed; no response from called R session");
+		return;
 	}
+
+	templateStr = [templateStr stringByReplacingOccurrencesOfString:@"§" withString:@"\n"];
+	templateStr = [templateStr stringByReplacingOccurrencesOfString:@"mean.POSIXct" withString:NLS(@"FUNCTION_NAME")];
+	templateStr = [templateStr stringByReplacingOccurrencesOfRegex:@"\\n\\.POSIXct[^\\n]+" withString:@""];
+		
+	[[myWinCtrl textView] insertText:templateStr];
+
+	NSRange newFunRange = [templateStr rangeOfString:NLS(@"FUNCTION_NAME")];
+	[[myWinCtrl textView] setSelectedRange:newFunRange];
+	[[myWinCtrl textView] scrollRangeToVisible:newFunRange];
 }
 
 - (BOOL) convertRd2PDF
 {
 
-	REngine *re = [REngine mainEngine];
 	BOOL success = YES;
+	NSError *bashError = nil;
 
 	// Try to find the path to the default tex distribution
 	NSString *texPath = @"";
-	if (![re beginProtected]) {
-		SLog(@"RDocument.convertRd2PDF bailed because protected REngine entry failed [***]");
-		return NO;
-	}
-	RSEXP *xx = [re evaluateString:@"system('which tex', intern=TRUE)"];
-	[re endProtected];
-	if(xx) {
-		NSString *aPath = [xx string];
-		if(aPath && [aPath length]) {
-			[xx release];
-		} else {
-			[xx release];
-			if (![re beginProtected]) {
-				SLog(@"RDocument.convertRd2PDF bailed because protected REngine entry failed [***]");
-				return NO;
-			}
-			xx = [re evaluateString:@"system('which /usr/libexec/path_helper > /dev/null && eval `/usr/libexec/path_helper -s` && dirname `which tex`', intern=TRUE)"];
-			[re endProtected];
-			if(xx) {
-				aPath = [xx string];
-				if(aPath && [aPath length]) {
-					texPath = [NSString stringWithFormat:@"export PATH=$PATH:%@ && ", aPath];
-				}
-				[xx release];
-			}
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
+	NSString *aPath = [@"which tex" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	[myWinCtrl setStatusLineText:@""];
+	if(bashError == nil && aPath && [aPath length]) {
+		;
+	} else {
+		if(bashError) SLog(@"Couldn't find tex %@", [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey]);
+		bashError = nil;
+		[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
+		aPath = [@"eval `/usr/libexec/path_helper -s` && dirname `which tex`" 
+			runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+		[myWinCtrl setStatusLineText:@""];
+		if(bashError == nil && aPath && [aPath length]) {
+			texPath = [NSString stringWithFormat:@"export PATH=$PATH:%@", aPath];
 		}
-
+		else if(bashError) SLog(@"path_helper couldn't find a tex environment %@", [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey]);
 	}
-
 
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
 	NSError *error;
 	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
 	NSString *pdfOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"pdf"];
+	NSString *errOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"txt"];
 
 	NSURL *pdfOutputFileURL = [NSURL URLWithString:pdfOutputFile];
 
 	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
 
-	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO])
-		return NO;
-
-	NSString *convCmd = [NSString stringWithFormat:@"system(\"%@R CMD Rd2pdf --no-preview --title='%@' --force --output='%@' '%@' 2>/dev/null\", intern=TRUE, wait=TRUE)", texPath, [self displayName], pdfOutputFile, inputFile];
-
-	if (![re beginProtected]) {
-		SLog(@"RDocument.convertRdPDF bailed because protected REngine entry failed [***]");
+	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO]) {
+		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
+		[[NSFileManager defaultManager] removeItemAtPath:pdfOutputFile error:NULL];
+		[myWinCtrl setStatusLineText:@""];
 		return NO;
 	}
-	xx = [re evaluateString:convCmd];
-	[re endProtected];
-	if(xx) {
-		[xx release];
-		NSFileManager *man = [NSFileManager defaultManager];
+
+	NSString *convCmd = [NSString stringWithFormat:@"#!/bin/sh\n%@\nR CMD Rd2pdf --no-preview --title='%@' --force --output='%@' '%@' 2>'%@'", texPath, [self displayName], pdfOutputFile, inputFile, errOutputFile];
+	bashError = nil;
+
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@ (%@)", NLS(@"Rd → PDF…"), NLS(@"press ⌘. to cancel")]];
+	(void)[convCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	[myWinCtrl setStatusLineText:@""];
+
+	NSFileManager *man = [NSFileManager defaultManager];
+
+	if(bashError == nil) {
 		if([man fileExistsAtPath:pdfOutputFile])
 			[[HelpManager sharedController] showHelpFileForURL:pdfOutputFileURL];
-	}
+	} else {
+		NSString *errMessage = [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey];
+		if([man fileExistsAtPath:errOutputFile]) {
+			bashError = nil;
+			NSString *errMessages = [[[NSString alloc]
+				initWithContentsOfFile:errOutputFile
+					encoding:NSUTF8StringEncoding
+						error:&bashError] autorelease];
+			if(bashError == nil && errMessages && [errMessages length])
+				errMessage = [errMessage stringByAppendingString:errMessages];
+		}
+		
+		NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Error") 
+				defaultButton:NLS(@"OK") 
+				alternateButton:nil 
+				otherButton:nil 
+				informativeTextWithFormat:[errMessage stringByReplacingOccurrencesOfString:inputFile withString:NLS(@"Rd file")]];
 
-	if (![re beginProtected]) {
-		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed for removing temporary files[***]");
+		[alert setAlertStyle:NSWarningAlertStyle];
+		[alert runModal];
+
+		[[myWinCtrl window] makeKeyAndOrderFront:self];
+		[[myWinCtrl window] makeFirstResponder:[myWinCtrl textView]];
+		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
+		[[NSFileManager defaultManager] removeItemAtPath:pdfOutputFile error:NULL];
+		[[NSFileManager defaultManager] removeItemAtPath:errOutputFile error:NULL];
 		return NO;
 	}
-	// After 200 secs all temporary files will be deleted even if R was quitted meanwhile
-	[re executeString:[NSString stringWithFormat:@"system(\"sleep 200 && rm -f '%@' && rm -f '%@'\", wait=FALSE)", inputFile, pdfOutputFile]];
-	[re endProtected];
+
+	// After 100 secs all temporary files will be deleted even if R was quitted meanwhile
+	[self performSelector:@selector(removeFiles:) withObject:[NSArray arrayWithObjects:inputFile, pdfOutputFile, errOutputFile, nil] afterDelay:100];
 
 	return success;
 }
@@ -738,25 +735,19 @@ create the UI for the document.
 - (BOOL) convertRd2HTML
 {
 
-	REngine *re = [REngine mainEngine];
+	BOOL success = YES;
 
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
 	NSString *RhomeCSS = @"R.css";
-	if (![re beginProtected]) {
-		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed [***]");
-		return NO;
-	}
-	RSEXP *xx = [re evaluateString:@"R.home()"];
-	[re endProtected];
-	if(xx) {
-		NSString *Rhome = [xx string];
-		if(Rhome) {
-			RhomeCSS = [NSString stringWithFormat:@"file://%@/doc/html/R.css", Rhome];
-		}
-		[xx release];
+
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
+	NSString *Rhome = [@"R --slave --vanilla -e 'cat(R.home())'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:nil];
+	[myWinCtrl setStatusLineText:@""];
+
+	if(Rhome && [Rhome length]) {
+		RhomeCSS = [NSString stringWithFormat:@"file://%@/doc/html/R.css", Rhome];
 	}
 	
-
 	NSError *error;
 	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
 	NSString *htmlOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"html"];
@@ -765,49 +756,45 @@ create the UI for the document.
 
 	[[[myWinCtrl textView] string] writeToFile:inputFile atomically:YES encoding:NSUTF8StringEncoding error:&error];
 
-	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO])
-		return NO;
-
-	NSString *convCmd = [NSString stringWithFormat:@"system(\"R CMD Rdconv -t html '%@' 2>/dev/null | perl -pe 's!R.css!%@!'> '%@'\", intern=TRUE, wait=TRUE)", inputFile, RhomeCSS, htmlOutputFile];
-
-	if (![re beginProtected]) {
-		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed [***]");
+	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO]) {
+		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
 		return NO;
 	}
-	xx = [re evaluateString:convCmd];
-	[re endProtected];
 
-	if (![re beginProtected]) {
-		SLog(@"RDocument.convertRd2HTML bailed because protected REngine entry failed for removing temporary files[***]");
-		return NO;
-	}
-	// After 200 secs all temporary files will be deleted even if R was quitted meanwhile
-	[re executeString:[NSString stringWithFormat:@"system(\"sleep 200 && rm -f '%@' && rm -f '%@'\", wait=FALSE)", inputFile, htmlOutputFile]];
-	[re endProtected];
+	error = nil;
 
-	if(xx) {
-		[xx release];
-
-		// Try to check if htmlOutputFile has content; if not don't come up with an empty window
-		BOOL fsizeChecked = NO;
+	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@ (%@)", NLS(@"Rd → HTML…"), NLS(@"press ⌘. to cancel")]];
+	NSString *convCmd = [NSString stringWithFormat:@"R CMD Rdconv -t html '%@' 2>/dev/null | perl -pe 's!R.css!%@!'> '%@'", inputFile, RhomeCSS, htmlOutputFile];
+	[convCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&error];
+	[myWinCtrl setStatusLineText:@""];
+	
+	// Try to check if htmlOutputFile has content; if not don't come up with an empty window
+	BOOL fsizeChecked = NO;
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-		UInt32 fsize = 0;
-		NSFileManager *man = [[NSFileManager alloc] init];
-		NSDictionary *attrs = [man attributesOfItemAtPath:htmlOutputFile error:nil];
-		if(attrs) {
-			fsize = [attrs fileSize];
-			fsizeChecked = YES;
-		}
-		[man release];
+	UInt32 fsize = 0;
+	NSFileManager *man = [[NSFileManager alloc] init];
+	NSDictionary *attrs = [man attributesOfItemAtPath:htmlOutputFile error:nil];
+	if(attrs) {
+		fsize = [attrs fileSize];
+		fsizeChecked = YES;
+	}
+	[man release];
 #endif
 
-		if(!fsizeChecked || (fsizeChecked && fsize > 0))
+	if(!fsizeChecked || (fsizeChecked && fsize > 0)) {
+		if(error == nil && [[NSFileManager defaultManager] fileExistsAtPath:htmlOutputFile])
 			[[HelpManager sharedController] showHelpFileForURL:htmlOutputFileURL];
-
-		return YES;
+		else {
+			NSBeep();
+			success = NO;
+		}
+			
 	}
 
-	return NO;
+	// After 100 secs all temporary files will be deleted even if R was quitted meanwhile
+	[self performSelector:@selector(removeFiles:) withObject:[NSArray arrayWithObjects:inputFile, htmlOutputFile, nil] afterDelay:100];
+
+	return success;
 
 }
 
@@ -833,6 +820,15 @@ create the UI for the document.
 		return [self isDocumentEdited];
 
 	return YES;
+}
+
+- (void) removeFiles:(NSArray*)files
+{
+	if(files && [files count]) {
+		NSInteger i = 0;
+		for(i=0; i<[files count]; i++)
+			[[NSFileManager defaultManager] removeItemAtPath:[files objectAtIndex:i] error:NULL];
+	}
 }
 
 @end
