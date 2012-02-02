@@ -1,5 +1,26 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-02-02 [HJBB]
+*	Added under menu Format > "Format Source Code".
+	This command will format the selection or the entire
+	R document by using "deparse()". According to "deparse()" 
+	the selection or the document has to contain valid 
+	R statement(s) otherwise parsing errors will be 
+	displayed. Comments will be kept as they are but indented.
+	Empty lines will also be preserved. For a selection 
+	whose first line is indented one has also to select 
+	the beginning of first line in order to preserve the 
+	indentation level. "deparse()"'s width.cutoff argument 
+	will be set either to the preference value 
+	RScriptEditorFormatWidthCutoff or, if that value is 
+	zero, to the current windows width. 
+	One can set that value by executing the following 
+	line without quotes: 
+	"defaults write org.R-project.R 
+	RScriptEditorFormatWidthCutoff -int 50"
+	in the Terminal. If a parsing error will be displayed
+	the command will try to jump to the erroneous line.
+
 Last-update: 2012-01-30 [HJBB]
 *	In R Script editor pressing ENTER after a simple
 	if(), for(), while(), or function() clause or if

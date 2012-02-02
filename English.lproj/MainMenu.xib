@@ -21,7 +21,6 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="828"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1494,6 +1493,15 @@
 									<string key="NSTitle">Decrease Indent</string>
 									<string key="NSKeyEquiv">[</string>
 									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="213717426"/>
+									<reference key="NSMixedImage" ref="299594582"/>
+								</object>
+								<object class="NSMenuItem" id="88853410">
+									<reference key="NSMenu" ref="398624975"/>
+									<string key="NSTitle">Format Source Code</string>
+									<string key="NSKeyEquiv">[</string>
+									<int key="NSKeyEquivModMask">1572864</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="213717426"/>
 									<reference key="NSMixedImage" ref="299594582"/>
@@ -7638,6 +7646,14 @@
 					</object>
 					<int key="connectionID">1751</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">tidyRCode:</string>
+						<reference key="source" ref="841731700"/>
+						<reference key="destination" ref="88853410"/>
+					</object>
+					<int key="connectionID">1753</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -8507,6 +8523,7 @@
 							<reference ref="206473336"/>
 							<reference ref="29380107"/>
 							<reference ref="469130510"/>
+							<reference ref="88853410"/>
 						</object>
 						<reference key="parent" ref="744173390"/>
 					</object>
@@ -10687,6 +10704,11 @@
 						<reference key="object" ref="557855270"/>
 						<reference key="parent" ref="1009875578"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">1752</int>
+						<reference key="object" ref="88853410"/>
+						<reference key="parent" ref="398624975"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -11101,6 +11123,7 @@
 					<string>1747.IBPluginDependency</string>
 					<string>1748.IBPluginDependency</string>
 					<string>1749.IBPluginDependency</string>
+					<string>1752.IBPluginDependency</string>
 					<string>19.IBPluginDependency</string>
 					<string>19.ImportedFromIB2</string>
 					<string>196.IBPluginDependency</string>
@@ -11991,7 +12014,7 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABBmAAAxAQAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{142, 324}, {223, 393}}</string>
+					<string>{{124, 324}, {223, 393}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12026,6 +12049,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{414, 544}, {339, 43}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12100,7 +12124,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{42, 717}, {596, 20}}</string>
+					<string>{{36, 724}, {596, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12479,7 +12503,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{168, 564}, {246, 153}}</string>
+					<string>{{162, 551}, {260, 173}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12606,7 +12630,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">1751</int>
+			<int key="maxID">1753</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -15155,18 +15179,16 @@
 							<string>goToLineCloseSheet:</string>
 							<string>insertRdDataTemplate:</string>
 							<string>insertRdFunctionTemplate:</string>
-							<string>makeASCIIconform:</string>
 							<string>printDocument:</string>
 							<string>reInterpretDocument:</string>
 							<string>setHelpSearchType:</string>
 							<string>shiftLeft:</string>
 							<string>shiftRight:</string>
 							<string>sourceCurrentDocument:</string>
-							<string>unescapeUnicode:</string>
+							<string>tidyRCode:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -15200,14 +15222,13 @@
 							<string>goToLineCloseSheet:</string>
 							<string>insertRdDataTemplate:</string>
 							<string>insertRdFunctionTemplate:</string>
-							<string>makeASCIIconform:</string>
 							<string>printDocument:</string>
 							<string>reInterpretDocument:</string>
 							<string>setHelpSearchType:</string>
 							<string>shiftLeft:</string>
 							<string>shiftRight:</string>
 							<string>sourceCurrentDocument:</string>
-							<string>unescapeUnicode:</string>
+							<string>tidyRCode:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -15252,10 +15273,6 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">makeASCIIconform:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
 								<string key="name">printDocument:</string>
 								<string key="candidateClassName">id</string>
 							</object>
@@ -15280,7 +15297,7 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
-								<string key="name">unescapeUnicode:</string>
+								<string key="name">tidyRCode:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>
