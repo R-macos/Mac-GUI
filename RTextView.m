@@ -209,7 +209,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 				// Check if something is selected and wrap it into matching pair characters and preserve the selection
 				// - in RConsole only if selection is in the last line
-				if((([self isRConsole] && ([[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location) || ![self isRConsole])) 
+				if(((([self isRConsole] && ([[self string] lineRangeForRange:NSMakeRange([[self string] length]-1,0)].location+1 < r.location)) || ![self isRConsole])) 
 					&& [self wrapSelectionWithPrefix:[NSString stringWithFormat:@"%c", ck] suffix:complement]) {
 					SLog(@"RTextView: selection was wrapped with auto-pairs");
 					return;

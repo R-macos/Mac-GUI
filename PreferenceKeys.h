@@ -61,6 +61,8 @@
 #define lastUsedFileEncoding @"LastUsedFileEncoding"
 #define usedFileEncodings @"UsedFileEncodings"
 
+#define RScriptEditorFormatWidthCutoff  @"RScriptEditorFormatWidthCutoff"
+
 #define FontSizeKey    @"Console Font Size"
 #define RScriptEditorTabWidth    @"R Script Editor tab width"
 #define RScriptEditorDefaultFont    @"R Script Editor default font"

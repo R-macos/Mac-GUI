@@ -75,6 +75,7 @@
 	BOOL userTerminated = NO;
 	BOOL redirectForScript = NO;
 	BOOL isDir = NO;
+	BOOL nonWaitingMode = ([self hasSuffix:@"&"]) ? YES : NO;
 	
 	NSMutableArray *scriptHeaderArguments = [NSMutableArray array];
 	NSString *scriptPath = @"";
@@ -112,7 +113,7 @@
 			}
 		}
 	} else {
-		[scriptHeaderArguments addObject:@"/bin/sh"];
+		[scriptHeaderArguments addObject:@"/bin/bash"];
 		NSError *writeError = nil;
 		[self writeToFile:scriptFilePath atomically:YES encoding:NSUTF8StringEncoding error:&writeError];
 		if(writeError == nil) {
@@ -126,9 +127,12 @@
 	
 	NSTask *bashTask = [[NSTask alloc] init];
 	[bashTask setLaunchPath:@"/bin/bash"];
-	
+
 	NSMutableDictionary *theEnv = [NSMutableDictionary dictionary];
-	[theEnv setDictionary:shellEnvironment];
+	if(shellEnvironment)
+		[theEnv setDictionary:shellEnvironment];
+	else
+		[theEnv setDictionary:[[NSProcessInfo processInfo] environment]];
 
 	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionNone] forKey:kBASHTaskShellVariableExitNone];
 	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceSection] forKey:kBASHTaskShellVariableExitReplaceSelection];
@@ -151,37 +155,49 @@
 	else
 		[bashTask setArguments:[NSArray arrayWithObjects:@"-c", [NSString stringWithFormat:@"%@ > %@", [scriptHeaderArguments componentsJoinedByString:@" "], stdoutFilePath], nil]];
 	
-	NSPipe *stderr_pipe = [NSPipe pipe];
-	[bashTask setStandardError:stderr_pipe];
-	NSFileHandle *stderr_file = [stderr_pipe fileHandleForReading];
+
+	NSFileHandle *stderr_file = nil;
+	NSPipe *stderr_pipe = nil;
+	if(!nonWaitingMode) {
+		stderr_pipe = [NSPipe pipe];
+		[bashTask setStandardError:stderr_pipe];
+		stderr_file = [stderr_pipe fileHandleForReading];
+	}
 	[bashTask launch];
 
 	NSInteger pid = -1;
 	pid = [bashTask processIdentifier];
 	
-	// Listen to ⌘. to terminate
-	while(1) {
-		if(![bashTask isRunning] || [bashTask processIdentifier] == 0) break;
-		NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask
-											untilDate:[NSDate distantPast]
-											   inMode:NSDefaultRunLoopMode
-											  dequeue:YES];
-		usleep(1000);
-		if(!event) continue;
-		if ([event type] == NSKeyDown) {
-			unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
-			if (([event modifierFlags] & NSCommandKeyMask) && key == '.') {
-				[bashTask terminate];
-				userTerminated = YES;
-				break;
+	if(!nonWaitingMode) {
+		// Listen to ⌘. to terminate
+		while(1) {
+			if(![bashTask isRunning] || [bashTask processIdentifier] == 0) break;
+			NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask
+												untilDate:[NSDate distantPast]
+												   inMode:NSDefaultRunLoopMode
+												  dequeue:YES];
+			usleep(1000);
+			if(!event) continue;
+			if ([event type] == NSKeyDown) {
+				unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
+				if (([event modifierFlags] & NSCommandKeyMask) && key == '.') {
+					[bashTask terminate];
+					userTerminated = YES;
+					break;
+				}
+				[NSApp sendEvent:event];
+			} else {
+				[NSApp sendEvent:event];
 			}
-			[NSApp sendEvent:event];
-		} else {
-			[NSApp sendEvent:event];
 		}
-	}
 	
-	[bashTask waitUntilExit];
+		[bashTask waitUntilExit];
+	} else {
+		if (bashTask) [bashTask release];
+		[fm removeItemAtPath:scriptFilePath error:nil];
+		[fm removeItemAtPath:stdoutFilePath error:nil];
+		return @"";
+	}
 
 	// Remove files
 	[fm removeItemAtPath:scriptFilePath error:nil];

@@ -57,6 +57,7 @@
 		isEditable=YES;
 		isREdit=NO;
 		myWinCtrl=nil;
+		rdToolsAreWorking=NO;
 		fileTypeWasChangedWhileSaving = NO;
     }
     return self;
@@ -565,19 +566,26 @@ create the UI for the document.
 - (BOOL) checkRdDocument
 {
 
+	if(rdToolsAreWorking) return NO;
+	rdToolsAreWorking = YES;
+
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
 	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
 
 	BOOL success = [self checkRdDocumentWithFilePath:inputFile reportSuccess:YES];
 
 	[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
-	
+
+	rdToolsAreWorking = NO;
 	return success;
 
 }
 
 - (void) insertRdDataTemplate
 {
+
+	if(rdToolsAreWorking) return;
+	rdToolsAreWorking = YES;
 
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
 
@@ -589,12 +597,14 @@ create the UI for the document.
 	if(bashError != nil) {
 		NSBeep();
 		NSLog(@"RDocumentWinCtrl.insertRdDataTemplate bailed due to BASH error:\n%@", bashError);
+		rdToolsAreWorking = NO;
 		return;
 	}
 
 	if(!templateStr) {
 		NSBeep();
 		NSLog(@"RDocumentWinCtrl.insertRdDataTemplate bailed; no response from called R session");
+		rdToolsAreWorking = NO;
 		return;
 	}
 
@@ -607,10 +617,16 @@ create the UI for the document.
 	NSRange newFunRange = [templateStr rangeOfString:NLS(@"DATA_NAME")];
 	[[myWinCtrl textView] setSelectedRange:newFunRange];
 	[[myWinCtrl textView] scrollRangeToVisible:newFunRange];
+
+	rdToolsAreWorking = NO;
+
 }
 
 - (void) insertRdFunctionTemplate
 {
+
+	if(rdToolsAreWorking) return;
+	rdToolsAreWorking = YES;
 
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
 
@@ -622,12 +638,14 @@ create the UI for the document.
 	if(bashError != nil) {
 		NSBeep();
 		NSLog(@"RDocumentWinCtrl.insertRdFunctionTemplate bailed due to BASH error:\n%@", bashError);
+		rdToolsAreWorking = NO;
 		return;
 	}
 
 	if(!templateStr) {
 		NSBeep();
 		NSLog(@"RDocumentWinCtrl.insertRdFunctionTemplate bailed; no response from called R session");
+		rdToolsAreWorking = NO;
 		return;
 	}
 
@@ -640,10 +658,16 @@ create the UI for the document.
 	NSRange newFunRange = [templateStr rangeOfString:NLS(@"FUNCTION_NAME")];
 	[[myWinCtrl textView] setSelectedRange:newFunRange];
 	[[myWinCtrl textView] scrollRangeToVisible:newFunRange];
+
+	rdToolsAreWorking = NO;
+
 }
 
 - (BOOL) convertRd2PDF
 {
+
+	if(rdToolsAreWorking) return NO;
+	rdToolsAreWorking = YES;
 
 	BOOL success = YES;
 	NSError *bashError = nil;
@@ -682,6 +706,7 @@ create the UI for the document.
 		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
 		[[NSFileManager defaultManager] removeItemAtPath:pdfOutputFile error:NULL];
 		[myWinCtrl setStatusLineText:@""];
+		rdToolsAreWorking = NO;
 		return NO;
 	}
 
@@ -723,8 +748,11 @@ create the UI for the document.
 		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
 		[[NSFileManager defaultManager] removeItemAtPath:pdfOutputFile error:NULL];
 		[[NSFileManager defaultManager] removeItemAtPath:errOutputFile error:NULL];
+		rdToolsAreWorking = NO;
 		return NO;
 	}
+
+	rdToolsAreWorking = NO;
 
 	// After 100 secs all temporary files will be deleted even if R was quitted meanwhile
 	[self performSelector:@selector(removeFiles:) withObject:[NSArray arrayWithObjects:inputFile, pdfOutputFile, errOutputFile, nil] afterDelay:100];
@@ -735,19 +763,25 @@ create the UI for the document.
 - (BOOL) convertRd2HTML
 {
 
+	if(rdToolsAreWorking) return NO;
+	rdToolsAreWorking = YES;
+
 	BOOL success = YES;
 
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
 	NSString *RhomeCSS = @"R.css";
-
-	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
-	NSString *Rhome = [@"R --slave --vanilla -e 'cat(R.home())'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:nil];
-	[myWinCtrl setStatusLineText:@""];
+	NSString *Rhome = [[RController sharedController] home];
+	
+	if(!Rhome || ![Rhome length]) {
+		[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
+		Rhome = [@"R --slave --vanilla -e 'cat(R.home())'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:nil];
+		[myWinCtrl setStatusLineText:@""];
+	}
 
 	if(Rhome && [Rhome length]) {
 		RhomeCSS = [NSString stringWithFormat:@"file://%@/doc/html/R.css", Rhome];
 	}
-	
+
 	NSError *error;
 	NSString *inputFile = [NSString stringWithFormat: @"%@%@", tempName, @"rd"];
 	NSString *htmlOutputFile = [NSString stringWithFormat: @"%@%@", tempName, @"html"];
@@ -758,6 +792,7 @@ create the UI for the document.
 
 	if(![self checkRdDocumentWithFilePath:inputFile reportSuccess:NO]) {
 		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:NULL];
+		rdToolsAreWorking = NO;
 		return NO;
 	}
 
@@ -788,8 +823,9 @@ create the UI for the document.
 			NSBeep();
 			success = NO;
 		}
-			
 	}
+
+	rdToolsAreWorking = NO;
 
 	// After 100 secs all temporary files will be deleted even if R was quitted meanwhile
 	[self performSelector:@selector(removeFiles:) withObject:[NSArray arrayWithObjects:inputFile, htmlOutputFile, nil] afterDelay:100];

@@ -75,6 +75,7 @@ extern NSColor *shColorIdentifier;
 	BOOL plainFile; // overriders preferences - if YES syntax HL is disabled
 	BOOL argsHints; // fn args hinting
 	BOOL lastLineWasCodeIndented;
+	BOOL isFormattingRcode;
 
 	int hsType; // help search type
 	
