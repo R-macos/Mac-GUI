@@ -67,7 +67,7 @@
  * @param theError If not nil and the bash command failed it contains the returned error message as NSLocalizedDescriptionKey
  * 
  */
-- (NSString *)runBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atCurrentDirectoryPath:(NSString*)path callerInstance:(id)caller contextInfo:(NSDictionary*)contextInfo error:(NSError**)theError
+- (NSString *)evaluateAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atPath:(NSString*)path callerInstance:(id)caller contextInfo:(NSDictionary*)contextInfo error:(NSError**)theError ignoreOutput:(BOOL)ignoreOutput
 {
 	
 	NSFileManager *fm = [NSFileManager defaultManager];
@@ -134,14 +134,14 @@
 	else
 		[theEnv setDictionary:[[NSProcessInfo processInfo] environment]];
 
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionNone] forKey:kBASHTaskShellVariableExitNone];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceSection] forKey:kBASHTaskShellVariableExitReplaceSelection];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceContent] forKey:kBASHTaskShellVariableExitReplaceContent];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsText] forKey:kBASHTaskShellVariableExitInsertAsText];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsSnippet] forKey:kBASHTaskShellVariableExitInsertAsSnippet];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTML] forKey:kBASHTaskShellVariableExitShowAsHTML];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsTextTooltip] forKey:kBASHTaskShellVariableExitShowAsTextTooltip];
-	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTMLTooltip] forKey:kBASHTaskShellVariableExitShowAsHTMLTooltip];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionNone] forKey:kBASHTaskShellVariableExitNone];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceSection] forKey:kBASHTaskShellVariableExitReplaceSelection];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceContent] forKey:kBASHTaskShellVariableExitReplaceContent];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsText] forKey:kBASHTaskShellVariableExitInsertAsText];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsSnippet] forKey:kBASHTaskShellVariableExitInsertAsSnippet];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTML] forKey:kBASHTaskShellVariableExitShowAsHTML];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsTextTooltip] forKey:kBASHTaskShellVariableExitShowAsTextTooltip];
+	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTMLTooltip] forKey:kBASHTaskShellVariableExitShowAsHTMLTooltip];
 	
 	if(theEnv != nil && [theEnv count])
 		[bashTask setEnvironment:theEnv];
@@ -150,18 +150,20 @@
 		[bashTask setCurrentDirectoryPath:path];
 	
 	// STDOUT will be redirected to kBASHTaskOutputFilePath in order to avoid nasty pipe programming due to block size reading
-	if([shellEnvironment objectForKey:kBASHTaskShellVariableInputFilePathh])
-		[bashTask setArguments:[NSArray arrayWithObjects:@"-c", [NSString stringWithFormat:@"%@ > %@ < %@", [scriptHeaderArguments componentsJoinedByString:@" "], stdoutFilePath, [shellEnvironment objectForKey:kBASHTaskShellVariableInputFilePathh]], nil]];
+	if([shellEnvironment objectForKey:kBASHTaskShellVariableInputFilePath])
+		[bashTask setArguments:[NSArray arrayWithObjects:@"-c", [NSString stringWithFormat:@"%@ > %@ < %@", [scriptHeaderArguments componentsJoinedByString:@" "], stdoutFilePath, [shellEnvironment objectForKey:kBASHTaskShellVariableInputFilePath]], nil]];
 	else
 		[bashTask setArguments:[NSArray arrayWithObjects:@"-c", [NSString stringWithFormat:@"%@ > %@", [scriptHeaderArguments componentsJoinedByString:@" "], stdoutFilePath], nil]];
 	
 
 	NSFileHandle *stderr_file = nil;
 	NSPipe *stderr_pipe = nil;
-	if(!nonWaitingMode) {
+	if(!nonWaitingMode && theError != NULL) {
 		stderr_pipe = [NSPipe pipe];
 		[bashTask setStandardError:stderr_pipe];
 		stderr_file = [stderr_pipe fileHandleForReading];
+	} else {
+		[bashTask setStandardError:[NSFileHandle fileHandleForWritingAtPath:@"/dev/null"]];
 	}
 	[bashTask launch];
 
@@ -206,12 +208,12 @@
 	[NSApp activateIgnoringOtherApps:YES];
 	
 	NSInteger status = [bashTask terminationStatus];
-	NSData *errdata  = [stderr_file readDataToEndOfFile];
+	NSData *errdata  = nil;
 	
 	// Check STDERR
-	if([errdata length] && (status < kBASHTaskRedirectActionNone || status > kBASHTaskRedirectActionLastCode)) {
+	if(theError != NULL && [errdata length] && (status < kBASHTaskRedirectActionNone || status > kBASHTaskRedirectActionLastCode)) {
 		[fm removeItemAtPath:stdoutFilePath error:nil];
-		
+		if(stderr_file) [stderr_file readDataToEndOfFile];
 		if(status == 9 || userTerminated) return @"";
 		if(theError != NULL) {
 			NSMutableString *errMessage = [[[NSMutableString alloc] initWithData:errdata encoding:NSUTF8StringEncoding] autorelease];
@@ -222,12 +224,16 @@
 														  errMessage,
 														  NSLocalizedDescriptionKey, 
 														  nil]] autorelease];
-		} else {
-			NSBeep();
 		}
 		return @"";
 	}
-	
+
+	if(ignoreOutput && theError == NULL) {
+		if (bashTask) [bashTask release];
+		[fm removeItemAtPath:stdoutFilePath error:nil];
+		return @"";
+	}
+
 	// Read STDOUT saved to file 
 	if([fm fileExistsAtPath:stdoutFilePath isDirectory:nil]) {
 		NSString *stdoutContent = [NSString stringWithContentsOfFile:stdoutFilePath encoding:NSUTF8StringEncoding error:nil];
@@ -239,16 +245,17 @@
 			} else {
 				if(theError != NULL) {
 					if(status == 9 || userTerminated) return @"";
-					NSMutableString *errMessage = [[[NSMutableString alloc] initWithData:errdata encoding:NSUTF8StringEncoding] autorelease];
-					[errMessage replaceOccurrencesOfString:kBASHTaskScriptCommandFilePath withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [errMessage length])];
-					*theError = [[[NSError alloc] initWithDomain:NSPOSIXErrorDomain 
+					if(stderr_file) {
+						[stderr_file readDataToEndOfFile];
+						NSMutableString *errMessage = [[[NSMutableString alloc] initWithData:errdata encoding:NSUTF8StringEncoding] autorelease];
+						[errMessage replaceOccurrencesOfString:kBASHTaskScriptCommandFilePath withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [errMessage length])];
+						*theError = [[[NSError alloc] initWithDomain:NSPOSIXErrorDomain 
 															code:status 
 														userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
 																  errMessage,
 																  NSLocalizedDescriptionKey, 
 																  nil]] autorelease];
-				} else {
-					NSBeep();
+					}
 				}
 				if(status > kBASHTaskRedirectActionNone && status <= kBASHTaskRedirectActionLastCode)
 					return stdoutContent;
@@ -278,10 +285,89 @@
  * @param theError If not nil and the bash command failed it contains the returned error message as NSLocalizedDescriptionKey
  * 
  */
-- (NSString *)runBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atCurrentDirectoryPath:(NSString*)path error:(NSError**)theError
+- (NSString *)evaluateAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atPath:(NSString*)path error:(NSError**)theError
 {
-	return [self runBashCommandWithEnvironment:shellEnvironment atCurrentDirectoryPath:path callerInstance:nil contextInfo:nil error:theError];
+	return [self evaluateAsBashCommandWithEnvironment:shellEnvironment atPath:path callerInstance:nil contextInfo:nil error:theError ignoreOutput:NO];
 }
 
+/**
+ * Run self as BASH command(s) and return the result.
+ * This task can be interrupted by pressing ⌘.
+ *
+ * @param theError If not nil and the bash command failed it contains the returned error message as NSLocalizedDescriptionKey
+ * 
+ */
+- (NSString *)evaluateAsBashCommandAndError:(NSError**)theError
+{
+	return [self evaluateAsBashCommandWithEnvironment:nil atPath:nil callerInstance:nil contextInfo:nil error:theError ignoreOutput:NO];
+}
+
+/**
+ * Run self as BASH command(s) and return the result.
+ * This task can be interrupted by pressing ⌘.
+ *
+ */
+- (NSString *)evaluateAsBashCommand
+{
+	return [self evaluateAsBashCommandWithEnvironment:nil atPath:nil callerInstance:nil contextInfo:nil error:nil ignoreOutput:NO];
+}
+
+/**
+ * Run self as BASH command(s).
+ * This task can be interrupted by pressing ⌘.
+ *
+ * @param shellEnvironment A dictionary of environment variable values whose keys are the variable names.
+ *
+ * @param path The current directory for the bash command. If path is nil, the current directory is inherited from the process that created the receiver (normally /).
+ *
+ * @param caller The SPDatabaseDocument which invoked that command to register the command for cancelling; if nil the command won't be registered.
+ *
+ * @param name The menu title of the command.
+ *
+ * @param theError If not nil and the bash command failed it contains the returned error message as NSLocalizedDescriptionKey
+ * 
+ */
+- (void)runAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atPath:(NSString*)path callerInstance:(id)caller contextInfo:(NSDictionary*)contextInfo error:(NSError**)theError
+{
+	[self evaluateAsBashCommandWithEnvironment:shellEnvironment atPath:path callerInstance:caller contextInfo:contextInfo error:theError ignoreOutput:YES];
+}
+
+/**
+ * Run self as BASH command(s).
+ * This task can be interrupted by pressing ⌘.
+ *
+ * @param shellEnvironment A dictionary of environment variable values whose keys are the variable names.
+ *
+ * @param path The current directory for the bash command. If path is nil, the current directory is inherited from the process that created the receiver (normally /).
+ *
+ * @param theError If not nil and the bash command failed it contains the returned error message as NSLocalizedDescriptionKey
+ * 
+ */
+- (void)runAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atPath:(NSString*)path error:(NSError**)theError
+{
+	[self evaluateAsBashCommandWithEnvironment:shellEnvironment atPath:path callerInstance:nil contextInfo:nil error:theError ignoreOutput:YES];
+}
+
+/**
+ * Run self as BASH command(s).
+ * This task can be interrupted by pressing ⌘.
+ *
+ * @param theError If not nil and the bash command failed it contains the returned error message as NSLocalizedDescriptionKey
+ * 
+ */
+- (void)runAsBashCommandAndError:(NSError**)theError
+{
+	[self evaluateAsBashCommandWithEnvironment:nil atPath:nil callerInstance:nil contextInfo:nil error:theError ignoreOutput:YES];
+}
+
+/**
+ * Run self as BASH command(s).
+ * This task can be interrupted by pressing ⌘.
+ *
+ */
+- (void)runAsBashCommand
+{
+	[self evaluateAsBashCommandWithEnvironment:nil atPath:nil callerInstance:nil contextInfo:nil error:nil ignoreOutput:YES];
+}
 
 @end

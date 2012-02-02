@@ -481,7 +481,7 @@ create the UI for the document.
 
 	NSString *convCmd = [NSString stringWithFormat:@"R --vanilla -q --slave --encoding=UTF-8 -e 'tools:::checkRd(\"%@\")'", inputFile];
 	NSError *bashError = nil;
-	NSString *errMessage = [convCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	NSString *errMessage = [convCmd evaluateAsBashCommandAndError:&bashError];
 
 	if(bashError != nil) {
 		if([bashError code] == 1) {
@@ -590,7 +590,7 @@ create the UI for the document.
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
 
 	NSError *bashError = nil;
-	NSString *templateStr = [@"R --vanilla --slave -e 'cat(unlist(prompt(Formaldehyde,NA)), sep=\"§\")'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	NSString *templateStr = [@"R --vanilla --slave -e 'cat(unlist(prompt(Formaldehyde,NA)), sep=\"§\")'" evaluateAsBashCommandAndError:&bashError];
 
 	[myWinCtrl setStatusLineText:@""];
 
@@ -631,7 +631,7 @@ create the UI for the document.
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
 
 	NSError *bashError = nil;
-	NSString *templateStr = [@"R --vanilla --slave -e 'cat(unlist(prompt(mean.POSIXct,NA)), sep=\"§\")'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	NSString *templateStr = [@"R --vanilla --slave -e 'cat(unlist(prompt(mean.POSIXct,NA)), sep=\"§\")'" evaluateAsBashCommandAndError:&bashError];
 
 	[myWinCtrl setStatusLineText:@""];
 
@@ -675,21 +675,17 @@ create the UI for the document.
 	// Try to find the path to the default tex distribution
 	NSString *texPath = @"";
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
-	NSString *aPath = [@"which tex" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	NSString *aPath = [@"which tex" evaluateAsBashCommand];
 	[myWinCtrl setStatusLineText:@""];
-	if(bashError == nil && aPath && [aPath length]) {
+	if(aPath && [aPath length]) {
 		;
 	} else {
-		if(bashError) SLog(@"Couldn't find tex %@", [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey]);
-		bashError = nil;
 		[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
-		aPath = [@"eval `/usr/libexec/path_helper -s` && dirname `which tex`" 
-			runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+		aPath = [@"eval `/usr/libexec/path_helper -s` && dirname `which tex`" evaluateAsBashCommand];
 		[myWinCtrl setStatusLineText:@""];
-		if(bashError == nil && aPath && [aPath length]) {
+		if(aPath && [aPath length]) {
 			texPath = [NSString stringWithFormat:@"export PATH=$PATH:%@", aPath];
 		}
-		else if(bashError) SLog(@"path_helper couldn't find a tex environment %@", [[bashError userInfo] objectForKey:NSLocalizedDescriptionKey]);
 	}
 
 	NSString *tempName = [NSTemporaryDirectory() stringByAppendingPathComponent: [NSString stringWithFormat: @"%.0f.", [NSDate timeIntervalSinceReferenceDate] * 1000.0]];
@@ -714,7 +710,7 @@ create the UI for the document.
 	bashError = nil;
 
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@ (%@)", NLS(@"Rd → PDF…"), NLS(@"press ⌘. to cancel")]];
-	(void)[convCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	[convCmd runAsBashCommandAndError:&bashError];
 	[myWinCtrl setStatusLineText:@""];
 
 	NSFileManager *man = [NSFileManager defaultManager];
@@ -774,7 +770,7 @@ create the UI for the document.
 	
 	if(!Rhome || ![Rhome length]) {
 		[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@", NLS(@"press ⌘. to cancel")]];
-		Rhome = [@"R --slave --vanilla -e 'cat(R.home())'" runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:nil];
+		Rhome = [@"R --slave --vanilla -e 'cat(R.home())'" evaluateAsBashCommand];
 		[myWinCtrl setStatusLineText:@""];
 	}
 
@@ -800,7 +796,7 @@ create the UI for the document.
 
 	[myWinCtrl setStatusLineText:[NSString stringWithFormat:@"%@ (%@)", NLS(@"Rd → HTML…"), NLS(@"press ⌘. to cancel")]];
 	NSString *convCmd = [NSString stringWithFormat:@"R CMD Rdconv -t html '%@' 2>/dev/null | perl -pe 's!R.css!%@!'> '%@'", inputFile, RhomeCSS, htmlOutputFile];
-	[convCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&error];
+	[convCmd evaluateAsBashCommandAndError:&error];
 	[myWinCtrl setStatusLineText:@""];
 	
 	// Try to check if htmlOutputFile has content; if not don't come up with an empty window

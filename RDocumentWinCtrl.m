@@ -1356,7 +1356,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 		// go through all empty lines and replace them by "....e_m_p_t_y....=0"
 		// to preserve the user's structure
-		[tidyStr replaceOccurrencesOfRegex:@"(?m-s:^[ \t]*$)" withString:@"....e_m_p_t_y....=0\n"];
+		[tidyStr replaceOccurrencesOfRegex:@"(?m-s:^[ \t]*$)" withString:@"....e_m_p_t_y....=0"];
 
 		// prefix the selected text with n empty lines according
 		// the cursor location for possible line numbers in error message
@@ -1381,7 +1381,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		}
 		// go through all empty lines and replace them by "....e_m_p_t_y....=0"
 		// to preserve the user's structure
-		[tidyStr replaceOccurrencesOfRegex:@"(?m-s:^[ \t]*$)" withString:@"....e_m_p_t_y....=0\n"];
+		[tidyStr replaceOccurrencesOfRegex:@"(?m-s:^[ \t]*$)" withString:@"....e_m_p_t_y....=0"];
 	}
 
 
@@ -1491,7 +1491,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				, tempRFile, tempErrFile, startIndentation];
 
 	NSError *bashError = nil;
-	NSString *tidiedStr = [tidyCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
+	NSString *tidiedStr = [tidyCmd evaluateAsBashCommandAndError:&bashError];
 
 	NSString *errMessage = @"";
 
@@ -1522,6 +1522,9 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// Clean error message
 		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"(?s)^.*?\n" withString:@""];
 		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"dummy<-function\\(\\)\\{" withString:@""];
+		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"\\.{4}e_m_p_t_y\\.{4}=0" withString:@""];
+		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@"(?m-s);?c=\"@__?@_@_@(.*?)\"" withString:@"#$1"];
+		errMessages = [errMessages stringByReplacingOccurrencesOfRegex:@" *\\^" withString:@""];
 
 		// Find error line number
 		NSInteger errorLineNumber = -1;
@@ -1615,66 +1618,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	// Delete a next last \n character for selected code
 	if([textView selectedRange].length)
 		[tidyStr replaceOccurrencesOfRegex:@"\n$" withString:@""];
-
-
-	{
-		// Re-check after formatting for parsing errors within that method ... one never knows
-		// [[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		// [[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		// [[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		// [[NSString stringWithFormat:@"dummy<-function(){\n%@}\n",tidyStr] writeToFile:tempRFuncFile 
-		// 	atomically:YES encoding:NSUTF8StringEncoding error:nil];
-		// // for re-checking try only to source the formatted R code
-		// tidyR = [NSString stringWithFormat:
-		// 		@"options(keep.source = FALSE)\n"
-		// 		"options(warn = -1)\n"
-		// 		"options(show.error.messages = TRUE)\n"
-		// 		"source(\"%@\")",
-		// 			tempRFuncFile];
-		// [tidyR writeToFile:tempRFile atomically:YES encoding:NSUTF8StringEncoding error:nil];
-		//
-		// bashError = nil;
-		// (void)[tidyCmd runBashCommandWithEnvironment:nil atCurrentDirectoryPath:nil error:&bashError];
-		// 
-		// if(bashError != nil) {
-		// 	NSBeep();
-		// 	NSLog(@"RDocumentWinCtrl.tidyRCode for re-checking bailed due to BASH error:\n%@", bashError);
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		// 	[self setStatusLineText:@""];
-		// 	isFormattingRcode = NO;
-		// 	return;
-		// }
-		// 
-		// error2 = nil;
-		// errMessages = [[[NSString alloc]
-		// 	initWithContentsOfFile:tempErrFile
-		// 		encoding:NSUTF8StringEncoding
-		// 			error:&error2] autorelease];
-		// if(error2 != nil) {
-		// 	NSBeep();
-		// 	NSLog(@"RDocumentWinCtrl.tidyRCode re-checking read error.");
-		// 	// Remove temporary files
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		// 	isFormattingRcode = NO;
-		// 	return;
-		// }
-		// if([errMessages length]) {
-		// 	NSRunInformationalAlertPanel(NLS(@"Format R Code"), [NSString stringWithFormat:@"%@", NLS(@"Sorry, formatting caused errors.")], NLS(@"Ok"), nil, nil);
-		// 	[[self window] makeKeyAndOrderFront:self];
-		// 	[[self window] makeFirstResponder:textView];
-		// 	// Remove temporary files
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
-		// 	[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
-		// 	isFormattingRcode = NO;
-		// 	return;
-		// }
-	}
-
 
 	// Insert formatted R code
 	if(![textView selectedRange].length)

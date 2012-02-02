@@ -120,7 +120,7 @@
 #define kBASHFileInternalexecutionUUID @"bashexeUUID"
 #define kBASHTaskOutputFilePath  @"/tmp/R_BASH_OUTPUT"
 #define kBASHTaskScriptCommandFilePath @"/tmp/R_BASH_SCRIPT_COMMAND"
-#define kBASHTaskShellVariableInputFilePathh @"/tmp/R_BASH_INPUT"
+#define kBASHTaskShellVariableInputFilePath @"/tmp/R_BASH_INPUT"
 #define kBASHTaskRedirectActionNone                 200
 #define kBASHTaskRedirectActionReplaceSection       201
 #define kBASHTaskRedirectActionReplaceContent       202

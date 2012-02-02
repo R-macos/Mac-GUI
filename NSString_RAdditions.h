@@ -37,7 +37,19 @@
 
 + (NSString*)stringWithNewUUID;
 
-- (NSString *)runBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atCurrentDirectoryPath:(NSString*)path callerInstance:(id)caller contextInfo:(NSDictionary*)contextInfo error:(NSError**)theError;
-- (NSString *)runBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atCurrentDirectoryPath:(NSString*)path error:(NSError**)theError;
+- (NSString *)evaluateAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment 
+	atPath:(NSString*)path 
+	callerInstance:(id)caller 
+	contextInfo:(NSDictionary*)contextInfo 
+	error:(NSError**)theError ignoreOutput:(BOOL)ignoreOutput;
+- (NSString *)evaluateAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment 
+	atPath:(NSString*)path error:(NSError**)theError;
+- (NSString *)evaluateAsBashCommandAndError:(NSError**)theError;
+- (NSString *)evaluateAsBashCommand;
+
+- (void)runAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atPath:(NSString*)path callerInstance:(id)caller contextInfo:(NSDictionary*)contextInfo error:(NSError**)theError;
+- (void)runAsBashCommandWithEnvironment:(NSDictionary*)shellEnvironment atPath:(NSString*)path error:(NSError**)theError;
+- (void)runAsBashCommandAndError:(NSError**)theError;
+- (void)runAsBashCommand;
 
 @end
