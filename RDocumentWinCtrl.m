@@ -1410,7 +1410,26 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		rs = [rs stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 		[tidyStr replaceCharactersInRange:r withString:[NSString stringWithFormat:@"c=\"@_@_@_@%@\"", rs]];
 		[tidyStr flushCachedRegexData];
-		searchRange = NSMakeRange(NSMaxRange(r), [tidyStr length]-NSMaxRange(r));
+		searchRange = NSMakeRange(r.location+[rs length], [tidyStr length]-r.location-[rs length]);
+	}
+	NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask
+										untilDate:[NSDate distantPast]
+										   inMode:NSDefaultRunLoopMode
+										  dequeue:YES];
+	if(event){
+		if ([event type] == NSKeyDown) {
+			unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
+			if (([event modifierFlags] & NSCommandKeyMask) && key == '.') {
+				SLog(@"RDocumentWinCtrl.tidyRCode terminated by user");
+				[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+				[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+				[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+				[self setStatusLineText:@""];
+				isFormattingRcode = NO;
+				return;
+			}
+		}
+		[NSApp sendEvent:event];
 	}
 
 	// check for comments at end of lines as for print(1) # print 1
@@ -1509,8 +1528,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				error:&error1] autorelease];
 
 	if(error1 != nil) {
-		NSBeep();
-		NSLog(@"RDocumentWinCtrl.tidyRCode read error.\n%@", error1);
+		SLog(@"RDocumentWinCtrl.tidyRCode read error.\n%@", error1);
 		[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
 		[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
 		[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
@@ -1587,6 +1605,26 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	tidiedStr = [tidiedStr stringByReplacingOccurrencesOfRegex:@"\\}\\s*else" withString:@"} else"];
 	tidiedStr = [@"\n" stringByAppendingString:tidiedStr];
 
+	event = [NSApp nextEventMatchingMask:NSAnyEventMask
+										untilDate:[NSDate distantPast]
+										   inMode:NSDefaultRunLoopMode
+										  dequeue:YES];
+	if(event){
+		if ([event type] == NSKeyDown) {
+			unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
+			if (([event modifierFlags] & NSCommandKeyMask) && key == '.') {
+				SLog(@"RDocumentWinCtrl.tidyRCode terminated by user");
+				[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+				[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+				[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+				[self setStatusLineText:@""];
+				isFormattingRcode = NO;
+				return;
+			}
+		}
+		[NSApp sendEvent:event];
+	}
+
 	// Re-convert comment lines
 	//  - first for comment lines which began with a #
 	[tidyStr setString:tidiedStr];
@@ -1601,9 +1639,30 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		r3 = [tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:3L error:nil];
 		rs = [[[tidyStr substringWithRange:r3] stringByReplacingOccurrencesOfString:@"\\t" withString:@"\t"] 
 			stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
-		[tidyStr replaceCharactersInRange:r2 withString:[NSString stringWithFormat:@"#%@\n%@", rs, [tidyStr substringWithRange:r]]];
-		searchRange = NSMakeRange(NSMaxRange(r2), [tidyStr length]-NSMaxRange(r2));
+		NSString *p = [NSString stringWithFormat:@"#%@\n%@", rs, [tidyStr substringWithRange:r]];
+		[tidyStr replaceCharactersInRange:r2 withString:p];
+		searchRange = NSMakeRange(r2.location+[p length], [tidyStr length]-r2.location-[p length]);
 		[tidyStr flushCachedRegexData];
+	}
+
+	event = [NSApp nextEventMatchingMask:NSAnyEventMask
+										untilDate:[NSDate distantPast]
+										   inMode:NSDefaultRunLoopMode
+										  dequeue:YES];
+	if(event){
+		if ([event type] == NSKeyDown) {
+			unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
+			if (([event modifierFlags] & NSCommandKeyMask) && key == '.') {
+				SLog(@"RDocumentWinCtrl.tidyRCode terminated by user");
+				[[NSFileManager defaultManager] removeItemAtPath:tempRFuncFile error:NULL];
+				[[NSFileManager defaultManager] removeItemAtPath:tempRFile error:NULL];
+				[[NSFileManager defaultManager] removeItemAtPath:tempErrFile error:NULL];
+				[self setStatusLineText:@""];
+				isFormattingRcode = NO;
+				return;
+			}
+		}
+		[NSApp sendEvent:event];
 	}
 
 	// if last line is a comment remove trailing \n if present

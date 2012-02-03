@@ -134,14 +134,14 @@
 	else
 		[theEnv setDictionary:[[NSProcessInfo processInfo] environment]];
 
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionNone] forKey:kBASHTaskShellVariableExitNone];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceSection] forKey:kBASHTaskShellVariableExitReplaceSelection];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceContent] forKey:kBASHTaskShellVariableExitReplaceContent];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsText] forKey:kBASHTaskShellVariableExitInsertAsText];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsSnippet] forKey:kBASHTaskShellVariableExitInsertAsSnippet];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTML] forKey:kBASHTaskShellVariableExitShowAsHTML];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsTextTooltip] forKey:kBASHTaskShellVariableExitShowAsTextTooltip];
-	// [theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTMLTooltip] forKey:kBASHTaskShellVariableExitShowAsHTMLTooltip];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionNone] forKey:kBASHTaskShellVariableExitNone];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceSection] forKey:kBASHTaskShellVariableExitReplaceSelection];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceContent] forKey:kBASHTaskShellVariableExitReplaceContent];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsText] forKey:kBASHTaskShellVariableExitInsertAsText];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionInsertAsSnippet] forKey:kBASHTaskShellVariableExitInsertAsSnippet];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTML] forKey:kBASHTaskShellVariableExitShowAsHTML];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsTextTooltip] forKey:kBASHTaskShellVariableExitShowAsTextTooltip];
+	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionShowAsHTMLTooltip] forKey:kBASHTaskShellVariableExitShowAsHTMLTooltip];
 	
 	if(theEnv != nil && [theEnv count])
 		[bashTask setEnvironment:theEnv];
@@ -178,7 +178,7 @@
 												untilDate:[NSDate distantPast]
 												   inMode:NSDefaultRunLoopMode
 												  dequeue:YES];
-			usleep(1000);
+			usleep(10000);
 			if(!event) continue;
 			if ([event type] == NSKeyDown) {
 				unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
