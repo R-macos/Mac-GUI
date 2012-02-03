@@ -29,6 +29,7 @@
 	[self addPane:editorPrefPane withIdentifier:[editorPrefPane identifier]];
 
 	[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:RScriptEditorDefaultFont options:NSKeyValueObservingOptionNew context:NULL];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:NSApp];
 
 	// set up some configuration options
 	[self setUsesConfigurationPane:YES];

@@ -168,6 +168,24 @@
 	// (fixes PR#13625)
 	[normalSyntaxColorWell activate:YES];
 	[normalSyntaxColorWell deactivate];
+	[stringSyntaxColorWell activate:YES];
+	[stringSyntaxColorWell deactivate];
+	[numberSyntaxColorWell activate:YES];
+	[numberSyntaxColorWell deactivate];
+	[keywordSyntaxColorWell activate:YES];
+	[keywordSyntaxColorWell deactivate];
+	[commentSyntaxColorWell activate:YES];
+	[commentSyntaxColorWell deactivate];
+	[identifierSyntaxColorWell activate:YES];
+	[identifierSyntaxColorWell deactivate];
+	[backgroundSyntaxColorWell activate:YES];
+	[backgroundSyntaxColorWell deactivate];
+	[currentLineSyntaxColorWell activate:YES];
+	[currentLineSyntaxColorWell deactivate];
+	[cursorSyntaxColorWell activate:YES];
+	[cursorSyntaxColorWell deactivate];
+	[selectionSyntaxColorWell activate:YES];
+	[selectionSyntaxColorWell deactivate];
 }
 
 - (void)didUnselect

@@ -213,6 +213,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
 	[shColorIdentifier retain]; 
 
+	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:nil];
+	if (!c) c=[NSColor selectedControlTextColor];
+	NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+	[attr setDictionary:[self selectedTextAttributes]];
+	[attr setObject:c forKey:NSForegroundColorAttributeName];
+	[self setSelectedTextAttributes:attr];
+	
 	// Rd stuff
 	// c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];
 	// if (c) rdColorSection = c;
@@ -284,6 +291,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:HighlightIntervalKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:highlightCurrentLine options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:showLineNumbersKey options:NSKeyValueObservingOptionNew context:NULL];
+	[prefs addObserver:self forKeyPath:editorSelectionBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 
 	[self setTextColor:shColorNormal];
 	[self setInsertionPointColor:shColorCursor];
@@ -398,6 +406,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:editorCurrentLineBackgroundColorKey]) {
 		if(shColorCurrentLine) [shColorCurrentLine release];
 		shColorCurrentLine = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+		[self setNeedsDisplayInRect:[self bounds]];
+	} else if ([keyPath isEqualToString:editorSelectionBackgroundColorKey]) {
+		NSColor *c = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
+		NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+		[attr setDictionary:[self selectedTextAttributes]];
+		[attr setObject:c forKey:NSForegroundColorAttributeName];
+		[self setSelectedTextAttributes:attr];
 		[self setNeedsDisplayInRect:[self bounds]];
 
 	} else if ([keyPath isEqualToString:showSyntaxColoringKey]) {
@@ -533,7 +548,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 								selector:@selector(doSyntaxHighlighting) 
 								object:nil];
 
-		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0f];
+		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.001f];
 
 		// Cancel setting undo break point
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
@@ -698,7 +713,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	NSRange tokenRange;
 
 	// first remove the old colors and kQuote
-	[theTextStorage removeAttribute:NSForegroundColorAttributeName range:textRange];
+	// [theTextStorage removeAttribute:NSForegroundColorAttributeName range:textRange];
 	// mainly for suppressing auto-pairing in 
 	[theTextStorage removeAttribute:kLEXToken range:textRange];
 

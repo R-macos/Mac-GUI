@@ -300,6 +300,10 @@
 				// thus close it explicitly
 				[[NSColorPanel sharedColorPanel] close];
 
+				// Synchronize selected toolbar item mainly if the
+				// method was called by the app (like Rconsole colors)
+				[[[self window] toolbar] setSelectedItemIdentifier:identifier];
+
 				[[self window] setTitle:[[prefPanes objectForKey:identifier] label]];
 				[self changeContentView:paneView];
 

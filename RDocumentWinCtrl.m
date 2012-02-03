@@ -427,12 +427,12 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	NSSize p = [statusLine frame].size;
 	p.height = (w > p.width) ? 22 : 17;
 	[statusLine setFrameSize:p];
+	[statusLine setToolTip:text];
+	[statusLine setStringValue:text];
 	[statusLine setNeedsDisplay:YES];
 	// Run NSDefaultRunLoopMode to allow to update status line
 	[[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode 
 							 beforeDate:[NSDate distantPast]];
-	[statusLine setToolTip:text];
-	[statusLine setStringValue:text];
 
 }
 
@@ -1334,6 +1334,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	NSMutableString *tidyStr = [NSMutableString string];
 	NSString *startIndentation = @"";
+	NSUInteger lineOffset = 0;
 
 	NSString *tempRFuncFile = [NSString stringWithFormat:@"%@/RGUI_Rtidy_func.R", NSTemporaryDirectory()];
 	NSString *tempRFile = [NSString stringWithFormat:@"%@/RGUI_Rtidy.R", NSTemporaryDirectory()];
@@ -1361,16 +1362,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// prefix the selected text with n empty lines according
 		// the cursor location for possible line numbers in error message
 		NSString *string = [textView string];
-		NSMutableString *prefix = [NSMutableString string];
 		NSUInteger index, stringLength = [string length];
 		NSUInteger currentCursorPosition = [textView selectedRange].location;
-		for (index = 0; index < stringLength;) {
+		for (index = 0; index < stringLength; lineOffset++) {
 		    index = NSMaxRange([string lineRangeForRange:NSMakeRange(index, 0)]);
 			if(index > currentCursorPosition)
 				break;
-			[prefix appendString:@"\n"];
 		}
-		[tidyStr insertString:prefix atIndex:0];
 
 	} else {
 		[tidyStr setString:[textView string]];
@@ -1388,14 +1386,16 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	NSString *rs = nil;
 	NSRange r;
 	NSString *comre = @"^\\s*(#([^\n]*))";
+	NSRange searchRange = NSMakeRange(0, [tidyStr length]);
 
 	// first line begins with a comment?
-	if([tidyStr isMatchedByRegex:comre]) {
-		r = [tidyStr rangeOfRegex:comre capture:1L];
-		rs = [tidyStr substringWithRange:[tidyStr rangeOfRegex:comre capture:2L]];
+	if([tidyStr isMatchedByRegex:comre inRange:searchRange]) {
+		r = [tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:1L error:nil];
+		rs = [tidyStr substringWithRange:[tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:2L error:nil]];
 		rs = [rs stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 		[tidyStr replaceCharactersInRange:r withString:[NSString stringWithFormat:@"c=\"@_@_@_@%@\"", rs]];
 		[tidyStr flushCachedRegexData];
+		searchRange = NSMakeRange(NSMaxRange(r), [tidyStr length]-NSMaxRange(r));
 	}
 
 	[tidyStr setString:[NSString stringWithFormat:@"dummy<-function(){%@\n}\n", tidyStr]];
@@ -1403,12 +1403,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	// go through all comment lines beginning with a #
 	// and replace them by e.g. "c="@_@_@_@print 1""
 	comre = @"\n\\s*(#([^\n]*))";
-	while([tidyStr isMatchedByRegex:comre]) {
-		r = [tidyStr rangeOfRegex:comre capture:1L];
-		rs = [tidyStr substringWithRange:[tidyStr rangeOfRegex:comre capture:2L]];
+	searchRange = NSMakeRange(0, [tidyStr length]);
+	while([tidyStr isMatchedByRegex:comre inRange:searchRange]) {
+		r = [tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:1L error:nil];
+		rs = [tidyStr substringWithRange:[tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:2L error:nil]];
 		rs = [rs stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 		[tidyStr replaceCharactersInRange:r withString:[NSString stringWithFormat:@"c=\"@_@_@_@%@\"", rs]];
 		[tidyStr flushCachedRegexData];
+		searchRange = NSMakeRange(NSMaxRange(r), [tidyStr length]-NSMaxRange(r));
 	}
 
 	// check for comments at end of lines as for print(1) # print 1
@@ -1416,7 +1418,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	comre = @"(?s)(#([^\n]*))";
 	RTextView *rtv = [[RTextView alloc] init];
 	[rtv insertText:tidyStr];
-	NSRange searchRange = NSMakeRange(0, [[rtv string] length]);
+	searchRange = NSMakeRange(0, [[rtv string] length]);
 	NSRange fr;
 	NSString *rstr = nil;
 	NSString *rtvstr = [rtv string];
@@ -1551,6 +1553,9 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[[self window] makeKeyAndOrderFront:self];
 		[[self window] makeFirstResponder:textView];
 
+		// for selection synchronize line number
+		errorLineNumber += --lineOffset;
+
 		// Go to possible error line
 		if(errorLineNumber >=0) {
 			NSRange currentLineRange = NSMakeRange(0, 0);
@@ -1589,15 +1594,18 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	comre = @"(?m)^([ \t]*)(c = \"@_@_@_@([^\n]*)\"\n[ \t]*)";
 	NSRange r2;
 	NSRange r3;
-	while([tidyStr isMatchedByRegex:comre]) {
-		r  = [tidyStr rangeOfRegex:comre capture:1L];
-		r2 = [tidyStr rangeOfRegex:comre capture:2L];
-		r3 = [tidyStr rangeOfRegex:comre capture:3L];
+	searchRange = NSMakeRange(0, [tidyStr length]);
+	while([tidyStr isMatchedByRegex:comre inRange:searchRange]) {
+		r  = [tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:1L error:nil];
+		r2 = [tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:2L error:nil];
+		r3 = [tidyStr rangeOfRegex:comre options:0 inRange:searchRange capture:3L error:nil];
 		rs = [[[tidyStr substringWithRange:r3] stringByReplacingOccurrencesOfString:@"\\t" withString:@"\t"] 
 			stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
 		[tidyStr replaceCharactersInRange:r2 withString:[NSString stringWithFormat:@"#%@\n%@", rs, [tidyStr substringWithRange:r]]];
+		searchRange = NSMakeRange(NSMaxRange(r2), [tidyStr length]-NSMaxRange(r2));
 		[tidyStr flushCachedRegexData];
 	}
+
 	// if last line is a comment remove trailing \n if present
 	if([tidyStr length])
 		[tidyStr replaceOccurrencesOfRegex:@"^(\\s*#[^\n]*)\n$" withString:@"$1" range:[tidyStr lineRangeForRange:NSMakeRange([tidyStr length]-1,0)]];
@@ -1619,11 +1627,14 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if([textView selectedRange].length)
 		[tidyStr replaceOccurrencesOfRegex:@"\n$" withString:@""];
 
-	// Insert formatted R code
-	if(![textView selectedRange].length)
-		[textView setSelectedRange:NSMakeRange(0, [[textView string] length])];
-	[textView insertText:tidyStr];
-
+	if([tidyStr length]) {
+		// Insert formatted R code
+		if(![textView selectedRange].length)
+			[textView setSelectedRange:NSMakeRange(0, [[textView string] length])];
+		[textView insertText:tidyStr];
+	} else {
+		NSBeep();
+	}
 	isFormattingRcode = NO;
 
 	// Remove temporary files

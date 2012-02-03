@@ -174,6 +174,18 @@
 	// (fixes PR#13625)
 	[inputColorWell activate:YES];
 	[inputColorWell deactivate];
+	[outputColorWell activate:YES];
+	[outputColorWell deactivate];
+	[promptColorWell activate:YES];
+	[promptColorWell deactivate];
+	[backgColorWell activate:YES];
+	[backgColorWell deactivate];
+	[stderrColorWell activate:YES];
+	[stderrColorWell deactivate];
+	[stdoutColorWell activate:YES];
+	[stdoutColorWell deactivate];
+	[selectionColorWell activate:YES];
+	[selectionColorWell deactivate];
 }
 
 - (void)didUnselect

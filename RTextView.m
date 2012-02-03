@@ -119,7 +119,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 - (BOOL)acceptsFirstResponder
 {
 
-	// Close sharedColorPanel if visible to avoid annoying color changes
+	// Close sharedColorPanel if visible to avoid color changes
 	if([[NSColorPanel sharedColorPanel] isVisible])
 		[[NSColorPanel sharedColorPanel] close];
 
