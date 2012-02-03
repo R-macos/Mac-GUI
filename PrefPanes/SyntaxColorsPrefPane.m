@@ -53,7 +53,6 @@
 		[theImage setFlipped:NO];
 		[theImage lockFocus];
 		[[NSColor blackColor] set];
-		//		[theIdentifier drawAtPoint:NSZeroPoint withAttributes:nil];
 		[theImage unlockFocus];
 		[theImage recache];
 		[self setIcon:theImage];
@@ -63,8 +62,8 @@
 
 - (void) awakeFromNib
 {
-	[self updatePreferences];
 	[[Preferences sharedPreferences] addDependent:self];
+	[self updatePreferences];
 	[[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
 }
 
@@ -181,6 +180,10 @@
 	[Preferences setKey:normalSyntaxColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
+- (IBAction)changeSelectionColor:(id)sender {
+	[Preferences setKey:editorSelectionBackgroundColorKey withArchivedObject:[(NSColorWell*)sender color]];
+}
+
 - (IBAction)changeStringColor:(id)sender {
 	[Preferences setKey:stringSyntaxColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
@@ -235,6 +238,7 @@
 
 - (void) updatePreferences
 {
+
 	NSColor *c=[Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[normalSyntaxColorWell color]]) [normalSyntaxColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:stringSyntaxColorKey withDefault:nil];
@@ -247,7 +251,16 @@
 	if (c && ![c isEqualTo:[commentSyntaxColorWell color]]) [commentSyntaxColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[identifierSyntaxColorWell color]]) [identifierSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];
+	c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]];
+	if (c && ![c isEqualTo:[backgroundSyntaxColorWell color]]) [backgroundSyntaxColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:editorCurrentLineBackgroundColorKey withDefault:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8]];
+	if (c && ![c isEqualTo:[currentLineSyntaxColorWell color]]) [currentLineSyntaxColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
+	if (c && ![c isEqualTo:[cursorSyntaxColorWell color]]) [cursorSyntaxColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:[NSColor selectedControlTextColor]];
+	if (c && ![c isEqualTo:[selectionSyntaxColorWell color]]) [selectionSyntaxColorWell setColor:c];
+
+	// c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];
 	// if (c && ![c isEqualTo:[sectionRdSyntaxColorWell color]]) [sectionRdSyntaxColorWell setColor:c];
 	// c=[Preferences unarchivedObjectForKey:macroArgRdSyntaxColorKey withDefault:nil];
 	// if (c && ![c isEqualTo:[macroArgRdSyntaxColorWell color]]) [macroArgRdSyntaxColorWell setColor:c];
@@ -255,12 +268,7 @@
 	// if (c && ![c isEqualTo:[macroGenRdSyntaxColorWell color]]) [macroGenRdSyntaxColorWell setColor:c];
 	// c=[Preferences unarchivedObjectForKey:directiveRdSyntaxColorKey withDefault:nil];
 	// if (c && ![c isEqualTo:[directiveRdSyntaxColorWell color]]) [directiveRdSyntaxColorWell setColor:c];
-	// c=[Preferences unarchivedObjectForKey:editorBackgroundColorKey withDefault:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:1.0 alpha:1.0]];
-	if (c && ![c isEqualTo:[backgroundSyntaxColorWell color]]) [backgroundSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:editorCurrentLineBackgroundColorKey withDefault:[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8]];
-	if (c && ![c isEqualTo:[currentLineSyntaxColorWell color]]) [currentLineSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
-	if (c && ![c isEqualTo:[cursorSyntaxColorWell color]]) [cursorSyntaxColorWell setColor:c];
+
 }
 
 - (IBAction) setDefaultSyntaxColors:(id)sender
@@ -283,6 +291,8 @@
 		[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
 	[Preferences setKey:editorCurrentLineBackgroundColorKey withArchivedObject:
 		[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8]];
+	[Preferences setKey:editorSelectionBackgroundColorKey withArchivedObject:
+		[NSColor selectedControlTextColor]];
 	// [Preferences setKey:sectionRdSyntaxColorKey withArchivedObject:
 	// 	[NSColor colorWithDeviceRed:0.8 green:0.0353 blue:0.02 alpha:1.0]];
 	// [Preferences setKey:macroArgRdSyntaxColorKey withArchivedObject:

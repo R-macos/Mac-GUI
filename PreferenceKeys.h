@@ -34,6 +34,7 @@
 
 #define backgColorKey @"Background Color"
 #define inputColorKey @"Input Color"
+#define selectionColorKey @"Selection Color"
 #define outputColorKey @"Output Color"
 #define stdoutColorKey @"Stdout Color"
 #define stderrColorKey @"Stderr Color"
@@ -56,6 +57,7 @@
 #define editorCursorColorKey @"RScriptEditorCursorColor"
 #define editorBackgroundColorKey @"RScriptEditorBackgroundColor"
 #define editorCurrentLineBackgroundColorKey @"RScriptEditorHighlightCurrentLineColor"
+#define editorSelectionBackgroundColorKey @"RScriptEditorSelectionColor"
 
 #define initialWorkingDirectoryKey @"Working directory"
 #define lastUsedFileEncoding @"LastUsedFileEncoding"
@@ -150,3 +152,4 @@
 #define iStdoutColor     5
 #define iRootColor       6
 #define iErrorColor      iStderrColor
+#define iSelectionColor  7

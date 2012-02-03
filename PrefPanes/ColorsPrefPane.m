@@ -70,6 +70,7 @@
 {
 	[self updatePreferences];
 	[[Preferences sharedPreferences] addDependent:self];
+	[[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
 }
 
 - (void) dealloc
@@ -185,6 +186,10 @@
 	[Preferences setKey:inputColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
 
+- (IBAction)changeSelectionColor:(id)sender {
+	[Preferences setKey:inputColorKey withArchivedObject:[(NSColorWell*)sender color]];
+}
+
 - (IBAction)changeOutputColor:(id)sender {
 	[Preferences setKey:outputColorKey withArchivedObject:[(NSColorWell*)sender color]];
 }
@@ -221,6 +226,8 @@
 	if (c && ![c isEqualTo:[inputColorWell color]]) [inputColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:outputColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[outputColorWell color]]) [outputColorWell setColor:c];
+	c=[Preferences unarchivedObjectForKey:selectionColorKey withDefault:nil];
+	if (c && ![c isEqualTo:[selectionColorWell color]]) [selectionColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:promptColorKey withDefault:nil];
 	if (c && ![c isEqualTo:[promptColorWell color]]) [promptColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:stdoutColorKey withDefault:nil];

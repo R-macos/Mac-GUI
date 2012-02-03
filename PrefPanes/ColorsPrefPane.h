@@ -44,6 +44,7 @@
     IBOutlet NSColorWell *backgColorWell;
     IBOutlet NSColorWell *stderrColorWell;
     IBOutlet NSColorWell *stdoutColorWell;
+    IBOutlet NSColorWell *selectionColorWell;
 	
 	IBOutlet NSButton *defaultColorsButton;
 	IBOutlet NSSlider *alphaStepper;

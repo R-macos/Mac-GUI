@@ -35,26 +35,36 @@
 #import "../Preferences.h"
 
 @interface SyntaxColorsPrefPane : NSObject <AMPrefPaneProtocol, PreferencesDependent> {
+
+
 	IBOutlet NSView *mainView;
-	NSString *identifier;
-	NSString *label;
-	NSString *category;
-	NSImage *icon;
-	
+
 	IBOutlet NSColorWell *normalSyntaxColorWell;
-    IBOutlet NSColorWell *stringSyntaxColorWell;
-    IBOutlet NSColorWell *numberSyntaxColorWell;
-    IBOutlet NSColorWell *keywordSyntaxColorWell;
-    IBOutlet NSColorWell *commentSyntaxColorWell;
-    IBOutlet NSColorWell *identifierSyntaxColorWell;
-    IBOutlet NSColorWell *backgroundSyntaxColorWell;
-    IBOutlet NSColorWell *currentLineSyntaxColorWell;
-    IBOutlet NSColorWell *cursorSyntaxColorWell;
+	IBOutlet NSColorWell *stringSyntaxColorWell;
+	IBOutlet NSColorWell *numberSyntaxColorWell;
+	IBOutlet NSColorWell *keywordSyntaxColorWell;
+	IBOutlet NSColorWell *commentSyntaxColorWell;
+	IBOutlet NSColorWell *identifierSyntaxColorWell;
+	IBOutlet NSColorWell *backgroundSyntaxColorWell;
+	IBOutlet NSColorWell *currentLineSyntaxColorWell;
+	IBOutlet NSColorWell *cursorSyntaxColorWell;
+	IBOutlet NSColorWell *selectionSyntaxColorWell;
     // IBOutlet NSColorWell *sectionRdSyntaxColorWell;
     // IBOutlet NSColorWell *macroArgRdSyntaxColorWell;
     // IBOutlet NSColorWell *macroGenRdSyntaxColorWell;
     // IBOutlet NSColorWell *directiveRdSyntaxColorWell;
-    IBOutlet NSButton *setDefaultSyntaxColors;
+
+	IBOutlet NSButton *setDefaultSyntaxColors;
+
+	IBOutlet NSTextField *colorThemeName;
+
+	NSString *identifier;
+	NSString *label;
+	NSString *category;
+	NSImage *icon;
+
+	
+
 }
 
 - (id)initWithIdentifier:(NSString *)identifier label:(NSString *)label category:(NSString *)category;
@@ -85,6 +95,8 @@
 - (IBAction) changeBackgroundColor:(id)sender;
 - (IBAction) changeCurrentLineColor:(id)sender;
 - (IBAction) changeCursorColor:(id)sender;
+- (IBAction) changeSelectionColor:(id)sender;
+
 // - (IBAction) changeRdSectionColor:(id)sender;
 // - (IBAction) changeRdMacroGenColor:(id)sender;
 // - (IBAction) changeRdMacroArgColor:(id)sender;

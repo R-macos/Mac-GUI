@@ -205,10 +205,10 @@ static inline const char* NSStringUTF8String(NSString* self)
 	
 	consoleColorsKeys = [[NSArray alloc] initWithObjects:
 		backgColorKey, inputColorKey, outputColorKey, promptColorKey,
-		stderrColorKey, stdoutColorKey, rootColorKey, nil];
+		stderrColorKey, stdoutColorKey, rootColorKey, selectionColorKey, nil];
 	defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
 		[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
-		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], nil];
+		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], [NSColor selectedControlTextColor], nil];
 	consoleColors = [defaultConsoleColors mutableCopy];
 
 	filteredHistory = nil;
@@ -3616,6 +3616,9 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[attr setDictionary:[consoleTextView typingAttributes]];
 		[attr setObject:[consoleColors objectAtIndex:iInputColor] forKey:NSForegroundColorAttributeName];
 		[consoleTextView setTypingAttributes:attr];
+		[attr setDictionary:[consoleTextView selectedTextAttributes]];
+		[attr setObject:[consoleColors objectAtIndex:iSelectionColor] forKey:NSForegroundColorAttributeName];
+		[consoleTextView setSelectedTextAttributes:attr];
 	}
 	[consoleTextView setNeedsDisplay:YES];
 	SLog(@" - done, preferences updated");
