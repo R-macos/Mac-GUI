@@ -63,6 +63,7 @@
 #import "PreferenceKeys.h"
 #import "RTextView.h"
 #import "RConsoleTextStorage.h"
+#import "RProgressIndicator.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -72,7 +73,7 @@
 @interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent, NSTextStorageDelegate, NSToolbarDelegate>
 {
 	IBOutlet RTextView *consoleTextView;
-	IBOutlet NSProgressIndicator *progressWheel;
+	IBOutlet RProgressIndicator *progressWheel;
 	IBOutlet NSTableView *historyView;            /* TableView for the package manager */ 
 	IBOutlet NSTextField *WDirView;               /* Mini-TextField for the working directory */
 	IBOutlet NSSearchField *helpSearch;           /* help search  field */

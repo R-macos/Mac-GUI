@@ -186,6 +186,8 @@
 		BC12B314130A65CE009F7D3F /* RScriptEditorTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */; };
 		BC12DC4A130EC12900FB39CE /* NoodleLineNumberView.h in Headers */ = {isa = PBXBuildFile; fileRef = BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */; };
 		BC12DC4B130EC12900FB39CE /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */; };
+		BC13F8AB14DC6DA10083305F /* RProgressIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = BC13F8A914DC6DA10083305F /* RProgressIndicator.h */; };
+		BC13F8AC14DC6DA10083305F /* RProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = BC13F8AA14DC6DA10083305F /* RProgressIndicator.m */; };
 		BC1952B21330C9D400D52B29 /* RChooseEncodingPopupAccessory.m in Sources */ = {isa = PBXBuildFile; fileRef = BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */; };
 		BC1952B31330C9D400D52B29 /* RChooseEncodingPopupAccessory.h in Headers */ = {isa = PBXBuildFile; fileRef = BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */; };
 		BC1952B61330CA3500D52B29 /* EncodingPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BC1952B41330CA3500D52B29 /* EncodingPopupView.xib */; };
@@ -463,6 +465,8 @@
 		BC12B312130A65CE009F7D3F /* RScriptEditorTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorTextView.m; sourceTree = "<group>"; };
 		BC12DC48130EC12900FB39CE /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoodleLineNumberView.h; sourceTree = "<group>"; };
 		BC12DC49130EC12900FB39CE /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoodleLineNumberView.m; sourceTree = "<group>"; };
+		BC13F8A914DC6DA10083305F /* RProgressIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RProgressIndicator.h; sourceTree = "<group>"; };
+		BC13F8AA14DC6DA10083305F /* RProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RProgressIndicator.m; sourceTree = "<group>"; };
 		BC1952B01330C9D400D52B29 /* RChooseEncodingPopupAccessory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RChooseEncodingPopupAccessory.m; sourceTree = "<group>"; };
 		BC1952B11330C9D400D52B29 /* RChooseEncodingPopupAccessory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RChooseEncodingPopupAccessory.h; sourceTree = "<group>"; };
 		BC1952B51330CA3500D52B29 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/EncodingPopupView.xib; sourceTree = "<group>"; };
@@ -548,6 +552,8 @@
 				BC0D31971334B1240071B76A /* Category Additions */,
 				687B4E430794167000074042 /* Console */,
 				687B4E400794165600074042 /* Editor */,
+				BC13F8A914DC6DA10083305F /* RProgressIndicator.h */,
+				BC13F8AA14DC6DA10083305F /* RProgressIndicator.m */,
 				D41DED57073B3FF700B900F2 /* RDocumentController.h */,
 				D41DED58073B3FF700B900F2 /* RDocumentController.m */,
 				1CDD06110763FD2000B8FCA6 /* PreferenceKeys.h */,
@@ -1008,6 +1014,7 @@
 				BCF5D88C14BB5666000A71F6 /* RdScriptEditorTokens.h in Headers */,
 				BCFAE71C14C58372008762EE /* RSymbolTokens.h in Headers */,
 				BCF4B2C114D9815400F14715 /* NSString_RAdditions.h in Headers */,
+				BC13F8AB14DC6DA10083305F /* RProgressIndicator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1265,6 +1272,7 @@
 				BCF5D88A14BB564A000A71F6 /* RdScriptEditorTokens.l in Sources */,
 				BCFAE71A14C5835B008762EE /* RSymbolTokens.l in Sources */,
 				BCF4B2C214D9815400F14715 /* NSString_RAdditions.m in Sources */,
+				BC13F8AC14DC6DA10083305F /* RProgressIndicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
