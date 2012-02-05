@@ -61,7 +61,7 @@ extern BOOL RTextView_autoCloseBrackets;
 
 - (void)setConsoleMode:(BOOL)isConsole;
 
-- (int)parserContextForPosition:(int)position;
+- (int)  parserContextForPosition:(int)position;
 - (void) showHelpForCurrentFunction;
 - (void) currentFunctionHint;
 - (BOOL) wrapSelectionWithPrefix:(NSString *)prefix suffix:(NSString *)suffix;
@@ -73,5 +73,7 @@ extern BOOL RTextView_autoCloseBrackets;
 
 - (IBAction)makeASCIIconform:(id)sender;
 - (IBAction)unescapeUnicode:(id)sender;
+
+- (NSUInteger)characterIndexOfPoint:(NSPoint)aPoint;
 
 @end

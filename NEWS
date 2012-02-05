@@ -1,5 +1,17 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-02-05 [HJBB]
+*	In Script Editor "function list" selection
+	follows cursor position.
+*	Added support for dragging *.R and *.Rdata files to
+	RConsole or Script Editor to insert template
+	"source()" and "load()" resp. For these file
+	extensions holding down CMD key while dragging
+	will insert the file path only.
+*	"Copy" for RConsole and Script Editor will also add
+	rich text format (RTF) data to the pasteboard in order
+	to be able to paste text syntax highlighted
+
 Last-update: 2012-02-02 [HJBB]
 *	Added under menu Format > "Format Source Code".
 	This command will format the selection or the entire

@@ -572,6 +572,11 @@ static inline const char* NSStringUTF8String(NSString* self)
 	return home;
 }
 
+- (NSString*) currentWorkingDirectory
+{
+	return [[WDirView stringValue] stringByExpandingTildeInPath];
+}
+
 -(void) applicationDidFinishLaunching: (NSNotification *)aNotification
 {
 

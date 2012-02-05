@@ -302,6 +302,7 @@
 - (BOOL)appLaunched;
 
 - (NSString*) home;
+- (NSString*) currentWorkingDirectory;
 - (int) helpServerPort;
 - (BOOL)isREditMode;
 

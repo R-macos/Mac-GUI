@@ -555,15 +555,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 								selector:@selector(breakUndoCoalescing) 
 								object:nil];
 
-		// Cancel calling functionRescan
-		[NSObject cancelPreviousPerformRequestsWithTarget:[self delegate] 
-								selector:@selector(functionRescan) 
-								object:nil];
-
 		// Improve undo behaviour, i.e. it depends how fast the user types
 		[self performSelector:@selector(breakUndoCoalescing) withObject:nil afterDelay:0.8];
-
-		[[self delegate] performSelector:@selector(functionRescan) withObject:nil afterDelay:0.2];
 
 	}
 

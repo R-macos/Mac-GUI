@@ -294,6 +294,30 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[[self delegate] highlightBracesWithShift:-1 andWarn:YES];
 }
 
+/**
+ * Copy selected text chunk as RTF to preserve syntax highlighting
+ * and as plain text
+ */
+- (void)copy:(id)sender
+{
+
+	NSPasteboard *pb = [NSPasteboard generalPasteboard];
+	NSTextStorage *textStorage = [self textStorage];
+	NSData *rtf = [textStorage RTFFromRange:[self selectedRange]
+		documentAttributes:nil];
+
+	if (rtf)
+	{
+		[pb declareTypes:[NSArray arrayWithObject:NSRTFPboardType] owner:self];
+		[pb setData:rtf forType:NSRTFPboardType];
+	}
+
+	[pb addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
+	[pb setString:[textStorage string] forType:NSStringPboardType];
+
+}
+
+
 - (void)deleteBackward:(id)sender
 {
 
@@ -1050,7 +1074,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 }
 
-
 #pragma mark -
 
 - (void)changeFont:(id)sender
@@ -1080,5 +1103,99 @@ BOOL RTextView_autoCloseBrackets = YES;
 	}
 
 }
+
+#pragma mark -
+#pragma mark drag&drop
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+	NSPasteboard *pboard = [sender draggingPasteboard];
+
+	// textClip stuff handles the system
+	if ( [[pboard types] containsObject:NSFilenamesPboardType] 
+		&& [[pboard types] containsObject:@"CorePasteboardFlavorType 0x54455854"])
+		return [super performDragOperation:sender];
+
+	// if a file path is dragged check for R or Rdata files or if user has set a template
+	// passed via the file extension
+	if ( [[pboard types] containsObject:NSFilenamesPboardType] ) {
+
+		NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
+
+		NSInteger i = 0;
+		NSString *suffix = ([files count] > 1) ? @"\n" : @"";
+
+		NSString *curDir = @"";
+		// Get current directory of source document's file path
+		if([[[[self window] windowController] document] retain]) {
+			NSString *path = [[[[[self window] windowController] document] fileURL] path];
+			curDir = [path stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"%@$", [path lastPathComponent]] withString:@""];
+		// otherwise take the current working directory
+		} else
+			curDir = [[[RController sharedController] currentWorkingDirectory] stringByAppendingString:@"/"];
+		
+		for(i = 0; i < [files count]; i++) {
+
+			NSString *filepath = [[pboard propertyListForType:NSFilenamesPboardType] objectAtIndex:i];
+			filepath = [filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""];
+			// Set the new insertion point
+			NSPoint draggingLocation = [sender draggingLocation];
+			draggingLocation = [self convertPoint:draggingLocation fromView:nil];
+			NSUInteger characterIndex = [self characterIndexOfPoint:draggingLocation];
+			[self setSelectedRange:NSMakeRange(characterIndex,0)];
+
+			// Check if user pressed  ⌘ while dragging for inserting only the file path
+			if([sender draggingSourceOperationMask] == 4)
+			{
+				[self insertText:[filepath stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
+			} 
+			else {
+				NSString *extension = [[filepath pathExtension] lowercaseString];
+				// handle *.R for source()
+				if([extension isEqualToString:@"r"])
+					[self insertText:[NSString stringWithFormat:@"source('%@', chdir = %@)%@", 
+						[filepath stringByAbbreviatingWithTildeInPath], 
+						([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
+						(i < ([files count]-1)) ? suffix : @""]];
+				// handle *.Rdata for load()
+				else if([extension isEqualToString:@"rdata"])
+					[self insertText:[NSString stringWithFormat:@"load('%@')%@", 
+						[filepath stringByAbbreviatingWithTildeInPath], 
+						(i < ([files count]-1)) ? suffix : @""]];
+				else
+					return [super performDragOperation:sender];
+			}
+		}
+		return YES;
+	}
+
+	return [super performDragOperation:sender];
+
+}
+
+/**
+ * Convert a NSPoint, usually the mouse location, to
+ * a character index of the text view.
+ */
+- (NSUInteger)characterIndexOfPoint:(NSPoint)aPoint
+{
+	NSUInteger glyphIndex;
+	NSLayoutManager *layoutManager = [self layoutManager];
+	CGFloat fractionalDistance;
+	NSRange range;
+
+	range = [layoutManager glyphRangeForTextContainer:[self textContainer]];
+	glyphIndex = [layoutManager glyphIndexForPoint:aPoint
+		inTextContainer:[self textContainer]
+		fractionOfDistanceThroughGlyph:&fractionalDistance];
+	if( fractionalDistance > 0.5 ) glyphIndex++;
+
+	if( glyphIndex == NSMaxRange(range) )
+		return  [[self textStorage] length];
+	else
+		return [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+
+}
+
 
 @end

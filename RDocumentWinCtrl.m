@@ -1245,8 +1245,15 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 								selector:@selector(currentFunctionHint) 
 								object:nil];
 
-		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
+		// Cancel calling functionRescan
+		[NSObject cancelPreviousPerformRequestsWithTarget:tv 
+								selector:@selector(functionRescan) 
+								object:nil];
 
+		// update current function hint
+		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
+		// update function list to display the function in which the cursor is located
+		[self performSelector:@selector(functionRescan) withObject:nil afterDelay:0.2];
 	}
 }
 
