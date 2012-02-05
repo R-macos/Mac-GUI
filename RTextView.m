@@ -1137,7 +1137,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 		for(i = 0; i < [files count]; i++) {
 
 			NSString *filepath = [[pboard propertyListForType:NSFilenamesPboardType] objectAtIndex:i];
-			filepath = [filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""];
 			// Set the new insertion point
 			NSPoint draggingLocation = [sender draggingLocation];
 			draggingLocation = [self convertPoint:draggingLocation fromView:nil];
@@ -1150,6 +1149,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 				[self insertText:[filepath stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
 			} 
 			else {
+
+				// convert filepath to the relative path against curDir
+				filepath = [filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""];
+
 				NSString *extension = [[filepath pathExtension] lowercaseString];
 				// handle *.R for source()
 				if([extension isEqualToString:@"r"])
