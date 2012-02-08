@@ -208,7 +208,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 		stderrColorKey, stdoutColorKey, rootColorKey, selectionColorKey, nil];
 	defaultConsoleColors = [[NSArray alloc] initWithObjects: // default colors
 		[NSColor whiteColor], [NSColor blueColor], [NSColor blackColor], [NSColor purpleColor],
-		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], [NSColor selectedControlTextColor], nil];
+		[NSColor redColor], [NSColor grayColor], [NSColor purpleColor], [NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f], nil];
 	consoleColors = [defaultConsoleColors mutableCopy];
 
 	filteredHistory = nil;
@@ -227,6 +227,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 	lastFunctionForHint = [[NSString stringWithString:@""] retain];
 	lastFunctionHintText = nil;
+	appSupportPath = nil;
 
 	return self;
 
@@ -331,6 +332,11 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[consoleTextView setFont:[Preferences unarchivedObjectForKey:RConsoleDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
 	[consoleTextView setDrawsBackground:NO];
 	[[consoleTextView enclosingScrollView] setDrawsBackground:NO];
+	NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+	[attr setDictionary:[consoleTextView selectedTextAttributes]];
+	[attr setObject:[Preferences unarchivedObjectForKey:selectionColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]] forKey:NSBackgroundColorAttributeName];
+	[consoleTextView setSelectedTextAttributes:attr];
+	[consoleTextView setNeedsDisplayInRect:[consoleTextView bounds]];
 
 	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
@@ -1061,6 +1067,7 @@ extern BOOL isTimeToFinish;
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
 	if(home) [home release];
+	if(appSupportPath) [appSupportPath release];
 	if(filteredHistory) [filteredHistory release], filteredHistory = nil;
 	if(currentWebViewForFindAction) [currentWebViewForFindAction release];
 	if(searchInWebViewWindow) [searchInWebViewWindow release], searchInWebViewWindow = nil;
@@ -2204,6 +2211,8 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 	// if the user really changed the text
 	if(editedMask != 1) {
+
+		[consoleTextView checkSnippets];
 
 		// Cancel setting undo break point
 		[NSObject cancelPreviousPerformRequestsWithTarget:consoleTextView 
@@ -3622,7 +3631,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[attr setObject:[consoleColors objectAtIndex:iInputColor] forKey:NSForegroundColorAttributeName];
 		[consoleTextView setTypingAttributes:attr];
 		[attr setDictionary:[consoleTextView selectedTextAttributes]];
-		[attr setObject:[consoleColors objectAtIndex:iSelectionColor] forKey:NSForegroundColorAttributeName];
+		[attr setObject:[consoleColors objectAtIndex:iSelectionColor] forKey:NSBackgroundColorAttributeName];
 		[consoleTextView setSelectedTextAttributes:attr];
 	}
 	[consoleTextView setNeedsDisplay:YES];
@@ -3639,6 +3648,46 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (NSWindow *)getRConsoleWindow{
 	return RConsoleWindow;
+}
+
+- (NSString*)getAppSupportPath
+{
+
+	BOOL isDir;
+
+	if(!appSupportPath) {
+
+		NSString *tpath;
+		NSArray* paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+
+		if (![paths count]) {
+			SLog(@"RController.getAppSupportPath bailed due to no search paths found");
+			return nil;
+		}
+
+		// Use only the first path returned
+		tpath = [paths objectAtIndex:0];
+
+		// Append the application name
+		tpath = [tpath stringByAppendingPathComponent:
+			[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"]];
+
+		// Check if user created the app support path already
+		[[NSFileManager defaultManager] fileExistsAtPath:tpath isDirectory:&isDir];
+
+		if(isDir) appSupportPath = [tpath retain];
+
+	}
+
+	// Check if app support path still exists
+	[[NSFileManager defaultManager] fileExistsAtPath:appSupportPath isDirectory:&isDir];
+	if(!isDir) {
+		if(appSupportPath) [appSupportPath release];
+		appSupportPath = nil;
+	}
+
+	return appSupportPath;
+
 }
 
 - (void)setStatusLineText:(NSString*)text
@@ -3837,6 +3886,14 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 }
 
+- (NSRange)textView:(NSTextView *)aTextView willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange toCharacterRange:(NSRange)newSelectedCharRange
+{
+	// Check if snippet session is still valid
+	if (!newSelectedCharRange.length && [consoleTextView isSnippetMode]) {
+		[consoleTextView checkForCaretInsideSnippet];
+	}
 
+	return newSelectedCharRange;
+}
 
 @end

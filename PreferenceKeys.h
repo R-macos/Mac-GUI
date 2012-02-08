@@ -141,6 +141,21 @@
 #define kBASHTaskShellVariableExitReplaceContent       @"R_TASK_EXIT_REPLACE_CONTENT"
 #define kBASHTaskShellVariableExitReplaceSelection     @"R_TASK_EXIT_REPLACE_SELECTION"
 
+// user defined actions and snippet support
+
+#define kDragActionFolderName  @"DragActions"
+#define kUserCommandFileName   @"command.sh"
+
+#define kShellVarNameDraggedFilePath          @"R_DRAGGED_FILE_PATH"
+#define kShellVarNameDraggedRelativeFilePath  @"R_DRAGGED_RELATIVE_FILE_PATH"
+#define kShellVarNameCurrentLine              @"R_CURRENT_LINE"
+#define kShellVarNameCurrentWord              @"R_CURRENT_WORD"
+#define kShellVarNameSelectedText             @"R_SELECTED_TEXT"
+#define kShellVarNameCommandPath              @"R_COMMAND_PATH"
+#define kShellVarNameCurrentFilePath          @"R_FILE_PATH"
+#define kShellVarNameCurrentSnippetIndex      @"R_CURRENT_SNIPPET_INDEX"
+
+
 
 // other constants
 

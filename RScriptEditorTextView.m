@@ -32,7 +32,6 @@
  *
  */
 
-
 #import "RScriptEditorTextView.h"
 #import "RGUI.h"
 
@@ -214,7 +213,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[shColorIdentifier retain]; 
 
 	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:nil];
-	if (!c) c=[NSColor selectedControlTextColor];
+	if (!c) c=[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f];
 	NSMutableDictionary *attr = [NSMutableDictionary dictionary];
 	[attr setDictionary:[self selectedTextAttributes]];
 	[attr setObject:c forKey:NSForegroundColorAttributeName];
@@ -411,7 +410,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		NSColor *c = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
 		NSMutableDictionary *attr = [NSMutableDictionary dictionary];
 		[attr setDictionary:[self selectedTextAttributes]];
-		[attr setObject:c forKey:NSForegroundColorAttributeName];
+		[attr setObject:c forKey:NSBackgroundColorAttributeName];
 		[self setSelectedTextAttributes:attr];
 		[self setNeedsDisplayInRect:[self bounds]];
 
@@ -510,7 +509,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		// Highlightes the current query if set in the Pref
 		// and if nothing is selected in the text view
-		if ([prefs boolForKey:highlightCurrentLine] && ![self selectedRange].length) {
+		if ([prefs boolForKey:highlightCurrentLine] && ![self selectedRange].length && ![self isSnippetMode]) {
 			NSUInteger rectCount;
 			NSRange curLineRange = [[self string] lineRangeForRange:[self selectedRange]];
 			[theTextStorage ensureAttributesAreFixedInRange:curLineRange];
@@ -542,6 +541,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// if the user really changed the text
 	if(editedMask != 1) {
+
+		[self checkSnippets];
 
 		// Cancel calling doSyntaxHighlighting
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 

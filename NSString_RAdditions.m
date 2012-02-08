@@ -32,6 +32,7 @@
  *
  */
 
+#import "RGUI.h"
 #import "NSString_RAdditions.h"
 #import "RegexKitLite.h"
 #import "PreferenceKeys.h"
@@ -129,11 +130,12 @@
 	[bashTask setLaunchPath:@"/bin/bash"];
 
 	NSMutableDictionary *theEnv = [NSMutableDictionary dictionary];
-	if(shellEnvironment)
-		[theEnv setDictionary:shellEnvironment];
-	else
-		[theEnv setDictionary:[[NSProcessInfo processInfo] environment]];
+	// set current environment variables to shell
+	[theEnv setDictionary:[[NSProcessInfo processInfo] environment]];
+	// overwrite or set additional variables
+	if(shellEnvironment) [theEnv addEntriesFromDictionary:shellEnvironment];
 
+	// set exit codes
 	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionNone] forKey:kBASHTaskShellVariableExitNone];
 	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceSection] forKey:kBASHTaskShellVariableExitReplaceSelection];
 	[theEnv setObject:[NSNumber numberWithInteger:kBASHTaskRedirectActionReplaceContent] forKey:kBASHTaskShellVariableExitReplaceContent];
@@ -169,16 +171,16 @@
 
 	NSInteger pid = -1;
 	pid = [bashTask processIdentifier];
-	
+
 	if(!nonWaitingMode) {
 		// Listen to ⌘. to terminate
 		while(1) {
 			if(![bashTask isRunning] || [bashTask processIdentifier] == 0) break;
+			usleep(1000);
 			NSEvent* event = [NSApp nextEventMatchingMask:NSAnyEventMask
 												untilDate:[NSDate distantPast]
 												   inMode:NSDefaultRunLoopMode
 												  dequeue:YES];
-			usleep(10000);
 			if(!event) continue;
 			if ([event type] == NSKeyDown) {
 				unichar key = [[event characters] length] == 1 ? [[event characters] characterAtIndex:0] : 0;
@@ -192,7 +194,6 @@
 				[NSApp sendEvent:event];
 			}
 		}
-	
 		[bashTask waitUntilExit];
 	} else {
 		if (bashTask) [bashTask release];
@@ -209,13 +210,26 @@
 	
 	NSInteger status = [bashTask terminationStatus];
 	NSData *errdata  = nil;
-	
+	if(stderr_file) errdata = [stderr_file readDataToEndOfFile];
+
+	if(status == 9 || userTerminated) {
+		if(theError != NULL)
+		*theError = [[[NSError alloc] initWithDomain:NSPOSIXErrorDomain 
+												code:status 
+											userInfo:[NSDictionary dictionaryWithObjectsAndKeys:
+													  NLS(@"User Termination"),
+													  NSLocalizedDescriptionKey, 
+													  @"",
+													  @"terminated",
+													  nil]] autorelease];
+		return @"";
+	}
+
+
 	// Check STDERR
-	if(theError != NULL && [errdata length] && (status < kBASHTaskRedirectActionNone || status > kBASHTaskRedirectActionLastCode)) {
+	if(theError != NULL && errdata && [errdata length] && (status < kBASHTaskRedirectActionNone || status > kBASHTaskRedirectActionLastCode)) {
 		[fm removeItemAtPath:stdoutFilePath error:nil];
-		if(stderr_file) [stderr_file readDataToEndOfFile];
-		if(status == 9 || userTerminated) return @"";
-		if(theError != NULL) {
+		if(theError != NULL && errdata && [errdata length]) {
 			NSMutableString *errMessage = [[[NSMutableString alloc] initWithData:errdata encoding:NSUTF8StringEncoding] autorelease];
 			[errMessage replaceOccurrencesOfString:[NSString stringWithFormat:@"%@: ", scriptFilePath] withString:@"" options:NSLiteralSearch range:NSMakeRange(0, [errMessage length])];
 			*theError = [[[NSError alloc] initWithDomain:NSPOSIXErrorDomain 

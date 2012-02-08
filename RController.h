@@ -163,6 +163,8 @@
 	NSString *home;
 	NSString *lastFunctionForHint;
 	NSString *lastFunctionHintText;
+
+	NSString *appSupportPath;
 }
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
@@ -303,8 +305,10 @@
 
 - (NSString*) home;
 - (NSString*) currentWorkingDirectory;
+- (NSString*)getAppSupportPath;
 - (int) helpServerPort;
 - (BOOL)isREditMode;
+
 
 - (IBAction)performFindPanelAction:(id)sender;
 - (IBAction)performFindPanelFindInWebViewAction:(id)sender;

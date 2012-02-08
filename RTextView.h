@@ -54,6 +54,17 @@ extern BOOL RTextView_autoCloseBrackets;
 {
 	BOOL console;
 	BOOL isRdDocument;
+
+	NSInteger snippetControlArray[20][3];
+	NSInteger snippetMirroredControlArray[20][3];
+	NSInteger snippetControlCounter;
+	NSInteger snippetControlMax;
+	NSInteger currentSnippetIndex;
+	NSInteger mirroredCounter;
+	BOOL snippetWasJustInserted;
+	BOOL isProcessingMirroredSnippets;
+
+
 @private
 	NSCharacterSet *separatingTokensSet;
 	NSCharacterSet *undoBreakTokensSet;
@@ -75,5 +86,15 @@ extern BOOL RTextView_autoCloseBrackets;
 - (IBAction)unescapeUnicode:(id)sender;
 
 - (NSUInteger)characterIndexOfPoint:(NSPoint)aPoint;
+
+- (void)endSnippetSession;
+- (void)processMirroredSnippets;
+- (void)selectCurrentSnippet;
+- (void)insertAsSnippet:(NSString*)theSnippet atRange:(NSRange)targetRange;
+- (BOOL)checkForCaretInsideSnippet;
+- (BOOL)isSnippetMode;
+- (void)checkSnippets;
+- (NSDictionary*)getCurrentEnvironment;
+
 
 @end

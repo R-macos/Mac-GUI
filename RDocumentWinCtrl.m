@@ -1073,7 +1073,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			}
 
 
-			if([Preferences flagForKey:indentNewLineAfterSimpleClause withDefault:YES]) {
+			else if([Preferences flagForKey:indentNewLineAfterSimpleClause withDefault:YES]) {
 
 				// indent only next line after simple if,for,while,function commands without trailing {
 				// and if line has more opened ( than )
@@ -1084,18 +1084,18 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				for(i=0; i<[line length]; i++) {
 					if(RPARSERCONTEXTFORPOSITION(textView, i) == pcExpression) {
 						c=CFStringGetCharacterAtIndex((CFStringRef)line,i);
-						switch(c){
-							case ')':closedP++;break;
-							case '(':openedP++;break;
-						}
+						if(c==')')
+							closedP++;
+						else if (c=='(')
+							openedP++;
 					}
 				}
 				if(openedP>closedP) {
 					[textView breakUndoCoalescing];
 					[textView insertText:indentString];
 				} 
-				else if([line isMatchedByRegex:@"^\\s*(if|for|while)\\s*\\([^\\)]+?\\)\\s*$"]
-						|| [line isMatchedByRegex:@"(<-|=)\\s*function\\s*\\([^\\)]+?\\)\\s*$"]) {
+				else if([line isMatchedByRegex:@"^\\s*(if|for|while)\\s*\\(.+\\)\\s*$"]
+						|| [line isMatchedByRegex:@"(<-|=)\\s*function\\s*\\(.+\\)\\s*$"]) {
 					[textView breakUndoCoalescing];
 					[textView insertText:indentString];
 					lastLineWasCodeIndented = YES;
@@ -2034,6 +2034,16 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (IBAction)checkRdDocument:(id)sender
 {
 	[[self document] checkRdDocument];
+}
+
+- (NSRange)textView:(NSTextView *)aTextView willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange toCharacterRange:(NSRange)newSelectedCharRange
+{
+	// Check if snippet session is still valid
+	if (!newSelectedCharRange.length && [textView isSnippetMode]) {
+		[textView checkForCaretInsideSnippet];
+	}
+
+	return newSelectedCharRange;
 }
 
 @end

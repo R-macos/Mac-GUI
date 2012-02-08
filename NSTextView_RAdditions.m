@@ -506,25 +506,4 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	[self setEditable:editableStatus];
 }
 
-
-
-
-#pragma mark -
-#pragma mark multi-touch trackpad support
-
-/**
- * Trackpad two-finger zooming gesture for in/decreasing the font size
- */
-- (void) magnifyWithEvent:(NSEvent *)anEvent
-{
-	
-	//Font resizing for RTextViews only
-	if([(RTextView*)self isRConsole]) return;
-	
-	if([anEvent deltaZ]>5.0)
-		[self makeTextSizeLarger];
-	else if([anEvent deltaZ]<-5.0)
-		[self makeTextSizeSmaller];
-}
-
 @end

@@ -275,7 +275,7 @@
 	if (c && ![c isEqualTo:[currentLineSyntaxColorWell color]]) [currentLineSyntaxColorWell setColor:c];
 	c=[Preferences unarchivedObjectForKey:editorCursorColorKey withDefault:[NSColor colorWithDeviceRed:0.000 green:0.000 blue:0.000 alpha:1.0]];
 	if (c && ![c isEqualTo:[cursorSyntaxColorWell color]]) [cursorSyntaxColorWell setColor:c];
-	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:[NSColor selectedControlTextColor]];
+	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]];
 	if (c && ![c isEqualTo:[selectionSyntaxColorWell color]]) [selectionSyntaxColorWell setColor:c];
 
 	// c=[Preferences unarchivedObjectForKey:sectionRdSyntaxColorKey withDefault:nil];

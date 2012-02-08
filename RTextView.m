@@ -30,6 +30,7 @@
  *  $Id$
  */
 
+
 #import "RTextView.h"
 #import "HelpManager.h"
 #import "RGUI.h"
@@ -37,10 +38,20 @@
 #import "RController.h"
 #import "NSTextView_RAdditions.h"
 #import "RDocumentWinCtrl.h"
+#import "NSString_RAdditions.h"
 
 // linked character attributes
 #define kTALinked    @"link"
 #define kTAVal       @"x"
+
+// some helper functions for handling rectangles and points
+// needed in roundedBezierPathAroundRange:
+static inline CGFloat RRectTop(NSRect rectangle) { return rectangle.origin.y; }
+static inline CGFloat RRectBottom(NSRect rectangle) { return rectangle.origin.y+rectangle.size.height; }
+static inline CGFloat RRectLeft(NSRect rectangle) { return rectangle.origin.x; }
+static inline CGFloat RRectRight(NSRect rectangle) { return rectangle.origin.x+rectangle.size.width; }
+static inline CGFloat RPointDistance(NSPoint a, NSPoint b) { return sqrtf( (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y) ); }
+static inline NSPoint RPointOnLine(NSPoint a, NSPoint b, CGFloat t) { return NSMakePoint(a.x*(1.0f-t) + b.x*t, a.y*(1.0f-t) + b.y*t); }
 
 static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
 {
@@ -106,6 +117,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if ([self respondsToSelector:@selector(setAutomaticDashSubstitutionEnabled:)])
 		[self setAutomaticDashSubstitutionEnabled:NO];
 
+	[self endSnippetSession];
+
 }
 
 - (void)dealloc
@@ -126,6 +139,130 @@ BOOL RTextView_autoCloseBrackets = YES;
 	return YES;
 
 }
+- (NSBezierPath*)roundedBezierPathAroundRange:(NSRange)aRange
+{
+
+	// This method was modified taken from the open source project "Sequel Pro"
+	//   http://www.sequelpro.com
+	//
+	// which follows the 
+	// GNU GENERAL PUBLIC LICENSE
+	// http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+	//
+	// more details:
+	//   http://www.sequelpro.com/legal/
+	//   http://www.sequelpro.com/developers/
+
+	// parameters for snippet highlighting
+	CGFloat kappa = 0.5522847498f; // magic number from http://www.whizkidtech.redprince.net/bezier/circle/
+	CGFloat radius = 6;
+	CGFloat horzInset = -3;
+	CGFloat vertInset = 0.3f;
+	BOOL connectDisconnectedPartsWithLine = NO;
+
+	NSBezierPath *framePath = [NSBezierPath bezierPath];
+	NSUInteger rectCount;
+	NSRectArray rects = [[self layoutManager] rectArrayForCharacterRange: aRange
+											withinSelectedCharacterRange: aRange
+														 inTextContainer: [self textContainer]
+															   rectCount: &rectCount ];
+	if (rectCount>2 || (rectCount>1 && (RRectRight(rects[1]) >= RRectLeft(rects[0]) || connectDisconnectedPartsWithLine))) {
+		// highlight complicated multiline snippet
+		NSRect lineRects[4];
+		lineRects[0] = rects[0];
+		lineRects[1] = rects[1];
+		lineRects[2] = rects[rectCount-2];
+		lineRects[3] = rects[rectCount-1];
+		for(int j=0;j<4;j++) lineRects[j] = NSInsetRect(lineRects[j], horzInset, vertInset);
+		NSPoint vertices[8];
+		vertices[0] = NSMakePoint( RRectLeft(lineRects[0]),  RRectTop(lineRects[0])    ); // point a
+		vertices[1] = NSMakePoint( RRectRight(lineRects[0]), RRectTop(lineRects[0])    ); // point b
+		vertices[2] = NSMakePoint( RRectRight(lineRects[2]), RRectBottom(lineRects[2]) ); // point c
+		vertices[3] = NSMakePoint( RRectRight(lineRects[3]), RRectBottom(lineRects[2]) ); // point d
+		vertices[4] = NSMakePoint( RRectRight(lineRects[3]), RRectBottom(lineRects[3]) ); // point e
+		vertices[5] = NSMakePoint( RRectLeft(lineRects[3]),  RRectBottom(lineRects[3]) ); // point f
+		vertices[6] = NSMakePoint( RRectLeft(lineRects[1]),  RRectTop(lineRects[1])    ); // point g
+		vertices[7] = NSMakePoint( RRectLeft(lineRects[0]),  RRectTop(lineRects[1])    ); // point h
+
+		for (NSUInteger j=0; j<8; j++) {
+			NSPoint curr = vertices[j];
+			NSPoint prev = vertices[(j+8-1)%8];
+			NSPoint next = vertices[(j+1)%8];
+
+			CGFloat s = radius/RPointDistance(prev, curr);
+			if (s>0.5) s = 0.5f;
+			CGFloat t = radius/RPointDistance(curr, next);
+			if (t>0.5) t = 0.5f;
+
+			NSPoint a = RPointOnLine(curr, prev, 0.5f);
+			NSPoint b = RPointOnLine(curr, prev, s);
+			NSPoint c = curr;
+			NSPoint d = RPointOnLine(curr, next, t);
+			NSPoint e = RPointOnLine(curr, next, 0.5f);
+
+			if (j==0) [framePath moveToPoint:a];
+			[framePath lineToPoint: b];
+			[framePath curveToPoint:d controlPoint1:RPointOnLine(b, c, kappa) controlPoint2:RPointOnLine(d, c, kappa)];
+			[framePath lineToPoint: e];
+		}
+	} else {
+		//highlight disconnected snippet parts (or single line snippet)
+		for (NSUInteger j=0; j<rectCount; j++) {
+			NSRect rect = rects[j];
+			rect = NSInsetRect(rect, horzInset, vertInset);
+			[framePath appendBezierPathWithRoundedRect:rect xRadius:radius yRadius:radius];
+		}
+	}
+	return framePath;
+}
+
+- (void)drawRect:(NSRect)rect {
+
+
+	// Draw background only for screen display but not while printing
+	if([NSGraphicsContext currentContextDrawingToScreen]) {
+
+		// Draw textview's background since due to the snippet highlighting we're responsible for it.
+		NSColor *bgColor = [NSColor clearColor];
+		NSColor *frameColor = [NSColor clearColor];
+		CGFloat r, g, b, a;
+		if([[self delegate] isKindOfClass:[RController class]]) {
+			frameColor = [Preferences unarchivedObjectForKey:selectionColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]];
+			[frameColor getRed:&r green:&g blue:&b alpha:&a];
+			bgColor = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:0.4];
+		} else {
+			frameColor = [Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]];
+			[frameColor getRed:&r green:&g blue:&b alpha:&a];
+			bgColor = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:0.4];
+		}
+
+		// Highlight snippets
+		if(snippetControlCounter > -1) {
+			// Is the caret still inside a snippet
+			if([self checkForCaretInsideSnippet]) {
+				for(NSInteger i=0; i<snippetControlMax; i++) {
+					if(snippetControlArray[i][0] > -1) {
+						// choose the colors for the snippet parts
+						if(i == currentSnippetIndex) {
+							[bgColor setFill];
+							[frameColor setStroke];
+						} else {
+							[bgColor setFill];
+							[frameColor setStroke];
+						}
+						NSBezierPath *snippetPath = [self roundedBezierPathAroundRange: NSMakeRange(snippetControlArray[i][0],snippetControlArray[i][1]) ];
+						[snippetPath fill];
+						[snippetPath stroke];
+					}
+				}
+			} else {
+				[self endSnippetSession];
+			}
+		}
+	}
+
+	[super drawRect:rect];
+}
 
 - (void)keyDown:(NSEvent *)theEvent
 {
@@ -139,6 +276,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	NSString *cc = [theEvent characters];
 	unsigned int modFlags = [theEvent modifierFlags];
 	long allFlags = (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask);
+	long curFlags = (modFlags & allFlags);
 
 	BOOL hilite = NO;
 
@@ -281,13 +419,66 @@ BOOL RTextView_autoCloseBrackets = YES;
 			SLog(@"RTextView: closing bracket chracter %c", ck);
 		}
 	}
-	// if ((modFlags&(NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask))==NSControlKeyMask) {
-	// 	if ([rc isEqual:@"{"]) {
-	//
-	// 	} else if ([rc isEqual:@"}"]) {
-	//
-	// 	}
-	// }
+
+	// Check for {SHIFT}TAB to try to insert snippet via TAB trigger
+	// or if snippet mode select next/prev snippet
+	if ([theEvent keyCode] == 48 && [self isEditable]){
+
+		NSRange targetRange = [self getRangeForCurrentWord];
+		NSString *tabTrigger = [[self string] substringWithRange:targetRange];
+
+		// Is TAB trigger active change selection according to {SHIFT}TAB
+		if(snippetControlCounter > -1){
+
+			if(curFlags==(NSShiftKeyMask)) { // select previous snippet
+
+				currentSnippetIndex--;
+
+				// Look for previous defined snippet since snippet numbers must not serial like 1, 5, and 12 e.g.
+				while(snippetControlArray[currentSnippetIndex][0] == -1 && currentSnippetIndex > -2)
+					currentSnippetIndex--;
+
+				if(currentSnippetIndex < 0) {
+					currentSnippetIndex = 0;
+					while(snippetControlArray[currentSnippetIndex][0] == -1 && currentSnippetIndex < 20)
+						currentSnippetIndex++;
+					NSBeep();
+				}
+
+				[self selectCurrentSnippet];
+				return;
+
+			} else { // select next snippet
+
+				currentSnippetIndex++;
+
+				// Look for next defined snippet since snippet numbers must not serial like 1, 5, and 12 e.g.
+				while(snippetControlArray[currentSnippetIndex][0] == -1 && currentSnippetIndex < 20)
+					currentSnippetIndex++;
+
+				if(currentSnippetIndex > snippetControlMax) { // for safety reasons
+					[self endSnippetSession];
+				} else {
+					[self selectCurrentSnippet];
+					return;
+				}
+			}
+
+			[self endSnippetSession];
+			return;
+
+		}
+
+		// Check if tab trigger is defined; if so insert it, otherwise pass through event
+		if(snippetControlCounter < 0 && [tabTrigger length]) {
+			// TODO will come soon [HJBB]
+			[super keyDown:theEvent];
+			return;
+		}
+
+	}
+
+
 	[super keyDown:theEvent];
 
 	if(hilite && [[self delegate] respondsToSelector:@selector(highlightBracesWithShift:andWarn:)])
@@ -313,7 +504,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	}
 
 	[pb addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
-	[pb setString:[textStorage string] forType:NSStringPboardType];
+	[pb setString:[[textStorage string] substringWithRange:[self selectedRange]] forType:NSStringPboardType];
 
 }
 
@@ -539,12 +730,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	return (leftIsAlphanum ^ rightIsAlphanum || (leftIsAlphanum && rightIsAlphanum));
 }
-
-/**
- * Returns the range of the current word relative the current cursor position
- *   finds: [| := caret]  |word  wo|rd  word|
- *   if | is in between whitespaces range length is zero.
- */
 
 /**
  * Sets the console mode
@@ -1109,6 +1294,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
 {
+
 	NSPasteboard *pboard = [sender draggingPasteboard];
 
 	// textClip stuff handles the system
@@ -1123,6 +1309,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		NSArray *files = [pboard propertyListForType:NSFilenamesPboardType];
 
 		NSInteger i = 0;
+		NSInteger snip_cnt = 0;
 		NSString *suffix = ([files count] > 1) ? @"\n" : @"";
 
 		NSString *curDir = @"";
@@ -1133,42 +1320,192 @@ BOOL RTextView_autoCloseBrackets = YES;
 		// otherwise take the current working directory
 		} else
 			curDir = [[[RController sharedController] currentWorkingDirectory] stringByAppendingString:@"/"];
-		
+
+		NSString *appSupportPath = [[RController sharedController] getAppSupportPath];
+		NSError *anError = nil;
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSString *userDragActionDir = (appSupportPath) ? [NSString stringWithFormat:@"%@/%@/", appSupportPath, kDragActionFolderName] : nil;
+
+		NSMutableDictionary *env = [NSMutableDictionary dictionary];
+		NSDictionary *cdic = [self getCurrentEnvironment];
+		if(cdic) [env setDictionary:cdic];
+
+		// Set the new insertion point
+		NSPoint draggingLocation = [sender draggingLocation];
+		draggingLocation = [self convertPoint:draggingLocation fromView:nil];
+		NSUInteger characterIndex = [self characterIndexOfPoint:draggingLocation];
+		if([[self delegate] isKindOfClass:[RController class]])
+			if(characterIndex < [[self delegate] lastCommittedLength])
+				characterIndex = [[self delegate] lastCommittedLength];
+		[self setSelectedRange:NSMakeRange(characterIndex,0)];
+
+		NSMutableString *insertionString = [NSMutableString string];
+		[insertionString setString:@""];
+
 		for(i = 0; i < [files count]; i++) {
 
-			NSString *filepath = [[pboard propertyListForType:NSFilenamesPboardType] objectAtIndex:i];
-			// Set the new insertion point
-			NSPoint draggingLocation = [sender draggingLocation];
-			draggingLocation = [self convertPoint:draggingLocation fromView:nil];
-			NSUInteger characterIndex = [self characterIndexOfPoint:draggingLocation];
-			[self setSelectedRange:NSMakeRange(characterIndex,0)];
+			snip_cnt++;
+			if(snip_cnt>19) snip_cnt=19;
 
-			// Check if user pressed  ⌘ while dragging for inserting only the file path
+			NSString *filepath = [[pboard propertyListForType:NSFilenamesPboardType] objectAtIndex:i];
+
+			// Check if user pressed CMD while dragging for inserting only the full file path
 			if([sender draggingSourceOperationMask] == 4)
 			{
-				[self insertText:[filepath stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
+				[insertionString appendString:[[filepath stringByAbbreviatingWithTildeInPath] stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
 			} 
 			else {
 
+				[env setObject:filepath forKey:kShellVarNameDraggedFilePath];
 				// convert filepath to the relative path against curDir
-				filepath = [filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""];
+				// if user didn't press the ALT key otherwise pass the full path
+				if([sender draggingSourceOperationMask] == 1) {
+					[env setObject:[filepath stringByAbbreviatingWithTildeInPath] forKey:kShellVarNameDraggedRelativeFilePath];
+				} else {
+					filepath = [filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""];
+					[env setObject:[filepath stringByAbbreviatingWithTildeInPath] forKey:kShellVarNameDraggedRelativeFilePath];
+				}
+				[env setObject:[NSNumber numberWithInt:snip_cnt] forKey:kShellVarNameCurrentSnippetIndex];
 
 				NSString *extension = [[filepath pathExtension] lowercaseString];
+
 				// handle *.R for source()
-				if([extension isEqualToString:@"r"])
-					[self insertText:[NSString stringWithFormat:@"source('%@', chdir = %@)%@", 
-						[filepath stringByAbbreviatingWithTildeInPath], 
-						([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
-						(i < ([files count]-1)) ? suffix : @""]];
+				if([extension isEqualToString:@"r"]) {
+					if((userDragActionDir && [fm fileExistsAtPath:[NSString stringWithFormat:@"%@r/%@", userDragActionDir, kUserCommandFileName]])) {
+						anError = nil;
+						NSString *cmd = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@r/%@", userDragActionDir, kUserCommandFileName] encoding:NSUTF8StringEncoding error:&anError];
+						if(anError == nil) {
+							[[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
+							NSString *res = [cmd evaluateAsBashCommandWithEnvironment:env atPath:[NSString stringWithFormat:@"%@r", userDragActionDir] error:&anError];
+							[[self delegate] setStatusLineText:@""];
+							if(anError != nil) {
+								NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Snippet Error") 
+										defaultButton:NLS(@"OK") 
+										alternateButton:nil 
+										otherButton:nil 
+										informativeTextWithFormat:[[anError userInfo] objectForKey:NSLocalizedDescriptionKey]];
+
+								[alert setAlertStyle:NSWarningAlertStyle];
+								[alert runModal];
+								[[self window] makeKeyAndOrderFront:self];
+								[[self window] makeFirstResponder:self];
+								return NO;
+							}
+							if(res && [res length]) {
+								[insertionString appendString:res];
+								[insertionString appendString:(i < ([files count]-1)) ? suffix : @""];
+								NSArray *snipcounters = [res componentsMatchedByRegex:@"(?s)(?<!\\\\)\\$\\{(\\d+):" capture:1L];
+								NSInteger k=0;
+								NSInteger lastSnipCnt = 0;
+								for(k=0 ; k<[snipcounters count]; k++)
+									if([[snipcounters objectAtIndex:k] intValue] > lastSnipCnt)
+										lastSnipCnt = [[snipcounters objectAtIndex:k] intValue];
+								snip_cnt = lastSnipCnt;
+							}
+						} else {
+							NSBeep();
+							NSLog(@"Drag Action: Couldn't read '%@'", [NSString stringWithFormat:@"%@r/%@", userDragActionDir, kUserCommandFileName]);
+							return NO;
+						}
+					} else {
+						[insertionString appendString:[NSString stringWithFormat:@"source('%@', chdir = ${%d:%@})%@", 
+							[filepath stringByAbbreviatingWithTildeInPath], snip_cnt, 
+							([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
+							(i < ([files count]-1)) ? suffix : @""]];
+					}
+				}
+
 				// handle *.Rdata for load()
-				else if([extension isEqualToString:@"rdata"])
-					[self insertText:[NSString stringWithFormat:@"load('%@')%@", 
-						[filepath stringByAbbreviatingWithTildeInPath], 
-						(i < ([files count]-1)) ? suffix : @""]];
+				else if([extension isEqualToString:@"rdata"]) {
+					if((userDragActionDir && [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/rdata/%@", userDragActionDir, kUserCommandFileName]])) {
+						anError = nil;
+						[[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
+						NSString *cmd = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@rdata/%@", userDragActionDir, kUserCommandFileName] encoding:NSUTF8StringEncoding error:&anError];
+						[[self delegate] setStatusLineText:@""];
+						if(anError == nil) {
+							NSString *res = [cmd evaluateAsBashCommandWithEnvironment:env atPath:[NSString stringWithFormat:@"%@rdata", userDragActionDir] error:&anError];
+							if(anError != nil) {
+								NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Snippet Error") 
+										defaultButton:NLS(@"OK") 
+										alternateButton:nil 
+										otherButton:nil 
+										informativeTextWithFormat:[[anError userInfo] objectForKey:NSLocalizedDescriptionKey]];
+
+								[alert setAlertStyle:NSWarningAlertStyle];
+								[alert runModal];
+								[[self window] makeKeyAndOrderFront:self];
+								[[self window] makeFirstResponder:self];
+								return NO;
+							}
+							if(res && [res length]) {
+								[insertionString appendString:res];
+								[insertionString appendString:(i < ([files count]-1)) ? suffix : @""];
+								NSArray *snipcounters = [res componentsMatchedByRegex:@"(?s)(?<!\\\\)\\$\\{(\\d+):" capture:1L];
+								NSInteger k=0;
+								NSInteger lastSnipCnt = 0;
+								for(k=0 ; k<[snipcounters count]; k++)
+									if([[snipcounters objectAtIndex:k] intValue] > lastSnipCnt)
+										lastSnipCnt = [[snipcounters objectAtIndex:k] intValue];
+								snip_cnt = lastSnipCnt;
+							}
+						} else {
+							NSBeep();
+							NSLog(@"Drag Action: Couldn't read '%@'", [NSString stringWithFormat:@"%@rdata/%@", userDragActionDir, kUserCommandFileName]);
+							return NO;
+						}
+					} else {
+						[insertionString appendString:[NSString stringWithFormat:@"load('%@')%@", 
+							[filepath stringByAbbreviatingWithTildeInPath], 
+								(i < ([files count]-1)) ? suffix : @""]];
+					}
+				}
+
+				// look for user-defined commands due to extension
+				else if((userDragActionDir && [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/%@/%@", userDragActionDir, extension, kUserCommandFileName]])) {
+					anError = nil;
+					NSString *cmd = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@%@/%@", userDragActionDir, extension, kUserCommandFileName] encoding:NSUTF8StringEncoding error:&anError];
+					if(anError == nil) {
+						[[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
+						NSString *res = [cmd evaluateAsBashCommandWithEnvironment:env atPath:[NSString stringWithFormat:@"%@%@", userDragActionDir, extension] error:&anError];
+						[[self delegate] setStatusLineText:@""];
+						if(anError != nil) {
+							NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Snippet Error") 
+									defaultButton:NLS(@"OK") 
+									alternateButton:nil 
+									otherButton:nil 
+									informativeTextWithFormat:[[anError userInfo] objectForKey:NSLocalizedDescriptionKey]];
+
+							[alert setAlertStyle:NSWarningAlertStyle];
+							[alert runModal];
+							[[self window] makeKeyAndOrderFront:self];
+							[[self window] makeFirstResponder:self];
+							return NO;
+						}
+						if(res && [res length]) {
+							[insertionString appendString:res];
+							[insertionString appendString:(i < ([files count]-1)) ? suffix : @""];
+							NSArray *snipcounters = [res componentsMatchedByRegex:@"(?s)(?<!\\\\)\\$\\{(\\d+):" capture:1L];
+							NSInteger k=0;
+							NSInteger lastSnipCnt = 0;
+							for(k=0 ; k<[snipcounters count]; k++)
+								if([[snipcounters objectAtIndex:k] intValue] > lastSnipCnt)
+									lastSnipCnt = [[snipcounters objectAtIndex:k] intValue];
+							snip_cnt = lastSnipCnt;
+						}
+					} else {
+						NSBeep();
+						NSLog(@"Drag Action: Couldn't read '%@'", [NSString stringWithFormat:@"%@%@/%@", userDragActionDir, extension, kUserCommandFileName]);
+						return NO;
+					}
+				}
+
 				else
-					return [super performDragOperation:sender];
+					[insertionString appendString:[[filepath stringByAbbreviatingWithTildeInPath] stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
 			}
 		}
+
+		[self insertAsSnippet:insertionString atRange:[self selectedRange]];
+
 		return YES;
 	}
 
@@ -1195,10 +1532,581 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	if( glyphIndex == NSMaxRange(range) )
 		return  [[self textStorage] length];
-	else
-		return [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+	else {
+		glyphIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+		if(glyphIndex>1) glyphIndex--;
+		return glyphIndex;
+	}
 
 }
 
+#pragma mark -
+#pragma mark snippet handler
+
+/**
+ * Reset snippet controller variables to end a snippet session
+ */
+- (void)endSnippetSession
+{
+
+	snippetControlCounter = -1;
+	currentSnippetIndex   = -1;
+	snippetControlMax     = -1;
+	mirroredCounter       = -1;
+	snippetWasJustInserted = NO;
+
+	// remove all snippet frames
+	[self setNeedsDisplayInRect:[self bounds] avoidAdditionalLayout:NO];
+
+}
+
+/**
+ * Update all mirrored snippets and adjust any involved instances
+ */
+- (void)processMirroredSnippets
+{
+	if(mirroredCounter > -1) {
+
+		isProcessingMirroredSnippets = YES;
+
+		NSInteger i, j, k, deltaLength;
+		NSRange mirroredRange;
+
+		// Go through each defined mirrored snippet and update it
+		for(i=0; i<=mirroredCounter; i++) {
+			if(snippetMirroredControlArray[i][0] == currentSnippetIndex) {
+
+				deltaLength = snippetControlArray[currentSnippetIndex][1]-snippetMirroredControlArray[i][2];
+
+				mirroredRange = NSMakeRange(snippetMirroredControlArray[i][1], snippetMirroredControlArray[i][2]);
+				NSString *mirroredString = nil;
+
+				// For safety reasons
+				@try{
+					mirroredString = [[self string] substringWithRange:NSMakeRange(snippetControlArray[currentSnippetIndex][0], snippetControlArray[currentSnippetIndex][1])];
+				}
+				@catch(id ae) {
+					NSLog(@"Error while parsing for mirrored snippets. %@", [ae description]);
+					NSBeep();
+					[self endSnippetSession];
+					return;
+				}
+
+				// Register for undo
+				[self shouldChangeTextInRange:mirroredRange replacementString:mirroredString];
+
+				[self replaceCharactersInRange:mirroredRange withString:mirroredString];
+				snippetMirroredControlArray[i][2] = snippetControlArray[currentSnippetIndex][1];
+
+				// If a completion list is open adjust the theCharRange and theParseRange if a mirrored snippet
+				// was updated which is located before the initial position 
+				// if(completionIsOpen && snippetMirroredControlArray[i][1] < (NSInteger)completionParseRangeLocation)
+				// 	[completionPopup adjustWorkingRangeByDelta:deltaLength];
+
+				// Adjust all other snippets accordingly
+				for(j=0; j<=snippetControlMax; j++) {
+					if(snippetControlArray[j][0] > -1) {
+						if(snippetControlArray[j][0]+snippetControlArray[j][1]>=snippetMirroredControlArray[i][1]) {
+							snippetControlArray[j][0] += deltaLength;
+						}
+					}
+				}
+				// Adjust all mirrored snippets accordingly
+				for(k=0; k<=mirroredCounter; k++) {
+					if(i != k) {
+						if(snippetMirroredControlArray[k][1] > snippetMirroredControlArray[i][1]) {
+							snippetMirroredControlArray[k][1] += deltaLength;
+						}
+					}
+				}
+			}
+		}
+
+		isProcessingMirroredSnippets = NO;
+		[self didChangeText];
+		
+	}
+}
+
+
+/**
+ * Selects the current snippet defined by “currentSnippetIndex”
+ */
+- (void)selectCurrentSnippet
+{
+	if( snippetControlCounter  > -1 
+		&& currentSnippetIndex >= 0 
+		&& currentSnippetIndex <= snippetControlMax
+		)
+	{
+
+		[self breakUndoCoalescing];
+
+		// Place the caret at the end of snippet
+		// and finish snippet editing
+		if(currentSnippetIndex == snippetControlMax) {
+			NSRange r = NSMakeRange(snippetControlArray[snippetControlMax][0] + snippetControlArray[snippetControlMax][1], 0);
+			if(r.location >= [[self string] length])
+				r = NSMakeRange([[self string] length], 0);
+			else
+				r = NSIntersectionRange(NSMakeRange(0,[[self string] length]), r);
+			[self setSelectedRange:r];
+			[self scrollRangeToVisible:r];
+			[self endSnippetSession];
+			return;
+		}
+
+		if(currentSnippetIndex >= 0 && currentSnippetIndex < 20) {
+			if(snippetControlArray[currentSnippetIndex][2] == 0) {
+
+				NSRange r1 = NSMakeRange(snippetControlArray[currentSnippetIndex][0], snippetControlArray[currentSnippetIndex][1]);
+
+				NSRange r2;
+				// Ensure the selection for nested snippets if it is at very end of the text buffer
+				// because NSIntersectionRange returns {0, 0} in such a case
+				if(r1.location == [[self string] length])
+					r2 = NSMakeRange([[self string] length], 0);
+				else
+					r2 = NSIntersectionRange(NSMakeRange(0,[[self string] length]), r1);
+
+				if(r1.location == r2.location && r1.length == r2.length) {
+					[self setSelectedRange:r2];
+					[self scrollRangeToVisible:r2];
+					NSString *snip = [[self string] substringWithRange:r2];
+					
+ 					if([snip length] > 2 && [snip hasPrefix:@"¦"] && [snip hasSuffix:@"¦"]) {
+						;
+					}
+				} else {
+					[self endSnippetSession];
+				}
+			}
+		} else { // for safety reasons
+			[self endSnippetSession];
+		}
+	} else { // for safety reasons
+		[self endSnippetSession];
+	}
+}
+
+/**
+ * Inserts a chosen query favorite and initialze a snippet session if user defined any
+ */
+- (void)insertAsSnippet:(NSString*)theSnippet atRange:(NSRange)targetRange
+{
+
+	// Do not allow the insertion of a snippet if snippets are active
+	if(snippetControlCounter > -1) {
+		NSBeep();
+		return;
+	}
+
+	NSInteger i, j;
+	mirroredCounter = -1;
+
+	// reset snippet array
+	for(i=0; i<20; i++) {
+		snippetControlArray[i][0] = -1; // snippet location
+		snippetControlArray[i][1] = -1; // snippet length
+		snippetControlArray[i][2] = -1; // snippet task : -1 not valid, 0 select snippet
+		snippetMirroredControlArray[i][0] = -1; // mirrored snippet index
+		snippetMirroredControlArray[i][1] = -1; // mirrored snippet location
+		snippetMirroredControlArray[i][2] = -1; // mirrored snippet length
+	}
+
+	if(theSnippet == nil || ![theSnippet length]) return;
+
+	NSMutableString *snip = [[NSMutableString alloc] initWithCapacity:[theSnippet length]];
+
+	@try{
+		NSString *re = @"(?s)(?<!\\\\)\\$\\{(1?\\d):(.{0}|[^\\{\\}]*?[^\\\\])\\}";
+		NSString *mirror_re = @"(?<!\\\\)\\$(1?\\d)(?=\\D)";
+
+		if(targetRange.length)
+			targetRange = NSIntersectionRange(NSMakeRange(0,[[self string] length]), targetRange);
+		[snip setString:theSnippet];
+
+		if (snip == nil) return;
+		if (![snip length]) {
+			[snip release];
+			return;
+		}
+
+		// Replace `${x:…}` by ${x:`…`} for convience 
+		[snip replaceOccurrencesOfRegex:@"`(?s)(?<!\\\\)\\$\\{(1?\\d):(.{0}|.*?[^\\\\])\\}`" withString:@"${$1:`$2`}"];
+		[snip flushCachedRegexData];
+
+		snippetControlCounter = -1;
+		snippetControlMax     = -1;
+		currentSnippetIndex   = -1;
+
+		// Suppress snippet range calculation in [self textStorageDidProcessEditing] while initial insertion
+		snippetWasJustInserted = YES;
+
+		while([snip isMatchedByRegex:re]) {
+			[snip flushCachedRegexData];
+			snippetControlCounter++;
+
+			NSRange snipRange = [snip rangeOfRegex:re capture:0L];
+			NSInteger snipCnt = [[snip substringWithRange:[snip rangeOfRegex:re capture:1L]] intValue];
+			NSRange hintRange = [snip rangeOfRegex:re capture:2L];
+
+			// Check for snippet number 19 (to simplify regexp)
+			if(snipCnt>18 || snipCnt<0) {
+				NSLog(@"Only snippets in the range of 0…18 allowed.");
+				[self endSnippetSession];
+				break;
+			}
+
+			// Remember the maximal snippet number defined by user
+			if(snipCnt>snippetControlMax)
+				snippetControlMax = snipCnt;
+
+			// Replace internal variables
+			NSMutableString *theHintString = [[NSMutableString alloc] initWithCapacity:hintRange.length];
+			[theHintString setString:[snip substringWithRange:hintRange]];
+
+			// Handle escaped characters
+			[theHintString replaceOccurrencesOfRegex:@"\\\\(\\$\\(|\\}|\\$R_)" withString:@"$1"];
+			[theHintString flushCachedRegexData];
+
+			// If inside the snippet hint $(…) is defined run … as BASH command
+			// and replace $(…) by the return string of that command. Please note
+			// only one $(…) statement is allowed within one ${…} snippet environment.
+			NSRange tagRange = [theHintString rangeOfRegex:@"(?s)(?<!\\\\)\\$\\((.*)\\)"];
+			if(tagRange.length) {
+				[theHintString flushCachedRegexData];
+				NSRange cmdRange = [theHintString rangeOfRegex:@"(?s)(?<!\\\\)\\$\\(\\s*(.*)\\s*\\)" capture:1L];
+				if(cmdRange.length) {
+					NSError *err = nil;
+					NSString *cmdResult = [[theHintString substringWithRange:cmdRange] evaluateAsBashCommandAndError:&err];
+					if(err == nil) {
+						[theHintString replaceCharactersInRange:tagRange withString:cmdResult];
+					} else if([err code] != 9) { // Suppress an error message if command was killed
+						// NSString *errorMessage  = [err localizedDescription];
+						// NSBeginAlertSheet(NSLocalizedString(@"BASH Error", @"bash error"), NSLocalizedString(@"OK", @"OK button"), nil, nil, [self window], self, nil, nil,
+						// 				  [NSString stringWithFormat:@"%@ “%@”:\n%@", NSLocalizedString(@"Error for", @"error for message"), [theHintString substringWithRange:cmdRange], errorMessage]);
+					}
+				} else {
+					[theHintString replaceCharactersInRange:tagRange withString:@""];
+				}
+			}
+			[theHintString flushCachedRegexData];
+
+			[snip replaceCharactersInRange:snipRange withString:theHintString];
+			[snip flushCachedRegexData];
+
+			// Store found snippet range
+			snippetControlArray[snipCnt][0] = snipRange.location + targetRange.location;
+			snippetControlArray[snipCnt][1] = [theHintString length];
+			snippetControlArray[snipCnt][2] = 0;
+
+			[theHintString release];
+
+			// Adjust successive snippets
+			for(i=0; i<20; i++)
+				if(snippetControlArray[i][0] > -1 && i != snipCnt && snippetControlArray[i][0] > snippetControlArray[snipCnt][0])
+					snippetControlArray[i][0] -= 3+((snipCnt>9)?2:1);
+
+		}
+
+		// Parse for mirrored snippets
+		while([snip isMatchedByRegex:mirror_re]) {
+			mirroredCounter++;
+			if(mirroredCounter > 19) {
+				NSLog(@"Only 20 mirrored snippet placeholders allowed.");
+				NSBeep();
+				break;
+			} else {
+
+				NSRange snipRange = [snip rangeOfRegex:mirror_re capture:0L];
+				NSInteger snipCnt = [[snip substringWithRange:[snip rangeOfRegex:mirror_re capture:1L]] intValue];
+
+				// Check for snippet number 19 (to simplify regexp)
+				if(snipCnt>18 || snipCnt<0) {
+					NSLog(@"Only snippets in the range of 0…18 allowed.");
+					[self endSnippetSession];
+					break;
+				}
+
+				[snip replaceCharactersInRange:snipRange withString:@""];
+				[snip flushCachedRegexData];
+
+				// Store found mirrored snippet range
+				snippetMirroredControlArray[mirroredCounter][0] = snipCnt;
+				snippetMirroredControlArray[mirroredCounter][1] = snipRange.location + targetRange.location;
+				snippetMirroredControlArray[mirroredCounter][2] = 0;
+
+				// Adjust successive snippets
+				for(i=0; i<20; i++)
+					if(snippetControlArray[i][0] > -1 && snippetControlArray[i][0] > snippetMirroredControlArray[mirroredCounter][1])
+						snippetControlArray[i][0] -= 1+((snipCnt>9)?2:1);
+
+				[snip flushCachedRegexData];
+			}
+		}
+		// Preset mirrored snippets with according snippet content
+		if(mirroredCounter > -1) {
+			for(i=0; i<=mirroredCounter; i++) {
+				if(snippetControlArray[snippetMirroredControlArray[i][0]][0] > -1 && snippetControlArray[snippetMirroredControlArray[i][0]][1] > 0) {
+					[snip replaceCharactersInRange:NSMakeRange(snippetMirroredControlArray[i][1]-targetRange.location, snippetMirroredControlArray[i][2]) 
+										withString:[snip substringWithRange:NSMakeRange(snippetControlArray[snippetMirroredControlArray[i][0]][0]-targetRange.location, snippetControlArray[snippetMirroredControlArray[i][0]][1])]];
+					snippetMirroredControlArray[i][2] = snippetControlArray[snippetMirroredControlArray[i][0]][1];
+				}
+				// Adjust successive snippets
+				for(j=0; j<20; j++)
+					if(snippetControlArray[j][0] > -1 && snippetControlArray[j][0] > snippetMirroredControlArray[i][1])
+						snippetControlArray[j][0] += snippetControlArray[snippetMirroredControlArray[i][0]][1];
+				// Adjust successive mirrored snippets
+				for(j=0; j<=mirroredCounter; j++)
+					if(snippetMirroredControlArray[j][1] > snippetMirroredControlArray[i][1])
+						snippetMirroredControlArray[j][1] += snippetControlArray[snippetMirroredControlArray[i][0]][1];
+			}
+		}
+
+		if(snippetControlCounter > -1) {
+			// Store the end for tab out
+			snippetControlMax++;
+			snippetControlArray[snippetControlMax][0] = targetRange.location + [snip length];
+			snippetControlArray[snippetControlMax][1] = 0;
+			snippetControlArray[snippetControlMax][2] = 0;
+		}
+
+		// unescape escaped snippets and re-adjust successive snippet locations : \${1:a} → ${1:a}
+		NSString *ure = @"(?s)\\\\\\$\\{(1?\\d):(.{0}|.*?[^\\\\])\\}";
+		while([snip isMatchedByRegex:ure]) {
+			NSRange escapeRange = [snip rangeOfRegex:ure capture:0L];
+			[snip replaceCharactersInRange:escapeRange withString:[snip substringWithRange:NSMakeRange(escapeRange.location+1,escapeRange.length-1)]];
+			NSInteger loc = escapeRange.location + targetRange.location;
+			[snip flushCachedRegexData];
+			for(i=0; i<=snippetControlMax; i++)
+				if(snippetControlArray[i][0] > -1 && snippetControlArray[i][0] > loc)
+					snippetControlArray[i][0]--;
+			// Adjust mirrored snippets
+			if(mirroredCounter > -1)
+				for(i=0; i<=mirroredCounter; i++)
+					if(snippetMirroredControlArray[i][0] > -1 && snippetMirroredControlArray[i][1] > loc)
+						snippetMirroredControlArray[i][1]--;
+		}
+
+		// Insert snippet by selecting the tab trigger if any
+		[self setSelectedRange:targetRange];
+
+		// Registering for undo
+		[self breakUndoCoalescing];
+		[self insertText:snip];
+
+		// If autopair is enabled check whether snip begins with ( and ends with ), if so mark ) as pair-linked
+		if (
+
+				[[NSUserDefaults standardUserDefaults] objectForKey:kAutoCloseBrackets] &&
+
+				 (([snip hasPrefix:@"("] && [snip hasSuffix:@")"])
+						|| ([snip hasPrefix:@"`"] && [snip hasSuffix:@"`"])
+						|| ([snip hasPrefix:@"'"] && [snip hasSuffix:@"'"])
+						|| ([snip hasPrefix:@"\""] && [snip hasSuffix:@"\""])))
+		{
+			[[self textStorage] addAttribute:kTALinked value:kTAVal range:NSMakeRange([self selectedRange].location - 1, 1)];
+		}
+
+		// Any snippets defined?
+		if(snippetControlCounter > -1) {
+			// Find and select first defined snippet
+			currentSnippetIndex = 0;
+			// Look for next defined snippet since snippet numbers must not serial like 1, 5, and 12 e.g.
+			while(snippetControlArray[currentSnippetIndex][0] == -1 && currentSnippetIndex < 20)
+				currentSnippetIndex++;
+			[self selectCurrentSnippet];
+		}
+
+		snippetWasJustInserted = NO;
+	}
+	@catch(id ae) { // For safety reasons catch exceptions
+		NSLog(@"Snippet Error: %@", [ae description]);
+		[self endSnippetSession];
+		snippetWasJustInserted = NO;
+	}
+
+	if(snip)[snip release];
+
+}
+
+/**
+ * Checks whether the current caret position in inside of a defined snippet range
+ */
+- (BOOL)checkForCaretInsideSnippet
+{
+
+	if(snippetWasJustInserted) return YES;
+
+	BOOL isCaretInsideASnippet = NO;
+
+	if(snippetControlCounter < 0 || currentSnippetIndex == snippetControlMax) {
+		[self endSnippetSession];
+		return NO;
+	}
+	
+	[[self textStorage] ensureAttributesAreFixedInRange:[self selectedRange]];
+	NSInteger caretPos = [self selectedRange].location;
+	NSInteger i, j;
+	NSInteger foundSnippetIndices[20]; // array to hold nested snippets
+
+	j = -1;
+
+	// Go through all snippet ranges and check whether the caret is inside of the
+	// current snippet range. Remember matches 
+	// in foundSnippetIndices array to test for nested snippets.
+	for(i=0; i<=snippetControlMax; i++) {
+		j++;
+		foundSnippetIndices[j] = 0;
+		if(snippetControlArray[i][0] != -1 
+			&& caretPos >= snippetControlArray[i][0]
+			&& caretPos <= snippetControlArray[i][0] + snippetControlArray[i][1]) {
+
+			foundSnippetIndices[j] = 1;
+			if(i == currentSnippetIndex)
+				isCaretInsideASnippet = YES;
+
+		}
+	}
+	// If caret is not inside the current snippet range check if caret is inside of
+	// another defined snippet; if so set currentSnippetIndex to it (this allows to use the
+	// mouse to activate another snippet). If the caret is inside of overlapped snippets (nested)
+	// then select this snippet which has the smallest length.
+	if(!isCaretInsideASnippet && foundSnippetIndices[currentSnippetIndex] == 1) {
+		isCaretInsideASnippet = YES;
+	} else if(![self selectedRange].length) {
+		NSInteger curIndex = -1;
+		NSInteger smallestLength = -1;
+		for(i=0; i<snippetControlMax; i++) {
+			if(foundSnippetIndices[i] == 1) {
+				if(curIndex == -1) {
+					curIndex = i;
+					smallestLength = snippetControlArray[i][1];
+				} else {
+					if(smallestLength > snippetControlArray[i][1]) {
+						curIndex = i;
+						smallestLength = snippetControlArray[i][1];
+					}
+				}
+			}
+		}
+		// Reset the active snippet
+		if(curIndex > -1 && smallestLength > -1) {
+			currentSnippetIndex = curIndex;
+			isCaretInsideASnippet = YES;
+		}
+	}
+	return isCaretInsideASnippet;
+
+}
+
+/**
+ * Return YES if user interacts with snippets (is needed mainly for suppressing
+ * the highlighting of the current query)
+ */
+- (BOOL)isSnippetMode
+{
+	return (snippetControlCounter > -1) ? YES : NO;
+}
+
+- (void)checkSnippets
+{
+	// Re-calculate snippet ranges if snippet session is active
+	if(snippetControlCounter > -1 && !snippetWasJustInserted && !isProcessingMirroredSnippets) {
+		// Remove any fully nested snippets relative to the current snippet which was edited
+		NSInteger currentSnippetLocation = snippetControlArray[currentSnippetIndex][0];
+		NSInteger currentSnippetMaxRange = snippetControlArray[currentSnippetIndex][0] + snippetControlArray[currentSnippetIndex][1];
+		NSInteger i;
+		for(i=0; i<snippetControlMax; i++) {
+			if(snippetControlArray[i][0] > -1
+				&& i != currentSnippetIndex
+				&& snippetControlArray[i][0] >= currentSnippetLocation
+				&& snippetControlArray[i][0] <= currentSnippetMaxRange
+				&& snippetControlArray[i][0] + snippetControlArray[i][1] >= currentSnippetLocation
+				&& snippetControlArray[i][0] + snippetControlArray[i][1] <= currentSnippetMaxRange
+				) {
+					snippetControlArray[i][0] = -1;
+					snippetControlArray[i][1] = -1;
+					snippetControlArray[i][2] = -1;
+			}
+		}
+
+		NSInteger editStartPosition = [[self textStorage] editedRange].location;
+		NSUInteger changeInLength = [[self textStorage] changeInLength];
+
+		// Adjust length change to current snippet
+		snippetControlArray[currentSnippetIndex][1] += changeInLength;
+		// If length < 0 break snippet input
+		if(snippetControlArray[currentSnippetIndex][1] < 0) {
+			[self endSnippetSession];
+		} else {
+			// Adjust start position of snippets after caret position
+			for(i=0; i<=snippetControlMax; i++) {
+				if(snippetControlArray[i][0] > -1 && i != currentSnippetIndex) {
+					if(editStartPosition < snippetControlArray[i][0]) {
+						snippetControlArray[i][0] += changeInLength;
+					} else if(editStartPosition >= snippetControlArray[i][0] && editStartPosition <= snippetControlArray[i][0] + snippetControlArray[i][1]) {
+						snippetControlArray[i][1] += changeInLength;
+					}
+				}
+			}
+			// Adjust start position of mirrored snippets after caret position
+			if(mirroredCounter > -1)
+				for(i=0; i<=mirroredCounter; i++) {
+					if(editStartPosition < snippetMirroredControlArray[i][1]) {
+						snippetMirroredControlArray[i][1] += changeInLength;
+					}
+				}
+		}
+
+		if(mirroredCounter > -1 && snippetControlCounter > -1) {
+			[self performSelector:@selector(processMirroredSnippets) withObject:nil afterDelay:0.0];
+		}
+	}
+}
+
+- (NSDictionary*)getCurrentEnvironment
+{
+	NSMutableDictionary *env = [NSMutableDictionary dictionary];
+
+	NSString *cword = [[self string] substringWithRange:
+		[self getRangeForCurrentWord]];
+
+	NSString *cline = [[self string] substringWithRange:
+		[[self string] lineRangeForRange:[self selectedRange]]];
+
+	NSString *cpath = @"";
+	NSURL *anURL = [[[[self window] windowController] document] fileURL];
+	if(anURL)
+		cpath = [anURL path];
+	else if([[self delegate] isKindOfClass:[RController class]])
+		cpath = @"RConsole";
+
+	NSString *stext = [[self string] substringWithRange:
+		[self selectedRange]];
+
+	if(cword)
+		[env setObject:cword forKey:kShellVarNameCurrentWord];
+	if(cline)
+		[env setObject:cline forKey:kShellVarNameCurrentLine];
+	if(cpath)
+		[env setObject:cpath forKey:kShellVarNameCurrentFilePath];
+	if(stext)
+		[env setObject:stext forKey:kShellVarNameSelectedText];
+
+	return (NSDictionary*)env;
+}
+
+#pragma mark -
+#pragma mark multi-touch trackpad support
+
+/**
+ * Trackpad two-finger zooming gesture for in/decreasing the font size
+ */
+- (void) magnifyWithEvent:(NSEvent *)anEvent
+{
+	[[RController sharedController] fontSizeChangedBy:([anEvent deltaZ]/100) withSender:self];
+}
 
 @end
