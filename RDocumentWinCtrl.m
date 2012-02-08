@@ -1078,24 +1078,35 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				// indent only next line after simple if,for,while,function commands without trailing {
 				// and if line has more opened ( than )
 				NSString *line = [[textView string] substringWithRange:lr];
-				NSInteger openedP = 0;
-				NSInteger closedP = 0;
+				NSInteger cntP = 0;
+				NSInteger lastClosedP = -1;
+				BOOL oneBlock = YES;
+				BOOL firstRun = YES;
 				unichar c;
 				for(i=0; i<[line length]; i++) {
 					if(RPARSERCONTEXTFORPOSITION(textView, i) == pcExpression) {
 						c=CFStringGetCharacterAtIndex((CFStringRef)line,i);
-						if(c==')')
-							closedP++;
-						else if (c=='(')
-							openedP++;
+						if(c==')') {
+							cntP--;
+							lastClosedP = i;
+						}
+						else if (c=='(') {
+							if(oneBlock && !firstRun && cntP == 0) {
+								oneBlock = NO;
+							}
+							firstRun = NO;
+							cntP++;
+						}
 					}
 				}
-				if(openedP>closedP) {
+				if(cntP > 0) {
 					[textView breakUndoCoalescing];
 					[textView insertText:indentString];
 				} 
-				else if([line isMatchedByRegex:@"^\\s*(if|for|while)\\s*\\(.+\\)\\s*$"]
-						|| [line isMatchedByRegex:@"(<-|=)\\s*function\\s*\\(.+\\)\\s*$"]) {
+				else if(oneBlock 
+					&& [[line substringFromIndex:lastClosedP] isMatchedByRegex:@"^\\)[ \t]*$"] 
+					&& ([line isMatchedByRegex:@"^[ \t]*(if|for|while)[ \t]*\\(.+\\)[ \t]*$"]
+						|| [line isMatchedByRegex:@"(<-|=)[ \t]*function[ \t]*\\(.*\\)[ \t]*$"])) {
 					[textView breakUndoCoalescing];
 					[textView insertText:indentString];
 					lastLineWasCodeIndented = YES;
