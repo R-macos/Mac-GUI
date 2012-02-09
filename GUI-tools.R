@@ -175,6 +175,32 @@ add.fn("data.manager", function ()
     }
 })
 
+# added "interactive" argument to "prompt(...)"
+# if interactive == TRUE the generated Rd doc will be opened in R.app
+#   for filename = NA or filename == NULL -> an untitled new Rd doc for passed function
+#   for filename = a_path -> a_path will be opened for passed function
+add.fn("prompt", function (object, filename = NULL, name = NULL, interactive = FALSE, ...)
+{
+    if(interactive == FALSE) {
+        # call default prompt()
+        utils:::prompt(object, filename = filename, name = name, ...)
+    } else {
+        # let R.app handle the result of prompt()
+        isTempFile <- FALSE
+        if(is.null(filename) || is.na(filename)) {
+            # if no filename was passed we do it on a temporary file
+            # which will be removed by 'RappPrompt->RController.handlePromptRdFileAtPath
+            isTempFile <- TRUE
+            filename <- tempfile()
+        }
+        # call default prompt() by suppressing the outputted messages since
+        # we're in interactive mode
+        suppressMessages(utils:::prompt(object=object, filename = filename, name = name, ...))
+        # let RappPrompt - defined in main.m - handle the generated Rd file
+        invisible(.Call("RappPrompt", filename, isTempFile))
+    }
+})
+
 ## we catch q/quit to make sure users don't use it inadvertently
 if (!isTRUE(getOption("RGUI.base.quit"))) {
 add.fn("q", function (save = "default", status = 0, runLast = TRUE) .Call("RappQuit", save, status, runLast))

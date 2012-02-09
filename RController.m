@@ -2721,6 +2721,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	NSString *fname = nil;
 	BOOL isDir = NO;
 	BOOL flag = [Preferences flagForKey:enforceInitialWorkingDirectoryKey withDefault:NO];
+	filename = [filename stringByExpandingTildeInPath];
 	NSFileManager *manager = [NSFileManager defaultManager];
 	if ([manager fileExistsAtPath:filename isDirectory:&isDir] && isDir){
 		SLog(@"   is a directory, cwd to %@", filename);
@@ -2902,6 +2903,53 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	}
 	[RConsoleWindow makeKeyWindow];
 	return strlen(buf); // is is used? it's potentially incorrect...
+}
+
+- (void) handlePromptRdFileAtPath:(NSString*)filepath isTempFile:(BOOL)isTempFile
+{
+	if(filepath && [filepath length] 
+			&& [[NSFileManager defaultManager] fileExistsAtPath:[filepath stringByExpandingTildeInPath]]) {
+		if(!isTempFile) {
+			NSURL *url = [NSURL fileURLWithPath:[filepath stringByExpandingTildeInPath]];
+			NSError *theError = nil;
+			SLog(@"RController:handlePromptRdFileAtPath opens prompt's Rd file '%@>'", [url absoluteString]);
+			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
+			if(theError != nil) {
+				NSBeep();
+				NSLog(@"RController.handlePromptRdFileAtPath %@ couldn't be opened.\n%@", theError);
+			}
+		} else {
+			NSError *err = nil;
+			SLog(@"RController:handlePromptRdFileAtPath opens untitled Rd file for '%@>'", [url absoluteString]);
+			RDocumentController *ctrl = [RDocumentController sharedDocumentController];
+			RDocument *doc = [ctrl makeUntitledDocumentOfType:ftRdDoc error:&err];
+			if(err != nil) {
+				NSBeep();
+				NSLog(@"RController.handlePromptRdFileAtPath couln't create an untitled Rd document.\n%@", err);
+			} else {
+				[ctrl addDocument:doc];
+				[doc makeWindowControllers];
+				if([doc windowControllers] && [[doc windowControllers] count]) {
+					NSWindow *win = [[[doc windowControllers] objectAtIndex:0] window];
+					[doc showWindows];
+					NSString *content = [NSString stringWithContentsOfFile:filepath encoding:NSUTF8StringEncoding error:&err];
+					if(win && err == nil && content && [content length]) {
+						[[win firstResponder] insertText:content];
+					} else {
+						NSBeep();
+						NSLog(@"RController.handlePromptRdFileAtPath couldn't insert the Rd template.\n%@", err);
+					}
+				} else {
+					NSBeep();
+					NSLog(@"RController.handlePromptRdFileAtPath couln't find a window for the untitled Rd document.");
+					return;
+				}
+			}
+			[[NSFileManager defaultManager] removeItemAtPath:filepath error:nil]; 
+		}
+	} else {
+		SLog(@"RController.handlePromptRdFileAtPath - no valid file path passed.");
+	}
 }
 
 - (void) loadFile:(NSString *)fname

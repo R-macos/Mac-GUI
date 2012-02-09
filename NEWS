@@ -1,5 +1,26 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-02-09 [HJBB]
+*	Added Rd file support:
+	- Rd file extension is now affiliated to R.app
+	- Rd documents will have a list of sections in the toolbar
+	- to create a new empty Rd doc Menu > File > New Rd Document
+	- the Rd document's toolbar contains a toolbox with the following
+	  methods:
+	  -- Insert Function/Data Template
+	  -- Check Rd Document
+	  -- HTML/PDF Preview
+	- syntax coloring is adopted from the settings for R code
+*	Enhanced R's prompt() function if called without default 
+	namespace 'utils':
+	- added function argument 'interactive = FALSE'
+	- if interactive == FALSE prompt() will call utils:::prompt()
+	- if interactive == TRUE then prompt() will open the generated
+	  Rd document in R.app
+	  -- if filename == NULL or filename == NA R.app will open
+	     an untitled Rd document with the generated Rd code
+	  -- if filename is a valid path R.app will open that Rd file
+
 Last-update: 2012-02-08 [HJBB]
 *	In Script Editor "function list" selection
 	follows cursor position.

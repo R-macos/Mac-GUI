@@ -74,8 +74,23 @@ static SEXP RappQuit(SEXP save, SEXP status, SEXP runLast) {
 	return R_NilValue;
 }
 
+/* this is called by the R.app prompt() function in interactive mode */
+static SEXP RappPrompt(SEXP filename, SEXP isTempFile) {
+	BOOL isTemp = (asInteger(isTempFile) == 1) ? YES : NO;
+	const char *fp;
+	NSString *filepath = nil;
+	fp = CHAR(STRING_ELT(filename, 0));
+	filepath = [NSString stringWithCString:fp encoding:NSUTF8StringEncoding];
+	if(filepath && [filepath length])
+		[[RController sharedController] handlePromptRdFileAtPath:filepath isTempFile:isTemp];
+	else
+		Rf_error("in interactive mode the argument 'filename' has to be either a valid path or NULL or NA");
+	return R_NilValue;
+}
+
 static R_CallMethodDef mainCallMethods[]  = {
 	{"RappQuit", (DL_FUNC) &RappQuit, 3},
+	{"RappPrompt", (DL_FUNC) &RappPrompt, 2},
 	{NULL, NULL, 0}
 };
 

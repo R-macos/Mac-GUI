@@ -289,6 +289,7 @@
 - (void) handleFlushConsole;
 - (void) handleBusy: (BOOL)i;
 - (int)  handleChooseFile: (char *)buf len:(int)len isNew:(int)isNew;	
+- (void) handlePromptRdFileAtPath: (NSString*)filepath isTempFile:(BOOL)isTempFile;
 
 - (void) setStatusLineText: (NSString*) text;
 - (NSString*) statusLineText;
