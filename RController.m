@@ -3122,7 +3122,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[toolbarItem setPaletteLabel: NLS(@"New Document")];
 		[toolbarItem setToolTip: NLS(@"Create a new, empty document in the editor")];
 		[toolbarItem setImage: [NSImage imageNamed: @"emptyDoc"]];
-		[toolbarItem setTarget: self];
+		[toolbarItem setTarget: [RDocumentController sharedDocumentController]];
 		[toolbarItem setAction: @selector(newDocument:)];
 		
     } else  if ([itemIdent isEqual: X11ToolbarItemIdentifier]) {
