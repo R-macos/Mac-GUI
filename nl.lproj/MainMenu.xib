@@ -21,8 +21,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="828"/>
 			<integer value="2"/>
+			<integer value="24"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -506,7 +506,7 @@
 								</object>
 								<object class="NSMenuItem" id="102875923">
 									<reference key="NSMenu" ref="176257117"/>
-									<string key="NSTitle">Toon alle</string>
+									<string key="NSTitle">Toon alles</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -599,7 +599,7 @@
 								</object>
 								<object class="NSMenuItem" id="388875075">
 									<reference key="NSMenu" ref="3535262"/>
-									<string key="NSTitle">Open recente</string>
+									<string key="NSTitle">Open recente bestanden</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -607,7 +607,7 @@
 									<reference key="NSMixedImage" ref="299594582"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="137073750">
-										<string key="NSTitle">Open recente</string>
+										<string key="NSTitle">Open recente bestanden</string>
 										<object class="NSMutableArray" key="NSMenuItems">
 											<bool key="EncodedWithXMLCoder">YES</bool>
 											<object class="NSMenuItem" id="509689464">
@@ -663,7 +663,7 @@
 								</object>
 								<object class="NSMenuItem" id="925697182">
 									<reference key="NSMenu" ref="3535262"/>
-									<string key="NSTitle">Herstel</string>
+									<string key="NSTitle">Laatst bewaarde versie</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="213717426"/>
@@ -691,7 +691,7 @@
 								</object>
 								<object class="NSMenuItem" id="121582893">
 									<reference key="NSMenu" ref="3535262"/>
-									<string key="NSTitle">Print…</string>
+									<string key="NSTitle">Druk af…</string>
 									<string key="NSKeyEquiv">p</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -904,7 +904,7 @@
 											</object>
 											<object class="NSMenuItem" id="558087667">
 												<reference key="NSMenu" ref="524066003"/>
-												<string key="NSTitle">Gebruik selectie voor zoeken</string>
+												<string key="NSTitle">Gebruik selectie voor zoekactie</string>
 												<string key="NSKeyEquiv">e</string>
 												<int key="NSKeyEquivModMask">1572864</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -914,7 +914,7 @@
 											</object>
 											<object class="NSMenuItem" id="81980564">
 												<reference key="NSMenu" ref="524066003"/>
-												<string key="NSTitle">Spring naar selectie</string>
+												<string key="NSTitle">Ga naar selectie</string>
 												<string key="NSKeyEquiv">j</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -937,7 +937,7 @@
 								</object>
 								<object class="NSMenuItem" id="494395796">
 									<reference key="NSMenu" ref="149976397"/>
-									<string key="NSTitle">Ga naar lijn</string>
+									<string key="NSTitle">Ga naar regel…</string>
 									<string key="NSKeyEquiv">l</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1850,19 +1850,19 @@
 									<reference key="NSOnImage" ref="213717426"/>
 									<reference key="NSMixedImage" ref="299594582"/>
 								</object>
-								<object class="NSMenuItem" id="1038698072">
+								<object class="NSMenuItem" id="460336416">
 									<reference key="NSMenu" ref="714891013"/>
-									<string key="NSTitle">Zoom</string>
-									<string key="NSKeyEquiv"/>
+									<string key="NSTitle">Minimaliseer</string>
+									<string key="NSKeyEquiv">m</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="213717426"/>
 									<reference key="NSMixedImage" ref="299594582"/>
 								</object>
-								<object class="NSMenuItem" id="460336416">
+								<object class="NSMenuItem" id="1038698072">
 									<reference key="NSMenu" ref="714891013"/>
-									<string key="NSTitle">Minimaliseer</string>
-									<string key="NSKeyEquiv">m</string>
+									<string key="NSTitle">Vergoot/verklein</string>
+									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="213717426"/>
@@ -1881,7 +1881,7 @@
 								</object>
 								<object class="NSMenuItem" id="164653880">
 									<reference key="NSMenu" ref="714891013"/>
-									<string key="NSTitle">Breng alles naar voorgrond</string>
+									<string key="NSTitle">Alles op voorgrond</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -7845,7 +7845,6 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="164653880"/>
-							<reference ref="460336416"/>
 							<reference ref="761161950"/>
 							<reference ref="1038698072"/>
 							<reference ref="983466974"/>
@@ -7855,6 +7854,7 @@
 							<reference ref="266552152"/>
 							<reference ref="519251961"/>
 							<reference ref="1010081061"/>
+							<reference ref="460336416"/>
 						</object>
 						<reference key="parent" ref="570105787"/>
 					</object>
@@ -11054,6 +11054,7 @@
 					<string>1580.ImportedFromIB2</string>
 					<string>1581.IBPluginDependency</string>
 					<string>1581.ImportedFromIB2</string>
+					<string>159.IBEditorWindowLastContentRect</string>
 					<string>159.IBPluginDependency</string>
 					<string>159.ImportedFromIB2</string>
 					<string>160.IBPluginDependency</string>
@@ -11175,6 +11176,7 @@
 					<string>222.ImportedFromIB2</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.ImportedFromIB2</string>
+					<string>24.IBEditorWindowLastContentRect</string>
 					<string>24.IBPluginDependency</string>
 					<string>24.ImportedFromIB2</string>
 					<string>243.IBPluginDependency</string>
@@ -11357,6 +11359,7 @@
 					<string>565.IBAttributePlaceholdersKey</string>
 					<string>565.IBPluginDependency</string>
 					<string>565.ImportedFromIB2</string>
+					<string>57.IBEditorWindowLastContentRect</string>
 					<string>57.IBPluginDependency</string>
 					<string>57.ImportedFromIB2</string>
 					<string>570.IBPluginDependency</string>
@@ -11953,6 +11956,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>{{443, 254}, {303, 103}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12028,7 +12032,7 @@
 						<bytes key="NSTransformStruct">P4AAAL+AAABBmAAAxAQAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{151, 109}, {220, 393}}</string>
+					<string>{{223, 164}, {220, 393}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12101,6 +12105,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>{{654, 364}, {279, 193}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12133,7 +12138,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{44, 502}, {669, 20}}</string>
+					<string>{{116, 557}, {669, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12333,6 +12338,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
+					<string>{{128, 354}, {230, 203}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12473,7 +12479,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{114, 438}, {237, 253}}</string>
+					<string>{{156, 304}, {257, 253}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12502,7 +12508,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{211, 329}, {270, 173}}</string>
+					<string>{{283, 384}, {270, 173}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12513,19 +12519,7 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{442, 518}, {165, 153}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<boolean value="YES"/>
+					<string>{{553, 384}, {202, 153}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -12558,7 +12552,19 @@
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{297, 408}, {175, 283}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<boolean value="YES"/>
+					<string>{{553, 274}, {204, 283}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

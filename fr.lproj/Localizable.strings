@@ -253,28 +253,28 @@
 "Please specify a valid URL first." = "S'il vous plait, spécifiez d'abord une adresse URL valide.";
 
 /* Editor preference group */
-"PrefG-Editor" = "PrefG-Editeur";
+"PrefG-Editor" = "Editeur";
 
 /* General preference group */
-"PrefG-General" = "PrefG-Générales";
+"PrefG-General" = "Générales";
 
 /* Views preference group */
-"PrefG-Views" = "PrefG-Vues";
+"PrefG-Views" = "Vues";
 
 /* Colors preference pane */
-"PrefP-Colors" = "PrefP-Couleurs";
+"PrefP-Colors" = "Console Couleurs";
 
 /* Editor preference pane */
-"PrefP-Editor" = "PrefP-Editeur";
+"PrefP-Editor" = "Editeur";
 
 /* Quartz preference pane */
-"PrefP-Quartz" = "PrefP-Quartz";
+"PrefP-Quartz" = "Quartz";
 
 /* Startup preference pane */
-"PrefP-Startup" = "PrefP-Démarrage";
+"PrefP-Startup" = "Démarrage";
 
 /* Syntax colors preference pane */
-"PrefP-Syntax" = "PrefP-Syntaxe";
+"PrefP-Syntax" = "Syntaxe";
 
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Imprimer ce document";

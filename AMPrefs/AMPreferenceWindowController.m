@@ -60,7 +60,7 @@
 	[panel setContentView:[[[NSView alloc] initWithFrame:NSMakeRect(0, 0, 200, 100)] autorelease]];
 	[self setPrefPanes:[NSMutableDictionary dictionary]];
 	[self setAutosaveName:name];
-	[self setTitle:@"Preferences"];
+	[self setTitle:NLS(@"Preferences")];
 	[self createIconViewPane];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:NSApp];
 	_am_oldContentViewFrame = [[panel contentView] frame];

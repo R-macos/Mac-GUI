@@ -9,15 +9,15 @@
 #import "AMPrefPaneIconView.h"
 #import "NSImage_AMAdditions.h"
 
-#define AMPrefPaneIconViewVerticalPadding 14
-#define AMPrefPaneIconViewHorizontalPadding 12
+#define AMPrefPaneIconViewVerticalPadding 10
+#define AMPrefPaneIconViewHorizontalPadding 40
 #define AMPrefPaneIconViewTopGroupPadding 3
 #define AMPrefPaneIconViewTopPadding 2
 #define AMPrefPaneIconViewBottomGroupPadding 6
-#define AMPrefPaneIconViewBottomPadding 6
-#define AMPrefPaneIconViewTopIconPadding 11
-#define AMPrefPaneIconViewVerticalLabelSpacing 1
-#define AMPrefPaneIconViewHorizontalIconSpacing 4
+#define AMPrefPaneIconViewBottomPadding 10
+#define AMPrefPaneIconViewTopIconPadding 8
+#define AMPrefPaneIconViewVerticalLabelSpacing 3
+#define AMPrefPaneIconViewHorizontalIconSpacing 20
 
 
 
@@ -53,9 +53,17 @@
 		[self setColumns:numColumns];
 		//[self setSortByCategory:YES];
 		NSFont *labelFont = [NSFont systemFontOfSize:[NSFont systemFontSizeForControlSize:NSSmallControlSize]];
-		_am_iconLabelAttributes = [[NSDictionary dictionaryWithObject:labelFont forKey:NSFontAttributeName] retain];
+		NSMutableParagraphStyle *mutParaStyle=[[NSMutableParagraphStyle alloc] init];
+		[mutParaStyle setAlignment:NSCenterTextAlignment];
+		// [attrStr addAttributes:[NSDictionary dictionaryWithObject:mutParaStyle forKey:NSParagraphStyleAttributeName] range:NSMakeRange(0,[attrStr length])];
+		_am_iconLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+			labelFont, NSFontAttributeName,
+			mutParaStyle, NSParagraphStyleAttributeName,
+			nil] retain];
 		NSFont *captionFont = [NSFont boldSystemFontOfSize:[NSFont systemFontSize]];
 		_am_captionAttributes = [[NSDictionary dictionaryWithObject:captionFont forKey:NSFontAttributeName] retain];
+		[mutParaStyle release];
+
 	}
 	return self;
 }
@@ -404,6 +412,7 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 	}
 	if (sortByCategory) {
 		NSPoint captionOffset = NSMakePoint(AMPrefPaneIconViewHorizontalPadding, frame.origin.y +AMPrefPaneIconViewTopGroupPadding);
+		captionOffset.x -= 10;
 		if (index > 0) {
 			// divider line
 			[[NSColor colorWithCalibratedWhite:0.84 alpha:1.0] set];
