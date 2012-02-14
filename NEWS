@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-02-14 [HJBB]
+*	Added trackpad three-finger swiping to toggle history drawer 
+	visibility in RConsole
+
 Last-update: 2012-02-09 [HJBB]
 *	Added Rd file support:
 	- Rd file extension is now affiliated to R.app
