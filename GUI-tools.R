@@ -183,7 +183,24 @@ add.fn("prompt", function (object, filename = NULL, name = NULL, interactive = F
 {
     if(interactive == FALSE) {
         # call default prompt()
-        utils:::prompt(object, filename = filename, name = name, ...)
+        ## the name setting here is necessary to avoid taking 'object'
+        ## as passed name - TODO has to be improved
+        if(missing(name))
+            name <- if(is.character(object))
+                object
+            else {
+                name <- substitute(object)
+                if(is.name(name))
+                    as.character(name)
+                else if(is.call(name)
+                        && (as.character(name[[1L]]) %in% c("::", ":::", "getAnywhere"))) {
+                    name <- as.character(name)
+                    name[length(name)]
+                }
+                else
+                    stop("cannot determine a usable name")
+            }
+        return(utils:::prompt(object, filename = filename, name= name, ...))
     } else {
         # let R.app handle the result of prompt()
         isTempFile <- FALSE
