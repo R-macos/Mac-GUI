@@ -66,6 +66,17 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 // declared external
 BOOL RTextView_autoCloseBrackets = YES;
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_5
+// declare the following methods to avoid compiler warnings
+@interface NSTextView (SuppressWarnings)
+- (void)swipeWithEvent:(NSEvent *)event;
+- (void)setAutomaticTextReplacementEnabled:(BOOL)flag;
+- (void)setAutomaticSpellingCorrectionEnabled:(BOOL)flag;
+- (void)setAutomaticDataDetectionEnabled:(BOOL)flag;
+- (void)setAutomaticDashSubstitutionEnabled:(BOOL)flag;
+@end
+#endif
+
 #pragma mark -
 #pragma mark Private API
 
@@ -1156,7 +1167,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 - (BOOL) isRConsole
 {
-	return console;
+	return ([self delegate] && [[self delegate] isKindOfClass:[RController class]]);
 }
 
 - (IBAction)makeASCIIconform:(id)sender
@@ -2110,14 +2121,31 @@ BOOL RTextView_autoCloseBrackets = YES;
 }
 
 /**
- * Trackpad three-finger swiping to toggle history drawer visibility 
+ * Trackpad three-finger swiping to toggle history drawer visibility in RConsole
  */
 - (void)swipeWithEvent:(NSEvent *)event
 {
-	if([self isRConsole])
-		[[RController sharedController] toggleHistory:self];
-	else
-		[super swipeWithEvent:event];
+
+	if([self isRConsole]) {
+
+		CGFloat x = [event deltaX];
+		CGFloat y = [event deltaY];
+		NSNumber *onEdge = nil;
+
+		if(x == -1.0f && y == 0.0f)
+			onEdge = [NSNumber numberWithInt:NSMaxXEdge];
+		else if(x == 1.0f && y == 0.0f)
+			onEdge = [NSNumber numberWithInt:NSMinXEdge];
+
+		if(onEdge) {
+			[[RController sharedController] toggleHistory:onEdge];
+			return;
+		}
+
+	}
+
+	[super swipeWithEvent:event];
+
 }
 
 @end

@@ -2426,12 +2426,17 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	[[(RDocumentController*)[NSDocumentController sharedDocumentController] findLastWindowForDocType:ftRSource] makeKeyAndOrderFront:sender];
 }
 
-- (IBAction)toggleHistory:(id)sender{
+- (IBAction)toggleHistory:(id)sender
+{
 	NSDrawerState state = [HistoryDrawer state];
 	if (NSDrawerOpeningState == state || NSDrawerOpenState == state) {
 		[HistoryDrawer close];
 	} else {
-		[HistoryDrawer open];
+		if(sender && [sender isKindOfClass:[NSNumber class]]) {
+			[HistoryDrawer openOnEdge:[sender intValue]];
+		} else {
+			[HistoryDrawer open];
+		}
 		NSInteger lastRowIndex = [self numberOfRowsInTableView:historyView]-1;
 		[historyView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastRowIndex] byExtendingSelection:NO];
 		[historyView scrollRowToVisible:lastRowIndex];
