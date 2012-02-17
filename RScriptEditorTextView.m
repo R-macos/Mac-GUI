@@ -854,6 +854,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 -(void)resetHighlights
 {
+
 	SLog(@"RScriptEditorTextView: resetHighlights with current highlite %d", currentHighlight);
 
 	if (currentHighlight>-1) {
@@ -873,21 +874,30 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	}
 }
 
--(void)highlightCharacter:(int)pos
+-(void)highlightCharacter:(NSNumber*)loc
 {
 
 	SLog(@"RScriptEditorTextView: highlightCharacter: %d", pos);
 
-	[self resetHighlights];
+	NSInteger pos = [loc intValue];
 
 	if (pos>=0 && pos<[[self string] length]) {
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+		[self showFindIndicatorForRange:NSMakeRange(pos, 1)];
+#else
+		[self resetHighlights];
 		NSLayoutManager *lm = [self layoutManager];
 		if (lm) {
 			currentHighlight = pos;
 			[lm setTemporaryAttributes:highlightColorAttr forCharacterRange:NSMakeRange(pos, 1)];
 			[self performSelector:@selector(resetBackgroundColor:) withObject:nil afterDelay:braceHighlightInterval];
-		} else SLog(@"highlightCharacter: attempt to set highlight %d beyond the text range 0:%d - I refuse!", pos, [[self string] length] - 1);
+		}
+
+#endif
+
 	}
+	else SLog(@"highlightCharacter: attempt to set highlight %d beyond the text range 0:%d - I refuse!", pos, [[self string] length] - 1);
 }
 
 -(void)resetBackgroundColor:(id)sender

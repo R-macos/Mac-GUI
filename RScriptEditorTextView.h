@@ -92,7 +92,7 @@
 
 - (void)setDeleteBackward:(BOOL)delBack;
 - (void)doSyntaxHighlighting;
-- (void)highlightCharacter:(int)pos;
+- (void)highlightCharacter:(NSNumber*)loc;
 - (void)resetHighlights;
 - (void)resetBackgroundColor:(id)sender;
 - (void)updateLineWrappingMode;

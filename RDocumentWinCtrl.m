@@ -972,7 +972,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 				if (c == openingChar) {
 					if (!skipMatchingBrace) {
-						[textView highlightCharacter:cursorLocation];
+						[textView performSelector:@selector(highlightCharacter:) withObject:[NSNumber numberWithInt:cursorLocation] afterDelay:0.01];
 						return;
 					} else
 						skipMatchingBrace--;
@@ -993,7 +993,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 					if (c == openingChar) {
 						if (!skipMatchingBrace) {
-							[textView highlightCharacter:cursorLocation];
+							[textView performSelector:@selector(highlightCharacter:) withObject:[NSNumber numberWithInt:cursorLocation] afterDelay:0.01];
 							return;
 						} else
 							skipMatchingBrace--;
