@@ -186,7 +186,7 @@
 - (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)docType error:(NSError **)outError
 {
 
-	SLog(@"RDocument.writeToFile: %@ ofType: %@ ", fileName, docType);
+	SLog(@"RDocument.writeToFile: %@ ofType: %@ ", absoluteURL, docType);
 
 	NSString *oldFileType = (initialContentsType)?:ftRSource; 
 

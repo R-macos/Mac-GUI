@@ -2925,7 +2925,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			}
 		} else {
 			NSError *err = nil;
-			SLog(@"RController:handlePromptRdFileAtPath opens untitled Rd file for '%@>'", [url absoluteString]);
+			SLog(@"RController:handlePromptRdFileAtPath opens untitled Rd file for '%@>'", filepath);
 			RDocumentController *ctrl = [RDocumentController sharedDocumentController];
 			RDocument *doc = [ctrl makeUntitledDocumentOfType:ftRdDoc error:&err];
 			if(err != nil) {
