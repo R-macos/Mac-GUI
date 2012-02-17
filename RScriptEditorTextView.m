@@ -213,10 +213,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[shColorIdentifier retain]; 
 
 	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:nil];
-	if (!c) c=[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f];
+	if (!c) c=[NSColor colorWithDeviceRed:0.71f green:0.835f blue:1.0f alpha:1.0f];
 	NSMutableDictionary *attr = [NSMutableDictionary dictionary];
 	[attr setDictionary:[self selectedTextAttributes]];
-	[attr setObject:c forKey:NSForegroundColorAttributeName];
+	[attr setObject:c forKey:NSBackgroundColorAttributeName];
 	[self setSelectedTextAttributes:attr];
 	
 	// Rd stuff

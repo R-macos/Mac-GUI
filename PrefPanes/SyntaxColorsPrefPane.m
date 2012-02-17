@@ -310,7 +310,7 @@
 	[Preferences setKey:editorCurrentLineBackgroundColorKey withArchivedObject:
 		[NSColor colorWithDeviceRed:0.9 green:0.9 blue:0.9 alpha:0.8]];
 	[Preferences setKey:editorSelectionBackgroundColorKey withArchivedObject:
-		[NSColor selectedControlTextColor]];
+		[NSColor colorWithDeviceRed:0.71f green:0.835f blue:1.0f alpha:1.0f]];
 	// [Preferences setKey:sectionRdSyntaxColorKey withArchivedObject:
 	// 	[NSColor colorWithDeviceRed:0.8 green:0.0353 blue:0.02 alpha:1.0]];
 	// [Preferences setKey:macroArgRdSyntaxColorKey withArchivedObject:
