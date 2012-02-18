@@ -176,7 +176,6 @@
 		68E2B9F30796C9D200E31F29 /* devQuartz.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E2B9F10796C9D200E31F29 /* devQuartz.c */; };
 		68F84C6209ABB2BF0098D772 /* privateR.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F84C6109ABB2BF0098D772 /* privateR.h */; };
 		8D1107280486CEB800E47090 /* R_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* R_Prefix.pch */; };
-		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		BC03E662133AA8E100456B01 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC03E661133AA8E100456B01 /* Quartz.framework */; };
@@ -250,7 +249,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		1601EFCF06CBBEC700BF60D4 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
@@ -838,7 +836,6 @@
 				6853563B07B0285E00FDAAC3 /* PrefPanes */,
 				162B6A0406CD770C00C0B085 /* images */,
 				8D1107310486CEB800E47090 /* Info.plist */,
-				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1611E321070B86850025F66D /* R.scriptSuite */,
 				163B0D0406CE597300A380BE /* Credits.rtf */,
 				1611E323070B86990025F66D /* R.scriptTerminology */,
@@ -1097,7 +1094,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C34E62406F9EE2000211ACC /* sush in Resources */,
-				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				16D3042806B55072009CB94A /* RLogo.png in Resources */,
 				16D3044406B556BD009CB94A /* RLogo.icns in Resources */,
 				1601EFBD06CBBD2000BF60D4 /* ReadMe.txt in Resources */,
@@ -1292,14 +1288,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				089C165DFE840E0CC02AAC07 /* English */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		1611E321070B86850025F66D /* R.scriptSuite */ = {
 			isa = PBXVariantGroup;
 			children = (

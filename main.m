@@ -79,10 +79,15 @@ static SEXP RappPrompt(SEXP filename, SEXP isTempFile) {
 	BOOL isTemp = (asInteger(isTempFile) == 1) ? YES : NO;
 	const char *fp;
 	NSString *filepath = nil;
-	fp = CHAR(STRING_ELT(filename, 0));
-	filepath = [NSString stringWithCString:fp encoding:NSUTF8StringEncoding];
+	if (TYPEOF(filename) == STRSXP && LENGTH(filename) > 0) {
+		if (LENGTH(filename) > 1)
+			Rf_warning("`filename' has more than one element, using only the first one.");
+		fp = Rf_translateCharUTF8(STRING_ELT(filename, 0));
+		if (fp)
+			filepath = [NSString stringWithCString:fp encoding:NSUTF8StringEncoding];
+	}
 	if(filepath && [filepath length])
-		[[RController sharedController] handlePromptRdFileAtPath:filepath isTempFile:isTemp];
+		[[RController sharedController] handlePromptRdFileAtPath:[filepath stringByExpandingTildeInPath] isTempFile:isTemp];
 	else
 		Rf_error("in interactive mode the argument 'filename' has to be either a valid path or NULL or NA");
 	return R_NilValue;

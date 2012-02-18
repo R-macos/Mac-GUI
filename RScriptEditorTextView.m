@@ -876,10 +876,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 -(void)highlightCharacter:(NSNumber*)loc
 {
+	NSInteger pos = [loc intValue];
 
 	SLog(@"RScriptEditorTextView: highlightCharacter: %d", pos);
-
-	NSInteger pos = [loc intValue];
 
 	if (pos>=0 && pos<[[self string] length]) {
 
