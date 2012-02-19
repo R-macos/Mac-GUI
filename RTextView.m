@@ -236,16 +236,12 @@ BOOL RTextView_autoCloseBrackets = YES;
 		// Draw textview's background since due to the snippet highlighting we're responsible for it.
 		NSColor *bgColor = [NSColor clearColor];
 		NSColor *frameColor = [NSColor clearColor];
-		CGFloat r, g, b, a;
-		if([[self delegate] isKindOfClass:[RController class]]) {
+		if([[self delegate] isKindOfClass:[RController class]])
 			frameColor = [Preferences unarchivedObjectForKey:selectionColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]];
-			[frameColor getRed:&r green:&g blue:&b alpha:&a];
-			bgColor = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:0.4];
-		} else {
+		else
 			frameColor = [Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]];
-			[frameColor getRed:&r green:&g blue:&b alpha:&a];
-			bgColor = [NSColor colorWithCalibratedRed:r green:g blue:b alpha:0.4];
-		}
+		
+		bgColor = [frameColor colorWithAlphaComponent:0.4];
 
 		// Highlight snippets
 		if(snippetControlCounter > -1) {
