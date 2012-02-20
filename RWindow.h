@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-12  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
@@ -25,51 +25,18 @@
  *  http://www.gnu.org/copyleft/gpl.html.  You can also obtain it by
  *  writing to the Free Software Foundation, Inc., 59 Temple Place,
  *  Suite 330, Boston, MA  02111-1307  USA.
+ *
+ *  RWindow.h
+ *
+ *  Created by Hans-J. Bibiko on 18/02/2012.
+ *
  */
 
-/* HelpManager */
+#import <Cocoa/Cocoa.h>
 
-#import "CCComp.h"
-#import <WebKit/WebKit.h>
-#import <WebKit/WebFrame.h>
 
-#define kExactMatch 10
-#define kFuzzyMatch 11
+@interface RWindow : NSWindow {
 
-@interface HelpManager : NSObject
-{
-	IBOutlet WebView *HelpView;
-	IBOutlet NSSearchField *searchField;
-	IBOutlet NSWindow *helpWindow;
-	IBOutlet NSButton *forward;
-	IBOutlet NSButton *back;
-
-	int searchType;
-	NSString *home;
 }
-
-- (IBAction)runHelpSearch:(id)sender;
-- (IBAction)showMainHelp:(id)sender;
-- (IBAction)showRFAQ:(id)sender;
-- (IBAction)whatsNew:(id)sender;
-- (IBAction)changeSearchType:(id)sender;
-- (IBAction)executeSelection:(id)sender;
-- (IBAction)printDocument:(id)sender;
-
-- (void)showHelpUsingFile: (NSString *)file topic: (NSString*) topic; // displays results only, used by help() in 2.1 and later
-- (void)showHelpFor:(NSString *)topic; // runs a search
-
-+ (id)sharedController;
-- (NSWindow*)window;
-- (WebView*)webView;
-
-- (void)setSearchType:(int)type;
-- (int)searchType;
-
-- (void)showHelpFileForURL:(NSURL*)url;
-- (void)supportsWebViewSwipingInHistory;
-- (void)supportsWebViewMagnifying;
-
-- (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame;
 
 @end

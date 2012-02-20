@@ -52,6 +52,9 @@
 - (void) updateHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
 - (int) count;
 - (void) show;
+- (WebView*)webView;
+- (void)supportsWebViewSwipingInHistory;
+- (void)supportsWebViewMagnifying;
 
 + (id) sharedController;
 @end

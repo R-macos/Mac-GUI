@@ -183,6 +183,21 @@ static id sharedHSController;
 						    contextInfo:@""];
 }
 
+- (void)supportsWebViewSwipingInHistory
+{
+	return;
+}
+
+- (void)supportsWebViewMagnifying
+{
+	return;
+}
+
+- (WebView*)webView
+{
+	return TopicHelpView;
+}
+
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
 	if ([menuItem action] == @selector(executeSelection:)) {

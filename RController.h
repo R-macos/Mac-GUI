@@ -148,6 +148,7 @@
 	BOOL processingEvents;
 	BOOL breakPending;
 	BOOL isREditMode;
+	BOOL ignoreMagnifyingEvent;
 	
 	char *writeBuffer;
 	char *writeBufferPos;
@@ -309,6 +310,7 @@
 - (NSString*)getAppSupportPath;
 - (int) helpServerPort;
 - (BOOL)isREditMode;
+- (void)ignoreMagnifyingEventTimer;
 
 
 - (IBAction)performFindPanelAction:(id)sender;

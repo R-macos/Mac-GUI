@@ -191,6 +191,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 	processingEvents = NO;
 	breakPending = NO;
 	isREditMode = NO;
+	ignoreMagnifyingEvent = NO;
 	outputPosition = promptPosition = committedLength = lastCommittedLength = 0;
 	consoleInputQueue = [[NSMutableArray alloc] initWithCapacity:8];
 	currentConsoleInput = nil;
@@ -888,6 +889,11 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[self flushStdConsole];
 }
 
+- (void)ignoreMagnifyingEventTimer
+{
+	ignoreMagnifyingEvent = NO;
+}
+
 - (void) fontSizeChangedBy:(float)delta withSender:(id)sender
 {
 
@@ -904,10 +910,17 @@ static inline const char* NSStringUTF8String(NSString* self)
 		if(aWebFrameView && [aWebFrameView respondsToSelector:@selector(webFrame)]) {
 			WebView *aWebView = [[(WebFrameView*)aWebFrameView webFrame] webView];
 			if(aWebView) {
-				if(delta > 0)
-					[aWebView makeTextLarger:sender];
-				else if(delta < 0)
-					[aWebView makeTextSmaller:sender];
+				if(!ignoreMagnifyingEvent) {
+
+					// delay font size changing for 200msecs
+					ignoreMagnifyingEvent = YES;
+					[self performSelector:@selector(ignoreMagnifyingEventTimer) withObject:nil afterDelay:0.2f];
+
+					if(delta > 0)
+						[aWebView makeTextLarger:sender];
+					else if(delta < 0)
+						[aWebView makeTextSmaller:sender];
+				}
 			}
 		}
 	}
@@ -958,8 +971,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 			}
 		}
 	}
-	else
-		[[NSFontManager sharedFontManager] modifyFont:sender];
 
 }
 

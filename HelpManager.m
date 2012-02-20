@@ -180,6 +180,11 @@ static id sharedHMController;
 	return helpWindow;
 }
 
+- (WebView*)webView
+{
+	return HelpView;
+}
+
 - (IBAction)showMainHelp:(id)sender
 {
 	 REngine *re = [REngine mainEngine];	
@@ -368,6 +373,16 @@ static id sharedHMController;
 	}
 
 	return YES;
+}
+
+- (void)supportsWebViewSwipingInHistory
+{
+	return;
+}
+
+- (void)supportsWebViewMagnifying
+{
+	return;
 }
 
 - (void)sheetDidEnd:(id)sheet returnCode:(int)returnCode contextInfo:(NSString *)contextInfo

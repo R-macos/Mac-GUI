@@ -2116,32 +2116,4 @@ BOOL RTextView_autoCloseBrackets = YES;
 	[[RController sharedController] fontSizeChangedBy:([anEvent deltaZ]/100) withSender:self];
 }
 
-/**
- * Trackpad three-finger swiping to toggle history drawer visibility in RConsole
- */
-- (void)swipeWithEvent:(NSEvent *)event
-{
-
-	if([self isRConsole]) {
-
-		CGFloat x = [event deltaX];
-		CGFloat y = [event deltaY];
-		NSNumber *onEdge = nil;
-
-		if(x == -1.0f && y == 0.0f)
-			onEdge = [NSNumber numberWithInt:NSMaxXEdge];
-		else if(x == 1.0f && y == 0.0f)
-			onEdge = [NSNumber numberWithInt:NSMinXEdge];
-
-		if(onEdge) {
-			[[RController sharedController] toggleHistory:onEdge];
-			return;
-		}
-
-	}
-
-	[super swipeWithEvent:event];
-
-}
-
 @end
