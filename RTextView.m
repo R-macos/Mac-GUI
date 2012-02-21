@@ -1541,7 +1541,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return  [[self textStorage] length];
 	else {
 		glyphIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
-		if(glyphIndex>1) glyphIndex--;
 		return glyphIndex;
 	}
 
