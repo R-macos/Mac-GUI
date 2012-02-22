@@ -33,9 +33,10 @@
 #import "Preferences.h"
 
 @interface History : NSObject <PreferencesDependent> {
-    NSMutableArray* hist;
-    NSString* dirtyEntry;
-    int pos;
+	NSMutableArray* hist;
+	NSMutableCharacterSet *trimmingCharSet;
+	NSString* dirtyEntry;
+	int pos;
 }
 
 

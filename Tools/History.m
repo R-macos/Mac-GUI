@@ -29,8 +29,9 @@
 
 
 #import "History.h"
-#import "RController.h"
-#import "RDocumentController.h"
+#import "../RController.h"
+#import "../RDocumentController.h"
+#import "../RegexKitLite.h"
 
 
 @implementation History
@@ -40,6 +41,8 @@
     hist = [[NSMutableArray alloc] initWithCapacity: 16];
     dirtyEntry=nil;
     pos=0;
+    trimmingCharSet = [[NSMutableCharacterSet whitespaceAndNewlineCharacterSet] retain];
+    [trimmingCharSet addCharactersInString:@"#"];
     return self;
 }
 
@@ -51,6 +54,7 @@
 }
 
 - (void) dealloc {
+    [trimmingCharSet release];
     [self resetAll];
     [hist release];
     [super dealloc];
@@ -73,12 +77,36 @@
 			BOOL firstTime = YES;
 			BOOL done = NO;
 			BOOL found = NO;
+
+			BOOL isInsideQuote = NO;
+			unichar quoteSign = ' ';
+			unichar lastChar = ' ';
+			unichar c;
+
 			for (i = 0 ; i < len ; i++) {
-				if ([entry characterAtIndex:i] == '#') {
+
+				c = CFStringGetCharacterAtIndex((CFStringRef)entry,i);
+
+				// Check if # is not inside a quote
+				if((c == '"' || c == '\'') && lastChar != '\\') {
+					if(quoteSign == ' ') {
+						quoteSign = c;
+						isInsideQuote = !isInsideQuote;
+					} else {
+						if(c == quoteSign) {
+							isInsideQuote = !isInsideQuote;
+						}
+					}
+				}
+				lastChar = c;
+				if(isInsideQuote) continue;
+				quoteSign = ' ';
+
+				if (c == '#') {
 					found = YES;
 					done = NO;
 					for (j = i ; !done && j < len ; j++) {
-						if ([entry characterAtIndex:j] == '\n') {
+						if (CFStringGetCharacterAtIndex((CFStringRef)entry,j) == '\n') {
 							if (firstTime) {
 								newEntry = [entry substringWithRange: NSMakeRange(k, i)];
 								firstTime = NO;
@@ -91,35 +119,33 @@
 					}
 				}			
 			}
-			if (!(j>=(len-1)) && found) {
-				NSString *restString = [entry substringWithRange: NSMakeRange(k, i-k)];
-				newEntry = [newEntry stringByAppendingString: restString];
-			}		
+
+			if (!(j>=(len-1)) && found)
+				newEntry = [newEntry stringByAppendingString:[entry substringWithRange:NSMakeRange(k, i-k)]];
+
+			// remove empty lines due to comment e.g.
+			newEntry = [newEntry stringByReplacingOccurrencesOfRegex:@"[\n\r]\\s+[\n\r]" withString:@"\n"];
+
 			entry = newEntry;
 		}
-		len = [entry length];
+
 		if ([Preferences flagForKey:cleanupHistoryEntriesKey withDefault:YES]) {
-			while (len > 1 && 
-				   ([entry characterAtIndex:len-1] == '\r' ||
-					[entry characterAtIndex:len-1] == '\n' ||
-					[entry characterAtIndex:len-1] == '\t' ||
-					[entry characterAtIndex:len-1] == ' '  ||
-					[entry characterAtIndex:len-1] == '#')) {
-				entry = [entry substringWithRange: NSMakeRange(0, [entry length]-1)];	
-				len = [entry length];
-			}
+			// trim leading and trailing white spaces, new lines and # characters
+			entry = [entry stringByTrimmingCharactersInSet:trimmingCharSet];
+			// remove empty lines
+			entry = [entry stringByReplacingOccurrencesOfRegex:@"[\n\r]\\s+[\n\r]" withString:@"\n"];
 		}
-		if (!(len == 1 &&
-             ([entry characterAtIndex:len-1] == '\n' ||
-			  [entry characterAtIndex:len-1] == '\r' ||
-			  [entry characterAtIndex:len-1] == '\t' ||
-			  [entry characterAtIndex:len-1] == ' '  ||
-			  [entry characterAtIndex:len-1] == '#'))) {
-			if (len > 0 ) {
-				if ([Preferences flagForKey:removeDuplicateHistoryEntriesKey withDefault:NO])
-					[hist removeObject: entry];
-				[hist addObject: entry];
-			}
+
+		len = [entry length];
+
+		// add to history if entry has a length and if the length is 1
+		// that entry doesn't contain any to be ignored characters
+		if (len && !(len == 1 && [trimmingCharSet characterIsMember:CFStringGetCharacterAtIndex((CFStringRef)entry,len-1)])) {
+
+			if ([Preferences flagForKey:removeDuplicateHistoryEntriesKey withDefault:NO])
+				[hist removeObject: entry];
+
+			[hist addObject: entry];
 		} 
     }
     if (dirtyEntry!=nil) [dirtyEntry release];
@@ -129,6 +155,7 @@
 	if ([hist count] > max) 
 		[hist removeObjectAtIndex: 0];
 	pos=[hist count];
+
 }
 
 /** moves to the next entry; if out of the history, returns the dirty entry */

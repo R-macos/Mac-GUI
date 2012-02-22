@@ -1898,6 +1898,19 @@ The input replaces what the user is currently typing.
 	return NO;
 }
 
+- (BOOL)tableView:(NSTableView *)tableView shouldShowCellExpansionForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+	return NO;
+}
+
+- (NSString *)tableView:(NSTableView *)aTableView toolTipForCell:(NSCell *)aCell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)row mouseLocation:(NSPoint)mouseLocation
+{
+	if(filteredHistory)
+		return [filteredHistory objectAtIndex:row];
+	else
+		return (NSString*) [[hist entries] objectAtIndex:row];
+}
+
 /*  Clears the history  and updates the TableView */
 
 - (IBAction)doClearHistory:(id)sender
