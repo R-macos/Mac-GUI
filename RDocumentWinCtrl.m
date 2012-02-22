@@ -42,6 +42,7 @@
 #import "HelpManager.h"
 #import "NSTextView_RAdditions.h"
 #import "NSString_RAdditions.h"
+#import "RWindow.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -346,6 +347,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 {
 
 	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
+
+	// Add full screen support for MacOSX Lion or higher
+	[[self window] setCollectionBehavior:[[self window] collectionBehavior] | NSWindowCollectionBehaviorFullScreenPrimary];
+
 
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
 	argsHints = [Preferences flagForKey:prefShowArgsHints withDefault:YES];

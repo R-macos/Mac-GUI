@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-02-22 [HJBB]
+*	Added full screen mode for RConsole and script windows for Mac OSX 10.7
+	or higher.
+
 Last-update: 2012-02-18 [HJBB]
 *	Added trackpad three-finger swiping for toggling history drawer 
 	visibility in RConsole and for going back and forward in help

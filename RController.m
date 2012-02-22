@@ -29,6 +29,7 @@
  *  $Id$
  */
 
+
 #import "RGUI.h"
 #include <R.h>
 #include <Rversion.h>
@@ -64,6 +65,7 @@
 #import "Tools/Authorization.h"
 #import "RChooseEncodingPopupAccessory.h"
 #import "NSTextView_RAdditions.h"
+#import "RWindow.h"
 
 #import "Preferences.h"
 #import "SearchTable.h"
@@ -310,6 +312,9 @@ static inline const char* NSStringUTF8String(NSString* self)
 - (void) awakeFromNib {
 
 	SLog(@"RController.awakeFromNib");
+
+	// Add full screen support for MacOSX Lion or higher
+	[RConsoleWindow setCollectionBehavior:[RConsoleWindow collectionBehavior] | NSWindowCollectionBehaviorFullScreenPrimary];
 
 	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
 
