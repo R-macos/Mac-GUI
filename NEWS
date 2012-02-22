@@ -31,17 +31,20 @@ Last-update: 2012-02-09 [HJBB]
 Last-update: 2012-02-08 [HJBB]
 *	In Script Editor "function list" selection
 	follows cursor position.
+*	For dragging files which have not the extension *.R or *.Rdata
+	holding down the ALT key will insert the relative path only
 *	Added support for dragging *.R and *.Rdata files to
 	RConsole or Script Editor to insert template
 	"source()" and "load()" resp. For these file
 	extensions holding down CMD key while dragging
-	will insert the file path only. The file path will be 
-	inserted relative to the documents and the set working
-	directory resp. By holding down the ALT key while dragging
-	the full path will be inserted.
-	For dragged *.R files the value(s) of the paramater 'chdir'
-	is/are highlighted. The highlighted parts of the template
-	can be reached by press TAB and SHIFT+TAB. A TAB for the
+	will use the relative file path only. By holding down the ALT 
+	key while dragging only the pure relative path will be inserted.
+	By holding down the ALT and CMD key only the full path will be
+	inserted.
+	For dragged *.R files the entire parameter setting and 
+	value(s) of the paramater 'chdir' is/are highlighted.
+	The highlighted parts of the template can be reached 
+	by press TAB (next )and SHIFT+TAB (prev). A TAB for the
 	last highlighted part will place the cursor at the end of
 	the inserted template. This mechanism is part of the new
 	implemented user-definable text macro system.

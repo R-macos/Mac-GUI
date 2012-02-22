@@ -1356,22 +1356,18 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 			NSString *filepath = [[pboard propertyListForType:NSFilenamesPboardType] objectAtIndex:i];
 
-			// Check if user pressed CMD while dragging for inserting only the full file path
-			if([sender draggingSourceOperationMask] == 4)
+			// Check if user pressed ALT while dragging for inserting relative file path
+			if([sender draggingSourceOperationMask] == 1)
 			{
-				[insertionString appendString:[[filepath stringByAbbreviatingWithTildeInPath] stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
+				[insertionString appendString:
+					[[[filepath stringByReplacingOccurrencesOfRegex:
+						[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath] 
+							stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
 			} 
 			else {
 
 				[env setObject:filepath forKey:kShellVarNameDraggedFilePath];
-				// convert filepath to the relative path against curDir
-				// if user didn't press the ALT key otherwise pass the full path
-				if([sender draggingSourceOperationMask] == 1) {
-					[env setObject:[filepath stringByAbbreviatingWithTildeInPath] forKey:kShellVarNameDraggedRelativeFilePath];
-				} else {
-					filepath = [filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""];
-					[env setObject:[filepath stringByAbbreviatingWithTildeInPath] forKey:kShellVarNameDraggedRelativeFilePath];
-				}
+				[env setObject:[[filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath] forKey:kShellVarNameDraggedRelativeFilePath];
 				[env setObject:[NSNumber numberWithInt:snip_cnt] forKey:kShellVarNameCurrentSnippetIndex];
 
 				NSString *extension = [[filepath pathExtension] lowercaseString];
@@ -1415,10 +1411,23 @@ BOOL RTextView_autoCloseBrackets = YES;
 							return NO;
 						}
 					} else {
-						[insertionString appendString:[NSString stringWithFormat:@"source('%@', chdir = ${%d:%@})%@", 
-							[filepath stringByAbbreviatingWithTildeInPath], snip_cnt, 
-							([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
-							(i < ([files count]-1)) ? suffix : @""]];
+						if([sender draggingSourceOperationMask] == 4)
+							[insertionString appendString:[NSString stringWithFormat:@"source('%@', chdir = ${%d:%@})%@", 
+								[[filepath stringByReplacingOccurrencesOfRegex:
+									[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath], snip_cnt, 
+										([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
+											(i < ([files count]-1)) ? suffix : @""]];
+						else if([sender draggingSourceOperationMask] == 5)
+							[insertionString appendString:[NSString stringWithFormat:@"%@%@", 
+								[filepath stringByAbbreviatingWithTildeInPath], 
+											(i < ([files count]-1)) ? suffix : @""]];
+						else {
+							[insertionString appendString:[NSString stringWithFormat:@"source('%@'${%d:, chdir = ${%d:%@}})%@", 
+								[filepath stringByAbbreviatingWithTildeInPath], snip_cnt, snip_cnt+1,
+								([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
+								(i < ([files count]-1)) ? suffix : @""]];
+							snip_cnt++;
+						}
 					}
 				}
 
@@ -1461,6 +1470,16 @@ BOOL RTextView_autoCloseBrackets = YES;
 							return NO;
 						}
 					} else {
+						if([sender draggingSourceOperationMask] == 4)
+							[insertionString appendString:[NSString stringWithFormat:@"load('%@')%@", 
+								[[filepath stringByReplacingOccurrencesOfRegex:
+									[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath], 
+										(i < ([files count]-1)) ? suffix : @""]];
+						else if([sender draggingSourceOperationMask] == 5)
+							[insertionString appendString:[NSString stringWithFormat:@"%@%@", 
+								[filepath stringByAbbreviatingWithTildeInPath], 
+											(i < ([files count]-1)) ? suffix : @""]];
+						else
 						[insertionString appendString:[NSString stringWithFormat:@"load('%@')%@", 
 							[filepath stringByAbbreviatingWithTildeInPath], 
 								(i < ([files count]-1)) ? suffix : @""]];
