@@ -207,11 +207,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
 	[shColorIdentifier retain]; 
 
-	c=[Preferences unarchivedObjectForKey:identifierSyntaxColorKey withDefault:nil];
-	if (c) shColorIdentifier = c;
-	else shColorIdentifier=[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-	[shColorIdentifier retain]; 
-
 	c=[Preferences unarchivedObjectForKey:editorSelectionBackgroundColorKey withDefault:nil];
 	if (!c) c=[NSColor colorWithDeviceRed:0.71f green:0.835f blue:1.0f alpha:1.0f];
 	NSMutableDictionary *attr = [NSMutableDictionary dictionary];

@@ -264,6 +264,7 @@ static id sharedHMController;
 - (void)showHelpFileForURL:(NSURL*)url
 {
 	if(url != nil) {
+		SLog(@"HelpManager:showHelpFileForURL %@", [url absoluteString]);
 		[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:url]];
 		[helpWindow makeKeyAndOrderFront:self];
 		return;
