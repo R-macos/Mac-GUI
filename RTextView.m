@@ -1411,12 +1411,14 @@ BOOL RTextView_autoCloseBrackets = YES;
 							return NO;
 						}
 					} else {
-						if([sender draggingSourceOperationMask] == 4)
-							[insertionString appendString:[NSString stringWithFormat:@"source('%@', chdir = ${%d:%@})%@", 
+						if([sender draggingSourceOperationMask] == 4) {
+							[insertionString appendString:[NSString stringWithFormat:@"source('%@'${%d:, chdir = ${%d:%@}})%@", 
 								[[filepath stringByReplacingOccurrencesOfRegex:
-									[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath], snip_cnt, 
+									[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath], snip_cnt, snip_cnt+1, 
 										([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
 											(i < ([files count]-1)) ? suffix : @""]];
+							snip_cnt++;
+						}
 						else if([sender draggingSourceOperationMask] == 5)
 							[insertionString appendString:[NSString stringWithFormat:@"%@%@", 
 								[filepath stringByAbbreviatingWithTildeInPath], 
