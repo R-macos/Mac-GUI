@@ -1078,7 +1078,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			}
 
 
-			else if([Preferences flagForKey:indentNewLineAfterSimpleClause withDefault:YES]) {
+			else if([Preferences flagForKey:indentNewLineAfterSimpleClause withDefault:NO]) {
 
 				// indent only next line after simple if,for,while,function commands without trailing {
 				// and if line has more opened ( than )

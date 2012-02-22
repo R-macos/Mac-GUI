@@ -83,11 +83,12 @@ Last-update: 2012-01-30 [HJBB]
 	current line has more opened parenthesis than
 	closed will only indent the next line. This behavior
 	is active for preference setting "Indent new lines".
-	In addition it can be explicitly disabled if you
+	This feature is disabled by default since it's in
+	beta status. It can be enabled if you
 	execute the following command as one line and no
 	quotes in the Terminal:
 	"defaults write org.R-project.R 
-	RScriptEditorIndentNewLineAfterSimpleClause -string NO"
+	RScriptEditorIndentNewLineAfterSimpleClause -string YES"
 
 Last-update: 2012-01-27 [HJBB]
 *	Improved "function list" for R scripts to list
