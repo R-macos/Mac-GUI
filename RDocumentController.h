@@ -52,8 +52,9 @@
 @end
 
 @interface RDocumentController : NSDocumentController <PreferencesDependent>
-
+{
 	NSString *activeFileType;
+}
 
 - (NSWindow*)findLastWindowForDocType:(NSString*)aType;
 - (NSWindow*)findNextWindowForDocType:(NSString*)aType;
