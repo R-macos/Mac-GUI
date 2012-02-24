@@ -136,6 +136,14 @@ static inline const char* NSStringUTF8String(NSString* self)
 	return to_return;
 }
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_7
+// declare the following methods to avoid compiler warnings
+@interface NSWindow (SuppressWarnings)
+- (void)toggleFullScreen:(id)sender;
+@end
+#endif
+
+
 @interface R_WebViewSearchWindow : NSWindow
 @end
 
@@ -713,8 +721,41 @@ static inline const char* NSStringUTF8String(NSString* self)
 	// Register us as service provider
 	[NSApp setServicesProvider:self];
 
+
+	if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6) {
+		NSString *label = nil;
+		if(([[self window] styleMask] & NSFullScreenWindowMask) == NSFullScreenWindowMask)
+			label = NLS(@"Exit Full Screen");
+		else
+			label = NLS(@"Enter Full Screen");
+		toggleFullScreenMenuItem = [[NSMenuItem alloc] initWithTitle:label action:@selector(toggleFullScreenMode:) keyEquivalent:@"f"];
+		[toggleFullScreenMenuItem setKeyEquivalentModifierMask:(NSControlKeyMask | NSCommandKeyMask)];
+		NSInteger m = [[NSApp mainMenu] numberOfItems]-2; // Window submenu
+		[[[[NSApp mainMenu] itemAtIndex:m] submenu] insertItem:[NSMenuItem separatorItem] atIndex:0];
+		[[[[NSApp mainMenu] itemAtIndex:m] submenu] insertItem:toggleFullScreenMenuItem atIndex:0];
+	}
+
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
 
+}
+
+- (void)windowDidEnterFullScreen:(NSNotification *)notification
+{
+	if(toggleFullScreenMenuItem)
+		[toggleFullScreenMenuItem setTitle:NLS(@"Exit Full Screen")];
+}
+
+- (void)windowDidExitFullScreen:(NSNotification *)notification
+{
+	if(toggleFullScreenMenuItem)
+		[toggleFullScreenMenuItem setTitle:NLS(@"Enter Full Screen")];
+}
+
+-(IBAction)toggleFullScreenMode:(id)sender
+{
+#if !defined(MAC_OS_X_VERSION_10_7) || MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7
+	[[self window] toggleFullScreen:nil];
+#endif
 }
 
 - (void)updateReInterpretEncodingMenu
@@ -1078,6 +1119,7 @@ extern BOOL isTimeToFinish;
 
 - (void) dealloc
 {
+	if(toggleFullScreenMenuItem) [toggleFullScreenMenuItem release];
 	if(toolbarStopItem) [toolbarStopItem release];
 	if(lastFunctionForHint) [lastFunctionForHint release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];

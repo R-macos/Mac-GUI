@@ -166,6 +166,9 @@
 	NSString *lastFunctionHintText;
 
 	NSString *appSupportPath;
+
+	NSMenuItem *toggleFullScreenMenuItem;
+
 }
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
@@ -209,6 +212,7 @@
 -(IBAction) showVignettes:(id)sender;
 
 -(IBAction) clearConsole:(id)sender;
+-(IBAction) toggleFullScreenMode:(id)sender;
 
 -(IBAction) searchInHistory:(id)sender;
 -(IBAction) activateSearchInHistory:(id)sender;

@@ -66,7 +66,7 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 // declared external
 BOOL RTextView_autoCloseBrackets = YES;
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_5
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_7
 // declare the following methods to avoid compiler warnings
 @interface NSTextView (SuppressWarnings)
 - (void)swipeWithEvent:(NSEvent *)event;

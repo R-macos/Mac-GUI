@@ -38,8 +38,12 @@ enum {
 	NSWindowCollectionBehaviorFullScreenPrimary   = 1 << 7,
 	NSWindowCollectionBehaviorFullScreenAuxiliary = 1 << 8
 };
+enum {
+   NSFullScreenWindowMask = 1 << 14
+};
 #endif
 
+#define NSAppKitVersionNumber10_6 1038
 
 #import <Cocoa/Cocoa.h>
 

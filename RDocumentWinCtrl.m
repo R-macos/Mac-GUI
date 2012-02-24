@@ -349,7 +349,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	SLog(@"RDocumentWinCtrl(%@).windowDidLoad", self);
 
 	// Add full screen support for MacOSX Lion or higher
-	[[self window] setCollectionBehavior:[[self window] collectionBehavior] | NSWindowCollectionBehaviorFullScreenPrimary];
+	// [[self window] setCollectionBehavior:[[self window] collectionBehavior] | NSWindowCollectionBehaviorFullScreenPrimary];
 
 
 	showMatchingBraces = [Preferences flagForKey:showBraceHighlightingKey withDefault: YES];
