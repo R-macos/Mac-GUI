@@ -210,6 +210,10 @@
 		BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD7EC941301A5190050850E /* RegexKitLite.m */; };
 		BCDF1C9113C2F160001216D9 /* RDataEditorTableHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = BCDF1C8F13C2F160001216D9 /* RDataEditorTableHeaderView.h */; };
 		BCDF1C9213C2F160001216D9 /* RDataEditorTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */; };
+		BCED54F514FA37BD00F5AD8A /* RTooltip.h in Headers */ = {isa = PBXBuildFile; fileRef = BCED54F314FA37BD00F5AD8A /* RTooltip.h */; };
+		BCED54F614FA37BD00F5AD8A /* RTooltip.m in Sources */ = {isa = PBXBuildFile; fileRef = BCED54F414FA37BD00F5AD8A /* RTooltip.m */; };
+		BCED54F914FA380A00F5AD8A /* RChooseMenuItemDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = BCED54F714FA380A00F5AD8A /* RChooseMenuItemDialog.h */; };
+		BCED54FA14FA380A00F5AD8A /* RChooseMenuItemDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = BCED54F814FA380A00F5AD8A /* RChooseMenuItemDialog.m */; };
 		BCEFEBD71336705800CED44F /* RFontPreviewTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBD51336705800CED44F /* RFontPreviewTextField.h */; };
 		BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */; };
 		BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBE01336709A00CED44F /* RColorWellCell.h */; };
@@ -499,6 +503,10 @@
 		BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDataEditorTableHeaderView.m; sourceTree = "<group>"; };
 		BCE2529913326919001D3138 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCE5C673133262CC00381F90 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BCED54F314FA37BD00F5AD8A /* RTooltip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTooltip.h; sourceTree = "<group>"; };
+		BCED54F414FA37BD00F5AD8A /* RTooltip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTooltip.m; sourceTree = "<group>"; };
+		BCED54F714FA380A00F5AD8A /* RChooseMenuItemDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RChooseMenuItemDialog.h; sourceTree = "<group>"; };
+		BCED54F814FA380A00F5AD8A /* RChooseMenuItemDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RChooseMenuItemDialog.m; sourceTree = "<group>"; };
 		BCEEA0EE1332641B00F55604 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCEFEBD51336705800CED44F /* RFontPreviewTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RFontPreviewTextField.h; sourceTree = "<group>"; };
 		BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFontPreviewTextField.m; sourceTree = "<group>"; };
@@ -742,6 +750,10 @@
 				68AAC9E608F41CBB0064CDA1 /* PDFImageView.m */,
 				1CC7C86507396890005CF3AA /* SortableDataSource.h */,
 				1CC7C86607396890005CF3AA /* SortableDataSource.m */,
+				BCED54F314FA37BD00F5AD8A /* RTooltip.h */,
+				BCED54F414FA37BD00F5AD8A /* RTooltip.m */,
+				BCED54F714FA380A00F5AD8A /* RChooseMenuItemDialog.h */,
+				BCED54F814FA380A00F5AD8A /* RChooseMenuItemDialog.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -1019,6 +1031,8 @@
 				BCF4B2C114D9815400F14715 /* NSString_RAdditions.h in Headers */,
 				BC13F8AB14DC6DA10083305F /* RProgressIndicator.h in Headers */,
 				BCB4FEAB14F24B0E00281019 /* RWindow.h in Headers */,
+				BCED54F514FA37BD00F5AD8A /* RTooltip.h in Headers */,
+				BCED54F914FA380A00F5AD8A /* RChooseMenuItemDialog.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1277,6 +1291,8 @@
 				BCF4B2C214D9815400F14715 /* NSString_RAdditions.m in Sources */,
 				BC13F8AC14DC6DA10083305F /* RProgressIndicator.m in Sources */,
 				BCB4FEAC14F24B0E00281019 /* RWindow.m in Sources */,
+				BCED54F614FA37BD00F5AD8A /* RTooltip.m in Sources */,
+				BCED54FA14FA380A00F5AD8A /* RChooseMenuItemDialog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
