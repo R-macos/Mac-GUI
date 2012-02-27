@@ -481,29 +481,4 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	}
 }
 
-/**
- * Increase the textView's font size by 1
- */
-- (void)makeTextSizeLarger
-{
-	NSFont *aFont = [self font];
-	BOOL editableStatus = [self isEditable];
-	[self setEditable:YES];
-	[self setFont:[[NSFontManager sharedFontManager] convertFont:aFont toSize:[aFont pointSize]+1]];
-	[self setEditable:editableStatus];
-}
-
-/*
- * Decrease the textView's font size by 1 but not smaller than 4pt
- */
-- (void)makeTextSizeSmaller
-{
-	NSFont *aFont = [self font];
-	NSInteger newSize = ([aFont pointSize]-1 < 4) ? [aFont pointSize] : [aFont pointSize]-1;
-	BOOL editableStatus = [self isEditable];
-	[self setEditable:YES];
-	[self setFont:[[NSFontManager sharedFontManager] convertFont:aFont toSize:newSize]];
-	[self setEditable:editableStatus];
-}
-
 @end

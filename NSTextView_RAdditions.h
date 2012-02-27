@@ -55,7 +55,4 @@
 - (IBAction)moveSelectionLineUp:(id)sender;
 - (IBAction)moveSelectionLineDown:(id)sender;
 
-- (void)makeTextSizeLarger;
-- (void)makeTextSizeSmaller;
-
 @end
