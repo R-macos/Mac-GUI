@@ -3,10 +3,10 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2011
-@set FAQ-VERSION 2.14-0 @value{FAQ-YEAR}-10-31
-@set REL-VERSION 2.14.0
-@set GUI-VERSION 1.41
+@set FAQ-YEAR 2012
+@set FAQ-VERSION 2.14-2 @value{FAQ-YEAR}-02-29
+@set REL-VERSION 2.14.2
+@set GUI-VERSION 1.50
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -1223,6 +1223,7 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * R.app GUI does not save the workspace!::  
 * Why is the GUI not saving my history?::  
 * I get ``command not found'' in the GUI yet it works in the Terminal - why?::  
+* I see no text in a Quartz plot!::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Sparse questions, Sparse questions
@@ -1381,7 +1382,7 @@ When you quit the R.app GUI it asks you whether to save the workspace or not. Th
 
 In some recent versions of R there is a conflict between the history of R itself and the GUI such that the history file will be always empty. In R 2.11.1 the default has been changed such that the GUI will use @code{.Rapp.history} file whereas command line R will use @code{.Rhistory} so that they will not collide. If you have old preferences, go to Preferences -> Startup in the GUI and click on the Default button next to the R history file text box and close the preferences. This is a work-around until the internal R history and the history of the GUI are synchronized properly.
 
-@node I get ``command not found'' in the GUI yet it works in the Terminal - why?,  , Why is the GUI not saving my history?, Sparse questions
+@node I get ``command not found'' in the GUI yet it works in the Terminal - why?, I see no text in a Quartz plot!, Why is the GUI not saving my history?, Sparse questions
 @section I get ``command not found'' in the GUI yet it works in the Terminal - why?
 
 When executing system commands (for example directly via @code{system} or indirectly via functions that call other programs such as @code{install.packages}) the locations in which the shell is looking for programs is governed by the @code{PATH} environment variable. That variable may be set differently for R started from an interactive shell and for R started in the GUI. You can use @code{Sys.getenv("PATH")} to verify the current setting.
@@ -1389,6 +1390,11 @@ When executing system commands (for example directly via @code{system} or indire
 When R is started from a shell (e.g., on the command line of the Terminal), it will inherit settings from that shell. Those are typically modified by shell-specific configuration files, such as @code{.profile} or @code{.bashrc}. Those apply only to the shell, not to the system as a whole. In addition, some installers (such as MacTeX) will modify global shell settings to make user's life more comfortable on the command line, but, again, those do not apply to programs not started from the shell - such as GUIs.
 
 In order to standardize your @code{PATH} setting in R, you can set it in your @code{.Renviron} file (in your home - see @code{?Startup} in R for details on how R uses configuration files on startup). This setting will apply to R regardless of how it is started. You can also add more elaborate constructs to @code{.Rprofile} instead if you wish to selectively modify the existing @code{PATH} variable via @code{Sys.getenv} and @code{Sys.setenv}.
+
+@node I see no text in a Quartz plot!,  , I get ``command not found'' in the GUI yet it works in the Terminal - why?, Sparse questions
+@section I see no text in a Quartz plot!
+
+Typically this means that you have corrupted fonts in your system. Open the @code{Font Book} application (in @code{Applications}) and check the fonts that you are using (for example the default font in Quartz is ``Helvetica''). Corrupted fonts will have no glyphs (text will nto appear as it should), remove such fonts.
 
 @bye
 
