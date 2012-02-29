@@ -22,6 +22,9 @@
 /* Entry = "94.title"; Class = "NSButtonCell" */
 "Cancel" = "Cancel";
 
+/* Entry = "161.title"; Class = "NSMenuItem" */
+"Check Rd Document" = "Check Rd Document";
+
 /* Entry = "83.title"; Class = "NSMenuItem" */
 "Clear" = "Effacer";
 
@@ -43,11 +46,20 @@
 /* Entry = "96.title"; Class = "NSTextFieldCell" */
 "Go to line:" = "Aller à la ligne:";
 
+/* Entry = "153.title"; Class = "NSMenuItem" */
+"HTML Preview" = "Insert Function Rd Template";
+
 /* Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
 "Help search" = "Recherche d'aide";
 
 /* Entry = "120.title"; Class = "NSMenuItem" */
 "ISO2022-JP" = "ISO2022-JP";
+
+/* Entry = "165.title"; Class = "NSMenuItem" */
+"Insert Data Rd Template" = "Insert Data Rd Template";
+
+/* Entry = "164.title"; Class = "NSMenuItem" */
+"Insert Function Rd Template" = "Insert Function Rd Template";
 
 /* Entry = "81.title"; Class = "NSMenuItem" */
 "Item" = "Item";
@@ -70,8 +82,14 @@
 /* Entry = "44.title"; Class = "NSMenu" */
 "OtherViews" = "AutreVues";
 
+/* Entry = "150.title"; Class = "NSMenu" */
+"OtherViews" = "OtherViews";
+
 /* Entry = "103.title"; Class = "NSMenu" */
 "OtherViews" = "AutreVues";
+
+/* Entry = "159.title"; Class = "NSMenuItem" */
+"PDF Preview" = "PDF Preview";
 
 /* Entry = "68.title"; Class = "NSPanel" */
 "Panel" = "Panel";

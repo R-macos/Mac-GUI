@@ -88,7 +88,7 @@
 /* Entry = "146.title"; Class = "NSButtonCell" */
 "Strip comments in history entries" = "Kommentare im Verlauf nicht speichern";
 
-/* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
+/* Entry = "108.gToolTip"; Class = "NSTextField" */
 "URL for the default CRAN URL. If left empty, the user will be prompted." = "Voreinstellung für CRAN URL. Die URL wird interaktiv erfragt wenn nicht angegeben.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */
