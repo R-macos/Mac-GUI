@@ -57,8 +57,8 @@
 @interface NoodleLineNumberView (Private)
 
 - (NSArray *)lineIndices;
-- (void)invalidateLineIndices;
 - (void)calculateLines;
+- (void)invalidateLineIndices;
 - (void)updateGutterThicknessConstants;
 
 @end
@@ -196,6 +196,13 @@
 
 #pragma mark -
 
+- (void)refresh
+{
+	if(![(RScriptEditorTextView*)clientView lineNumberingEnabled]) return;
+	[self invalidateLineIndices];
+	[self setNeedsDisplay:YES];
+}
+
 - (void)textDidChange:(NSNotification *)notification
 {
 
@@ -325,6 +332,10 @@
 	CGFloat boundsWidthRULER   = NSWidth(bounds) - RULER_MARGIN;
 	CGFloat yinsetMinY         = yinset - NSMinY(visibleRect);
 	CGFloat rectHeight;
+	CGFloat last_y = -10.0f;
+	CGFloat y;
+	// BOOL didDrawFoldingLine = NO;
+	// [[NSColor grayColor] setFill];
 
 	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
@@ -351,12 +362,21 @@
 				while(idx) { numOfDigits++; idx/=10; }
 
 				rectHeight = NSHeight(rects[0]);
-				// Draw string flush right, centered vertically within the line
-				[labelText drawInRect:
-				NSMakeRect(boundsWidthRULER - (maxWidthOfGlyph * numOfDigits),
-					yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - maxHeightOfGlyph) >> 1),
-					boundsRULERMargin2, rectHeight)
-					withAttributes:textAttributes];
+				y = yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - maxHeightOfGlyph) >> 1);
+				if(y != last_y) {
+					// 	didDrawFoldingLine = NO;
+					// Draw string flush right, centered vertically within the line
+					[labelText drawInRect:
+						NSMakeRect(boundsWidthRULER - (maxWidthOfGlyph * numOfDigits), y,
+							boundsRULERMargin2, rectHeight)
+						withAttributes:textAttributes];
+				// } else {
+				// 	if(!didDrawFoldingLine) {
+				// 		NSRectFill(NSMakeRect(0, NSMaxY(rects[rectCount-1])-1, NSWidth(bounds), 2));
+				// 		didDrawFoldingLine = YES;
+				// 	}
+				}
+				last_y = y;
 			}
 		}
 

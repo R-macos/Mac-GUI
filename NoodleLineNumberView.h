@@ -90,4 +90,6 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 - (NSUInteger)lineNumberForLocation:(CGFloat)location;
 - (NSUInteger)lineNumberForCharacterIndex:(NSUInteger)index;
 
+- (void)refresh;
+
 @end

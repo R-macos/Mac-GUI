@@ -33,6 +33,10 @@
  */
 
 #import "RScriptEditorTextView.h"
+#import "RScriptEditorTextStorage.h"
+#import "RScriptEditorTypesetter.h"
+#import "RScriptEditorLayoutManager.h"
+#import "FoldingSignTextAttachmentCell.h"
 #import "RGUI.h"
 
 
@@ -112,27 +116,59 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 - (void)awakeFromNib
 {
+
 	// we are a subclass of RTextView which has its own awake and we must call it
 	[super awakeFromNib];
+
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
-	isSyntaxHighlighting = NO;
+
 	prefs = [[NSUserDefaults standardUserDefaults] retain];
 	[[Preferences sharedPreferences] addDependent:self];
+
+	lineNumberingEnabled = [Preferences flagForKey:showLineNumbersKey withDefault:NO];
+
+	// <TODO> enable for folding
+	// theTextStorage = [[RScriptEditorTextStorage alloc] init];
+	theTextStorage = [self textStorage];
+
+	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
+	[theTextStorage setDelegate:self];
+
+	// <TODO> enable for folding
+	// Make sure using foldingLayoutManager
+	// if (![[self layoutManager] isKindOfClass:[RScriptEditorLayoutManager class]]) {
+	// 	RScriptEditorLayoutManager *layoutManager = [[RScriptEditorLayoutManager alloc] init];
+	// 	[[self textContainer] replaceLayoutManager:layoutManager];
+	// 	[layoutManager release];
+	// }
+
+	// disabled to get the current text range in textView safer
+	[[self layoutManager] setBackgroundLayoutEnabled:NO];
+	[[self layoutManager] replaceTextStorage:theTextStorage];
+
+	if(lineNumberingEnabled) {
+
+		SLog(@"RScriptEditorTextView: set up line numbering <%@>", self);
+
+		NoodleLineNumberView *theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
+		[scrollView setVerticalRulerView:theRulerView];
+		[scrollView setHasHorizontalRuler:NO];
+		[scrollView setHasVerticalRuler:YES];
+		[scrollView setRulersVisible:YES];
+		[theRulerView release];
+		[self display];
+	}
+
+
+	isSyntaxHighlighting = NO;
 
 	if([prefs objectForKey:highlightCurrentLine] == nil) [prefs setBool:YES forKey:highlightCurrentLine];
 	if([prefs objectForKey:indentNewLines] == nil) [prefs setBool:YES forKey:indentNewLines];
 
 	[self setFont:[Preferences unarchivedObjectForKey:RScriptEditorDefaultFont withDefault:[NSFont fontWithName:@"Monaco" size:11]]];
 
-	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
-	[[self textStorage] setDelegate:self];
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-	[[self layoutManager] setAllowsNonContiguousLayout:YES];
-#endif
-	
 	// Set defaults for general usage
 	braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
-	lineNumberingEnabled = [Preferences flagForKey:showLineNumbersKey withDefault:NO];
 	argsHints = [Preferences flagForKey:prefShowArgsHints withDefault:YES];
 	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault:YES];
 	syntaxHighlightingEnabled = [Preferences flagForKey:showSyntaxColoringKey withDefault:YES];
@@ -149,16 +185,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	else
 		editorToolbar = [[REditorToolbar alloc] initWithEditor:[self delegate]];
 
-	if(lineNumberingEnabled) {
-
-		SLog(@"RScriptEditorTextView: set up line numbering <%@>", self);
-
-		theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
-		[scrollView setVerticalRulerView:theRulerView];
-		[scrollView setHasHorizontalRuler:NO];
-		[scrollView setHasVerticalRuler:YES];
-		[scrollView setRulersVisible:YES];
-	}
 	[self setAllowsDocumentBackgroundColorChange:YES];
 	[self setContinuousSpellCheckingEnabled:NO];
 
@@ -170,9 +196,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// Re-define tab stops for a better editing
 	[self setTabStops];
-
-	// disabled to get the current text range in textView safer
-	[[self layoutManager] setBackgroundLayoutEnabled:NO];
 
 	// add NSViewBoundsDidChangeNotification to scrollView
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChangeNotification:) name:NSViewBoundsDidChangeNotification object:[scrollView contentView]];
@@ -290,11 +313,17 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[self setTextColor:shColorNormal];
 	[self setInsertionPointColor:shColorCursor];
 
-	theTextStorage = [self textStorage];
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+	[[self layoutManager] setAllowsNonContiguousLayout:YES];
+#endif
+
+
 }
 
 - (void)dealloc {
 	SLog(@"RScriptEditorTextView: dealloc <%@>", self);
+
+	[theTextStorage release];
 
 	if(editorToolbar) [editorToolbar release];
 
@@ -316,8 +345,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// if(rdColorMacroArg) [rdColorMacroArg release];
 	// if(rdColorMacroGen) [rdColorMacroGen release];
 	// if(rdColorDirective) [rdColorDirective release];
-
-	if(theRulerView) [theRulerView release];
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[[Preferences sharedPreferences] removeDependent:self];
@@ -424,18 +451,14 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	} else if ([keyPath isEqualToString:showLineNumbersKey]) {
 		lineNumberingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-		//TODO implement
 		if(lineNumberingEnabled) {
-			if(!theRulerView) {
-				theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
-				[scrollView setVerticalRulerView:theRulerView];
-			}
+			NoodleLineNumberView *theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
+			[scrollView setVerticalRulerView:theRulerView];
 			[scrollView setHasHorizontalRuler:NO];
 			[scrollView setHasVerticalRuler:YES];
 			[scrollView setRulersVisible:YES];
-		} else {
 			[theRulerView release];
-			theRulerView = nil;
+		} else {
 			[scrollView setHasHorizontalRuler:NO];
 			[scrollView setHasVerticalRuler:NO];
 			[scrollView setRulersVisible:NO];
@@ -920,6 +943,113 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	}
 
 }
+
+#pragma mark -
+#pragma mark folding
+
+- (void)foldSelectedLines:(id)sender
+{
+
+	NSRange r = [self selectedRange];
+
+	if(!r.length) return;
+
+	if([[self string] characterAtIndex:NSMaxRange(r)-1] == '\n')
+		r.length--;
+
+	if(!r.length) return;
+
+	[theTextStorage beginEditing];
+	[theTextStorage addAttribute:foldingAttributeName value:[NSNumber numberWithBool:YES] range:r];
+	[theTextStorage endEditing];
+
+	[self didChangeText];
+	if(lineNumberingEnabled)
+		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+
+	[self setSelectedRange:NSMakeRange(NSMaxRange(r), 0)];
+	[self scrollRangeToVisible:[self selectedRange]];
+
+}
+
+- (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex
+{
+
+	NSTextStorage *textStorage = [self textStorage];
+	NSRange range;
+	NSNumber *value = [textStorage attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [textStorage length])];
+
+	if (value && [value boolValue] && [self shouldChangeTextInRange:range replacementString:nil]) {
+		[textStorage removeAttribute:foldingAttributeName range:range];
+		[self didChangeText];
+		[self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+		if(lineNumberingEnabled)
+			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+		[self scrollRangeToVisible:[self selectedRange]];
+		return YES;
+	}
+	return NO;
+}
+
+// <TODO> enable for folding
+// - (void)mouseDown:(NSEvent *)event
+// {
+// 
+// 	if(![theTextStorage isKindOfClass:[RScriptEditorTextStorage class]]) [super mouseDown:event];
+// 
+// 	NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPointFromBase:[event locationInWindow]] inTextContainer:[self textContainer]];
+// 	RScriptEditorLayoutManager *layoutManager = (RScriptEditorLayoutManager*)[self layoutManager];
+// 
+// 	[theTextStorage setLineFoldingEnabled:YES];
+// 
+// 	// trigger unfolding if inside foldingAttachmentCell
+// 	if (glyphIndex < [layoutManager numberOfGlyphs]) {
+// 		NSUInteger charIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+// 		NSRange range;
+// 		NSNumber *value = [theTextStorage attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [theTextStorage length])];
+// 	
+// 		if (value && [value boolValue]) {
+// 			NSTextAttachment *attachment = [theTextStorage attribute:NSAttachmentAttributeName atIndex:range.location effectiveRange:NULL];
+// 	
+// 			if (attachment) {
+// 				NSTextAttachmentCell *cell = (NSTextAttachmentCell *)[attachment attachmentCell];
+// 				NSRect cellFrame;
+// 				NSPoint delta;
+// 	
+// 				glyphIndex = [layoutManager glyphIndexForCharacterAtIndex:range.location];
+// 	
+// 				cellFrame.origin = [self textContainerOrigin];
+// 				cellFrame.size = [layoutManager attachmentSizeForGlyphAtIndex:glyphIndex];
+// 	
+// 				delta = [layoutManager lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL].origin;
+// 				cellFrame.origin.x += delta.x;
+// 				cellFrame.origin.y += delta.y;
+// 	
+// 				cellFrame.origin.x += [layoutManager locationForGlyphAtIndex:glyphIndex].x;
+// 	
+// 				if ([cell wantsToTrackMouseForEvent:event inRect:cellFrame ofView:self atCharacterIndex:range.location] && [cell trackMouse:event inRect:cellFrame ofView:self atCharacterIndex:range.location untilMouseUp:YES]) return;
+// 			}
+// 		}
+// 	}
+// 
+// 	[theTextStorage setLineFoldingEnabled:NO];
+// 
+// 	[super mouseDown:event];
+// }
+
+- (void)setTypingAttributes:(NSDictionary *)attrs
+{
+	// we don't want to store foldingAttributeName as a typing attribute
+	if ([attrs objectForKey:foldingAttributeName]) {
+		NSMutableDictionary *copy = [[attrs mutableCopyWithZone:NULL] autorelease];
+		[copy removeObjectForKey:foldingAttributeName];
+		attrs = copy;
+	}
+
+	[super setTypingAttributes:attrs];
+}
+
+#pragma mark -
 
 - (void)updatePreferences
 {

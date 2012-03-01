@@ -218,6 +218,16 @@
 		BCEFEBD81336705800CED44F /* RFontPreviewTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */; };
 		BCEFEBE21336709A00CED44F /* RColorWellCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BCEFEBE01336709A00CED44F /* RColorWellCell.h */; };
 		BCEFEBE31336709A00CED44F /* RColorWellCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BCEFEBE11336709A00CED44F /* RColorWellCell.m */; };
+		BCF18DAB14FC8A1000670A26 /* RScriptEditorGlyphGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF18DA914FC8A1000670A26 /* RScriptEditorGlyphGenerator.h */; };
+		BCF18DAC14FC8A1000670A26 /* RScriptEditorGlyphGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF18DAA14FC8A1000670A26 /* RScriptEditorGlyphGenerator.m */; };
+		BCF18DAF14FC8A2200670A26 /* RScriptEditorLayoutManager.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF18DAD14FC8A2200670A26 /* RScriptEditorLayoutManager.h */; };
+		BCF18DB014FC8A2200670A26 /* RScriptEditorLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF18DAE14FC8A2200670A26 /* RScriptEditorLayoutManager.m */; };
+		BCF18DB314FC8A3B00670A26 /* FoldingSignTextAttachmentCell.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF18DB114FC8A3B00670A26 /* FoldingSignTextAttachmentCell.h */; };
+		BCF18DB414FC8A3B00670A26 /* FoldingSignTextAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF18DB214FC8A3B00670A26 /* FoldingSignTextAttachmentCell.m */; };
+		BCF18DB714FC8A5E00670A26 /* RScriptEditorTextStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF18DB514FC8A5E00670A26 /* RScriptEditorTextStorage.h */; };
+		BCF18DB814FC8A5E00670A26 /* RScriptEditorTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF18DB614FC8A5E00670A26 /* RScriptEditorTextStorage.m */; };
+		BCF18DBB14FC8A7100670A26 /* RScriptEditorTypeSetter.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF18DB914FC8A7100670A26 /* RScriptEditorTypeSetter.h */; };
+		BCF18DBC14FC8A7100670A26 /* RScriptEditorTypeSetter.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF18DBA14FC8A7100670A26 /* RScriptEditorTypeSetter.m */; };
 		BCF4B2C114D9815400F14715 /* NSString_RAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = BCF4B2BF14D9815400F14715 /* NSString_RAdditions.h */; };
 		BCF4B2C214D9815400F14715 /* NSString_RAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BCF4B2C014D9815400F14715 /* NSString_RAdditions.m */; };
 		BCF5D88A14BB564A000A71F6 /* RdScriptEditorTokens.l in Sources */ = {isa = PBXBuildFile; fileRef = BCF5D88914BB564A000A71F6 /* RdScriptEditorTokens.l */; };
@@ -512,6 +522,16 @@
 		BCEFEBD61336705800CED44F /* RFontPreviewTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RFontPreviewTextField.m; sourceTree = "<group>"; };
 		BCEFEBE01336709A00CED44F /* RColorWellCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RColorWellCell.h; sourceTree = "<group>"; };
 		BCEFEBE11336709A00CED44F /* RColorWellCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RColorWellCell.m; sourceTree = "<group>"; };
+		BCF18DA914FC8A1000670A26 /* RScriptEditorGlyphGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorGlyphGenerator.h; sourceTree = "<group>"; };
+		BCF18DAA14FC8A1000670A26 /* RScriptEditorGlyphGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorGlyphGenerator.m; sourceTree = "<group>"; };
+		BCF18DAD14FC8A2200670A26 /* RScriptEditorLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorLayoutManager.h; sourceTree = "<group>"; };
+		BCF18DAE14FC8A2200670A26 /* RScriptEditorLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorLayoutManager.m; sourceTree = "<group>"; };
+		BCF18DB114FC8A3B00670A26 /* FoldingSignTextAttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FoldingSignTextAttachmentCell.h; sourceTree = "<group>"; };
+		BCF18DB214FC8A3B00670A26 /* FoldingSignTextAttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FoldingSignTextAttachmentCell.m; sourceTree = "<group>"; };
+		BCF18DB514FC8A5E00670A26 /* RScriptEditorTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTextStorage.h; sourceTree = "<group>"; };
+		BCF18DB614FC8A5E00670A26 /* RScriptEditorTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorTextStorage.m; sourceTree = "<group>"; };
+		BCF18DB914FC8A7100670A26 /* RScriptEditorTypeSetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RScriptEditorTypeSetter.h; sourceTree = "<group>"; };
+		BCF18DBA14FC8A7100670A26 /* RScriptEditorTypeSetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RScriptEditorTypeSetter.m; sourceTree = "<group>"; };
 		BCF4B2BF14D9815400F14715 /* NSString_RAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_RAdditions.h; sourceTree = "<group>"; };
 		BCF4B2C014D9815400F14715 /* NSString_RAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_RAdditions.m; sourceTree = "<group>"; };
 		BCF5D88914BB564A000A71F6 /* RdScriptEditorTokens.l */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.lex; path = RdScriptEditorTokens.l; sourceTree = "<group>"; };
@@ -910,6 +930,16 @@
 				68756ED907FDDAEF0014821A /* REditorToolbar.m */,
 				BC884B6914BAD86C00DEFFE0 /* RdEditorToolbar.h */,
 				BC884B6A14BAD86C00DEFFE0 /* RdEditorToolbar.m */,
+				BCF18DA914FC8A1000670A26 /* RScriptEditorGlyphGenerator.h */,
+				BCF18DAA14FC8A1000670A26 /* RScriptEditorGlyphGenerator.m */,
+				BCF18DAD14FC8A2200670A26 /* RScriptEditorLayoutManager.h */,
+				BCF18DAE14FC8A2200670A26 /* RScriptEditorLayoutManager.m */,
+				BCF18DB114FC8A3B00670A26 /* FoldingSignTextAttachmentCell.h */,
+				BCF18DB214FC8A3B00670A26 /* FoldingSignTextAttachmentCell.m */,
+				BCF18DB514FC8A5E00670A26 /* RScriptEditorTextStorage.h */,
+				BCF18DB614FC8A5E00670A26 /* RScriptEditorTextStorage.m */,
+				BCF18DB914FC8A7100670A26 /* RScriptEditorTypeSetter.h */,
+				BCF18DBA14FC8A7100670A26 /* RScriptEditorTypeSetter.m */,
 			);
 			name = Editor;
 			sourceTree = "<group>";
@@ -1033,6 +1063,11 @@
 				BCB4FEAB14F24B0E00281019 /* RWindow.h in Headers */,
 				BCED54F514FA37BD00F5AD8A /* RTooltip.h in Headers */,
 				BCED54F914FA380A00F5AD8A /* RChooseMenuItemDialog.h in Headers */,
+				BCF18DAB14FC8A1000670A26 /* RScriptEditorGlyphGenerator.h in Headers */,
+				BCF18DAF14FC8A2200670A26 /* RScriptEditorLayoutManager.h in Headers */,
+				BCF18DB314FC8A3B00670A26 /* FoldingSignTextAttachmentCell.h in Headers */,
+				BCF18DB714FC8A5E00670A26 /* RScriptEditorTextStorage.h in Headers */,
+				BCF18DBB14FC8A7100670A26 /* RScriptEditorTypeSetter.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1293,6 +1328,11 @@
 				BCB4FEAC14F24B0E00281019 /* RWindow.m in Sources */,
 				BCED54F614FA37BD00F5AD8A /* RTooltip.m in Sources */,
 				BCED54FA14FA380A00F5AD8A /* RChooseMenuItemDialog.m in Sources */,
+				BCF18DAC14FC8A1000670A26 /* RScriptEditorGlyphGenerator.m in Sources */,
+				BCF18DB014FC8A2200670A26 /* RScriptEditorLayoutManager.m in Sources */,
+				BCF18DB414FC8A3B00670A26 /* FoldingSignTextAttachmentCell.m in Sources */,
+				BCF18DB814FC8A5E00670A26 /* RScriptEditorTextStorage.m in Sources */,
+				BCF18DBC14FC8A7100670A26 /* RScriptEditorTypeSetter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

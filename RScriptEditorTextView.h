@@ -40,6 +40,8 @@
 #import "NoodleLineNumberView.h"
 #import "REditorToolbar.h"
 #import "RdEditorToolbar.h"
+#import "RScriptEditorTextStorage.h"
+
 
 #define R_TEXT_SIZE_TRIGGER_FOR_PARSING_PARTLY 10000
 
@@ -69,7 +71,6 @@
 	NSColor *shColorCurrentLine;
 
 	id editorToolbar;
-	NoodleLineNumberView *theRulerView;
 
 	BOOL lineNumberingEnabled;
 	BOOL syntaxHighlightingEnabled;
@@ -82,11 +83,14 @@
 	int currentHighlight;
 	double braceHighlightInterval; // interval to flash brace highlighting for
 
+	// RScriptEditorTextStorage *theTextStorage;
 	NSTextStorage *theTextStorage;
 
 	NSDictionary *highlightColorAttr;
 
 }
+
+- (IBAction)foldSelectedLines:(id)sender;
 
 - (void)setTabStops;
 
@@ -97,6 +101,8 @@
 - (void)resetBackgroundColor:(id)sender;
 - (void)updateLineWrappingMode;
 - (BOOL)lineNumberingEnabled;
+
+- (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex;
 
 - (void)updatePreferences;
 

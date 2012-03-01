@@ -1000,20 +1000,13 @@ static inline const char* NSStringUTF8String(NSString* self)
 			NSRange r = [firstResponder selectedRange];
 			[firstResponder shouldChangeTextInRange:r replacementString:[[firstResponder string] substringWithRange:r]];
 			[[firstResponder textStorage] addAttribute:NSFontAttributeName value:font range:r];
-			// TODO: Invoke refreshing line numbering and view; no other way found yet
-			[firstResponder setAllowsUndo:NO];
-			[firstResponder setSelectedRange:NSMakeRange(r.location, 0)];
-			[firstResponder insertText:@""];
-			[firstResponder setSelectedRange:r];
-			[firstResponder setAllowsUndo:YES];
+			if([firstResponder lineNumberingEnabled]) {
+				[[[firstResponder enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+			}
 		} else {
 			[[NSUserDefaults standardUserDefaults] setObject:[NSArchiver archivedDataWithRootObject:font] forKey:RScriptEditorDefaultFont];
-			// TODO: Invoke refreshing line numbering; no other way found yet
-			// and force to scroll view to cursor
 			if([firstResponder lineNumberingEnabled]) {
-				[firstResponder setAllowsUndo:NO];
-				[firstResponder insertText:@""];
-				[firstResponder setAllowsUndo:YES];
+				[[[firstResponder enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
 			}
 		}
 	}

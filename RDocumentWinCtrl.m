@@ -1242,6 +1242,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
 
+	if(![[aNotification object] isKindOfClass:[RTextView class]]) return;
+
 	RTextView *tv = [aNotification object];
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
@@ -2061,7 +2063,33 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[textView checkForCaretInsideSnippet];
 	}
 
+	if(0 && [aTextView isKindOfClass:[RScriptEditorTextView class]] && oldSelectedCharRange.length) {
+
+		if(NSMaxRange(oldSelectedCharRange) < [[aTextView string] length]) {
+
+			NSRange effectiveRange;
+
+			NSNumber *value = [[aTextView textStorage] attribute:foldingAttributeName atIndex:newSelectedCharRange.location effectiveRange:&effectiveRange];
+
+			NSLog(@"%@ %@ %@", NSStringFromRange(oldSelectedCharRange),NSStringFromRange(newSelectedCharRange), NSStringFromRange(effectiveRange));
+
+			if(value && [value boolValue] && NSMaxRange(oldSelectedCharRange) != effectiveRange.location) {
+				NSLog(@"1");
+				return NSMakeRange(oldSelectedCharRange.location, effectiveRange.length+oldSelectedCharRange.length);
+			}
+
+			if(NSMaxRange(newSelectedCharRange) < [[aTextView string] length] && newSelectedCharRange.length) {
+				value = [[aTextView textStorage] attribute:foldingAttributeName atIndex:newSelectedCharRange.location effectiveRange:&effectiveRange];
+				if(value && [value boolValue] && oldSelectedCharRange.location != effectiveRange.location) {
+					NSLog(@"2");
+					return NSMakeRange(newSelectedCharRange.location, effectiveRange.length+oldSelectedCharRange.length);
+				}
+			}
+		}
+	}
+
 	return newSelectedCharRange;
+
 }
 
 @end
