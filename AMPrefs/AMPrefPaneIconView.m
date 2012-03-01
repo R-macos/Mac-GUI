@@ -614,7 +614,17 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 		[pasteboard setString:[_am_selectedIcon itemIdentifier] forType:@"NSToolbarItemIdentifierPboardType"];
 		// deselect icon
 		[self setNeedsDisplay:YES];
-		[self _am_setSelectedIcon:nil];
+
+		// still over the same icon from which the mouseDown event came?
+		// if so - do not clear _am_selectedIcon since for Lion _am_selectedIcon will be set to nil
+		// [due to the fact that mouseDragged is also called for mouseDown]
+		// and mouseUp event will never invoke clicked icon in category overview
+		// <TODO> the entire Pref Pane stuff should be re-written since the code is VERY old!
+		localPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+		AMPrefPaneIcon *icon_cur = [self iconAt:localPoint categoryIndex:&_am_selectedIconCategory iconIndex:&_am_selectedIconIndex];
+		if (icon_cur != _am_selectedIcon)
+			[self _am_setSelectedIcon:nil];
+
 		[self displayIfNeeded];
 		// initiate drag
 		[self dragImage:image at:imageOrigin offset:dragOffset event:theEvent pasteboard:pasteboard source:self slideBack:YES];
