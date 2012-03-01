@@ -283,7 +283,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 	SLog(@"RController.handleAppleEvent is called");
 
-	NSAppleEventDescriptor *openEvents = [event descriptorAtIndex:1];
+	NSAppleEventDescriptor *openEvents = [event paramDescriptorForKeyword:keyDirectObject];
 
 	if(!openEvents) {
 		NSLog(@" - no open events found");
