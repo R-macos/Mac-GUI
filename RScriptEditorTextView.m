@@ -512,8 +512,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		[[self undoManager] enableUndoRegistration];
 	}
 	[[self textContainer] setHeightTracksTextView:NO];
+	[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
 
-	[[NSNotificationCenter defaultCenter] postNotificationName:NSWindowDidResizeNotification object:[[self delegate] window]];
 }
 
 - (void)drawRect:(NSRect)rect
