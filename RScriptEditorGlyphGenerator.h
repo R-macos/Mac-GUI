@@ -40,6 +40,8 @@
 
 	// the original glyph generation requester
 	id <NSGlyphStorage> _destination;
+	NSGlyph nullGlyph;
+	IMP _attrStrImp;
 
 }
 @end

@@ -40,6 +40,8 @@
 
 	NSTextStorage *_attributedString;
 	BOOL _lineFoldingEnabled;
+	IMP _getImp;
+	IMP _setImp;
 
 }
 

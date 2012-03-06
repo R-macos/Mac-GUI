@@ -83,6 +83,7 @@
 	int currentHighlight;
 	double braceHighlightInterval; // interval to flash brace highlighting for
 
+	// <TODO> enable for folding
 	// RScriptEditorTextStorage *theTextStorage;
 	NSTextStorage *theTextStorage;
 

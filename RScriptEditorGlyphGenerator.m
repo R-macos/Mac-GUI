@@ -36,7 +36,28 @@
 #import "RScriptEditorTypesetter.h"
 #import "PreferenceKeys.h"
 
+static SEL _attrStrSel;
+
 @implementation RScriptEditorGlyphGenerator
+
+ + (void)initialize
+ {
+ 	if ([self class] == [RScriptEditorGlyphGenerator class]) {
+ 		_attrStrSel = @selector(attributedString);
+ 	}
+ }
+
+ - (id)init
+ {
+ 	self = [super init];
+
+ 	if (self != nil) {
+		_attrStrImp = [self methodForSelector:_attrStrSel];
+		nullGlyph = NSNullGlyph;
+ 	}
+
+ 	return self;
+ }
 
 - (void)generateGlyphsForGlyphStorage:(id <NSGlyphStorage>)glyphStorage desiredNumberOfCharacters:(NSUInteger)nChars glyphIndex:(NSUInteger *)glyphIndex characterIndex:(NSUInteger *)charIndex
 {
@@ -49,18 +70,17 @@
 // NSGlyphStorage interface
 - (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex
 {
-	id attribute;
-	NSRange effectiveRange;
 	NSGlyph *buffer = NULL;
+	id attribute;
 
-	attribute = [[self attributedString] attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
-
+	// <SPEED>
+	attribute = [(*_attrStrImp)(self, _attrStrSel) attribute:foldingAttributeName atIndex:charIndex effectiveRange:NULL];
 	if (attribute && [attribute boolValue]) {
+		NSRange effectiveRange;
+		(void)[(*_attrStrImp)(self, _attrStrSel) attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
 		NSInteger size = sizeof(NSGlyph) * length;
-		NSGlyph aGlyph = NSNullGlyph;
 		buffer = NSZoneMalloc(NULL, size);
-		memset_pattern4(buffer, &aGlyph, size);
-
+		memset_pattern4(buffer, &nullGlyph, size);
 		if (effectiveRange.location == charIndex) buffer[0] = NSControlGlyph;
 		glyphs = buffer;
 	}

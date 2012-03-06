@@ -146,20 +146,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[[self layoutManager] setBackgroundLayoutEnabled:NO];
 	[[self layoutManager] replaceTextStorage:theTextStorage];
 
-	if(lineNumberingEnabled) {
-
-		SLog(@"RScriptEditorTextView: set up line numbering <%@>", self);
-
-		NoodleLineNumberView *theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:scrollView];
-		[scrollView setVerticalRulerView:theRulerView];
-		[scrollView setHasHorizontalRuler:NO];
-		[scrollView setHasVerticalRuler:YES];
-		[scrollView setRulersVisible:YES];
-		[theRulerView release];
-		[self display];
-	}
-
-
 	isSyntaxHighlighting = NO;
 
 	if([prefs objectForKey:highlightCurrentLine] == nil) [prefs setBool:YES forKey:highlightCurrentLine];
@@ -512,6 +498,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		[[self undoManager] enableUndoRegistration];
 	}
 	[[self textContainer] setHeightTracksTextView:NO];
+
 	[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
 
 }
@@ -567,7 +554,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 								selector:@selector(doSyntaxHighlighting) 
 								object:nil];
 
-		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.001f];
+		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.01f];
 
 		// Cancel setting undo break point
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
@@ -952,15 +939,44 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	NSRange r = [self selectedRange];
 
+	if(r.length < 4) return;
+
+	unichar s = [[self string] characterAtIndex:r.location];
+	unichar e = [[self string] characterAtIndex:NSMaxRange(r)-1];
+
+	BOOL wrapCheck = NO;
+
+	if(s == '{' && e == '}') {
+		r.location++;
+		r.length -= 2;
+		wrapCheck = YES;
+	} else if(s == '(' && e == ')') {
+		r.location++;
+		r.length -= 2;
+		wrapCheck = YES;
+	} else if(s == '[' && e == ']') {
+		r.location++;
+		r.length -= 2;
+		wrapCheck = YES;
+	}
+
 	if(!r.length) return;
 
-	if([[self string] characterAtIndex:NSMaxRange(r)-1] == '\n')
+	if(!wrapCheck && [[self string] characterAtIndex:NSMaxRange(r)-1] == '\n')
 		r.length--;
 
 	if(!r.length) return;
 
+	NSString *tooltip = nil;
+	if(r.length < 300)
+		tooltip = [[self string] substringWithRange:r];
+	else
+		tooltip = [[[self string] substringWithRange:NSMakeRange(r.location, 300)] stringByAppendingString:@"\n…"];
+
 	[theTextStorage beginEditing];
 	[theTextStorage addAttribute:foldingAttributeName value:[NSNumber numberWithBool:YES] range:r];
+	[theTextStorage addAttribute:NSCursorAttributeName value:[NSCursor arrowCursor] range:r];
+	[theTextStorage addAttribute:NSToolTipAttributeName value:tooltip range:r];
 	[theTextStorage endEditing];
 
 	[self didChangeText];
@@ -981,6 +997,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	if (value && [value boolValue] && [self shouldChangeTextInRange:range replacementString:nil]) {
 		[textStorage removeAttribute:foldingAttributeName range:range];
+		[textStorage removeAttribute:NSCursorAttributeName range:range];
+		[textStorage removeAttribute:NSToolTipAttributeName range:range];
 		[self didChangeText];
 		[self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
 		if(lineNumberingEnabled)
@@ -991,14 +1009,16 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	return NO;
 }
 
-// <TODO> enable for folding
-// - (void)mouseDown:(NSEvent *)event
-// {
-// 
+- (void)mouseDown:(NSEvent *)event
+{
+
+	// <TODO> enable for folding
+	[super mouseDown:event];
+
 // 	if(![theTextStorage isKindOfClass:[RScriptEditorTextStorage class]]) [super mouseDown:event];
 // 
-// 	NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPointFromBase:[event locationInWindow]] inTextContainer:[self textContainer]];
 // 	RScriptEditorLayoutManager *layoutManager = (RScriptEditorLayoutManager*)[self layoutManager];
+// 	NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPointFromBase:[event locationInWindow]] inTextContainer:[self textContainer]];
 // 
 // 	[theTextStorage setLineFoldingEnabled:YES];
 // 
@@ -1036,6 +1056,44 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 // 
 // 	[super mouseDown:event];
 // }
+// 
+// - (void)setSelectedRanges:(NSArray *)ranges affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)stillSelectingFlag
+// {
+// 
+// 	if(!stillSelectingFlag) {
+// 
+// 		if([ranges count] > 0) {
+// 
+// 			// Adjust range for folded text chunks; additional checks will be made in
+// 			// the self's delegate [RDocumentWinCtrl:textViewDidChangeSelection:]
+// 
+// 			NSRange range = [[ranges objectAtIndex:0] rangeValue];
+// 
+// 			if(!range.length) {
+// 				[super setSelectedRanges:ranges affinity:affinity stillSelecting:stillSelectingFlag];
+// 				return;
+// 			}
+// 
+// 			NSRange glyphRange = [[self layoutManager] glyphRangeForCharacterRange:range actualCharacterRange:NULL];
+// 
+// 			if(glyphRange.location != range.location || glyphRange.length != range.length) {
+// 
+// 				if([ranges count] == 2)
+// 					glyphRange.length += [[ranges objectAtIndex:1] rangeValue].length;
+// 
+// 				SLog(@"RScriptEditorTextView:setSelectedRanges: adjust range via glyph range from %@ to %@", NSStringFromRange(range), NSStringFromRange(glyphRange));
+// 
+// 				[super setSelectedRange:glyphRange];
+// 				return;
+// 
+// 			}
+// 		}
+// 	}
+// 
+// 	[super setSelectedRanges:ranges affinity:affinity stillSelecting:stillSelectingFlag];
+
+}
+
 
 - (void)setTypingAttributes:(NSDictionary *)attrs
 {

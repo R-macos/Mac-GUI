@@ -43,6 +43,7 @@
 #import "NSTextView_RAdditions.h"
 #import "NSString_RAdditions.h"
 #import "RWindow.h"
+#import "NoodleLineNumberView.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -393,6 +394,20 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	SLog(@" - scan document for functions");
 	[self functionRescan];
+
+	if([textView lineNumberingEnabled]) {
+
+		SLog(@" - set up line numbering for text view");
+
+		NoodleLineNumberView *theRulerView = [[NoodleLineNumberView alloc] initWithScrollView:[textView enclosingScrollView]];
+		[[textView enclosingScrollView] setVerticalRulerView:theRulerView];
+		[[textView enclosingScrollView] setHasHorizontalRuler:NO];
+		[[textView enclosingScrollView] setHasVerticalRuler:YES];
+		[[textView enclosingScrollView] setRulersVisible:YES];
+		[theRulerView release];
+
+	}
+
 
 	SLog(@" - windowDidLoad is done");
 
@@ -1255,6 +1270,40 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if([[NSUserDefaults standardUserDefaults] boolForKey:highlightCurrentLine])
 		[tv setNeedsDisplayInRect:[tv bounds] avoidAdditionalLayout:YES];
 
+	// Adjust cursor position if cursor is inside of a folded text chunk;
+	// additional checks were made in [RScriptEditorTextView:setSelectedRanges:]
+	// <TODO> enable for folding
+	if(0 & [tv isKindOfClass:[RScriptEditorTextView class]]) {
+		NSRange r = [tv selectedRange];
+		NSUInteger len = [[tv string] length];
+		if(r.location < len) {
+			NSNumber *value = [[tv textStorage] attribute:foldingAttributeName atIndex:r.location effectiveRange:NULL];
+			if(value && [value boolValue]) {
+				NSRange effectiveRange;
+				(void)[[tv textStorage] attribute:foldingAttributeName atIndex:r.location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, len)];
+				if(r.location > effectiveRange.location && r.location < NSMaxRange(effectiveRange)) {
+					if(r.length) {
+						NSRange nr = NSMakeRange(effectiveRange.location, NSMaxRange(r) - effectiveRange.location);
+						if(NSMaxRange(r) == NSMaxRange(nr)) {
+							if(nr.length > r.length) {
+								nr.location = NSMaxRange(effectiveRange);
+								nr.length = nr.length - effectiveRange.length;
+							} else {
+								nr.length = 0;
+								nr.location = NSMaxRange(nr);
+							}
+						}
+						SLog(@"RDocumentWinCtrl:textViewDidChangeSelection: adjust range via attribute checking from %@ to %@", NSStringFromRange(r), NSStringFromRange(nr));
+						[tv setSelectedRange:nr];
+					} else {
+						SLog(@"RDocumentWinCtrl:textViewDidChangeSelection: adjust range via attribute checking from %@ to %@", NSStringFromRange(r), NSStringFromRange(NSMakeRange(effectiveRange.location, 0)));
+						[tv setSelectedRange:NSMakeRange(effectiveRange.location, 0)];
+					}
+				}
+			}
+		}
+	}
+
 	if(argsHints && ![[self document] hasREditFlag] && ![self plain]) {
 
 		// show functions hints due to current caret position or selection
@@ -2061,31 +2110,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	// Check if snippet session is still valid
 	if (!newSelectedCharRange.length && [textView isSnippetMode]) {
 		[textView checkForCaretInsideSnippet];
-	}
-
-	if(0 && [aTextView isKindOfClass:[RScriptEditorTextView class]] && oldSelectedCharRange.length) {
-
-		if(NSMaxRange(oldSelectedCharRange) < [[aTextView string] length]) {
-
-			NSRange effectiveRange;
-
-			NSNumber *value = [[aTextView textStorage] attribute:foldingAttributeName atIndex:newSelectedCharRange.location effectiveRange:&effectiveRange];
-
-			NSLog(@"%@ %@ %@", NSStringFromRange(oldSelectedCharRange),NSStringFromRange(newSelectedCharRange), NSStringFromRange(effectiveRange));
-
-			if(value && [value boolValue] && NSMaxRange(oldSelectedCharRange) != effectiveRange.location) {
-				NSLog(@"1");
-				return NSMakeRange(oldSelectedCharRange.location, effectiveRange.length+oldSelectedCharRange.length);
-			}
-
-			if(NSMaxRange(newSelectedCharRange) < [[aTextView string] length] && newSelectedCharRange.length) {
-				value = [[aTextView textStorage] attribute:foldingAttributeName atIndex:newSelectedCharRange.location effectiveRange:&effectiveRange];
-				if(value && [value boolValue] && oldSelectedCharRange.location != effectiveRange.location) {
-					NSLog(@"2");
-					return NSMakeRange(newSelectedCharRange.location, effectiveRange.length+oldSelectedCharRange.length);
-				}
-			}
-		}
 	}
 
 	return newSelectedCharRange;

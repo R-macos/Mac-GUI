@@ -42,6 +42,8 @@
 @synthesize lineFoldingEnabled = _lineFoldingEnabled;
 
 static NSTextAttachment *sharedAttachment = nil;
+static SEL _getSel;
+static SEL _setSel;
 
 + (void)initialize
 {
@@ -51,6 +53,8 @@ static NSTextAttachment *sharedAttachment = nil;
 		sharedAttachment = [[NSTextAttachment alloc] init];
 		[sharedAttachment setAttachmentCell:cell];
 		[cell release];
+		_getSel = @selector(attributesAtIndex:effectiveRange:);
+		_setSel = @selector(setAttributes:range:);
 	}
 }
 
@@ -65,6 +69,8 @@ static NSTextAttachment *sharedAttachment = nil;
 
 	if (self != nil) {
 		_attributedString = [[NSTextStorage alloc] init];
+		_getImp = [_attributedString methodForSelector:_getSel];
+		_setImp = [_attributedString methodForSelector:_setSel];
 	}
 
 	return self;
@@ -87,32 +93,31 @@ static NSTextAttachment *sharedAttachment = nil;
 - (NSDictionary *)attributesAtIndex:(NSUInteger)location effectiveRange:(NSRangePointer)range
 {
 
-	if(!_lineFoldingEnabled) return [_attributedString attributesAtIndex:location effectiveRange:range];
+	NSDictionary *attributes = (*_getImp)(_attributedString, _getSel, location, range);
 
-	NSDictionary *attributes = [_attributedString attributesAtIndex:location effectiveRange:range];
+	if(!_lineFoldingEnabled) return attributes;
 
-	if (_lineFoldingEnabled) {
-		id value;
-		NSRange effectiveRange;
+	id value;
+	NSRange effectiveRange;
 
-		value = [attributes objectForKey:foldingAttributeName];
-		if (value && [value boolValue]) {
-			[_attributedString attribute:foldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
+	value = [attributes objectForKey:foldingAttributeName];
+	if (value && [value boolValue]) {
+		[_attributedString attribute:foldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
 
-			// We adds NSAttachmentAttributeName if in lineFoldingAttributeName
-			if (location == effectiveRange.location) { // beginning of a folded range
-				NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
-				[dict setObject:[RScriptEditorTextStorage attachment] forKey:NSAttachmentAttributeName];
-				attributes = [dict autorelease];
-				effectiveRange.length = 1;
-			} else {
-				++(effectiveRange.location); --(effectiveRange.length);
-			}
-			if (range) *range = effectiveRange;
+		// We adds NSAttachmentAttributeName if in lineFoldingAttributeName
+		if (location == effectiveRange.location) { // beginning of a folded range
+			NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
+			[dict setObject:sharedAttachment forKey:NSAttachmentAttributeName];
+			attributes = [dict autorelease];
+			effectiveRange.length = 1;
+		} else {
+			++(effectiveRange.location); --(effectiveRange.length);
 		}
+		if (range) *range = effectiveRange;
 	}
 
 	return attributes;
+
 }
 
 // NSMutableAttributedString primitives
@@ -124,7 +129,7 @@ static NSTextAttachment *sharedAttachment = nil;
 
 - (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range
 {
-	[_attributedString setAttributes:attrs range:range];
+	(*_setImp)(_attributedString, _setSel, attrs, range);
 	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 

@@ -33,6 +33,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "RScriptEditorTextStorage.h"
 
 
 @interface RScriptEditorLayoutManager : NSLayoutManager

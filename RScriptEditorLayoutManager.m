@@ -65,7 +65,7 @@
 
 - (void)drawGlyphsForGlyphRange:(NSRange)glyphsToShow atPoint:(NSPoint)origin
 {
-
+	// <SPEED>
 	NSTextStorage *textStorage = [self textStorage];
 
 	[(RScriptEditorTextStorage *)textStorage setLineFoldingEnabled:YES];
