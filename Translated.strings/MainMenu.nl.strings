@@ -26,10 +26,10 @@
 "Activate SearchField ⇧⌘H" = "Activeer zoekveld ⇧⌘H";
 
 /* Entry = "1719.title"; Class = "NSMenuItem" */
-"Add Column (CHARACTER)" = "Add Column (CHARACTER)";
+"Add Column (CHARACTER)" = "Voeg kolom toe (CHARACTER)";
 
 /* Entry = "1718.title"; Class = "NSMenuItem" */
-"Add Column (NUMERIC)" = "Add Column (NUMERIC)";
+"Add Column (NUMERIC)" = "Voeg kolom toe (NUMERIC)";
 
 /* Entry = "1720.title"; Class = "NSMenuItem" */
 "Add Row" = "Add Row";
@@ -101,7 +101,7 @@
 "Cancel Object Editing" = "Cancel Object Editing";
 
 /* Entry = "1723.gToolTip"; Class = "NSMenuItem" */
-"Cancels object editing without passing data back to R and closes the editor window" = "Cancels object editing without passing data back to R and closes the editor window";
+"Cancels object editing without passing data back to R and closes the editor window" = "Breek het wijzigen van het object af zonder de veranderingen te bewaren. De editor wordt afgesloten.";
 
 /* Entry = "829.title"; Class = "NSMenuItem" */
 "Center" = "Centreer";
@@ -734,7 +734,7 @@
 "Use Selection for Find" = "Gebruik selectie voor zoekactie";
 
 /* Entry = "565.gToolTip"; Class = "NSButton" */
-"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  ";
+"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "De gebruiker dient het package formaat te definieren voor Non-Default Repositories. Meestal zijn pakketten met de \".tar.gz\" extensie in \"Source Format\", pakketten met de \".tgz\" extensie in \"Binary Format\".  ";
 
 /* Entry = "1110.title"; Class = "NSMenuItem" */
 "Vignettes" = "Vignetten";

@@ -40,13 +40,13 @@
 "Add Row" = "Voeg rij toe";
 
 /* From: REditor.m (toolbar) */
-"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%1$@)\tAdd column of type ‘CHARACTER’\n(%2$@)\tAdd column of type ‘NUMERIC’";
+"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "Voeg een column toe rechts van de geselecteerde kolommen of aan het eind van de data. Het nieuwe kolom data type komt overeen met het type links van de nieuwe kolom.\n\n(%1$@)\tVoeg een kolom toe met het type ‘CHARACTER’\n(%2$@)\tVoeg een kolom toe met het type ‘NUMERIC’";
 
 /* From: REditor.m (toolbar) */
 "Adds a row below a group of selected rows or at the bottom of the data" = "Voegt nieuwe rijen toe onder de geselecteerde kolommen of op het einde van de data";
 
 /* From: RController.m (clearWorkSpace) */
-"All objects in the workspace will be removed. Are you sure you want to proceed?" = "Alle objecten in de Workspace worden verwijderd. Wil u doorgaan?";
+"All objects in the workspace will be removed. Are you sure you want to proceed?" = "Alle objecten in de Workspace worden verwijderd. Wilt u doorgaan?";
 
 /* From: WSBrowser.m (remObject) */
 "Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "Bent u zeker dat u object '%@' wenst te verwijderen? Deze actie kan niet hersteld worden.";
@@ -55,7 +55,7 @@
 "Authentication" = "Authenticatie";
 
 /* From: RController.m (toolbar) */
-"Authorize R to run system commands as root" = "Authoriseer R om systeemcomando's als root uit te voeren";
+"Authorize R to run system commands as root" = "Authoriseer R om systeemcommando's als root uit te voeren";
 
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Kan helponderwerp niet vinden, wenst u de zoekopdracht uit te breiden?";
@@ -71,7 +71,7 @@
 "Cancel Editing" = "Cancel Editing";
 
 /* From: REditor.m (toolbar) */
-"Cancels object editing without passing data back to R and closes the editor window" = "Cancels object editing without passing data back to R and closes the editor window";
+"Cancels object editing without passing data back to R and closes the editor window" = "Breek het wijzigen van het object af zonder de veranderingen te bewaren. De editor wordt afgesloten.";
 
 /* From: RDocumentWinCtrl.m (goHelpSearch) */
 "Cannot determine package for the topic." = "Kan geen pakket vinden voor het onderwerp.";
@@ -120,7 +120,7 @@
 "Convertion Error" = "Fout opgetreden in conversie";
 
 /* From: RDocument.m (reinterpretInEncoding) */
-"Couldn't reinterpret the text by using the encoding" = "Couldn't reinterpret the text by using the encoding";
+"Couldn't reinterpret the text by using the encoding" = "Het is niet gelukt de text opnieuw te interpreteren met de ingestelde codering";
 
 /* From: RDocument.m (revertToContentsOfURL) */
 "Couldn't revert to saved document" = "Kan niet terug gaan naar opgeslagen bestand";
@@ -155,7 +155,7 @@
 "Edit the selected object" = "Bewerk geselecteerd object";
 
 /* From: REditor.m (startDataEntry) */
-"editing cancelled" = "editing cancelled";
+"editing cancelled" = "editing be-eindigt";
 
 /* From: RDocumentController.m (encodingAccessory) */
 "Encoding" = "Encoding";
@@ -166,14 +166,14 @@
 
 /* From: RController.m (sheetDidEnd)
    From: RDocument.m (convertRd2PDF) */
-"Error" = "Error";
+"Error" = "Fout";
 
 /* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
 "executing" = "aan het uitvoeren";
 
 /* From: RController.m (applicationDidFinishLaunching)
    From: RController.m (windowDidEnterFullScreen) */
-"Exit Full Screen" = "Exit Full Screen";
+"Exit Full Screen" = "Be-eindig Full Screen";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Fetching Package List Failed" = "Het ophalen van de pakkettenlijst mislukte";
@@ -349,10 +349,10 @@
 "R Console" = "R Console";
 
 /* From: REditor.m (initData) */
-"R Data Editor - error while reading object data" = "R Data Editor - error while reading object data";
+"R Data Editor - error while reading object data" = "R Data Editor - fout tijdens het inlezen van de object data";
 
 /* From: REditor.m (windowShouldClose) */
-"R Data Editor couldn't write object data" = "R Data Editor couldn't write object data";
+"R Data Editor couldn't write object data" = "R Data Editor - fout tijdens het wegschrijven van de object data";
 
 /* From: RController.m (sourceFile) */
 "R File to Source" = "R bestand naar broncode";
@@ -547,7 +547,7 @@
 "VAR_NAME_2" = "VAR_NAME_2";
 
 /* From: RController.m (applicationDidFinishLaunching) */
-"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n";
+"WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "WAARSCHUWING: U gebruikt een non-UTF8 locale, alleen ASCII characters zullen werken.\nRaadpleeg de R for Mac OS X FAQ (zie Help) section 9 en pas Uw system preferences aan.\n";
 
 /* Global string @ */
 "Yes" = "Ja";
