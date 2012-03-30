@@ -15,7 +15,7 @@
 "<functions>" = "<関数>";
 
 /* From: RDocumentWinCtrl.m (functionReset) */
-"<sections>" = "<sections>";
+"<sections>" = "<セクション>";
 
 /* From: SearchTable.m (show) */
 "<unknown>" = "<不明>";
@@ -40,7 +40,7 @@
 "Add Row" = "行を追加";
 
 /* From: REditor.m (toolbar) */
-"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%1$@)\tAdd column of type ‘CHARACTER’\n(%2$@)\tAdd column of type ‘NUMERIC’";
+"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "選択された列の右端もしくはデータの末尾に列を追加します。列の型はその左の列と同じになります。\n\n(%@)\t'CHARACTER'型の列を追加します\n(%@)\t'NUMERIC'型の列を追加します";
 
 /* From: REditor.m (toolbar) */
 "Adds a row below a group of selected rows or at the bottom of the data" = "選択中の行の下あるいはデータの最後に行を追加";
@@ -68,10 +68,10 @@
 
 /* Cancel Editing - label for a toolbar, keep short!
    From: REditor.m (toolbar) */
-"Cancel Editing" = "Cancel Editing";
+"Cancel Editing" = "編集をキャンセル";
 
 /* From: REditor.m (toolbar) */
-"Cancels object editing without passing data back to R and closes the editor window" = "Cancels object editing without passing data back to R and closes the editor window";
+"Cancels object editing without passing data back to R and closes the editor window" = "オブジェクトの編集をキャンセルし、Rに変更内容を反映せずにウィンドウを閉じます";
 
 /* From: RDocumentWinCtrl.m (goHelpSearch) */
 "Cannot determine package for the topic." = "このトピックに関するパッケージを決定できません.";
@@ -89,10 +89,10 @@
 "Change the size of R console font" = "コンソールのフォントサイズを変更";
 
 /* From: RDocument.m (checkRdDocumentWithFilePath) */
-"Check Rd document…" = "Check Rd document…";
+"Check Rd document…" = "Rdドキュメントをチェック…";
 
 /* From: RDocument.m (checkRdDocumentWithFilePath) */
-"Check was successful." = "Check was successful.";
+"Check was successful." = "チェックは成功しました";
 
 /* From: RController.m (handleChooseFile)
    From: RController.m (openDocument) */
@@ -155,14 +155,14 @@
 "Edit the selected object" = "選択されたオブジェクトを編集";
 
 /* From: REditor.m (startDataEntry) */
-"editing cancelled" = "editing cancelled";
+"editing cancelled" = "編集をキャンセルしました";
 
 /* From: RDocumentController.m (encodingAccessory) */
 "Encoding" = "エンコーディング";
 
 /* From: RController.m (applicationDidFinishLaunching)
    From: RController.m (windowDidExitFullScreen) */
-"Enter Full Screen" = "Enter Full Screen";
+"Enter Full Screen" = "フルスクリーンにする";
 
 /* From: RController.m (sheetDidEnd)
    From: RDocument.m (convertRd2PDF) */
@@ -173,7 +173,7 @@
 
 /* From: RController.m (applicationDidFinishLaunching)
    From: RController.m (windowDidEnterFullScreen) */
-"Exit Full Screen" = "Exit Full Screen";
+"Exit Full Screen" = "フルスクリーンを解除";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Fetching Package List Failed" = "パッケージ一覧の読み込みに失敗しました";
@@ -182,7 +182,7 @@
 "Font Size" = "フォントサイズ";
 
 /* From: RDocumentWinCtrl.m (tidyRCode) */
-"Formatting…" = "Formatting…";
+"Formatting…" = "整形中…";
 
 /* From: RDocument.m (insertRdFunctionTemplate) */
 "FUNCTION_NAME" = "FUNCTION_NAME";
@@ -224,7 +224,7 @@
 
 /* From: RdEditorToolbar.m (textView)
    From: RDocumentWinCtrl.m (functionReset) */
-"List of Sections" = "List of Sections";
+"List of Sections" = "セクションの一覧";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Never" = "決してしない";
@@ -288,7 +288,7 @@
 "Package update was not successful. Please see the R Console for details." = "パッケージのアップデートに失敗しました. 詳細についてはRコンソールを参照して下さい.";
 
 /* From: RDocumentWinCtrl.m (tidyRCode) */
-"Parsing Error" = "Parsing Error";
+"Parsing Error" = "構文解析エラー";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please consult  R Console output for details." = "詳細についてはRコンソールを参照して下さい.";
@@ -298,7 +298,7 @@
 "Please specify a valid URL first." = "まず正しいURLを指定して下さい。";
 
 /* From: AMPrefs/AMPreferenceWindowController.m (initWithAutosaveName) */
-"Preferences" = "Preferences";
+"Preferences" = "環境設定";
 
 /* Editor preference group */
 "PrefG-Editor" = "ソースエディタ";
@@ -331,7 +331,7 @@
    From: RDocument.m (insertRdFunctionTemplate)
    From: RDocumentWinCtrl.m (tidyRCode)
    From: RTextView.m (performDragOperation) */
-"press ⌘. to cancel" = "press ⌘. to cancel";
+"press ⌘. to cancel" = "⌘. を押してキャンセル";
 
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "この文書を印刷";
@@ -349,10 +349,10 @@
 "R Console" = "Rコンソール";
 
 /* From: REditor.m (initData) */
-"R Data Editor - error while reading object data" = "R Data Editor - error while reading object data";
+"R Data Editor - error while reading object data" = "Rデータエディタ - オブジェクトの読み込みエラー";
 
 /* From: REditor.m (windowShouldClose) */
-"R Data Editor couldn't write object data" = "R Data Editor couldn't write object data";
+"R Data Editor couldn't write object data" = "Rデータエディタはオブジェクトを書き込めません";
 
 /* From: RController.m (sourceFile) */
 "R File to Source" = "ソースとして読み込むRファイル";
@@ -364,14 +364,14 @@
 "R Message" = "Rメッセージ";
 
 /* From: RDocument.m (checkRdDocumentWithFilePath) */
-"Rd Check" = "Rd Check";
+"Rd Check" = "Rdチェック";
 
 /* From: RDocument.m (checkRdDocumentWithFilePath)
    From: RDocument.m (convertRd2PDF) */
-"Rd file" = "Rd file";
+"Rd file" = "Rdファイル";
 
 /* From: RdEditorToolbar.m (textView) */
-"Rd Toolbox" = "Rd Toolbox";
+"Rd Toolbox" = "Rdツールボックス";
 
 /* From: RDocument.m (convertRd2HTML) */
 "Rd → HTML…" = "Rd → HTML…";
@@ -416,7 +416,7 @@
 "Resizing to %g x %g" = "%g x %g　にリサイズ";
 
 /* From: RDocument.m (revertToContentsOfURL) */
-"Reverting Document" = "Reverting Document";
+"Reverting Document" = "文書を元に戻す";
 
 /* Global string @ */
 "Save" = "保存";
@@ -456,7 +456,7 @@
 "Search Panel" = "パネルを検索";
 
 /* From: RdEditorToolbar.m (textView) */
-"Sections" = "Sections";
+"Sections" = "セクション";
 
 /* From: PrefPanes/EditorPrefPane.m (changeEditor) */
 "Select editor application" = "エディタアプリケーションを選択";
@@ -505,7 +505,7 @@
 "Show/Hide R command history" = "Rコマンドの履歴を表示/非表示";
 
 /* From: RTextView.m (performDragOperation) */
-"Snippet Error" = "Snippet Error";
+"Snippet Error" = "スニペットのエラー";
 
 /* From: RController.m (toolbar) */
 "Source or Load in R" = "ソースまたはイメージをRに読み込み";
@@ -538,7 +538,7 @@
 "Unable to start R: %@" = "Rを起動できません: %@";
 
 /* From: NSString_RAdditions.m (evaluateAsBashCommandWithEnvironment) */
-"User Termination" = "User Termination";
+"User Termination" = "ユーザによる中断";
 
 /* From: RDocument.m (insertRdDataTemplate) */
 "VAR_NAME_1" = "VAR_NAME_1";

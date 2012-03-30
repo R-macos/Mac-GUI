@@ -26,13 +26,13 @@
 "Activate SearchField ⇧⌘H" = "検索フィールドをアクティブ化 ⇧⌘H";
 
 /* Entry = "1719.title"; Class = "NSMenuItem" */
-"Add Column (CHARACTER)" = "Add Column (CHARACTER)";
+"Add Column (CHARACTER)" = "列を追加 (CHARACTER)";
 
 /* Entry = "1718.title"; Class = "NSMenuItem" */
-"Add Column (NUMERIC)" = "Add Column (NUMERIC)";
+"Add Column (NUMERIC)" = "列を追加 (NUMERIC)";
 
 /* Entry = "1720.title"; Class = "NSMenuItem" */
-"Add Row" = "Add Row";
+"Add Row" = "行を追加";
 
 /* Entry = "834.title"; Class = "NSMenuItem" */
 "Align Left" = "左揃え";
@@ -98,10 +98,10 @@
 "Cancel" = "キャンセル";
 
 /* Entry = "1723.title"; Class = "NSMenuItem" */
-"Cancel Object Editing" = "Cancel Object Editing";
+"Cancel Object Editing" = "オブジェクトの編集をキャンセル";
 
 /* Entry = "1723.gToolTip"; Class = "NSMenuItem" */
-"Cancels object editing without passing data back to R and closes the editor window" = "Cancels object editing without passing data back to R and closes the editor window";
+"Cancels object editing without passing data back to R and closes the editor window" = "オブジェクトの編集をキャンセルし、Rに変更内容を反映せずにウィンドウを閉じます";
 
 /* Entry = "829.title"; Class = "NSMenuItem" */
 "Center" = "中央揃え";
@@ -161,7 +161,7 @@
 "Copy Style" = "スタイルのコピー";
 
 /* Entry = "1730.title"; Class = "NSMenuItem" */
-"Copy as CSV" = "Copy as CSV";
+"Copy as CSV" = "CSVとしてコピー";
 
 /* Entry = "1489.title"; Class = "NSTextFieldCell" */
 "Current Working Directory" = "現在の作業ディレクトリ";
@@ -209,7 +209,7 @@
 "Edit" = "編集";
 
 /* Entry = "1740.title"; Class = "NSMenuItem" */
-"Edit Column Names" = "Edit Column Names";
+"Edit Column Names" = "列名を編集";
 
 /* Entry = "221.title"; Class = "NSMenuItem" */
 "Edit Object…" = "オブジェクトの編集…";
@@ -263,7 +263,7 @@
 "Format" = "フォーマット";
 
 /* Entry = "1752.title"; Class = "NSMenuItem" */
-"Format Source Code" = "Format Source Code";
+"Format Source Code" = "ソースコードを整形";
 
 /* Entry = "1514.alternateTitle"; Class = "NSButtonCell" */
 "Forward" = "進む";
@@ -542,7 +542,7 @@
 "R for Mac OS X FAQ" = "MacOS X版RのFAQ";
 
 /* Entry = "1517.title"; Class = "NSButtonCell" */
-"Radio" = "ラジオ";
+"Radio" = "Radio";
 
 /* Entry = "850.title"; Class = "NSMenuItem" */
 "Raise" = "すべてを手前に移動";
@@ -563,7 +563,7 @@
 "Reinterpret with Encoding" = "エンコーディングを指定して再読み込み";
 
 /* Entry = "1722.title"; Class = "NSMenuItem" */
-"Remove Selection" = "Remove Selection";
+"Remove Selection" = "選択部分を削除";
 
 /* Entry = "550.headerCell.title"; Class = "NSTableColumn" */
 "Repository Version" = "リポジトリにあるバージョン";
@@ -707,7 +707,7 @@
 "Undo" = "取り消し";
 
 /* Entry = "1748.title"; Class = "NSMenuItem" */
-"Unicode Characters in R Strings to \\uxxxx" = "\\uxxxx to Character";
+"Unicode Characters in R Strings to \\uxxxx" = "R文字列中のユニコード文字を \\uxxxx 表記に変換";
 
 /* Entry = "1509.title"; Class = "NSButtonCell" */
 "Update All" = "すべてアップデート";
@@ -767,7 +767,7 @@
 "Zoom" = "拡大／縮小";
 
 /* Entry = "1749.title"; Class = "NSMenuItem" */
-"\\uxxxx to Character" = "Unicode Characters in R Strings to \\uxxxx";
+"\\uxxxx to Character" = "\\uxxxx 表記から文字に変換";
 
 /* Entry = "1491.title"; Class = "NSTextFieldCell" */
 "\n" = "\n";

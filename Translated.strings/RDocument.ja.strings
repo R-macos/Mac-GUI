@@ -23,7 +23,7 @@
 "Cancel" = "キャンセル";
 
 /* Entry = "161.title"; Class = "NSMenuItem" */
-"Check Rd Document" = "Check Rd Document";
+"Check Rd Document" = "Rd文書のチェック";
 
 /* Entry = "83.title"; Class = "NSMenuItem" */
 "Clear" = "消去";
@@ -47,7 +47,7 @@
 "Go to line:" = "指定行へ:";
 
 /* Entry = "153.title"; Class = "NSMenuItem" */
-"HTML Preview" = "Insert Function Rd Template";
+"HTML Preview" = "HTMLでプレビュー";
 
 /* Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
 "Help search" = "ヘルプを検索";
@@ -56,10 +56,10 @@
 "ISO2022-JP" = "ISO2022-JP";
 
 /* Entry = "165.title"; Class = "NSMenuItem" */
-"Insert Data Rd Template" = "Insert Data Rd Template";
+"Insert Data Rd Template" = "データRd文書のひな形を挿入";
 
 /* Entry = "164.title"; Class = "NSMenuItem" */
-"Insert Function Rd Template" = "Insert Function Rd Template";
+"Insert Function Rd Template" = "関数Rd文書のひな形を挿入";
 
 /* Entry = "81.title"; Class = "NSMenuItem" */
 "Item" = "項目";
@@ -89,7 +89,7 @@
 "OtherViews" = "他のビュー";
 
 /* Entry = "159.title"; Class = "NSMenuItem" */
-"PDF Preview" = "PDF Preview";
+"PDF Preview" = "PDFでプレビュー";
 
 /* Entry = "68.title"; Class = "NSPanel" */
 "Panel" = "パネル";
