@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.51 (6148) - supplied with R 2.15.0 --
+
+Last-update: 2012-03-02 [HJBB]
+*	Fixes for Lion (among others drag-n-drop while R.app is not
+	running) and performance updates
+
 -- Release Version 1.50 (6126) - supplied with R 2.14.2 --
 
 Last-update: 2012-02-22 [HJBB]

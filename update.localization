@@ -3,7 +3,7 @@
 # Created 2005/02/01 by Simon Urbanek
 
 # list of localizations we want to generate from English
-languages=`cat LANGUAGES`
+if [ -z "$languages" ]; then languages=`cat LANGUAGES`; fi
 
 # Get all (non-backup) NIBs in English.lproj assuming that this is where we do active development
 NIBS=`ls -d English.lproj/*.xib | grep -v \~ | awk -F / '{print substr($2,1,length($2)-4)}'`
