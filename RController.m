@@ -672,7 +672,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 		[pendingDocsToOpen removeAllObjects];
 	}
 
-	[[REngine mainEngine] executeString:@"if (exists('.First') && is.function(.First)) .First()"];
+	[[REngine mainEngine] executeString:@"if (exists('.First') && is.function(.First) && !identical(.First, .__RGUI__..First)) .First()"];
 
 #if R_VERSION >= R_Version(2,7,0)
 	SLog(@" - set Quartz preferences (if necessary)");

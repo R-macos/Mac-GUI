@@ -224,6 +224,8 @@ add.fn("q", function (save = "default", status = 0, runLast = TRUE) .Call("RappQ
 add.fn("quit", function (save = "default", status = 0, runLast = TRUE) .Call("RappQuit", save, status, runLast))
 }
 
+.e[[".__RGUI__..First"]] <- .GlobalEnv$.First
+
 if (rv < 210) add.fn("main.help.url", function () 
 {
     .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(), 

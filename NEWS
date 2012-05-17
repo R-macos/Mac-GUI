@@ -1,5 +1,30 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-05-16
+*	Do not execute .First twice if it is defined in .Rprofile
+	(this is done by having GUI tools save it in
+	 .__RGUI__..First and then compare with the version
+	 present after loading the workspace and preventing
+	 re-execution if it is identical)
+	
+Note that this is the initialization sequence in the GUI:
+ 1) R.app GUI preferences are loaded and the environemnt initialized
+    accordingly (LANG, R_LIBS, R_HOME, ...)
+ 2) R is started with --no-save --no-restore-data --gui=cocoa
+ 3) The GUI-tools are loaded (reporting the GUI version)
+ 4) open document requests are acquired
+    - if none are open, the workspace is loaded
+ 5) history is loaded if requested in preferences
+ 6) all open document requests are processed
+    - for directories the path is changed, .Rprofile sourced
+      (if present), .RData loaded (if present) and history loaded
+    - for files the directory is changed to the enclosing directory
+      and the file is sourced/loaded/opened (depending on type)
+ 7) .First is executed if present
+ 8) Quartz preferences are set
+ 9) auto-reopen is called for documents
+
+
 -- Release Version 1.51 (6148) - supplied with R 2.15.0 --
 
 Last-update: 2012-03-02 [HJBB]
