@@ -1542,10 +1542,7 @@
 		680710F40EB0C05E00436993 /* Leopard */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = i386;
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
