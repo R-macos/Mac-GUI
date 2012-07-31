@@ -492,30 +492,6 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[[self delegate] highlightBracesWithShift:-1 andWarn:YES];
 }
 
-/**
- * Copy selected text chunk as RTF to preserve syntax highlighting
- * and as plain text
- */
-- (void)copy:(id)sender
-{
-
-	NSPasteboard *pb = [NSPasteboard generalPasteboard];
-	NSTextStorage *textStorage = [self textStorage];
-	NSData *rtf = [textStorage RTFFromRange:[self selectedRange]
-		documentAttributes:nil];
-
-	if (rtf)
-	{
-		[pb declareTypes:[NSArray arrayWithObject:NSRTFPboardType] owner:self];
-		[pb setData:rtf forType:NSRTFPboardType];
-	}
-
-	[pb addTypes:[NSArray arrayWithObject:NSStringPboardType] owner:self];
-	[pb setString:[[textStorage string] substringWithRange:[self selectedRange]] forType:NSStringPboardType];
-
-}
-
-
 - (void)deleteBackward:(id)sender
 {
 
@@ -1363,7 +1339,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 					[[[filepath stringByReplacingOccurrencesOfRegex:
 						[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath] 
 							stringByAppendingString:(i < ([files count]-1)) ? suffix : @""]];
-			} 
+			}
 			else {
 
 				[env setObject:filepath forKey:kShellVarNameDraggedFilePath];
@@ -1556,7 +1532,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	glyphIndex = [layoutManager glyphIndexForPoint:aPoint
 		inTextContainer:[self textContainer]
 		fractionOfDistanceThroughGlyph:&fractionalDistance];
-	if( fractionalDistance > 0.5 ) glyphIndex++;
+
+	if( fractionalDistance > 0.5f && fractionalDistance < 1.0f) glyphIndex++;
 
 	if( glyphIndex == NSMaxRange(range) )
 		return  [[self textStorage] length];

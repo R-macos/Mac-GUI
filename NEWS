@@ -1,5 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-07-31 [HJBB]
+*	Fixed broken block selection
+*	Fixed minor issue while dragging an item to RConsole or 
+	R Script editor if insertion cursor is located at an 
+	empty line
+
 -- Release Version 1.52 (6188) - supplied with R 2.15.1 --
 
 Last-update: 2012-05-16

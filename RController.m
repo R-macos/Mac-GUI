@@ -4003,14 +4003,13 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 }
 
-- (NSRange)textView:(NSTextView *)aTextView willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange toCharacterRange:(NSRange)newSelectedCharRange
+- (NSArray *)textView:(NSTextView *)aTextView willChangeSelectionFromCharacterRanges:(NSArray *)oldSelectedCharRanges toCharacterRanges:(NSArray *)newSelectedCharRanges
 {
 	// Check if snippet session is still valid
-	if (!newSelectedCharRange.length && [consoleTextView isSnippetMode]) {
+	if ([newSelectedCharRanges count] && ![[newSelectedCharRanges objectAtIndex:0] rangeValue].length && [consoleTextView isSnippetMode]) {
 		[consoleTextView checkForCaretInsideSnippet];
 	}
-
-	return newSelectedCharRange;
+	return newSelectedCharRanges;
 }
 
 @end

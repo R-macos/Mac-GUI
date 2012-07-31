@@ -2105,15 +2105,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	[[self document] checkRdDocument];
 }
 
-- (NSRange)textView:(NSTextView *)aTextView willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange toCharacterRange:(NSRange)newSelectedCharRange
+- (NSArray *)textView:(NSTextView *)aTextView willChangeSelectionFromCharacterRanges:(NSArray *)oldSelectedCharRanges toCharacterRanges:(NSArray *)newSelectedCharRanges
 {
 	// Check if snippet session is still valid
-	if (!newSelectedCharRange.length && [textView isSnippetMode]) {
+	if ([newSelectedCharRanges count] && ![[newSelectedCharRanges objectAtIndex:0] rangeValue].length && [textView isSnippetMode]) {
 		[textView checkForCaretInsideSnippet];
 	}
-
-	return newSelectedCharRange;
-
+	return newSelectedCharRanges;
 }
 
 @end
