@@ -376,7 +376,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 					SLog(@"RTextView: suppressed auto-pairing");
 					[super keyDown:theEvent];
 					if(hilite && [[self delegate] respondsToSelector:@selector(highlightBracesWithShift:andWarn:)])
-						[[self delegate] highlightBracesWithShift:-1 andWarn:YES];
+						[(id)[self delegate] highlightBracesWithShift:-1 andWarn:YES];
 					return;
 				}
 
@@ -489,7 +489,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	[super keyDown:theEvent];
 
 	if(hilite && [[self delegate] respondsToSelector:@selector(highlightBracesWithShift:andWarn:)])
-		[[self delegate] highlightBracesWithShift:-1 andWarn:YES];
+		[(id)[self delegate] highlightBracesWithShift:-1 andWarn:YES];
 }
 
 - (void)deleteBackward:(id)sender
@@ -565,7 +565,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if (thisLine.location == position)
 		return context;
 
-	SLog(@"RTextView: parserContextForPosition: %d, line span=%d:%d", position, thisLine.location, thisLine.length);
+	SLog(@"RTextView: parserContextForPosition: %d, line span=%ld:%ld", position, thisLine.location, thisLine.length);
 
 	int i = thisLine.location;
 	BOOL skip = NO;
@@ -651,7 +651,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	} else { // normal completion
 		userRange.location++; // skip past first bad one
 		userRange.length = selection.location - userRange.location;
-		SLog(@" - returned range: %d:%d", userRange.location, userRange.length);
+		SLog(@" - returned range: %ld:%ld", userRange.location, userRange.length);
 
 		// FIXME: do we really need to change it? Cocoa should be doing it .. (and does in Lion)
 		if (os_version < 11.0)
@@ -758,7 +758,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[keyWin toggleToolbarShown:nil];
 
 	if([[self delegate] respondsToSelector:@selector(searchToolbarView)])
-		aSearchField = [[self delegate] searchToolbarView];
+		aSearchField = [(id)[self delegate] searchToolbarView];
 
 	if(aSearchField == nil || ![aSearchField isKindOfClass:[NSSearchField class]]) return;
 
@@ -1055,8 +1055,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	//  we have to check class since it runs in its own thread (but not sure - if one uses
 	//  [self isRConsole] it doesn't work)
 	if([[self delegate] isKindOfClass:[RController class]] & ([[RController sharedController] lastCommittedLength] <= selectedRange.location)) {
-		parseRange = NSMakeRange([[self delegate] lastCommittedLength], 
-				[parseString length]-[[self delegate] lastCommittedLength]);
+		parseRange = NSMakeRange([(id)[self delegate] lastCommittedLength],
+				[parseString length]-[(id)[self delegate] lastCommittedLength]);
 	}
 
 	// sanety check; if it fails bail
@@ -1318,8 +1318,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 		draggingLocation = [self convertPoint:draggingLocation fromView:nil];
 		NSUInteger characterIndex = [self characterIndexOfPoint:draggingLocation];
 		if([[self delegate] isKindOfClass:[RController class]])
-			if(characterIndex < [[self delegate] lastCommittedLength])
-				characterIndex = [[self delegate] lastCommittedLength];
+			if(characterIndex < [(id)[self delegate] lastCommittedLength])
+				characterIndex = [(id)[self delegate] lastCommittedLength];
 		[self setSelectedRange:NSMakeRange(characterIndex,0)];
 
 		NSMutableString *insertionString = [NSMutableString string];
@@ -1354,9 +1354,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 						anError = nil;
 						NSString *cmd = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@r/%@", userDragActionDir, kUserCommandFileName] encoding:NSUTF8StringEncoding error:&anError];
 						if(anError == nil) {
-							[[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
+							[(id)[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
 							NSString *res = [cmd evaluateAsBashCommandWithEnvironment:env atPath:[NSString stringWithFormat:@"%@r", userDragActionDir] error:&anError];
-							[[self delegate] setStatusLineText:@""];
+							[(id)[self delegate] setStatusLineText:@""];
 							if(anError != nil) {
 								NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Snippet Error") 
 										defaultButton:NLS(@"OK") 
@@ -1388,7 +1388,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 						}
 					} else {
 						if([sender draggingSourceOperationMask] == 4) {
-							[insertionString appendString:[NSString stringWithFormat:@"source('%@'${%d:, chdir = ${%d:%@}})%@", 
+							[insertionString appendString:[NSString stringWithFormat:@"source('%@'${%ld:, chdir = ${%ld:%@}})%@",
 								[[filepath stringByReplacingOccurrencesOfRegex:
 									[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath], snip_cnt, snip_cnt+1, 
 										([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
@@ -1400,10 +1400,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 								[filepath stringByAbbreviatingWithTildeInPath], 
 											(i < ([files count]-1)) ? suffix : @""]];
 						else {
-							[insertionString appendString:[NSString stringWithFormat:@"source('%@'${%d:, chdir = ${%d:%@}})%@", 
+							[insertionString appendString:[NSString stringWithFormat:@"source('%@'${%ld:, chdir = ${%ld:%@}})%@",
 								[filepath stringByAbbreviatingWithTildeInPath], snip_cnt, snip_cnt+1,
-								([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , 
-								(i < ([files count]-1)) ? suffix : @""]];
+								([filepath rangeOfString:@"/"].length) ? @"TRUE" : @"FALSE" , (i < ([files count]-1)) ? suffix : @""]];
 							snip_cnt++;
 						}
 					}
@@ -1413,9 +1412,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 				else if([extension isEqualToString:@"rdata"]) {
 					if((userDragActionDir && [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/rdata/%@", userDragActionDir, kUserCommandFileName]])) {
 						anError = nil;
-						[[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
+						[(id)[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
 						NSString *cmd = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@rdata/%@", userDragActionDir, kUserCommandFileName] encoding:NSUTF8StringEncoding error:&anError];
-						[[self delegate] setStatusLineText:@""];
+						[(id)[self delegate] setStatusLineText:@""];
 						if(anError == nil) {
 							NSString *res = [cmd evaluateAsBashCommandWithEnvironment:env atPath:[NSString stringWithFormat:@"%@rdata", userDragActionDir] error:&anError];
 							if(anError != nil) {
@@ -1469,9 +1468,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 					anError = nil;
 					NSString *cmd = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@%@/%@", userDragActionDir, extension, kUserCommandFileName] encoding:NSUTF8StringEncoding error:&anError];
 					if(anError == nil) {
-						[[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
+						[(id)[self delegate] setStatusLineText:NLS(@"press ⌘. to cancel")];
 						NSString *res = [cmd evaluateAsBashCommandWithEnvironment:env atPath:[NSString stringWithFormat:@"%@%@", userDragActionDir, extension] error:&anError];
-						[[self delegate] setStatusLineText:@""];
+						[(id)[self delegate] setStatusLineText:@""];
 						if(anError != nil) {
 							NSAlert *alert = [NSAlert alertWithMessageText:NLS(@"Snippet Error") 
 									defaultButton:NLS(@"OK") 

@@ -102,7 +102,7 @@
 
 		// if no document is associated wit this window, check whether this is a Quartz Cocoa window
 		if (!d && [[(NSObject*)[w delegate] className] isEqualToString:@"QuartzCocoaView"]) {
-			d = [[QuartzCocoaDocument alloc] initWithWindow:w];
+			d = (RDocument*)[[QuartzCocoaDocument alloc] initWithWindow:w];
 			[d makeWindowControllers];
 			[[NSDocumentController sharedDocumentController] addDocument:d];
 			[d release];

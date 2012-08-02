@@ -67,7 +67,7 @@
 			onEdge = [NSNumber numberWithInt:NSMinXEdge];
 
 		if(onEdge) {
-			[[self delegate] toggleHistory:onEdge];
+			[(id)[self delegate] toggleHistory:onEdge];
 			return;
 		}
 
@@ -79,7 +79,7 @@
 	//     (WebView*)webView  [which returns the web view in question]
 	if([[self delegate] respondsToSelector:@selector(supportsWebViewSwipingInHistory)]) {
 
-		WebView* wv = [[self delegate] webView];
+		WebView* wv = [(id)[self delegate] webView];
 
 		CGFloat x = [event deltaX];
 		CGFloat y = [event deltaY];

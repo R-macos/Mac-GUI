@@ -354,7 +354,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	if(!objectData) return;
 
 	for (i = 0; i < numberOfColumns; i++) {
-		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:[NSNumber numberWithInt:i]];
+		NSTableColumn *col = [[NSTableColumn alloc] initWithIdentifier:[NSString stringWithFormat:@"%ld", i]];
 		NSString *colName  = NSArrayObjectAtIndex(objectColumnNames, i);
 		NSInteger colType  = [NSArrayObjectAtIndex(objectColumnTypes, i) intValue];
 		if(colName) {
@@ -377,20 +377,20 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	// column auto-sizing
 	for(i = 0; i < numberOfColumns; i++) {
-		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] setWidth:
+		[[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", i]] setWidth:
 				[editorSource widthForColumn:i andHeaderName:NSArrayObjectAtIndex(objectColumnNames, i)]];
 		if(i+1 < numberOfColumns)
-			[[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] headerCell] controlView] setNextKeyView:[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i+1]] headerCell] controlView]];
+			[[[[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", i]] headerCell] controlView] setNextKeyView:[[[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", i+1]] headerCell] controlView]];
 		else if(i-1 == numberOfColumns)
-			[[[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInt:i]] headerCell] controlView] setNextKeyView:editorSource];
+			[[[[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", i]] headerCell] controlView] setNextKeyView:editorSource];
 	}
 
 	[editorSource sizeLastColumnToFit];
 
 	//tries to fix problem with last row
-	if ( [[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:numberOfColumns-1]] width] < 30 )
-		[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:numberOfColumns-1]]
-				setWidth:[[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:0]] width]];
+	if ( [[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", numberOfColumns-1]] width] < 30 )
+		[[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", numberOfColumns-1]]
+				setWidth:[[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", 0L]] width]];
 
 	[editorSource reloadData];
 
@@ -577,7 +577,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	// Trap ESC while editing column names to cancel editing
 	if (@selector(cancelOperation:) == commandSelector) {
-		NSTableColumn *col = [editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:editedColumnNameIndex]];
+		NSTableColumn *col = [editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", editedColumnNameIndex]];
 		[[col headerCell] setTitle:[[col headerCell] titleBeforeEditing]];
 		editedColumnNameIndex = -1;
 		[[[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]] setFieldEditor:YES];
@@ -595,7 +595,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		|| @selector(insertBacktab:) == commandSelector
 		) {
 
-		NSTableColumn *col = [editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:editedColumnNameIndex]];
+		NSTableColumn *col = [editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", editedColumnNameIndex]];
 		if(![[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]]) return NO;
 		NSString *newColumnName = [[[[[REditor getDEController] window] fieldEditor:NO forObject:[col headerCell]] string] copy];
 
@@ -966,7 +966,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 		return;
 
 	while (current_index != NSNotFound) {
-		[editorSource removeTableColumn:[editorSource tableColumnWithIdentifier:[NSNumber numberWithInteger:current_index]]];
+		[editorSource removeTableColumn:[editorSource tableColumnWithIdentifier:[NSString stringWithFormat:@"%ld", current_index]]];
 		current_index = [cols indexGreaterThanIndex:current_index];
 	}
 
@@ -988,7 +988,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 	} else {
 
 		for(i = 0; i < numberOfColumns; i++)
-			[[[editorSource tableColumns] objectAtIndex:i] setIdentifier:[NSNumber numberWithInteger:i]];
+			[[[editorSource tableColumns] objectAtIndex:i] setIdentifier:[NSString stringWithFormat:@"%ld", i]];
 
 		[editorSource reloadData];
 

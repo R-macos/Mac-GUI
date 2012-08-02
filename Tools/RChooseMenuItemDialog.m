@@ -65,13 +65,13 @@
 
 - (IBAction)menuItemHandler:(id)sender
 {
-	[[self delegate] setSelectedItemIndex:[sender tag]];
-	[[self delegate] setWaitForChoice:NO];
+	[(id)[self delegate] setSelectedItemIndex:[sender tag]];
+	[(id)[self delegate] setWaitForChoice:NO];
 }
 
 - (NSMenu *)menuForEvent:(NSEvent *)event 
 {
-	return [[self delegate] contextMenu];
+	return [(id)[self delegate] contextMenu];
 }
 
 @end
@@ -108,7 +108,7 @@
 	[self setAlphaValue:0.0f];
 
 	dummyTextView = [[RChooseMenuItemDialogTextView alloc] init];
-	[dummyTextView setDelegate:self];
+	[dummyTextView setDelegate:(id)self];
 
 	[self setContentView:dummyTextView];
 

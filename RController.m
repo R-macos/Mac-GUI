@@ -397,10 +397,18 @@ static inline const char* NSStringUTF8String(NSString* self)
 			char *cRLIBS = getenv("R_LIBS");
 			NSString *addPath = [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath];
 			if (![fm fileExistsAtPath:addPath]) { // make sure the directory exists
-				[fm createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
-				[fm createDirectoryAtPath:[[NSString stringWithFormat:@"~/Library/R/%@", Rapp_R_version_short] stringByExpandingTildeInPath] attributes:nil];
-				[fm createDirectoryAtPath:addPath attributes:nil];
-			}
+
+//				[fm createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
+//				[fm createDirectoryAtPath:[[NSString stringWithFormat:@"~/Library/R/%@", Rapp_R_version_short] stringByExpandingTildeInPath] attributes:nil];
+//              [fm createDirectoryAtPath:addPath attributes:nil];
+
+                NSError *err = nil;
+                [fm createDirectoryAtPath:addPath withIntermediateDirectories:YES attributes:nil error:&err];
+                if(err != nil) {
+                    NSBeep();
+                    NSLog(@"The directory '%@' couldn't be created!", addPath);
+                }
+            }
 			if (cRLIBS && *cRLIBS)
 				addPath = [NSString stringWithFormat: @"%s:%@", cRLIBS, addPath];
 			setenv("R_LIBS", [addPath UTF8String], 1);
