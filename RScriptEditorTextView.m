@@ -296,9 +296,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[prefs addObserver:self forKeyPath:showLineNumbersKey options:NSKeyValueObservingOptionNew context:NULL];
 	[prefs addObserver:self forKeyPath:editorSelectionBackgroundColorKey options:NSKeyValueObservingOptionNew context:NULL];
 
-	[self setTextColor:shColorNormal];
-	[self setInsertionPointColor:shColorCursor];
-
+	if(syntaxHighlightingEnabled) {
+		[self setTextColor:shColorNormal];
+		[self setInsertionPointColor:shColorCursor];
+	} else {
+		[self setTextColor:[NSColor blackColor]];
+		[self setInsertionPointColor:[NSColor blackColor]];
+	}
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[self layoutManager] setAllowsNonContiguousLayout:YES];
 #endif
