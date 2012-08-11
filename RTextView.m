@@ -97,6 +97,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if (self) {
 		separatingTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"()'\"+-=/* ,\t]{}^|&!;<>?`\n\\"] retain];
 		undoBreakTokensSet = [[NSCharacterSet characterSetWithCharactersInString: @"+- .,|&*/:!?<>=\n"] retain];
+		wordCharSet = [NSMutableCharacterSet alphanumericCharacterSet];
+		[wordCharSet addCharactersInString:@"_.\\"];
+		[wordCharSet retain];
 	}
 	return self;
 }
@@ -136,6 +139,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 {
 	if(separatingTokensSet) [separatingTokensSet release];
 	if(undoBreakTokensSet) [undoBreakTokensSet release];
+	if(wordCharSet) [wordCharSet release];
 	// if(commentTokensSet) [commentTokensSet release];
 	[super dealloc];
 }
@@ -2099,6 +2103,52 @@ BOOL RTextView_autoCloseBrackets = YES;
 		[env setObject:stext forKey:kShellVarNameSelectedText];
 
 	return (NSDictionary*)env;
+}
+
+/**
+ * Returns the range of the current word.
+ *   finds: [| := caret]  |word  wo|rd  word|
+ * If | is in between whitespaces nothing will be selected.
+ */
+- (NSRange)getRangeForCurrentWord
+{
+	return [self getRangeForCurrentWordOfRange:[self selectedRange]];
+}
+
+- (NSRange)getRangeForCurrentWordOfRange:(NSRange)curRange
+{
+
+	if (curRange.length) return curRange;
+
+	NSString *str = [self string];
+	int curLocation = curRange.location;
+	int start = curLocation;
+	int end = curLocation;
+	unsigned int strLen = [[self string] length];
+
+	if(start) {
+		start--;
+		if(CFStringGetCharacterAtIndex((CFStringRef)str, start) != '\n' || CFStringGetCharacterAtIndex((CFStringRef)str, start) != '\r') {
+			while([wordCharSet characterIsMember:CFStringGetCharacterAtIndex((CFStringRef)str, start)]) {
+				start--;
+				if(start < 0) break;
+			}
+		}
+		start++;
+	}
+
+	while(end < strLen && [wordCharSet characterIsMember:CFStringGetCharacterAtIndex((CFStringRef)str, end)])
+		end++;
+
+	// correct range if found range ends with a .
+	NSRange wordRange = NSMakeRange(start, end-start);
+	if(wordRange.length && CFStringGetCharacterAtIndex((CFStringRef)str, NSMaxRange(wordRange)-1) == '.')
+		wordRange.length--;
+
+	SLog(@"RTextView: returned range for current word: %@", NSStringFromRange(wordRange));
+
+	return(wordRange);
+
 }
 
 #pragma mark -

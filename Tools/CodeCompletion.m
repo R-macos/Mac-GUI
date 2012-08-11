@@ -247,8 +247,8 @@
 	// use internal rcompgen to retrieve completion suggestions;
 	// can be modified by the user via rc.setting s() and rc.options() resp.
 
-	// escape ' since we pass it via @" '...' "
-	linebuffer = [linebuffer stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+	// remove all content in quotes and replace '' by "" for passing it through rcompgen.completion('%@')
+	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"([\"']).*?(?<!\\\\)\\1" withString:@"\"\""];
 
 	// escape backslashes
 	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"\\\\" withString:@"\\"];

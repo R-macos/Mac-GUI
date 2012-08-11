@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-08-11 [HJBB]
+*	Fixed bug for not working code completion if in the
+	completion scope strings wrapped by '' are involved
+
 Last-update: 2012-07-31 [HJBB]
 *	Fixed broken block selection
 *	Fixed minor issue while dragging an item to RConsole or 

@@ -68,7 +68,14 @@ extern BOOL RTextView_autoCloseBrackets;
 @private
 	NSCharacterSet *separatingTokensSet;
 	NSCharacterSet *undoBreakTokensSet;
+	NSMutableCharacterSet *wordCharSet;
 }
+
+// Both methods are already implemented in NSTextView_RAddition but there
+// one cannot init instance variable. That's why it is overwritten here to 
+// be able to speed up getRangeForCurrentWordOfRange enormously
+- (NSRange)getRangeForCurrentWord;
+- (NSRange)getRangeForCurrentWordOfRange:(NSRange)curRange;
 
 - (void)setConsoleMode:(BOOL)isConsole;
 

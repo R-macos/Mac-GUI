@@ -677,7 +677,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// by considering entire lines).
 
 	// Get the text range currently displayed in the view port
-	NSRect visibleRect = [[[self enclosingScrollView] contentView] documentVisibleRect];
+	NSRect visibleRect = [scrollView documentVisibleRect];
 	NSRange visibleRange = [[self layoutManager] glyphRangeForBoundingRectWithoutAdditionalLayout:visibleRect inTextContainer:[self textContainer]];
 
 	if(!visibleRange.length) {
@@ -722,13 +722,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	NSColor *tokenColor = nil;
 
-	size_t tokenEnd, token;
+	size_t token;
 	NSRange tokenRange;
 
 	// first remove the old colors and kQuote
 	// [theTextStorage removeAttribute:NSForegroundColorAttributeName range:textRange];
 	// mainly for suppressing auto-pairing in 
-	[theTextStorage removeAttribute:kLEXToken range:textRange];
+	// [theTextStorage removeAttribute:kLEXToken range:textRange];
 
 	// initialise flex
 	yyuoffset = textRange.location; yyuleng = 0;
@@ -771,22 +771,19 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 				tokenRange = NSIntersectionRange(tokenRange, textRange);
 				if (!tokenRange.length) continue;
 
-				// If the current token is marked as SQL keyword, uppercase it if required.
-				tokenEnd = NSMaxRange(tokenRange) - 1;
-
 				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
 
 				// Add an attribute to be used in the auto-pairing (keyDown:)
 				// to disable auto-pairing if caret is inside of any token found by lex.
 				// For discussion: maybe change it later (only for quotes not keywords?)
-				if(token < 6)
-					NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
+				// if(token < 6)
+				// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
 
 
 				// Add an attribute to be used to distinguish quotes from keywords etc.
 				// used e.g. in completion suggestions
-				else if(token < 4)
-					NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
+				// else if(token < 4)
+				// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
 
 			}
 
@@ -832,22 +829,19 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			tokenRange = NSIntersectionRange(tokenRange, textRange);
 			if (!tokenRange.length) continue;
 
-			// If the current token is marked as SQL keyword, uppercase it if required.
-			tokenEnd = NSMaxRange(tokenRange) - 1;
-
 			NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
 		
 			// Add an attribute to be used in the auto-pairing (keyDown:)
 			// to disable auto-pairing if caret is inside of any token found by lex.
 			// For discussion: maybe change it later (only for quotes not keywords?)
-			if(token < 6)
-				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
+			// if(token < 6)
+			// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
 		
 
 			// Add an attribute to be used to distinguish quotes from keywords etc.
 			// used e.g. in completion suggestions
-			else if(token < 4)
-				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
+			// if(token < 4)
+			// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
 		
 
 		}
