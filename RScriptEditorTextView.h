@@ -48,7 +48,7 @@
 @interface RScriptEditorTextView : RTextView <PreferencesDependent, NSTextStorageDelegate>
 {
 
-	IBOutlet NSScrollView *scrollView;
+	NSScrollView *scrollView;
 
 	NSUserDefaults *prefs;
 

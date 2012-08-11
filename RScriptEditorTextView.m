@@ -122,6 +122,15 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
 
+	// Bind scrollView programmatically - if done in RDocument.xib this'd lead to
+	// calling awakeFromNib twice
+	id scrView = (NSScrollView *)self.superview.superview;
+	if ([scrView isKindOfClass:[NSScrollView class]]) {
+		if(scrollView) [scrollView release];
+		scrollView = [scrView retain];
+		SLog(@"RScriptEditorTextView:awakeFromNib set scrollView");
+	}
+
 	prefs = [[NSUserDefaults standardUserDefaults] retain];
 	[[Preferences sharedPreferences] addDependent:self];
 
@@ -315,6 +324,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	[theTextStorage release];
 
+	if(scrollView) [scrollView release];
 	if(editorToolbar) [editorToolbar release];
 
 	if(highlightColorAttr) [highlightColorAttr release];
