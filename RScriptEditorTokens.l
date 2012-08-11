@@ -88,7 +88,7 @@ functions	(if|f(or|unction)|while)
 
 {ops}						{ return RPT_OPERATOR; }							/* all operators                  */
 {decl}						{ return RPT_DECLARATION; }							/* all declarations               */
-{s}+						{ return RPT_WHITESPACE; }							/* ignore spaces                  */
+{s}+						{  }												/* ignore spaces                  */
 
 {word}+						{ return RPT_WORD; }								/* return any word                */
 

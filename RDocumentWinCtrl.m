@@ -174,7 +174,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	[textView setSelectedRange:NSMakeRange(0,0)];
 	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.5];
 #endif
-	[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
+	// [textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
 	[[self window] setDocumentEdited:NO];
 }
 

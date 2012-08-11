@@ -568,7 +568,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 								selector:@selector(doSyntaxHighlighting) 
 								object:nil];
 
-		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.01f];
+		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05f];
 
 		// Cancel setting undo break point
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
@@ -576,7 +576,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 								object:nil];
 
 		// Improve undo behaviour, i.e. it depends how fast the user types
-		[self performSelector:@selector(breakUndoCoalescing) withObject:nil afterDelay:0.8];
+		[self performSelector:@selector(breakUndoCoalescing) withObject:nil afterDelay:0.8f];
 
 	}
 
@@ -669,9 +669,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	NSString *selfstr    = [theTextStorage string];
 	NSInteger strlength  = (NSInteger)[selfstr length];
 
-
 	// do not highlight if text larger than 10MB
-	if(strlength > 10000000) return;
+	if(strlength > 10000000 || !strlength) return;
 
 	// == Do highlighting partly (max R_SYNTAX_HILITE_BIAS*2 around visibleRange
 	// by considering entire lines).
@@ -706,10 +705,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	NSRange textRange = NSMakeRange(start, end-start);
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-	[[self layoutManager] ensureLayoutForCharacterRange:textRange];
-#endif
-
 	// only to be sure that nothing went wrongly
 	textRange = NSIntersectionRange(textRange, NSMakeRange(0, [theTextStorage length])); 
 
@@ -725,11 +720,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	size_t token;
 	NSRange tokenRange;
 
-	// first remove the old colors and kQuote
-	// [theTextStorage removeAttribute:NSForegroundColorAttributeName range:textRange];
-	// mainly for suppressing auto-pairing in 
-	// [theTextStorage removeAttribute:kLEXToken range:textRange];
-
 	// initialise flex
 	yyuoffset = textRange.location; yyuleng = 0;
 
@@ -739,7 +729,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 			// now loop through all the tokens
 			while ((token = rdlex())) {
-		// NSLog(@"t %d", token);
 				switch (token) {
 					case RDPT_COMMENT:
 					    tokenColor = shColorComment;
@@ -773,18 +762,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
 
-				// Add an attribute to be used in the auto-pairing (keyDown:)
-				// to disable auto-pairing if caret is inside of any token found by lex.
-				// For discussion: maybe change it later (only for quotes not keywords?)
-				// if(token < 6)
-				// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
-
-
-				// Add an attribute to be used to distinguish quotes from keywords etc.
-				// used e.g. in completion suggestions
-				// else if(token < 4)
-				// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
-
 			}
 
 	} else {
@@ -793,7 +770,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		// now loop through all the tokens
 		while ((token = yylex())) {
-	// NSLog(@"t %d", token);
 			switch (token) {
 				case RPT_SINGLE_QUOTED_TEXT:
 				case RPT_DOUBLE_QUOTED_TEXT:
@@ -814,9 +790,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 				case RPT_VARIABLE:
 				    tokenColor = shColorIdentifier;
 				    break;
-				case RPT_WHITESPACE:
-				    continue;
-				    break;
 				default:
 				    tokenColor = shColorNormal;
 			}
@@ -831,19 +804,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 			NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
 		
-			// Add an attribute to be used in the auto-pairing (keyDown:)
-			// to disable auto-pairing if caret is inside of any token found by lex.
-			// For discussion: maybe change it later (only for quotes not keywords?)
-			// if(token < 6)
-			// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kLEXToken, kLEXTokenValue, tokenRange);
-		
-
-			// Add an attribute to be used to distinguish quotes from keywords etc.
-			// used e.g. in completion suggestions
-			// if(token < 4)
-			// 	NSMutableAttributedStringAddAttributeValueRange(theTextStorage, kQuote, kQuoteValue, tokenRange);
-		
-
 		}
 	}
 
@@ -861,7 +821,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[theTextStorage endEditing];
 	isSyntaxHighlighting = NO;
 
-	[self setNeedsDisplay:YES];
+	[self setNeedsDisplayInRect:[self bounds]];
 
 }
 
