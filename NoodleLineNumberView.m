@@ -289,6 +289,12 @@
 	return left;
 }
 
+// - (void)drawBackgroundInRect:(NSRect)rect
+// {
+//   [[NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0] set];
+//   [NSBezierPath fillRect: rect];
+// }
+
 - (void)drawHashMarksAndLabelsInRect:(NSRect)aRect
 {
 
@@ -329,13 +335,12 @@
 	range.length++;
 
 	CGFloat boundsRULERMargin2 = NSWidth(bounds) - RULER_MARGIN2;
-	CGFloat boundsWidthRULER   = NSWidth(bounds) - RULER_MARGIN;
+	CGFloat boundsWidthRULER   = NSWidth(bounds) - RULER_MARGIN + 1;
 	CGFloat yinsetMinY         = yinset - NSMinY(visibleRect);
 	CGFloat rectHeight;
 	CGFloat last_y = -10.0f;
 	CGFloat y;
-	// BOOL didDrawFoldingLine = NO;
-	// [[NSColor grayColor] setFill];
+	NSInteger foldingDepth = 0;
 
 	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
@@ -353,28 +358,91 @@
 				// Note that the ruler view is only as tall as the visible
 				// portion. Need to compensate for the clipview's coordinates.
 
+				// Check for folding markers
+				// NSRange r;
+				// if(line < [lines count]-1) {
+				// 	r = NSMakeRange(index, [NSArrayObjectAtIndex(lines, line+1) unsignedIntegerValue]-1-index);
+				// } else {
+				// 	r = NSMakeRange(index, [[clientView string] length]-index);
+				// }
+				// 
+				// NSString *s = [[clientView string] substringWithRange:r];
+				// NSString *m = @"";
+				// unichar c;
+				// 
+				// if(r.length) {
+				// 	NSInteger i = [s length]-1;
+				// 	NSInteger type = 0;
+				// 	while(i >= 0) {
+				// 		c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
+				// 		type = [(RScriptEditorTextView*)clientView parserContextForPosition:i+index];
+				// 		if(c==' ' || c=='\t' || type == 4) {
+				// 			i--;
+				// 			continue;
+				// 		}
+				// 		if(c=='{' && type == 5) {
+				// 			m = @" ▼";
+				// 			foldingDepth++;
+				// 			while(i>=0) {
+				// 				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
+				// 				if(c=='}' && [(RScriptEditorTextView*)clientView parserContextForPosition:i] == 5) {
+				// 					m = @"";
+				// 					foldingDepth--;
+				// 					break;
+				// 				}
+				// 				i--;
+				// 			}
+				// 			break;
+				// 		}
+				// 		if(c=='}') {
+				// 			m = @" ▲";
+				// 			foldingDepth--;
+				// 			i--;
+				// 			while(i>=0) {
+				// 				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
+				// 				if(c==' ' || c=='\t') {
+				// 					i--;
+				// 					continue;
+				// 				} else {
+				// 					m = @"";
+				// 					foldingDepth++;
+				// 					break;
+				// 				}
+				// 				i--;
+				// 			}
+				// 		}
+				// 		break;
+				// 	}
+				// }
+
 				// Line numbers are internally stored starting at 0
 				labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
 
 				// How many digits has the current line number?
 				NSUInteger idx = line + 1;
-				NSInteger numOfDigits = 0;
+				NSInteger numOfDigits = 0; // 2 := folding marker width
 				while(idx) { numOfDigits++; idx/=10; }
 
 				rectHeight = NSHeight(rects[0]);
 				y = yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - maxHeightOfGlyph) >> 1);
 				if(y != last_y) {
-					// 	didDrawFoldingLine = NO;
+
+					// if(foldingDepth) {
+					// 	NSColor *c = [NSColor colorWithCalibratedWhite:(0.95f - foldingDepth*0.04f) alpha:1.0f];
+					// 	[c setFill];
+					// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
+					// } else {
+					// 	NSColor *c = [NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0];
+					// 	[c setFill];
+					// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
+					// }
+
+
 					// Draw string flush right, centered vertically within the line
 					[labelText drawInRect:
 						NSMakeRect(boundsWidthRULER - (maxWidthOfGlyph * numOfDigits), y,
 							boundsRULERMargin2, rectHeight)
 						withAttributes:textAttributes];
-				// } else {
-				// 	if(!didDrawFoldingLine) {
-				// 		NSRectFill(NSMakeRect(0, NSMaxY(rects[rectCount-1])-1, NSWidth(bounds), 2));
-				// 		didDrawFoldingLine = YES;
-				// 	}
 				}
 				last_y = y;
 			}
@@ -396,7 +464,169 @@
 	if (![[self clientView] isKindOfClass:[NSTextView class]]) return;
 	view = (NSTextView *)[self clientView];
 
-	line = [self lineNumberForLocation:[self convertPoint:[theEvent locationInWindow] fromView:nil].y];
+	NSPoint p = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+
+	line = [self lineNumberForLocation:p.y];
+
+	if(0 && (NSWidth([self bounds]) - RULER_MARGIN) - p.x >= 0 && (NSWidth([self bounds]) - RULER_MARGIN) - p.x < 7) {
+
+		NSUInteger caretPosition = 0;
+		NSArray *lines           = [self lineIndices];
+		NSInteger index = [NSArrayObjectAtIndex(lines, line-1) unsignedIntegerValue];
+		
+		// Check for folding markers
+		NSRange r;
+		NSUInteger selectionEnd = 0;
+		if (line < [lines count]) {
+			selectionEnd = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue] - 1;
+		} else {
+			selectionEnd = [[clientView string] length];
+		}
+		r = NSMakeRange(index, selectionEnd - index);
+
+		NSString *s = [[clientView string] substringWithRange:r];
+		NSLog(@"bibiko '%@'", s);
+		NSInteger foldItem = 0;
+		unichar c;
+
+		if(r.length) {
+			NSInteger i = [s length]-1;
+			NSInteger type = 0;
+			while(i >= 0) {
+				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
+				type = [(RScriptEditorTextView*)clientView parserContextForPosition:i+index];
+				if(c==' ' || c=='\t' || type == 4) {
+					i--;
+					continue;
+				}
+				if(c=='{' && type == 5) {
+					foldItem = 1;
+					while(i>=0) {
+						c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
+						if(c=='}' && [(RScriptEditorTextView*)clientView parserContextForPosition:i] == 5) {
+							foldItem = 0;
+							break;
+						}
+						i--;
+					}
+					break;
+				}
+				if(c=='}') {
+					foldItem = 2;
+					i--;
+					while(i>=0) {
+						c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
+						if(c==' ' || c=='\t') {
+							i--;
+							continue;
+						} else {
+							foldItem = 0;
+							break;
+						}
+						i--;
+					}
+				}
+				break;
+			}
+		}
+		
+		if(foldItem < 2) {
+			caretPosition = [NSArrayObjectAtIndex([self lineIndices], line) unsignedIntegerValue];
+			if(caretPosition > 0) caretPosition--;
+		} else {
+			caretPosition = index;
+		}
+
+		NSUInteger stringLength = [[clientView string] length];
+
+		if(!stringLength) return;
+
+		CFStringRef parserStringRef = (CFStringRef)[clientView string];
+
+		unichar co = ' '; // opening char
+		unichar cc = ' '; // closing char
+	
+		if(caretPosition == 0 || caretPosition >= stringLength) return;
+	
+		NSInteger pcnt = 0; // ) counter
+		NSInteger bcnt = 0; // ] counter
+		NSInteger scnt = 0; // } counter
+
+		// look for the first non-balanced closing bracket
+		for(NSUInteger i=caretPosition; i<stringLength; i++) {
+			if([(RScriptEditorTextView*)clientView parserContextForPosition:i] != pcExpression) continue;
+			switch(CFStringGetCharacterAtIndex(parserStringRef, i)) {
+				case ')': 
+					if(!pcnt) {
+						co='(';cc=')';
+						i=stringLength;
+					}
+					pcnt++; break;
+				case '(': pcnt--; break;
+				case ']': 
+					if(!bcnt) {
+						co='[';cc=']';
+						i=stringLength;
+					}
+					bcnt++; break;
+				case '[': bcnt--; break;
+				case '}': 
+					if(!scnt) {
+						co='{';cc='}';
+						i=stringLength;
+					}
+					scnt++; break;
+				case '{': scnt--; break;
+			}
+		}
+
+		NSInteger start = -1;
+		NSInteger end = -1;
+		NSInteger bracketCounter = 0;
+
+		c = CFStringGetCharacterAtIndex(parserStringRef, caretPosition);
+		if(c == cc)
+			bracketCounter--;
+		if(c == co)
+			bracketCounter++;
+
+		for(NSInteger i=caretPosition; i>=0; i--) {
+			if([(RScriptEditorTextView*)clientView parserContextForPosition:i] != pcExpression) continue;
+			c = CFStringGetCharacterAtIndex(parserStringRef, i);
+			if(c == co) {
+				if(!bracketCounter) {
+					start = i;
+					break;
+				}
+				bracketCounter--;
+			}
+			if(c == cc) {
+				bracketCounter++;
+			}
+		}
+		if(start < 0 ) return;
+
+		bracketCounter = 0;
+		for(NSUInteger i=caretPosition; i<stringLength; i++) {
+			if([(RScriptEditorTextView*)clientView parserContextForPosition:i] != pcExpression) continue;
+			c = CFStringGetCharacterAtIndex(parserStringRef, i);
+			if(c == co) {
+				bracketCounter++;
+			}
+			if(c == cc) {
+				if(!bracketCounter) {
+					end = i+1;
+					break;
+				}
+				bracketCounter--;
+			}
+		}
+
+		if(end < 0 || bracketCounter || end-start < 1) return;
+
+		[clientView setSelectedRange:NSMakeRange(start, end-start)];
+		return;
+	}
 	dragSelectionStartLine = line;
 
 	if (line != NSNotFound)
@@ -566,6 +796,8 @@
 		newThickness = maxWidthOfGlyph8;
 	else
 		newThickness = 100;
+
+	// newThickness += 12.0f;
 
 	currentNumberOfLines = lineCount;
 

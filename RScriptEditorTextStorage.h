@@ -34,7 +34,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-
 @interface RScriptEditorTextStorage : NSTextStorage
 {
 
@@ -42,6 +41,9 @@
 	BOOL _lineFoldingEnabled;
 	IMP _getImp;
 	IMP _setImp;
+	IMP _strImp;
+	IMP _replImp;
+	IMP _editImp;
 
 }
 

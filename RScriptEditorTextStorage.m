@@ -44,6 +44,9 @@
 static NSTextAttachment *sharedAttachment = nil;
 static SEL _getSel;
 static SEL _setSel;
+static SEL _strSel;
+static SEL _replSel;
+static SEL _editSel;
 
 + (void)initialize
 {
@@ -53,8 +56,12 @@ static SEL _setSel;
 		sharedAttachment = [[NSTextAttachment alloc] init];
 		[sharedAttachment setAttachmentCell:cell];
 		[cell release];
-		_getSel = @selector(attributesAtIndex:effectiveRange:);
-		_setSel = @selector(setAttributes:range:);
+		_getSel  = @selector(attributesAtIndex:effectiveRange:);
+		_setSel  = @selector(setAttributes:range:);
+		_strSel  = @selector(string);
+		_replSel = @selector(replaceCharactersInRange:withString:);
+		_editSel = @selector(edited:range:changeInLength:);
+		_lineFoldingEnabled = NO;
 	}
 }
 
@@ -69,8 +76,11 @@ static SEL _setSel;
 
 	if (self != nil) {
 		_attributedString = [[NSTextStorage alloc] init];
-		_getImp = [_attributedString methodForSelector:_getSel];
-		_setImp = [_attributedString methodForSelector:_setSel];
+		_getImp  = [_attributedString methodForSelector:_getSel];
+		_setImp  = [_attributedString methodForSelector:_setSel];
+		_strImp  = [_attributedString methodForSelector:_strSel];
+		_replImp = [_attributedString methodForSelector:_replSel];
+		_editImp = [_attributedString methodForSelector:_editSel];
 	}
 
 	return self;
@@ -80,15 +90,15 @@ static SEL _setSel;
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_attributedString release];
+	if(sharedAttachment) [sharedAttachment release];
 	[super dealloc];
 }
 
 // NSAttributedString primitives
 - (NSString *)string
 { 
-	return [_attributedString string];
+	return (*_strImp)(_attributedString, _strSel);
 }
-
 
 - (NSDictionary *)attributesAtIndex:(NSUInteger)location effectiveRange:(NSRangePointer)range
 {
@@ -123,14 +133,14 @@ static SEL _setSel;
 // NSMutableAttributedString primitives
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)str
 {
-	[_attributedString replaceCharactersInRange:range withString:str];
-	[self edited:NSTextStorageEditedCharacters range:range changeInLength:[str length] - range.length];
+	(*_replImp)(_attributedString, _replSel, range, str);
+	(*_editImp)(self, _editSel, NSTextStorageEditedCharacters, range, [str length] - range.length);
 }
 
 - (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range
 {
 	(*_setImp)(_attributedString, _setSel, attrs, range);
-	[self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
+	(*_editImp)(self, _editSel, NSTextStorageEditedAttributes, range, 0);
 }
 
 // Attribute Fixing Overrides

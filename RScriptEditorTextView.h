@@ -79,13 +79,12 @@
 	BOOL deleteBackward;
 	BOOL startListeningToBoundChanges;
 	BOOL isSyntaxHighlighting;
+	NSInteger breakSyntaxHighlighting;
 
 	int currentHighlight;
 	double braceHighlightInterval; // interval to flash brace highlighting for
 
-	// <TODO> enable for folding
-	// RScriptEditorTextStorage *theTextStorage;
-	NSTextStorage *theTextStorage;
+	RScriptEditorTextStorage *theTextStorage;
 
 	NSDictionary *highlightColorAttr;
 

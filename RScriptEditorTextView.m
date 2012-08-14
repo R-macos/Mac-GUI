@@ -122,6 +122,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
 
+	breakSyntaxHighlighting = 0;
+
 	// Bind scrollView programmatically - if done in RDocument.xib this'd lead to
 	// calling awakeFromNib twice
 	id scrView = (NSScrollView *)self.superview.superview;
@@ -136,9 +138,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	lineNumberingEnabled = [Preferences flagForKey:showLineNumbersKey withDefault:NO];
 
-	// <TODO> enable for folding
-	// theTextStorage = [[RScriptEditorTextStorage alloc] init];
-	theTextStorage = [self textStorage];
+	theTextStorage = [[RScriptEditorTextStorage alloc] init];
 
 	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
 	[theTextStorage setDelegate:self];
@@ -354,6 +354,15 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 }
 
+- (void)setNonSyntaxHighlighting
+{
+	[theTextStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
+	[theTextStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
+	[self setTextColor:[NSColor blackColor]];
+	[self setInsertionPointColor:[NSColor blackColor]];
+	[self setNeedsDisplayInRect:[self bounds]];
+}
+
 /**
  * This method is called as part of Key Value Observing which is used to watch for prefernce changes which effect the interface.
  */
@@ -439,12 +448,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:showSyntaxColoringKey]) {
 		syntaxHighlightingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		if(syntaxHighlightingEnabled) {
-			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.1];
+			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05f];
 		} else {
-			[theTextStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
-			[self setNeedsDisplayInRect:[self bounds]];
+			[self performSelector:@selector(setNonSyntaxHighlighting) withObject:nil afterDelay:0.05f];
 		}
-
 	} else if ([keyPath isEqualToString:enableLineWrappingKey]) {
 		[self updateLineWrappingMode];
 		[self setNeedsDisplayInRect:[self bounds]];
@@ -560,6 +567,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// if the user really changed the text
 	if(editedMask != 1) {
+
+		// For larger text break a running syntax highlighting for user interaction
+		// to make them more responsive (typing and scrolling)
+		if([[theTextStorage string] length] > 120000) {
+			breakSyntaxHighlighting = 1;
+		}
 
 		[self checkSnippets];
 
@@ -762,6 +775,20 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 				NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
 
+				if(breakSyntaxHighlighting) {
+
+					// Cancel calling doSyntaxHighlighting
+					[NSObject cancelPreviousPerformRequestsWithTarget:self 
+											selector:@selector(doSyntaxHighlighting) 
+											object:nil];
+
+					[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.15f];
+
+					breakSyntaxHighlighting = 0;
+					break;
+
+				}
+
 			}
 
 	} else {
@@ -803,7 +830,21 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			if (!tokenRange.length) continue;
 
 			NSMutableAttributedStringAddAttributeValueRange(theTextStorage, NSForegroundColorAttributeName, tokenColor, tokenRange);
-		
+
+			if(breakSyntaxHighlighting) {
+
+				// Cancel calling doSyntaxHighlighting
+				[NSObject cancelPreviousPerformRequestsWithTarget:self 
+										selector:@selector(doSyntaxHighlighting) 
+										object:nil];
+
+				[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.15f];
+
+				breakSyntaxHighlighting = 0;
+				break;
+
+			}
+
 		}
 	}
 
@@ -879,8 +920,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 /**
  * Scrollview delegate after the textView's view port was changed.
- * Manily used to update the syntax highlighting for a large text size, line numbering rendering, and
- * status line size checking
+ * Manily used to update the syntax highlighting for a large text size
  */
 - (void)boundsDidChangeNotification:(NSNotification *)notification
 {
@@ -892,6 +932,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 									object:nil];
 
 		if(![theTextStorage changeInLength]) {
+			if([[theTextStorage string] length] > 120000)
+				breakSyntaxHighlighting = 2;
 			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
 		}
 
@@ -900,7 +942,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 }
 
 #pragma mark -
-#pragma mark folding
+#pragma mark Folding
 
 - (void)foldSelectedLines:(id)sender
 {

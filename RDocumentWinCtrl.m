@@ -376,6 +376,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if(plainFile) [fnListBox setHidden:YES];
 
 	[super windowDidLoad];
+	[[self window] makeKeyAndOrderFront:self];
 
 	// TODO control font size due to tollbar setting small or normal
 	// now the new size will set for any new opened doc
@@ -1186,6 +1187,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (NSArray *)textView:(NSTextView *)aTextView completions:(NSArray *)words forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index 
 {
 
+	NSInteger scopeBias = 500;
+
 	NSRange sr = [aTextView selectedRange];
 	BOOL texMode = (sr.location && [[textView string] characterAtIndex:sr.location-1] == '\\') ? YES : NO;
 
@@ -1193,13 +1196,16 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	SLog(@"completion attempt; cursor at %d, complRange: %d-%d", sr.location, charRange.location, charRange.location+charRange.length);
 
-	*index=0;
+	if(charRange.length)
+		*index=0;
+	else
+		*index=-1;
 
 	// avoid selecting of token if nothing was found
 	// [textView setSelectedRange:NSMakeRange(NSMaxRange(sr), 0)];
 
 	NSMutableSet *uniqueArray = [NSMutableSet setWithCapacity:100];
-
+	
 	NSString *currentWord = [[aTextView string] substringWithRange:charRange];
 
 	if([self isRdDocument]) {
@@ -1214,14 +1220,44 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			}
 		} else {
 			// For better current function detection we pass maximal 1000 left from caret
-			[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
-														 inTextView:aTextView]];
+			// and considering full starting line
+			NSRange scopeRange;
+			NSString *str = [aTextView string];
+			if(sr.location > scopeBias) {
+				NSInteger start = sr.location - scopeBias;
+				if (start > 0)
+					while(start > 0) {
+						if(CFStringGetCharacterAtIndex((CFStringRef)str, start)=='\n')
+							break;
+						start--;
+					}
+				if(start < 0) start = 0;
+				scopeRange = NSMakeRange(start, caretPosition - start);
+			} else {
+				scopeRange = NSMakeRange(0, caretPosition);
+			}
+			[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:scopeRange inTextView:aTextView]];
 			[uniqueArray addObjectsFromArray:words];
 		}
 	} else {
-		// For better current function detection we pass maximal 1000 left from caret
-		[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:(sr.location > 1000) ? NSMakeRange(caretPosition-1000, 1000) : NSMakeRange(0, caretPosition)
-													 inTextView:aTextView]];
+		// For better current function detection we pass maximal scopeBias left from caret
+		// and considering full starting line
+		NSRange scopeRange;
+		NSString *str = [aTextView string];
+		if(sr.location > scopeBias) {
+			NSInteger start = sr.location - scopeBias;
+			if (start > 0)
+				while(start > 0) {
+					if(CFStringGetCharacterAtIndex((CFStringRef)str, start)=='\n')
+						break;
+					start--;
+				}
+			if(start < 0) start = 0;
+			scopeRange = NSMakeRange(start, caretPosition - start);
+		} else {
+			scopeRange = NSMakeRange(0, caretPosition);
+		}
+		[uniqueArray addObjectsFromArray:[CodeCompletion retrieveSuggestionsForScopeRange:scopeRange inTextView:aTextView]];
 	}
 
 	// Only parse for words if text size is less than 3MB

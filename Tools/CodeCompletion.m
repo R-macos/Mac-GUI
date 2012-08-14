@@ -211,8 +211,8 @@
 		return nil;
 	}
 
-	// delete all comments
-	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"(?sm)#.*?$" withString:@""];
+	// delete all lines consisting of comments
+	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"(?sm)^\\s*#.*?$" withString:@""];
 
 	// convert scope string to single line
 	linebuffer = [linebuffer stringByReplacingOccurrencesOfRegex:@"[\n\r\t]+" withString:@" "];
