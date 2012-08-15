@@ -33,15 +33,21 @@
  */
 
 #import <Cocoa/Cocoa.h>
-
+#import "RScriptEditorTextStorage.h"
 
 @interface RScriptEditorGlyphGenerator : NSGlyphGenerator <NSGlyphStorage>
 {
 
 	// the original glyph generation requester
 	id <NSGlyphStorage> _destination;
+	RScriptEditorTextStorage *theTextStorage;
 	NSGlyph nullGlyph;
 	IMP _attrStrImp;
+	IMP _foldImp;
+	IMP _foldindImp;
 
 }
+
+- (void)setTextStorage:(RScriptEditorTextStorage*)textStorage;
+
 @end

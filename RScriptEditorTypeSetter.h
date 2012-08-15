@@ -33,11 +33,19 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "RScriptEditorTextStorage.h"
+#import <objc/objc-runtime.h>
+#include <objc/objc-class.h>
 
 
 @interface RScriptEditorTypeSetter : NSATSTypesetter
 {
 
+	RScriptEditorTextStorage *_attributedString;
+	IMP _foldImp;
+
 }
+
+- (void)setTextStorage:(RScriptEditorTextStorage*)textStorage;
 
 @end

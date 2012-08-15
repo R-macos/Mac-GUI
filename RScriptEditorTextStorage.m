@@ -47,6 +47,8 @@ static SEL _setSel;
 static SEL _strSel;
 static SEL _replSel;
 static SEL _editSel;
+static SEL _getlSel;
+
 
 + (void)initialize
 {
@@ -61,7 +63,8 @@ static SEL _editSel;
 		_strSel  = @selector(string);
 		_replSel = @selector(replaceCharactersInRange:withString:);
 		_editSel = @selector(edited:range:changeInLength:);
-		_lineFoldingEnabled = NO;
+		_getlSel = @selector(attribute:atIndex:longestEffectiveRange:inRange:);
+
 	}
 }
 
@@ -80,7 +83,15 @@ static SEL _editSel;
 		_setImp  = [_attributedString methodForSelector:_setSel];
 		_strImp  = [_attributedString methodForSelector:_strSel];
 		_replImp = [_attributedString methodForSelector:_replSel];
-		_editImp = [_attributedString methodForSelector:_editSel];
+		_editImp = [self methodForSelector:_editSel];
+		_getlImp = [_attributedString methodForSelector:_getlSel];
+
+		foldedCounter = 0;
+
+		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+			foldedRanges[i][0] = -1;
+			foldedRanges[i][1] = 0;
+		}
 	}
 
 	return self;
@@ -94,6 +105,137 @@ static SEL _editSel;
 	[super dealloc];
 }
 
+- (BOOL)hasFoldedItems
+{
+	return (foldedCounter == 0) ? NO : YES;
+}
+
+- (NSInteger)foldedAtIndex:(NSInteger)index
+{
+
+	if(!foldedCounter) return -1;
+
+	NSInteger i = 0;
+	for(i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+		if(foldedRanges[i][0] <= index && foldedRanges[i][0]+foldedRanges[i][1] > index) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+- (NSInteger)foldedForIndicatorAtIndex:(NSInteger)index
+{
+
+	if(!foldedCounter) return -1;
+
+	if(index) {
+		// Folded ranges are stored from { to } but indicator will drawn inside of { and }
+		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+			if(foldedRanges[i][0] > -1 && foldedRanges[i][0] <= (index-1) && foldedRanges[i][0]+foldedRanges[i][1] > index+1) {
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
+- (NSInteger)registerFoldedRange:(NSRange)range
+{
+
+	NSInteger index = -1;
+	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+		if(foldedRanges[i][0] == -1) {
+			index = i;
+			foldedRanges[i][0] = (NSInteger)range.location;
+			foldedRanges[i][1] = (NSInteger)range.length;
+			foldedCounter++;
+			break;
+		}
+	}
+
+	return(index);
+
+}
+
+- (BOOL)removeFoldedRangeWithId:(NSNumber*)index
+{
+
+	NSInteger i = [index integerValue];
+
+	if(i < 0 || i >= R_MAX_FOLDED_ITEMS) {
+		[self removeAllFoldedRanges];
+		return NO;
+	}
+
+	[[[self delegate] undoManager] disableUndoRegistration];
+
+	NSRange range = NSMakeRange(foldedRanges[i][0], foldedRanges[i][1]);
+	range = NSIntersectionRange(NSMakeRange(0, [_attributedString length]), range);
+	if(range.length) {
+		[self beginEditing];
+		// [self removeAttribute:foldingAttributeName range:range];
+		[self removeAttribute:foldingAttributeId range:range];
+		[self removeAttribute:NSCursorAttributeName range:range];
+		[self removeAttribute:NSToolTipAttributeName range:range];
+		[self endEditing];
+	}
+
+	foldedRanges[i][0] = -1;
+	foldedRanges[i][1] = 0;
+	foldedCounter--;
+	if(foldedCounter < 0) foldedCounter = 0;
+
+	[[[self delegate] undoManager] enableUndoRegistration];
+
+	return YES;
+}
+
+- (void)removeAllFoldedRanges
+{
+	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+		foldedRanges[i][0] = -1;
+		foldedRanges[i][1] = 0;
+	}
+	[[[self delegate] undoManager] disableUndoRegistration];
+	NSRange range = NSMakeRange(0, [_attributedString length]);
+	[self beginEditing];
+	// [self removeAttribute:foldingAttributeName range:range];
+	[self removeAttribute:foldingAttributeId range:range];
+	[self removeAttribute:NSCursorAttributeName range:range];
+	[self removeAttribute:NSToolTipAttributeName range:range];
+	[self endEditing];
+	[[[self delegate] undoManager] enableUndoRegistration];
+	foldedCounter = 0;
+}
+
+- (BOOL)existsFoldedRange:(NSRange)range
+{
+
+	if(!foldedCounter) return NO;
+
+	BOOL success = NO;
+	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+		if(foldedRanges[i][0] == range.location && foldedRanges[i][1] == range.length) {
+			success = YES;
+			break;
+		}
+	}
+
+	return success;
+	
+}
+
+- (NSRange)foldedRangeAtIndex:(NSInteger)index
+{
+
+	if(!foldedCounter || index < 0 || index > R_MAX_FOLDED_ITEMS) return NSMakeRange(NSNotFound, 0);
+
+	NSInteger loc = foldedRanges[index][0];
+	if(loc == -1) return NSMakeRange(NSNotFound, 0);
+	return NSMakeRange(loc, foldedRanges[index][1]-foldedRanges[index][0]);
+}
+
 // NSAttributedString primitives
 - (NSString *)string
 { 
@@ -105,21 +247,32 @@ static SEL _editSel;
 
 	NSDictionary *attributes = (*_getImp)(_attributedString, _getSel, location, range);
 
-	if(!_lineFoldingEnabled) return attributes;
+	if(!foldedCounter) return attributes;
 
-	id value;
 	NSRange effectiveRange;
 
-	value = [attributes objectForKey:foldingAttributeName];
-	if (value && [value boolValue]) {
-		[_attributedString attribute:foldingAttributeName atIndex:location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, [_attributedString length])];
+	// Check if location is inside folded range for drawing indicator
+	NSInteger index = -1;
+	if(location) {
+		// Notes folded ranges are stored from { to } but indicator will drawn inside of { and }
+		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+			if(foldedRanges[i][0] <= (location-1) && foldedRanges[i][0]+foldedRanges[i][1] > location+2) {
+				index = i;
+				break;
+			}
+		}
+	}
 
+	if (index > -1) {
+		effectiveRange = NSMakeRange(foldedRanges[index][0]+1, foldedRanges[index][1]-2);
 		// We adds NSAttachmentAttributeName if in lineFoldingAttributeName
 		if (location == effectiveRange.location) { // beginning of a folded range
+
 			NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
 			[dict setObject:sharedAttachment forKey:NSAttachmentAttributeName];
 			attributes = [dict autorelease];
 			effectiveRange.length = 1;
+
 		} else {
 			++(effectiveRange.location); --(effectiveRange.length);
 		}
@@ -128,6 +281,29 @@ static SEL _editSel;
 
 	return attributes;
 
+}
+
+- (void)edited:(NSUInteger)mask range:(NSRange)oldRange changeInLength:(NSInteger)lengthChange
+{
+
+	if(foldedCounter && mask == NSTextStorageEditedCharacters) {
+		// update foldedRanges array
+		NSInteger index = oldRange.location;
+		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+			if(index < foldedRanges[i][0]) {
+				if(foldedRanges[i][0] >= oldRange.location && foldedRanges[i][0]+foldedRanges[i][1] <= NSMaxRange(oldRange)) {
+					[self removeFoldedRangeWithId:[NSNumber numberWithInt:i]];
+					continue;
+				}
+				foldedRanges[i][0] += lengthChange;
+				if(foldedRanges[i][0] < -1) {
+					[self removeFoldedRangeWithId:[NSNumber numberWithInt:i]];
+				}
+			}
+		}
+	}
+
+	[super edited:mask range:oldRange changeInLength:lengthChange];
 }
 
 // NSMutableAttributedString primitives

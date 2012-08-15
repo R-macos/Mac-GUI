@@ -34,7 +34,7 @@
 
 #import "RScriptEditorTextView.h"
 #import "RScriptEditorTextStorage.h"
-#import "RScriptEditorTypesetter.h"
+#import "RScriptEditorTypeSetter.h"
 #import "RScriptEditorLayoutManager.h"
 #import "FoldingSignTextAttachmentCell.h"
 #import "RGUI.h"
@@ -63,6 +63,7 @@ typedef struct rd_buffer_state *RD_BUFFER_STATE;
 void rd_switch_to_buffer(RD_BUFFER_STATE);
 RD_BUFFER_STATE rd_scan_string (const char *);
 
+static SEL _foldedSel;
 
 #pragma mark -
 #pragma mark attribute definition 
@@ -80,7 +81,7 @@ RD_BUFFER_STATE rd_scan_string (const char *);
 
 #pragma mark -
 
-#define R_SYNTAX_HILITE_BIAS 3000
+#define R_SYNTAX_HILITE_BIAS 2000
 #define R_MAX_TEXT_SIZE_FOR_SYNTAX_HIGHLIGHTING 20000000
 
 
@@ -123,7 +124,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
 
 	breakSyntaxHighlighting = 0;
-
+	_foldedSel = @selector(foldedAtIndex:);
+	
 	// Bind scrollView programmatically - if done in RDocument.xib this'd lead to
 	// calling awakeFromNib twice
 	id scrView = (NSScrollView *)self.superview.superview;
@@ -142,6 +144,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
 	[theTextStorage setDelegate:self];
+	_foldedImp = [theTextStorage methodForSelector:_foldedSel];
 
 	// <TODO> enable for folding
 	// Make sure using foldingLayoutManager
@@ -154,6 +157,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// disabled to get the current text range in textView safer
 	[[self layoutManager] setBackgroundLayoutEnabled:NO];
 	[[self layoutManager] replaceTextStorage:theTextStorage];
+
+	// <TODO> enable for folding
+	// [(RScriptEditorTypeSetter*)[[self layoutManager] typesetter] setTextStorage:theTextStorage];
 
 	isSyntaxHighlighting = NO;
 
@@ -735,6 +741,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	// initialise flex
 	yyuoffset = textRange.location; yyuleng = 0;
+	
+	BOOL hasFoldedItems = [theTextStorage hasFoldedItems];
 
 	if([[self delegate] isRdDocument]) {
 
@@ -742,6 +750,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 			// now loop through all the tokens
 			while ((token = rdlex())) {
+				if(hasFoldedItems && (NSInteger)(_foldedImp)(theTextStorage, _foldedSel, yyuoffset) > -1) continue;
 				switch (token) {
 					case RDPT_COMMENT:
 					    tokenColor = shColorComment;
@@ -795,8 +804,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		yy_switch_to_buffer(yy_scan_string(NSStringUTF8String([selfstr substringWithRange:textRange])));
 
+
+// NSDate *d1 = [NSDate date];
+
 		// now loop through all the tokens
 		while ((token = yylex())) {
+			if(hasFoldedItems && (NSInteger)(_foldedImp)(theTextStorage, _foldedSel, yyuoffset) > -1) continue;
 			switch (token) {
 				case RPT_SINGLE_QUOTED_TEXT:
 				case RPT_DOUBLE_QUOTED_TEXT:
@@ -846,6 +859,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			}
 
 		}
+
+// NSLog(@"bibiko1 t %f", [[NSDate date] timeIntervalSinceDate:d1]);
+
 	}
 
 	// set current textColor to the color of the caret's position - 1
@@ -941,82 +957,124 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 }
 
+- (IBAction)undo:(id)sender
+{
+	if([[self undoManager] canUndo]) {
+		[[self undoManager] undo];
+		if(lineNumberingEnabled)
+			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+	}
+}
+
+- (IBAction)redo:(id)sender
+{
+	if([[self undoManager] canRedo]) {
+		[[self undoManager] redo];
+		if(lineNumberingEnabled)
+			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+	}
+}
+
 #pragma mark -
 #pragma mark Folding
 
-- (void)foldSelectedLines:(id)sender
+- (void)foldLinesInRange:(NSRange)range
 {
+	if(range.length < 2) return;
 
-	NSRange r = [self selectedRange];
+	NSInteger foldId = [theTextStorage registerFoldedRange:range];
+	NSInteger caretPosition = [self selectedRange].location;
+	BOOL caretWasInsideFoldedRange = NO;
 
-	if(r.length < 4) return;
+	if(foldId < 0) {
+		NSBeep();
+		return;
+	}
 
-	unichar s = [[self string] characterAtIndex:r.location];
-	unichar e = [[self string] characterAtIndex:NSMaxRange(r)-1];
+	if(caretPosition >= range.location && caretPosition < NSMaxRange(range)) {
+		[self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+		caretWasInsideFoldedRange = YES;
+	}
+
+	unichar s = [[self string] characterAtIndex:range.location];
+	unichar e = [[self string] characterAtIndex:NSMaxRange(range)-1];
 
 	BOOL wrapCheck = NO;
 
 	if(s == '{' && e == '}') {
-		r.location++;
-		r.length -= 2;
+		range.location++;
+		range.length -= 2;
 		wrapCheck = YES;
 	} else if(s == '(' && e == ')') {
-		r.location++;
-		r.length -= 2;
+		range.location++;
+		range.length -= 2;
 		wrapCheck = YES;
 	} else if(s == '[' && e == ']') {
-		r.location++;
-		r.length -= 2;
+		range.location++;
+		range.length -= 2;
 		wrapCheck = YES;
 	}
 
-	if(!r.length) return;
+	if(!range.length) return;
 
-	if(!wrapCheck && [[self string] characterAtIndex:NSMaxRange(r)-1] == '\n')
-		r.length--;
+	if(!wrapCheck && [[self string] characterAtIndex:NSMaxRange(range)-1] == '\n')
+		range.length--;
 
-	if(!r.length) return;
+	if(!range.length) return;
+
 
 	NSString *tooltip = nil;
-	if(r.length < 300)
-		tooltip = [[self string] substringWithRange:r];
+	if(range.length < 300)
+		tooltip = [[self string] substringWithRange:range];
 	else
-		tooltip = [[[self string] substringWithRange:NSMakeRange(r.location, 300)] stringByAppendingString:@"\n…"];
+		tooltip = [[[self string] substringWithRange:NSMakeRange(range.location, 300)] stringByAppendingString:@"\n…"];
 
 	[theTextStorage beginEditing];
-	[theTextStorage addAttribute:foldingAttributeName value:[NSNumber numberWithBool:YES] range:r];
-	[theTextStorage addAttribute:NSCursorAttributeName value:[NSCursor arrowCursor] range:r];
-	[theTextStorage addAttribute:NSToolTipAttributeName value:tooltip range:r];
+	[theTextStorage addAttribute:foldingAttributeId value:[NSNumber numberWithInteger:foldId] range:range];
+	[theTextStorage addAttribute:NSCursorAttributeName value:[NSCursor arrowCursor] range:range];
+	[theTextStorage addAttribute:NSToolTipAttributeName value:tooltip range:range];
 	[theTextStorage endEditing];
 
 	[self didChangeText];
-	if(lineNumberingEnabled)
-		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
 
-	[self setSelectedRange:NSMakeRange(NSMaxRange(r), 0)];
-	[self scrollRangeToVisible:[self selectedRange]];
+	if(caretWasInsideFoldedRange)
+		[self scrollRangeToVisible:[self selectedRange]];
+
+	if(lineNumberingEnabled)
+		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.01f];
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(doSyntaxHighlighting) 
+							object:nil];
+	[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0f];
 
 }
 
 - (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex
 {
 
-	NSTextStorage *textStorage = [self textStorage];
-	NSRange range;
-	NSNumber *value = [textStorage attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [textStorage length])];
+	NSInteger foldIndex = [theTextStorage foldedAtIndex:charIndex];
 
-	if (value && [value boolValue] && [self shouldChangeTextInRange:range replacementString:nil]) {
-		[textStorage removeAttribute:foldingAttributeName range:range];
-		[textStorage removeAttribute:NSCursorAttributeName range:range];
-		[textStorage removeAttribute:NSToolTipAttributeName range:range];
+	if(foldIndex > -1) {
+		[theTextStorage removeFoldedRangeWithId:[theTextStorage attribute:foldingAttributeId atIndex:charIndex effectiveRange:NULL]];
+
 		[self didChangeText];
-		[self setSelectedRange:NSMakeRange(NSMaxRange(range), 0)];
+
 		if(lineNumberingEnabled)
-			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
-		[self scrollRangeToVisible:[self selectedRange]];
+			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.01f];
+		
+		[NSObject cancelPreviousPerformRequestsWithTarget:self 
+								selector:@selector(doSyntaxHighlighting) 
+								object:nil];
+
+		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0f];
+
+
 		return YES;
 	}
+	
 	return NO;
+
 }
 
 - (void)mouseDown:(NSEvent *)event
@@ -1025,48 +1083,50 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// <TODO> enable for folding
 	[super mouseDown:event];
 
-// 	if(![theTextStorage isKindOfClass:[RScriptEditorTextStorage class]]) [super mouseDown:event];
-// 
-// 	RScriptEditorLayoutManager *layoutManager = (RScriptEditorLayoutManager*)[self layoutManager];
-// 	NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPointFromBase:[event locationInWindow]] inTextContainer:[self textContainer]];
-// 
-// 	[theTextStorage setLineFoldingEnabled:YES];
-// 
-// 	// trigger unfolding if inside foldingAttachmentCell
-// 	if (glyphIndex < [layoutManager numberOfGlyphs]) {
-// 		NSUInteger charIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
-// 		NSRange range;
-// 		NSNumber *value = [theTextStorage attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&range inRange:NSMakeRange(0, [theTextStorage length])];
-// 	
-// 		if (value && [value boolValue]) {
-// 			NSTextAttachment *attachment = [theTextStorage attribute:NSAttachmentAttributeName atIndex:range.location effectiveRange:NULL];
-// 	
-// 			if (attachment) {
-// 				NSTextAttachmentCell *cell = (NSTextAttachmentCell *)[attachment attachmentCell];
-// 				NSRect cellFrame;
-// 				NSPoint delta;
-// 	
-// 				glyphIndex = [layoutManager glyphIndexForCharacterAtIndex:range.location];
-// 	
-// 				cellFrame.origin = [self textContainerOrigin];
-// 				cellFrame.size = [layoutManager attachmentSizeForGlyphAtIndex:glyphIndex];
-// 	
-// 				delta = [layoutManager lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL].origin;
-// 				cellFrame.origin.x += delta.x;
-// 				cellFrame.origin.y += delta.y;
-// 	
-// 				cellFrame.origin.x += [layoutManager locationForGlyphAtIndex:glyphIndex].x;
-// 	
-// 				if ([cell wantsToTrackMouseForEvent:event inRect:cellFrame ofView:self atCharacterIndex:range.location] && [cell trackMouse:event inRect:cellFrame ofView:self atCharacterIndex:range.location untilMouseUp:YES]) return;
-// 			}
-// 		}
-// 	}
-// 
-// 	[theTextStorage setLineFoldingEnabled:NO];
-// 
-// 	[super mouseDown:event];
-// }
-// 
+	// if(![theTextStorage isKindOfClass:[RScriptEditorTextStorage class]]) {
+	// 	[super mouseDown:event];
+	// 	return;
+	// }
+	// 
+	// RScriptEditorLayoutManager *layoutManager = (RScriptEditorLayoutManager*)[self layoutManager];
+	// NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPointFromBase:[event locationInWindow]] inTextContainer:[self textContainer]];
+	// 
+	// // trigger unfolding if inside foldingAttachmentCell
+	// if (glyphIndex < [layoutManager numberOfGlyphs]) {
+	// 
+	// 	NSUInteger charIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
+	// 	NSInteger foldIndex  = [theTextStorage foldedForIndicatorAtIndex:charIndex];
+	// 
+	// 	if (foldIndex > -1) {
+	// 
+	// 		NSInteger foldStart = [theTextStorage foldedRangeAtIndex:foldIndex].location+1;
+	// 		NSTextAttachment *attachment = [theTextStorage attribute:NSAttachmentAttributeName atIndex:foldStart effectiveRange:NULL];
+	// 
+	// 		if (attachment) {
+	// 			NSTextAttachmentCell *cell = (NSTextAttachmentCell *)[attachment attachmentCell];
+	// 			NSRect cellFrame;
+	// 			NSPoint delta;
+	// 
+	// 			glyphIndex = [layoutManager glyphIndexForCharacterAtIndex:foldStart];
+	// 
+	// 			cellFrame.origin = [self textContainerOrigin];
+	// 			cellFrame.size = [layoutManager attachmentSizeForGlyphAtIndex:glyphIndex];
+	// 
+	// 			delta = [layoutManager lineFragmentRectForGlyphAtIndex:glyphIndex effectiveRange:NULL].origin;
+	// 			cellFrame.origin.x += delta.x;
+	// 			cellFrame.origin.y += delta.y;
+	// 
+	// 			cellFrame.origin.x += [layoutManager locationForGlyphAtIndex:glyphIndex].x;
+	// 
+	// 			if ([cell wantsToTrackMouseForEvent:event inRect:cellFrame ofView:self atCharacterIndex:foldStart] 
+	// 					&& [cell trackMouse:event inRect:cellFrame ofView:self atCharacterIndex:foldStart untilMouseUp:YES]) return;
+	// 		}
+	// 	}
+	// }
+	// 
+	// [super mouseDown:event];
+}
+
 // - (void)setSelectedRanges:(NSArray *)ranges affinity:(NSSelectionAffinity)affinity stillSelecting:(BOOL)stillSelectingFlag
 // {
 // 
@@ -1101,16 +1161,16 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 // 	}
 // 
 // 	[super setSelectedRanges:ranges affinity:affinity stillSelecting:stillSelectingFlag];
-
-}
-
+// 
+// }
+// 
 
 - (void)setTypingAttributes:(NSDictionary *)attrs
 {
-	// we don't want to store foldingAttributeName as a typing attribute
-	if ([attrs objectForKey:foldingAttributeName]) {
+	// we don't want to store foldingAttributeId as a typing attribute
+	if ([attrs objectForKey:foldingAttributeId]) {
 		NSMutableDictionary *copy = [[attrs mutableCopyWithZone:NULL] autorelease];
-		[copy removeObjectForKey:foldingAttributeName];
+		[copy removeObjectForKey:foldingAttributeId];
 		attrs = copy;
 	}
 

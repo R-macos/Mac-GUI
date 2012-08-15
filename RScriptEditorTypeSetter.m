@@ -33,38 +33,49 @@
  */
 
 #import "RScriptEditorTypeSetter.h"
-#import "RScriptEditorTextStorage.h"
 #import "PreferenceKeys.h"
 
 
 @implementation RScriptEditorTypeSetter
 
+static SEL _foldSel;
+
 - (id)init
 {
 	self = [super init];
 	if (nil == self) return nil;
+	_attributedString = nil;
+	_foldSel = @selector(foldedForIndicatorAtIndex:);
 	return self;
+}
+
+- (void)dealloc
+{
+	if(_attributedString) [_attributedString release];
+	[super dealloc];
+}
+
+- (void)setTextStorage:(RScriptEditorTextStorage*)textStorage
+{
+	if(_attributedString) [_attributedString release];
+	_attributedString = [textStorage retain];
+	_foldImp  = [_attributedString methodForSelector:_foldSel];
+
 }
 
 - (NSTypesetterControlCharacterAction)actionForControlCharacterAtIndex:(NSUInteger)charIndex
 {
-	id attribute = [[self attributedString] attribute:foldingAttributeName atIndex:charIndex effectiveRange:NULL];
-
-	if (attribute && [attribute boolValue]) return NSTypesetterZeroAdvancementAction;
-
+	if ((NSInteger)(*_foldImp)(_attributedString, _foldSel, charIndex) > -1) return NSTypesetterZeroAdvancementAction;
 	return [super actionForControlCharacterAtIndex:charIndex];
 }
 
-- (NSUInteger)layoutParagraphAtPoint:(NSPointPointer)lineFragmentOrigin
-{
-	id attrString = ([attributedString respondsToSelector:@selector(setLineFoldingEnabled:)] ? attributedString : nil);
-	NSUInteger result;
-
-	[attrString setLineFoldingEnabled:YES];
-	result = [super layoutParagraphAtPoint:lineFragmentOrigin];
-	[attrString setLineFoldingEnabled:NO];
-
-	return result;
-}
+// - (NSUInteger)layoutParagraphAtPoint:(NSPointPointer)lineFragmentOrigin
+// {
+// 	(*_setfImp)(_attributedString, _setfSel, YES);
+// 	NSUInteger result = [super layoutParagraphAtPoint:lineFragmentOrigin];
+// 	(*_setfImp)(_attributedString, _setfSel, NO);
+// 	return result;
+// }
 
 @end
+ 

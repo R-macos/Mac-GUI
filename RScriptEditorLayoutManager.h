@@ -34,11 +34,15 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RScriptEditorTextStorage.h"
+#import "RScriptEditorTypeSetter.h"
 
 
 @interface RScriptEditorLayoutManager : NSLayoutManager
+	 
 {
-
+ 	RScriptEditorTextStorage *_attributedString;
+ 	IMP _setfImp;
+	
 }
 
 @end

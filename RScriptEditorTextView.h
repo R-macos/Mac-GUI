@@ -88,9 +88,11 @@
 
 	NSDictionary *highlightColorAttr;
 
+	IMP _foldedImp;
+
 }
 
-- (IBAction)foldSelectedLines:(id)sender;
+- (void)foldLinesInRange:(NSRange)range;
 
 - (void)setTabStops;
 

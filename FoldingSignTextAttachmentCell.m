@@ -93,8 +93,11 @@ static NSLayoutManager *scratchLayoutManager = nil;
 - (BOOL)trackMouse:(NSEvent *)theEvent inRect:(NSRect)cellFrame ofView:(NSView *)controlView atCharacterIndex:(NSUInteger)charIndex untilMouseUp:(BOOL)flag
 {
 
-	if ([controlView respondsToSelector:@selector(unfoldLinesContainingCharacterAtIndex:)]) {
-		return [(RScriptEditorTextView *)controlView unfoldLinesContainingCharacterAtIndex:charIndex];
+	if ([(RScriptEditorTextView *)controlView respondsToSelector:@selector(unfoldLinesContainingCharacterAtIndex:)]) {
+		[[(RScriptEditorTextView *)controlView undoManager] disableUndoRegistration];
+		BOOL success = [(RScriptEditorTextView *)controlView unfoldLinesContainingCharacterAtIndex:charIndex];
+		[[(RScriptEditorTextView *)controlView undoManager] enableUndoRegistration];
+		return success;
 	}
 
 	return NO;
@@ -113,9 +116,6 @@ static NSLayoutManager *scratchLayoutManager = nil;
 	NSRect textFrame;
 	NSRange glyphRange;
 	NSRect frame;
-	BOOL lineFoldingEnabled = [(RScriptEditorTextStorage *)textStorage lineFoldingEnabled];
-
-	[(RScriptEditorTextStorage *)textStorage setLineFoldingEnabled:NO];
 
 	if ([scratchLayoutManager textStorage] != textStorage) {
 		[textStorage addLayoutManager:scratchLayoutManager];
@@ -126,8 +126,6 @@ static NSLayoutManager *scratchLayoutManager = nil;
 	[scratchLayoutManager ensureLayoutForCharacterRange:NSMakeRange(charIndex, 1)];
 	textFrame = [scratchLayoutManager lineFragmentRectForGlyphAtIndex:[scratchLayoutManager glyphIndexForCharacterAtIndex:charIndex] effectiveRange:&glyphRange];
 
-	[(RScriptEditorTextStorage *)textStorage setLineFoldingEnabled:lineFoldingEnabled];
-    
 	frame.origin = NSZeroPoint;
 	frame.size = NSMakeSize(30.0f, NSHeight(lineFrag)); 
 	frame.origin.y -= [[scratchLayoutManager typesetter] baselineOffsetInLayoutManager:scratchLayoutManager glyphIndex:glyphRange.location];

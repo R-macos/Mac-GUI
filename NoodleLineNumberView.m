@@ -34,6 +34,8 @@
 
 #import "NoodleLineNumberView.h"
 #import "RScriptEditorTextView.h"
+#import "RScriptEditorTextStorage.h"
+#import "PreferenceKeys.h"
 
 #include <tgmath.h>
 
@@ -328,6 +330,7 @@
 	if(!count) return;
 
 	// Find the characters that are currently visible
+
 	range = [layoutManager characterRangeForGlyphRange:[layoutManager glyphRangeForBoundingRect:visibleRect inTextContainer:container] actualGlyphRange:NULL];
 
 	// Fudge the range a tad in case there is an extra new line at end.
@@ -358,6 +361,7 @@
 				// Note that the ruler view is only as tall as the visible
 				// portion. Need to compensate for the clipview's coordinates.
 
+				// <TODO> enable for folding				
 				// Check for folding markers
 				// NSRange r;
 				// if(line < [lines count]-1) {
@@ -376,13 +380,14 @@
 				// 	while(i >= 0) {
 				// 		c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
 				// 		type = [(RScriptEditorTextView*)clientView parserContextForPosition:i+index];
-				// 		if(c==' ' || c=='\t' || type == 4) {
+				// 		if(c==' ' || c=='\t' || type == 4 || c=='#') {
 				// 			i--;
 				// 			continue;
 				// 		}
 				// 		if(c=='{' && type == 5) {
 				// 			m = @" ▼";
 				// 			foldingDepth++;
+				// 			// look for lines a la "} else {" - if so do not draw folding marker
 				// 			while(i>=0) {
 				// 				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
 				// 				if(c=='}' && [(RScriptEditorTextView*)clientView parserContextForPosition:i] == 5) {
@@ -415,28 +420,34 @@
 				// 	}
 				// }
 
+				// <TODO> enable for folding
 				// Line numbers are internally stored starting at 0
+				// labelText = [NSString stringWithFormat:@"%lu%@", (NSUInteger)(line + 1), m];
 				labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
 
 				// How many digits has the current line number?
 				NSUInteger idx = line + 1;
-				NSInteger numOfDigits = 0; // 2 := folding marker width
+				// <TODO> enable for folding
+				// NSInteger numOfDigits = 2; // 2 := folding marker width
+				NSInteger numOfDigits = 0;
 				while(idx) { numOfDigits++; idx/=10; }
 
 				rectHeight = NSHeight(rects[0]);
 				y = yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - maxHeightOfGlyph) >> 1);
+
+				// if(foldingDepth < 0) foldingDepth = 0;
+				// 
+				// if(foldingDepth) {
+				// 	NSColor *c = [NSColor colorWithCalibratedWhite:(0.95f - foldingDepth*0.04f) alpha:1.0f];
+				// 	[c setFill];
+				// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
+				// } else {
+				// 	NSColor *c = [NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0];
+				// 	[c setFill];
+				// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
+				// }
+				// 
 				if(y != last_y) {
-
-					// if(foldingDepth) {
-					// 	NSColor *c = [NSColor colorWithCalibratedWhite:(0.95f - foldingDepth*0.04f) alpha:1.0f];
-					// 	[c setFill];
-					// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
-					// } else {
-					// 	NSColor *c = [NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0];
-					// 	[c setFill];
-					// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
-					// }
-
 
 					// Draw string flush right, centered vertically within the line
 					[labelText drawInRect:
@@ -468,6 +479,8 @@
 
 	line = [self lineNumberForLocation:p.y];
 
+	// <TODO> enable for folding
+	// Check if click was inside folding marker
 	if(0 && (NSWidth([self bounds]) - RULER_MARGIN) - p.x >= 0 && (NSWidth([self bounds]) - RULER_MARGIN) - p.x < 7) {
 
 		NSUInteger caretPosition = 0;
@@ -485,7 +498,6 @@
 		r = NSMakeRange(index, selectionEnd - index);
 
 		NSString *s = [[clientView string] substringWithRange:r];
-		NSLog(@"bibiko '%@'", s);
 		NSInteger foldItem = 0;
 		unichar c;
 
@@ -495,7 +507,7 @@
 			while(i >= 0) {
 				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
 				type = [(RScriptEditorTextView*)clientView parserContextForPosition:i+index];
-				if(c==' ' || c=='\t' || type == 4) {
+				if(c==' ' || c=='\t' || type == 4 || c=='#') {
 					i--;
 					continue;
 				}
@@ -616,7 +628,23 @@
 			if(c == cc) {
 				if(!bracketCounter) {
 					end = i+1;
-					break;
+					BOOL goAhead = NO;
+					//go ahead for lines a la  "} else {"
+					for(NSUInteger j=end; j<stringLength; j++) {
+						c = CFStringGetCharacterAtIndex(parserStringRef, j);
+						if(c == '\n' || c == '\r') {
+							break;
+						}
+						if(c == '\t' || c == ' ') {
+							continue;
+						}
+						if([(RScriptEditorTextView*)clientView parserContextForPosition:j] != pcExpression) continue;
+						if(c == co) {
+							goAhead = YES;
+							break;
+						}
+					}
+					if(!goAhead) break;
 				}
 				bracketCounter--;
 			}
@@ -624,8 +652,26 @@
 
 		if(end < 0 || bracketCounter || end-start < 1) return;
 
-		[clientView setSelectedRange:NSMakeRange(start, end-start)];
+		NSRange foldRange = NSMakeRange(start, end-start);
+
+		if(foldItem) {
+			[[clientView undoManager] disableUndoRegistration];
+			if(![(RScriptEditorTextStorage*)[clientView textStorage] existsFoldedRange:foldRange]) {
+				[(RScriptEditorTextView*)clientView foldLinesInRange:foldRange];
+			} else {
+				[(RScriptEditorTextView*)clientView unfoldLinesContainingCharacterAtIndex:foldRange.location+1];
+			}
+			[[clientView undoManager] enableUndoRegistration];
+
+			return;
+		}
+		
+		//if user didn't click at a folding marker
+		//select balanced bracket range for convenience
+		[clientView setSelectedRange:foldRange];
+
 		return;
+
 	}
 	dragSelectionStartLine = line;
 
@@ -797,6 +843,7 @@
 	else
 		newThickness = 100;
 
+	// <TODO> enable for folding
 	// newThickness += 12.0f;
 
 	currentNumberOfLines = lineCount;

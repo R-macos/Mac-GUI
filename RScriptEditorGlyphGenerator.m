@@ -34,30 +34,49 @@
 
 #import "RScriptEditorGlyphGenerator.h"
 #import "RScriptEditorTypesetter.h"
+#import "RScriptEditorTextStorage.h"
+#import "RScriptEditorLayoutManager.h"
 #import "PreferenceKeys.h"
 
 static SEL _attrStrSel;
+static SEL _foldSel;
+static SEL _foldindSel;
 
 @implementation RScriptEditorGlyphGenerator
 
- + (void)initialize
- {
- 	if ([self class] == [RScriptEditorGlyphGenerator class]) {
- 		_attrStrSel = @selector(attributedString);
- 	}
- }
++ (void)initialize
+{
+	if ([self class] == [RScriptEditorGlyphGenerator class]) {
+		_attrStrSel = @selector(attributedString);
+		_foldSel    = @selector(foldedRangeAtIndex:);
+		_foldindSel = @selector(foldedForIndicatorAtIndex:);
+	}
+}
 
- - (id)init
- {
- 	self = [super init];
+- (id)init
+{
+	self = [super init];
 
- 	if (self != nil) {
+	if (self != nil) {
 		_attrStrImp = [self methodForSelector:_attrStrSel];
 		nullGlyph = NSNullGlyph;
- 	}
+	}
 
- 	return self;
- }
+	return self;
+}
+
+- (void)dealloc{
+	if(theTextStorage) [theTextStorage release];
+	[super dealloc];
+}
+
+- (void)setTextStorage:(RScriptEditorTextStorage*)textStorage
+{
+	if(theTextStorage) [theTextStorage release];
+	theTextStorage = [textStorage retain];
+	_foldImp = [theTextStorage methodForSelector:_foldSel];
+	_foldindImp = [theTextStorage methodForSelector:_foldindSel];
+}
 
 - (void)generateGlyphsForGlyphStorage:(id <NSGlyphStorage>)glyphStorage desiredNumberOfCharacters:(NSUInteger)nChars glyphIndex:(NSUInteger *)glyphIndex characterIndex:(NSUInteger *)charIndex
 {
@@ -71,18 +90,19 @@ static SEL _attrStrSel;
 - (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex
 {
 	NSGlyph *buffer = NULL;
-	id attribute;
+	NSInteger folded = (NSInteger)(*_foldindImp)(theTextStorage, _foldSel, charIndex);
 
-	// <SPEED>
-	attribute = [(*_attrStrImp)(self, _attrStrSel) attribute:foldingAttributeName atIndex:charIndex effectiveRange:NULL];
-	if (attribute && [attribute boolValue]) {
-		NSRange effectiveRange;
-		(void)[(*_attrStrImp)(self, _attrStrSel) attribute:foldingAttributeName atIndex:charIndex longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, charIndex + length)];
-		NSInteger size = sizeof(NSGlyph) * length;
-		buffer = NSZoneMalloc(NULL, size);
-		memset_pattern4(buffer, &nullGlyph, size);
-		if (effectiveRange.location == charIndex) buffer[0] = NSControlGlyph;
-		glyphs = buffer;
+	if (folded > -1) {
+		NSRange effectiveRange = [theTextStorage foldedRangeAtIndex:folded];
+		if(effectiveRange.length) {
+			NSInteger size = sizeof(NSGlyph) * length;
+			buffer = NSZoneMalloc(NULL, size);
+			memset_pattern4(buffer, &nullGlyph, size);
+			if ((effectiveRange.location+1) == charIndex) buffer[0] = NSControlGlyph;
+			glyphs = buffer;
+		} else {
+			NSBeep();
+		}
 	}
 
 	[_destination insertGlyphs:glyphs length:length forStartingGlyphAtIndex:glyphIndex characterIndex:charIndex];

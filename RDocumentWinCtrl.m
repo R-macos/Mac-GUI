@@ -41,6 +41,7 @@
 #import "RTextView.h"
 #import "HelpManager.h"
 #import "NSTextView_RAdditions.h"
+#import "RScriptEditorTextStorage.h"
 #import "NSString_RAdditions.h"
 #import "RWindow.h"
 #import "NoodleLineNumberView.h"
@@ -1309,31 +1310,18 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	// Adjust cursor position if cursor is inside of a folded text chunk;
 	// additional checks were made in [RScriptEditorTextView:setSelectedRanges:]
 	// <TODO> enable for folding
-	if(0 & [tv isKindOfClass:[RScriptEditorTextView class]]) {
+	if(0 && [tv isKindOfClass:[RScriptEditorTextView class]]) {
 		NSRange r = [tv selectedRange];
 		NSUInteger len = [[tv string] length];
 		if(r.location < len) {
-			NSNumber *value = [[tv textStorage] attribute:foldingAttributeName atIndex:r.location effectiveRange:NULL];
-			if(value && [value boolValue]) {
-				NSRange effectiveRange;
-				(void)[[tv textStorage] attribute:foldingAttributeName atIndex:r.location longestEffectiveRange:&effectiveRange inRange:NSMakeRange(0, len)];
-				if(r.location > effectiveRange.location && r.location < NSMaxRange(effectiveRange)) {
-					if(r.length) {
-						NSRange nr = NSMakeRange(effectiveRange.location, NSMaxRange(r) - effectiveRange.location);
-						if(NSMaxRange(r) == NSMaxRange(nr)) {
-							if(nr.length > r.length) {
-								nr.location = NSMaxRange(effectiveRange);
-								nr.length = nr.length - effectiveRange.length;
-							} else {
-								nr.length = 0;
-								nr.location = NSMaxRange(nr);
-							}
-						}
-						SLog(@"RDocumentWinCtrl:textViewDidChangeSelection: adjust range via attribute checking from %@ to %@", NSStringFromRange(r), NSStringFromRange(nr));
-						[tv setSelectedRange:nr];
-					} else {
-						SLog(@"RDocumentWinCtrl:textViewDidChangeSelection: adjust range via attribute checking from %@ to %@", NSStringFromRange(r), NSStringFromRange(NSMakeRange(effectiveRange.location, 0)));
-						[tv setSelectedRange:NSMakeRange(effectiveRange.location, 0)];
+			NSInteger foldIndex = [(RScriptEditorTextStorage*)[tv textStorage] foldedAtIndex:r.location];
+			if(foldIndex > -1) {
+				NSRange effectiveRange = [(RScriptEditorTextStorage*)[tv textStorage] foldedRangeAtIndex:foldIndex];
+				if(effectiveRange.length) {
+					if(r.location > effectiveRange.location || r.location < NSMaxRange(effectiveRange)-1) {
+						[[tv undoManager] disableUndoRegistration];
+						[(RScriptEditorTextView*)tv unfoldLinesContainingCharacterAtIndex:r.location];
+						[[tv undoManager] enableUndoRegistration];
 					}
 				}
 			}
@@ -1408,6 +1396,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	SLog(@"RDocumentWinCtrl%@.windowShouldClose: (doc=%@, win=%@, self.rc=%d)", self, [self document], [self window], [self retainCount]);
 
 	// Cancel pending calls
+	[NSObject cancelPreviousPerformRequestsWithTarget:[[textView enclosingScrollView] verticalRulerView] 
+							selector:@selector(refresh) 
+							object:nil];
+
 	[NSObject cancelPreviousPerformRequestsWithTarget:textView 
 							selector:@selector(currentFunctionHint) 
 							object:nil];
