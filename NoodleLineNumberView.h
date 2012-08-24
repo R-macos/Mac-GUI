@@ -28,6 +28,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "RScriptEditorTextStorage.h"
 
 static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i) 
 {
@@ -58,6 +59,16 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 	CGFloat         maxWidthOfGlyph8;
 	CGFloat         currentRuleThickness;
 	NSDictionary    *textAttributes;
+	NSColor         *normalBackgroundColor;
+	NSColor         *foldedBackgroundColor;
+	NSPoint         mouseHoveringAtPoint;
+	NSImage         *top;
+	NSImage         *topHoover;
+	NSImage         *bottom;
+	NSImage         *bottomHoover;
+	NSImage         *folded;
+	NSImage         *foldedHoover;
+	BOOL            lineWrapping;
 
 	// Add support for selection by clicking/dragging
 	NSUInteger      dragSelectionStartLine;
@@ -75,6 +86,7 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 	NSLayoutManager  *layoutManager;
 	NSTextContainer  *container;
 	NSTextView       *clientView;
+	RScriptEditorTextStorage *cvTextStorage;
 
 }
 
@@ -85,6 +97,7 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 - (void)setFont:(NSFont*)aFont;
 - (NSColor*)textColor;
 - (void)setTextColor:(NSColor*)color;
+- (void)setLineWrappingMode:(BOOL)mode;
 
 - (id)initWithScrollView:(NSScrollView *)aScrollView;
 - (NSUInteger)lineNumberForLocation:(CGFloat)location;

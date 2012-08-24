@@ -34,12 +34,11 @@
 
 #import "RScriptEditorTextStorage.h"
 #import "RScriptEditorTypesetter.h"
+#import "RScriptEditorTextView.h"
 #import "FoldingSignTextAttachmentCell.h"
-#import "PreferenceKeys.h"
+#import "RGUI.h"
 
 @implementation RScriptEditorTextStorage
-
-@synthesize lineFoldingEnabled = _lineFoldingEnabled;
 
 static NSTextAttachment *sharedAttachment = nil;
 static SEL _getSel;
@@ -48,7 +47,6 @@ static SEL _strSel;
 static SEL _replSel;
 static SEL _editSel;
 static SEL _getlSel;
-
 
 + (void)initialize
 {
@@ -87,10 +85,12 @@ static SEL _getlSel;
 		_getlImp = [_attributedString methodForSelector:_getlSel];
 
 		foldedCounter = 0;
+		currentMaxFoldedIndex = -1;
 
 		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
 			foldedRanges[i][0] = -1;
 			foldedRanges[i][1] = 0;
+			foldedRanges[i][2] = 0;
 		}
 	}
 
@@ -110,14 +110,30 @@ static SEL _getlSel;
 	return (foldedCounter == 0) ? NO : YES;
 }
 
+- (BOOL)inFoldedRangeForRange:(NSRange)range
+{
+	if(!foldedCounter) return NO;
+
+	NSInteger i = 0;
+	NSInteger maxRange = NSMaxRange(range);
+	NSInteger rangeLoc = range.location;
+	for(i = 0; i < currentMaxFoldedIndex+1; i++) {
+		if(rangeLoc > foldedRanges[i][0] && maxRange <= foldedRanges[i][2]) {
+			return YES;
+		}
+	}
+	return NO;
+	
+}
+
 - (NSInteger)foldedAtIndex:(NSInteger)index
 {
 
 	if(!foldedCounter) return -1;
 
 	NSInteger i = 0;
-	for(i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
-		if(foldedRanges[i][0] <= index && foldedRanges[i][0]+foldedRanges[i][1] > index) {
+	for(i = 0; i < currentMaxFoldedIndex+1; i++) {
+		if(foldedRanges[i][2] > index && foldedRanges[i][0] <= index) {
 			return i;
 		}
 	}
@@ -131,8 +147,9 @@ static SEL _getlSel;
 
 	if(index) {
 		// Folded ranges are stored from { to } but indicator will drawn inside of { and }
-		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
-			if(foldedRanges[i][0] > -1 && foldedRanges[i][0] <= (index-1) && foldedRanges[i][0]+foldedRanges[i][1] > index+1) {
+		NSInteger adjIndex = index + 1;
+		for(NSInteger i = 0; i < currentMaxFoldedIndex+1; i++) {
+			if(foldedRanges[i][2] > adjIndex && foldedRanges[i][0] < index) {
 				return i;
 			}
 		}
@@ -143,70 +160,112 @@ static SEL _getlSel;
 - (NSInteger)registerFoldedRange:(NSRange)range
 {
 
+
+	[[[self delegate] undoManager] disableUndoRegistration];
+
 	NSInteger index = -1;
 	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
 		if(foldedRanges[i][0] == -1) {
 			index = i;
 			foldedRanges[i][0] = (NSInteger)range.location;
 			foldedRanges[i][1] = (NSInteger)range.length;
+			foldedRanges[i][2] = (NSInteger)NSMaxRange(range);
 			foldedCounter++;
+			if(i > currentMaxFoldedIndex) currentMaxFoldedIndex = i;
+			SLog(@"RScriptEditorTextStorage:registerFoldedRange %@ at position %d : max index %d", NSStringFromRange(range), i, currentMaxFoldedIndex);
 			break;
 		}
 	}
+
+	[[[self delegate] undoManager] enableUndoRegistration];
 
 	return(index);
 
 }
 
-- (BOOL)removeFoldedRangeWithId:(NSNumber*)index
+- (BOOL)removeFoldedRangeWithIndex:(NSInteger)index
 {
 
-	NSInteger i = [index integerValue];
+	BOOL exists = NO;
+	NSRange range;
+	
+	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex %d", i);
+	
+	if(index > -1 && index < R_MAX_FOLDED_ITEMS) {
+		if(foldedRanges[index][0] > -1 && foldedRanges[index][1] > 0) {
+			range = NSMakeRange(foldedRanges[index][0], foldedRanges[index][1]);
+			exists = YES;
+		}
+	}
 
-	if(i < 0 || i >= R_MAX_FOLDED_ITEMS) {
+	if(!exists) {
 		[self removeAllFoldedRanges];
+		NSLog(@"Removing folded text chunk failed. For safety reasons all folded chunks were be unfolded.");
 		return NO;
 	}
 
 	[[[self delegate] undoManager] disableUndoRegistration];
 
-	NSRange range = NSMakeRange(foldedRanges[i][0], foldedRanges[i][1]);
-	range = NSIntersectionRange(NSMakeRange(0, [_attributedString length]), range);
+	range = NSIntersectionRange(NSMakeRange(0, [[_attributedString string] length]), range);
 	if(range.length) {
-		[self beginEditing];
-		// [self removeAttribute:foldingAttributeName range:range];
-		[self removeAttribute:foldingAttributeId range:range];
 		[self removeAttribute:NSCursorAttributeName range:range];
 		[self removeAttribute:NSToolTipAttributeName range:range];
-		[self endEditing];
 	}
 
-	foldedRanges[i][0] = -1;
-	foldedRanges[i][1] = 0;
+	foldedRanges[index][0] = -1;
+	foldedRanges[index][1] = 0;
+	foldedRanges[index][2] = 0;
 	foldedCounter--;
 	if(foldedCounter < 0) foldedCounter = 0;
 
+	// check folded chunks inside range
+	NSInteger rloc = range.location;
+	NSInteger maxrlen = NSMaxRange(range);
+	NSRange r;
+	for(NSInteger j = currentMaxFoldedIndex; j >= 0; j--) {
+		if(foldedRanges[j][0] > rloc && foldedRanges[j][2] < maxrlen) {
+			r = NSMakeRange(foldedRanges[j][0], foldedRanges[j][1]);
+			foldedRanges[j][0] = -1;
+			foldedRanges[j][1] = 0;
+			foldedRanges[j][2] = 0;
+			[[self delegate] refoldLinesInRange:r];
+		}
+	}
+
 	[[[self delegate] undoManager] enableUndoRegistration];
+	
+	// update currentMaxFoldedIndex
+	NSInteger maxCount = -1;
+	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+		if(foldedRanges[i][0] > -1) {
+			if(i > maxCount) maxCount = i;
+		}
+	}
+	currentMaxFoldedIndex = maxCount;
+	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex: done. Max index: %d", currentMaxFoldedIndex);
 
 	return YES;
 }
 
 - (void)removeAllFoldedRanges
 {
+
+	[[[self delegate] undoManager] disableUndoRegistration];
+
 	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
 		foldedRanges[i][0] = -1;
 		foldedRanges[i][1] = 0;
+		foldedRanges[i][2] = 0;
 	}
-	[[[self delegate] undoManager] disableUndoRegistration];
 	NSRange range = NSMakeRange(0, [_attributedString length]);
-	[self beginEditing];
-	// [self removeAttribute:foldingAttributeName range:range];
-	[self removeAttribute:foldingAttributeId range:range];
 	[self removeAttribute:NSCursorAttributeName range:range];
 	[self removeAttribute:NSToolTipAttributeName range:range];
-	[self endEditing];
-	[[[self delegate] undoManager] enableUndoRegistration];
+
 	foldedCounter = 0;
+	currentMaxFoldedIndex = -1;
+
+	[[[self delegate] undoManager] enableUndoRegistration];
+
 }
 
 - (BOOL)existsFoldedRange:(NSRange)range
@@ -215,7 +274,7 @@ static SEL _getlSel;
 	if(!foldedCounter) return NO;
 
 	BOOL success = NO;
-	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+	for(NSInteger i = 0; i < currentMaxFoldedIndex+1; i++) {
 		if(foldedRanges[i][0] == range.location && foldedRanges[i][1] == range.length) {
 			success = YES;
 			break;
@@ -232,11 +291,15 @@ static SEL _getlSel;
 	if(!foldedCounter || index < 0 || index > R_MAX_FOLDED_ITEMS) return NSMakeRange(NSNotFound, 0);
 
 	NSInteger loc = foldedRanges[index][0];
-	if(loc == -1) return NSMakeRange(NSNotFound, 0);
-	return NSMakeRange(loc, foldedRanges[index][1]-foldedRanges[index][0]);
-}
 
-// NSAttributedString primitives
+	if(loc == -1) return NSMakeRange(NSNotFound, 0);
+
+	return NSMakeRange(loc, foldedRanges[index][1]-foldedRanges[index][0]);
+
+}
+#pragma mark -
+#pragma mark Primitives
+
 - (NSString *)string
 { 
 	return (*_strImp)(_attributedString, _strSel);
@@ -255,8 +318,9 @@ static SEL _getlSel;
 	NSInteger index = -1;
 	if(location) {
 		// Notes folded ranges are stored from { to } but indicator will drawn inside of { and }
-		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
-			if(foldedRanges[i][0] <= (location-1) && foldedRanges[i][0]+foldedRanges[i][1] > location+2) {
+		NSInteger adjLocation = location + 2;
+		for(NSInteger i = 0; i < currentMaxFoldedIndex+1; i++) {
+			if(foldedRanges[i][2] > adjLocation && foldedRanges[i][0] < location) {
 				index = i;
 				break;
 			}
@@ -265,7 +329,7 @@ static SEL _getlSel;
 
 	if (index > -1) {
 		effectiveRange = NSMakeRange(foldedRanges[index][0]+1, foldedRanges[index][1]-2);
-		// We adds NSAttachmentAttributeName if in lineFoldingAttributeName
+		// We adds NSAttachmentAttributeName if location is at beginning of folded range
 		if (location == effectiveRange.location) { // beginning of a folded range
 
 			NSMutableDictionary *dict = [attributes mutableCopyWithZone:NULL];
@@ -287,17 +351,22 @@ static SEL _getlSel;
 {
 
 	if(foldedCounter && mask == NSTextStorageEditedCharacters) {
-		// update foldedRanges array
-		NSInteger index = oldRange.location;
-		for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
+		// update foldedRanges array due to changes
+		NSInteger index = oldRange.location-1;
+		NSInteger maxOldRange = NSMaxRange(oldRange) + 1;
+		for(NSInteger i = 0; i < currentMaxFoldedIndex+1; i++) {
 			if(index < foldedRanges[i][0]) {
-				if(foldedRanges[i][0] >= oldRange.location && foldedRanges[i][0]+foldedRanges[i][1] <= NSMaxRange(oldRange)) {
-					[self removeFoldedRangeWithId:[NSNumber numberWithInt:i]];
+				// if change covers the entire folded range -> delete it
+				if(foldedRanges[i][2] < maxOldRange && foldedRanges[i][0] > index) {
+					[self removeFoldedRangeWithIndex:i];
 					continue;
 				}
+				// otherwise correct folded start range and maxrange
 				foldedRanges[i][0] += lengthChange;
-				if(foldedRanges[i][0] < -1) {
-					[self removeFoldedRangeWithId:[NSNumber numberWithInt:i]];
+				foldedRanges[i][2] += lengthChange;
+				// for safety delete it if new location is negative
+				if(foldedRanges[i][0] < 0) {
+					[self removeFoldedRangeWithIndex:i];
 				}
 			}
 		}

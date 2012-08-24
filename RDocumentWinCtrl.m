@@ -45,6 +45,7 @@
 #import "NSString_RAdditions.h"
 #import "RWindow.h"
 #import "NoodleLineNumberView.h"
+#import "Tools/RTooltip.h"
 
 // R defines "error" which is deadly as we use open ... with ... error: where error then gets replaced by Rf_error
 #ifdef error
@@ -408,8 +409,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[[textView enclosingScrollView] setRulersVisible:YES];
 		[theRulerView release];
 
-	}
+		[(NoodleLineNumberView*)[[textView enclosingScrollView] verticalRulerView] setLineWrappingMode:[Preferences flagForKey:enableLineWrappingKey withDefault: YES]];
 
+	}
+	
+	
+	// Needed for showing tooltips of folded items
+	[[self window] setAcceptsMouseMovedEvents:YES];
 
 	SLog(@" - windowDidLoad is done");
 
@@ -1291,6 +1297,22 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	return [[uniqueArray allObjects] sortedArrayUsingFunction:_alphabeticSort context:&reverseSort];
 }
 
+- (NSString *)textView:(NSTextView *)tv willDisplayToolTip:(NSString *)tooltip forCharacterAtIndex:(NSUInteger)characterIndex
+{
+	if([tv isKindOfClass:[RScriptEditorTextView class]]) {
+		[RTooltip showWithObject:[NSString stringWithFormat:@"<pre>%@</pre>", tooltip] 
+				atLocation:NSMakePoint(-1,-1)
+				ofType:@"html" 
+				displayOptions:[NSDictionary dictionaryWithObjectsAndKeys:
+				[[textView font] familyName], @"fontname", 
+				[NSString stringWithFormat:@"%f", [[textView font] pointSize]], @"fontsize", 
+					nil]
+					];
+		return nil;
+	}
+	return tooltip;
+}
+
 - (void)textViewDidChangeSelection:(NSNotification *)aNotification
 {
 
@@ -1309,8 +1331,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	// Adjust cursor position if cursor is inside of a folded text chunk;
 	// additional checks were made in [RScriptEditorTextView:setSelectedRanges:]
-	// <TODO> enable for folding
-	if(0 && [tv isKindOfClass:[RScriptEditorTextView class]]) {
+	if([tv isKindOfClass:[RScriptEditorTextView class]]) {
 		NSRange r = [tv selectedRange];
 		NSUInteger len = [[tv string] length];
 		if(r.location < len) {
@@ -1319,9 +1340,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				NSRange effectiveRange = [(RScriptEditorTextStorage*)[tv textStorage] foldedRangeAtIndex:foldIndex];
 				if(effectiveRange.length) {
 					if(r.location > effectiveRange.location || r.location < NSMaxRange(effectiveRange)-1) {
-						[[tv undoManager] disableUndoRegistration];
 						[(RScriptEditorTextView*)tv unfoldLinesContainingCharacterAtIndex:r.location];
-						[[tv undoManager] enableUndoRegistration];
 					}
 				}
 			}
@@ -1339,7 +1358,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 								object:nil];
 
 		// Cancel calling functionRescan
-		[NSObject cancelPreviousPerformRequestsWithTarget:tv 
+		[NSObject cancelPreviousPerformRequestsWithTarget:self 
 								selector:@selector(functionRescan) 
 								object:nil];
 

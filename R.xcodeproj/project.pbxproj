@@ -210,6 +210,15 @@
 		BCD7EC961301A5190050850E /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = BCD7EC941301A5190050850E /* RegexKitLite.m */; };
 		BCDF1C9113C2F160001216D9 /* RDataEditorTableHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = BCDF1C8F13C2F160001216D9 /* RDataEditorTableHeaderView.h */; };
 		BCDF1C9213C2F160001216D9 /* RDataEditorTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */; };
+		BCE60A1F15E4E95A0039D8A3 /* Folding Bottom Hoover.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1615E4E95A0039D8A3 /* Folding Bottom Hoover.png */; };
+		BCE60A2015E4E95A0039D8A3 /* Folding Bottom Pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1715E4E95A0039D8A3 /* Folding Bottom Pressed.png */; };
+		BCE60A2115E4E95A0039D8A3 /* Folding Bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1815E4E95A0039D8A3 /* Folding Bottom.png */; };
+		BCE60A2215E4E95A0039D8A3 /* Folding Collapsed Hoover.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1915E4E95A0039D8A3 /* Folding Collapsed Hoover.png */; };
+		BCE60A2315E4E95A0039D8A3 /* Folding Collapsed Pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1A15E4E95A0039D8A3 /* Folding Collapsed Pressed.png */; };
+		BCE60A2415E4E95A0039D8A3 /* Folding Collapsed.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1B15E4E95A0039D8A3 /* Folding Collapsed.png */; };
+		BCE60A2515E4E95A0039D8A3 /* Folding Top Hoover.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1C15E4E95A0039D8A3 /* Folding Top Hoover.png */; };
+		BCE60A2615E4E95A0039D8A3 /* Folding Top Pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1D15E4E95A0039D8A3 /* Folding Top Pressed.png */; };
+		BCE60A2715E4E95A0039D8A3 /* Folding Top.png in Resources */ = {isa = PBXBuildFile; fileRef = BCE60A1E15E4E95A0039D8A3 /* Folding Top.png */; };
 		BCED54F514FA37BD00F5AD8A /* RTooltip.h in Headers */ = {isa = PBXBuildFile; fileRef = BCED54F314FA37BD00F5AD8A /* RTooltip.h */; };
 		BCED54F614FA37BD00F5AD8A /* RTooltip.m in Sources */ = {isa = PBXBuildFile; fileRef = BCED54F414FA37BD00F5AD8A /* RTooltip.m */; };
 		BCED54F914FA380A00F5AD8A /* RChooseMenuItemDialog.h in Headers */ = {isa = PBXBuildFile; fileRef = BCED54F714FA380A00F5AD8A /* RChooseMenuItemDialog.h */; };
@@ -513,6 +522,15 @@
 		BCDF1C9013C2F160001216D9 /* RDataEditorTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDataEditorTableHeaderView.m; sourceTree = "<group>"; };
 		BCE2529913326919001D3138 /* ja */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ja; path = ja.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
 		BCE5C673133262CC00381F90 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		BCE60A1615E4E95A0039D8A3 /* Folding Bottom Hoover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Bottom Hoover.png"; path = "images/Folding Bottom Hoover.png"; sourceTree = "<group>"; };
+		BCE60A1715E4E95A0039D8A3 /* Folding Bottom Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Bottom Pressed.png"; path = "images/Folding Bottom Pressed.png"; sourceTree = "<group>"; };
+		BCE60A1815E4E95A0039D8A3 /* Folding Bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Bottom.png"; path = "images/Folding Bottom.png"; sourceTree = "<group>"; };
+		BCE60A1915E4E95A0039D8A3 /* Folding Collapsed Hoover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Collapsed Hoover.png"; path = "images/Folding Collapsed Hoover.png"; sourceTree = "<group>"; };
+		BCE60A1A15E4E95A0039D8A3 /* Folding Collapsed Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Collapsed Pressed.png"; path = "images/Folding Collapsed Pressed.png"; sourceTree = "<group>"; };
+		BCE60A1B15E4E95A0039D8A3 /* Folding Collapsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Collapsed.png"; path = "images/Folding Collapsed.png"; sourceTree = "<group>"; };
+		BCE60A1C15E4E95A0039D8A3 /* Folding Top Hoover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Top Hoover.png"; path = "images/Folding Top Hoover.png"; sourceTree = "<group>"; };
+		BCE60A1D15E4E95A0039D8A3 /* Folding Top Pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Top Pressed.png"; path = "images/Folding Top Pressed.png"; sourceTree = "<group>"; };
+		BCE60A1E15E4E95A0039D8A3 /* Folding Top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Folding Top.png"; path = "images/Folding Top.png"; sourceTree = "<group>"; };
 		BCED54F314FA37BD00F5AD8A /* RTooltip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTooltip.h; sourceTree = "<group>"; };
 		BCED54F414FA37BD00F5AD8A /* RTooltip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTooltip.m; sourceTree = "<group>"; };
 		BCED54F714FA380A00F5AD8A /* RChooseMenuItemDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RChooseMenuItemDialog.h; sourceTree = "<group>"; };
@@ -635,6 +653,15 @@
 		162B6A0406CD770C00C0B085 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				BCE60A1615E4E95A0039D8A3 /* Folding Bottom Hoover.png */,
+				BCE60A1715E4E95A0039D8A3 /* Folding Bottom Pressed.png */,
+				BCE60A1815E4E95A0039D8A3 /* Folding Bottom.png */,
+				BCE60A1915E4E95A0039D8A3 /* Folding Collapsed Hoover.png */,
+				BCE60A1A15E4E95A0039D8A3 /* Folding Collapsed Pressed.png */,
+				BCE60A1B15E4E95A0039D8A3 /* Folding Collapsed.png */,
+				BCE60A1C15E4E95A0039D8A3 /* Folding Top Hoover.png */,
+				BCE60A1D15E4E95A0039D8A3 /* Folding Top Pressed.png */,
+				BCE60A1E15E4E95A0039D8A3 /* Folding Top.png */,
 				68C11BCF09FEE47C004DD95C /* Rdata.icns */,
 				68C11BB909FED6E1004DD95C /* Rdoc.icns */,
 				68C11BBA09FED6E1004DD95C /* Rrun.icns */,
@@ -1207,6 +1234,15 @@
 				6895896B132FB05C007D8E7B /* QuartzPrefPane.xib in Resources */,
 				BC1952B61330CA3500D52B29 /* EncodingPopupView.xib in Resources */,
 				BC81712F13321873004B52A0 /* SelectEncodingsPanel.xib in Resources */,
+				BCE60A1F15E4E95A0039D8A3 /* Folding Bottom Hoover.png in Resources */,
+				BCE60A2015E4E95A0039D8A3 /* Folding Bottom Pressed.png in Resources */,
+				BCE60A2115E4E95A0039D8A3 /* Folding Bottom.png in Resources */,
+				BCE60A2215E4E95A0039D8A3 /* Folding Collapsed Hoover.png in Resources */,
+				BCE60A2315E4E95A0039D8A3 /* Folding Collapsed Pressed.png in Resources */,
+				BCE60A2415E4E95A0039D8A3 /* Folding Collapsed.png in Resources */,
+				BCE60A2515E4E95A0039D8A3 /* Folding Top Hoover.png in Resources */,
+				BCE60A2615E4E95A0039D8A3 /* Folding Top Pressed.png in Resources */,
+				BCE60A2715E4E95A0039D8A3 /* Folding Top.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

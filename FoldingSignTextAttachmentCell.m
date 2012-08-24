@@ -75,14 +75,15 @@ static NSLayoutManager *scratchLayoutManager = nil;
 	[[col colorWithAlphaComponent:0.6f] setFill];
 	[path fill];
 	[path stroke];
-	[col setFill];
 
-	p = NSMakeRect(cellFrame.origin.x+4.0f+5.0f, y+h/2-1.0f, 3.0f, 3.0f);
-	NSRectFill(p);
-	p.origin.x+=5.0f;
-	NSRectFill(p);
-	p.origin.x+=5.0f;
-	NSRectFill(p);
+	// [col setFill];
+	// p = NSMakeRect(cellFrame.origin.x+4.0f+5.0f, y+h/2-1.0f, 3.0f, 3.0f);
+	// NSRectFill(p);
+	// p.origin.x+=5.0f;
+	// NSRectFill(p);
+	// p.origin.x+=5.0f;
+	// NSRectFill(p);
+
 }
 
 - (BOOL)wantsToTrackMouseForEvent:(NSEvent *)theEvent inRect:(NSRect)cellFrame ofView:(NSView *)controlView atCharacterIndex:(NSUInteger)charIndex
@@ -94,9 +95,7 @@ static NSLayoutManager *scratchLayoutManager = nil;
 {
 
 	if ([(RScriptEditorTextView *)controlView respondsToSelector:@selector(unfoldLinesContainingCharacterAtIndex:)]) {
-		[[(RScriptEditorTextView *)controlView undoManager] disableUndoRegistration];
 		BOOL success = [(RScriptEditorTextView *)controlView unfoldLinesContainingCharacterAtIndex:charIndex];
-		[[(RScriptEditorTextView *)controlView undoManager] enableUndoRegistration];
 		return success;
 	}
 

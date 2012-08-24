@@ -92,7 +92,11 @@
 
 }
 
-- (void)foldLinesInRange:(NSRange)range;
+- (IBAction)foldCurrentBlock:(id)sender;
+- (IBAction)unfoldCurrentBlock:(id)sender;
+- (IBAction)foldBlockAtLevel:(id)sender;
+- (IBAction)unFoldAllBlocks:(id)sender;
+- (void)refoldLinesInRange:(NSRange)range;
 
 - (void)setTabStops;
 
@@ -104,7 +108,9 @@
 - (void)updateLineWrappingMode;
 - (BOOL)lineNumberingEnabled;
 
+- (BOOL)foldLinesInRange:(NSRange)range;
 - (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex;
+- (NSInteger)foldStatusAtIndex:(NSInteger)index;
 
 - (void)updatePreferences;
 

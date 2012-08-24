@@ -159,8 +159,6 @@
 
 // other constants
 
-#define foldingAttributeName  @"folded"
-#define foldingAttributeId  @"foldedId"
 
 #define iBackgroundColor 0
 #define iInputColor      1

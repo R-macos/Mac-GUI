@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-08-24 [HJBB]
+*	Added Code Folding of { ... } multi-line blocks
+	in R Script Editor; see gutter and/or
+	Menu > Format > Code Folding > ...
+
 Last-update: 2012-08-11 [HJBB]
 *	Fixed bug for not working code completion if in the
 	completion scope strings wrapped by '' are involved

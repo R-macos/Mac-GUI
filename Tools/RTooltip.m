@@ -404,6 +404,7 @@ static CGFloat slow_in_out (CGFloat t)
 	[self setValue:[NSDate date] forKey:@"didOpenAtDate"];
 	mousePositionWhenOpened = NSZeroPoint;
 
+
 	NSWindow* appKeyWindow = [[NSApp keyWindow] retain];
 	BOOL didAcceptMouseMovedEvents = [appKeyWindow acceptsMouseMovedEvents];
 	[appKeyWindow setAcceptsMouseMovedEvents:YES];
@@ -447,7 +448,7 @@ static CGFloat slow_in_out (CGFloat t)
 
 	[self stopAnimation:self];
 	[self setValue:[NSDate date] forKey:@"animationStart"];
-	[self setValue:[NSTimer scheduledTimerWithTimeInterval:0.01f target:self selector:@selector(animationTick:) userInfo:nil repeats:YES] forKey:@"animationTimer"];
+	[self setValue:[NSTimer scheduledTimerWithTimeInterval:0.001f target:self selector:@selector(animationTick:) userInfo:nil repeats:YES] forKey:@"animationTimer"];
 }
 
 - (void)animationTick:(id)sender

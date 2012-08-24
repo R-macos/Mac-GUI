@@ -76,6 +76,7 @@
 	if ((self = [super initWithScrollView:aScrollView orientation:NSVerticalRuler]) != nil)
 	{
 		[self setClientView:[aScrollView documentView]];
+		cvTextStorage = (RScriptEditorTextStorage*)[[aScrollView documentView] textStorage];
 		// [self setAlternateTextColor:[NSColor whiteColor]];
 		lineIndices = nil;
 		textAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
@@ -98,8 +99,24 @@
 		rangeOfLineSel = @selector(getLineStart:end:contentsEnd:forRange:);
 
 		currentNumberOfLines = 1;
+		lineWrapping = NO;
 		numberClass = [NSNumber class];
+		
+		normalBackgroundColor = [[NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0] retain];
+		foldedBackgroundColor = [[NSColor colorWithCalibratedWhite: 0.85 alpha: 1.0] retain];
 
+		top          = [[NSImage imageNamed:@"Folding Top"] retain];
+		topHoover    = [[NSImage imageNamed:@"Folding Top Hoover"] retain];
+		bottom       = [[NSImage imageNamed:@"Folding Bottom"] retain];
+		bottomHoover = [[NSImage imageNamed:@"Folding Bottom Hoover"] retain];
+		folded       = [[NSImage imageNamed:@"Folding Collapsed"] retain];
+		foldedHoover = [[NSImage imageNamed:@"Folding Collapsed Hoover"] retain];
+
+
+		NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:[self visibleRect] options:NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveInKeyWindow owner:self userInfo:nil];
+		[self addTrackingArea:trackingArea];
+		[trackingArea release];
+		mouseHoveringAtPoint = NSMakePoint(-1,-1);
 	}
 
 	return self;
@@ -107,21 +124,43 @@
 
 - (void)awakeFromNib
 {
-	[self setClientView:[[self scrollView] documentView]];
+	[self setClientView:[[self scrollView] documentView]];	
 }
 
 - (void)dealloc
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 
+	for(NSTrackingArea *trackingArea in self.trackingAreas)
+		[self removeTrackingArea:trackingArea];
+
+	[top release];
+	[topHoover release];
+	[bottom release];
+	[bottomHoover release];
+	[folded release];
+	[foldedHoover release];
+
 	if (lineIndices) [lineIndices release];
 	if (textAttributes) [textAttributes release];
 	if (font) [font release];
 	if (textColor) [textColor release];
+	[normalBackgroundColor release];
+	[foldedBackgroundColor release];
 	[super dealloc];
 }
 
 #pragma mark -
+
+- (void)windowDidResignKey:(NSNotification*)notification
+{
+	[self mouseExited:nil];
+}
+
+- (void)setLineWrappingMode:(BOOL)mode
+{
+	lineWrapping = mode;
+}
 
 - (void)setFont:(NSFont *)aFont
 {
@@ -202,7 +241,7 @@
 {
 	if(![(RScriptEditorTextView*)clientView lineNumberingEnabled]) return;
 	[self invalidateLineIndices];
-	[self setNeedsDisplay:YES];
+	[self setNeedsDisplayInRect:[self visibleRect]];
 }
 
 - (void)textDidChange:(NSNotification *)notification
@@ -216,7 +255,7 @@
 	// They will be recalculated and recached on demand.
 	if([[clientView textStorage] editedMask] != 1) {
 		[self invalidateLineIndices];
-		[self setNeedsDisplay:YES];
+		[self setNeedsDisplayInRect:[self visibleRect]];
 	}
 
 }
@@ -291,11 +330,11 @@
 	return left;
 }
 
-// - (void)drawBackgroundInRect:(NSRect)rect
-// {
-//   [[NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0] set];
-//   [NSBezierPath fillRect: rect];
-// }
+- (void)drawBackgroundInRect:(NSRect)rect
+{
+  [normalBackgroundColor set];
+  [NSBezierPath fillRect: rect];
+}
 
 - (void)drawHashMarksAndLabelsInRect:(NSRect)aRect
 {
@@ -340,10 +379,14 @@
 	CGFloat boundsRULERMargin2 = NSWidth(bounds) - RULER_MARGIN2;
 	CGFloat boundsWidthRULER   = NSWidth(bounds) - RULER_MARGIN + 1;
 	CGFloat yinsetMinY         = yinset - NSMinY(visibleRect);
+	CGFloat foldBackWidth      = NSWidth(bounds) - 1;
+	CGFloat foldx              = boundsWidthRULER - 9;
 	CGFloat rectHeight;
 	CGFloat last_y = -10.0f;
 	CGFloat y;
-	NSInteger foldingDepth = 0;
+	BOOL isHoveringRect = YES;
+	BOOL flipped = [self isFlipped];
+
 
 	for (line = (NSUInteger)(*lineNumberForCharacterIndexIMP)(self, lineNumberForCharacterIndexSel, range.location); line < count; line++)
 	{
@@ -361,99 +404,66 @@
 				// Note that the ruler view is only as tall as the visible
 				// portion. Need to compensate for the clipview's coordinates.
 
-				// <TODO> enable for folding				
-				// Check for folding markers
-				// NSRange r;
-				// if(line < [lines count]-1) {
-				// 	r = NSMakeRange(index, [NSArrayObjectAtIndex(lines, line+1) unsignedIntegerValue]-1-index);
-				// } else {
-				// 	r = NSMakeRange(index, [[clientView string] length]-index);
-				// }
-				// 
-				// NSString *s = [[clientView string] substringWithRange:r];
-				// NSString *m = @"";
-				// unichar c;
-				// 
-				// if(r.length) {
-				// 	NSInteger i = [s length]-1;
-				// 	NSInteger type = 0;
-				// 	while(i >= 0) {
-				// 		c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
-				// 		type = [(RScriptEditorTextView*)clientView parserContextForPosition:i+index];
-				// 		if(c==' ' || c=='\t' || type == 4 || c=='#') {
-				// 			i--;
-				// 			continue;
-				// 		}
-				// 		if(c=='{' && type == 5) {
-				// 			m = @" ▼";
-				// 			foldingDepth++;
-				// 			// look for lines a la "} else {" - if so do not draw folding marker
-				// 			while(i>=0) {
-				// 				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
-				// 				if(c=='}' && [(RScriptEditorTextView*)clientView parserContextForPosition:i] == 5) {
-				// 					m = @"";
-				// 					foldingDepth--;
-				// 					break;
-				// 				}
-				// 				i--;
-				// 			}
-				// 			break;
-				// 		}
-				// 		if(c=='}') {
-				// 			m = @" ▲";
-				// 			foldingDepth--;
-				// 			i--;
-				// 			while(i>=0) {
-				// 				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
-				// 				if(c==' ' || c=='\t') {
-				// 					i--;
-				// 					continue;
-				// 				} else {
-				// 					m = @"";
-				// 					foldingDepth++;
-				// 					break;
-				// 				}
-				// 				i--;
-				// 			}
-				// 		}
-				// 		break;
-				// 	}
-				// }
-
-				// <TODO> enable for folding
-				// Line numbers are internally stored starting at 0
-				// labelText = [NSString stringWithFormat:@"%lu%@", (NSUInteger)(line + 1), m];
-				labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
-
-				// How many digits has the current line number?
-				NSUInteger idx = line + 1;
-				// <TODO> enable for folding
-				// NSInteger numOfDigits = 2; // 2 := folding marker width
-				NSInteger numOfDigits = 0;
-				while(idx) { numOfDigits++; idx/=10; }
-
 				rectHeight = NSHeight(rects[0]);
 				y = yinsetMinY + NSMinY(rects[0]) + ((NSInteger)(rectHeight - maxHeightOfGlyph) >> 1);
-
-				// if(foldingDepth < 0) foldingDepth = 0;
-				// 
-				// if(foldingDepth) {
-				// 	NSColor *c = [NSColor colorWithCalibratedWhite:(0.95f - foldingDepth*0.04f) alpha:1.0f];
-				// 	[c setFill];
-				// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
-				// } else {
-				// 	NSColor *c = [NSColor colorWithCalibratedWhite: 0.95 alpha: 1.0];
-				// 	[c setFill];
-				// 	NSRectFill(NSMakeRect(boundsWidthRULER-10, y, 10, 16));
-				// }
-				// 
 				if(y != last_y) {
+
+					// Check for folding markers
+					NSRange r;
+					NSImage *foldImage = nil;
+					if(line < [lines count]-1) {
+						r = NSMakeRange(index, [NSArrayObjectAtIndex(lines, line+1) unsignedIntegerValue]-1-index);
+					} else {
+						r = NSMakeRange(index, [[clientView string] length]-index);
+					}
+
+					isHoveringRect = NSMouseInRect(mouseHoveringAtPoint, NSMakeRect(foldx, y,
+							boundsRULERMargin2, rectHeight), flipped);
+
+					// for soft wrapped text view continue if line range is partially
+					// (r.location > a range.location) in a folded range
+					if(lineWrapping && [cvTextStorage inFoldedRangeForRange:r]) continue;
+
+					if([cvTextStorage foldedAtIndex:NSMaxRange(r)] > -1) {
+						foldImage = (isHoveringRect) ? foldedHoover : folded;
+						[foldedBackgroundColor setFill];
+						NSRectFill(NSMakeRect(0, y, foldBackWidth, rectHeight-5));
+					}
+					else if(r.length) {						
+						switch([(RScriptEditorTextView*)clientView foldStatusAtIndex:NSMaxRange(r)-1]) {
+							case 0:
+							foldImage = nil;
+							break;
+							case 1:
+							foldImage = (isHoveringRect) ? bottomHoover : bottom;
+							break;
+							case 2:
+							foldImage = (isHoveringRect) ? topHoover : top;
+							break;
+						}
+					}
+
+					// How many digits has the current line number?
+					NSUInteger idx = line + 1;
+					NSInteger numOfDigits = 2; // 2 := folding marker width
+					while(idx) { numOfDigits++; idx/=10; }
+
+					// Line numbers are internally stored starting at 0
+					labelText = [NSString stringWithFormat:@"%lu", (NSUInteger)(line + 1)];
 
 					// Draw string flush right, centered vertically within the line
 					[labelText drawInRect:
 						NSMakeRect(boundsWidthRULER - (maxWidthOfGlyph * numOfDigits), y,
 							boundsRULERMargin2, rectHeight)
 						withAttributes:textAttributes];
+
+					// Draw fold marker if any
+					if(foldImage)
+						[foldImage drawInRect:NSMakeRect(foldx, y, 12, 12) 
+								 fromRect:NSZeroRect 
+								operation:NSCompositeSourceOver fraction:1.0];
+
+
 				}
 				last_y = y;
 			}
@@ -479,9 +489,8 @@
 
 	line = [self lineNumberForLocation:p.y];
 
-	// <TODO> enable for folding
 	// Check if click was inside folding marker
-	if(0 && (NSWidth([self bounds]) - RULER_MARGIN) - p.x >= 0 && (NSWidth([self bounds]) - RULER_MARGIN) - p.x < 7) {
+	if(((NSWidth([self bounds]) - RULER_MARGIN)+3) - p.x >= 0 && ((NSWidth([self bounds]) - RULER_MARGIN)-3) - p.x < 7) {
 
 		NSUInteger caretPosition = 0;
 		NSArray *lines           = [self lineIndices];
@@ -495,51 +504,18 @@
 		} else {
 			selectionEnd = [[clientView string] length];
 		}
+
+		if(index < 0 || (selectionEnd - index) >= [[clientView string] length]) {
+			return;
+		}
+
 		r = NSMakeRange(index, selectionEnd - index);
 
-		NSString *s = [[clientView string] substringWithRange:r];
 		NSInteger foldItem = 0;
 		unichar c;
 
 		if(r.length) {
-			NSInteger i = [s length]-1;
-			NSInteger type = 0;
-			while(i >= 0) {
-				c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
-				type = [(RScriptEditorTextView*)clientView parserContextForPosition:i+index];
-				if(c==' ' || c=='\t' || type == 4 || c=='#') {
-					i--;
-					continue;
-				}
-				if(c=='{' && type == 5) {
-					foldItem = 1;
-					while(i>=0) {
-						c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
-						if(c=='}' && [(RScriptEditorTextView*)clientView parserContextForPosition:i] == 5) {
-							foldItem = 0;
-							break;
-						}
-						i--;
-					}
-					break;
-				}
-				if(c=='}') {
-					foldItem = 2;
-					i--;
-					while(i>=0) {
-						c = CFStringGetCharacterAtIndex((CFStringRef)s, i);
-						if(c==' ' || c=='\t') {
-							i--;
-							continue;
-						} else {
-							foldItem = 0;
-							break;
-						}
-						i--;
-					}
-				}
-				break;
-			}
+			foldItem = [(RScriptEditorTextView*)clientView foldStatusAtIndex:NSMaxRange(r)-1];
 		}
 		
 		if(foldItem < 2) {
@@ -550,48 +526,15 @@
 		}
 
 		NSUInteger stringLength = [[clientView string] length];
-
 		if(!stringLength) return;
+		if(caretPosition == 0 || caretPosition >= stringLength) return;
+		
 
 		CFStringRef parserStringRef = (CFStringRef)[clientView string];
 
-		unichar co = ' '; // opening char
-		unichar cc = ' '; // closing char
+		unichar co = '{'; // opening char
+		unichar cc = '}'; // closing char
 	
-		if(caretPosition == 0 || caretPosition >= stringLength) return;
-	
-		NSInteger pcnt = 0; // ) counter
-		NSInteger bcnt = 0; // ] counter
-		NSInteger scnt = 0; // } counter
-
-		// look for the first non-balanced closing bracket
-		for(NSUInteger i=caretPosition; i<stringLength; i++) {
-			if([(RScriptEditorTextView*)clientView parserContextForPosition:i] != pcExpression) continue;
-			switch(CFStringGetCharacterAtIndex(parserStringRef, i)) {
-				case ')': 
-					if(!pcnt) {
-						co='(';cc=')';
-						i=stringLength;
-					}
-					pcnt++; break;
-				case '(': pcnt--; break;
-				case ']': 
-					if(!bcnt) {
-						co='[';cc=']';
-						i=stringLength;
-					}
-					bcnt++; break;
-				case '[': bcnt--; break;
-				case '}': 
-					if(!scnt) {
-						co='{';cc='}';
-						i=stringLength;
-					}
-					scnt++; break;
-				case '{': scnt--; break;
-			}
-		}
-
 		NSInteger start = -1;
 		NSInteger end = -1;
 		NSInteger bracketCounter = 0;
@@ -617,6 +560,34 @@
 			}
 		}
 		if(start < 0 ) return;
+
+		// go up for lines like "} else {"
+		if(start && [(RScriptEditorTextView*)clientView foldStatusAtIndex:start-1] == 0) {
+			for(NSInteger i=start-1; i>=0; i--) {
+				c = CFStringGetCharacterAtIndex(parserStringRef, i);
+				if(c == '\n' || c == '\r') break;
+				if([(RScriptEditorTextView*)clientView parserContextForPosition:i] != pcExpression) continue;
+				if(c == cc && i > 0) {
+					bracketCounter = 0;
+					for(NSInteger j=i-1; j>=0; j--) {
+						if([(RScriptEditorTextView*)clientView parserContextForPosition:j] != pcExpression) continue;
+						c = CFStringGetCharacterAtIndex(parserStringRef, j);
+						if(c == co) {
+							if(!bracketCounter) {
+								start = j;
+								break;
+							}
+							bracketCounter--;
+						}
+						if(c == cc) {
+							bracketCounter++;
+						}
+					}
+					break;
+				}
+			}
+		}		
+
 
 		bracketCounter = 0;
 		for(NSUInteger i=caretPosition; i<stringLength; i++) {
@@ -655,14 +626,11 @@
 		NSRange foldRange = NSMakeRange(start, end-start);
 
 		if(foldItem) {
-			[[clientView undoManager] disableUndoRegistration];
 			if(![(RScriptEditorTextStorage*)[clientView textStorage] existsFoldedRange:foldRange]) {
 				[(RScriptEditorTextView*)clientView foldLinesInRange:foldRange];
 			} else {
 				[(RScriptEditorTextView*)clientView unfoldLinesContainingCharacterAtIndex:foldRange.location+1];
 			}
-			[[clientView undoManager] enableUndoRegistration];
-
 			return;
 		}
 		
@@ -843,8 +811,7 @@
 	else
 		newThickness = 100;
 
-	// <TODO> enable for folding
-	// newThickness += 12.0f;
+	newThickness += 12.0f;
 
 	currentNumberOfLines = lineCount;
 
@@ -875,6 +842,33 @@
 	maxWidthOfGlyph6 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph * 6 + RULER_MARGIN2));
 	maxWidthOfGlyph7 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph * 7 + RULER_MARGIN2));
 	maxWidthOfGlyph8 = ceil(MAX(DEFAULT_THICKNESS, maxWidthOfGlyph * 8 + RULER_MARGIN2));
+}
+
+- (void)mouseMoved:(NSEvent*)event
+{
+	mouseHoveringAtPoint = [self convertPoint:[event locationInWindow] fromView:nil];
+	[self setNeedsDisplayInRect:[self visibleRect]];
+}
+
+- (void)mouseExited:(NSEvent*)event
+{
+	mouseHoveringAtPoint = NSMakePoint(-1, -1);
+	[self setNeedsDisplayInRect:[self visibleRect]];
+}
+
+- (void)scrollWheel:(NSEvent*)event
+{
+	[clientView scrollWheel:event];
+	[self mouseMoved:event];
+}
+
+- (void)updateTrackingAreas
+{
+	[super updateTrackingAreas];
+	NSTrackingArea* trackingArea = [[NSTrackingArea alloc] initWithRect:[self visibleRect] options:NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveInKeyWindow owner:self userInfo:nil];
+	[self addTrackingArea:trackingArea];
+	[trackingArea release];
+	mouseHoveringAtPoint = NSMakePoint(-1,-1);
 }
 
 @end

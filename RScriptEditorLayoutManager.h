@@ -40,8 +40,8 @@
 @interface RScriptEditorLayoutManager : NSLayoutManager
 	 
 {
+
  	RScriptEditorTextStorage *_attributedString;
- 	IMP _setfImp;
 	
 }
 

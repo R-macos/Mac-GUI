@@ -60,6 +60,7 @@ static SEL _foldindSel;
 	if (self != nil) {
 		_attrStrImp = [self methodForSelector:_attrStrSel];
 		nullGlyph = NSNullGlyph;
+		sizeOfNSGlyph = sizeof(NSGlyph);
 	}
 
 	return self;
@@ -86,7 +87,9 @@ static SEL _foldindSel;
 	_destination = nil;
 }
 
-// NSGlyphStorage interface
+#pragma mark -
+#pragma mark NSGlyphStoragePrimitives
+
 - (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex
 {
 	NSGlyph *buffer = NULL;
@@ -95,13 +98,11 @@ static SEL _foldindSel;
 	if (folded > -1) {
 		NSRange effectiveRange = [theTextStorage foldedRangeAtIndex:folded];
 		if(effectiveRange.length) {
-			NSInteger size = sizeof(NSGlyph) * length;
+			NSInteger size = sizeOfNSGlyph * length;
 			buffer = NSZoneMalloc(NULL, size);
 			memset_pattern4(buffer, &nullGlyph, size);
 			if ((effectiveRange.location+1) == charIndex) buffer[0] = NSControlGlyph;
 			glyphs = buffer;
-		} else {
-			NSBeep();
 		}
 	}
 
@@ -122,7 +123,7 @@ static SEL _foldindSel;
 
 - (NSUInteger)layoutOptions
 {
-	return [_destination layoutOptions];
+	return [_destination layoutOptions] | NSShowControlGlyphs;
 }
 
 @end

@@ -69,13 +69,5 @@ static SEL _foldSel;
 	return [super actionForControlCharacterAtIndex:charIndex];
 }
 
-// - (NSUInteger)layoutParagraphAtPoint:(NSPointPointer)lineFragmentOrigin
-// {
-// 	(*_setfImp)(_attributedString, _setfSel, YES);
-// 	NSUInteger result = [super layoutParagraphAtPoint:lineFragmentOrigin];
-// 	(*_setfImp)(_attributedString, _setfSel, NO);
-// 	return result;
-// }
-
 @end
  

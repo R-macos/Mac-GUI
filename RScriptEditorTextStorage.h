@@ -34,16 +34,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define R_MAX_FOLDED_ITEMS 100
+#define R_MAX_FOLDED_ITEMS 1024
 
 @interface RScriptEditorTextStorage : NSTextStorage
 {
 
 	NSTextStorage *_attributedString;
-	NSInteger foldedRanges[R_MAX_FOLDED_ITEMS][2];
+	NSInteger foldedRanges[R_MAX_FOLDED_ITEMS][3];
 	NSInteger foldedCounter;
+	NSInteger currentMaxFoldedIndex;
 
-	BOOL _lineFoldingEnabled;
 	IMP _getImp;
 	IMP _setImp;
 	IMP _strImp;
@@ -53,13 +53,12 @@
 
 }
 
-@property BOOL lineFoldingEnabled;
-
 - (NSInteger)foldedAtIndex:(NSInteger)index;
 - (NSInteger)foldedForIndicatorAtIndex:(NSInteger)index;
 - (NSRange)foldedRangeAtIndex:(NSInteger)index;
 - (NSInteger)registerFoldedRange:(NSRange)range;
-- (BOOL)removeFoldedRangeWithId:(NSNumber*)index;
+- (BOOL)inFoldedRangeForRange:(NSRange)range;
+- (BOOL)removeFoldedRangeWithIndex:(NSInteger)i;
 - (void)removeAllFoldedRanges;
 - (BOOL)existsFoldedRange:(NSRange)range;
 - (BOOL)hasFoldedItems;

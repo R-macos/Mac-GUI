@@ -45,6 +45,7 @@
 	IMP _attrStrImp;
 	IMP _foldImp;
 	IMP _foldindImp;
+	NSInteger sizeOfNSGlyph;
 
 }
 

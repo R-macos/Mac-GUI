@@ -574,6 +574,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	int i = thisLine.location;
 	BOOL skip = NO;
 	unichar c;
+	unichar commentSign = (isRdDocument) ? '%' : '#';
+	
 	while (i < position) {
 		c = CFStringGetCharacterAtIndex((CFStringRef)string, i);
 		if (skip) {
@@ -601,9 +603,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 					context = pcStringBQ;
 			}
 			else if(context == pcExpression) {
-				if(isRdDocument && c == '%')
-					context = pcComment;
-				else if(c == '#')
+				if(c == commentSign)
 					context = pcComment;
 			}
 
@@ -1236,6 +1236,12 @@ BOOL RTextView_autoCloseBrackets = YES;
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
 
+	if ([menuItem action] == @selector(undo:))
+		return ([[self undoManager] canUndo]);
+
+	if ([menuItem action] == @selector(redo:))
+		return ([[self undoManager] canRedo]);
+
 	if ([menuItem action] == @selector(makeASCIIconform:))
 		return ([self selectedRange].length || (([(RTextView*)self getRangeForCurrentWord].length) && RPARSERCONTEXTFORPOSITION((RTextView*)self, [self selectedRange].location) < pcStringBQ)) ? YES : NO;
 
@@ -1697,7 +1703,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 }
 
 /**
- * Inserts a chosen query favorite and initialze a snippet session if user defined any
+ * Inserts a chosen snippet and initialze a snippet session if user defined any
  */
 - (void)insertAsSnippet:(NSString*)theSnippet atRange:(NSRange)targetRange
 {
@@ -2010,7 +2016,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 /**
  * Return YES if user interacts with snippets (is needed mainly for suppressing
- * the highlighting of the current query)
+ * the highlighting of the current line)
  */
 - (BOOL)isSnippetMode
 {
