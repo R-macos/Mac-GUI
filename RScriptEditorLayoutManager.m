@@ -57,7 +57,7 @@
 	[self setGlyphGenerator:glyphGenerator];
 	[glyphGenerator release];
 
-	[self setBackgroundLayoutEnabled:YES];
+	[self setBackgroundLayoutEnabled:NO];
 
 	return self;
 

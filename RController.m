@@ -350,7 +350,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[attr setDictionary:[consoleTextView selectedTextAttributes]];
 	[attr setObject:[Preferences unarchivedObjectForKey:selectionColorKey withDefault:[NSColor colorWithCalibratedRed:0.71f green:0.835f blue:1.0f alpha:1.0f]] forKey:NSBackgroundColorAttributeName];
 	[consoleTextView setSelectedTextAttributes:attr];
-	[consoleTextView setNeedsDisplayInRect:[consoleTextView bounds]];
+	[consoleTextView setNeedsDisplayInRect:[consoleTextView visibleRect]];
 
 	NSLayoutManager *lm = [[consoleTextView layoutManager] retain];
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5

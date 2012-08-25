@@ -357,13 +357,18 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 }
 
+- (id)scrollView
+{
+	return scrollView;
+}
+
 - (void)setNonSyntaxHighlighting
 {
 	[theTextStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
 	[theTextStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
 	[self setTextColor:[NSColor blackColor]];
 	[self setInsertionPointColor:[NSColor blackColor]];
-	[self setNeedsDisplayInRect:[self bounds]];
+	[self setNeedsDisplayInRect:[self visibleRect]];
 }
 
 /**
@@ -426,7 +431,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		if(shColorCursor) [shColorCursor release];
 		shColorCursor = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
 		[self setInsertionPointColor:shColorCursor];
-		[self setNeedsDisplayInRect:[self bounds]];
+		[self setNeedsDisplayInRect:[self visibleRect]];
 	} else if ([keyPath isEqualToString:identifierSyntaxColorKey]) {
 		if(shColorIdentifier) [shColorIdentifier release];
 		shColorIdentifier = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
@@ -435,18 +440,18 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:editorBackgroundColorKey]) {
 		if(shColorBackground) [shColorBackground release];
 		shColorBackground = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		[self setNeedsDisplayInRect:[self bounds]];
+		[self setNeedsDisplayInRect:[self visibleRect]];
 	} else if ([keyPath isEqualToString:editorCurrentLineBackgroundColorKey]) {
 		if(shColorCurrentLine) [shColorCurrentLine release];
 		shColorCurrentLine = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
-		[self setNeedsDisplayInRect:[self bounds]];
+		[self setNeedsDisplayInRect:[self visibleRect]];
 	} else if ([keyPath isEqualToString:editorSelectionBackgroundColorKey]) {
 		NSColor *c = [[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]] retain];
 		NSMutableDictionary *attr = [NSMutableDictionary dictionary];
 		[attr setDictionary:[self selectedTextAttributes]];
 		[attr setObject:c forKey:NSBackgroundColorAttributeName];
 		[self setSelectedTextAttributes:attr];
-		[self setNeedsDisplayInRect:[self bounds]];
+		[self setNeedsDisplayInRect:[self visibleRect]];
 
 	} else if ([keyPath isEqualToString:showSyntaxColoringKey]) {
 		syntaxHighlightingEnabled = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
@@ -486,11 +491,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		}
 
 	} else if ([keyPath isEqualToString:highlightCurrentLine]) {
-		[self setNeedsDisplayInRect:[self bounds]];
+		[self setNeedsDisplayInRect:[self visibleRect]];
 
 	} else if ([keyPath isEqualToString:RScriptEditorDefaultFont] && ![[[[self window] windowController] document] isRTF] && ![self selectedRange].length) {
 			[self setFont:[NSUnarchiver unarchiveObjectWithData:[change objectForKey:NSKeyValueChangeNewKey]]];
-			[self setNeedsDisplayInRect:[self bounds]];
+			[self setNeedsDisplayInRect:[self visibleRect]];
 	
 		} else if ([keyPath isEqualToString:HighlightIntervalKey]) {
 		braceHighlightInterval = [Preferences floatForKey:HighlightIntervalKey withDefault:0.3f];
@@ -501,12 +506,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 {
 
 	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
-
+	
 	NSSize contentSize = [scrollView contentSize];
 	NSTextContainer *textContainer = [self textContainer];
-
+	
 	// [self setMinSize:contentSize];
-
+	
 	if (lineWrappingEnabled) {
 		[scrollView setHasHorizontalScroller:YES];
 		[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
@@ -520,7 +525,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		[self setHorizontallyResizable:YES];
 		[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:NO];
 	}
-
+	
 	[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
 
 	// NSSize layoutSize;
@@ -716,7 +721,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// by considering entire lines).
 
 	// Get the text range currently displayed in the view port
-	NSRect visibleRect = [scrollView documentVisibleRect];
+	NSRect visibleRect = [self visibleRect];
 	NSRange visibleRange = [[self layoutManager] glyphRangeForBoundingRectWithoutAdditionalLayout:visibleRect inTextContainer:[self textContainer]];
 
 	if(!visibleRange.length) {
@@ -864,11 +869,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			if(breakSyntaxHighlighting) {
 
 				// Cancel calling doSyntaxHighlighting
-				[NSObject cancelPreviousPerformRequestsWithTarget:self 
-										selector:@selector(doSyntaxHighlighting) 
-										object:nil];
-
-				[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.15f];
+				// [NSObject cancelPreviousPerformRequestsWithTarget:self 
+				// 						selector:@selector(doSyntaxHighlighting) 
+				// 						object:nil];
+				// 
+				// [self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.15f];
 
 				breakSyntaxHighlighting = 0;
 				break;
@@ -892,8 +897,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	[theTextStorage endEditing];
 	isSyntaxHighlighting = NO;
-
-	[self setNeedsDisplayInRect:[self bounds]];
+	[self setNeedsDisplayInRect:visibleRect];
 
 }
 

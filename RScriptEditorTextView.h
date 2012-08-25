@@ -112,6 +112,8 @@
 - (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex;
 - (NSInteger)foldStatusAtIndex:(NSInteger)index;
 
+- (id)scrollView;
+
 - (void)updatePreferences;
 
 @end

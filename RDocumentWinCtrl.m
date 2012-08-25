@@ -1143,7 +1143,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				}
 			}
 
-			[textView setNeedsDisplayInRect:[textView frame]];
+			// [textView setNeedsDisplayInRect:[textView frame]];
 			return YES;
 		}
 	}
@@ -1327,7 +1327,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 #endif
 
 	if([[NSUserDefaults standardUserDefaults] boolForKey:highlightCurrentLine])
-		[tv setNeedsDisplayInRect:[tv bounds] avoidAdditionalLayout:YES];
+		[tv setNeedsDisplayInRect:[tv visibleRect] avoidAdditionalLayout:NO];
 
 	// Adjust cursor position if cursor is inside of a folded text chunk;
 	// additional checks were made in [RScriptEditorTextView:setSelectedRanges:]

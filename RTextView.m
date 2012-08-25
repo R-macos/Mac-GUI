@@ -1569,7 +1569,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	snippetWasJustInserted = NO;
 
 	// remove all snippet frames
-	[self setNeedsDisplayInRect:[self bounds] avoidAdditionalLayout:NO];
+	[self setNeedsDisplayInRect:[self visibleRect] avoidAdditionalLayout:NO];
 
 }
 
