@@ -58,7 +58,7 @@
 - (NSRange)foldedRangeAtIndex:(NSInteger)index;
 - (NSInteger)registerFoldedRange:(NSRange)range;
 - (BOOL)inFoldedRangeForRange:(NSRange)range;
-- (BOOL)removeFoldedRangeWithIndex:(NSInteger)i;
+- (BOOL)removeFoldedRangeWithIndex:(NSInteger)index;
 - (void)removeAllFoldedRanges;
 - (BOOL)existsFoldedRange:(NSRange)range;
 - (BOOL)hasFoldedItems;
