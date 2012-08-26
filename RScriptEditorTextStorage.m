@@ -189,7 +189,7 @@ static SEL _getlSel;
 	BOOL exists = NO;
 	NSRange range;
 	
-	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex %d", i);
+	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex %d", index);
 	
 	if(index > -1 && index < R_MAX_FOLDED_ITEMS) {
 		if(foldedRanges[index][0] > -1 && foldedRanges[index][1] > 0) {
