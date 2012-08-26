@@ -505,53 +505,53 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 - (void)updateLineWrappingMode
 {
 
-	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
-	
-	NSSize contentSize = [scrollView contentSize];
-	NSTextContainer *textContainer = [self textContainer];
-	
-	// [self setMinSize:contentSize];
-	
-	if (lineWrappingEnabled) {
-		[scrollView setHasHorizontalScroller:YES];
-		[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
-		[textContainer setWidthTracksTextView:YES];
-		[self setHorizontallyResizable:NO];
-		[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:YES];
-	} else {
-		[scrollView setHasHorizontalScroller:YES];
-		[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
-		[textContainer setWidthTracksTextView:NO];
-		[self setHorizontallyResizable:YES];
-		[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:NO];
-	}
-	
-	[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
-
-	// NSSize layoutSize;
-	// 
 	// lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
-	// [self setHorizontallyResizable:YES];
-	// if (!lineWrappingEnabled) {
-	// 	layoutSize = NSMakeSize(10e6,10e6);
+	// 
+	// NSSize contentSize = [scrollView contentSize];
+	// NSTextContainer *textContainer = [self textContainer];
+	// 
+	// // [self setMinSize:contentSize];
+	// 
+	// if (lineWrappingEnabled) {
 	// 	[scrollView setHasHorizontalScroller:YES];
-	// 	[self setMaxSize:layoutSize];
-	// 	[[self textContainer] setContainerSize:layoutSize];
-	// 	[[self textContainer] setWidthTracksTextView:NO];
+	// 	[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
+	// 	[textContainer setWidthTracksTextView:YES];
+	// 	[self setHorizontallyResizable:NO];
+	// 	[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:YES];
 	// } else {
-	// 	[scrollView setHasHorizontalScroller:NO];
-	// 	layoutSize = [self maxSize];
-	// 	[self setMaxSize:layoutSize];
-	// 	[[self textContainer] setContainerSize:layoutSize];
-	// 	[[self textContainer] setWidthTracksTextView:YES];
-	// 	// Enforce view to be re-layouted correctly
-	// 	[[self undoManager] disableUndoRegistration];
-	// 	[self selectAll:nil];
-	// 	[self cut:nil];
-	// 	[self paste:nil];
-	// 	[[self undoManager] enableUndoRegistration];
+	// 	[scrollView setHasHorizontalScroller:YES];
+	// 	[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
+	// 	[textContainer setWidthTracksTextView:NO];
+	// 	[self setHorizontallyResizable:YES];
+	// 	[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:NO];
 	// }
-	// [[self textContainer] setHeightTracksTextView:NO];
+	// 
+	// [[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+
+	NSSize layoutSize;
+	
+	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
+	[self setHorizontallyResizable:YES];
+	if (!lineWrappingEnabled) {
+		layoutSize = NSMakeSize(10e6,10e6);
+		[scrollView setHasHorizontalScroller:YES];
+		[self setMaxSize:layoutSize];
+		[[self textContainer] setContainerSize:layoutSize];
+		[[self textContainer] setWidthTracksTextView:NO];
+	} else {
+		[scrollView setHasHorizontalScroller:NO];
+		layoutSize = [self maxSize];
+		[self setMaxSize:layoutSize];
+		[[self textContainer] setContainerSize:layoutSize];
+		[[self textContainer] setWidthTracksTextView:YES];
+		// Enforce view to be re-layouted correctly
+		[[self undoManager] disableUndoRegistration];
+		[self selectAll:nil];
+		[self cut:nil];
+		[self paste:nil];
+		[[self undoManager] enableUndoRegistration];
+	}
+	[[self textContainer] setHeightTracksTextView:NO];
 
 
 }
@@ -869,11 +869,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 			if(breakSyntaxHighlighting) {
 
 				// Cancel calling doSyntaxHighlighting
-				// [NSObject cancelPreviousPerformRequestsWithTarget:self 
-				// 						selector:@selector(doSyntaxHighlighting) 
-				// 						object:nil];
-				// 
-				// [self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.15f];
+				[NSObject cancelPreviousPerformRequestsWithTarget:self 
+										selector:@selector(doSyntaxHighlighting) 
+										object:nil];
+				
+				[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.2f];
 
 				breakSyntaxHighlighting = 0;
 				break;
@@ -1159,13 +1159,14 @@ inside such a range (go to line, find something) the folded range will be unfold
 		// set caret for ▲ line inside {} for scrolling
 		if(foldItem == 2)
 			[self setSelectedRange:NSMakeRange(r.location, 0)];
-		[self foldLinesInRange:foldRange];
+		[self foldLinesInRange:foldRange blockMode:NO];
 	}
 
 }
 
 - (IBAction)foldBlockAtLevel:(id)sender
 {
+
 	NSInteger level = [sender tag];
 	NSInteger bracketCounter = 0;
 	NSInteger start = 0;
@@ -1174,7 +1175,7 @@ inside such a range (go to line, find something) the folded range will be unfold
 	
 	unichar c;
 	
-	// [self unFoldAllBlocks:self];
+	[[self undoManager] disableUndoRegistration];
 	
 	for(NSInteger i=0; i<[[self string] length]; i++) {
 		c = CFStringGetCharacterAtIndex(str, i);
@@ -1195,7 +1196,7 @@ inside such a range (go to line, find something) the folded range will be unfold
 					end = i;
 					NSRange r = NSMakeRange(start, end - start+1);
 					if(![theTextStorage existsFoldedRange:r])
-						[self foldLinesInRange:r];
+						[self foldLinesInRange:r blockMode:YES];
 				}
 				if(bracketCounter < 0) {
 					NSBeep();
@@ -1204,7 +1205,25 @@ inside such a range (go to line, find something) the folded range will be unfold
 			}
 		}
 	}
+
+	[self didChangeText];
 	
+	NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
+										glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
+												  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
+
+	[theTextStorage ensureAttributesAreFixedInRange:r];
+
+	if(lineNumberingEnabled)
+		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self 
+							selector:@selector(doSyntaxHighlighting) 
+							object:nil];
+
+	[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.02f];
+
+	[[self undoManager] enableUndoRegistration];
 }
 
 - (IBAction)unFoldAllBlocks:(id)sender
@@ -1257,7 +1276,7 @@ inside such a range (go to line, find something) the folded range will be unfold
 
 }
 
-- (BOOL)foldLinesInRange:(NSRange)range
+- (BOOL)foldLinesInRange:(NSRange)range blockMode:(BOOL)blockMode
 {
 	if(range.length < 5) {
 		return NO;
@@ -1315,12 +1334,14 @@ inside such a range (go to line, find something) the folded range will be unfold
 
 	if(!range.length) return NO;
 	
-	[[self undoManager] disableUndoRegistration];
-	if(![self shouldChangeTextInRange:range replacementString:nil]) {
+	if(!blockMode) {
+		[[self undoManager] disableUndoRegistration];
+		if(![self shouldChangeTextInRange:range replacementString:nil]) {
+			[[self undoManager] enableUndoRegistration];
+			return NO;
+		}
 		[[self undoManager] enableUndoRegistration];
-		return NO;
 	}
-	[[self undoManager] enableUndoRegistration];
 
 	NSString *tooltip = nil;
 	if(range.length < 300)
@@ -1333,25 +1354,27 @@ inside such a range (go to line, find something) the folded range will be unfold
 	[theTextStorage addAttribute:NSToolTipAttributeName value:tooltip range:range];
 	[theTextStorage endEditing];
 
-	[self didChangeText];
+	if(!blockMode) {
+		[self didChangeText];
 
-	if(caretWasInsideFoldedRange)
-		[self scrollRangeToVisible:[self selectedRange]];
+		if(caretWasInsideFoldedRange)
+			[self scrollRangeToVisible:[self selectedRange]];
 
-	NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
-										glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
-												  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
+		NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
+											glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
+													  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
 
-	[theTextStorage ensureAttributesAreFixedInRange:r];
+		[theTextStorage ensureAttributesAreFixedInRange:r];
 
-	if(lineNumberingEnabled)
-		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+		if(lineNumberingEnabled)
+			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
 	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self 
-							selector:@selector(doSyntaxHighlighting) 
-							object:nil];
+		[NSObject cancelPreviousPerformRequestsWithTarget:self 
+								selector:@selector(doSyntaxHighlighting) 
+								object:nil];
 
-	[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.02f];
+		[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.02f];
+	}
 
 	return YES;
 

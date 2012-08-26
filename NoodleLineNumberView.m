@@ -627,7 +627,7 @@
 
 		if(foldItem) {
 			if(![(RScriptEditorTextStorage*)[clientView textStorage] existsFoldedRange:foldRange]) {
-				[(RScriptEditorTextView*)clientView foldLinesInRange:foldRange];
+				[(RScriptEditorTextView*)clientView foldLinesInRange:foldRange blockMode:NO];
 			} else {
 				[(RScriptEditorTextView*)clientView unfoldLinesContainingCharacterAtIndex:foldRange.location+1];
 			}

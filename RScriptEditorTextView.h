@@ -108,7 +108,7 @@
 - (void)updateLineWrappingMode;
 - (BOOL)lineNumberingEnabled;
 
-- (BOOL)foldLinesInRange:(NSRange)range;
+- (BOOL)foldLinesInRange:(NSRange)range blockMode:(BOOL)blockMode;
 - (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex;
 - (NSInteger)foldStatusAtIndex:(NSInteger)index;
 

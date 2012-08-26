@@ -1327,7 +1327,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 #endif
 
 	if([[NSUserDefaults standardUserDefaults] boolForKey:highlightCurrentLine])
-		[tv setNeedsDisplayInRect:[tv visibleRect] avoidAdditionalLayout:NO];
+		[tv setNeedsDisplayInRect:[tv visibleRect] avoidAdditionalLayout:YES];
 
 	// Adjust cursor position if cursor is inside of a folded text chunk;
 	// additional checks were made in [RScriptEditorTextView:setSelectedRanges:]
