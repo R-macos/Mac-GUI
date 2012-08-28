@@ -127,6 +127,10 @@ int R_SetOptionWidth(int);
 
 static RController* sharedRController;
 
+static SEL _nextEventSel;
+static SEL _sendEventSel;
+static SEL _doProcessSel;
+
 static inline const char* NSStringUTF8String(NSString* self) 
 {
 	typedef const char* (*SPUTF8StringMethodPtr)(NSString*, SEL);
@@ -223,6 +227,14 @@ static inline const char* NSStringUTF8String(NSString* self)
 	consoleColors = [defaultConsoleColors mutableCopy];
 
 	filteredHistory = nil;
+	
+	_nextEventSel = @selector(nextEventMatchingMask:untilDate:inMode:dequeue:);
+	_sendEventSel = @selector(sendEvent:);
+	_doProcessSel = @selector(doProcessEvents:);
+
+	_nextEventImp = [NSApp methodForSelector:_nextEventSel];
+	_sendEventImp = [NSApp methodForSelector:_sendEventSel];
+	_doProcessImp = [self methodForSelector:_doProcessSel];
 
 	specialCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"\r\b\a"] retain];
 
@@ -670,15 +682,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 		SLog(@"RController.applicationDidFinishLaunching - load history file %@", fname);
 	}
     
-	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
-	if ([pendingDocsToOpen count] > 0) {
-		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
-		NSString *fileName;
-		SLog(@" - %d documents to open", [pendingDocsToOpen count]);
-		while ((fileName = (NSString*) [enumerator nextObject]))
-			[self application:NSApp openFile:fileName];
-		[pendingDocsToOpen removeAllObjects];
-	}
 
 	[[REngine mainEngine] executeString:@"if (exists('.First') && is.function(.First) && !identical(.First, .__RGUI__..First)) .First()"];
 
@@ -741,6 +744,16 @@ static inline const char* NSStringUTF8String(NSString* self)
 		NSInteger m = [[NSApp mainMenu] numberOfItems]-2; // Window submenu
 		[[[[NSApp mainMenu] itemAtIndex:m] submenu] insertItem:[NSMenuItem separatorItem] atIndex:0];
 		[[[[NSApp mainMenu] itemAtIndex:m] submenu] insertItem:toggleFullScreenMenuItem atIndex:0];
+	}
+
+	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
+	if ([pendingDocsToOpen count] > 0) {
+		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
+		NSString *fileName;
+		SLog(@" - %d documents to open", [pendingDocsToOpen count]);
+		while ((fileName = (NSString*) [enumerator nextObject]))
+			[self application:NSApp openFile:fileName];
+		[pendingDocsToOpen removeAllObjects];
 	}
 
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
@@ -1388,7 +1401,7 @@ extern BOOL isTimeToFinish;
 - (void)  handleProcessingInput: (char*) cmd
 {
 	NSString *s = [[NSString alloc] initWithUTF8String:cmd];
-	
+
 	@synchronized(textViewSync) {
 		unsigned textLength = [[consoleTextView textStorage] length];
 		
@@ -1426,7 +1439,7 @@ extern BOOL isTimeToFinish;
 	
 	while ([consoleInputQueue count]==0) {
 		processingEvents = NO; // we should be at the top level, so for sanity reasons make sure we always process events
-		[self doProcessEvents: YES];
+		(_doProcessImp)(self, _doProcessSel, YES);
 	}
 	
 	currentConsoleInput = [consoleInputQueue objectAtIndex:0];
@@ -1711,15 +1724,14 @@ extern BOOL isTimeToFinish;
 		while (1) {
 			pid_t w = waitpid(pid, &cstat, WNOHANG);
 			if (w!=0 || breakPending) break;
+
 			// NOTE: this deliberately circumvents doProcessEvents: since we need events
 			// to be processed in all cases, even if system was called from within
 			// the event handler and as such can run recursively
 			NSEvent *event;
-			if( (event = [NSApp nextEventMatchingMask:NSAnyEventMask
-											untilDate:[NSDate dateWithTimeIntervalSinceNow:0.05]
-											   inMode:NSDefaultRunLoopMode 
-											  dequeue:YES]))
-				[NSApp sendEvent:event];
+			if((event = (_nextEventImp)(NSApp, _nextEventSel, NSAnyEventMask, [NSDate dateWithTimeIntervalSinceNow:0.05], NSDefaultRunLoopMode, YES)))
+				(_sendEventImp)(NSApp, _sendEventSel, event);
+
 		}
 		if(breakPending) {
 			kill(pid, SIGINT);
@@ -3078,7 +3090,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return(1);
 }
 
-- (void) doProcessEvents: (BOOL) blocking {
+- (void) doProcessEvents: (BOOL) blocking
+{
+
 	NSEvent *event;
 	
 	// avoid re-entrant event processing
@@ -3090,23 +3104,17 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 #endif
 		if (blocking){
-			event = [NSApp nextEventMatchingMask:NSAnyEventMask
-									   untilDate:[NSDate distantFuture]
-										  inMode:NSDefaultRunLoopMode
-										 dequeue:YES];
-			[NSApp sendEvent:event];	
+			(_sendEventImp)(NSApp, _sendEventSel, (_nextEventImp)(NSApp, _nextEventSel, NSAnyEventMask, [NSDate distantFuture], NSDefaultRunLoopMode, YES));
 		} else {
-			while( (event = [NSApp nextEventMatchingMask:NSAnyEventMask
-											   untilDate:[NSDate dateWithTimeIntervalSinceNow:0.0001]
-												  inMode:NSDefaultRunLoopMode 
-												 dequeue:YES]))
-				[NSApp sendEvent:event];
+			while((event = (_nextEventImp)(NSApp, _nextEventSel, NSAnyEventMask, [NSDate dateWithTimeIntervalSinceNow:0.0001], NSDefaultRunLoopMode, YES)))
+				(_sendEventImp)(NSApp, _sendEventSel, event);
 		}
 #ifdef USE_POOLS
 		[pool release];
 #endif
 	}
 	@catch (NSException *foo) {
+		NSBeep();
 		NSLog(@"*** RController: caught ObjC exception while processing system events. Update to the latest GUI version and consider reporting this properly (see FAQ) if it persists and is not known. \n*** reason: %@\n*** name: %@, info: %@\n*** Version: R %s.%s (%s) R.app %@%s\nConsider saving your work soon in case this develops into a problem.", [foo reason], [foo name], [foo userInfo], R_MAJOR, R_MINOR, R_SVN_REVISION, [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], getenv("R_ARCH"));
 	}
 	processingEvents = NO;
@@ -3117,8 +3125,9 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	return;
 }
 
-- (void) handleProcessEvents{
-	[self doProcessEvents: NO];
+- (void) handleProcessEvents
+{
+	(_doProcessImp)(self, _doProcessSel, NO);
 }
 
 

@@ -92,6 +92,10 @@
 	WebView *currentWebViewForFindAction;
 	id searchInWebViewWindow;
 
+	IMP _nextEventImp;
+	IMP _sendEventImp;
+	IMP _doProcessImp;
+
 	NSTimer *timer;
 	NSTimer *RLtimer;
 	NSTimer *Flushtimer;
