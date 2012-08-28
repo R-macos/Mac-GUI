@@ -574,7 +574,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if (lineStart == position)
 		return context;
 
-	SLog(@"RTextView: parserContextForPosition: %d, line span=%ld:%ld", position, thisLine.location, thisLine.length);
+	SLog(@"RTextView: parserContextForPosition: %d, line start: %ld", position, lineStart);
 
 	int i = lineStart;
 	BOOL skip = NO;
