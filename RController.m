@@ -744,6 +744,10 @@ static inline const char* NSStringUTF8String(NSString* self)
 		NSInteger m = [[NSApp mainMenu] numberOfItems]-2; // Window submenu
 		[[[[NSApp mainMenu] itemAtIndex:m] submenu] insertItem:[NSMenuItem separatorItem] atIndex:0];
 		[[[[NSApp mainMenu] itemAtIndex:m] submenu] insertItem:toggleFullScreenMenuItem atIndex:0];
+	} else {
+		// <TODO> folding only for >=10.7 - why?
+		[[[[[NSApp mainMenu] itemAtIndex:3] submenu] itemAtIndex:9] setHidden:YES];
+		[[[[[NSApp mainMenu] itemAtIndex:3] submenu] itemAtIndex:10] setHidden:YES];
 	}
 
 	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");

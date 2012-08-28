@@ -36,8 +36,10 @@
 #import "RScriptEditorTextView.h"
 #import "RScriptEditorTextStorage.h"
 #import "PreferenceKeys.h"
+#import "RWindow.h"
 
 #include <tgmath.h>
+
 
 #pragma mark NSCoding methods
 
@@ -76,6 +78,12 @@
 	if ((self = [super initWithScrollView:aScrollView orientation:NSVerticalRuler]) != nil)
 	{
 		[self setClientView:[aScrollView documentView]];
+
+		isFoldingEnabled = NO;
+		if (floor(NSAppKitVersionNumber) > NSAppKitVersionNumber10_6) {
+			isFoldingEnabled = YES;
+		}
+
 		cvTextStorage = (RScriptEditorTextStorage*)[[aScrollView documentView] textStorage];
 		// [self setAlternateTextColor:[NSColor whiteColor]];
 		lineIndices = nil;
@@ -417,29 +425,31 @@
 						r = NSMakeRange(index, [[clientView string] length]-index);
 					}
 
-					isHoveringRect = NSMouseInRect(mouseHoveringAtPoint, NSMakeRect(foldx, y,
-							boundsRULERMargin2, rectHeight), flipped);
+					if(isFoldingEnabled) {
+						isHoveringRect = NSMouseInRect(mouseHoveringAtPoint, NSMakeRect(foldx, y,
+								boundsRULERMargin2, rectHeight), flipped);
 
-					// for soft wrapped text view continue if line range is partially
-					// (r.location > a range.location) in a folded range
-					if(lineWrapping && [cvTextStorage inFoldedRangeForRange:r]) continue;
+						// for soft wrapped text view continue if line range is partially
+						// (r.location > a range.location) in a folded range
+						if(lineWrapping && [cvTextStorage inFoldedRangeForRange:r]) continue;
 
-					if([cvTextStorage foldedAtIndex:NSMaxRange(r)] > -1) {
-						foldImage = (isHoveringRect) ? foldedHoover : folded;
-						[foldedBackgroundColor setFill];
-						NSRectFill(NSMakeRect(0, y, foldBackWidth, rectHeight-5));
-					}
-					else if(r.length) {						
-						switch([(RScriptEditorTextView*)clientView foldStatusAtIndex:NSMaxRange(r)-1]) {
-							case 0:
-							foldImage = nil;
-							break;
-							case 1:
-							foldImage = (isHoveringRect) ? bottomHoover : bottom;
-							break;
-							case 2:
-							foldImage = (isHoveringRect) ? topHoover : top;
-							break;
+						if([cvTextStorage foldedAtIndex:NSMaxRange(r)] > -1) {
+							foldImage = (isHoveringRect) ? foldedHoover : folded;
+							[foldedBackgroundColor setFill];
+							NSRectFill(NSMakeRect(0, y, foldBackWidth, rectHeight-5));
+						}
+						else if(r.length) {						
+							switch([(RScriptEditorTextView*)clientView foldStatusAtIndex:NSMaxRange(r)-1]) {
+								case 0:
+								foldImage = nil;
+								break;
+								case 1:
+								foldImage = (isHoveringRect) ? bottomHoover : bottom;
+								break;
+								case 2:
+								foldImage = (isHoveringRect) ? topHoover : top;
+								break;
+							}
 						}
 					}
 
@@ -458,7 +468,7 @@
 						withAttributes:textAttributes];
 
 					// Draw fold marker if any
-					if(foldImage)
+					if(isFoldingEnabled && foldImage)
 						[foldImage drawInRect:NSMakeRect(foldx, y, 12, 12) 
 								 fromRect:NSZeroRect 
 								operation:NSCompositeSourceOver fraction:1.0];
@@ -490,7 +500,7 @@
 	line = [self lineNumberForLocation:p.y];
 
 	// Check if click was inside folding marker
-	if(((NSWidth([self bounds]) - RULER_MARGIN)+3) - p.x >= 0 && ((NSWidth([self bounds]) - RULER_MARGIN)-3) - p.x < 7) {
+	if(isFoldingEnabled && ((NSWidth([self bounds]) - RULER_MARGIN)+3) - p.x >= 0 && ((NSWidth([self bounds]) - RULER_MARGIN)-3) - p.x < 7) {
 
 		NSUInteger caretPosition = 0;
 		NSArray *lines           = [self lineIndices];

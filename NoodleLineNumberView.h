@@ -69,6 +69,7 @@ static inline id NSArrayObjectAtIndex(NSArray *self, NSUInteger i)
 	NSImage         *folded;
 	NSImage         *foldedHoover;
 	BOOL            lineWrapping;
+	BOOL            isFoldingEnabled;
 
 	// Add support for selection by clicking/dragging
 	NSUInteger      dragSelectionStartLine;
