@@ -71,7 +71,7 @@ static SEL _getlSel;
 	return sharedAttachment;
 }
 
-- (id)init
+- (id)initWithDelegate:(id)theDelegate
 {
 	self = [super init];
 
@@ -84,8 +84,8 @@ static SEL _getlSel;
 		_editImp = [self methodForSelector:_editSel];
 		_getlImp = [_attributedString methodForSelector:_getlSel];
 
-		selfDelegate = (RScriptEditorTextView*)[self delegate];
-
+		selfDelegate = (RScriptEditorTextView*)theDelegate;
+		[self setDelegate:theDelegate];
 		foldedCounter = 0;
 		currentMaxFoldedIndex = -1;
 

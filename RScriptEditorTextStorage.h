@@ -55,6 +55,8 @@
 
 }
 
+- (id)initWithDelegate:(id)theDelegate;
+
 - (NSInteger)foldedAtIndex:(NSInteger)index;
 - (NSInteger)foldedForIndicatorAtIndex:(NSInteger)index;
 - (NSRange)foldedRangeAtIndex:(NSInteger)index;

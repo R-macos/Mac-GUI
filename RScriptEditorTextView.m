@@ -142,10 +142,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	lineNumberingEnabled = [Preferences flagForKey:showLineNumbersKey withDefault:NO];
 
-	theTextStorage = [[RScriptEditorTextStorage alloc] init];
+	// Init textStorage and set self as delegate for the textView's textStorage to enable
+	// syntax highlighting, folding etc.
+	theTextStorage = [[RScriptEditorTextStorage alloc] initWithDelegate:self];
 
-	// Set self as delegate for the textView's textStorage to enable syntax highlighting,
-	[theTextStorage setDelegate:self];
 	_foldedImp = [theTextStorage methodForSelector:_foldedSel];
 
 	// Make sure using foldingLayoutManager
@@ -1285,6 +1285,7 @@ inside such a range (go to line, find something) the folded range will be unfold
 
 - (void)refoldLinesInRange:(NSRange)range
 {
+
 	NSInteger foldId = [theTextStorage registerFoldedRange:range];
 
 	if(foldId < 0) {
