@@ -143,9 +143,11 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	NSInteger pcnt = 0; // ) counter
 	NSInteger bcnt = 0; // ] counter
 	NSInteger scnt = 0; // } counter
+	NSInteger breakCounter = 10000;
 
 	// look for the first non-balanced closing bracket
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
+		if(!breakCounter--) return;
 		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
 		switch(CFStringGetCharacterAtIndex(parserStringRef, i)) {
 			case ')': 
@@ -182,7 +184,9 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	if(c == co)
 		bracketCounter++;
 
+	breakCounter = 10000;
 	for(NSInteger i=caretPosition; i>=0; i--) {
+		if(!breakCounter--) return;
 		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
 		c = CFStringGetCharacterAtIndex(parserStringRef, i);
 		if(c == co) {
@@ -199,7 +203,9 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	if(start < 0 ) return;
 
 	bracketCounter = 0;
+	breakCounter = 10000;
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
+		if(!breakCounter--) return;
 		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
 		c = CFStringGetCharacterAtIndex(parserStringRef, i);
 		if(c == co) {

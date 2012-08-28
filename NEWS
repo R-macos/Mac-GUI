@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-08-28 [HJBB]
+*	Improved handling of larger documents
+*	Fixed a crash if the R script editor has to handle
+	_very_ long lines
+
 Last-update: 2012-08-24 [HJBB]
 *	Added Code Folding of { ... } multi-line blocks
 	in R Script Editor; see gutter and/or

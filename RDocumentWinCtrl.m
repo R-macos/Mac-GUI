@@ -61,7 +61,7 @@
 
 // Symbol lexer
 extern NSUInteger symlex();
-extern NSUInteger yyuoffset, yyuleng;
+extern NSUInteger symuoffset, symuleng;
 typedef struct sym_buffer_state *SYM_BUFFER_STATE;
 void sym_switch_to_buffer(SYM_BUFFER_STATE);
 SYM_BUFFER_STATE sym_scan_string (const char *);
@@ -172,11 +172,12 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (void) replaceContentsWithString: (NSString*) strContents
 {
 	[textView setString:strContents];
+
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[textView setSelectedRange:NSMakeRange(0,0)];
 	[self performSelector:@selector(layoutTextView) withObject:nil afterDelay:0.5];
 #endif
-	// [textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
+
 	[[self window] setDocumentEdited:NO];
 }
 
@@ -240,6 +241,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		execNewlineFlag=NO;
 		lastLineWasCodeIndented = NO;
 		isFormattingRcode = NO;
+		isFunctionScanning = NO;
 
 		texItems = [[NSArray arrayWithObjects:
 			@"R",
@@ -396,7 +398,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	nil] retain];
 
 	SLog(@" - scan document for functions");
-	[self functionRescan];
+	// [self functionRescan];
 
 	if([textView lineNumberingEnabled]) {
 
@@ -557,19 +559,35 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	}
 }
 
+- (BOOL) isFunctionScanning
+{
+	return isFunctionScanning;
+}
+
 - (void) functionRescan
 {
+
+	if(plainFile || isFunctionScanning || [textView isSyntaxHighlighting]) {
+		if(plainFile)
+			[fnListBox setEnabled:NO];
+		return;
+	}
 
 	// Cancel pending functionRescan calls
 	[NSObject cancelPreviousPerformRequestsWithTarget:self 
 							selector:@selector(functionRescan) 
 							object:nil];
 
-	if(plainFile) {
+	if([textView breakSyntaxHighlighting]) {
+		// Cancel calling functionRescan
+		[NSObject cancelPreviousPerformRequestsWithTarget:self 
+								selector:@selector(functionRescan) 
+								object:nil];
+		[self performSelector:@selector(functionRescan) withObject:nil afterDelay:0.3f];		
 		return;
 	}
 
-	[fnListBox setEnabled:NO];
+	isFunctionScanning = YES;
 
 	NSTextStorage *ts = [textView textStorage];
 	NSString *s = [ts string];
@@ -582,9 +600,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	NSRange sr = [textView selectedRange];
 	[self functionReset];
 
-	if([s length]<8) return;
+	if([s length]<8) {
+		isFunctionScanning = NO;
+		return;
+	}
 
-	NSRange textRange = NSMakeRange(0, [s length]);
 	NSString *fn = nil;
 	NSMenuItem *mi = nil;
 	NSAttributedString *fna = nil;
@@ -599,26 +619,30 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		NSArray *d = nil;
 
 		// initialise flex
-		size_t tokenEnd, token;
+		size_t token;
 		NSRange tokenRange;
-		yyuoffset = 0; yyuleng = 0;
+		symuoffset = 0; symuleng = 0;
 		sym_switch_to_buffer(sym_scan_string(NSStringUTF8String(s)));
 
 		// now loop through all the tokens
 		while ((token = symlex())) {
-			// NSLog(@"t %d",token);
+			if([textView breakSyntaxHighlighting]) {
+				isFunctionScanning = NO;
+				return;
+			}
 			switch (token) {
 				case RSYM_FUNCTION: // a valid function name was found
 					fn = [NSString stringWithFormat:@" %@%@%@", 
 						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
 						(level)?@" └ ":@"", 
-						[s substringWithRange:NSMakeRange(yyuoffset, yyuleng)]];
+						[s substringWithRange:NSMakeRange(symuoffset, symuleng)]];
+					fn = [fn stringByReplacingOccurrencesOfRegex:@"\\s*<.*" withString:@""];
 					mi = nil;
-					SLog(@" - found function %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					SLog(@" - found function %d:%d \"%@\"", symuoffset, symuleng, fn);
 					fnf++;
-					if (yyuoffset<=sr.location) sit=pim;
+					if (symuoffset<=sr.location) sit=pim;
 					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-					[mi setTag:yyuoffset];
+					[mi setTag:symuoffset];
 					[mi setTarget:self];
 					[fnm addItem:mi];
 					[mi release];
@@ -628,23 +652,23 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					fn = [NSString stringWithFormat:@" %@%@%@", 
 						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
 						(level)?@" └ ":@"", 
-						[s substringWithRange:NSMakeRange(yyuoffset, yyuleng)]];
-					mi = nil;
-					SLog(@" - found invalid function %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+						[s substringWithRange:NSMakeRange(symuoffset, symuleng)]];
+					fn = [fn stringByReplacingOccurrencesOfRegex:@"\\s*<.*" withString:@""];					mi = nil;
+					SLog(@" - found invalid function %d:%d \"%@\"", symuoffset, symuleng, fn);
 					fnf++;
-					if (yyuoffset<=sr.location) sit=pim;
+					if (symuoffset<=sr.location) sit=pim;
 					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
 					fna = [[NSAttributedString alloc] initWithString:fn attributes:functionMenuInvalidAttribute];
 					[mi setAttributedTitle:fna];
 					[fna release];
-					[mi setTag:yyuoffset];
+					[mi setTag:symuoffset];
 					[mi setTarget:self];
 					[fnm addItem:mi];
 					[mi release];
 					pim++;
 					break;
 				case RSYM_METHOD1: // setMethod(f, sig)
-					d = [s captureComponentsMatchedByRegex:@"(?m)([\"'])([^\"']+)\\1[^\"']+?([\"'])([^\"']+)\\3" range:NSMakeRange(yyuoffset, yyuleng)];
+					d = [s captureComponentsMatchedByRegex:@"(?m)([\"'])([^\"']+)\\1[^\"']+?([\"'])([^\"']+)\\3" range:NSMakeRange(symuoffset, symuleng)];
 					if(d && [d count] == 5) {
 						fn = [NSString stringWithFormat:@" %@%@- %@ (%@)", 
 							[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
@@ -652,11 +676,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 							[d objectAtIndex:2], 
 							[d lastObject]];
 						mi = nil;
-						SLog(@" - found method1 %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+						SLog(@" - found method1 %d:%d \"%@\"", symuoffset, symuleng, fn);
 						fnf++;
-						if (yyuoffset<=sr.location) sit=pim;
+						if (symuoffset<=sr.location) sit=pim;
 						mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-						[mi setTag:yyuoffset];
+						[mi setTag:symuoffset];
 						[mi setTarget:self];
 						[fnm addItem:mi];
 						[mi release];
@@ -664,7 +688,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					}
 				    break;
 				case RSYM_METHOD2: // setMethod(sig, f)
-					d = [s captureComponentsMatchedByRegex:@"(?m)([\"'])([^\"']+)\\1[^\"']+?([\"'])([^\"']+)\\3" range:NSMakeRange(yyuoffset, yyuleng)];
+					d = [s captureComponentsMatchedByRegex:@"(?m)([\"'])([^\"']+)\\1[^\"']+?([\"'])([^\"']+)\\3" range:NSMakeRange(symuoffset, symuleng)];
 					if(d && [d count] == 5) {
 						fn = [NSString stringWithFormat:@" %@%@- %@ (%@)", 
 							[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
@@ -672,11 +696,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 							[d lastObject], 
 							[d objectAtIndex:2]];
 						mi = nil;
-						SLog(@" - found method2 %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+						SLog(@" - found method2 %d:%d \"%@\"", symuoffset, symuleng, fn);
 						fnf++;
-						if (yyuoffset<=sr.location) sit=pim;
+						if (symuoffset<=sr.location) sit=pim;
 						mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-						[mi setTag:yyuoffset];
+						[mi setTag:symuoffset];
 						[mi setTarget:self];
 						[fnm addItem:mi];
 						[mi release];
@@ -684,33 +708,33 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					}
 				    break;
 				case RSYM_CLASS: // setClass
-					tokenRange = NSMakeRange(yyuoffset, yyuleng);
+					tokenRange = NSMakeRange(symuoffset, symuleng);
 					fn = [NSString stringWithFormat:@" %@%@- (%@)", 
 						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
 						(level)?@" └ ":@"", 
 						[[s substringWithRange:tokenRange] stringByMatching:@"([\"'])([^\"']+)\\1" capture:2L]];
 					mi = nil;
-					SLog(@" - found class %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					SLog(@" - found class %d:%d \"%@\"", symuoffset, symuleng, fn);
 					fnf++;
-					if (yyuoffset<=sr.location) sit=pim;
+					if (symuoffset<=sr.location) sit=pim;
 					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
-					[mi setTag:yyuoffset];
+					[mi setTag:symuoffset];
 					[mi setTarget:self];
 					[fnm addItem:mi];
 					[mi release];
 					pim++;
 				    break;
 				case RSYM_PRAGMA: // a literal pragma mark was found; it will displayed in blue to structure large R scripts
-					fn = [[s substringWithRange:NSMakeRange(yyuoffset, yyuleng)] stringByMatching:@"^(#pragma\\s+mark\\s+)(.*?)\\s*$" capture:2L];
+					fn = [[s substringWithRange:NSMakeRange(symuoffset, symuleng)] stringByMatching:@"^(#pragma\\s+mark\\s+)(.*?)\\s*$" capture:2L];
 					mi = nil;
-					SLog(@" - found pragma %d:%d \"%@\"", yyuoffset, yyuleng, fn);
+					SLog(@" - found pragma %d:%d \"%@\"", symuoffset, symuleng, fn);
 					fnf++;
-					if (yyuoffset<=sr.location) sit=pim;
+					if (symuoffset<=sr.location) sit=pim;
 					mi = [[NSMenuItem alloc] initWithTitle:fn action:@selector(functionGo:) keyEquivalent:@""];
 					fna = [[NSAttributedString alloc] initWithString:fn attributes:pragmaMenuAttribute];
 					[mi setAttributedTitle:fna];
 					[fna release];
-					[mi setTag:yyuoffset];
+					[mi setTag:symuoffset];
 					[mi setTarget:self];
 					[fnm addItem:mi];
 					[mi release];
@@ -720,7 +744,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					mi = nil;
 					SLog(@" - found identifier for separator");
 					fnf++;
-					if (yyuoffset<=sr.location) sit=pim;
+					if (symuoffset<=sr.location) sit=pim;
 					[fnm addItem:[NSMenuItem separatorItem]];
 					pim++;
 					break;
@@ -734,15 +758,6 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 				default:
 					;
 			}
-			tokenRange = NSMakeRange(yyuoffset, yyuleng);
-
-			// make sure that tokenRange is valid (and therefore within textRange)
-			// otherwise a bug in the lex code could cause the the TextView to crash
-			tokenRange = NSIntersectionRange(tokenRange, textRange);
-			if (!tokenRange.length) continue;
-
-			tokenEnd = NSMaxRange(tokenRange) - 1;
-
 		}
 
 	}
@@ -815,6 +830,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[fnListBox removeItemAtIndex:0];
 		[fnListBox selectItemAtIndex:sit];
 	}
+
+	isFunctionScanning = NO;
 
 	SLog(@" - rescan finished (%d sections)", fnf);
 }
@@ -993,9 +1010,11 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	else if (characterToCheck == '}') openingChar='{';
 
 	unichar c;
+	NSInteger breakCounter = 3000;
 	// well, this is rather simple so far, because it ignores cross-quoting, but for a first shot it's not too bad ;)
 	if (openingChar) {
 		while (cursorLocation--) {
+			if(!breakCounter--) return;
 			if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) == pcExpression) {
 				c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 				if (c == openingChar) {
@@ -1017,6 +1036,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		else if (characterToCheck == '{') openingChar='}';
 		if (openingChar) {
 			while ((++cursorLocation)<maxLimit) {
+				if(!breakCounter--) return;
 				if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) == pcExpression) {
 					c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 					if (c == openingChar) {
@@ -1229,11 +1249,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			// For better current function detection we pass maximal 1000 left from caret
 			// and considering full starting line
 			NSRange scopeRange;
+			NSInteger breakCounter = 1000;
 			NSString *str = [aTextView string];
 			if(sr.location > scopeBias) {
 				NSInteger start = sr.location - scopeBias;
 				if (start > 0)
 					while(start > 0) {
+						if(!breakCounter--) break;
 						if(CFStringGetCharacterAtIndex((CFStringRef)str, start)=='\n')
 							break;
 						start--;
@@ -1250,11 +1272,13 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		// For better current function detection we pass maximal scopeBias left from caret
 		// and considering full starting line
 		NSRange scopeRange;
+		NSInteger breakCounter = 1000;
 		NSString *str = [aTextView string];
 		if(sr.location > scopeBias) {
 			NSInteger start = sr.location - scopeBias;
 			if (start > 0)
 				while(start > 0) {
+					if(!breakCounter--) break;
 					if(CFStringGetCharacterAtIndex((CFStringRef)str, start)=='\n')
 						break;
 					start--;
@@ -1300,6 +1324,16 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (NSString *)textView:(NSTextView *)tv willDisplayToolTip:(NSString *)tooltip forCharacterAtIndex:(NSUInteger)characterIndex
 {
 	if([tv isKindOfClass:[RScriptEditorTextView class]]) {
+		// After undoing it could happen that a tooltip is still stored
+		// whereby the folded chunk was removed, thus remove it
+		// <TODO> find a better method
+		if([(RScriptEditorTextStorage*)[tv textStorage] foldedAtIndex:characterIndex] < 0) {
+			NSRange eff;
+			[(RScriptEditorTextStorage*)[tv textStorage] attribute:NSToolTipAttributeName atIndex:characterIndex longestEffectiveRange:&eff inRange:NSMakeRange(0, [[tv string] length])];
+			[(RScriptEditorTextStorage*)[tv textStorage] removeAttribute:NSCursorAttributeName range:eff];
+			[(RScriptEditorTextStorage*)[tv textStorage] removeAttribute:NSToolTipAttributeName range:eff];
+			return nil;
+		}
 		[RTooltip showWithObject:[NSString stringWithFormat:@"<pre>%@</pre>", tooltip] 
 				atLocation:NSMakePoint(-1,-1)
 				ofType:@"html" 
@@ -1363,9 +1397,10 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 								object:nil];
 
 		// update current function hint
-		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1];
+		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1f];
 		// update function list to display the function in which the cursor is located
-		[self performSelector:@selector(functionRescan) withObject:nil afterDelay:0.2];
+		[self performSelector:@selector(functionRescan) withObject:nil afterDelay:0.3f];
+
 	}
 }
 

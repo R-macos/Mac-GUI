@@ -559,25 +559,30 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if (position < 1)
 		return context;
 
-	NSString *string = [self string];
-	if (position > [string length])
-		position = [string length];
+	CFStringRef string = (CFStringRef)[self string];
+	if (position > [[self string] length])
+		position = [[self string] length];
 
-	NSRange thisLine = [string lineRangeForRange:NSMakeRange(position, 0)];
+
+	// NSRange thisLine = [string lineRangeForRange:NSMakeRange(position, 0)];
+
+	CFIndex lineStart;
+
+	CFStringGetLineBounds(string, CFRangeMake(position, 0), &lineStart, NULL, NULL);
 
 	// we do NOT support multi-line strings, so the line always starts as an expression
-	if (thisLine.location == position)
+	if (lineStart == position)
 		return context;
 
 	SLog(@"RTextView: parserContextForPosition: %d, line span=%ld:%ld", position, thisLine.location, thisLine.length);
 
-	int i = thisLine.location;
+	int i = lineStart;
 	BOOL skip = NO;
 	unichar c;
 	unichar commentSign = (isRdDocument) ? '%' : '#';
 	
 	while (i < position) {
-		c = CFStringGetCharacterAtIndex((CFStringRef)string, i);
+		c = CFStringGetCharacterAtIndex(string, i);
 		if (skip) {
 			skip = NO;
 		} else {
@@ -1013,6 +1018,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 	NSString *parseString = [self string];
 	NSRange  selectedRange = [self selectedRange];
 	NSRange parseRange = NSMakeRange(0, [parseString length]);
+	NSInteger breakCounter = 1000;
 
 	int parentheses = 0;
 	int index       = 0;
@@ -1075,7 +1081,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 	// go back according opened/closed parentheses
 	BOOL opened, closed;
 	BOOL found = NO;
+
 	for(index = NSMaxRange(parseRange) - 1; index > parseRange.location; index--) {
+		if(!breakCounter--) return nil;
 		unichar c = CFStringGetCharacterAtIndex((CFStringRef)parseString, index);
 		closed = (c == ')');
 		opened = (c == '(');
@@ -1108,7 +1116,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	// check if char in front of ( is not a white space; if so go back
 	if(index > 0) {
+		breakCounter = 1000;
 		while(index > 0 && index >= parseRange.location) {
+			if(!breakCounter--) return nil;
 			unichar c = CFStringGetCharacterAtIndex((CFStringRef)parseString, --index);
 			if(c == ' ' || c == '\t' || c == '\n' || c == '\r') {
 				;

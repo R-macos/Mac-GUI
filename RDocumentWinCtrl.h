@@ -76,6 +76,7 @@ extern NSColor *shColorIdentifier;
 	BOOL argsHints; // fn args hinting
 	BOOL lastLineWasCodeIndented;
 	BOOL isFormattingRcode;
+	BOOL isFunctionScanning;
 
 	int hsType; // help search type
 	
@@ -148,6 +149,7 @@ extern NSColor *shColorIdentifier;
 
 - (NSView*) saveOpenAccView;
 
+- (BOOL) isFunctionScanning;
 - (void) functionRescan; // re-scans the functions it the document and updates function list/pop-up
 - (void) functionGo: (id) sender; // invoked by function pop-up, the tag of the sender specifies the position to go to
 - (void) functionReset; // reset all functions (will go away soon, user functionRescan instead)

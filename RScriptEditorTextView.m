@@ -196,9 +196,6 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// Re-define tab stops for a better editing
 	[self setTabStops];
 
-	// add NSViewBoundsDidChangeNotification to scrollView
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChangeNotification:) name:NSViewBoundsDidChangeNotification object:[scrollView contentView]];
-
 	NSColor *c = [Preferences unarchivedObjectForKey:normalSyntaxColorKey withDefault:nil];
 	if (c) shColorNormal = c;
 	else shColorNormal=[NSColor colorWithDeviceRed:0.025 green:0.085 blue:0.600 alpha:1.0];
@@ -319,6 +316,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[self layoutManager] setAllowsNonContiguousLayout:YES];
 #endif
+
+	// add NSViewBoundsDidChangeNotification to scrollView
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChangeNotification:) name:NSViewBoundsDidChangeNotification object:[scrollView contentView]];
 
 }
 
@@ -602,11 +602,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		// For larger text break a running syntax highlighting for user interaction
 		// to make them more responsive (typing and scrolling)
-		if([[theTextStorage string] length] > 120000) {
-			breakSyntaxHighlighting = 1;
-		}
+		// if([[theTextStorage string] length] > 120000) {
+		// 	breakSyntaxHighlighting = 1;
+		// }
 
 		[self checkSnippets];
+
+		breakSyntaxHighlighting = 1;
 
 		// Cancel calling doSyntaxHighlighting
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
@@ -698,6 +700,15 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	[paragraphStyle release];
 }
 
+- (BOOL)isSyntaxHighlighting
+{
+	return isSyntaxHighlighting;
+}
+
+- (BOOL)breakSyntaxHighlighting
+{
+	return breakSyntaxHighlighting;
+}
 /**
  * Syntax Highlighting.
  *  
@@ -707,6 +718,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 - (void)doSyntaxHighlighting
 {
 
+	if(!syntaxHighlightingEnabled)
+		breakSyntaxHighlighting = 0;
+
 	if (!syntaxHighlightingEnabled || [[self delegate] plain]) return;
 
 	isSyntaxHighlighting = YES;
@@ -715,7 +729,11 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	NSInteger strlength  = (NSInteger)[selfstr length];
 
 	// do not highlight if text larger than 10MB
-	if(strlength > 10000000 || !strlength) return;
+	if(strlength > 10000000 || !strlength) {
+		isSyntaxHighlighting = NO;
+		breakSyntaxHighlighting = 0;
+		return;
+	}
 
 	// == Do highlighting partly (max R_SYNTAX_HILITE_BIAS*2 around visibleRange
 	// by considering entire lines).
@@ -726,22 +744,27 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	if(!visibleRange.length) {
 		isSyntaxHighlighting = NO;
+		breakSyntaxHighlighting = 0;
 		return;
 	}
 
+	NSInteger breakCounter = 1000;
 	NSInteger start = visibleRange.location - R_SYNTAX_HILITE_BIAS;
 	if (start > 0)
 		while(start > 0) {
+			if(!breakCounter--) break;
 			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, start)=='\n')
 				break;
 			start--;
 		}
 	if(start < 0) start = 0;
+	breakCounter = 1000;
 	NSInteger end = NSMaxRange(visibleRange) + R_SYNTAX_HILITE_BIAS;
 	if (end > strlength) {
 		end = strlength;
 	} else {
 		while(end < strlength) {
+			if(!breakCounter--) break;
 			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, end)=='\n')
 				break;
 			end++;
@@ -753,8 +776,9 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// only to be sure that nothing went wrongly
 	textRange = NSIntersectionRange(textRange, NSMakeRange(0, [theTextStorage length])); 
 
-	if (!textRange.length) {
+	if (!textRange.length || textRange.length > 30000) {
 		isSyntaxHighlighting = NO;
+		breakSyntaxHighlighting = 0;
 		return;
 	}
 
@@ -817,7 +841,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 											selector:@selector(doSyntaxHighlighting) 
 											object:nil];
 
-					[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.15f];
+					[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.08f];
 
 					breakSyntaxHighlighting = 0;
 					break;
@@ -873,7 +897,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 										selector:@selector(doSyntaxHighlighting) 
 										object:nil];
 				
-				[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.2f];
+				[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.08f];
 
 				breakSyntaxHighlighting = 0;
 				break;
@@ -896,8 +920,12 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	}
 
 	[theTextStorage endEditing];
-	isSyntaxHighlighting = NO;
+
 	[self setNeedsDisplayInRect:visibleRect];
+
+	breakSyntaxHighlighting = 0;
+
+	isSyntaxHighlighting = NO;
 
 }
 
@@ -962,6 +990,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	if(startListeningToBoundChanges) {
 
+		breakSyntaxHighlighting = 1;
+
 		[NSObject cancelPreviousPerformRequestsWithTarget:self 
 									selector:@selector(doSyntaxHighlighting) 
 									object:nil];
@@ -969,7 +999,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		if(![theTextStorage changeInLength]) {
 			if([[theTextStorage string] length] > 120000)
 				breakSyntaxHighlighting = 2;
-			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.05];
+			[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.08];
 		}
 		if(lineNumberingEnabled) {
 			[NSObject cancelPreviousPerformRequestsWithTarget:[[self enclosingScrollView] verticalRulerView] 
@@ -1241,12 +1271,14 @@ inside such a range (go to line, find something) the folded range will be unfold
 
 	if(lineNumberingEnabled)
 		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
+
+	breakSyntaxHighlighting = 1;
 	
 	[NSObject cancelPreviousPerformRequestsWithTarget:self 
 							selector:@selector(doSyntaxHighlighting) 
 							object:nil];
 
-	[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0f];
+	[self performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.01f];
 }
 
 - (void)refoldLinesInRange:(NSRange)range

@@ -107,6 +107,8 @@
 - (void)resetBackgroundColor:(id)sender;
 - (void)updateLineWrappingMode;
 - (BOOL)lineNumberingEnabled;
+- (BOOL)isSyntaxHighlighting;
+- (BOOL)breakSyntaxHighlighting;
 
 - (BOOL)foldLinesInRange:(NSRange)range blockMode:(BOOL)blockMode;
 - (BOOL)unfoldLinesContainingCharacterAtIndex:(NSUInteger)charIndex;
