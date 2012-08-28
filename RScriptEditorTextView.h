@@ -41,6 +41,7 @@
 #import "REditorToolbar.h"
 #import "RdEditorToolbar.h"
 #import "RScriptEditorTextStorage.h"
+#import "RDocumentWinCtrl.h"
 
 
 #define R_TEXT_SIZE_TRIGGER_FOR_PARSING_PARTLY 10000
@@ -70,6 +71,8 @@
 	NSColor *shColorBackground;
 	NSColor *shColorCurrentLine;
 
+	RDocumentWinCtrl *selfDelegate;
+
 	id editorToolbar;
 
 	BOOL lineNumberingEnabled;
@@ -87,6 +90,7 @@
 	RScriptEditorTextStorage *theTextStorage;
 
 	NSDictionary *highlightColorAttr;
+	
 
 	IMP _foldedImp;
 

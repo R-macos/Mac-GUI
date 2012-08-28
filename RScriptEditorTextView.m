@@ -123,6 +123,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 	SLog(@"RScriptEditorTextView: awakeFromNib <%@>", self);
 
+	selfDelegate = (RDocumentWinCtrl*)[self delegate];
+
 	breakSyntaxHighlighting = 0;
 	_foldedSel = @selector(foldedAtIndex:);
 	
@@ -179,10 +181,10 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	// For now replaced selectedTextBackgroundColor by redColor
 	highlightColorAttr = [[NSDictionary alloc] initWithObjectsAndKeys:[NSColor redColor], NSBackgroundColorAttributeName, nil];
 
-	if([[self delegate] isRdDocument])
-		editorToolbar = [[RdEditorToolbar alloc] initWithEditor:[self delegate]];
+	if([selfDelegate isRdDocument])
+		editorToolbar = [[RdEditorToolbar alloc] initWithEditor:selfDelegate];
 	else
-		editorToolbar = [[REditorToolbar alloc] initWithEditor:[self delegate]];
+		editorToolbar = [[REditorToolbar alloc] initWithEditor:selfDelegate];
 
 	[self setAllowsDocumentBackgroundColorChange:YES];
 	[self setContinuousSpellCheckingEnabled:NO];
@@ -485,7 +487,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	} else if ([keyPath isEqualToString:prefShowArgsHints]) {
 		argsHints = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
 		if(!argsHints) {
-			[[self delegate] setStatusLineText:@""];
+			[selfDelegate setStatusLineText:@""];
 		} else {
 			[self currentFunctionHint];
 		}
@@ -721,7 +723,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	if(!syntaxHighlightingEnabled)
 		breakSyntaxHighlighting = 0;
 
-	if (!syntaxHighlightingEnabled || [[self delegate] plain]) return;
+	if (!syntaxHighlightingEnabled || [selfDelegate plain]) return;
 
 	isSyntaxHighlighting = YES;
 
@@ -794,7 +796,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 	
 	BOOL hasFoldedItems = [theTextStorage hasFoldedItems];
 
-	if([[self delegate] isRdDocument]) {
+	if([selfDelegate isRdDocument]) {
 
 			rd_switch_to_buffer(rd_scan_string(NSStringUTF8String([selfstr substringWithRange:textRange])));
 
@@ -1424,7 +1426,7 @@ inside such a range (go to line, find something) the folded range will be unfold
 	NSString *selfStr = [self string];
 	unichar c;
 
-	BOOL isRd = [[self delegate] isRdDocument];
+	BOOL isRd = [selfDelegate isRdDocument];
 
 	unichar commentSign = (isRd) ? '%' : '#';
 

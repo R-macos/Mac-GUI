@@ -43,6 +43,8 @@
 	NSInteger foldedRanges[R_MAX_FOLDED_ITEMS][3];
 	NSInteger foldedCounter;
 	NSInteger currentMaxFoldedIndex;
+	
+	id selfDelegate;
 
 	IMP _getImp;
 	IMP _setImp;

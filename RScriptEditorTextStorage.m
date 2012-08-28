@@ -84,6 +84,8 @@ static SEL _getlSel;
 		_editImp = [self methodForSelector:_editSel];
 		_getlImp = [_attributedString methodForSelector:_getlSel];
 
+		selfDelegate = (RScriptEditorTextView*)[self delegate];
+
 		foldedCounter = 0;
 		currentMaxFoldedIndex = -1;
 
@@ -161,7 +163,7 @@ static SEL _getlSel;
 {
 
 
-	[[[self delegate] undoManager] disableUndoRegistration];
+	[[selfDelegate undoManager] disableUndoRegistration];
 
 	NSInteger index = -1;
 	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
@@ -177,7 +179,7 @@ static SEL _getlSel;
 		}
 	}
 
-	[[[self delegate] undoManager] enableUndoRegistration];
+	[[selfDelegate undoManager] enableUndoRegistration];
 
 	return(index);
 
@@ -204,7 +206,7 @@ static SEL _getlSel;
 		return NO;
 	}
 
-	[[[self delegate] undoManager] disableUndoRegistration];
+	[[selfDelegate undoManager] disableUndoRegistration];
 
 	range = NSIntersectionRange(NSMakeRange(0, [[_attributedString string] length]), range);
 	if(range.length) {
@@ -228,11 +230,11 @@ static SEL _getlSel;
 			foldedRanges[j][0] = -1;
 			foldedRanges[j][1] = 0;
 			foldedRanges[j][2] = 0;
-			[[self delegate] refoldLinesInRange:r];
+			[selfDelegate refoldLinesInRange:r];
 		}
 	}
 
-	[[[self delegate] undoManager] enableUndoRegistration];
+	[[selfDelegate undoManager] enableUndoRegistration];
 	
 	// update currentMaxFoldedIndex
 	NSInteger maxCount = -1;
@@ -250,7 +252,7 @@ static SEL _getlSel;
 - (void)removeAllFoldedRanges
 {
 
-	[[[self delegate] undoManager] disableUndoRegistration];
+	[[selfDelegate undoManager] disableUndoRegistration];
 
 	for(NSInteger i = 0; i < R_MAX_FOLDED_ITEMS; i++) {
 		foldedRanges[i][0] = -1;
@@ -264,7 +266,7 @@ static SEL _getlSel;
 	foldedCounter = 0;
 	currentMaxFoldedIndex = -1;
 
-	[[[self delegate] undoManager] enableUndoRegistration];
+	[[selfDelegate undoManager] enableUndoRegistration];
 
 }
 
