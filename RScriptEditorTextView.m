@@ -570,7 +570,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		if ([prefs boolForKey:highlightCurrentLine] && ![self selectedRange].length && ![self isSnippetMode]) {
 			NSUInteger rectCount;
 			NSRange curLineRange = [[self string] lineRangeForRange:[self selectedRange]];
-			[theTextStorage ensureAttributesAreFixedInRange:curLineRange];
+			// [theTextStorage ensureAttributesAreFixedInRange:curLineRange];
 			NSRectArray queryRects = [[self layoutManager] rectArrayForCharacterRange: curLineRange
 														 withinSelectedCharacterRange: curLineRange
 																	  inTextContainer: [self textContainer]
@@ -1238,11 +1238,11 @@ inside such a range (go to line, find something) the folded range will be unfold
 
 	[self didChangeText];
 	
-	NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
-										glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
-												  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
-
-	[theTextStorage ensureAttributesAreFixedInRange:r];
+	// NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
+	// 									glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
+	// 											  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
+	// 
+	// [theTextStorage ensureAttributesAreFixedInRange:r];
 
 	if(lineNumberingEnabled)
 		[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
@@ -1262,11 +1262,11 @@ inside such a range (go to line, find something) the folded range will be unfold
 
 	[self didChangeText];
 
-	NSRange r = NSMakeRange(0, [[self string] length]);
+	// NSRange r = NSMakeRange(0, [[self string] length]);
 
-	[theTextStorage fixAttributesInRange:r];
-	[theTextStorage fixAttachmentAttributeInRange:r];
-	[theTextStorage ensureAttributesAreFixedInRange:r];
+	// [theTextStorage fixAttributesInRange:r];
+	// [theTextStorage fixAttachmentAttributeInRange:r];
+	// [theTextStorage ensureAttributesAreFixedInRange:r];
 
 
 	if(lineNumberingEnabled)
@@ -1392,11 +1392,11 @@ inside such a range (go to line, find something) the folded range will be unfold
 		if(caretWasInsideFoldedRange)
 			[self scrollRangeToVisible:[self selectedRange]];
 
-		NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
-											glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
-													  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
+		// NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
+		// 									glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
+		// 											  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
 
-		[theTextStorage ensureAttributesAreFixedInRange:r];
+		// [theTextStorage ensureAttributesAreFixedInRange:r];
 
 		if(lineNumberingEnabled)
 			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
@@ -1518,11 +1518,11 @@ inside such a range (go to line, find something) the folded range will be unfold
 								selector:@selector(doSyntaxHighlighting) 
 								object:nil];
 
-		NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
-											glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
-													  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
-
-		[theTextStorage ensureAttributesAreFixedInRange:r];
+		// NSRange r = [[self layoutManager] characterRangeForGlyphRange:[[self layoutManager] 
+		// 									glyphRangeForBoundingRect:[scrollView documentVisibleRect] 
+		// 											  inTextContainer:[self textContainer]] actualGlyphRange:NULL];
+		// 
+		// [theTextStorage ensureAttributesAreFixedInRange:r];
 
 		if(lineNumberingEnabled)
 			[[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];

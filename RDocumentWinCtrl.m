@@ -1373,7 +1373,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			if(foldIndex > -1) {
 				NSRange effectiveRange = [(RScriptEditorTextStorage*)[tv textStorage] foldedRangeAtIndex:foldIndex];
 				if(effectiveRange.length) {
-					if(r.location > effectiveRange.location || r.location < NSMaxRange(effectiveRange)-1) {
+					if(r.location > effectiveRange.location && r.location < NSMaxRange(effectiveRange)) {
 						[(RScriptEditorTextView*)tv unfoldLinesContainingCharacterAtIndex:r.location];
 					}
 				}

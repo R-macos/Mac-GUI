@@ -294,7 +294,7 @@ static SEL _getlSel;
 
 	if(loc == -1) return NSMakeRange(NSNotFound, 0);
 
-	return NSMakeRange(loc, foldedRanges[index][1]-foldedRanges[index][0]);
+	return NSMakeRange(loc, foldedRanges[index][1]);
 
 }
 #pragma mark -
@@ -310,7 +310,7 @@ static SEL _getlSel;
 
 	NSDictionary *attributes = (*_getImp)(_attributedString, _getSel, location, range);
 
-	if(!foldedCounter) return attributes;
+	if(!foldedCounter || location > [_attributedString length]) return attributes;
 
 	NSRange effectiveRange;
 
@@ -340,6 +340,7 @@ static SEL _getlSel;
 		} else {
 			++(effectiveRange.location); --(effectiveRange.length);
 		}
+		effectiveRange = NSIntersectionRange(effectiveRange, NSMakeRange(0, [_attributedString length]));
 		if (range) *range = effectiveRange;
 	}
 
