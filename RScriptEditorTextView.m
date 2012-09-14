@@ -750,23 +750,19 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		return;
 	}
 
-	NSInteger breakCounter = 1000;
 	NSInteger start = visibleRange.location - R_SYNTAX_HILITE_BIAS;
 	if (start > 0)
 		while(start > 0) {
-			if(!breakCounter--) break;
 			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, start)=='\n')
 				break;
 			start--;
 		}
 	if(start < 0) start = 0;
-	breakCounter = 1000;
 	NSInteger end = NSMaxRange(visibleRange) + R_SYNTAX_HILITE_BIAS;
 	if (end > strlength) {
 		end = strlength;
 	} else {
 		while(end < strlength) {
-			if(!breakCounter--) break;
 			if(CFStringGetCharacterAtIndex((CFStringRef)selfstr, end)=='\n')
 				break;
 			end++;
