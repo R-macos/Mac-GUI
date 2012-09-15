@@ -132,7 +132,9 @@ extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+#if (R_VERSION < R_Version(2,15,2))
 extern void (*ptr_do_flushconsole)();
+#endif
 extern void (*ptr_R_ProcessEvents)();
 
 #if R_VERSION >= R_Version(2,1,0)
@@ -222,10 +224,14 @@ int initR(int argc, char **argv, int save_action) {
     ptr_R_WriteConsole = NULL;
     ptr_R_WriteConsoleEx = Re_WriteConsoleEx;
     ptr_R_ResetConsole = Re_ResetConsole;
-    ptr_do_flushconsole = Re_FlushConsole;
+    ptr_R_FlushConsole = Re_FlushConsole;
     ptr_R_ClearerrConsole = Re_ClearerrConsole;
     ptr_R_Busy = Re_RBusy;
     ptr_R_ProcessEvents =  Re_ProcessEvents;
+
+#if (R_VERSION < R_Version(2,15,2))
+    ptr_do_flushconsole = Re_FlushConsole; // this is the former private version
+#endif
 
 #if (R_VERSION >= R_Version(2,1,0))
 	ptr_R_EditFile = Re_Edit;
