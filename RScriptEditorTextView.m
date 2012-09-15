@@ -507,39 +507,19 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 - (void)updateLineWrappingMode
 {
 
-	// lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
-	// 
-	// NSSize contentSize = [scrollView contentSize];
-	// NSTextContainer *textContainer = [self textContainer];
-	// 
-	// // [self setMinSize:contentSize];
-	// 
-	// if (lineWrappingEnabled) {
-	// 	[scrollView setHasHorizontalScroller:YES];
-	// 	[textContainer setContainerSize:NSMakeSize(contentSize.width, CGFLOAT_MAX)];
-	// 	[textContainer setWidthTracksTextView:YES];
-	// 	[self setHorizontallyResizable:NO];
-	// 	[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:YES];
-	// } else {
-	// 	[scrollView setHasHorizontalScroller:YES];
-	// 	[textContainer setContainerSize:NSMakeSize(CGFLOAT_MAX, CGFLOAT_MAX)];
-	// 	[textContainer setWidthTracksTextView:NO];
-	// 	[self setHorizontallyResizable:YES];
-	// 	[(NoodleLineNumberView*)[[self enclosingScrollView] verticalRulerView] setLineWrappingMode:NO];
-	// }
-	// 
-	// [[[self enclosingScrollView] verticalRulerView] performSelector:@selector(refresh) withObject:nil afterDelay:0.0f];
-
 	NSSize layoutSize;
 	
 	lineWrappingEnabled = [Preferences flagForKey:enableLineWrappingKey withDefault: YES];
+
 	[self setHorizontallyResizable:YES];
 	if (!lineWrappingEnabled) {
+		NSRange curRange = [self selectedRange];
 		layoutSize = NSMakeSize(10e6,10e6);
 		[scrollView setHasHorizontalScroller:YES];
 		[self setMaxSize:layoutSize];
 		[[self textContainer] setContainerSize:layoutSize];
 		[[self textContainer] setWidthTracksTextView:NO];
+		[self scrollRangeToVisible:NSMakeRange(curRange.location, 0)];
 	} else {
 		[scrollView setHasHorizontalScroller:NO];
 		layoutSize = [self maxSize];
@@ -547,14 +527,20 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		[[self textContainer] setContainerSize:layoutSize];
 		[[self textContainer] setWidthTracksTextView:YES];
 		// Enforce view to be re-layouted correctly
+		// by re-inserting the the current text buffer
 		[[self undoManager] disableUndoRegistration];
+		NSRange curRange = [self selectedRange];
+		NSString *t = [[NSString alloc] initWithString:[self string]];
 		[self selectAll:nil];
-		[self cut:nil];
-		[self paste:nil];
+		[self insertText:@""];
+		usleep(1000);
+		[self insertText:t];
+		[t release];
+		[self setSelectedRange:curRange];
+		[self scrollRangeToVisible:NSMakeRange(curRange.location, 0)];
 		[[self undoManager] enableUndoRegistration];
 	}
 	[[self textContainer] setHeightTracksTextView:NO];
-
 
 }
 
