@@ -178,6 +178,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 }
 
+#define NA_CHARS " <NA> "
 - (BOOL)writeDataBackToObject
 {
 	NSInteger buflen = 256;
@@ -227,7 +228,8 @@ void printelt(SEXP invec, int vrow, char *strp)
 				break;
 
 				case CHARACTER:
-				if(buf[0] == '\0')
+//				if(buf[0] == '\0')
+				    if(strcmp(buf, NA_CHARS) == 0)
 					SET_STRING_ELT(tmp, j, NA_STRING);
 				 else
 					SET_STRING_ELT(tmp, j, mkChar(buf));
@@ -293,7 +295,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 				if ( !streql( CHAR(STRING_ELT(tmp, k)), CHAR(STRING_ELT(ssNA_STRING, 0)) ) )
 					cont[k] = (NSString*)CFStringCreateWithCString(NULL, CHAR(STRING_ELT(tmp, k)), kCFStringEncodingUTF8);
 				else
-					cont[k] = @"";
+					cont[k] = @NA_CHARS;
 				k++;
 			}
 			NSArray *a = [NSArray arrayWithObjects:cont count:l];
