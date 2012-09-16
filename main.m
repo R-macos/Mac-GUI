@@ -93,9 +93,23 @@ static SEXP RappPrompt(SEXP filename, SEXP isTempFile) {
 	return R_NilValue;
 }
 
+SEXP pkgbrowser(SEXP rpkgs, SEXP rvers, SEXP ivers, SEXP wwwhere,
+		SEXP install_dflt);
+SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
+	       SEXP h_url);
+SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl);
+SEXP datamanager(SEXP dsets, SEXP dpkg, SEXP ddesc, SEXP durl);
+SEXP customprint(SEXP objType, SEXP obj);
+
+
 static R_CallMethodDef mainCallMethods[]  = {
 	{"RappQuit", (DL_FUNC) &RappQuit, 3},
 	{"RappPrompt", (DL_FUNC) &RappPrompt, 2},
+	{"pkgbrowser", (DL_FUNC) &pkgbrowser, 5},
+	{"hsbrowser", (DL_FUNC) &hsbrowser, 5},
+	{"pkgmanager", (DL_FUNC) &pkgmanager, 4},
+	{"datamanager", (DL_FUNC) &datamanager, 4},
+	{"aqua_custom_print", (DL_FUNC) &customprint, 2},
 	{NULL, NULL, 0}
 };
 

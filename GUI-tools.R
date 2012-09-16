@@ -3,7 +3,7 @@
 ## target environment for all this
 .e <- attach(NULL, name = "tools:RGUI")
 
-rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
+if (getRversion() < "2.10.0") error(" NOTE: your R version is too old")
 
 add.fn <- function(name, FN) {
     assign(name, FN, .e)
@@ -39,7 +39,6 @@ add.fn("quartz.save", function(file, type='png', device=dev.cur(), dpi=100, ...)
 add.fn("print.hsearch", function (x, ...)
 {
     if (.Platform$GUI == "AQUA") {
-	rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
         db <- x$matches
         rows <- NROW(db)
         if (rows == 0) {
@@ -53,13 +52,12 @@ add.fn("print.hsearch", function (x, ...)
                                          package = db[i, "Package"],
                                          lib.loc = lib, help_type = 'html'))
                 if (length(tmp) > 0)
-                    url[i] <- if (rv >= 210)
-                        gsub(lib, '/library', tmp, fixed = TRUE) else tmp
+                    url[i] <- gsub(lib, '/library', tmp, fixed = TRUE)
             }
             wtitle <- paste("Help topics matching", sQuote(x$pattern))
-            showhelp <- which(.Internal(hsbrowser(db[, "topic"],
-                                                  db[, "Package"],
-                                                  db[, "title"], wtitle, url)))
+            showhelp <- which(.Call("hsbrowser", db[, "topic"],
+                                    db[, "Package"], db[, "title"],
+                                    wtitle, url))
             for (i in showhelp)
                 print(help(db[i, "topic"], package = db[i, "Package"]))
         }
@@ -87,7 +85,7 @@ add.fn("browse.pkgs", function (repos = getOption("repos"), contriburl = contrib
     vers2[xx] <- i.vers[which(!is.na(idx))]
     i.vers <- vers2
     want.update <- rep(FALSE, length(i.vers))
-    .Internal(pkgbrowser(c.pkgs, c.vers, i.vers, label, want.update))
+    .Call("pkgbrowser", c.pkgs, c.vers, i.vers, label, want.update)
 })
 
 add.fn("Rapp.updates", function ()
@@ -127,7 +125,7 @@ add.fn("package.manager", function ()
     pkgs.status[which(!is.loaded)] <- " "
     pkgs.url <- file.path(.find.package(pkgs), "html", "00Index.html")
     load.idx <-
-        .Internal(package.manager(is.loaded, pkgs, pkgs.desc, pkgs.url))
+        .Call("pkgmanager", is.loaded, pkgs, pkgs.desc, pkgs.url)
     toload <- which(load.idx & !is.loaded)
     tounload <- which(is.loaded & !load.idx)
     for (i in tounload) {
@@ -169,7 +167,7 @@ add.fn("data.manager", function ()
             url[i] <- tmp
     }
     as.character(help("BOD", package = "datasets", help_type = "html"))
-    load.idx <- which(.Internal(data.manager(dt, pkg, desc, url)))
+    load.idx <- which(.Call("datamanager", dt, pkg, desc, url))
     for (i in load.idx) {
         cat("loading dataset:", dt[i], "\n")
         data.by.name(dt[i])
@@ -230,17 +228,13 @@ add.fn("quit", function (save = "default", status = 0, runLast = TRUE)
 
 .e[[".__RGUI__..First"]] <- .GlobalEnv$.First
 
-if (rv < 210) add.fn("main.help.url", function ()
-{
-    .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(),
-        collapse = " ")))
-    make.packages.html()
-    tmpdir <- paste("file://", tempdir(), "/.R", sep = "")
-    url <- paste(tmpdir, "/doc/html/index.html", sep = "")
-    options(main.help.url = url)
-}) else add.fn("main.help.url", function() help.start(browser=function(x, ...) {
-    .Internal(aqua.custom.print("help-files", x))
-    return(invisible(x)) }))
+
+add.fn("main.help.url",
+       function() help.start(browser = function(x, ...) {
+           .Call("aqua_custom_print", "help-files", x)
+           return(invisible(x))
+       })
+)
 
 if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) {
     cat("[R.app GUI ",
@@ -250,5 +244,3 @@ if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) {
 } else {
     cat("[Warning: GUI-tools are intended for internal use by the R.app GUI only]\n")
 }
-if (rv < 210)
-    cat(" NOTE: your R version is too old, some GUI tools may not work correctly!\n")

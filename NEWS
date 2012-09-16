@@ -1,10 +1,11 @@
 NEWS for R.app GUI for Mac OS X
 
-Last-update: 2012-09-15 [BDR]
+Last-update: 2012-09-16 [BDR]
 *	Set ptr_R_FlushConsole (long overdue!).
 *	REditor: represent NA strings as ' <NA> ' so they are preserved,
 	and empty strings are not mapped to NA.
 	(https://stat.ethz.ch/pipermail/r-sig-mac/2012-January/008941.html)
+*	The .Internal()s in GUI-tools.R have been replaced by .Call()s.
 
 Last-update: 2012-08-28 [HJBB]
 *	Improved handling of larger documents

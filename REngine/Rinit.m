@@ -235,7 +235,7 @@ int initR(int argc, char **argv, int save_action) {
 
 #if (R_VERSION >= R_Version(2,1,0))
 	ptr_R_EditFile = Re_Edit;
-	ptr_Raqua_CustomPrint = Re_CustomPrint;
+//	ptr_Raqua_CustomPrint = Re_CustomPrint;
 #else
 	ptr_Raqua_Edit = Re_Edit;
 #endif
@@ -245,11 +245,11 @@ int initR(int argc, char **argv, int save_action) {
     ptr_R_ChooseFile = Re_ChooseFile;
 	
 	
-	ptr_do_packagemanger = Re_packagemanger;
-	ptr_do_datamanger = Re_datamanger;
-	ptr_do_browsepkgs = Re_browsepkgs;
-	ptr_do_wsbrowser = Re_do_wsbrowser;
-	ptr_do_hsbrowser = Re_do_hsbrowser;
+//	ptr_do_packagemanger = Re_packagemanger;
+//	ptr_do_datamanger = Re_datamanger;
+//	ptr_do_browsepkgs = Re_browsepkgs;
+//	ptr_do_wsbrowser = Re_do_wsbrowser;
+//	ptr_do_hsbrowser = Re_do_hsbrowser;
 	
 #if R_VERSION < R_Version(2,7,0)
 	ptr_CocoaInnerQuartzDevice = innerQuartzDevice;

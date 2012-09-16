@@ -286,7 +286,7 @@ int Re_system(char *cmd) {
 	return r;
 }
 
-int  Re_CustomPrint(char *type, SEXP obj)
+int  Re_CustomPrint(const char *type, SEXP obj)
 {
 	insideR--;
 	if ([REngine cocoaHandler]) {
@@ -300,38 +300,40 @@ int  Re_CustomPrint(char *type, SEXP obj)
 	return -1;
 }
 
-SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
+// code formerly in src/unix/aqua.c
+SEXP customprint(SEXP objType, SEXP obj)
 {
-	SEXP pkgname, pkgstatus, pkgdesc, pkgurl;
-	char *vm;
+    const char *ct;
+    int cpr;
+
+    if (!isString(objType) || LENGTH(objType) < 1) error("invalid arguments");
+    ct = CHAR(STRING_ELT(objType,0));
+    cpr = Re_CustomPrint(ct, obj);
+    return ScalarInteger(cpr);
+}
+
+
+SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl)
+{
 	SEXP ans; 
 	int i, len;
 	
 	char **sName, **sDesc, **sURL;
 	BOOL *bStat;
 	
-	checkArity(op, args);
-
 	if (![REngine cocoaHandler]) return R_NilValue;
-	
-	vm = vmaxget();
-	pkgstatus = CAR(args); args = CDR(args);
-	pkgname = CAR(args); args = CDR(args);
-	pkgdesc = CAR(args); args = CDR(args);
-	pkgurl = CAR(args); args = CDR(args);
   
 	if(!isString(pkgname) || !isLogical(pkgstatus) || !isString(pkgdesc) || !isString(pkgurl))
-		errorcall(call, "invalid arguments");
+		error("invalid arguments");
    
 	len = LENGTH(pkgname);
 	if (len!=LENGTH(pkgstatus) || len!=LENGTH(pkgdesc) || len!=LENGTH(pkgurl))
-		errorcall(call, "invalid arguments (length mismatch)");
+		error("invalid arguments (length mismatch)");
 
 	if (len==0) {
 		insideR--;
 		[[REngine cocoaHandler] handlePackages: 0 withNames: 0 descriptions: 0 URLs: 0 status: 0];
 		insideR++;
-		vmaxset(vm);
 		return pkgstatus;
 	}
 
@@ -359,39 +361,28 @@ SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env)
 	UNPROTECT(1);
 	free(bStat);
 	
-	vmaxset(vm);
   	return ans;
 }
 
-SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
+SEXP datamanager(SEXP dsets, SEXP dpkg, SEXP ddesc, SEXP durl)
 {
-  SEXP  dsets, dpkg, ddesc, durl, ans;
-  char *vm;
+  SEXP  ans;
   int i, len;
   
   char **sName, **sDesc, **sURL, **sPkg;
   BOOL *res;
 
-  checkArity(op, args);
-
-  vm = vmaxget();
-  dsets = CAR(args); args = CDR(args);
-  dpkg = CAR(args); args = CDR(args);
-  ddesc = CAR(args); args = CDR(args);
-  durl = CAR(args);
-  
   if (!isString(dsets) || !isString(dpkg) || !isString(ddesc)  || !isString(durl) )
-	errorcall(call, "invalid arguments");
+	error("invalid arguments");
 
   len = LENGTH(dsets);
   if (LENGTH(dpkg)!=len || LENGTH(ddesc)!=len || LENGTH(durl)!=len)
-	  errorcall(call, "invalid arguments (length mismatch)");
+	  error("invalid arguments (length mismatch)");
 	  
   if (len==0) {
 	  insideR--;
 	  [[REngine cocoaHandler] handleDatasets: 0 withNames: 0 descriptions: 0 packages: 0 URLs: 0];
 	  insideR++;
-	  vmaxset(vm);
 	  return R_NilValue;
   }
 
@@ -429,41 +420,28 @@ SEXP Re_datamanger(SEXP call, SEXP op, SEXP args, SEXP env)
 	  ans=allocVector(LGLSXP, 0);
   }
   
-  vmaxset(vm);
-  
   return ans;
 }
 
-SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
+SEXP pkgbrowser(SEXP rpkgs, SEXP rvers, SEXP ivers, SEXP wwwhere,
+		SEXP install_dflt)
 {
-  char *vm;
   int i, len;
-  SEXP rpkgs, rvers, ivers, wwwhere, install_dflt;
 
   char **sName, **sIVer, **sRVer;
   BOOL *bStat;
 
-  checkArity(op, args);
-
-  vm = vmaxget();
-  rpkgs = CAR(args); args = CDR(args);
-  rvers = CAR(args); args = CDR(args);
-  ivers = CAR(args); args = CDR(args);
-  wwwhere = CAR(args); args=CDR(args);
-  install_dflt = CAR(args); 
-  
   if(!isString(rpkgs) || !isString(rvers) || !isString(ivers) || !isString(wwwhere) || !isLogical(install_dflt))
-	  errorcall(call, "invalid arguments");
+	  error("invalid arguments");
 
   len = LENGTH(rpkgs);
   if (LENGTH(rvers)!=len || LENGTH(ivers)!=len || LENGTH(wwwhere)<1 || LENGTH(install_dflt)!=len)
-	  errorcall(call, "invalid arguments (length mismatch)");
+	  error("invalid arguments (length mismatch)");
 	  
   if (len==0) {
 	  insideR--;
 	  [[REngine cocoaHandler] handleInstalledPackages: 0 withNames: 0 installedVersions: 0 repositoryVersions: 0 update: 0 label: 0];
 	  insideR++;
-	  vmaxset(vm);
 	  return R_NilValue;
   }
   
@@ -486,39 +464,27 @@ SEXP Re_browsepkgs(SEXP call, SEXP op, SEXP args, SEXP env)
   insideR++;
   free(sName); free(sIVer); free(sRVer); free(bStat);
     
-  vmaxset(vm);
   return allocVector(LGLSXP, 0);
 }
 
-SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
+SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
+	       SEXP h_url) 
 {
-	char *vm;
 	SEXP ans; 
 	int i, len;
-	SEXP h_topic, h_pkg, h_desc, h_wtitle, h_url;
 	char **sTopic, **sDesc, **sPkg, **sURL;
 	
-	checkArity(op, args);
-	
-	vm = vmaxget();
-	h_topic = CAR(args); args = CDR(args);
-	h_pkg = CAR(args); args = CDR(args);
-	h_desc = CAR(args); args = CDR(args);
-	h_wtitle = CAR(args); args = CDR(args);
-	h_url = CAR(args); 
-	
 	if(!isString(h_topic) | !isString(h_pkg) | !isString(h_desc) )
-		errorcall(call, "invalid arguments");
+		error("invalid arguments");
 	
 	len = LENGTH(h_topic);
 	if (LENGTH(h_pkg)!=len || LENGTH(h_desc)!=len || LENGTH(h_wtitle)<1 || LENGTH(h_url)!=len)
-		errorcall(call, "invalid arguments (length mismatch)");
+		error("invalid arguments (length mismatch)");
 	
 	if (len==0) {
 		insideR--;
 		[[REngine cocoaHandler] handleHelpSearch: 0 withTopics: 0 packages: 0 descriptions: 0 urls: 0 title: 0];
 		insideR++;
-		vmaxset(vm);
 		return R_NilValue;
 	}
 	
@@ -545,7 +511,6 @@ SEXP Re_do_hsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 	for(i=0;i<len;i++)
 		LOGICAL(ans)[i] = 0;
 	
-	vmaxset(vm);  
 	UNPROTECT(1);
 	
 	return ans;
@@ -643,12 +608,9 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 	int i, len;
 	SEXP ids, isroot, iscont, numofit, parid;
 	SEXP name, type, objsize;
-	char *vm;
-   
     
 	checkArity(op, args);
 
-	vm = vmaxget();
 	ids = CAR(args); args = CDR(args);
 	isroot = CAR(args); args = CDR(args);
 	iscont = CAR(args); args = CDR(args);
@@ -661,15 +623,15 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 	if(!isInteger(ids)) 
 		errorcall(call,"`id' must be integer");      
 	if(!isString(name))
-		errorcall(call, "invalid objects' name");
+		error("invalid objects' name");
 	if(!isString(type))
-		errorcall(call, "invalid objects' type");
+		error("invalid objects' type");
 	if(!isString(objsize))
-		errorcall(call, "invalid objects' size");
+		error("invalid objects' size");
 	if(!isLogical(isroot))
-		errorcall(call, "invalid `isroot' definition");
+		error("invalid `isroot' definition");
 	if(!isLogical(iscont))
-		errorcall(call, "invalid `iscont' definition");
+		error("invalid `iscont' definition");
 	if(!isInteger(numofit))
 		errorcall(call,"`numofit' must be integer");
 	if(!isInteger(parid))
@@ -708,8 +670,6 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 		ws_IsContainer[i] = LOGICAL(iscont)[i];
 	}
   }
-
-  vmaxset(vm);
 
 	insideR--;
 	[WSBrowser toggleWorkspaceBrowser];
