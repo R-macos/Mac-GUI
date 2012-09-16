@@ -1590,7 +1590,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1610,6 +1610,7 @@
 				INSTALL_PATH = /Applications;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+				"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -1680,7 +1681,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1700,6 +1701,7 @@
 				INSTALL_PATH = /Applications;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+				"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -1995,7 +1997,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEVELOPMENT_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.4u.sdk;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 			};
 			name = Development;
@@ -2018,7 +2020,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEPLOYMENT_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.4u.sdk;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -2083,6 +2085,7 @@
 				INSTALL_PATH = /Applications;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+				"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -2153,7 +2156,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -2245,7 +2248,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEPLOYMENT64_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 			};
 			name = Deployment64;

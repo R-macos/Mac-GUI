@@ -1,62 +1,67 @@
 ## R GUI supplementary code and tools (loaded since R 2.9.0)
 
 ## target environment for all this
-.e <- attach(NULL,name="tools:RGUI")
+.e <- attach(NULL, name = "tools:RGUI")
 
 rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
 
-add.fn <- function(name, FN) { assign(name, FN, .e); environment(.e[[name]]) <- .e }
+add.fn <- function(name, FN) {
+    assign(name, FN, .e)
+    environment(.e[[name]]) <- .e
+}
 
 ## quartz.save
 add.fn("quartz.save", function(file, type='png', device=dev.cur(), dpi=100, ...) {
- # modified version of dev.copy2pdf
- dev.set(device)
- current.device <- dev.cur()
- nm <- names(current.device)[1]
- if (nm == 'null device') stop('no device to print from')
- oc <- match.call()
- oc[[1]] <- as.name('dev.copy')
- oc$file <- NULL
- oc$device <- quartz
- oc$type <- type
- oc$file <- file
- oc$dpi <- dpi
- din <- dev.size('in')
- w <- din[1]
- h <- din[2]
- if (is.null(oc$width))
-   oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w
- if (is.null(oc$height))
-   oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h
- dev.off(eval.parent(oc))
- dev.set(current.device)
+    ## modified version of dev.copy2pdf
+    dev.set(device)
+    current.device <- dev.cur()
+    nm <- names(current.device)[1]
+    if (nm == 'null device') stop('no device to print from')
+    oc <- match.call()
+    oc[[1]] <- as.name('dev.copy')
+    oc$file <- NULL
+    oc$device <- quartz
+    oc$type <- type
+    oc$file <- file
+    oc$dpi <- dpi
+    din <- dev.size('in')
+    w <- din[1]
+    h <- din[2]
+    if (is.null(oc$width))
+        oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w
+    if (is.null(oc$height))
+        oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h
+    dev.off(eval.parent(oc))
+    dev.set(current.device)
 })
 
 ## print.hsearch is our way to display search results internally
-add.fn("print.hsearch", function (x, ...) 
+add.fn("print.hsearch", function (x, ...)
 {
     if (.Platform$GUI == "AQUA") {
 	rv <- as.numeric(R.version$major) * 100 + as.numeric(R.version$minor)
         db <- x$matches
         rows <- NROW(db)
         if (rows == 0) {
-            writeLines(strwrap(paste("No help files found matching", 
-                sQuote(x$pattern), "using", x$type, "matching\n\n")))
-        }
-        else {
+            writeLines(strwrap(paste("No help files found matching",
+                                     sQuote(x$pattern), "using", x$type, "matching\n\n")))
+        } else {
             url = character(rows)
             for (i in 1:rows) {
 		lib <- dirname(db[i, "LibPath"])
-                tmp <- as.character(help(db[i, "topic"], package = db[i, 
-                  "Package"], lib.loc = lib, help_type = 'html'))
-                if (length(tmp) > 0) 
-                  url[i] <- if (rv >= 210) gsub(lib, '/library', tmp, fixed = TRUE) else tmp
+                tmp <- as.character(help(db[i, "topic"],
+                                         package = db[i, "Package"],
+                                         lib.loc = lib, help_type = 'html'))
+                if (length(tmp) > 0)
+                    url[i] <- if (rv >= 210)
+                        gsub(lib, '/library', tmp, fixed = TRUE) else tmp
             }
             wtitle <- paste("Help topics matching", sQuote(x$pattern))
-            showhelp <- which(.Internal(hsbrowser(db[, "topic"], 
-                db[, "Package"], db[, "title"], wtitle, url)))
-            for (i in showhelp) print(help(db[i, "topic"], package = db[i, 
-                "Package"]))
+            showhelp <- which(.Internal(hsbrowser(db[, "topic"],
+                                                  db[, "Package"],
+                                                  db[, "title"], wtitle, url)))
+            for (i in showhelp)
+                print(help(db[i, "topic"], package = db[i, "Package"]))
         }
         invisible(x)
     }
@@ -65,9 +70,9 @@ add.fn("print.hsearch", function (x, ...)
 
 ## --- the following functions are compatibility functions that wil go away very soon!
 
-add.fn("browse.pkgs", function (repos = getOption("repos"), contriburl = contrib.url(repos, type), type = getOption("pkgType")) 
+add.fn("browse.pkgs", function (repos = getOption("repos"), contriburl = contrib.url(repos, type), type = getOption("pkgType"))
 {
-    if (.Platform$GUI != "AQUA") 
+    if (.Platform$GUI != "AQUA")
         stop("this function is intended to work with the Aqua GUI")
     x <- installed.packages()
     i.pkgs <- as.character(x[, 1])
@@ -85,35 +90,31 @@ add.fn("browse.pkgs", function (repos = getOption("repos"), contriburl = contrib
     .Internal(pkgbrowser(c.pkgs, c.vers, i.vers, label, want.update))
 })
 
-add.fn("Rapp.updates", function () 
+add.fn("Rapp.updates", function ()
 {
-    if (.Platform$GUI != "AQUA") 
+    if (.Platform$GUI != "AQUA")
         stop("this function is intended to work with the Aqua GUI")
     cran.ver <- readLines("http://cran.r-project.org/bin/macosx/VERSION")
     ver <- strsplit(cran.ver, "\\.")
     cran.ver <- as.numeric(ver[[1]])
-    rapp.ver <- paste(R.Version()$major, ".", R.version$minor, 
-        sep = "")
+    rapp.ver <- paste(R.Version()$major, ".", R.version$minor, sep = "")
     ver <- strsplit(rapp.ver, "\\.")
     rapp.ver <- as.numeric(ver[[1]])
     this.ver <- sum(rapp.ver * c(10000, 100, 1))
     new.ver <- sum(cran.ver * c(10000, 100, 1))
     if (new.ver > this.ver) {
         cat("\nThis version of R is", paste(rapp.ver, collapse = "."))
-        cat("\nThere is a newer version of R on CRAN which is", 
+        cat("\nThere is a newer version of R on CRAN which is",
             paste(cran.ver, collapse = "."), "\n")
         action <- readline("Do you want to visit CRAN now? ")
-        if (substr(action, 1, 1) == "y") 
+        if (substr(action, 1, 1) == "y")
             system("open http://cran.r-project.org/bin/macosx/")
-    }
-    else {
-        cat("\nYour version of R is up to date\n")
-    }
+    } else cat("\nYour version of R is up to date\n")
 })
 
-add.fn("package.manager", function () 
+add.fn("package.manager", function ()
 {
-    if (.Platform$GUI != "AQUA") 
+    if (.Platform$GUI != "AQUA")
         stop("this function is intended to work with the Aqua GUI")
     loaded.pkgs <- .packages()
     x <- library()
@@ -125,8 +126,8 @@ add.fn("package.manager", function ()
     pkgs.status[which(is.loaded)] <- "loaded"
     pkgs.status[which(!is.loaded)] <- " "
     pkgs.url <- file.path(.find.package(pkgs), "html", "00Index.html")
-    load.idx <- .Internal(package.manager(is.loaded, pkgs, pkgs.desc, 
-        pkgs.url))
+    load.idx <-
+        .Internal(package.manager(is.loaded, pkgs, pkgs.desc, pkgs.url))
     toload <- which(load.idx & !is.loaded)
     tounload <- which(is.loaded & !load.idx)
     for (i in tounload) {
@@ -148,9 +149,9 @@ add.fn("rcompgen.completion", function (x)
     utils:::.CompletionEnv[["comps"]]
 })
 
-add.fn("data.manager", function () 
+add.fn("data.manager", function ()
 {
-    if (.Platform$GUI != "AQUA") 
+    if (.Platform$GUI != "AQUA")
         stop("this function is intended to work with the Aqua GUI")
     data.by.name <- function(datanames) {
         aliases <- sub("^.+ +\\((.+)\\)$", "\\1", datanames)
@@ -164,7 +165,7 @@ add.fn("data.manager", function ()
     url <- character(len)
     for (i in 1:len) {
         tmp <- as.character(help(dt[i], package = pkg[i], help_type = "html"))
-        if (length(tmp) > 0) 
+        if (length(tmp) > 0)
             url[i] <- tmp
     }
     as.character(help("BOD", package = "datasets", help_type = "html"))
@@ -179,10 +180,11 @@ add.fn("data.manager", function ()
 # if interactive == TRUE the generated Rd doc will be opened in R.app
 #   for filename = NA or filename == NULL -> an untitled new Rd doc for passed function
 #   for filename = a_path -> a_path will be opened for passed function
+
 add.fn("prompt", function (object, filename = NULL, name = NULL, interactive = FALSE, ...)
 {
     if(interactive == FALSE) {
-        # call default prompt()
+        ## call default prompt()
         ## the name setting here is necessary to avoid taking 'object'
         ## as passed name - TODO has to be improved
         if(missing(name))
@@ -202,33 +204,35 @@ add.fn("prompt", function (object, filename = NULL, name = NULL, interactive = F
             }
         return(utils:::prompt(object, filename = filename, name= name, ...))
     } else {
-        # let R.app handle the result of prompt()
+        ## let R.app handle the result of prompt()
         isTempFile <- FALSE
         if(is.null(filename) || is.na(filename)) {
-            # if no filename was passed we do it on a temporary file
-            # which will be removed by 'RappPrompt->RController.handlePromptRdFileAtPath
+            ## if no filename was passed we do it on a temporary file
+            ## which will be removed by 'RappPrompt->RController.handlePromptRdFileAtPath
             isTempFile <- TRUE
             filename <- tempfile()
         }
-        # call default prompt() by suppressing the outputted messages since
-        # we're in interactive mode
+        ## call default prompt() by suppressing the outputted messages since
+        ## we're in interactive mode
         suppressMessages(utils:::prompt(object=object, filename = filename, name = name, ...))
-        # let RappPrompt - defined in main.m - handle the generated Rd file
+        ## let RappPrompt - defined in main.m - handle the generated Rd file
         invisible(.Call("RappPrompt", filename, isTempFile))
     }
 })
 
 ## we catch q/quit to make sure users don't use it inadvertently
 if (!isTRUE(getOption("RGUI.base.quit"))) {
-add.fn("q", function (save = "default", status = 0, runLast = TRUE) .Call("RappQuit", save, status, runLast))
-add.fn("quit", function (save = "default", status = 0, runLast = TRUE) .Call("RappQuit", save, status, runLast))
+add.fn("q", function (save = "default", status = 0, runLast = TRUE)
+       .Call("RappQuit", save, status, runLast))
+add.fn("quit", function (save = "default", status = 0, runLast = TRUE)
+       .Call("RappQuit", save, status, runLast))
 }
 
 .e[[".__RGUI__..First"]] <- .GlobalEnv$.First
 
-if (rv < 210) add.fn("main.help.url", function () 
+if (rv < 210) add.fn("main.help.url", function ()
 {
-    .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(), 
+    .Script("sh", "help-links.sh", paste(tempdir(), paste(.libPaths(),
         collapse = " ")))
     make.packages.html()
     tmpdir <- paste("file://", tempdir(), "/.R", sep = "")
@@ -238,5 +242,13 @@ if (rv < 210) add.fn("main.help.url", function ()
     .Internal(aqua.custom.print("help-files", x))
     return(invisible(x)) }))
 
-if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) cat("[R.app GUI ",Sys.getenv("R_GUI_APP_VERSION")," (",Sys.getenv("R_GUI_APP_REVISION"),") ",R.version$platform,"]\n\n",sep='') else cat("[Warning: GUI-tools are intended for internal use by the R.app GUI only]\n")
-if (rv < 210) cat(" NOTE: your R version is too old, some GUI tools may not work correctly!\n")
+if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) {
+    cat("[R.app GUI ",
+        Sys.getenv("R_GUI_APP_VERSION")," (",
+        Sys.getenv("R_GUI_APP_REVISION"),") ",
+        R.version$platform,"]\n\n", sep = '')
+} else {
+    cat("[Warning: GUI-tools are intended for internal use by the R.app GUI only]\n")
+}
+if (rv < 210)
+    cat(" NOTE: your R version is too old, some GUI tools may not work correctly!\n")
