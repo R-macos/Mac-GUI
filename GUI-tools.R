@@ -231,8 +231,8 @@ add.fn("quit", function (save = "default", status = 0, runLast = TRUE)
 
 add.fn("main.help.url",
        function() help.start(browser = function(x, ...) {
-           .Call("aqua_custom_print", "help-files", x)
-           return(invisible(x))
+           .Internal(aqua.custom.print("help-files", x))
+           invisible(x)
        })
 )
 

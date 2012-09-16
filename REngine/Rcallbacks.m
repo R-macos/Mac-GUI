@@ -300,19 +300,6 @@ int  Re_CustomPrint(const char *type, SEXP obj)
 	return -1;
 }
 
-// code formerly in src/unix/aqua.c
-SEXP customprint(SEXP objType, SEXP obj)
-{
-    const char *ct;
-    int cpr;
-
-    if (!isString(objType) || LENGTH(objType) < 1) error("invalid arguments");
-    ct = CHAR(STRING_ELT(objType,0));
-    cpr = Re_CustomPrint(ct, obj);
-    return ScalarInteger(cpr);
-}
-
-
 SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl)
 {
 	SEXP ans; 
