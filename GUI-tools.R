@@ -229,12 +229,25 @@ add.fn("quit", function (save = "default", status = 0, runLast = TRUE)
 .e[[".__RGUI__..First"]] <- .GlobalEnv$.First
 
 
+add.fn("aqua.browser", function(x, ...) {
+    .Call("aqua.custom.print", "help-files", x)
+    invisible(x)})
+
 add.fn("main.help.url",
        function() help.start(browser = function(x, ...) {
-           .Internal(aqua.custom.print("help-files", x))
+           .Call("aqua.custom.print", "help-files", x)
            invisible(x)
        })
 )
+
+add.fn("wsbrowser", function(IDS, IsRoot, Container, ItemsPerContainer,
+                            ParentID, NAMES, TYPES, DIMS)
+{
+    .Call("wsbrowser", as.integer(IDS), IsRoot, Container,
+          as.integer(ItemsPerContainer), as.integer(ParentID),
+          NAMES, TYPES, DIMS)
+    invisible()
+})
 
 if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) {
     cat("[R.app GUI ",

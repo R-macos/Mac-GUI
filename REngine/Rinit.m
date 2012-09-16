@@ -133,28 +133,30 @@ int initR(int argc, char **argv, int save_action)
     ptr_R_ClearerrConsole = Re_ClearerrConsole;
     ptr_R_Busy = Re_RBusy;
     ptr_R_ProcessEvents =  Re_ProcessEvents;
+    ptr_do_dataentry = Re_dataentry;
+    ptr_do_selectlist = Re_do_selectlist;
 
 #if (R_VERSION < R_Version(2,15,2))
     ptr_do_flushconsole = Re_FlushConsole; // this is the former private version
 #endif
 
     ptr_R_EditFile = Re_Edit;
-    ptr_Raqua_CustomPrint = Re_CustomPrint;
 	
     ptr_R_ShowFiles = Re_ShowFiles;
     ptr_R_EditFiles = Re_EditFiles;
     ptr_R_ChooseFile = Re_ChooseFile;
 	
-	
+#if (R_VERSION < R_Version(2,16,0))
+    ptr_Raqua_CustomPrint = Re_CustomPrint;	
     ptr_do_wsbrowser = Re_do_wsbrowser;
+#endif
+
 //	ptr_do_packagemanger = Re_packagemanger;
 //	ptr_do_datamanger = Re_datamanger;
 //	ptr_do_browsepkgs = Re_browsepkgs;
 //	ptr_do_hsbrowser = Re_do_hsbrowser;
 	
     ptr_CocoaSystem = Re_system;
-    ptr_do_dataentry = Re_dataentry;
-    ptr_do_selectlist = Re_do_selectlist;
     setup_Rmainloop();
 
     return 0;

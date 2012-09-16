@@ -99,6 +99,9 @@ SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
 	       SEXP h_url);
 SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl);
 SEXP datamanager(SEXP dsets, SEXP dpkg, SEXP ddesc, SEXP durl);
+SEXP customprint(SEXP objType, SEXP obj);
+SEXP wsbrowser(SEXP ids, SEXP isroot, SEXP iscont, SEXP numofit,
+	       SEXP parid, SEXP name, SEXP type, SEXP objsize);
 
 
 static R_CallMethodDef mainCallMethods[]  = {
@@ -108,6 +111,8 @@ static R_CallMethodDef mainCallMethods[]  = {
 	{"hsbrowser", (DL_FUNC) &hsbrowser, 5},
 	{"pkgmanager", (DL_FUNC) &pkgmanager, 4},
 	{"datamanager", (DL_FUNC) &datamanager, 4},
+	{"aqua.custom.print", (DL_FUNC) &customprint, 2},
+	{"wsbrowser", (DL_FUNC) &wsbrowser, 8},
 	{NULL, NULL, 0}
 };
 

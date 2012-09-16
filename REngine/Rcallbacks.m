@@ -300,6 +300,14 @@ int  Re_CustomPrint(const char *type, SEXP obj)
 	return -1;
 }
 
+SEXP customprint(SEXP objType, SEXP obj)
+{
+    if (!isString(objType) || LENGTH(objType) < 1) error("invalid arguments");
+    const char *ct = CHAR(STRING_ELT(objType, 0));
+    int cpr = Re_CustomPrint(ct, obj);
+    return ScalarInteger(cpr);
+}
+
 SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl)
 {
 	SEXP ans; 
@@ -665,6 +673,57 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
   return R_NilValue;
 }
 
+SEXP wsbrowser(SEXP ids, SEXP isroot, SEXP iscont, SEXP numofit,
+	       SEXP parid, SEXP name, SEXP type, SEXP objsize)
+{
+    if(!isInteger(ids)) error("'id' must be integer");      
+    if(!isString(name)) error("invalid objects' name");
+    if(!isString(type)) error("invalid objects' type");
+    if(!isString(objsize)) error("invalid objects' size");
+    if(!isLogical(isroot)) error("invalid 'isroot' definition");
+    if(!isLogical(iscont)) error("invalid 'iscont' definition");
+    if(!isInteger(numofit)) error("'numofit' must be integer");
+    if(!isInteger(parid)) error("'parid' must be integer");
+  
+    int len = LENGTH(ids);
+
+    if(len) {
+	WeHaveWorkspace = YES;
+	NumOfWSObjects = freeWorkspaceList(len);		
+  
+	for(int i = 0; i < NumOfWSObjects; i++) {
+	    if (!isNull(STRING_ELT(name, i)))
+		ws_name[i] = strdup(CHAR(STRING_ELT(name, i)));
+	    else
+		ws_name[i] = strdup(CHAR(R_BlankString));
+
+	    if (!isNull(STRING_ELT(type, i)))
+		ws_type[i] = strdup(CHAR(STRING_ELT(type, i)));
+	    else
+		ws_type[i] = strdup(CHAR(R_BlankString));
+
+	    if (!isNull(STRING_ELT(objsize, i)))
+		ws_size[i] = strdup(CHAR(STRING_ELT(objsize, i)));
+	    else
+		ws_size[i] = strdup(CHAR(R_BlankString));  
+
+	    ws_IDNum[i] = INTEGER(ids)[i];
+	    ws_numOfItems[i] = INTEGER(numofit)[i];
+	    if(INTEGER(parid)[i] == -1)
+		ws_parID[i] = -1;
+	    else 
+		ws_parID[i] = INTEGER(parid)[i]; 
+	    ws_IsRoot[i] = LOGICAL(isroot)[i];
+	    ws_IsContainer[i] = LOGICAL(iscont)[i];
+	}
+    }
+
+    insideR--;
+    [WSBrowser toggleWorkspaceBrowser];
+    insideR++;
+
+    return R_NilValue;
+}
 
 int freeWorkspaceList(int newlen)
 {
