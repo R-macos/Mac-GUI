@@ -1610,6 +1610,7 @@
 				INSTALL_PATH = /Applications;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+				"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -1700,6 +1701,7 @@
 				INSTALL_PATH = /Applications;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+				"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -2083,6 +2085,7 @@
 				INSTALL_PATH = /Applications;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
+				"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
