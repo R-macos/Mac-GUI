@@ -25,13 +25,7 @@
 
 #include <Rversion.h>
 
-/* we include config.h in private headers only since 2.3.0 */
-#if (R_VERSION < R_Version(2,3,0))
-#define HAVE_WCHAR_H 1
-#else
 #include "config.h"
-#endif
-
 #include "Defn.h"
 #include "Print.h"
 

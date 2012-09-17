@@ -35,20 +35,19 @@
 #define R_INTERFACE_PTRS 1
 #define CSTACK_DEFNS 1
 
-#include "privateR.h"
+//#include "privateR.h"
 
 #include <R.h>
 #include <Rinternals.h>
 #include "Rinit.h"
 #include "Rcallbacks.h"
-#include "IOStuff.h"
+//#include "IOStuff.h"
 #include <R_ext/Parse.h>
-#include <Parse.h>
+//#include <Parse.h>
 
 #include <R_ext/GraphicsEngine.h>
 
 #include <Rembedded.h>
-#include <Rdefines.h> // FIXME, don't use
 
 /* This constant defines the maximal length of single ReadConsole input, which usually corresponds to the maximal length of a single line. The buffer is allocated dynamically, so an arbitrary size is fine. */
 #ifndef MAX_R_LINE_SIZE
@@ -60,21 +59,23 @@
 /* and SaveAction is not officially exported */
 extern SA_TYPE SaveAction;
 
-/* --- those are not part of the Rinterface --- */
-extern SEXP (*ptr_do_packagemanger)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_datamanger)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_browsepkgs)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_hsbrowser)(SEXP, SEXP, SEXP, SEXP);
+// not in Rinterface.h earlier
+#if (R_VERSION < R_Version(2,16,0))
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+#endif
+
 #if (R_VERSION < R_Version(2,15,2))
 extern void (*ptr_do_flushconsole)();
 #endif
 extern void (*ptr_R_ProcessEvents)();
 
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+
+#if (R_VERSION < R_Version(2,16,0))
+extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy */
+#endif
 
 extern int  (*ptr_CocoaSystem)(char *);
 
@@ -150,11 +151,6 @@ int initR(int argc, char **argv, int save_action)
     ptr_Raqua_CustomPrint = Re_CustomPrint;	
     ptr_do_wsbrowser = Re_do_wsbrowser;
 #endif
-
-//	ptr_do_packagemanger = Re_packagemanger;
-//	ptr_do_datamanger = Re_datamanger;
-//	ptr_do_browsepkgs = Re_browsepkgs;
-//	ptr_do_hsbrowser = Re_do_hsbrowser;
 	
     ptr_CocoaSystem = Re_system;
     setup_Rmainloop();

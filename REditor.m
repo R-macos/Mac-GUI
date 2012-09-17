@@ -33,11 +33,10 @@
 #include <R.h>
 #include <R_ext/Boolean.h>
 #include <R_ext/Rdynload.h>
-#include <Rdefines.h>
 #include <Rinternals.h>
 #include <Rversion.h>
 
-#include "privateR.h" // needs Defn.h Print.h
+//#include "privateR.h" // needs Defn.h Print.h
 
 #import "RGUI.h"
 #import "REditor.h"

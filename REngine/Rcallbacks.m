@@ -30,9 +30,8 @@
  *
  */
 
-#include "privateR.h"
+//#include "privateR.h"
 #include <R.h>
-#include <Rdefines.h>
 #include <Rinternals.h>
 #include <Rversion.h>
 
@@ -286,6 +285,9 @@ int Re_system(char *cmd) {
 	return r;
 }
 
+#if (R_VERSION >= R_Version(2,16,0))
+static
+#endif
 int  Re_CustomPrint(const char *type, SEXP obj)
 {
 	insideR--;
@@ -350,7 +352,7 @@ SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl)
 	insideR++;
 	free(sName); free(sDesc); free(sURL);
 	
-	PROTECT(ans = NEW_LOGICAL(len));
+	PROTECT(ans = allocVector(LGLSXP, len));
 	for(i=0;i<len;i++)
 		LOGICAL(ans)[i] = bStat[i];
 	UNPROTECT(1);
@@ -502,7 +504,7 @@ SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
 	insideR++;
 	free(sTopic); free(sDesc); free(sPkg); free(sURL);
 	
-	PROTECT(ans = NEW_LOGICAL(len));
+	PROTECT(ans = allocVector(LGLSXP, len));
 	for(i=0;i<len;i++)
 		LOGICAL(ans)[i] = 0;
 	
@@ -520,7 +522,7 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 	BOOL *itemStatus = 0;
 	int selectListDone = 0;
 	
-    checkArity(op, args);
+//    checkArity(op, args);
     list = CAR(args);
     if(!isString(list)) error(_("invalid 'list' argument"));
     preselect = CADR(args);
@@ -598,6 +600,7 @@ int NumOfID = 0;         /* length of the vectors    */
 
 BOOL WeHaveWorkspace;
 
+#if (R_VERSION < R_Version(2,16,0))
 SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 {
 	int i, len;
@@ -672,6 +675,7 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 
   return R_NilValue;
 }
+#endif
 
 SEXP wsbrowser(SEXP ids, SEXP isroot, SEXP iscont, SEXP numofit,
 	       SEXP parid, SEXP name, SEXP type, SEXP objsize)

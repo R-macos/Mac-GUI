@@ -36,19 +36,10 @@
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
 #include <Fileio.h>
-#if (R_VERSION >= R_Version(2,1,0))
-// Rinterface is public, but present only in 2.1+
 #include <Rinterface.h>
-#else
-// if there is no Rinterface, we need private Defn.h
-#include "privateR.h"
-#endif
 #include <langinfo.h>
 #include <locale.h>
-
-#if R_VERSION >= R_Version(2,7,0)
 #include <R_ext/QuartzDevice.h>
-#endif
 
 #import <sys/fcntl.h>
 #import <sys/select.h>
