@@ -312,8 +312,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 		[self setTextColor:shColorNormal];
 		[self setInsertionPointColor:shColorCursor];
 	} else {
-		[self setTextColor:[NSColor blackColor]];
-		[self setInsertionPointColor:[NSColor blackColor]];
+		[self setTextColor:shColorNormal];
+		[self setInsertionPointColor:shColorCursor];
 	}
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 	[[self layoutManager] setAllowsNonContiguousLayout:YES];
@@ -368,8 +368,8 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 {
 	[theTextStorage removeAttribute:NSForegroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
 	[theTextStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, [[theTextStorage string] length])];
-	[self setTextColor:[NSColor blackColor]];
-	[self setInsertionPointColor:[NSColor blackColor]];
+	[self setTextColor:shColorNormal];
+	[self setInsertionPointColor:shColorCursor];
 	[self setNeedsDisplayInRect:[self visibleRect]];
 }
 
@@ -612,6 +612,13 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		// Improve undo behaviour, i.e. it depends how fast the user types
 		[self performSelector:@selector(breakUndoCoalescing) withObject:nil afterDelay:0.8f];
+
+		[NSObject cancelPreviousPerformRequestsWithTarget:(RDocumentWinCtrl*)[self delegate] 
+								selector:@selector(functionRescan) 
+								object:nil];
+
+		// update function list to display the function in which the cursor is located
+		[(RDocumentWinCtrl*)[self delegate] performSelector:@selector(functionRescan) withObject:nil afterDelay:0.3f];
 
 	}
 

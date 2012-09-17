@@ -200,7 +200,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 {
 	plainFile=plain;
 	if (plain && useHighlighting && textView)
-		[textView setTextColor:[NSColor blackColor] range:NSMakeRange(0,[[textView textStorage] length])];
+		[textView setTextColor:shColorNormal range:NSMakeRange(0,[[textView textStorage] length])];
 	else if (!plain && useHighlighting && textView)
 		[textView performSelector:@selector(doSyntaxHighlighting) withObject:nil afterDelay:0.0];
 }
@@ -415,6 +415,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 
 	}
 	
+	[self functionReset];
 	
 	// Needed for showing tooltips of folded items
 	[[self window] setAcceptsMouseMovedEvents:YES];
@@ -527,6 +528,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[fnListBox setToolTip:tooltipStr];
 		[[fnListBox menu] addItem:fmi];
 		[fmi release];
+		[fnListBox setEnabled:NO];
 	}
 	SLog(@" - reset done");
 }
@@ -534,6 +536,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 - (void) functionAdd: (NSString*) fn atPosition: (int) pos
 {
 	if (fnListBox) {
+		[fnListBox setEnabled:YES];
 		if ([[[fnListBox menu] itemAtIndex:0] tag]==-1)
 			[fnListBox removeAllItems];
 		NSMenuItem *mi = [fnListBox itemWithTitle:fn];
@@ -653,7 +656,8 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 						[levelTemplate substringWithRange:NSMakeRange(0,(level>16) ? 48 : (level*3))], 
 						(level)?@" └ ":@"", 
 						[s substringWithRange:NSMakeRange(symuoffset, symuleng)]];
-					fn = [fn stringByReplacingOccurrencesOfRegex:@"\\s*<.*" withString:@""];					mi = nil;
+					fn = [fn stringByReplacingOccurrencesOfRegex:@"\\s*<.*" withString:@""];
+					mi = nil;
 					SLog(@" - found invalid function %d:%d \"%@\"", symuoffset, symuleng, fn);
 					fnf++;
 					if (symuoffset<=sr.location) sit=pim;
@@ -1391,16 +1395,30 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 								selector:@selector(currentFunctionHint) 
 								object:nil];
 
-		// Cancel calling functionRescan
-		[NSObject cancelPreviousPerformRequestsWithTarget:self 
-								selector:@selector(functionRescan) 
-								object:nil];
-
 		// update current function hint
 		[tv performSelector:@selector(currentFunctionHint) withObject:nil afterDelay:0.1f];
-		// update function list to display the function in which the cursor is located
-		[self performSelector:@selector(functionRescan) withObject:nil afterDelay:0.3f];
 
+		// update function list to display the function in which the cursor is located
+		// by iterating through the fnListBox menu items
+		if(fnListBox && [fnListBox isEnabled]) {
+			CFArrayRef items    = (CFArrayRef)[[fnListBox menu] itemArray];
+			NSUInteger pos      = [tv selectedRange].location;
+			NSInteger listItem  = -100;
+			NSInteger fnStart   = 0;
+			NSInteger itemCount = (NSInteger)CFArrayGetCount(items);
+			for(NSInteger i=0; i < itemCount; i++) {
+				fnStart = (NSInteger)[(NSMenuItem*)CFArrayGetValueAtIndex(items, i) tag];
+				if(pos <= fnStart) {
+					listItem = i - ((pos == fnStart) ? 0 : 1);
+					break;
+				}
+			}
+			if(listItem == -100)  // for loop didn't find -> cursor in last item
+				listItem = itemCount-1;
+			else if(listItem < 0) // cursor in first item
+				listItem = 0;
+			[fnListBox selectItemAtIndex:listItem];
+		}
 	}
 }
 
