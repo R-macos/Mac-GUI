@@ -120,96 +120,84 @@ static struct utsname os_uname;
 
 int main(int argc, const char *argv[])
 {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-	uname(&os_uname);
-	os_version_string = strdup(os_uname.release);
-	os_version = atof(os_uname.release);
+    uname(&os_uname);
+    os_version_string = strdup(os_uname.release);
+    os_version = atof(os_uname.release);
 
-	if ([Preferences flagForKey:@"Debug all exceptions"] == YES) {
-		// add an independent exception handler
-		[[GlobalExHandler alloc] init]; // the init method also registers the handler
-		[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: 1023]; // hang+log+handle all
-	}
+    if ([Preferences flagForKey:@"Debug all exceptions"] == YES) {
+	// add an independent exception handler
+	[[GlobalExHandler alloc] init]; // the init method also registers the handler
+	[[NSExceptionHandler defaultExceptionHandler] setExceptionHandlingMask: 1023]; // hang+log+handle all
+    }
 
-	Rapp_R_version_short = [[NSString alloc] initWithFormat:@"%d.%d", (R_VERSION >> 16), (R_VERSION >> 8)&255];
-	Rapp_R_version = [[NSString alloc] initWithFormat:@"%s.%s", R_MAJOR, R_MINOR];
+    Rapp_R_version_short = [[NSString alloc] initWithFormat:@"%d.%d", (R_VERSION >> 16), (R_VERSION >> 8)&255];
+    Rapp_R_version = [[NSString alloc] initWithFormat:@"%s.%s", R_MAJOR, R_MINOR];
 	
-	[NSApplication sharedApplication];
-	[NSBundle loadNibNamed:@"MainMenu" owner:NSApp];
+    [NSApplication sharedApplication];
+    [NSBundle loadNibNamed:@"MainMenu" owner:NSApp];
 	
-	 SLog(@" - initalizing R");
-	 if (![[REngine mainEngine] activate]) {
-		 NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
-		 exit(-1);
-	 }
+    SLog(@" - initalizing R");
+    if (![[REngine mainEngine] activate]) {
+	NSRunAlertPanel(NLS(@"Cannot start R"),[NSString stringWithFormat:NLS(@"Unable to start R: %@"), [[REngine mainEngine] lastError]],NLS(@"OK"),nil,nil);
+	exit(-1);
+    }
 	 
-#if R_VERSION < R_Version(2,7,0)
-	 /* register Quartz symbols */
-	 QuartzRegisterSymbols();
-	 /* create quartz.save function in tools:quartz */
-	 [[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\",function(file, type=\"png\", device=dev.cur(), ...) invisible(.Call(\"QuartzSaveContents\",device,file,type,list(...))),e)}))"];
-#elif R_VERSION < R_Version(2,9,0)
-	/* in R 2.7.0 we use dev.copy to implement quartz.save */
-	[[REngine mainEngine] executeString:@"try(local({e<-attach(NULL,name=\"tools:RGUI\"); assign(\"quartz.save\", function(file, type='png', device=dev.cur(), dpi=100, ...) {\n # modified version of dev.copy2pdf\n dev.set(device)\n current.device <- dev.cur()\n nm <- names(current.device)[1]\n if (nm == 'null device') stop('no device to print from')\n oc <- match.call()\n oc[[1]] <- as.name('dev.copy')\n oc$file <- NULL\n oc$device <- quartz\n oc$type <- type\n oc$file <- file\n oc$dpi <- dpi\n din <- dev.size('in')\n w <- din[1]\n h <- din[2]\n if (is.null(oc$width))\n oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w\n if (is.null(oc$height))\n oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h\n dev.off(eval.parent(oc))\n dev.set(current.device)\n},e); environment(e$quartz.save) <- e}))"];
-#else
-	R_registerRoutines(R_getEmbeddingDllInfo(), 0, mainCallMethods, 0, 0);
+    SLog(@" - load R code for R.app");
+    R_registerRoutines(R_getEmbeddingDllInfo(), 0, mainCallMethods, 0, 0);
 	
-	NSString *codePath = [[NSBundle mainBundle] pathForResource:@"GUI-tools.R" ofType:@""];
-	SLog(@" - loading code from '%@'", codePath);
-	[[REngine mainEngine] executeString: [NSString stringWithFormat:@"try(local(source(\"%@\",local=TRUE,echo=FALSE,verbose=FALSE,encoding='UTF-8',keep.source=FALSE)))", codePath]];
-#endif
+    NSString *codePath = [[NSBundle mainBundle] pathForResource:@"GUI-tools.R" ofType:@""];
+    SLog(@" - loading code from '%@'", codePath);
+    [[REngine mainEngine] executeString: [NSString stringWithFormat:@"try(local(source(\"%@\",local=TRUE,echo=FALSE,verbose=FALSE,encoding='UTF-8',keep.source=FALSE)))", codePath]];
 	
-	 SLog(@" - set R options");
-	 // force html-help, because that's the only format we can handle ATM
+    SLog(@" - set R options");
+    // force html-help, because that's the only format we can handle ATM
 #if R_VERSION < R_Version(2, 10, 0)
-	[[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
+    [[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
 #else
-	[[REngine mainEngine] executeString: @"options(help_type='html')"];	
+    [[REngine mainEngine] executeString: @"options(help_type='html')"];	
 #endif
 
-	SLog(@" - set default CRAN mirror");
-	 {
-		 NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
-		 if (![url isEqualToString:@""])
-			 [[REngine mainEngine] executeString:[NSString stringWithFormat:@"try(local({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) }),silent=TRUE)", url]];
-	 }
+    SLog(@" - set default CRAN mirror");
+    {
+	NSString *url = [Preferences stringForKey:defaultCRANmirrorURLKey withDefault:@""];
+	if (![url isEqualToString:@""])
+	    [[REngine mainEngine] executeString:[NSString stringWithFormat:@"try(local({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) }),silent=TRUE)", url]];
+    }
 	 
-	 SLog(@" - set BioC repositories");
-#if (R_VERSION < R_Version(2,3,0))
-	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=c('http://www.bioconductor.org/packages/bioc/stable','http://www.bioconductor.org/packages/data/annotation/stable','http://www.bioconductor.org/packages/data/experiment/stable'))"];
-#elif (R_VERSION < R_Version(2,4,0))
-	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.8/bioc','1.8/data/annotation','1.8/data/experiment','1.8/omegahat','1.8/lindsey'),sep=''))"];
-#elif (R_VERSION < R_Version(2,5,0))
-	 [[REngine mainEngine] executeString:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c('1.9/bioc','1.9/data/annotation','1.9/data/experiment','1.9/omegahat'),sep=''))"];
-#elif ((R_VERSION >> 16) == 2) /* R 2.x -> BioC 2.(x-5), consistent since BioC 2.0 */
-	int biocMinor = (((R_VERSION >> 8) & 255) - 5);
-	NSString *biocReposList = [NSString stringWithFormat:@"'2.%d/bioc','2.%d/data/annotation','2.%d/data/experiment','2.%d/extra'",
-				   biocMinor, biocMinor, biocMinor, biocMinor];
-	 [[REngine mainEngine] executeString:[NSString stringWithFormat:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c(%@),sep=''))", biocReposList]];
+    SLog(@" - set BioC repositories");
+#if (R_VERSION >= R_Version(2,15,0))
+    /* No algorithm is possible, use version in R itself at first use */
+//    [[REngine mainEngine] executeString:@"setBioCversion()"];
+#elif (R_VERSION >= R_Version(2,5,0))
+    int biocMinor = (((R_VERSION >> 8) & 255) - 5);
+    NSString *biocReposList = [NSString stringWithFormat:@"'2.%d/bioc','2.%d/data/annotation','2.%d/data/experiment','2.%d/extra'",
+					biocMinor, biocMinor, biocMinor, biocMinor];
+    [[REngine mainEngine] executeString:[NSString stringWithFormat:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c(%@),sep=''))", biocReposList]];
 #else
-#error "BioC repository is unknown, please add it to main.m or get more recent GUI sources"
+#error "BioC repository version is unknown"
 #endif
 
-	 SLog(@" - loading secondary NIBs");
-	 if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
-		 SLog(@" * unable to load Vignettes.nib!");
-	 }
+    SLog(@" - loading secondary NIBs");
+    if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
+	SLog(@" * unable to load Vignettes.nib!");
+    }
 
-	 SLog(@"main: finish launching");
-	 [NSApp finishLaunching];
+    SLog(@"main: finish launching");
+    [NSApp finishLaunching];
  
-	// torture
-	[pool release];
-	pool = [[NSAutoreleasePool alloc] init];
+    // torture
+    [pool release];
+    pool = [[NSAutoreleasePool alloc] init];
 
-	 // ready to rock
-	 SLog(@"main: entering REPL");
-	 [[REngine mainEngine] runREPL];
+    // ready to rock
+    SLog(@"main: entering REPL");
+    [[REngine mainEngine] runREPL];
 	 
-	 SLog(@"main: returned from REPL");
-	 [pool release];
+    SLog(@"main: returned from REPL");
+    [pool release];
 	 
-	 SLog(@"main: exiting with status 0");
-	 return 0;
+    SLog(@"main: exiting with status 0");
+    return 0;
 }

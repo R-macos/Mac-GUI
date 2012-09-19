@@ -1,6 +1,6 @@
 NEWS for R.app GUI for Mac OS X
 
-Last-update: 2012-09-16 [BDR]
+Last-update: 2012-09-19 [BDR]
 *	Set ptr_R_FlushConsole (long overdue!).
 *	REditor: represent NA strings as ' <NA> ' so they are preserved,
 	and empty strings are not mapped to NA.
@@ -8,6 +8,9 @@ Last-update: 2012-09-16 [BDR]
 *	The .Internal()s in GUI-tools.R have been replaced by .Call()s.
 *	Some long-obsolete conditional code has been removed from clarity.
 	R >= 2.10.0 is now required.
+*	options("BioC.Repos") is now set from the value in R itself.
+	This will be needed when BioC 2.11 is released on Oct 20.
+	It also respects the setting of the BioC mirror.
 
 Last-update: 2012-08-28 [HJBB]
 *	Improved handling of larger documents

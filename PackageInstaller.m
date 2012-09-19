@@ -359,12 +359,12 @@ NSString *location[4] = {
 			
 		case kBIOCBin:
 			success = [[REngine mainEngine] executeString: 
-				   [NSString stringWithFormat:@"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"%@\"), type=\"%@\")", pkgType, pkgType]];
+				   [NSString stringWithFormat:@"browse.pkgs(contriburl=contrib.url(setBioCversion(),\"%@\"), type=\"%@\")", pkgType, pkgType]];
 			break;
 			
 		case kBIOCSrc:
 			success = [[REngine mainEngine] executeString: 
-				   @"browse.pkgs(contriburl=contrib.url(getOption(\"BioC.Repos\"),\"source\"), type=\"source\")"];
+				   @"browse.pkgs(contriburl=contrib.url(setBioCversion(),\"source\"), type=\"source\")"];
 			break;
 			
 		case kOTHER:

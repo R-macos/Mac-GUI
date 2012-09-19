@@ -249,6 +249,20 @@ add.fn("wsbrowser", function(IDS, IsRoot, Container, ItemsPerContainer,
     invisible()
 })
 
+## As from R 2.15.x the BioC version cannot be determined algorithmically
+
+add.fn("setBioCversion", function()
+{
+    old <- getOption('BioC.Repos')
+    if(!is.null(old)) return(old)
+    mirror <- getOption("BioC_mirror", "http://www.bioconductor.org")
+    ver <- as.character(tools:::.BioC_version_associated_with_R_version)
+    options("BioC.Repos" = paste(mirror, "packages",
+            ver, c("bioc", "data/annotation", "data/experiment", "extra"),
+            sep = "/"))
+    getOption('BioC.Repos')
+})
+
 if (nzchar(Sys.getenv("R_GUI_APP_VERSION"))) {
     cat("[R.app GUI ",
         Sys.getenv("R_GUI_APP_VERSION")," (",
