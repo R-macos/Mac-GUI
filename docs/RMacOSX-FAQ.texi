@@ -1174,7 +1174,11 @@ If you use a non-standard setup (e.g. different language than formats), you can 
 @example
 defaults write org.R-project.R force.LANG en_US.UTF-8
 @end example
-when run in @emph{Terminal} it will enforce US-english setting regardless of the system setting. Please note that you must always use @samp{.UTF-8} version of the locale, otherwise @Rapp{} will not work properly.
+when run in @emph{Terminal} it will enforce US-english setting regardless of the system setting. If you don't know what @emph{Terminal} is you can use this @R{} command instead:
+@example
+system("defaults write org.R-project.R force.LANG en_US.UTF-8")
+@end example
+but do not forget to quit @R{} and start @Rapp{} again afterwards. Please note that you must always use @samp{.UTF-8} version of the locale, otherwise @Rapp{} will not work properly.
 
 Another change from previous versions (R 2.0 and @Rapp{} 1.01) is the support for UTF-8 character encoding. By default @Rapp{} uses UTF-8 for newly created documents and for the console. When opening new documents @Rapp{} assumes UTF-8 and only if the document violates UTF-8 rules, it will try to fallback to legacy encoding, usually Mac Roman.
 
