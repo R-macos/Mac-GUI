@@ -629,7 +629,7 @@ Use the Preferences window to set the R Console text colors (@pxref{Preferences}
 * Drag & drop::                 
 * Help system::                 
 * History::                     
-* Authentication and .libPath::  
+* Authentication and .libPaths::  
 @end menu
 
 @node Editor, Editor undo and line numbers, General Features, General Features
@@ -694,7 +694,7 @@ The Help screen allows a user to go back or forward to previous help pages.
 It is possible to print help pages. If a help topic is not found, a pop-up window allows
 to exit the help search or expand the search to a fuzzy/approximate search.  
 		
-@node History, Authentication and .libPath, Help system, General Features
+@node History, Authentication and .libPaths, Help system, General Features
 @subsection History
 @Rapp{} uses history files that are (superset) compatible with history files created by R. Multiline
 support remains available from inside @Rapp{}. Multiline is particularly useful when using the
@@ -707,8 +707,8 @@ of duplicate entries and strip comments.
 
 Note: R itself sometimes stores history in a file usually called .Rhistory. It is suggested to use a different name for the R.app history file.
 
-@node Authentication and .libPath,  , History, General Features
-@subsection Authentication and .libPath
+@node Authentication and .libPaths,  , History, General Features
+@subsection Authentication and .libPaths
 The official CRAN binaries come pre-packaged in such a way that administrator have sufficient privileges to update R and install packages system-wide. However, the default unix build requires root-authentication for package instllation and other administrative tasks. As it is not feasible to run the GUI as root, we provide the possibility to authenticate system commands issued from the GUI. The authentication requires an administrator login and causes all subsequent system commands to be executed as root. Use with care!
 
 In order to allow non-administrators to maintain their own set of packages, @Rapp{} optionally adds @code{~/Library/R/x.y/library} to the @code{.libPaths} (see start-up preferences, @code{x.y} denotes the R version without patch level). It is possible to use the Package Installer to install packages either globally (admin users only) or for the current user only.
