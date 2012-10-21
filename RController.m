@@ -327,7 +327,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 	// Add full screen support for MacOSX Lion or higher
 	[RConsoleWindow setCollectionBehavior:[RConsoleWindow collectionBehavior] | NSWindowCollectionBehaviorFullScreenPrimary];
 
-	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=cocoa", 0 };
+	char *args[5]={ "R", "--no-save", "--no-restore-data", "--gui=aqua", 0 };
 
 	requestSaveAction = nil;
 	sharedRController = self;
