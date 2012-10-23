@@ -1,7 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
-Last-update: 2012-10-21 [BDR]
+Last-update: 2012-10-22 [BDR]
 *	Use --gui=qaua for startup.
+*	The R-MacOSX FAQ has been modernized: some parts were many years 
+	out of date.
 
 Last-update: 2012-09-19 [BDR]
 *	Set ptr_R_FlushConsole (long overdue!).
