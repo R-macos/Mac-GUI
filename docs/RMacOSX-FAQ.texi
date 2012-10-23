@@ -160,7 +160,7 @@ Building @R{} from the sources requires Mac OS X version 10.2 (Jaguar)
 or higher to run. The @Rapp{} GUI requires Mac OS X 10.3 (Panther) or
 higher. The latest version of the system is always preferable,
 though. We do not support Mac OS X version 10.1 and earlier, and
-versions older thatn 10.5 (Leopard) have not been tested recently.
+versions older than 10.5 (Leopard) have not been tested recently.
 
 @R{} can be compiled from sources as a pure 64-bit application on
 PowerMac G5 and Intel x86_64 machines on Mac OS X 10.4 or
@@ -237,7 +237,7 @@ problem automatically.
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
 
-See also the main manual, `R Installation and Adminstration' which ships
+See also the main manual, `R Installation and Administration' which ships
 with each version of @R{}: the latest version can be found at
 @uref{http://r.research.att.com/man/R-admin.html}.
 
@@ -490,7 +490,7 @@ conflicting event loops (in fact Aqua Tcl/Tk cannot be embedded in any
 UI application due to its design assumptions). Therefore we strongly
 discourage the use of Aqua Tcl/Tk with @Rapp{}.
 
-However, for those using comamnd-line @R{} only, building against Aqua
+However, for those using command-line @R{} only, building against Aqua
 Tcl/Tk, e.g. as installed from
 @uref{http://www.activestate.com/activetcl/downloads}, works well and is
 a much more intuitive interface to Tk for experienced Mac users.
@@ -532,7 +532,7 @@ Some additional, useful flags that you may want to add to configure include:
 
 @c -- better keep quiet, it is not recommended --
 @c @item
-@c @code{--disable-R-framework} builds R the 'unix' way, not as a framework. This is in general not recommended, but users that want exactly the same layout as on other unices may prefer this. Note that this influences mainly the installation of R, not the compilation - in fact R compiled as a framework still behaves the 'unix' way until installed.
+@c @code{--disable-R-framework} builds R the 'unix' way, not as a framework. This is in general not recommended, but users that want exactly the same layout as on other unix-alikes may prefer this. Note that this influences mainly the installation of R, not the compilation - in fact R compiled as a framework still behaves the 'unix' way until installed.
 @end itemize
 
 You can change the default location of the @emph{R.framework} 
@@ -589,7 +589,7 @@ have a @file{MacOSX10.5.sdk}.
 @c project file is no longer actively maintained. 
 
 In addition to the default @code{Deployment} configuration there is also
-@code{Depolyment64} configuration that build 64-bit version of the GUI -
+@code{Deployment64} configuration that build 64-bit version of the GUI -
 you must have 64-bit R framework and Mac OS X 10.5 or higher for this to
 work. Other useful configurations include @code{Leopard},
 @code{Leopard64}, @code{SnowLeopard} and @code{Debug}.
@@ -1248,11 +1248,30 @@ tar fvcz $pkg.tgz -C /tmp/pkg `echo $pkg|awk -F_ '@{print $1@}'`
 rm -rf /tmp/pkg
 @end example
 
-Normally, building a package from sources produces a binary that is tied to the developer tools that you compiled it with, especially if FORTRAN is used, because it requires run-time libraries. Anything you compile with a Fortran requires that you have that Fortran installed at run time, because Fortran uses its own run-time libraries (if the Fortran you compiled with used dynamic libraries). This implies that if you distribute your package you have to tell users to install the same Fortran you used to compile it.
+Normally, building a package from sources produces a binary that is tied
+to the developer tools that you compiled it with, especially if FORTRAN
+is used, because it requires run-time libraries. Anything you compile
+with a Fortran requires that you have that Fortran installed at run
+time, because Fortran uses its own run-time libraries (if the Fortran
+you compiled with used dynamic libraries). This implies that if you
+distribute your package you have to tell users to install the same
+Fortran you used to compile it.
 
-However, unlike other unices Mac users do not necessarily have development tools installed, so on @CRAN{} we make an effort to modify the binaries such that they work even without the tools they have been compiled with. There are several possible approaches, but since R itself already uses the same Fortran, we ship a copy of the Fortran libraries inside R and modify packages such that they use it instead of the one from developer tools.
+However, unlike most other unix-alikes, Mac users do not necessarily have
+development tools installed, so on @CRAN{} we make an effort to modify
+the binaries such that they work even without the tools they have been
+compiled with. There are several possible approaches, but since R itself
+already uses the same Fortran, we ship a copy of the Fortran libraries
+inside R and modify packages such that they use it instead of the one
+from developer tools.
 
-If you want to share a binary with multiple users and don't want to require them to install Xcode, you can use the same approach as @CRAN{} but only if you use the same tools as we do on @CRAN{}. It means to change the path of the FORTRAN dynamic library (libgfortran) to point inside the R version that you are compiling for. For example, if you have installed a universal package @code{FOO} for R 2.14.x, you can change the paths as follows:
+If you want to share a binary with multiple users and don't want to
+require them to install Xcode, you can use the same approach as @CRAN{}
+but only if you use the same tools as we do on @CRAN{}. It means to
+change the path of the FORTRAN dynamic library (@code{libgfortran}) to
+point inside the R version that you are compiling for. For example, if
+you have installed a universal package @code{FOO} for R 2.14.x, you can
+change the paths as follows:
 
 @example
 # change into the library where you installed FOO
@@ -1369,7 +1388,7 @@ portions of @R{} code to execute via files. This is the approach used by the @R{
 Dragging a file on the @R{} icon, causes @R{} to source this file via
 the @command{source} @R{} command or, if the file is an @R{} image data
 file RDX1 or RDX2 (normally files with extension @file{.rda} or
-@file{.Rdata}), the data is loaded in the workspace and every object
+@file{.RData}), the data is loaded in the workspace and every object
 with the same name in the workspace is overwritten without
 notice. Loading a data file is equivalent to the @R{} command
 @command{load}.  At the moment there is no control over the file types,
@@ -1503,7 +1522,7 @@ The Apple Developer Connection (can be reached at
 Apple products (OS, hardware, software) for developers. You can
 subscribe for free to ADC and get the latest up-to-date tools from Apple
 (compilers for example): however more recently these have been
-distribtuted through the App Store.
+distributed through the App Store.
 
 @node The R for Mac OS X Developer page,  , Apple Developer Connection, Additional resources
 @section The R for Mac OS X Developer page
@@ -1602,9 +1621,28 @@ Also note that the development build of @Rapp{} sends output to the error consol
 
 @node Why do I need custom compilers for the CRAN binary?, Why is the Quartz much bigger than it used to be?, I don't see a thing when installing packages!, Miscellaneous questions
 @section Why do I need custom compilers for the CRAN binary?
-As of @R{} 2.5.0 the custom compilers are no longer necessary (save for Fortran). @CRAN{} binary is now built using Apple's gcc compiler from Xcode Developer Tools 3.1.4 and a GNU Fortran 4.2.4 compiler. Xcode doesn't contain a Fortran compiler, therefore we must supply our own. It is available from @uref{http://r.research.att.com/tools/}.
 
-@CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own complier (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the Apple-supplied compiler. The system compiler was kept in place, but @R{} used the new compiler for compiling packages instead. The main reason for this was that the compiler supplied by Apple contained several fatal bugs that lead to crashes of @R{} due to incorrectly generated code, especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we switched back to Apple's compilers for @R{} 2.5.0 and later.
+As of @R{} 2.5.0 the custom compilers are no longer necessary (save for
+Fortran). @CRAN{} binary is now built using Apple's gcc compiler from
+Xcode Developer Tools 3.1.4 and a GNU Fortran 4.2.4 compiler. Xcode
+doesn't contain a Fortran compiler, therefore we must supply our own. It
+is available from @uref{http://r.research.att.com/tools/}.
+
+Versions of Xcode since 4.2 no longer contain versions of
+@command{gcc-4.2}, although the LLVM-based compilers with @command{gcc}
+and @command{clang} front-ends can be used to build @R{} from source.
+Compilers known to be compatible with the @CRAN{} binary can be
+downloaded from @uref{http://r.research.att.com/tools/}: note that there
+are different versions for different versions of OS X.
+
+@CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own
+compiler (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the
+Apple-supplied compiler. The system compiler was kept in place, but @R{}
+used the new compiler for compiling packages instead. The main reason
+for this was that the compiler supplied by Apple contained several fatal
+bugs that lead to crashes of @R{} due to incorrectly generated code,
+especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we
+switched back to Apple's compilers for @R{} 2.5.0 and later.
 
 @node Why is the Quartz much bigger than it used to be?, Why is Quartz so slow?, Why do I need custom compilers for the CRAN binary?, Miscellaneous questions
 @section Why are Quartz plots much bigger than they used to be?
@@ -1636,7 +1674,7 @@ If you want to create a binary that works on all versions of Mac OS X 10.5, you 
 @node Why doesn't R GUI support keyboard shortcut XYZ ?, What is the difference between the Leopard and Tiger builds?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Miscellaneous questions
 @section Why doesn't R GUI support keyboard shortcut XYZ ?
 
-The @Rapp{} GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows a very flexible customization. For example if you are not satisfied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentaton on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
+The @Rapp{} GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows a very flexible customization. For example if you are not satisfied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentation on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
 
 @node What is the difference between the Leopard and Tiger builds?, What is the difference between the CRAN build and a vanilla build?, Why doesn't R GUI support keyboard shortcut XYZ ?, Miscellaneous questions
 @section What is the difference between the Leopard and Tiger builds?
@@ -1705,12 +1743,22 @@ When executing system commands (for example directly via @code{system} or indire
 
 When R is started from a shell (e.g., on the command line of the Terminal), it will inherit settings from that shell. Those are typically modified by shell-specific configuration files, such as @code{.profile} or @code{.bashrc}. Those apply only to the shell, not to the system as a whole. In addition, some installers (such as MacTeX) will modify global shell settings to make user's life more comfortable on the command line, but, again, those do not apply to programs not started from the shell - such as GUIs. See @uref{http://developer.apple.com/library/mac/#qa/qa1067, Apple Technical Q&A QA1067} for what Apple says about the topic.
 
-In order to standardize your @code{PATH} setting in R, you can set it in your @code{.Renviron} file (in your home - see @code{?Startup} in R for details on how R uses configuration files on startup). This setting will apply to R regardless of how it is started. You can also add more elaborate constructs to @code{.Rprofile} instead if you wish to selectively modify the existing @code{PATH} variable via @code{Sys.getenv} and @code{Sys.setenv}.
+In order to standardize your @code{PATH} setting in R, you can set it in
+your @code{.Renviron} file (in your home directory - see @code{?Startup}
+in R for details on how R uses configuration files on startup). This
+setting will apply to R regardless of how it is started. You can also
+add more elaborate constructs to @code{.Rprofile} instead if you wish to
+selectively modify the existing @code{PATH} variable via
+@code{Sys.getenv} and @code{Sys.setenv}.
 
 @node I see no text in a Quartz plot!,  , I get ``command not found'' in the GUI yet it works in the Terminal - why?, Miscellaneous questions
 @section I see no text in a Quartz plot!
 
-Typically this means that you have corrupted fonts in your system. Open the @code{Font Book} application (in @code{Applications}) and check the fonts that you are using (for example the default font in Quartz is ``Helvetica''). Corrupted fonts will have no glyphs (text will nto appear as it should), remove such fonts.
+Typically this means that you have corrupted fonts in your system. Open
+the @code{Font Book} application (in @code{Applications}) and check the
+fonts that you are using (for example the default font in Quartz is
+``Helvetica''). Corrupted fonts will have no glyphs (text will not
+appear as it should), remove such fonts.
 
 @bye
 
