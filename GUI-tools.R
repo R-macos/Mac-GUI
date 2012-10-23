@@ -11,17 +11,20 @@ add.fn <- function(name, FN) {
 }
 
 ## quartz.save
+if (getRversion() < "2.16.0")
 add.fn("quartz.save", function(file, type='png', device=dev.cur(), dpi=100, ...) {
     ## modified version of dev.copy2pdf
     dev.set(device)
     current.device <- dev.cur()
     nm <- names(current.device)[1]
     if (nm == 'null device') stop('no device to print from')
+    if (!grDevices:::dev.displaylist()) stop("can only print from a screen device")
     oc <- match.call()
     oc[[1]] <- as.name('dev.copy')
     oc$file <- NULL
     oc$device <- quartz
     oc$type <- type
+    if(missing(file)) file <- paste("Rplot", type, sep=".")
     oc$file <- file
     oc$dpi <- dpi
     din <- dev.size('in')
@@ -31,8 +34,8 @@ add.fn("quartz.save", function(file, type='png', device=dev.cur(), dpi=100, ...)
         oc$width <- if (!is.null(oc$height)) w/h * eval.parent(oc$height) else w
     if (is.null(oc$height))
         oc$height <- if (!is.null(oc$width)) h/w * eval.parent(oc$width) else h
+    on.exit(dev.set(current.device))
     dev.off(eval.parent(oc))
-    dev.set(current.device)
 })
 
 ## print.hsearch is our way to display search results internally
