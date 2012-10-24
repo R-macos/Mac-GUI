@@ -1438,11 +1438,10 @@ the loop, unless you redefined the function of the buttons.
 You can save the content of the quartz device window into a PDF
 file. This is a very simple way to export high quality graphics from
 @R{} into other applications on Mac OS X graphics is PDF based (so are
-almost all applications available). However, this process uses @R{}'s
-PDF device and not Mac OS X PDF facilities and thus doesn't yield an
-exact copy of the device contents.  For a Mac-native solution, see
+almost all applications available). For other solutions, see
 (@pxref{Copying the image into the clipboard}) and the
-@command{quartz.save} function in @Rapp{}.
+@command{quartz.save} function (only available in @Rapp{} in @R{} <
+2.16.0).
 
 @node Copying the image into the clipboard,  , Saving the image, Quartz device
 @section Copying the image into the clipboard
@@ -1455,9 +1454,7 @@ on the pasting applications, most modern application will prefer the PDF
 version which is of higher quality as it supports vector graphics.  Note
 that there is currently a difference between using the clipboard and
 saving to a PDF file (@pxref{Saving the image}). The latter will use R's
-PDF device which will not yield WYSIWYG results. However, using
-@command{quartz.save} command from @Rapp{} will produce the same result
-as the clipboard operation.
+PDF device which will not yield WYSIWYG results.
 
 @c @node Known bugs and missing features,  , Copying the image into the clipboard, Quartz device
 @c @section Known bugs and missing features
