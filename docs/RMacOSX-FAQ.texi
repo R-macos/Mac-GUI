@@ -1799,18 +1799,50 @@ Since R 2.8.0 the @CRAN{} binary also contains (statically) the most recent Font
 @node Why is R.home() not versioned?, R.app GUI crashes on startup!, What is the difference between the CRAN build and a vanilla build?, Miscellaneous questions
 @section Why is R.home() in the R framework not versioned?
 
-In the command line version of R @code{R.home()} always points to the @code{Resources} directory symbolic link inside the R framework which points to @code{Versions/Current/Resource} which is turn points to the actual home -- a versioned directory such as for example @code{Versions/2.11/Resources}. This is how framework versioning works in Mac OS X and is defined by Apple (see @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html, Framework Anatomy}).
+In the command line version of R @code{R.home()} always points to the
+@code{Resources} directory symbolic link inside the R framework which
+points to @code{Versions/Current/Resource} which is turn points to the
+actual home -- a versioned directory such as for example
+@code{Versions/2.11/Resources}. This is how framework versioning works
+in Mac OS X and is defined by Apple (see
+@uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html,
+Framework Anatomy}).
 
-The advantage of this setup is that it is possible to install multiple R versions in parallel and they all will be fully functional as long as the @code{Current} symbolic link points to the currently used version. There is even a small GUI utility @code{RSwitch} available form the @uref{http://r.research.att.com/, R for Mac devel page} that allows you to select the desired version. In addition, any application embedding R (such as the R GUI) can choose to use a specific R version (in most cases) or any version.
+The advantage of this setup is that it is possible to install multiple R
+versions in parallel and they all will be fully functional as long as
+the @code{Current} symbolic link points to the currently used
+version. There is even a small GUI utility @code{RSwitch} available form
+the @uref{http://r.research.att.com/, R for Mac devel page} that allows
+you to select the desired version. In addition, any application
+embedding R (such as the R GUI) can choose to use a specific R version
+(in most cases) or any version.  Note that @Rapp{} is compiled against a
+particular version of @R{} and it may crash if @code{RSwitch} is used to
+change the version of @R{} in use.
 
-Although it is possible to set @code{R_HOME} directly to the versioned path in the R shell scripts (and thus be able to run different version in parallel without changing the symbolic link), there are several dangers lurking there so we don't recommend it. One problem is that building packages from source won't work. The linker is always linking against the current version of the framework and therefore only the currently active version of R can compile packages. Further, packages may have used the value of @code{R.home()} at install time and thus may not work with incorrect setting. Similar problem may arise with help pages. Finally, if such an R start script happens to get copied and the R version changes, it will stop working.
+Although it is possible to set @code{R_HOME} directly to the versioned
+path in the R shell scripts (and thus be able to run different version
+in parallel without changing the symbolic link), there are several
+dangers lurking there so we don't recommend it. One problem is that
+building packages from source won't work. The linker is always linking
+against the current version of the framework and therefore only the
+currently active version of R can compile packages. Further, packages
+may have used the value of @code{R.home()} at install time and thus may
+not work with incorrect setting.  Finally, if such an R start script
+happens to get copied and the R version changes, it will stop working.
 
 @node R.app GUI crashes on startup!, R.app GUI does not save the workspace!, Why is R.home() not versioned?, Miscellaneous questions
 @section R.app GUI crashes on startup!
 
-If your R.app GUI crashes on startup, there are usually two major causes for this: saved workspace or corrupted history
+If your @Rapp{} GUI crashes on startup, there are two common causes for
+this: a saved workspace or a corrupted history file.  (Another is a
+mismatch between @Rapp{} and @R{} if either has been updated or
+@command{RSwitch} has bene used.)
 
-Saved workspaces can contain commands that implicitly load packages which in turn can trigger bugs in packages or feed R with incorrect starting values (especially if it was saved using another R). Try removing or renaming your workspace -- it's called @code{.RData}. If you did not change your startup settings, you can e.g.@: use
+Saved workspaces can contain commands that implicitly load packages
+which in turn can trigger bugs in packages or feed R with incorrect
+starting values (especially if it was saved using another R). Try
+removing or renaming your workspace -- it's called @code{.RData}. If you
+did not change your startup settings, you can e.g.@: use
 
 @example
 mv ~/.RData ~/workspace.RData
@@ -1818,25 +1850,47 @@ mv ~/.RData ~/workspace.RData
 
 to move it aside and load later manually for inspection using @code{load("~/workspace.RData")}.
 
-Second most common cause of crashes on startup is a history file that was not created using the @Rapp{} GUI. Again, move it aside to see if that's the issue:
+Second most common cause of crashes on startup is a history file that
+was not created using the @Rapp{} GUI. Again, move it aside to see if
+that's the issue: for the default file this could be done by
 
 @example
-mv ~/.Rhistory ~/history.txt
+mv ~/.Rapp.history ~/history.txt
 @end example
 
-Although we are trying to recover from invalid history files, they can still crash @Rapp{} due to issues in the internal handling of strings in Mac OS X. We are currently working on preventing this issue.
+Although we are trying to recover from invalid history files, they can
+still crash @Rapp{} due to issues in the internal handling of strings in
+Mac OS X. We are currently working on preventing this issue.
 
-If you did both of the above and @Rapp{} still crashes, please select `1' in the menu after the crash (if you get the crash menu in the console) and send us the resulting crash report (see @pxref{R.app Bugs} above).
+If you did both of the above and @Rapp{} still crashes, please select
+`1' in the menu after the crash (if you get the crash menu in the
+console) and send us the resulting crash report (see @pxref{R.app Bugs}
+above).
 
 @node R.app GUI does not save the workspace!, Why is the GUI not saving my history?, R.app GUI crashes on startup!, Miscellaneous questions
 @section R.app GUI does not save the workspace!
 
-When you quit the R.app GUI it asks you whether to save the workspace or not. There was a bug in R.app GUI 1.32 (shipped with the initial release of R 2.11.0) that did not save the workspace even if told to. If you use R.app GUI version 1.32 please make sure you upgrade to 1.33 (or higher) to avoid this bug. The current R on @CRAN{} ships with the more recent R.app GUI version that does not exhibit the problem.
+When you quit the R.app GUI it asks you whether to save the workspace or
+not. There was a bug in R.app GUI 1.32 (shipped with the initial release
+of R 2.11.0) that did not save the workspace even if told to. If you use
+R.app GUI version 1.32 please make sure you upgrade to 1.33 (or higher)
+to avoid this bug. The current R on @CRAN{} ships with the more recent
+R.app GUI version that does not exhibit the problem.
 
 @node Why is the GUI not saving my history?, I get ``command not found'' in the GUI yet it works in the Terminal - why?, R.app GUI does not save the workspace!, Miscellaneous questions
 @section Why is the GUI not saving my history?
 
-In some recent versions of R there is a conflict between the history of R itself and the GUI such that the history file will be always empty. In R 2.11.1 the default has been changed such that the GUI will use @code{.Rapp.history} file whereas command line R will use @code{.Rhistory} so that they will not collide. If you have old preferences, go to Preferences -> Startup in the GUI and click on the Default button next to the R history file text box and close the preferences. This is a work-around until the internal R history and the history of the GUI are synchronized properly.
+In some older versions of R there was a conflict between the history of
+R itself and the GUI such that the history file will be always empty. In
+R 2.11.1 the default has been changed such that the GUI will by default
+use a @code{.Rapp.history} file whereas command line @R{} will use
+@code{.Rhistory}. If you have old preferences, go to Preferences ->
+Startup in the GUI and click on the Default button next to the R history
+file text box and close the preferences.
+
+Note that calling @code{savehistory()} in @Rapp{} does not currently
+save the history of the @Rapp{} session: this means that
+@code{history()} will usually show an empty window.
 
 @node I get ``command not found'' in the GUI yet it works in the Terminal - why?, I see no text in a Quartz plot!, Why is the GUI not saving my history?, Miscellaneous questions
 @section I get ``command not found'' in the GUI yet it works in the Terminal - why?
