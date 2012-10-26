@@ -314,7 +314,7 @@ arch=x86_64
 mkdir R-$arch
 cd R-$arch
 # configure R
-../R-2.15.1/configure r_arch=$arch  CC="gcc-4.2 -arch $arch" \
+../R-2.15.2/configure r_arch=$arch  CC="gcc-4.2 -arch $arch" \
      CXX="g++-4.2 -arch $arch" F77="gfortran-4.2 -arch $arch" \
      FC="gfortran-4.2 -arch $arch" OBJC="gcc-4.2 -arch $arch" \
      --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib
