@@ -30,7 +30,6 @@
  *
  */
 
-//#include "privateR.h"
 #include <R.h>
 #include <Rinternals.h>
 #include <Rversion.h>
@@ -607,7 +606,7 @@ SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 	SEXP ids, isroot, iscont, numofit, parid;
 	SEXP name, type, objsize;
     
-	checkArity(op, args);
+//	checkArity(op, args);
 
 	ids = CAR(args); args = CDR(args);
 	isroot = CAR(args); args = CDR(args);
@@ -908,3 +907,14 @@ SEXP Re_dataentry(SEXP call, SEXP op, SEXP args, SEXP rho)
 	return work2;
 
 }
+
+void Re_loadhistory(SEXP call, SEXP op, SEXP args, SEXP env)
+{
+    errorcall(call, "'loadhistory' is not currently implemented");
+}
+
+void Re_savehistory(SEXP call, SEXP op, SEXP args, SEXP env)
+{
+    errorcall(call, "'savehistory' is not currently implemented");
+}
+

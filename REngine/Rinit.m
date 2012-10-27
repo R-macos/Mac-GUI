@@ -35,15 +35,11 @@
 #define R_INTERFACE_PTRS 1
 #define CSTACK_DEFNS 1
 
-//#include "privateR.h"
-
 #include <R.h>
 #include <Rinternals.h>
 #include "Rinit.h"
 #include "Rcallbacks.h"
-//#include "IOStuff.h"
 #include <R_ext/Parse.h>
-//#include <Parse.h>
 
 #include <R_ext/GraphicsEngine.h>
 
@@ -136,6 +132,8 @@ int initR(int argc, char **argv, int save_action)
     ptr_R_ProcessEvents =  Re_ProcessEvents;
     ptr_do_dataentry = Re_dataentry;
     ptr_do_selectlist = Re_do_selectlist;
+    ptr_R_loadhistory = Re_loadhistory;
+    ptr_R_savehistory = Re_savehistory;
 
 #if (R_VERSION < R_Version(2,15,2))
     ptr_do_flushconsole = Re_FlushConsole; // this is the former private version

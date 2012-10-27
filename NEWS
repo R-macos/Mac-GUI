@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2012-10-26 [BDR]
+*	Add stubs for loadhistory() and savehistory() so the 
+	readline-based ones are not used.
+
 -- Release Version 1.52 (6335) - supplied with R 2.15.2 --
 
 Last-update: 2012-10-22 [BDR]
