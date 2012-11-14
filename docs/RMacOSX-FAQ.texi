@@ -1799,11 +1799,11 @@ Since R 2.8.0 the @CRAN{} binary also contains (statically) the most recent Font
 @node Why is R.home() not versioned?, R.app GUI crashes on startup!, What is the difference between the CRAN build and a vanilla build?, Miscellaneous questions
 @section Why is R.home() in the R framework not versioned?
 
-In the command line version of R @code{R.home()} always points to the
+In the command line version of R, @code{R.home()} always points to the
 @code{Resources} directory symbolic link inside the R framework which
 points to @code{Versions/Current/Resource} which is turn points to the
 actual home -- a versioned directory such as for example
-@code{Versions/2.11/Resources}. This is how framework versioning works
+@code{Versions/2.15/Resources}. This is how framework versioning works
 in Mac OS X and is defined by Apple (see
 @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html,
 Framework Anatomy}).
@@ -1811,13 +1811,13 @@ Framework Anatomy}).
 The advantage of this setup is that it is possible to install multiple R
 versions in parallel and they all will be fully functional as long as
 the @code{Current} symbolic link points to the currently used
-version. There is even a small GUI utility @code{RSwitch} available form
+version. There is even a small GUI utility @code{RSwitch} available from
 the @uref{http://r.research.att.com/, R for Mac devel page} that allows
 you to select the desired version. In addition, any application
-embedding R (such as the R GUI) can choose to use a specific R version
-(in most cases) or any version.  Note that @Rapp{} is compiled against a
-particular version of @R{} and it may crash if @code{RSwitch} is used to
-change the version of @R{} in use.
+embedding R can choose to use a specific R version (in most cases) or
+any version.  Note that @Rapp{} is compiled against a particular version
+of @R{} and it may crash if @code{RSwitch} is used to change the version
+of @R{} in use.
 
 Although it is possible to set @code{R_HOME} directly to the versioned
 path in the R shell scripts (and thus be able to run different version
