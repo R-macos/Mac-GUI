@@ -8,7 +8,7 @@
  *                  
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
- *                     Copyright (C) 1998-2001   The R Development Core Team
+ *                     Copyright (C) 1998-2012   The R Development Core Team
  *                     Copyright (C) 2002-2004   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -96,7 +96,7 @@ int  Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean
 int  Re_EditFiles(int nfile, char **file, char **title, char *pager);
 int  Re_Edit(char *file);
 int  Re_system(char *cmd);
-#if (R_VERSION < R_Version(2,16,0))
+#if (R_VERSION < R_Version(3,0,0))
 int  Re_CustomPrint(const char *type, SEXP obj);
 #endif
 

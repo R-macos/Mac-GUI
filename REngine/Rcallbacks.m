@@ -8,7 +8,7 @@
  *                  
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
- *                     Copyright (C) 1998-2001   The R Development Core Team
+ *                     Copyright (C) 1998-2012   The R Development Core Team
  *                     Copyright (C) 2002-2005   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -284,7 +284,7 @@ int Re_system(char *cmd) {
 	return r;
 }
 
-#if (R_VERSION >= R_Version(2,16,0))
+#if (R_VERSION >= R_Version(3,0,0))
 static
 #endif
 int  Re_CustomPrint(const char *type, SEXP obj)
@@ -599,7 +599,7 @@ int NumOfID = 0;         /* length of the vectors    */
 
 BOOL WeHaveWorkspace;
 
-#if (R_VERSION < R_Version(2,16,0))
+#if (R_VERSION < R_Version(3,0,0))
 SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
 {
 	int i, len;

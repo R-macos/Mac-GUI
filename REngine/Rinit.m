@@ -8,7 +8,7 @@
  *                  
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
- *                     Copyright (C) 1998-2001   The R Development Core Team
+ *                     Copyright (C) 1998-2012   The R Development Core Team
  *                     Copyright (C) 2002-2005   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -56,7 +56,7 @@
 extern SA_TYPE SaveAction;
 
 // not in Rinterface.h earlier
-#if (R_VERSION < R_Version(2,16,0))
+#if (R_VERSION < R_Version(3,0,0))
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 #endif
@@ -68,7 +68,7 @@ extern void (*ptr_R_ProcessEvents)();
 
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
 
-#if (R_VERSION < R_Version(2,16,0))
+#if (R_VERSION < R_Version(3,0,0))
 extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy */
 #endif
@@ -145,7 +145,7 @@ int initR(int argc, char **argv, int save_action)
     ptr_R_EditFiles = Re_EditFiles;
     ptr_R_ChooseFile = Re_ChooseFile;
 	
-#if (R_VERSION < R_Version(2,16,0))
+#if (R_VERSION < R_Version(3,0,0))
     ptr_Raqua_CustomPrint = Re_CustomPrint;	
     ptr_do_wsbrowser = Re_do_wsbrowser;
 #endif
