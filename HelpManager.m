@@ -79,10 +79,6 @@ static id sharedHMController;
 {
 	if (!file) return;
 	if (!topic) topic=@"<unknown>";
-#if R_VERSION < R_Version(2, 10, 0)
-	NSString *url = [NSString stringWithFormat:@"file://%@",file];
-	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
-#else
 	NSString *url = nil;
 	if ([file hasPrefix:@"http://"]) 
 		url = file;
@@ -98,7 +94,6 @@ static id sharedHMController;
 		url = [NSString stringWithFormat:@"http://127.0.0.1:%d%@", port, file];
 	}
 	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
-#endif
 	if(url != nil) {
 		if ([Preferences flagForKey:kExternalHelp withDefault:NO])
 			[[REngine mainEngine] executeString:[NSString stringWithFormat:@"browseURL(\"%@\")", url]];
@@ -139,11 +134,7 @@ static id sharedHMController;
 	}
 
 	REngine *re = [REngine mainEngine];	
-#if R_VERSION < R_Version(2, 10, 0)
-	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", htmlhelp=TRUE))",searchString]];
-#else
 	RSEXP *x= [re evaluateString:[NSString stringWithFormat:@"as.character(help(\"%@\", help_type='html'))",searchString]];
-#endif
 	if ((x==nil) || ([x string]==NULL)) {
 		NSString *topicString = [NSString stringWithFormat:@"Topic: %@", searchString];
 		int res = NSRunInformationalAlertPanel(NLS(@"Can't find help for topic, would you like to expand the search?"), topicString, NLS(@"No"), NLS(@"Yes"), nil);
@@ -162,17 +153,8 @@ static id sharedHMController;
 		}
 		return;
 	}
-#if R_VERSION < R_Version(2, 10, 0)
-	NSString *url = [NSString stringWithFormat:@"file://%@",[x string]];
-	if(url != nil)
-	 	[[HelpView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
-	
-	[helpWindow makeKeyAndOrderFront:self];
-	[x release];
-#else
 	[x release];
 	[re executeString:[NSString stringWithFormat:@"print(help(\"%@\", help_type='html'))",searchString]];
-#endif	
 }
 
 - (NSWindow*) window

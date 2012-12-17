@@ -8,7 +8,7 @@
  *                  
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
- *                     Copyright (C) 1998-2001   The R Development Core Team
+ *                     Copyright (C) 1998-2012   The R Development Core Team
  *                     Copyright (C) 2002-2004   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -209,9 +209,6 @@ static DataManager* sharedController;
 
 	SLog(@"DataManager showHelp: %@", selectedItem);
 
-#if R_VERSION < R_Version(2, 10, 0)
-	NSString *urlText = [NSString stringWithFormat:@"file://%@", [selectedItem objectForKey:kDataManagerURL]];
-#else
 	NSString *urlText = nil;
 	int port = [[RController sharedController] helpServerPort];
 	if (port == 0) {
@@ -225,7 +222,6 @@ static DataManager* sharedController;
 		topic = [topic substringWithRange: NSMakeRange(r.location + 2, [topic length] - r.location - 3)];
 
 	urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, [selectedItem objectForKey:kDataManagerPackage], topic];
-#endif
 
 	[[dataInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 

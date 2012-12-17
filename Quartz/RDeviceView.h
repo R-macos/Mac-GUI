@@ -29,39 +29,7 @@
 
 /* RDeviceView */
 
-#include <Rversion.h>
-
-#if R_VERSION >= R_Version(2,7,0)
-
 #import <Cocoa/Cocoa.h>
 
 @interface RDeviceView : NSView
 @end
-
-#else
-
-#import <Cocoa/Cocoa.h>
-
-@interface RDeviceView : NSView
-{
-	NSWindow	*deviceWindow;
-	int         deviceNum;
-	IBOutlet id delegate;
-	BOOL PDFDrawing;  
-}
-
-/* PDFDrawing: This flag is used to force replay the displayGList of the graphic device inside the draw: method. 
-			   It is used for clipboard PDF pasting and shuld be also used for saving to PDF
-*/
-
-- (void) setDevNum: (int)dnum;
-- (int) getDevNum;
-- (void) setPDFDrawing: (BOOL)flag;
-- (BOOL) isPDFDrawing;
-
-- (void) saveAsBitmap: (NSString*) fname usingType: (NSBitmapImageFileType) ftype;
-- (void) saveAsPDF: (NSString*) fname;
-
-@end
-
-#endif

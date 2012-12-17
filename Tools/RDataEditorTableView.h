@@ -34,8 +34,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include <R.h>
-#include "privateR.h"
 
 @interface RDataEditorTableView : NSTableView
 {

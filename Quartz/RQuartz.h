@@ -34,33 +34,8 @@
 
 #import "RDeviceView.h"
 
-#include <Rversion.h>
-#if R_VERSION >= R_Version(2,7,0)
-
 @interface RQuartz : NSDocument
 {
 }
 @end
 
-#else
-
-@interface RQuartz : NSDocument
-{
-	IBOutlet	RDeviceView *deviceView;
-	IBOutlet	NSWindow *deviceWindow;
-	NSString *deviceName;
-}
-
-
-- (RDeviceView *)getDeviceView;
-- (NSWindow *)getDeviceWindow;
-- (IBAction) activateQuartzDevice: (id) sender;
-
-+ (void) changeDocumentTitle: (NSDocument *)document Title:(NSString *)title;
-- (NSTextView *)textView;
-- (void) setDeviceName: (NSString*) name;
-- (NSString*) deviceName;
-
-@end
-
-#endif

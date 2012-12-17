@@ -28,7 +28,7 @@
  */
 
 #include <Rversion.h>
-#if R_VERSION < R_Version(2, 10, 0)
+#if R_VERSION < R_Version(2,10,0)
 #error R >= 2.10.0 is required
 #endif
 

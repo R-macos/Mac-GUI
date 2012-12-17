@@ -35,8 +35,8 @@
 #include <R_ext/Rdynload.h>
 #include <Rinternals.h>
 #include <Rversion.h>
-
-//#include "privateR.h" // needs Defn.h Print.h
+void Rf_PrintDefaults(void);
+const char *Rf_EncodeElement(SEXP, int, int, char);
 
 #import "RGUI.h"
 #import "REditor.h"
@@ -80,29 +80,21 @@ void printelt(SEXP invec, int vrow, char *strp)
 	if(!strp) return;
 
 #if (R_VERSION < R_Version(2,13,0))
-	PrintDefaults(R_NilValue);
+	Rf_PrintDefaults(R_NilValue);
 #else
-	PrintDefaults();
+	Rf_PrintDefaults();
 #endif
 	if (TYPEOF(invec) == REALSXP) {
 		if (REAL(invec)[vrow] != ssNA_REAL) {
-#if (R_VERSION >= R_Version(2,2,0))
-			strcpy(strp, EncodeElement(invec, vrow, 0, '.'));
-#else
-			strcpy(strp, EncodeElement(invec, vrow, 0));
-#endif
+			strcpy(strp, Rf_EncodeElement(invec, vrow, 0, '.'));
 			return;
 		}
 	}
 	else if (TYPEOF(invec) == STRSXP) {
 		if(CHAR(STRING_ELT(invec, vrow))){
-			if ( !streql( CHAR(STRING_ELT(invec, vrow)),
+			if ( strcmp( CHAR(STRING_ELT(invec, vrow)),
 						  CHAR(STRING_ELT(ssNA_STRING, 0)) ) ) {
-#if (R_VERSION >= R_Version(2,2,0))
-				strcpy(strp, EncodeElement(invec, vrow, 0, '.'));
-#else
-				strcpy(strp, EncodeElement(invec, vrow, 0));
-#endif
+				strcpy(strp, Rf_EncodeElement(invec, vrow, 0, '.'));
 				return;
 			}
 		}
@@ -291,7 +283,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 			NSUInteger k=0, l=LENGTH(tmp);
 			id *cont=(id *)malloc(sizeof(id)*l);
 			while (k<l) {
-				if ( !streql( CHAR(STRING_ELT(tmp, k)), CHAR(STRING_ELT(ssNA_STRING, 0)) ) )
+				if ( strcmp( CHAR(STRING_ELT(tmp, k)), CHAR(STRING_ELT(ssNA_STRING, 0)) ) )
 					cont[k] = (NSString*)CFStringCreateWithCString(NULL, CHAR(STRING_ELT(tmp, k)), kCFStringEncodingUTF8);
 				else
 					cont[k] = @NA_CHARS;
@@ -311,11 +303,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 			id *cont = malloc(sizeof(id)*l);
 			while (k<l) {
 
-#if (R_VERSION >= R_Version(2,2,0))
-				cont[k] = (NSString*)CFStringCreateWithCString(NULL, EncodeElement(tmp, k, 0, '.'), kCFStringEncodingASCII);
-#else
-				cont[k] = (NSString*)CFStringCreateWithCString(NULL, EncodeElement(tmp, k, 0), kCFStringEncodingASCII);
-#endif
+				cont[k] = (NSString*)CFStringCreateWithCString(NULL, Rf_EncodeElement(tmp, k, 0, '.'), kCFStringEncodingASCII);
 
 				k++;
 			}

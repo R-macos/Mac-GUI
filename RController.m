@@ -32,10 +32,9 @@
 
 #import "RGUI.h"
 #include <R.h>
-#include <Rversion.h>
 #include <Rinternals.h>
 #include <R_ext/Parse.h>
-#include <Fileio.h>
+//#include <Fileio.h>
 #include <Rinterface.h>
 #include <langinfo.h>
 #include <locale.h>
@@ -443,11 +442,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 	else
 		home = [[NSString alloc] initWithString:@""];
 
-#if (R_VERSION >= R_Version(2,2,0))
-	/* 2.2.0 is now alpha, so it should be ok by now - keep this for 2.3 in case wee need it
-	if (!getenv("RGUI_NOWARN_RDEVEL"))
-		NSRunAlertPanel(@"Using R-devel (unstable!)",@"You are using R-devel (to become 2.2.0)\n\nSeveral properites that I rely on are changing in R-devel. I will take a wild guess as of how they change, but that guess can be completely wrong. Most importantly you have to use the default build settings. Proceed at your own risk.\n\n(Set RGUI_NOWARN_RDEVEL to get rid of this message)",NLS(@"OK"),nil,nil);
-	 */
 	{
 		char tp[1024];
 		/* since 2.2.0 those are set in the R shell script, so we need to set them as well */
@@ -463,27 +457,21 @@ static inline const char* NSStringUTF8String(NSString* self)
 		}
 	}
 
-#if (R_VERSION >= R_Version(2,3,0))
-	/* in 2.3.0 we have to set R_ARCH if appropriate */
-#ifdef __ppc__
-#define arch_lib_nss @"/lib/ppc"
-#define arch_str "/ppc"
-#else
-#ifdef __ppc64__
-#define arch_lib_nss @"/lib/ppc64"
-#define arch_str "/ppc64"
-#else
-#ifdef __i386__
+#if defined __i386__
 #define arch_lib_nss @"/lib/i386"
 #define arch_str "/i386"
-#else
-#ifdef __x86_64__
+#elif defined __x86_64__
 #define arch_lib_nss @"/lib/x86_64"
 #define arch_str "/x86_64"
+/* not used in R >= 2.15.2, so remove eventually */
+#elif defined __ppc__
+#define arch_lib_nss @"/lib/ppc"
+#define arch_str "/ppc"
+#elif defined __ppc64__
+#define arch_lib_nss @"/lib/ppc64"
+#define arch_str "/ppc64"
 #endif
-#endif
-#endif
-#endif
+
 #ifdef arch_lib_nss
 	if (!getenv("R_ARCH")) {
 		if ([fm fileExistsAtPath:[[NSString stringWithUTF8String:getenv("R_HOME")] stringByAppendingString: arch_lib_nss]])
@@ -492,12 +480,8 @@ static inline const char* NSStringUTF8String(NSString* self)
 #else
 #warning "Unknown architecture, R_ARCH won't be set automatically."
 #endif
-
-#endif /* R 2.3.0 */
-#endif /* R 2.2.0 */
 	
 	/* setup LANG variable to match the system locale based on user's CFLocale */
-#if (R_VERSION >= R_Version(2,1,0))
 	SLog(@" - set locale");
 	if ([Preferences stringForKey:@"force.LANG"]) {
 		const char *ls = [[Preferences stringForKey:@"force.LANG"] UTF8String];
@@ -541,7 +525,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 		setenv("LANG", cloc, 1);
 		SLog(@" - setting LANG=%s", getenv("LANG"));
 	}
-#endif
 
 	BOOL noReenter = [Preferences flagForKey:@"REngine prevent reentrance"];
 	if (noReenter == YES) preventReentrance = YES;
@@ -624,14 +607,12 @@ static inline const char* NSStringUTF8String(NSString* self)
 		[xPT release];
 	}
 	
-#if R_VERSION >= R_Version(2,7,0)
 	/* set embedding flags such that Quartz knows that we have set everything up already */
 	QuartzFunctions_t *qf = getQuartzFunctions();
 	if (qf) {
 		int eflags = QP_Flags_CFLoop | QP_Flags_Cocoa | QP_Flags_Front;
 		qf->SetParameter(NULL, QuartzParam_EmbeddingFlags, &eflags);
 	}
-#endif
 	
 	SLog(@" - setup notification and timers");
 	[[NSNotificationCenter defaultCenter] 
@@ -676,7 +657,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 	[[REngine mainEngine] executeString:@"if (exists('.First') && is.function(.First) && !identical(.First, .__RGUI__..First)) .First()"];
 
-#if R_VERSION >= R_Version(2,7,0)
 	SLog(@" - set Quartz preferences (if necessary)");
 	BOOL flag=[Preferences flagForKey:useQuartzPrefPaneSettingsKey withDefault: NO];
 	if (flag) {
@@ -685,7 +665,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 		NSString *qDPI = [Preferences stringForKey:quartzPrefPaneDPIKey withDefault: @""];
 		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quartz.options(width=%@,height=%@,dpi=%@)", qWidth, qHeight, ([qDPI length] == 0) ? @"NA_real_" : qDPI]];
 	}
-#endif
 	
 	appLaunched = YES;
 	[self setStatusLineText:@""];
@@ -1411,14 +1390,6 @@ extern BOOL isTimeToFinish;
 	}
 	
 	[s release];
-	
-// the ?/help hack is no longer needed in 2.1
-#if (R_VERSION < R_Version(2,1,0))
-	if((*cmd == '?') || (!strncmp("help(",cmd,5))){ 
-		[self openHelpFor: cmd];
-		cmd[0] = '\n'; cmd[1] = 0;
-	}
-#endif
 }
 
 - (char*) handleReadConsole: (int) addtohist
@@ -3858,9 +3829,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 }
 
 - (int) helpServerPort {
-#if R_VERSION < R_Version(2, 10, 0)
-	return 0;
-#else
 	REngine *re = [REngine mainEngine];	
 	RSEXP *x = [re evaluateString:@"tools:::httpdPort"];
 	int port = 0;
@@ -3876,7 +3844,6 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[x release];
 	}
 	return port;
-#endif
 }
 
 - (void) helpSearchTypeChanged

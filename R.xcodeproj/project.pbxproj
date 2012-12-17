@@ -174,7 +174,6 @@
 		68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DEAEE7083271CA00C5D76C /* RTextView.m */; };
 		68E2B9F20796C9D200E31F29 /* devQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 68E2B9F00796C9D200E31F29 /* devQuartz.h */; };
 		68E2B9F30796C9D200E31F29 /* devQuartz.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E2B9F10796C9D200E31F29 /* devQuartz.c */; };
-		68F84C6209ABB2BF0098D772 /* privateR.h in Headers */ = {isa = PBXBuildFile; fileRef = 68F84C6109ABB2BF0098D772 /* privateR.h */; };
 		8D1107280486CEB800E47090 /* R_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* R_Prefix.pch */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -478,7 +477,6 @@
 		68DEAEE7083271CA00C5D76C /* RTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTextView.m; sourceTree = "<group>"; };
 		68E2B9F00796C9D200E31F29 /* devQuartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devQuartz.h; sourceTree = "<group>"; };
 		68E2B9F10796C9D200E31F29 /* devQuartz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = devQuartz.c; sourceTree = "<group>"; };
-		68F84C6109ABB2BF0098D772 /* privateR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = privateR.h; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC03E661133AA8E100456B01 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -876,7 +874,6 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				68F84C6109ABB2BF0098D772 /* privateR.h */,
 				6825104C132F337800367C93 /* CCComp.h */,
 				32CA4F630368D1EE00C91783 /* R_Prefix.pch */,
 				6855194007B8FDDF00F3A57C /* RGUI.h */,
@@ -1065,7 +1062,6 @@
 				68AAC9E708F41CBB0064CDA1 /* DraggableScrollView.h in Headers */,
 				68AAC9E908F41CBB0064CDA1 /* PDFImageView.h in Headers */,
 				68AAC9ED08F41CD80064CDA1 /* VignettesController.h in Headers */,
-				68F84C6209ABB2BF0098D772 /* privateR.h in Headers */,
 				6880A0F30DBE886200FC684F /* QuartzCocoaDocument.h in Headers */,
 				6807116E0EB0CD4200436993 /* InfoPlist.h in Headers */,
 				BCD7EC951301A5190050850E /* RegexKitLite.h in Headers */,
@@ -1583,7 +1579,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -1674,7 +1669,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -1990,7 +1984,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -2013,7 +2006,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -2034,7 +2026,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -2058,7 +2049,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -2149,7 +2139,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -2241,7 +2230,6 @@
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
 				HEADER_SEARCH_PATHS = (
 					/Library/Frameworks/R.framework/Headers,
-					/Library/Frameworks/R.framework/PrivateHeaders,
 				);
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;

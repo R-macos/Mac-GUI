@@ -123,9 +123,6 @@ static PackageManager *sharedController = nil;
 {
 	int row = [sender selectedRow];
 	if (row < 0) return;
-#if R_VERSION < R_Version(2, 10, 0)
-	NSString *urlText = [NSString stringWithFormat:@"file://%@",package[row].url];
-#else
 	NSString *urlText = nil;
 	int port = [[RController sharedController] helpServerPort];
 	if (port == 0) {
@@ -133,7 +130,6 @@ static PackageManager *sharedController = nil;
 		return;
 	}
 	urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/00Index.html", port, package[row].name];
-#endif
 	SLog(@"PackageManager.showInfo: URL=%@", urlText);
 	[[PackageInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 }

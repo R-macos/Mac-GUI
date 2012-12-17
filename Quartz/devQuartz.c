@@ -7,13 +7,10 @@
 
 #include "devQuartz.h"
 
-#include <Rversion.h>
 #include <R.h>
 #include <Rdefines.h>
 #include <Rinternals.h>
 
-/* since 2.1.0 devQuartz is no longer in libR, so we need to duplicate it here */
-#if (R_VERSION >= R_Version(2,1,0))
 
 static char *SaveFontSpec(SEXP sxp, int offset) {
 	char *s;
@@ -53,4 +50,3 @@ char* RGUI_Quartz_TranslateFontFamily(char* family, int face, char *devfamily) {
 	UNPROTECT(4);
 	return result;
 }
-#endif

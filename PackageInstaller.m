@@ -33,7 +33,6 @@
 #import "REngine/REngine.h"
 #import "Tools/Authorization.h"
 #import "Preferences.h"
-#import <Rversion.h>
 #include <unistd.h>
 
 static id sharedController;
@@ -289,19 +288,12 @@ NSString *location[4] = {
 
 - (void) checkOptions
 {
-#if (R_VERSION >= R_Version(2,1,0))
 	// in 2.1.0 release the proxy functions were not updated to accomodate for changes in
 	// package installation - so we need to set options for backward compati-
 	// bility
 	if (!optionsChecked) {
 		RSEXP *x;
 		BOOL hadToChoose=NO;
-#if (R_VERSION < R_Version(2,2,0))
-		x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
-		if (!x || ![x string]) { // CRAN is not set - let's try the repos
-			SLog(@"PackageInstaller.reloadURL: checking options - CRAN is not set!");
-			if (x) [x release];
-#endif
 			x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
 			if (!x || ![x string] || [[x string] isEqualToString:@"@CRAN@"]) { // repos is not set
 				if (x) [x release];
@@ -311,20 +303,12 @@ NSString *location[4] = {
 				x = [[REngine mainEngine] evaluateString:@"getOption('repos')['CRAN']"];
 			}
 			if (x && [x string] && ![[x string] isEqualToString:@"@CRAN@"]) { // repos is set now - push it to CRAN
-#if (R_VERSION < R_Version(2,2,0))
-				[x release];
-				[[REngine mainEngine] evaluateString:@"options(CRAN=getOption('repos')['CRAN'])"];
-				x = [[REngine mainEngine] evaluateString:@"getOption('CRAN')"];
-#endif
 				if (hadToChoose && ![Preferences flagForKey:stopAskingAboutDefaultMirrorSavingKey withDefault:NO])
 					NSBeginAlertSheet(NLS(@"Set as default?"), NLS(@"Yes"), NLS(@"Never"), NLS(@"No"), [self window], self, @selector(mirrorSaveAskSheetDidEnd:returnCode:contextInfo:), NULL, NULL, NLS(@"Do you want me to remember the mirror you selected for future sessions?"));
 			} else {
 				if (x) [x release]; // set x to nil - we need that in case x is @CRAN@
 				x=nil;
 			}
-#if (R_VERSION < R_Version(2,2,0))
-		}
-#endif
 		if (!x || ![x string]) { // CRAN is still not set - bail out with an error
 			[self busy:NO];
 			NSRunAlertPanel(NLS(@"No CRAN Mirror Found"),NLS(@"No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL."),NLS(@"OK"),nil,nil);
@@ -333,7 +317,6 @@ NSString *location[4] = {
 		if (x) [x release];
 		optionsChecked = YES;
 	}
-#endif
 }
 
 - (IBAction)reloadURL:(id)sender

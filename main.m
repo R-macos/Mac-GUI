@@ -46,9 +46,9 @@
 #include <stdlib.h>
 #include <sys/utsname.h> /* for uname */
 
-/* we need teh following two to implement RappQuit and register it with R */
-#include "Startup.h"
+/* we need the following two to implement RappQuit and register it with R */
 #include "R_ext/Rdynload.h"
+#include "R_ext/RStartup.h"
 
 /* those are exported in RGUI.h */
 NSString *Rapp_R_version_short;
@@ -153,11 +153,7 @@ int main(int argc, const char *argv[])
 	
     SLog(@" - set R options");
     // force html-help, because that's the only format we can handle ATM
-#if R_VERSION < R_Version(2, 10, 0)
-    [[REngine mainEngine] executeString: @"options(htmlhelp=TRUE)"];
-#else
     [[REngine mainEngine] executeString: @"options(help_type='html')"];	
-#endif
 
     SLog(@" - set default CRAN mirror");
     {
@@ -170,13 +166,11 @@ int main(int argc, const char *argv[])
 #if (R_VERSION >= R_Version(2,15,0))
     /* No algorithm is possible, use version in R itself at first use */
 //    [[REngine mainEngine] executeString:@"setBioCversion()"];
-#elif (R_VERSION >= R_Version(2,5,0))
+#else
     int biocMinor = (((R_VERSION >> 8) & 255) - 5);
     NSString *biocReposList = [NSString stringWithFormat:@"'2.%d/bioc','2.%d/data/annotation','2.%d/data/experiment','2.%d/extra'",
 					biocMinor, biocMinor, biocMinor, biocMinor];
     [[REngine mainEngine] executeString:[NSString stringWithFormat:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c(%@),sep=''))", biocReposList]];
-#else
-#error "BioC repository version is unknown"
 #endif
 
     SLog(@" - loading secondary NIBs");

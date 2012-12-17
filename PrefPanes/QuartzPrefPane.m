@@ -31,7 +31,6 @@
 #import "PreferenceKeys.h"
 #import "Preferences.h"
 #import "REngine.h"
-#include <Rversion.h>
 
 @interface QuartzPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
@@ -200,11 +199,9 @@
 		[Preferences stringForKey:quartzPrefPaneHeightKey withDefault: @"5"]];
 	[quartzPrefPaneDPI setStringValue:
 	 [Preferences stringForKey:quartzPrefPaneDPIKey withDefault: @""]];
-#if R_VERSION >= R_Version(2,7,0)
 	if (flag)
 		[[REngine mainEngine] executeString:[NSString stringWithFormat:@"quartz.options(width=%@,height=%@,dpi=%@)", [quartzPrefPaneWidth stringValue],
 						     [quartzPrefPaneHeight stringValue], ([[quartzPrefPaneDPI stringValue] length] == 0) ? @"NA_real_" : [quartzPrefPaneDPI stringValue]]];
-#endif
 
 	[quartzPrefPaneLocation setEnabled:NSOnState];
 	NSString *i = [Preferences stringForKey:quartzPrefPaneLocationKey withDefault: @"Top Left"];
