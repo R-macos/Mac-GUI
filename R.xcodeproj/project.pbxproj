@@ -31,10 +31,6 @@
 		1611E324070B86990025F66D /* R.scriptTerminology in Resources */ = {isa = PBXBuildFile; fileRef = 1611E323070B86990025F66D /* R.scriptTerminology */; };
 		162B6A1A06CD773800C0B085 /* logs.icns in Resources */ = {isa = PBXBuildFile; fileRef = 162B6A1906CD773800C0B085 /* logs.icns */; };
 		162D387C06F71A3000C0936C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 162D387B06F71A3000C0936C /* Security.framework */; };
-		1633F01F06E62F7000225AA9 /* RQuartz.m in Sources */ = {isa = PBXBuildFile; fileRef = 1633F01E06E62F7000225AA9 /* RQuartz.m */; };
-		1633F02506E62F7800225AA9 /* RQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 1633F02406E62F7800225AA9 /* RQuartz.h */; };
-		1633F0E506E63DEB00225AA9 /* QuartzDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 1633F0E306E63DEB00225AA9 /* QuartzDevice.h */; };
-		1633F0E606E63DEB00225AA9 /* QuartzDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1633F0E406E63DEB00225AA9 /* QuartzDevice.m */; };
 		1636285906BA2B490005C811 /* Rcallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = 1636285106BA2B490005C811 /* Rcallbacks.h */; };
 		1636285A06BA2B490005C811 /* Rcallbacks.m in Sources */ = {isa = PBXBuildFile; fileRef = 1636285206BA2B490005C811 /* Rcallbacks.m */; };
 		1636285B06BA2B490005C811 /* REngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 1636285306BA2B490005C811 /* REngine.h */; };
@@ -101,8 +97,6 @@
 		16ABE75A06C752C600815F91 /* FileCompletion.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ABE75806C752C600815F91 /* FileCompletion.m */; };
 		16ABE78106C7538500815F91 /* CodeCompletion.h in Headers */ = {isa = PBXBuildFile; fileRef = 16ABE77F06C7538500815F91 /* CodeCompletion.h */; };
 		16ABE78206C7538500815F91 /* CodeCompletion.m in Sources */ = {isa = PBXBuildFile; fileRef = 16ABE78006C7538500815F91 /* CodeCompletion.m */; };
-		16CAC3E706E67FBA0049192B /* RDeviceView.h in Headers */ = {isa = PBXBuildFile; fileRef = 16CAC3E506E67FBA0049192B /* RDeviceView.h */; };
-		16CAC3E806E67FBA0049192B /* RDeviceView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16CAC3E606E67FBA0049192B /* RDeviceView.m */; };
 		16D3041806B54EE3009CB94A /* RController.h in Headers */ = {isa = PBXBuildFile; fileRef = 16D3041606B54EE3009CB94A /* RController.h */; };
 		16D3041906B54EE3009CB94A /* RController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16D3041706B54EE3009CB94A /* RController.m */; };
 		16D3042806B55072009CB94A /* RLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 16D3042706B55072009CB94A /* RLogo.png */; };
@@ -172,8 +166,6 @@
 		68C11BD009FEE47C004DD95C /* Rdata.icns in Resources */ = {isa = PBXBuildFile; fileRef = 68C11BCF09FEE47C004DD95C /* Rdata.icns */; };
 		68DEAEE8083271CA00C5D76C /* RTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = 68DEAEE6083271CA00C5D76C /* RTextView.h */; };
 		68DEAEE9083271CA00C5D76C /* RTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 68DEAEE7083271CA00C5D76C /* RTextView.m */; };
-		68E2B9F20796C9D200E31F29 /* devQuartz.h in Headers */ = {isa = PBXBuildFile; fileRef = 68E2B9F00796C9D200E31F29 /* devQuartz.h */; };
-		68E2B9F30796C9D200E31F29 /* devQuartz.c in Sources */ = {isa = PBXBuildFile; fileRef = 68E2B9F10796C9D200E31F29 /* devQuartz.c */; };
 		8D1107280486CEB800E47090 /* R_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* R_Prefix.pch */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -286,10 +278,6 @@
 		1611E30A070B84080025F66D /* English */ = {isa = PBXFileReference; explicitFileType = text.xml; fileEncoding = 30; name = English; path = English.lproj/R.scriptTerminology; sourceTree = "<group>"; };
 		162B6A1906CD773800C0B085 /* logs.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = logs.icns; path = images/logs.icns; sourceTree = "<group>"; };
 		162D387B06F71A3000C0936C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
-		1633F01E06E62F7000225AA9 /* RQuartz.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RQuartz.m; sourceTree = "<group>"; };
-		1633F02406E62F7800225AA9 /* RQuartz.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RQuartz.h; sourceTree = "<group>"; };
-		1633F0E306E63DEB00225AA9 /* QuartzDevice.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QuartzDevice.h; sourceTree = "<group>"; };
-		1633F0E406E63DEB00225AA9 /* QuartzDevice.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = QuartzDevice.m; sourceTree = "<group>"; };
 		1636285106BA2B490005C811 /* Rcallbacks.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Rcallbacks.h; sourceTree = "<group>"; };
 		1636285206BA2B490005C811 /* Rcallbacks.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Rcallbacks.m; sourceTree = "<group>"; };
 		1636285306BA2B490005C811 /* REngine.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = REngine.h; sourceTree = "<group>"; };
@@ -358,8 +346,6 @@
 		16ABE78006C7538500815F91 /* CodeCompletion.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CodeCompletion.m; sourceTree = "<group>"; };
 		16B66A3107B6E1F10053EDB2 /* it */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		16B66A5607B6EB260053EDB2 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = it; path = it.lproj/Credits.rtf; sourceTree = "<group>"; };
-		16CAC3E506E67FBA0049192B /* RDeviceView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RDeviceView.h; sourceTree = "<group>"; };
-		16CAC3E606E67FBA0049192B /* RDeviceView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RDeviceView.m; sourceTree = "<group>"; };
 		16D3041606B54EE3009CB94A /* RController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = RController.h; sourceTree = "<group>"; };
 		16D3041706B54EE3009CB94A /* RController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = RController.m; sourceTree = "<group>"; };
 		16D3042706B55072009CB94A /* RLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RLogo.png; sourceTree = "<group>"; };
@@ -475,8 +461,6 @@
 		68DDE21309697C6100BC6883 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = nl; path = nl.lproj/Credits.rtf; sourceTree = "<group>"; };
 		68DEAEE6083271CA00C5D76C /* RTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RTextView.h; sourceTree = "<group>"; };
 		68DEAEE7083271CA00C5D76C /* RTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RTextView.m; sourceTree = "<group>"; };
-		68E2B9F00796C9D200E31F29 /* devQuartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = devQuartz.h; sourceTree = "<group>"; };
-		68E2B9F10796C9D200E31F29 /* devQuartz.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = devQuartz.c; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* R.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = R.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC03E661133AA8E100456B01 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
@@ -695,21 +679,6 @@
 			name = images;
 			sourceTree = "<group>";
 		};
-		1633F00B06E62EF200225AA9 /* Quartz */ = {
-			isa = PBXGroup;
-			children = (
-				68E2B9F00796C9D200E31F29 /* devQuartz.h */,
-				68E2B9F10796C9D200E31F29 /* devQuartz.c */,
-				1633F01E06E62F7000225AA9 /* RQuartz.m */,
-				1633F02406E62F7800225AA9 /* RQuartz.h */,
-				1633F0E306E63DEB00225AA9 /* QuartzDevice.h */,
-				1633F0E406E63DEB00225AA9 /* QuartzDevice.m */,
-				16CAC3E506E67FBA0049192B /* RDeviceView.h */,
-				16CAC3E606E67FBA0049192B /* RDeviceView.m */,
-			);
-			path = Quartz;
-			sourceTree = "<group>";
-		};
 		1636285006BA2B490005C811 /* REngine */ = {
 			isa = PBXGroup;
 			children = (
@@ -853,7 +822,6 @@
 				1602BB2D0719702800805588 /* docs */,
 				16E4F2CE06F1322F009DB2A8 /* Managers */,
 				16ABE72706C7512D00815F91 /* Tools */,
-				1633F00B06E62EF200225AA9 /* Quartz */,
 				1636285006BA2B490005C811 /* REngine */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -1023,9 +991,6 @@
 				167BDD5F06D4C0F5005381BB /* PackageManager.h in Headers */,
 				169970A306DCD17300FFACB0 /* DataManager.h in Headers */,
 				1673550E06DE155F00A75774 /* PackageInstaller.h in Headers */,
-				1633F02506E62F7800225AA9 /* RQuartz.h in Headers */,
-				1633F0E506E63DEB00225AA9 /* QuartzDevice.h in Headers */,
-				16CAC3E706E67FBA0049192B /* RDeviceView.h in Headers */,
 				163B2CBC06ED1A990035FFD5 /* WSBrowser.h in Headers */,
 				165C0F4A06EF05E000994593 /* SearchTable.h in Headers */,
 				16E4F1FC06F1191B009DB2A8 /* HelpManager.h in Headers */,
@@ -1051,7 +1016,6 @@
 				687B4F0707942C1500074042 /* RDocumentWinCtrl.h in Headers */,
 				687B4F9707944B8000074042 /* REditorTextStorage.h in Headers */,
 				687B503B07945D4C00074042 /* RConsoleTextStorage.h in Headers */,
-				68E2B9F20796C9D200E31F29 /* devQuartz.h in Headers */,
 				D490C1EC07B400870034B42F /* RRulerView.h in Headers */,
 				6855194107B8FDDF00F3A57C /* RGUI.h in Headers */,
 				684D008507BD72BE0047EEF6 /* SyntaxColorsPrefPane.h in Headers */,
@@ -1302,9 +1266,6 @@
 				169970A406DCD17300FFACB0 /* DataManager.m in Sources */,
 				1673550F06DE155F00A75774 /* PackageInstaller.m in Sources */,
 				16EE32EF06E48A4300D6A457 /* Rinit.m in Sources */,
-				1633F01F06E62F7000225AA9 /* RQuartz.m in Sources */,
-				1633F0E606E63DEB00225AA9 /* QuartzDevice.m in Sources */,
-				16CAC3E806E67FBA0049192B /* RDeviceView.m in Sources */,
 				163B2CBD06ED1A990035FFD5 /* WSBrowser.m in Sources */,
 				165C0F4906EF05E000994593 /* SearchTable.m in Sources */,
 				16E4F1FD06F1191B009DB2A8 /* HelpManager.m in Sources */,
@@ -1328,7 +1289,6 @@
 				687B4F0807942C1500074042 /* RDocumentWinCtrl.m in Sources */,
 				687B4F9807944B8000074042 /* REditorTextStorage.m in Sources */,
 				687B503C07945D4C00074042 /* RConsoleTextStorage.m in Sources */,
-				68E2B9F30796C9D200E31F29 /* devQuartz.c in Sources */,
 				D490C1ED07B400870034B42F /* RRulerView.m in Sources */,
 				684D008607BD72BE0047EEF6 /* SyntaxColorsPrefPane.m in Sources */,
 				168776EC07D7C62B0064425C /* SelectList.m in Sources */,
@@ -1577,9 +1537,7 @@
 				ARCHS = i386;
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -1603,9 +1561,10 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				Lion = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-				"-F/Library/Frameworks",
+					"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -1667,9 +1626,7 @@
 				ARCHS = x86_64;
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -1693,9 +1650,10 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				Lion = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-				"-F/Library/Frameworks",
+					"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -1900,6 +1858,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				Lion = "";
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1931,6 +1890,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				Lion = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -1959,6 +1919,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				Lion = "";
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1982,9 +1943,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -2004,9 +1963,7 @@
 				);
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -2024,9 +1981,7 @@
 				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -2047,9 +2002,7 @@
 				);
 				COPY_PHASE_STRIP = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -2073,9 +2026,10 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				Lion = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-				"-F/Library/Frameworks",
+					"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
@@ -2131,95 +2085,6 @@
 			};
 			name = SnowLeopard;
 		};
-		68AD84DC107A492A00F44691 /* LeopardPPC64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = ppc64;
-				COPY_PHASE_STRIP = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
-				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
-				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
-				STRIP_INSTALLED_PRODUCT = NO;
-			};
-			name = LeopardPPC64;
-		};
-		68AD84DD107A492A00F44691 /* LeopardPPC64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = R_Prefix.pch;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Applications;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					R,
-				);
-				PRODUCT_NAME = R;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wall",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = LeopardPPC64;
-		};
-		68AD84DE107A492A00F44691 /* LeopardPPC64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = sush;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = LeopardPPC64;
-		};
-		68AD84DF107A492A00F44691 /* LeopardPPC64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Docs;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = LeopardPPC64;
-		};
 		68F2A1CA0D6C6B0400A7D43B /* Deployment64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2228,9 +2093,7 @@
 					x86_64,
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = (
-					/Library/Frameworks/R.framework/Headers,
-				);
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
@@ -2254,6 +2117,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				Lion = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -2321,7 +2185,6 @@
 				680F0B2D0997CE66009CDBE8 /* Deployment */,
 				680710F60EB0C05E00436993 /* Leopard */,
 				680710FA0EB0C14F00436993 /* Leopard64 */,
-				68AD84DE107A492A00F44691 /* LeopardPPC64 */,
 				68AD84D8107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CC0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
@@ -2336,7 +2199,6 @@
 				680F0B320997CE66009CDBE8 /* Deployment */,
 				680710F70EB0C05E00436993 /* Leopard */,
 				680710FB0EB0C14F00436993 /* Leopard64 */,
-				68AD84DF107A492A00F44691 /* LeopardPPC64 */,
 				68AD84D9107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CD0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B330997CE66009CDBE8 /* Debug */,
@@ -2351,7 +2213,6 @@
 				680F0B370997CE66009CDBE8 /* Deployment */,
 				680710F50EB0C05E00436993 /* Leopard */,
 				680710F90EB0C14F00436993 /* Leopard64 */,
-				68AD84DD107A492A00F44691 /* LeopardPPC64 */,
 				68AD84D7107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CB0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B380997CE66009CDBE8 /* Debug */,
@@ -2366,7 +2227,6 @@
 				680F0B3C0997CE66009CDBE8 /* Deployment */,
 				680710F40EB0C05E00436993 /* Leopard */,
 				680710F80EB0C14F00436993 /* Leopard64 */,
-				68AD84DC107A492A00F44691 /* LeopardPPC64 */,
 				68AD84D6107A47EE00F44691 /* SnowLeopard */,
 				68F2A1CA0D6C6B0400A7D43B /* Deployment64 */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,

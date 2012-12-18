@@ -35,7 +35,6 @@
 #import "REngine/REngine.h"
 #import "Preferences.h"
 #import "PreferenceKeys.h"
-#import "Quartz/QuartzDevice.h"
 #import "RController.h"
 #import "Rversion.h"
 
