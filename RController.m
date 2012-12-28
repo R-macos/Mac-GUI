@@ -605,12 +605,16 @@ static inline const char* NSStringUTF8String(NSString* self)
 		[xPT release];
 	}
 	
+#if (R_VERSION < R_Version(3,0,0))
+#if R_SVN_REVISION >= 61470
 	/* set embedding flags such that Quartz knows that we have set everything up already */
 	QuartzFunctions_t *qf = getQuartzFunctions();
 	if (qf) {
 		int eflags = QP_Flags_CFLoop | QP_Flags_Cocoa | QP_Flags_Front;
 		qf->SetParameter(NULL, QuartzParam_EmbeddingFlags, &eflags);
 	}
+#endif
+#endif
 	
 	SLog(@" - setup notification and timers");
 	[[NSNotificationCenter defaultCenter] 
