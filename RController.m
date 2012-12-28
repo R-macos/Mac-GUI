@@ -605,7 +605,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 		[xPT release];
 	}
 	
-#if (R_VERSION < R_Version(3,0,0)) ||  (R_SVN_REVISION >= 61470)
+#if (R_VERSION < R_Version(3,0,0))
 	/* set embedding flags such that Quartz knows that we have set everything up already */
 	QuartzFunctions_t *qf = getQuartzFunctions();
 	if (qf) {
