@@ -59,20 +59,19 @@ extern SA_TYPE SaveAction;
 #if (R_VERSION < R_Version(3,0,0))
 extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
 extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
+extern void (*ptr_R_ProcessEvents)();
 #endif
-
 #if (R_VERSION < R_Version(2,15,2))
 extern void (*ptr_do_flushconsole)();
 #endif
-extern void (*ptr_R_ProcessEvents)();
 
-extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
-
+// Private hooks in earlier versions
 #if (R_VERSION < R_Version(3,0,0))
 extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy */
 #endif
 
+// Private hook used in src/main/sysutils.c
 extern int  (*ptr_CocoaSystem)(char *);
 
 int end_Rmainloop(void);    /* from src/main.c */
