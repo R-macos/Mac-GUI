@@ -2,14 +2,15 @@ INSTALL
 
 configure, build and install R with
 
-	./configure
+	./configure --with-aqua --enable-R-framework
 	make
 	sudo make install
 	
 Once you have the R.framework installed in /Library/Frameworks, you
-can build R.app Note that for universal GUI you will have to set
-r_arch in configure above to one of the supported architectures: i386,
-x86_64, ppc, ppc64 or arm.
+can build R.app.
+
+Note that for universal GUI you will have to set r_arch in configure
+above to one of the supported architectures, currently i386 or x86_64.
 
 
  Building R.app
@@ -32,11 +33,6 @@ Supported configurations are:
   Debug (native arch, with debugging output, current OS X)
   Lion (32-bit Intel, release, OS X 10.7+, Xcode 4.5)
   Lion64 (64-bit Intel, release, OS X 10.7+, Xcode 4.5)
-
-The following legacy configurations are only supported until 1.40:
-  Development (native arch, debug, OS X 10.4+)
-  Deployment (32-bit Intel + PPC, release, OS X 10.4+)
-  Deployment64 (64-bit Intel + PPX, release, OS X 10.4+)
 
 To build the R for Mac OS X Faq use either
 	xcodebuild -target Docs
