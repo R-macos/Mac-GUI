@@ -1,8 +1,16 @@
 NEWS for R.app GUI for Mac OS X
 
+
+Last-update: 2012-12-28 [BDR]
+*	New targets Lion and Lion64 for use with Xcode 4.5+
+*	Use hooks in Rinterface.h where possible
+*	No longer call getQuartzFunctions() since package grDevices in
+	R-devel knows if it is being called from R.app.
+
 Last-update: 2012-12-16 [BDR]
-*	Change version tests for R-devel to 3.0.0.
-*	More cleanup of conditional code for R < 2.10.0.
+*	Change version tests for R-devel to >= 3.0.0.
+*	More cleanup of conditional code for R < 2.10.0, 
+	including removing the residue of the pre-2.7.0 quartz() device.
 *	Private copies of R headers are no longer used.
 
 Last-update: 2012-10-26 [BDR]

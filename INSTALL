@@ -30,6 +30,8 @@ Supported configurations are:
   Leopard64 (64-bit Intel, release, OS X 10.5+)
   SnowLeopard (32 and 64-bit Intel, release, OS X 10.6+)
   Debug (native arch, with debugging output, current OS X)
+  Lion (32-bit Intel, release, OS X 10.7+, Xcode 4.5)
+  Lion64 (64-bit Intel, release, OS X 10.7+, Xcode 4.5)
 
 The following legacy configurations are only supported until 1.40:
   Development (native arch, debug, OS X 10.4+)
