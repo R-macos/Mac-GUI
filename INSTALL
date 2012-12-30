@@ -38,7 +38,7 @@ Supported configurations are:
 The configurations differ mainly in the SDK selected (current versions
 of Xcode only support recent SDKs) and file locations (recent versions
 of Xcode have all the files in the Xcode.app directory rather than
-some in Developer).  The 'native arch' will be 64-bit Intel on recent
+some in /Developer).  The 'native arch' will be 64-bit Intel on recent
 versions of OS X.
 
 To build the R for Mac OS X Faq use either
