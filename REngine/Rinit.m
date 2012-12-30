@@ -71,8 +71,8 @@ extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy */
 #endif
 
-// Private hook used in src/main/sysutils.c
-extern int  (*ptr_CocoaSystem)(char *);
+// Private hook used from src/main/sysutils.c
+extern int  (*ptr_CocoaSystem)(const char *);
 
 int end_Rmainloop(void);    /* from src/main.c */
 int Rf_initialize_R(int ac, char **av); /* from src/unix/system.c */

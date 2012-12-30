@@ -266,7 +266,7 @@ int Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean 
 
 //==================================================== the following callbacks are Cocoa-specific callbacks (see CocoaHandler)
 
-int Re_system(char *cmd) {
+int Re_system(const char *cmd) {
 	int r;
 	insideR--;
 	if ([REngine cocoaHandler])
