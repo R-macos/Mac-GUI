@@ -68,6 +68,7 @@ Version @value{FAQ-VERSION}      @*
 Stefano M. Iacus                 @*
 Simon Urbanek                    @*
 Rob J. Goedman                   @*
+Brian Ripley                     @*
 
 @sp 2
 @end ifinfo
@@ -157,7 +158,7 @@ The binaries provided on @CRAN{} are multi-architecture (currently
 higher.
 
 Support for Leopard will be dropped in the next @R{} series
-(provisionally 2.16.0 in Spring 2013).
+(provisionally 3.0.0 in Spring 2013).
 
 @R{} can in principle be built from the sources on earlier versions of
 OS X, and also for PowerPC and PowerPC64 on Leopard: but this has not be
@@ -199,7 +200,17 @@ rm -rf /Library/Frameworks/R.framework /Applications/R.app
 On most installations there will also be a folder @code{R64.app} in
 @file{/Applications}.
 
-Another alternative is to use Apple's @code{pkgutil} tools to uninstall R. R consists of three packages: @code{org.r-project.R.Leopard.fw.pkg}, @code{org.r-project.R.Leopard.GUI.pkg} and @code{org.r-project.R.Leopard.GUI64.pkg}. You can use @code{pkgutil --unlink} for each of them to remove their files and/or @code{pkgutil --forget} if you want the Apple Installer to forget about the package without deleting its files (useful when installing multiple R versions in parallel).
+Note that this does leave some symbolic links in @file{/usr/bin}, some
+or all of @file{R}, @file{Rscript}, @file{R32} and @file{R64}.
+
+An alternative is to use Apple's @code{pkgutil} tools to uninstall R. R
+consists of three packages: @code{org.r-project.R.Leopard.fw.pkg},
+@code{org.r-project.R.Leopard.GUI.pkg} and
+@code{org.r-project.R.Leopard.GUI64.pkg}. You can use @code{pkgutil
+--unlink} for each of them to remove their files and/or @code{pkgutil
+--forget} if you want the Apple Installer to forget about the package
+without deleting its files (useful when installing multiple R versions
+in parallel).
 
 @node Installation Problems,  , How can R for Mac OS X be uninstalled?, Introduction
 @section Installation Problems
@@ -259,9 +270,9 @@ with each version of @R{}: the latest version can be found at
 @node Quick start, What is needed to build R, Building R from sources, Building R from sources
 @section Quick start
 
-If you have a clean, recent Mac OS X (10.5 Leopard later) and want quick
-instructions how to build your own R binary, read this section. In all
-other cases please read the details in the following sections.
+If you have a clean, recent Mac OS X (10.5 Leopard or later) and want
+quick instructions how to build your own R binary, read this section. In
+all other cases please read the details in the following sections.
 
 First, you need to install the developer tools -- that is
 @command{Xcode}.  For recent versions of OS X this is available from the
@@ -271,28 +282,29 @@ App Store: for earlier versions it is on the OS X installation DVD
 
 Xcode 4.3 and higher (available for Mac OS X 10.7 and higher) no longer
 installs command line tools in the system location, they need to be
-downloaded and installed separately. Look for ``Command Line Tools for
-Xcode'' at the Apple's Developer site or in the App Store. Alternatively
-it is also possible to add the full path to the tools present inside the
-Xcode application to the @code{PATH} environment variable (recommended
-only for advanced users since it is a bit tricky to get it right).
+downloaded and installed separately.   At least with 4.5 and higher you
+can do so by launching Xcode, opening Preferences, selecting Downloads
+and installing `Command Line Tools'.
 
 Xcode needs to be at least version 3.1 for Mac OS X 10.5 (Leopard) and
 Xcode 3.2 for Mac OS X 10.6 (Snow Leopard).
 
 Then download and install the @command{gcc-4.2} and @command{gfortran}
-compilers from @uref{http://R.research.att.com/tools/}.
+compilers from @uref{http://r.research.att.com/tools/}.
 
 Optionally you can install TeX (@uref{http://www.tug.org/mactex/}) to
 build documentation.  You can pick useful external libraries from
 @uref{http://r.research.att.com/libs/} (such as readline, libpng, jpeg,
-tiff) but they are not required.  You can install them using the Terminal
+tiff) but they are not essential.  You can install them using the Terminal
 (in Application/Utilities) for example:
 
 @example
 curl -s -S http://r.research.att.com/libs/readline-5.2-12-darwin8-bin4.tar.gz \
 | sudo tar fvxz - -C /
 @end example
+
+Note that they all unpack into @file{/usr/local}, hence the use of
+@command{sudo}.
 
 Download, configure and build @R{}. In the following we assume you have
 an Intel-based Mac with 64-bit support. Again in Terminal type:
@@ -337,7 +349,10 @@ Please note that any version of R you build yourself will be different
 from the released binary @CRAN{} version and may not work with the
 package binaries we provide. Therefore we recommend using the @CRAN{}
 binary or nightly builds from @uref{http://R.research.att.com} unless
-you want to modify R sources yourself.
+you want to modify R sources yourself.  However, builds following these
+instructions default to using source installations of packages, so
+incompatibility with binary packages is only a problem if you share an
+@R{} library of packages between versions of R.
 
 @node What is needed to build R, How to configure and build R, Quick start, Building R from sources
 @section What is needed to build R
@@ -365,9 +380,9 @@ section @pxref{How to build universal R}.
 
 If you have Mac OS X 10.7 (Lion) or higher and Xcode 4.3 or higher, you
 will need to install ``Command Line Tools for Xcode``. Those are
-available from the Apple Mac Developer website or the App Store. Xcode
-alone is no longer sufficient because with Xcode 4.3 Apple has removed
-the capability of Xcode to install system-wide command line tools.
+available from the Apple Mac Developer website or for recent Xcode, from
+within Xcode (see the previous section). Xcode alone is no longer
+sufficient.
 
 These versions of Xcode (and some versions of 4.2) do not include the
 compilers used to build @CRAN{} distributions of @R{}: these can be
@@ -501,8 +516,9 @@ used, make sure you get the most recent (even development) version
 available, because there are known bugs in FreeType with respect to Mac
 font support.
 
-Cairo support is strictly optional given that Quartz is the default
-graphics device on Mac OS X, but it can be useful for remote displays.
+Cairo support is strictly optional given that @code{quartz()} is the
+default graphics device on Mac OS X, but it can be useful for remote
+displays.
 
 @node X11 Tcl/Tk headers and libraries (optional), Aqua Tcl/Tk headers and libraries (optional), Cairo graphics library (optional), What is needed to build R
 @subsection X11 Tcl/Tk headers and libraries (optional)
@@ -515,10 +531,10 @@ This was at one time part of the @R{} distribution but is now
 distributed separately.
 
 Alternatively you need to download the sources of the Tcl and Tk 8.5.x
-packages to build it yourself from the sources.  The original sources
-can be found on the official Tcl/Tk web page
-@uref{http://www.tcl.tk/software/tcltk/8.5.html}.  Please do the
-following respecting the sequence (you'll be asked for a root
+(or 8.6.x) packages to build it yourself from the sources.  The original
+sources can be found on the official Tcl/Tk web page
+@uref{http://www.tcl.tk/software/tcltk/download.html}.  Please do the
+following respecting the sequence (you'll be asked for an administrator
 password). These are examples for version 8.5.5 of the Tcl and Tk
 sources, you'll probably find new version on the web page, thus only the
 name of the .tar.gz archives changes.
@@ -586,7 +602,7 @@ useful links for @TeX{} on Mac OS X.
 @node How to configure and build R, How to install R, What is needed to build R, Building R from sources
 @section How to configure and build R
 Download the latest sources of R from @CRAN{} or fetch them using SVN. Unpack the archive with tar -zxf @emph{name_of_R_sources_archive} and cd
-inside the R sources directory. Then you need to configure R for your system and build R. It is recommended to use separate directory for building from the sources. For example if you unpacked @R{} as R-2.15.2 type:
+inside the R sources directory. Then you need to configure R for your system and build R. It is recommended to use separate directory for building from the sources. For example if you unpacked @R{} at @file{R-2.15.2} type:
 @example
 mkdir build
 cd build
@@ -654,10 +670,8 @@ deployment build is universal, therefore you will need universal R
 framework and Mac OS X 10.4u SDK. Make sure @file{/Library} is available
 inside the SDK, recent Xcode installations ensure this automatically.
 
-Note that changes to the paths in the shipped project are needed for
-recent versions of Xcode 4.x which no longer install in
-@file{/Developer} but in @file{/Applications/Xcode.app}, and no longer
-have a @file{MacOSX10.5.sdk}.
+Note that other targets, e.g. @code{Lion64} may be needed for recent
+versions of Xcode.
 
 @c For compatibility, the GUI offers an old-style project for Xcode 2.0
 @c named @file{R.xcode} which will build PowerPC binary only. However, this
@@ -667,9 +681,10 @@ In addition to the default @code{Deployment} configuration there is also
 @code{Deployment64} configuration that build 64-bit version of the GUI -
 you must have 64-bit R framework and Mac OS X 10.5 or higher for this to
 work. Other useful configurations include @code{Leopard},
-@code{Leopard64}, @code{SnowLeopard} and @code{Debug}.
+@code{Leopard64}, @code{SnowLeopard}, @code{Lion}, @code{Lion64} and
+@code{Debug}.
 
-The build includes both @Rapp{} and this R for Mac OS X FAQ.
+The build includes both @Rapp{} and this `R for Mac OS X FAQ'.
 
 @Rapp{} does not need to be installed in any specific way. Building @Rapp{} results in the @Rapp{} bundle which appears as one R icon. This application bundle can be run anywhere and it is customary to place it in the @emph{Applications} folder.
 
@@ -751,9 +766,9 @@ Note that the `native architecture' is @code{i386} on all Intel-based
 Macs, whereas you probably do want @code{x86_64}.
 
 @CRAN{} installations of @R{} (but not @Rapp{}) on Mac OS X 10.6 (Snow
-Leopard) and 10.7 (Lion) default to 64-bit if the host CPU supports it.
-This will apply to 10.8 (Mountain Lion) in future, but did not for @R{}
-2.15.2.
+Leopard) and 10.7 (Lion) default to 64-bit if the host CPU supports it
+(and all Macs since mid 2008 do).  This will apply to 10.8 (Mountain
+Lion) in future, but did not for @R{} 2.15.2.
 
 @node Command line version of R, R.app, Building R from sources, Top
 @chapter Command line version of R
@@ -765,11 +780,12 @@ binaries are distributed through @CRAN{}.  These binaries come with a
 common installer used by @Rapp{} so please read the related notes
 (@pxref{How to get R.app}).
 
-On recent versions of OS X (Snow Leopard and later) the installer places
+On recent versions of OS X (Snow Leopard and later) the installer links
 three executables in @file{/usr/bin}, @code{R32}, @code{R64} and
 @code{R}.  The first is 32-bit, the second is 64-bit and @code{R} is
 64-bit on Snow Leopard and Lion and later but 32-bit on Leopard (and
-currently on Mountain Lion).
+currently on Mountain Lion).  It also links @code{Rscript} (of the same
+default architecture as @code{R}).
 
 One thing that is different from @R{} on any other unix-like is the way
 output is displayed on a terminal.  Except for `dumb' terminals,
@@ -804,11 +820,11 @@ bold using ANSI terminal escapes.
 * R.app Bugs::                  
 @end menu
 
-@Rapp{} is the name of the Cocoa-based GUI for Mac OS X that was
-introduced in R 2.0.0. It appears as an icon labeled @emph{R} or
-@emph{R64}, but to avoid confusion with general @R{}, we prefer to use
-the name as it appears when using @emph{Get Info} on the GUI: @Rapp{}
-This stands for @emph{R application}.
+@Rapp{} is the name of the GUI for Mac OS X that was introduced in R
+2.0.0. It appears as an icon labeled @emph{R} or @emph{R64}, but to
+avoid confusion with general @R{}, we prefer to use the name as it
+appears when using @emph{Get Info} on the GUI: @Rapp{} This stands for
+@emph{R application}.
 
 Internally @Rapp{} is a Cocoa program (hence written in Objective C)
 which links to embedded @R{} installed as a framework.
@@ -1006,7 +1022,7 @@ version without patch level). It is possible to use the Package
 Installer to install packages either globally (admin users only) or for
 the current user only.  (This is the same mechanism for personal library
 directories described in the main @R{} documentation, but with a location
-specific to @CRAN{}-like builds on @R{} on OS X.)
+specific to @CRAN{}-like builds of @R{} on OS X.)
 
 Note that user-local packages are only used when the corresponding
 preference option is enabled. The default for admin users is to use
@@ -1234,7 +1250,12 @@ documentation.
 
 @node Which kind of packages can I install using the GUI?, Installation of packages, How to install packages, How to install packages
 @section Which kind of packages can I install using the GUI?
-At the moment the GUI provide direct access/download/installation of packages located on @CRAN{}, the Bioconductor repository or a custom repository. You can also install packages from local files, either binary of source packages, as explained below. Otherwise you can use the appropriate @R{} commands (see @code{install.packages}) to install packages from a specific location other than the above mentioned ones.
+At the moment the GUI provide direct access/download/installation of
+packages located on @CRAN{}, the Bioconductor repositories or a custom
+repository. You can also install packages from local files, either
+binary of source packages, as explained below. Otherwise you can use the
+appropriate @R{} commands (see @code{install.packages}) to install
+packages from a specific location other than the above mentioned ones.
 
 @node Installation of packages, Installation of source packages, Which kind of packages can I install using the GUI?, How to install packages
 @section Installation of packages
@@ -1311,7 +1332,8 @@ A sign of missing Xcode tools is when the installation fails with
 make: command not found
 @end example
 
-In all such cases, please install the most recent Xcode version available.
+In all such cases, please install the most recent Xcode version
+available and its `Command Line Tools'.
 
 @node Building universal package, Can I install packages built for other platforms?, Installation of source packages, How to install packages
 @section Building universal packages
@@ -1420,8 +1442,8 @@ If you happen to use @code{install.packages} @R{} function instead of the Packag
 .libPaths()
 @end example
 
-@noindent
-@strong{Note:} When upgrading to a next major release of @R{}, users should delete their @code{~/Library/R/library} directory, because packages are incompatible across major @R{} versions. When you experience problems loading packages or starting R after an upgrade, make sure you don't have packages for your old @R{} version floating around. More recent versions of @Rapp{} (1.19) include the version number in the path to prevent this from happening.
+@c @noindent
+@c @strong{Note:} When upgrading to a next major release of @R{}, users should delete their @code{~/Library/R/library} directory, because packages are incompatible across major @R{} versions. When you experience problems loading packages or starting R after an upgrade, make sure you don't have packages for your old @R{} version floating around. More recent versions of @Rapp{} (1.19) include the version number in the path to prevent this from happening.
 
 @node R and external applications, Quartz device, How to install packages, Top
 @chapter R and external applications
@@ -1436,10 +1458,11 @@ If you happen to use @code{install.packages} @R{} function instead of the Packag
 @section AppleScript support
 
 
-@R{} has partial support for Apple-Scripts. 
-At the moment R can be invoked and asked to run commands from an AppleScript script.
-What follows is an example of script that interacts with @R{}. It firstly  invokes @R{} and then
-sends commands to @R{} with the @command{cmd} applescript command. 
+@R{} has partial support for Apple-Scripts.  At the moment @R{} can be
+invoked and asked to run commands from an AppleScript script.  What
+follows is an example of script that interacts with @R{}. It first
+invokes @R{} and then sends commands to @R{} with the @command{cmd}
+applescript command.
 
 @example
 set CommandLine to "R.Version()"
@@ -1517,11 +1540,13 @@ If @R{} is not yet running this action causes @R{} to startup.
 
 The @code{quartz()} device is the native graphic device in R for Mac OS
 X. Its name derives from Apple's Quartz Technology which is essentially
-similar to PDF rendering. One of the most amazing features of Quartz is
-anti-aliasing which gives you @emph{very nice} plots and images
-(although the other standard screen devices for @R{} have also supported
-anti-aliasing for several years).  From its PDF nature it is also
-resolution independent.
+similar to PDF rendering. 
+
+@c One of the most amazing features of Quartz is
+@c anti-aliasing which gives you @emph{very nice} plots and images
+@c (although the other standard screen devices for @R{} have also supported
+@c anti-aliasing for several years).  From its PDF nature it is also
+@c resolution independent.
 
 The @code{quartz()} device can be used from @Rapp{} or a suitable build of @R{}
 running at the Mac console.  Where supported it is the default graphics
@@ -1548,13 +1573,13 @@ the loop, unless you redefined the function of the buttons.
 @node Saving the image, Copying the image into the clipboard, Interactive mode, Quartz device
 @section Saving the image
 
-You can save the content of the quartz device window into a PDF
-file. This is a very simple way to export high quality graphics from
-@R{} into other applications on Mac OS X graphics is PDF based (so are
-almost all applications available). For other solutions, see
-(@pxref{Copying the image into the clipboard}) and the
-@command{quartz.save} function (only available in @Rapp{} in @R{} <
-2.16.0).
+You can save the content of the quartz device window into a PDF file,
+via the @R{} menu when the device window has focus.  This is a simple
+way to export high quality graphics from @R{} into other applications on
+Mac OS X as graphics is PDF-based (so are almost all applications
+available). For other solutions, see (@pxref{Copying the image into the
+clipboard}) and the @command{quartz.save} function (only available in
+@Rapp{} in @R{} < 3.0.0).
 
 @node Copying the image into the clipboard,  , Saving the image, Quartz device
 @section Copying the image into the clipboard
@@ -1564,10 +1589,11 @@ make the resulting image available for pasting into other
 applications. The clipboard will contain both a PDF version and a bitmap
 version of the quartz device window. Which version will be used depends
 on the pasting applications, most modern application will prefer the PDF
-version which is of higher quality as it supports vector graphics.  Note
-that there is currently a difference between using the clipboard and
-saving to a PDF file (@pxref{Saving the image}). The latter will use R's
-PDF device which will not yield WYSIWYG results.
+version which is of higher quality as it supports vector graphics.  
+
+@c Note that there is currently a difference between using the clipboard and
+@c saving to a PDF file (@pxref{Saving the image}). The latter will use R's
+@c PDF device which will not yield WYSIWYG results.
 
 @c @node Known bugs and missing features,  , Copying the image into the clipboard, Quartz device
 @c @section Known bugs and missing features
@@ -1746,9 +1772,9 @@ Also note that the development build of @Rapp{} sends output to the error consol
 @node Why do I need custom compilers for the CRAN binary?, Why is the Quartz much bigger than it used to be?, I don't see a thing when installing packages!, Miscellaneous questions
 @section Why do I need custom compilers for the CRAN binary?
 
-As of @R{} 2.5.0 the custom compilers are no longer necessary (save for
-Fortran). @CRAN{} binary is now built using Apple's gcc compiler from
-Xcode Developer Tools 3.1.4 and a GNU Fortran 4.2.4 compiler. Xcode
+As of @R{} 2.5.0 custom compilers are no longer necessary (save for
+Fortran). The @CRAN{} binary is now built using Apple's gcc compiler
+from Xcode Developer Tools 3.1.4 and a GNU Fortran 4.2.4 compiler. Xcode
 doesn't contain a Fortran compiler, therefore we must supply our own. It
 is available from @uref{http://r.research.att.com/tools/}.
 
@@ -1757,20 +1783,26 @@ Versions of Xcode since 4.2 no longer contain versions of
 and @command{clang} front-ends can be used to build @R{} from source.
 Compilers known to be compatible with the @CRAN{} binary can be
 downloaded from @uref{http://r.research.att.com/tools/}: note that there
-are different versions for different versions of OS X.
-
-@CRAN{} binaries of @R{} versions 2.3.0 to 2.4.1 supplied their own
-compiler (gcc 4.0.3 in @code{/usr/local/gcc4.0}), overriding the
-Apple-supplied compiler. The system compiler was kept in place, but @R{}
-used the new compiler for compiling packages instead. The main reason
-for this was that the compiler supplied by Apple contained several fatal
-bugs that lead to crashes of @R{} due to incorrectly generated code,
-especially for the Intel Macs. This has been fixed in Xcode 2.4.0 so we
-switched back to Apple's compilers for @R{} 2.5.0 and later.
+are different versions for different versions of OS X, and that the
+versions for Lion can be used on Mountain Lion.
 
 @node Why is the Quartz much bigger than it used to be?, Why is Quartz so slow?, Why do I need custom compilers for the CRAN binary?, Miscellaneous questions
 @section Why are Quartz plots much bigger than they used to be?
-R versions before 2.7.0 had a Quartz window that was smaller both in size and scale. This was caused by two ``bugs'': all devices in R have a default size of 7 inches. Quartz used a default of 5 inches and that was now changed to match all other devices. In addition, Quartz was incorrectly assuming a resolution of 72dpi for all screens. This means that a plot was drawn at ca. 3/4 of its intended size (given that most modern monitors use 100 dpi or more). The new Quartz device correctly detects the resolution of a screen by default and thus the plots will appear larger than they used to be. The resolution can be set using the @code{dpi} parameter of Quartz, i.e. to obtain the old behavior use @code{quartz(width=5,height=5,dpi=72)} when creating a new Quartz device. If you want to make this your default, use @code{quartz.options(width=5, height=5, dpi=72)}. You can also set those options in the Quartz Preferences of the @Rapp{} GUI.
+
+R versions before 2.7.0 had a Quartz window that was smaller both in
+size and scale. This was caused by two ``bugs'': all devices in R have a
+default size of 7 inches. Quartz used a default of 5 inches and that was
+now changed to match all other devices. In addition, Quartz was
+incorrectly assuming a resolution of 72dpi for all screens. This means
+that a plot was drawn at ca. 3/4 of its intended size (given that most
+modern monitors use 100 dpi or more). The new Quartz device correctly
+detects the resolution of a screen by default and thus the plots will
+appear larger than they used to be. The resolution can be set using the
+@code{dpi} parameter of Quartz, i.e. to obtain the old behavior use
+@code{quartz(width=5,height=5,dpi=72)} when creating a new Quartz
+device. If you want to make this your default, use
+@code{quartz.options(width=5, height=5, dpi=72)}. You can also set those
+options in the Quartz Preferences of the @Rapp{} GUI.
 
 Some other new features of Quartz in R 2.7.0 include a plot history (use
 <Cmd><Left> and <Cmd><Right> to browse), improved speed (uses Quartz
@@ -1864,7 +1896,7 @@ happens to get copied and the R version changes, it will stop working.
 If your @Rapp{} GUI crashes on startup, there are two common causes for
 this: a saved workspace or a corrupted history file.  (Another is a
 mismatch between @Rapp{} and @R{} if either has been updated or
-@command{RSwitch} has bene used.)
+@command{RSwitch} has been used.)
 
 Saved workspaces can contain commands that implicitly load packages
 which in turn can trigger bugs in packages or feed R with incorrect
