@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2013-01-21
+*	revert part of r6244 that moved 'odoc' proccessing to far
+	down and thus broke the documented behavior on drag&drop startup
 
 Last-update: 2013-01-20 [HJBB]
 *	Avoid superfluous lex output on stdout

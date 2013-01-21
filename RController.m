@@ -654,7 +654,16 @@ static inline const char* NSStringUTF8String(NSString* self)
 		SLog(@"RController.applicationDidFinishLaunching - load history file %@", fname);
 	}
     
-
+	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
+	if ([pendingDocsToOpen count] > 0) {
+		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
+		NSString *fileName;
+		SLog(@" - %d documents to open", [pendingDocsToOpen count]);
+		while ((fileName = (NSString*) [enumerator nextObject]))
+			[self application:NSApp openFile:fileName];
+		[pendingDocsToOpen removeAllObjects];
+	}
+	
 	[[REngine mainEngine] executeString:@"if (exists('.First') && is.function(.First) && !identical(.First, .__RGUI__..First)) .First()"];
 
 	SLog(@" - set Quartz preferences (if necessary)");
@@ -718,16 +727,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 		// <TODO> folding only for >=10.7 - why?
 		[[[[[NSApp mainMenu] itemAtIndex:3] submenu] itemAtIndex:9] setHidden:YES];
 		[[[[[NSApp mainMenu] itemAtIndex:3] submenu] itemAtIndex:10] setHidden:YES];
-	}
-
-	SLog(@"RController.openDocumentsPending: process pending 'odoc' events");
-	if ([pendingDocsToOpen count] > 0) {
-		NSEnumerator *enumerator = [pendingDocsToOpen objectEnumerator];
-		NSString *fileName;
-		SLog(@" - %d documents to open", [pendingDocsToOpen count]);
-		while ((fileName = (NSString*) [enumerator nextObject]))
-			[self application:NSApp openFile:fileName];
-		[pendingDocsToOpen removeAllObjects];
 	}
 
 	SLog(@"RController.applicationDidFinishLaunching - show main window");
