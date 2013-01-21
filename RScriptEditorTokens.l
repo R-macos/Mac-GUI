@@ -43,6 +43,8 @@ size_t yyuoffset, yyuleng;
 
 //keep track of the current utf-8 character (not byte) offset and token length
 #define YY_USER_ACTION { yyuoffset += yyuleng; yyuleng = utf8strlen(yytext); }
+//ignore the output of unmatched characters
+#define ECHO {}
 %}
 %option noyywrap
 %option nounput
@@ -76,6 +78,9 @@ functions	(if|f(or|unction)|while)
 {functions}/{fun}			{ return RPT_RESERVED_WORD; }						/* all R reserved functions       */
 
 {variable}/{fun}			{ return RPT_OTHER; }								/* non-reserved functions         */
+
+{variable}/{decl}			{ BEGIN(varequation); return RPT_VARIABLE; }		/* R variables before operator    */
+<varequation>{decl}			{ BEGIN(INITIAL); return RPT_OTHER; }       		
 
 {variable}/{ops}			{ BEGIN(varequation); return RPT_VARIABLE; }		/* R variables before operator    */
 <varequation>{ops}			{ BEGIN(INITIAL); return RPT_OTHER; }       		

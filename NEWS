@@ -1,6 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
 
+Last-update: 2013-01-20 [HJBB]
+*	Avoid superfluous lex output on stdout
+*	Treat a<-1 as a <- 1 and not a < -1
+
 Last-update: 2012-12-28 [BDR]
 *	New targets Lion and Lion64 for use with Xcode 4.5+
 *	Use hooks in Rinterface.h where possible
