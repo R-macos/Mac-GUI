@@ -854,11 +854,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 			[[textViewString substringWithRange:blockRange] 
 				stringByReplacingOccurrencesOfString:@"\n" withString:[NSString stringWithFormat:@"\n%@", indentString]]];
 
-	// Register the indent for undo
-	[self shouldChangeTextInRange:blockRange replacementString:newString];
 
-	[self replaceCharactersInRange:blockRange withString:newString];
-
+	// Do insertion via insertText in order to ensure proper layouting
+	[self setSelectedRange:blockRange];
+	[self insertText:newString];
 	[self setSelectedRange:NSMakeRange(blockRange.location, [newString length])];
 
 	if(blockRange.length == [newString length])
@@ -960,12 +959,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 	else
 		newString = [[textViewString substringWithRange:NSMakeRange(blockRange.location+leading, blockRange.length-leading)] 
 		stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"\n%@", indentString] withString:@"\n"];
-
-	// Register the unindent for undo
-	[self shouldChangeTextInRange:blockRange replacementString:newString];
-
-	[self replaceCharactersInRange:blockRange withString:newString];
-
+	
+	// Do insertion via insertText in order to ensure proper layouting
+	[self setSelectedRange:blockRange];
+	[self insertText:newString];
 	[self setSelectedRange:NSMakeRange(blockRange.location, [newString length])];
 
 	if(blockRange.length == [newString length])
