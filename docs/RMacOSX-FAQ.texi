@@ -3,9 +3,9 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2012
-@set FAQ-VERSION 2.15.2 @value{FAQ-YEAR}-10-26
-@set REL-VERSION 2.15.2
+@set FAQ-YEAR 2013
+@set FAQ-VERSION 2.15.3 @value{FAQ-YEAR}-03-01
+@set REL-VERSION 2.15.3
 @set GUI-VERSION 1.53
 @documentlanguage en
 @documentencoding ISO-8859-1
@@ -157,8 +157,8 @@ The binaries provided on @CRAN{} are multi-architecture (currently
 32-bit Intel + 64-bit Intel) and require Mac OS X 10.5 (Leopard) or
 higher.
 
-Support for Leopard will be dropped in the next @R{} series
-(provisionally 3.0.0 in Spring 2013).
+Support for Leopard and 32-bit builds will be dropped in the next @R{}
+series (starting with 3.0.0 in April 2013).
 
 @R{} can in principle be built from the sources on earlier versions of
 OS X, and also for PowerPC and PowerPC64 on Leopard: but this has not be
@@ -215,10 +215,8 @@ in parallel).
 @node Installation Problems,  , How can R for Mac OS X be uninstalled?, Introduction
 @section Installation Problems
 
-The binary version of @R{} is provided as an Apple Installer
-package. Therefore the installation is performed by the Apple Installer,
-which is the recommended way of installing software on Mac OS X. If you
-encounter any problem during the installation, please check the
+The binary version of @R{} is provided as an Apple Installer package. If
+you encounter any problem during the installation, please check the
 Installer log by clicking on the ``Window'' menu and item ``Installer
 Log''. The full output (select ``Show All Log'') is useful for tracking
 down problems.
@@ -233,30 +231,13 @@ Lion users: this package is unsigned, so to install it you may
 select @samp{Open} and then click @samp{Open} in the resulting dialog
 box.
 
-@c Some users have experienced problems during the installation of optional
-@c packages (compiler tools or Tcl/Tk) due to an infinite soft link
-@c ``@file{/usr/local/lib}''. This prevents installation of any files into
-@c that location. Apple Xcode 2.5 and 3.0 were suspected to create this
-@c problem as it renames the ``real'', existing @file{/usr/local/lib} to
-@c ``lib 1'' while creating an infinite link (i.e a link that points to
-@c itself). If that is the case (easily verified with @code{ls -ld
-@c /usr/local/lib*}), you can fix this problem by issuing the following
-@c commands in Terminal:
-
-@c @example
-@c sudo rm -f /usr/local/lib && \
-@c sudo mv '/usr/local/lib 1' /usr/local/lib
-@c @end example
-
-@c The R installer since version 2.7.0 attempts to detect and resolve the above
-@c problem automatically.
-
 @node Building R from sources, Command line version of R, Introduction, Top
 @chapter Building R from sources
 
 See also the main manual, `R Installation and Administration' which ships
-with each version of @R{}: the latest version can be found at
-@uref{http://r.research.att.com/man/R-admin.html}.
+with each version of @R{}: the latest versions can be found at
+@uref{http://cran.r-project.org/manuals.html}.
+
 
 @menu
 * Quick start::                 
@@ -311,16 +292,16 @@ an Intel-based Mac with 64-bit support. Again in Terminal type:
 
 @example
 # download R
-curl -O http://cran.r-project.org/src/base/R-2/R-2.15.2.tar.gz
+curl -O http://cran.r-project.org/src/base/R-2/R-2.15.3.tar.gz
 # unpack R
-tar fxz R-2.15.2.tar.gz
+tar fxz R-2.15.3.tar.gz
 # choose the architecture (x86_64 or i386)
 arch=x86_64
 # create a build directory
 mkdir R-$arch
 cd R-$arch
 # configure R
-../R-2.15.2/configure r_arch=$arch  CC="gcc-4.2 -arch $arch" \
+../R-2.15.3/configure r_arch=$arch  CC="gcc-4.2 -arch $arch" \
      CXX="g++-4.2 -arch $arch" F77="gfortran-4.2 -arch $arch" \
      FC="gfortran-4.2 -arch $arch" OBJC="gcc-4.2 -arch $arch" \
      --x-includes=/usr/X11/include --x-libraries=/usr/X11/lib
@@ -369,7 +350,7 @@ section @pxref{How to build universal R}.
 * Fortran compiler::            
 * readline 4.3 or higher (optional)::  
 * X11 window server (optional)::  
-* Cairo graphics library (optional)::  
+* Cairographics library (optional)::  
 * X11 Tcl/Tk headers and libraries (optional)::  
 * Aqua Tcl/Tk headers and libraries (optional)::  
 * TeX suite of tools for documentation (optional)::  
@@ -392,7 +373,7 @@ for Lion or Mountain Lion, install
 the time of writing: this includes a Fortran compiler).
 
 Earlier versions of Xcode contain usable C/C++ compilers, provided the
-version is at least 4.2.
+GCC version is at least 4.2.
 
 It is also possible to use @command{clang} or the LLVM-based
 @command{gcc} in recent versions of Xcode, but you will still need
@@ -406,13 +387,12 @@ to install a version of the Fortran compiler from GCC which is built for
 Mac OS X. We provide GNU Fortran builds that can be added to Apple's
 Xcode tools -- see @uref{http://r.research.att.com/tools/}. The @CRAN{}
 binaries are configured to use Apple's gcc and the supplied Fortran
-compiler (see also @pxref{Why do I need custom compilers for the CRAN
-binary?}).
+compiler.
 
 @node readline 4.3 or higher (optional), X11 window server (optional), Fortran compiler, What is needed to build R
 @subsection readline 4.3 or higher (optional)
-The readline library is optional as. Mac OS X 10.4 (Tiger) and later
-come with the @samp{libedit} library which emulates
+The readline library is in theory optional as Mac OS X 10.4 (Tiger) and
+later come with the @samp{libedit} library which emulates
 readline. Nevertheless, GNU readline has some additional functionality
 so it is worth installing.
 
@@ -430,7 +410,8 @@ patches is recommended due to bugs in earlier versions that can lead to
 crashes. (We cannot distribute readline 6.0 on @CRAN{} due to its
 incompatible licensing terms.)
 
-To compile readline, uncompress the source archive and follow the standard installation sequence:
+To compile readline, unpack the source archive and follow the standard
+installation sequence:
 @example
 ./configure
 make CPPFLAGS=-DNEED_EXTERN_PC
@@ -440,13 +421,14 @@ It installs everything in @file{/usr/local}.
 
 @emph{Note:} It is possible to build multi-architecture readline binary
 in one step, for example set @samp{CC='gcc -arch i386 -arch x86_64'} to
-build both currrent architectures (see the Apple Xcode tools reference
+build both current architectures (see the Apple Xcode tools reference
 for details).
 
-@node X11 window server (optional), Cairo graphics library (optional), readline 4.3 or higher (optional), What is needed to build R
+@node X11 window server (optional), Cairographics library (optional), readline 4.3 or higher (optional), What is needed to build R
 @subsection X11 window server (optional)
 X11 window system is necessary to use the X11 device in R and other
-devices that rely on X11.
+devices that rely on X11.  These include the version of Tk used by the
+CRAN binaries.
 
 Mac OS X 10.8 (Mountain Lion) does not include X11.  You can install it
 from the XQuartz project: @uref{http://xquartz.macosforge.org/landing/}.
@@ -497,11 +479,11 @@ PATH=/usr/X11/bin:$PATH}).
 @c Window server and the X11 SDK package from the XFree86 web page. Other
 @c versions such as using fink are available, too.
 
-@node Cairo graphics library (optional), X11 Tcl/Tk headers and libraries (optional), X11 window server (optional), What is needed to build R
-@subsection Cairo graphics library (optional)
+@node Cairographics library (optional), X11 Tcl/Tk headers and libraries (optional), X11 window server (optional), What is needed to build R
+@subsection Cairographics library (optional)
 
-@R{} 2.7.0 and later include support for cairo graphics library as one
-of the options in X11 support. Mac OS X does not include cairo library,
+@R{} 2.7.0 and later include support for cairographics library as one of
+the options in X11 support. Mac OS X does not include cairo library,
 therefore we have to build our own. In order to simplify the
 distribution, we use a static build of cairo. Therefore the library is
 not needed at run time as it is already part of @R{}. However, if you
@@ -516,11 +498,15 @@ used, make sure you get the most recent (even development) version
 available, because there are known bugs in FreeType with respect to Mac
 font support.
 
+Cairographics is part of XQuartz, so systems using that (including
+Mountain Lion) should be set up to use that version rather than that
+from @uref{http://r.research.att.com/libs/} (which does not work with XQuartz).
+
 Cairo support is strictly optional given that @code{quartz()} is the
 default graphics device on Mac OS X, but it can be useful for remote
 displays.
 
-@node X11 Tcl/Tk headers and libraries (optional), Aqua Tcl/Tk headers and libraries (optional), Cairo graphics library (optional), What is needed to build R
+@node X11 Tcl/Tk headers and libraries (optional), Aqua Tcl/Tk headers and libraries (optional), Cairographics library (optional), What is needed to build R
 @subsection X11 Tcl/Tk headers and libraries (optional)
 
 
@@ -565,9 +551,8 @@ this is the default on Leopard and later.)
 
 @node Aqua Tcl/Tk headers and libraries (optional), TeX suite of tools for documentation (optional), X11 Tcl/Tk headers and libraries (optional), What is needed to build R
 @subsection Aqua Tcl/Tk headers and libraries (optional)
-Mac OS X 10.4 (Tiger) and later come with Aqua Tcl/Tk libraries. If
-those are not detected automatically, use the following flags with
-@code{configure}:
+Some versions of OS X came with Aqua Tcl/Tk libraries. If those are not
+detected automatically, use the following flags with @code{configure}:
 @example
 --with-tcl-config=/System/Library/Frameworks/Tcl.framework/tclConfig.sh 
 --with-tk-config=/System/Library/Frameworks/Tk.framework/tkConfig.sh
@@ -582,6 +567,13 @@ However, for those using command-line @R{} only, building against Aqua
 Tcl/Tk, e.g.@: as installed from
 @uref{http://www.activestate.com/activetcl/downloads}, works well and is
 a much more intuitive interface to Tk for experienced Mac users.
+Replace the lines above with 
+@example
+--with-tcl-config=/Library/Frameworks/Tcl.framework/tclConfig.sh 
+--with-tk-config=/Library/Frameworks/Tk.framework/tkConfig.sh
+@end example
+
+
 
 @node TeX suite of tools for documentation (optional),  , Aqua Tcl/Tk headers and libraries (optional), What is needed to build R
 @subsection TeX suite of tools for documentation (optional)
@@ -602,11 +594,11 @@ useful links for @TeX{} on Mac OS X.
 @node How to configure and build R, How to install R, What is needed to build R, Building R from sources
 @section How to configure and build R
 Download the latest sources of R from @CRAN{} or fetch them using SVN. Unpack the archive with tar -zxf @emph{name_of_R_sources_archive} and cd
-inside the R sources directory. Then you need to configure R for your system and build R. It is recommended to use separate directory for building from the sources. For example if you unpacked @R{} at @file{R-2.15.2} type:
+inside the R sources directory. Then you need to configure R for your system and build R. It is recommended to use separate directory for building from the sources. For example if you unpacked @R{} at @file{R-2.15.3} type:
 @example
 mkdir build
 cd build
-../R-2.15.2/configure
+../R-2.15.3/configure
 make
 @end example
 This will configure R to be built as a Framework to be installed inside your @emph{/Library/Frameworks} directory with the name @emph{R.framework}. @code{make} will compile R. Such compiled @R{} can already be used by running the @code{bin/R} script.
@@ -667,15 +659,10 @@ xcodebuild -target R -configuration Deployment
 
 The current development is done using Xcode 3.1 or higher. The default
 deployment build is universal, therefore you will need universal R
-framework and Mac OS X 10.4u SDK. Make sure @file{/Library} is available
-inside the SDK, recent Xcode installations ensure this automatically.
+framework and Mac OS X 10.4u SDK.
 
-Note that other targets, e.g. @code{Lion64} may be needed for recent
+Note that other targets, e.g. @code{Lion64}, are needed for recent
 versions of Xcode.
-
-@c For compatibility, the GUI offers an old-style project for Xcode 2.0
-@c named @file{R.xcode} which will build PowerPC binary only. However, this
-@c project file is no longer actively maintained. 
 
 In addition to the default @code{Deployment} configuration there is also
 @code{Deployment64} configuration that build 64-bit version of the GUI -
@@ -707,13 +694,13 @@ available from @uref{http://r.research.att.com/tools/}.
 The next step is to build a binary for each architecture.
 
 Configure, build and install the @samp{i386} binary (assuming
-@samp{R-2.15.2.tar.gz} is in the current directory, replace
-@samp{R-2.15.2} with any other version or name as appropriate):
+@samp{R-2.15.3.tar.gz} is in the current directory, replace
+@samp{R-2.15.3} with any other version or name as appropriate):
 @example
-tar fxz R-2.15.2.tar.gz
+tar fxz R-2.15.3.tar.gz
 mkdir R-i386
 cd R-i386
-../R-2.15.2/configure r_arch=i386 CC="gcc -arch i386" \
+../R-2.15.3/configure r_arch=i386 CC="gcc -arch i386" \
 CXX="g++ -arch i386" F77="gfortran -arch i386" \
 FC="gfortran -arch i386" OBJC="gcc -arch i386"
 make
@@ -727,7 +714,7 @@ install}. The next step is to build and install the @samp{x86_64} binary:
 @example
 mkdir R-x86_64
 cd R-x86_64
-../R-2.15.2/configure r_arch=x86_64 CC="gcc -arch x86_64" \
+../R-2.15.3/configure r_arch=x86_64 CC="gcc -arch x86_64" \
 CXX="g++ -arch x86_64" F77="gfortran -arch x86_64" \
 FC="gfortran -arch x86_64" OBJC="gcc -arch x86_64"
 make
@@ -783,9 +770,9 @@ common installer used by @Rapp{} so please read the related notes
 On recent versions of OS X (Snow Leopard and later) the installer links
 three executables in @file{/usr/bin}, @code{R32}, @code{R64} and
 @code{R}.  The first is 32-bit, the second is 64-bit and @code{R} is
-64-bit on Snow Leopard and Lion and later but 32-bit on Leopard (and
-currently on Mountain Lion).  It also links @code{Rscript} (of the same
-default architecture as @code{R}).
+64-bit on Snow Leopard and Lion and later but 32-bit on Leopard (and on
+Mountain Lion for 2.15.2 and earlier).  It also links @code{Rscript} (of
+the same default architecture as @code{R}).
 
 One thing that is different from @R{} on any other unix-like is the way
 output is displayed on a terminal.  Except for `dumb' terminals,
@@ -816,7 +803,6 @@ bold using ANSI terminal escapes.
 * General Features::            
 * The Menus::                   
 * Preferences::                 
-* The near future of the R.app::  
 * R.app Bugs::                  
 @end menu
 
@@ -1141,7 +1127,7 @@ For more information on this topic see also @ref{How to install packages}.
 Using this menu you can open the on-line manuals (@emph{R Help}), read this FAQ and  review the latest changes, bug fixes and new features of R for Mac OS X (@emph{What's new in this version}).
 There are also interfaces to the R @emph{help} and @emph{help.search} functions as well as the @emph{example} function. 
 
-@node Preferences, The near future of the R.app, The Menus, R.app
+@node Preferences, R.app Bugs, The Menus, R.app
 @section Preferences
 You can set several aspects of the @R{} GUI via preferences. You can access the Preferences window via the Application menu when the
 @R{} Console is open.
@@ -1206,13 +1192,7 @@ Enables to select the input/output colors in R Console.
 Currently the the Quartz preference pane is not being used.
 
 
-@node The near future of the R.app, R.app Bugs, Preferences, R.app
-@section The near future of the R.app
-We have introduced @Rapp{} in R 2.0. Although it was a new approach, tt that point it was mainly replicating features fount in the old Carbon GUI. With R 2.1 we have moved more towards look at feel of the OS X operating system and worked mainly on improving the editor and its integration. In the near future we want to continue to improve the interface, add new features and exploit the possibilities of Mac OS X 10.4 (Tiger).
-
-The @Rapp{} is still very much a moving target. Although we release official versions with each R release, we continue to work on @Rapp{} and offer experimental builds that can be used with the last official release of R. See @uref{http://R.research.att.com/} for the current links to the most recent @Rapp{}.
-
-@node R.app Bugs,  , The near future of the R.app, R.app
+@node R.app Bugs,  , Preferences, R.app
 @section R.app Bugs
 On Unix systems a bug report can be generated using the function
 @code{bug.report()}.  Alternatively the bug report can be submitted to
@@ -1357,14 +1337,14 @@ process should be used. Assuming that you have a source package called
 installed universally using the following two-step process:
 
 @example
-# full 32-bit Intel install
-R --arch=i386 CMD INSTALL foo_1.0.tar.gz
-# 64-bit Intel library
-R --arch=x86_64 CMD INSTALL --libs-only foo_1.0.tar.gz
+# full 64-bit Intel install
+R --arch=x86_64 CMD INSTALL foo_1.0.tar.gz
+# 32-bit Intel library
+R --arch=i386 CMD INSTALL --libs-only foo_1.0.tar.gz
 @end example
 
-In the first step a full package for the 32-bit Intel platform is built
-and installed. In the following steps a package for 64-bit Intel
+In the first step a full package for the 64-bit Intel platform is built
+and installed. In the following steps a package for 32-bit Intel
 platform is built, but only the relevant binary libraries are
 installed. This way all platforms share the same set of files except for
 the package library.
@@ -1413,10 +1393,16 @@ done
 
 @node Can I install packages built for other platforms?, Where are the packages I've installed?, Building universal package, How to install packages
 @section Can I install packages built for other platforms?
-As a general rule the answer is @emph{yes} if the package does not contain any C/C++/Fortran code in the sources, otherwise
-the answer is negative. Another condition is that the package and the installed version of @R{} should be 
-the same major release, i.e. you can install a package built for @R{} 2.1.0 on @R{} 2.1.1, but usually not the same
+As a general rule the answer is @emph{yes} if the package does not
+contain any C/C++/Fortran code in the sources, otherwise the answer is
+negative. Another condition is that the package and the installed
+version of @R{} should be the same major release, i.e. you can install a
+package built for @R{} 2.1.0 on @R{} 2.1.1, but usually not the same
 package on @R{} 2.2.0.
+
+However, packages without compiled code can be built from their sources
+without any additional tools, so simply use @code{install.packages} to
+install them.
 
 @noindent
 A Mac OS X specific requirements is that a prebuilt package is assumed to be named (and accordingly archived and compressed) as @file{package_name.tgz}. The build script uses the more common extension @code{.tar.gz} and thus the resulting file must be renamed. On Windows, for example, packages come in a zipped format.
@@ -1430,7 +1416,7 @@ along with @R{}. Only administrators are allowed to install packages in
 this system-wide directory. Note that this directory is
 @R{}-version-specific. Optionally users can install private packages in
 their @code{~/Library/R/x.y/library} directory where @code{x.y} denotes
-the R version without the patch level (such as 2.14) -- see startup
+the R version without the patch level (such as 2.15) -- see the startup
 preferences.
 
 @noindent
@@ -1608,24 +1594,20 @@ use the X11 implementation of Tcl/Tk.  Of course a X windows server has
 to be started first: this should happen automatically on OS X, but can
 take quite a while to do so.
 
-@c If you are not using the @Rapp{} you need to also
-@c define the environment variable DISPLAY before attempting to use X11 from inside @R{} (Mac OS X 10.4 and earlier only!). You can do this as follows
-@c @example
-@c Sys.setenv(DISPLAY=":0")
-@c @end example
-
 If you don't like the X11 style of widgets you would probably want to
 build R using the Aqua version of Tcl/Tk (@pxref{Aqua Tcl/Tk headers and
 libraries (optional)}).
 
-Mac OS X 10.5 and later come with a ``feature'' that changes the way
-X11 server is setup. As a consequence the @env{DISPLAY} environment
-variable should not be touched or it will impede that mechanism. The
-good part is that it should start X11 automatically.
-
 @node Internationalization of the R.app, Additional resources, Tcl/Tk issues, Top
 @chapter Internationalization of the R.app
-@R{} and the @Rapp{} GUI introduced support for internationalization in R 2.1.0. Among other things this means that both messages and GUI elements can be translated into various languages. @Rapp{} automatically detects user's settings in the @emph{International} section of the System Preferences and uses that information to offer translated messages and GUI if available. Please note that both @emph{Language} and @emph{Formats} information is used so they should be set up consistently.
+@R{} and the @Rapp{} GUI introduced support for internationalization in
+R 2.1.0. Among other things this means that both messages and GUI
+elements can be translated into various languages. @Rapp{} automatically
+detects user's settings in the @emph{International} section of the
+System Preferences and uses that information to offer translated
+messages and GUI if available. Please note that both @emph{Language} and
+@emph{Formats} information is used so they should be set up
+consistently.
 
 If you use a non-standard setup (e.g.@: different language than
 formats), you can override the auto-detection performed by setting
@@ -1683,7 +1665,6 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * I see spurious error messages when starting R!::  
 * Which BLAS is used and how can it be changed?::  
 * I don't see a thing when installing packages!::  
-* Why do I need custom compilers for the CRAN binary?::  
 * Why is the Quartz much bigger than it used to be?::  
 * Why is Quartz so slow?::      
 * Why are there faint lines in image plots?::  
@@ -1763,30 +1744,14 @@ ln -sf libRblas.0.dylib libRblas.dylib
 
 This feature is only present in the @R{} @CRAN{} binary. Ordinarily compiled @R{} from sources will only have one of the above BLAS libraries, corresponding to the configuration options used.
 
-@node I don't see a thing when installing packages!, Why do I need custom compilers for the CRAN binary?, Which BLAS is used and how can it be changed?, Miscellaneous questions
+@node I don't see a thing when installing packages!, Why is the Quartz much bigger than it used to be?, Which BLAS is used and how can it be changed?, Miscellaneous questions
 @section I don't see a thing when installing packages!
 The output is not produced continuously during the package installation. Unlike previous GUIs @Rapp{} does its best to display the output as soon as possible, but for example the documentation script does not print anything until done.
 
 Also note that the development build of @Rapp{} sends output to the error console instead of the screen. You may want to check the @emph{Console} application in that case.
 
-@node Why do I need custom compilers for the CRAN binary?, Why is the Quartz much bigger than it used to be?, I don't see a thing when installing packages!, Miscellaneous questions
-@section Why do I need custom compilers for the CRAN binary?
 
-As of @R{} 2.5.0 custom compilers are no longer necessary (save for
-Fortran). The @CRAN{} binary is now built using Apple's gcc compiler
-from Xcode Developer Tools 3.1.4 and a GNU Fortran 4.2.4 compiler. Xcode
-doesn't contain a Fortran compiler, therefore we must supply our own. It
-is available from @uref{http://r.research.att.com/tools/}.
-
-Versions of Xcode since 4.2 no longer contain versions of
-@command{gcc-4.2}, although the LLVM-based compilers with @command{gcc}
-and @command{clang} front-ends can be used to build @R{} from source.
-Compilers known to be compatible with the @CRAN{} binary can be
-downloaded from @uref{http://r.research.att.com/tools/}: note that there
-are different versions for different versions of OS X, and that the
-versions for Lion can be used on Mountain Lion.
-
-@node Why is the Quartz much bigger than it used to be?, Why is Quartz so slow?, Why do I need custom compilers for the CRAN binary?, Miscellaneous questions
+@node Why is the Quartz much bigger than it used to be?, Why is Quartz so slow?, I don't see a thing when installing packages!, Miscellaneous questions
 @section Why are Quartz plots much bigger than they used to be?
 
 R versions before 2.7.0 had a Quartz window that was smaller both in
