@@ -25,7 +25,7 @@ the XCode GUI.
 
 To build the project from the command line in Mac-GUI directory use
 something like:
-	xcodebuild -target R -configuration Leopard
+	xcodebuild -target R -configuration SnowLeopard
 
 Supported configurations are:
   Leopard (32-bit Intel, release, OS X 10.5+, Xcode 3.0+)
@@ -34,6 +34,7 @@ Supported configurations are:
   Debug (native arch, with debugging output, current OS X)
   Lion (32-bit Intel, release, OS X 10.7+, Xcode 4.5+)
   Lion64 (64-bit Intel, release, OS X 10.7+, Xcode 4.5+)
+  MLion64 (64-bit Intel, release, OS X 10.8+, Xcode 4.5+)
 
 The configurations differ mainly in the SDK selected (current versions
 of Xcode only support recent SDKs) and file locations (recent versions
