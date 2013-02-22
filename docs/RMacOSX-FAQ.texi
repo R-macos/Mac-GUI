@@ -196,21 +196,20 @@ If you want to get rid of R using a Terminal, simply run (prepend
 @code{sudo} if needed):
 
 @example
-rm -rf /Library/Frameworks/R.framework /Applications/R.app  /Applications/R64.app
+rm -rf /Library/Frameworks/R.framework /Applications/R.app /Applications/R64.app
+rm -f /usr/bin/R /usr/bin/Rscript /usr/bin/R32 /usr/bin/R64
 @end example
-
-Note that this does leave some symbolic links in @file{/usr/bin}, some
-or all of @file{R}, @file{Rscript}, @file{R32} and @file{R64}.
 
 An alternative is to use Apple's @code{pkgutil} tools to uninstall
 R. The installation consists of three packages:
 @code{org.r-project.R.Leopard.fw.pkg},
 @code{org.r-project.R.Leopard.GUI.pkg} and
 @code{org.r-project.R.Leopard.GUI64.pkg}. You can use @code{pkgutil
---unlink} for each of them to remove their files and/or @code{pkgutil
---forget} if you want the Apple Installer to forget about the package
-without deleting its files (useful when installing multiple R versions
-in parallel).
+--unlink} (not supported on Lion and later) for each of them to remove
+their files and/or @code{pkgutil --forget} if you want the Apple
+Installer to forget about the package without deleting its files (useful
+when installing multiple R versions in parallel), or after you have
+deleted the files.
 
 @node Installation Problems,  , How can R for Mac OS X be uninstalled?, Introduction
 @section Installation Problems
