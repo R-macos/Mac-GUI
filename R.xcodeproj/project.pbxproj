@@ -1884,6 +1884,94 @@
 			};
 			name = SnowLeopard;
 		};
+		D90D7C3416D7CD6400F65176 /* SnowLeopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				COPY_PHASE_STRIP = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "SNOWLEOPARD_CFG=1";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
+				SDKROOT = "";
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
+				STRIP_INSTALLED_PRODUCT = NO;
+			};
+			name = SnowLeopard64;
+		};
+		D90D7C3516D7CD6400F65176 /* SnowLeopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = R_Prefix.pch;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = /Applications;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-F/Library/Frameworks",
+					"-framework",
+					R,
+				);
+				PRODUCT_NAME = R;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wall",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = SnowLeopard64;
+		};
+		D90D7C3616D7CD6400F65176 /* SnowLeopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sush;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = SnowLeopard64;
+		};
+		D90D7C3716D7CD6400F65176 /* SnowLeopard64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = Docs;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = SnowLeopard64;
+		};
 		D97F77C5168E24EA00EB58E7 /* Lion */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1896,7 +1984,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk;
+				SDKROOT = macosx10.7;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1984,7 +2072,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk;
+				SDKROOT = macosx10.7;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -2160,6 +2248,7 @@
 				D97F77CC168E24F600EB58E7 /* Lion64 */,
 				D9B9248016D7AA4800B56B82 /* MLion64 */,
 				68AD84D8107A47EE00F44691 /* SnowLeopard */,
+				D90D7C3616D7CD6400F65176 /* SnowLeopard64 */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2174,6 +2263,7 @@
 				D97F77CD168E24F600EB58E7 /* Lion64 */,
 				D9B9248116D7AA4800B56B82 /* MLion64 */,
 				68AD84D9107A47EE00F44691 /* SnowLeopard */,
+				D90D7C3716D7CD6400F65176 /* SnowLeopard64 */,
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2188,6 +2278,7 @@
 				D97F77CB168E24F600EB58E7 /* Lion64 */,
 				D9B9247F16D7AA4800B56B82 /* MLion64 */,
 				68AD84D7107A47EE00F44691 /* SnowLeopard */,
+				D90D7C3516D7CD6400F65176 /* SnowLeopard64 */,
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -2202,6 +2293,7 @@
 				D97F77CA168E24F600EB58E7 /* Lion64 */,
 				D9B9247E16D7AA4800B56B82 /* MLion64 */,
 				68AD84D6107A47EE00F44691 /* SnowLeopard */,
+				D90D7C3416D7CD6400F65176 /* SnowLeopard64 */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;

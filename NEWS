@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2013-03-04 [BDR]
+*	Remove toolbar icon to start X11 (which is often Xquartz, and
+	unneeded since 10.5).
+*	Add MLion64 configuration for 64-bit builds assuming >= 10.8
+	(will be needed once Xcode supports 10.9 since the 10.7 sdk will go)
+	and SnowLeopard64 (64-bit only, current OS)
+
 -- Release Version 1.53 (6451) - supplied with R 2.15.3 --
 
 Last-update: 2013-02-06 [HJBB]

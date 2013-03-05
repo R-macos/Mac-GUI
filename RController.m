@@ -3175,15 +3175,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		[toolbarItem setImage: [NSImage imageNamed: @"emptyDoc"]];
 		[toolbarItem setTarget: [RDocumentController sharedDocumentController]];
 		[toolbarItem setAction: @selector(newDocument:)];
-		
-    } else  if ([itemIdent isEqual: X11ToolbarItemIdentifier]) {
-		[toolbarItem setLabel: NLS(@"Start X11")];
-		[toolbarItem setPaletteLabel: NLS(@"Start X11 Server")];
-		[toolbarItem setToolTip: NLS(@"Start the X11 window server to allow R using X11 device and Tcl/Tk")];
-		[toolbarItem setImage: [NSImage imageNamed: @"X11"]];
-		[toolbarItem setTarget: self];
-		[toolbarItem setAction: @selector(runX11:)];
-		
+				
     }  else  if ([itemIdent isEqual: SetColorsToolbarItemIdentifier]) {
 		[toolbarItem setLabel: NLS(@"Set Colors")];
 		[toolbarItem setPaletteLabel: NLS(@"Set R Colors")];
@@ -3284,7 +3276,7 @@ This method calls the showHelpFor method of the Help Manager which opens
     // If during the toolbar's initialization, no overriding values are found in the user defaults, or if the
     // user chooses to revert to the default items this set will be used 
     return [NSArray arrayWithObjects:	InterruptToolbarItemIdentifier, SourceRCodeToolbarIdentifier,
-		NewQuartzToolbarItemIdentifier, X11ToolbarItemIdentifier,
+		NewQuartzToolbarItemIdentifier,
 		NSToolbarSeparatorItemIdentifier,
 		AuthenticationToolbarItemIdentifier, ShowHistoryToolbarItemIdentifier,
 		SetColorsToolbarItemIdentifier,
@@ -3304,7 +3296,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		NewEditWinToolbarItemIdentifier, LoadFileInEditorToolbarItemIdentifier,
 		NSToolbarPrintItemIdentifier, NSToolbarCustomizeToolbarItemIdentifier,
 		NSToolbarFlexibleSpaceItemIdentifier, NSToolbarSpaceItemIdentifier, 
-		NSToolbarSeparatorItemIdentifier, X11ToolbarItemIdentifier,
+		NSToolbarSeparatorItemIdentifier,
 		SetColorsToolbarItemIdentifier,
 		/*FontSizeToolbarItemIdentifier,*/ SourceRCodeToolbarIdentifier, nil];
 }
@@ -3338,9 +3330,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 		enable = [RConsoleWindow isDocumentEdited];
     } else if ([[toolbarItem itemIdentifier] isEqual: SourceRCodeToolbarIdentifier]) {
 		enable = YES;
-    } else if ([[toolbarItem itemIdentifier] isEqual: X11ToolbarItemIdentifier]) {
-		enable = YES;
-    } else if ([[toolbarItem itemIdentifier] isEqual: SetColorsToolbarItemIdentifier]) {
+} else if ([[toolbarItem itemIdentifier] isEqual: SetColorsToolbarItemIdentifier]) {
 		enable = YES;
     } else if ([[toolbarItem itemIdentifier] isEqual: LoadFileInEditorToolbarItemIdentifier]) {
 		enable = YES;
