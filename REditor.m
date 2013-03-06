@@ -79,11 +79,7 @@ void printelt(SEXP invec, int vrow, char *strp)
 
 	if(!strp) return;
 
-#if (R_VERSION < R_Version(2,13,0))
-	Rf_PrintDefaults(R_NilValue);
-#else
 	Rf_PrintDefaults();
-#endif
 	if (TYPEOF(invec) == REALSXP) {
 		if (REAL(invec)[vrow] != ssNA_REAL) {
 			strcpy(strp, Rf_EncodeElement(invec, vrow, 0, '.'));

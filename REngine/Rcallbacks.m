@@ -284,10 +284,7 @@ int Re_system(const char *cmd) {
 	return r;
 }
 
-#if (R_VERSION >= R_Version(3,0,0))
-static
-#endif
-int  Re_CustomPrint(const char *type, SEXP obj)
+static int  Re_CustomPrint(const char *type, SEXP obj)
 {
 	insideR--;
 	if ([REngine cocoaHandler]) {
@@ -599,82 +596,6 @@ int NumOfID = 0;         /* length of the vectors    */
 
 BOOL WeHaveWorkspace;
 
-#if (R_VERSION < R_Version(3,0,0))
-SEXP Re_do_wsbrowser(SEXP call, SEXP op, SEXP args, SEXP env)
-{
-	int i, len;
-	SEXP ids, isroot, iscont, numofit, parid;
-	SEXP name, type, objsize;
-    
-//	checkArity(op, args);
-
-	ids = CAR(args); args = CDR(args);
-	isroot = CAR(args); args = CDR(args);
-	iscont = CAR(args); args = CDR(args);
-	numofit = CAR(args); args = CDR(args);
-	parid = CAR(args); args = CDR(args);
-	name = CAR(args); args = CDR(args);
-	type = CAR(args); args = CDR(args);
-	objsize = CAR(args); 
-
-	if(!isInteger(ids)) 
-		errorcall(call,"`id' must be integer");      
-	if(!isString(name))
-		error("invalid objects' name");
-	if(!isString(type))
-		error("invalid objects' type");
-	if(!isString(objsize))
-		error("invalid objects' size");
-	if(!isLogical(isroot))
-		error("invalid `isroot' definition");
-	if(!isLogical(iscont))
-		error("invalid `iscont' definition");
-	if(!isInteger(numofit))
-		errorcall(call,"`numofit' must be integer");
-	if(!isInteger(parid))
-		errorcall(call,"`parid' must be integer");
-  
-    len = LENGTH(ids);
-
-	if(len>0){
-		WeHaveWorkspace = YES;
-		NumOfWSObjects = freeWorkspaceList(len);		
-  
-		for(i=0; i<NumOfWSObjects; i++){
-
-		if (!isNull(STRING_ELT(name, i)))
-			ws_name[i] = strdup(CHAR(STRING_ELT(name, i)));
-		else
-			ws_name[i] = strdup(CHAR(R_BlankString));
-
-		if (!isNull(STRING_ELT(type, i)))
-			ws_type[i] = strdup(CHAR(STRING_ELT(type, i)));
-		else
-			ws_type[i] = strdup(CHAR(R_BlankString));
-
-		if (!isNull(STRING_ELT(objsize, i)))
-			ws_size[i] = strdup(CHAR(STRING_ELT(objsize, i)));
-		else
-			ws_size[i] = strdup(CHAR(R_BlankString));  
-
-		ws_IDNum[i] = INTEGER(ids)[i];
-		ws_numOfItems[i] = INTEGER(numofit)[i];
-		if(INTEGER(parid)[i] == -1)
-			ws_parID[i] = -1;
-		else 
-			ws_parID[i] = INTEGER(parid)[i]; 
-		ws_IsRoot[i] = LOGICAL(isroot)[i];
-		ws_IsContainer[i] = LOGICAL(iscont)[i];
-	}
-  }
-
-	insideR--;
-	[WSBrowser toggleWorkspaceBrowser];
-	insideR++;
-
-  return R_NilValue;
-}
-#endif
 
 SEXP wsbrowser(SEXP ids, SEXP isroot, SEXP iscont, SEXP numofit,
 	       SEXP parid, SEXP name, SEXP type, SEXP objsize)

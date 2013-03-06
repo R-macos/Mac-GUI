@@ -161,17 +161,6 @@ int main(int argc, const char *argv[])
 	    [[REngine mainEngine] executeString:[NSString stringWithFormat:@"try(local({ r <- getOption('repos'); r['CRAN']<-gsub('/$', '', \"%@\"); options(repos = r) }),silent=TRUE)", url]];
     }
 	 
-    SLog(@" - set BioC repositories");
-#if (R_VERSION >= R_Version(2,15,0))
-    /* No algorithm is possible, use version in R itself at first use */
-//    [[REngine mainEngine] executeString:@"setBioCversion()"];
-#else
-    int biocMinor = (((R_VERSION >> 8) & 255) - 5);
-    NSString *biocReposList = [NSString stringWithFormat:@"'2.%d/bioc','2.%d/data/annotation','2.%d/data/experiment','2.%d/extra'",
-					biocMinor, biocMinor, biocMinor, biocMinor];
-    [[REngine mainEngine] executeString:[NSString stringWithFormat:@"if (is.null(getOption('BioC.Repos'))) options('BioC.Repos'=paste('http://www.bioconductor.org/packages/',c(%@),sep=''))", biocReposList]];
-#endif
-
     SLog(@" - loading secondary NIBs");
     if (![NSBundle loadNibNamed:@"Vignettes" owner:NSApp]) {
 	SLog(@" * unable to load Vignettes.nib!");

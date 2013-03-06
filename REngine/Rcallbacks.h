@@ -96,9 +96,6 @@ int  Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean
 int  Re_EditFiles(int nfile, char **file, char **title, char *pager);
 int  Re_Edit(char *file);
 int  Re_system(const char *cmd);
-#if (R_VERSION < R_Version(3,0,0))
-int  Re_CustomPrint(const char *type, SEXP obj);
-#endif
 
 void Re_ProcessEvents(void);
 SEXP Re_packagemanger(SEXP call, SEXP op, SEXP args, SEXP env);

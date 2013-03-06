@@ -28,8 +28,8 @@
  */
 
 #include <Rversion.h>
-#if R_VERSION < R_Version(2,10,0)
-#error R >= 2.10.0 is required
+#if R_VERSION < R_Version(3,0,0)
+#error R >= 3.0.0 is required
 #endif
 
 #define R_INTERFACE_PTRS 1
@@ -55,21 +55,8 @@
 /* and SaveAction is not officially exported */
 extern SA_TYPE SaveAction;
 
-// not in Rinterface.h earlier
-#if (R_VERSION < R_Version(3,0,0))
-extern SEXP (*ptr_do_dataentry)(SEXP, SEXP, SEXP, SEXP);
-extern SEXP (*ptr_do_selectlist)(SEXP, SEXP, SEXP, SEXP);
-extern void (*ptr_R_ProcessEvents)();
-#endif
-#if (R_VERSION < R_Version(2,15,2))
-extern void (*ptr_do_flushconsole)();
-#endif
-
-// Private hooks in earlier versions
-#if (R_VERSION < R_Version(3,0,0))
 extern SEXP (*ptr_do_wsbrowser)(SEXP, SEXP, SEXP, SEXP);
 extern int  (*ptr_Raqua_CustomPrint)(char *, SEXP); /* custom print proxy */
-#endif
 
 // Private hook used from src/main/sysutils.c
 extern int  (*ptr_CocoaSystem)(const char *);
@@ -134,20 +121,11 @@ int initR(int argc, char **argv, int save_action)
     ptr_R_loadhistory = Re_loadhistory;
     ptr_R_savehistory = Re_savehistory;
 
-#if (R_VERSION < R_Version(2,15,2))
-    ptr_do_flushconsole = Re_FlushConsole; // this is the former private version
-#endif
-
     ptr_R_EditFile = Re_Edit;
 	
     ptr_R_ShowFiles = Re_ShowFiles;
     ptr_R_EditFiles = Re_EditFiles;
     ptr_R_ChooseFile = Re_ChooseFile;
-	
-#if (R_VERSION < R_Version(3,0,0))
-    ptr_Raqua_CustomPrint = Re_CustomPrint;	
-    ptr_do_wsbrowser = Re_do_wsbrowser;
-#endif
 	
     ptr_CocoaSystem = Re_system;
     setup_Rmainloop();
