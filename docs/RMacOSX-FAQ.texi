@@ -95,8 +95,6 @@ Brian Ripley                     @*
 
 @menu
 * Introduction::                
-* Building R from sources::     
-* Command line version of R::   
 * R.app::                       
 * How to install packages::     
 * R and external applications::  
@@ -108,12 +106,14 @@ Brian Ripley                     @*
 * Miscellaneous questions::     
 @end menu
 
-@node Introduction, Building R from sources, Top, Top
+@node Introduction, R.app, Top, Top
 @chapter Introduction
 
 This document contains a user guide to the @Rapp{} version of @R{}, and
 information on using @R{} on OS X which supplements the main @R{}
-manuals.
+manuals.  As from @R{} 3.0.0 most of the information has been moved to
+those manuals, the latest versions of which can be found at
+@uref{http://cran.r-project.org/manuals.html}.
 
 In this document @R{} refers to the core, command-line-based @R{} system
 while @Rapp{} refers to the GUI-based Mac OS application that controls
@@ -139,40 +139,30 @@ R-SIG-Mac!}
 * How many versions of R for Mac OS X?::  
 * What machines does R for Mac OS X run on?::  
 * How can R for Mac OS X be obtained and installed?::  
-* How can R for Mac OS X be uninstalled?::  
-* Installation Problems::       
 @end menu
 
 @node How many versions of R for Mac OS X?, What machines does R for Mac OS X run on?, Introduction, Introduction
 @section How many versions of R for Mac OS X?
 
 There is only one version of R for Mac OS X.  However, @R{} on Mac OS X
-can be used either on the command-line (@pxref{Command line version of
-R}) like on other Unix systems, or via the @Rapp{} GUI (@pxref{R.app}).
-The second approach is mostly preferred by Macintosh users.  There are
-separate 32- and 64-bit versions of @Rapp{}.
+can be used either on the command-line as on other Unix systems, or via
+the @Rapp{} GUI (@pxref{R.app}).  The second approach is mostly
+preferred by Macintosh users.
+
+Prior to @R{} 3.0.0 there were separate 32- and 64-bit version of
+@Rapp{}: nowadays only 64-bit builds are supported.
 
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
 @section What machines does R for Mac OS X run on?
 
-The binaries provided on @CRAN{} are multi-architecture (currently
-32-bit Intel + 64-bit Intel) and require Mac OS X 10.5 (Leopard) or
-higher.
+64-bit Intel-based Macs, that is any machine made since mid 2008.
 
-Support for Leopard and 32-bit builds will be dropped in the next @R{}
-series (starting with 3.0.0 in April 2013).
-
-@R{} can in principle be built from the sources on earlier versions of
-OS X, and also for PowerPC and PowerPC64 on Leopard: but this has not be
-tested recently.  (PowerPC binaries were last supplied for @R{} 2.15.0.) 
-
-@node How can R for Mac OS X be obtained and installed?, How can R for Mac OS X be uninstalled?, What machines does R for Mac OS X run on?, Introduction
+@node How can R for Mac OS X be obtained and installed?,  , What machines does R for Mac OS X run on?, Introduction
 @section How can R for Mac OS X be obtained and installed?
 
 @R{} is available on @CRAN{} in the form of an Installer package
-containing the R framework and the 32- and 64-bit versions of the
-@Rapp{} GUI. The package is usually named @file{R.pkg} with an optional
-version number.
+containing the R framework and the @Rapp{} GUI. The package is usually
+named @file{R.pkg} with an optional version number.
 
 The installation is done by double-clicking on the Installer
 package. The Installer will guide you through the necessary steps.  Note
@@ -183,99 +173,11 @@ suitable for most users.
 Snapshots of the R-patched and R-devel flavours are available at
 @uref{http://r.research.att.com/}, packaged in the same way.
 
-@node How can R for Mac OS X be uninstalled?, Installation Problems, How can R for Mac OS X be obtained and installed?, Introduction
-@section How can R for Mac OS X be uninstalled?
+Further details, including uninstallation and building @R{} from the
+sources, are in the `R Installation and Administration Manual'.
 
-@R{} for Mac OS X consists of two parts: the GUI (@Rapp{}) and the R
-framework. The un-installation is as simple as removing those folders
-(e.g.@: by dragging them into the Trash). The typical installation will
-install the GUI into the @file{/Applications} folder and the R framework
-in the @file{/Library/Frameworks} folder.
 
-If you want to get rid of R using a Terminal, simply run (prepend
-@code{sudo} if needed):
-
-@example
-rm -rf /Library/Frameworks/R.framework /Applications/R.app /Applications/R64.app
-rm -f /usr/bin/R /usr/bin/Rscript /usr/bin/R32 /usr/bin/R64
-@end example
-
-An alternative is to use Apple's @code{pkgutil} tools to uninstall
-R. The installation consists of three packages:
-@code{org.r-project.R.Leopard.fw.pkg},
-@code{org.r-project.R.Leopard.GUI.pkg} and
-@code{org.r-project.R.Leopard.GUI64.pkg}. You can use @code{pkgutil
---unlink} (not supported on Lion and later) for each of them to remove
-their files and/or @code{pkgutil --forget} if you want the Apple
-Installer to forget about the package without deleting its files (useful
-when installing multiple R versions in parallel), or after you have
-deleted the files.
-
-@node Installation Problems,  , How can R for Mac OS X be uninstalled?, Introduction
-@section Installation Problems
-
-On Mountain Lion some of the packages may need (depending on your
-security settings) to be installed by right/control-clicking, selecting
-@samp{Open} and then clicking @samp{Open} in the resulting dialog box.
-
-The binary version of @R{} is provided as an Apple Installer package. If
-you encounter any problem during the installation, please check the
-Installer log by clicking on the ``Window'' menu and item ``Installer
-Log''. The full output (select ``Show All Log'') is useful for tracking
-down problems.
-
-@strong{Note:} In order for Tcl/Tk to work, don't forget to install the
-additional tools from
-@uref{http://cran.r-project.org/bin/macosx/tools/}.  These are updated
-rarely, so only need to be installed the first time you install @R{}.
-The disk image contains a package @file{tcltk.pkg}.
-
-@node Building R from sources, Command line version of R, Introduction, Top
-@chapter Building R from sources
-
-This information is now in the `R Installation and Administration
-Manual' which ships with each version of @R{}: the latest versions can
-be found at @uref{http://cran.r-project.org/manuals.html}.  It includes
-information on how to build @Rapp{}.
-
-@node Command line version of R, R.app, Building R from sources, Top
-@chapter Command line version of R
-
-The command line version of @R{} is almost identical to @R{} as used on
-other Unix-like operating systems. Therefore general documentation for
-@R{} applies to this version as well.  On each release ready-to-use
-binaries are distributed through @CRAN{}.  These binaries come with a
-common installer used by @Rapp{} so please read the related notes
-(@pxref{How to get R.app}).
-
-On recent versions of OS X (Snow Leopard and later) the installer links
-three executables in @file{/usr/bin}, @code{R32}, @code{R64} and
-@code{R}.  The first is 32-bit, the second is 64-bit and @code{R} is
-64-bit on Snow Leopard and Lion and later but 32-bit on Leopard (and on
-Mountain Lion for 2.15.2 and earlier).  It also links @code{Rscript} (of
-the same default architecture as @code{R}).
-
-One thing that is different from @R{} on any other Unix-like is the way
-output is displayed on a terminal.  Except for `dumb' terminals,
-messages to @file{stderr} are diverted to @file{stdout} and displayed in
-bold using ANSI terminal escapes.
-
-@c links to /usr/bin/R these days.
-@c To use @R{} you probably need to add a symbolic link on your system as
-@c the @R{} binary is located inside the framework.  Suppose you have the
-@c @emph{/usr/local/bin} directory on your system (if you do not have one,
-@c you can use @emph{/usr/bin} instead) you should just type in your
-@c Terminal (a root password is required)
-@c @example
-@c sudo ln -s /Library/Frameworks/R.framework/Resources/R /usr/local/bin/R
-@c @end example
-@c Assuming that you have @emph{/usr/local/bin} in your @emph{PATH}
-@c environment variable, you will be able to launch R from any location on
-@c your system just by typing @emph{R}. In this way, when you install a new
-@c version of the @emph{R.framework} this link will point to the latest R
-@c binary.
-
-@node R.app, How to install packages, Command line version of R, Top
+@node R.app, How to install packages, Introduction, Top
 @chapter R.app
 @menu
 * How to get R.app::            
@@ -288,10 +190,10 @@ bold using ANSI terminal escapes.
 @end menu
 
 @Rapp{} is the name of the GUI for Mac OS X that was introduced in R
-2.0.0. It appears as an icon labeled @emph{R} or @emph{R64}, but to
-avoid confusion with general @R{}, we prefer to use the name as it
-appears when using @emph{Get Info} on the GUI: @Rapp{} This stands for
-@emph{R application}.
+2.0.0. It appears as an icon labeled @emph{R}, but to avoid confusion
+with general @R{}, we prefer to use the name as it appears when using
+@emph{Get Info} on the GUI: @Rapp{} This stands for @emph{R
+application}.
 
 Internally @Rapp{} is a Cocoa program (hence written in Objective C)
 which links to embedded @R{} installed as a framework.
@@ -303,7 +205,7 @@ which links to embedded @R{} installed as a framework.
 
 @Rapp{} is part of the binary distribution of R for Mac OS X available
 from @CRAN{}. That distribution consists of one package containing the R
-framework and 32- and 64-bit versions of @Rapp{}.
+framework and @Rapp{}.
 
 Development versions of @Rapp{} are made available on daily basis in the
 form of a disk image containing the @Rapp{} itself. See the Mac OS X
@@ -570,12 +472,12 @@ The same applies to the @emph{Dataset Manager} menu but for data-sets.
 
 You can than get or update packages @CRAN{} either in binary or source
 format. Daily build of @CRAN{} packages are available for Mac OS X. If
-you don't know how to build @R{} itself from source (@pxref{Building R
-from sources}), you'll probably be unable to build packages from source
-on your own.  In this case, you should always choose for the binary
-option. These binary packages work (for sure!) for the release version
-of @R{} for Mac OS X you find on @CRAN{} even though it is not excluded
-that they will work for other prebuilt versions of @R{}.
+you don't know how to build @R{} itself from source, you'll probably be
+unable to build packages from source on your own.  In this case, you
+should always choose for the binary option. These binary packages work
+(for sure!) for the release version of @R{} for Mac OS X you find on
+@CRAN{} even though it is not excluded that they will work for other
+prebuilt versions of @R{}.
 
 
 When you attempt to install packages from @CRAN{}, @R{} first tries to
@@ -697,34 +599,43 @@ crash report).
 @chapter How to install packages
 You have several options for installing new packages on your system. We
 discuss here only the GUI interface to the standard @R{} functions like
-@command{install.package}. For the @R{} functions see the standard @R{}
+@command{install.packages()}. For the @R{} functions see the standard @R{}
 documentation.
 
 @menu
 * Which kind of packages can I install using the GUI?::  
 * Installation of packages::    
 * Installation of source packages::  
-* Building universal package::  
-* Can I install packages built for other platforms?::  
 * Where are the packages I've installed?::  
 @end menu
 
 @node Which kind of packages can I install using the GUI?, Installation of packages, How to install packages, How to install packages
-@section Which kind of packages can I install using the GUI?
-At the moment the GUI provide direct access/download/installation of
-packages located on @CRAN{}, the Bioconductor repositories or a custom
-repository. You can also install packages from local files, either
-binary of source packages, as explained below. Otherwise you can use the
-appropriate @R{} commands (see @code{install.packages}) to install
-packages from a specific location other than the above mentioned ones.
+@section Which kind of packages can I install using the GUI
+
+GUI provides direct access/download/installation of packages located on
+@CRAN{}, the Bioconductor repositories or a custom repository. You can
+also install packages from local files, either binary of source
+packages, as explained below. Otherwise you can use the appropriate @R{}
+commands (see @code{install.packages}) to install packages from a
+specific location other than the above mentioned ones.
 
 @node Installation of packages, Installation of source packages, Which kind of packages can I install using the GUI?, How to install packages
 @section Installation of packages
 @R{} for Mac OS X recognizes packages in two forms: @emph{binary} packages and @emph{source} packages.
 
-Binary packages are @R{} packages in ready-to-use form, such that no additional tools are necessary for their use. Binary packages are specific for a given @R{} version and OS. @CRAN{} and Bioconductor repositories offer @R{} packages in binary form for the last released @R{} version. Unlike on other Unix systems, R for Mac OS X installs binary packages by default, i.e. @code{install.packages} will look for binary repositories unless instructed otherwise.
+Binary packages are @R{} packages in ready-to-use form, such that no
+additional tools are necessary for their use. Binary packages are
+specific for a given @R{} version and OS. @CRAN{} and Bioconductor
+repositories offer @R{} packages in binary form for the last released
+@R{} version. Unlike on other Unix systems, R for Mac OS X installs
+binary packages by default, i.e. @code{install.packages} will look for
+binary repositories unless instructed otherwise.
 
-Source packages are general in that they can be used on any platform and OS supported by @R{}, but they need to be processed and/or compiled before they can be used. Additional tools are necessary for that, see @pxref{Installation of source packages} for details. For most users binary packages are sufficient.
+Source packages are general in that they can be used on any platform and
+OS supported by @R{}, but they need to be processed and/or compiled
+before they can be used. Additional tools may be necessary for that, see
+@pxref{Installation of source packages} for details. For most users
+binary packages are sufficient (if available and current).
 
 On Mac OS X packages can be installed in three ways:
 
@@ -760,155 +671,70 @@ in the top left list and press the @emph{Install} button (which is now enabled).
 @noindent
 Packages can also be installed from other repositories by selecting @emph{Other Repository} source. Enter the repository URL in the adjacent field. Note that currently the Package Installer assumes that custom repositories maintain proper hierarchy for both source and binary packages the same way @CRAN{} does when using @emph{Other Repository}. If your custom repository is flat, select @emph{Other Directory URL} in the installation type list.
 
-@node Installation of source packages, Building universal package, Installation of packages, How to install packages
+@node Installation of source packages, Where are the packages I've installed?, Installation of packages, How to install packages
 @section Installation of source packages
 
-Usually it is much faster and easier to install binary packages, because
-they are immediately ready to use. On the other hand only packages that
-pass all tests are available in binary form from @CRAN{}. If your
-desired package is not available in binary form, you will need to use
-its source form.  If you want to install a source package which contains
-code that needs compilation, you will need the same working setup for
-building R itself (see @pxref{Building R from sources}), including Apple
-Xcode Tools and a working @FORTRAN{} compiler (if the package requires
-it).
+Source packages which do not contain compiled code can (with rare
+exceptions) be installed with no additional tools.
 
-@strong{Important:} When using binary @R{} installation from @CRAN{},
-you must use Xcode 3.1 or higher. Although @R{} can be built using older
-tools, the way it is built depends on the version of the tools and
-therefore your must upgrade at least to Xcode 3.1 (or preferably the
-latest available) which is compatible with the @CRAN{} build. Failing to
-do so will result in either of the following errors at compile time:
+Packages with compiled code (or some with Unix scripts) need the tools
+used to build @R{} itself discussed in the `R Installation and
+Administation Manual', and these will need to be in the @samp{PATH} as
+seen from @Rapp{} or command-line @R{}.  For @Rapp{} you may need to add
+e.g.@: @file{/usr/local/bin} and it is usually most convenient to use
+command-line @R{}.
 
+If using a CRAN binary install of @R{} the compilers may not be in the
+same place or have the same names as on the CRAN build machine.  Look at
+file @file{/Library/Frameworks/R.framework/Resources/etc/Makeconf},
+which will contain lines like
 @example
-make: gcc-4.2: Command not found
-
-cc1: error: invalid option 'macosx-version-min=10.4'
-
-/usr/bin/libtool: unknown option character `m' in: -macosx_version_min
+CC = gcc -arch x86_64 -std=gnu99
+CXX = g++ -arch x86_64
+CXXCPP = g++ -arch x86_64 -E
+FC = gfortran -arch x86_64
+F77 = gfortran -arch x86_64
+OBJC = clang -arch x86_64
+OBJCXX = clang++ -arch x86_64
 @end example
-
-A sign of missing Xcode tools is when the installation fails with
-@example
-make: command not found
-@end example
-
-In all such cases, please install the most recent Xcode version
-available and its `Command Line Tools'.
-
-@node Building universal package, Can I install packages built for other platforms?, Installation of source packages, How to install packages
-@section Building universal packages
-The same binary package can be used for both 32- and 64-bit @R{} on
-Intel-based Macs. Such a package is called @emph{universal}, because it
-works on either platform. Building universal packages requires special
-handling. First, @R{} itself must be compiled as universal binary to
-support universal packages at all. The @CRAN{} binary is built this
-way. Finally, a compiler supporting both platforms is necessary.
-
-Once all tools are in place it is considerably easy to build an
-universal binary. If the package does not contain a @emph{configure}
-script then a regular package installation using either
-@code{install.packages} or @code{R CMD INSTALL} automatically creates an
-universal binary. If the package contains a @emph{configure} script then
-it cannot be compiled in-place for multiple platforms, and the following
-process should be used. Assuming that you have a source package called
-@code{foo_1.0.tar.gz} that uses a @emph{configure} script, it can be
-installed universally using the following two-step process:
-
-@example
-# full 64-bit Intel install
-R --arch=x86_64 CMD INSTALL foo_1.0.tar.gz
-# 32-bit Intel library
-R --arch=i386 CMD INSTALL --libs-only foo_1.0.tar.gz
-@end example
-
-In the first step a full package for the 64-bit Intel platform is built
-and installed. In the following steps a package for 32-bit Intel
-platform is built, but only the relevant binary libraries are
-installed. This way all platforms share the same set of files except for
-the package library.
-
-Alternatively, use
-
-@example
-R CMD INSTALL --merge-multiarch foo_1.0.tar.gz
-@end example
-
-Normally, building a package from sources produces a binary that is tied
-to the developer tools that you compiled it with, especially if FORTRAN
-is used, because it requires run-time libraries. Anything you compile
-with a Fortran requires that you have that Fortran installed at run
-time, because Fortran uses its own run-time libraries (if the Fortran
-you compiled with used dynamic libraries). This implies that if you
-distribute your package you have to tell users to install the same
-Fortran you used to compile it.
-
-However, unlike most other Unix-alikes, Mac users do not necessarily have
-development tools installed, so on @CRAN{} we make an effort to modify
-the binaries such that they work even without the tools they have been
-compiled with. There are several possible approaches, but since R itself
-already uses the same Fortran, we ship a copy of the Fortran libraries
-inside R and modify packages such that they use it instead of the one
-from developer tools.
-
-If you want to share a binary with multiple users and don't want to
-require them to install Xcode, you can use the same approach as @CRAN{}
-but only if you use the same tools as we do on @CRAN{}. It means to
-change the path of the FORTRAN dynamic library (@code{libgfortran}) to
-point inside the R version that you are compiling for. For example, if
-you have installed a universal package @code{FOO} for R 2.15.x, you can
-change the paths as follows:
-
-@example
-# change into the library where you installed FOO
-cd /Library/Frameworks/R.framework/Resources/library
-# fix the Fortran paths in FOO to point to R 2.15 instead
-for lib in `ls FOO/libs/*/*.so`; do
- install_name_tool -change /usr/local/lib/libgfortran.2.dylib \
-   /Library/Frameworks/R.framework/Versions/2.15/Resources/lib/libgfortran.2.dylib \
-  $lib
-done
-@end example
-
-@node Can I install packages built for other platforms?, Where are the packages I've installed?, Building universal package, How to install packages
-@section Can I install packages built for other platforms?
-As a general rule the answer is @emph{yes} if the package does not
-contain any C/C++/Fortran code in the sources, otherwise the answer is
-negative. Another condition is that the package and the installed
-version of @R{} should be the same major release, i.e. you can install a
-package built for @R{} 2.1.0 on @R{} 2.1.1, but usually not the same
-package on @R{} 2.2.0.
-
-However, packages without compiled code can be built from their sources
-without any additional tools, so simply use @code{install.packages} to
-install them.
 
 @noindent
-A Mac OS X specific requirements is that a prebuilt package is assumed to be named (and accordingly archived and compressed) as @file{package_name.tgz}. The build script uses the more common extension @code{.tar.gz} and thus the resulting file must be renamed. On Windows, for example, packages come in a zipped format.
+You can either edit that file, or override settings in file
+@file{~/.R/Makevars}: see the section `Customizing package compilation'
+of the `R Installation and Administration Manual'.
 
-@node Where are the packages I've installed?,  , Can I install packages built for other platforms?, How to install packages
+These settings are likely to change before release, to something like
+@example
+CC = /opt/R/bin/gcc-4.7 -std=gnu99
+@end example
+
+@node Where are the packages I've installed?,  , Installation of source packages, How to install packages
 @section Where are the packages I've installed?
 The main library of packages is the one located inside the R.framework
 (in @code{/Library/Frameworks/R.framework/Resources/library}). This
 library contains the packages (base and recommended ones) distributed
 along with @R{}. Only administrators are allowed to install packages in
 this system-wide directory. Note that this directory is
-@R{}-version-specific. Optionally users can install private packages in
+@R{}-version-specific. Optionally users can install personal packages in
 their @code{~/Library/R/x.y/library} directory where @code{x.y} denotes
-the R version without the patch level (such as 2.15) -- see the startup
-preferences.
+the R version without the patch level (such as 3.0) -- see the startup
+preferences in @Rapp{}.
 
 @noindent
-The Package Installer performs installation to either place depending on the installation target setting. The default for an admin users is to install packages system-wide, whereas the default for regular users is their private place.
+The Package Installer performs installation to either place depending on
+the installation target setting. The default for an admin users is to
+install packages system-wide, whereas the default for regular users is
+their personal library tree.
 
 @noindent
-If you happen to use @code{install.packages} @R{} function instead of the Package Installer, the regular Unix behavior applies (see help pages for details). For default setup this means that the packages are installed according to the startup preference setting. You can check the current defaults by issuing
+If you use @code{install.packages} @R{} function instead of
+the Package Installer, the regular Unix behavior applies (see help pages
+for details). For default setup this means that the packages are
+installed according to the startup preference setting. You can check the
+current defaults by issuing
 @example
 .libPaths()
 @end example
-
-@c @noindent
-@c @strong{Note:} When upgrading to a next major release of @R{}, users should delete their @code{~/Library/R/library} directory, because packages are incompatible across major @R{} versions. When you experience problems loading packages or starting R after an upgrade, make sure you don't have packages for your old @R{} version floating around. More recent versions of @Rapp{} (1.19) include the version number in the path to prevent this from happening.
 
 @node R and external applications, Quartz device, How to install packages, Top
 @chapter R and external applications
@@ -953,12 +779,14 @@ where command string have to be in quotes. Actually, the output of the command
 is not sent back to the application that is calling @R{} but to the @R{} Console directly.
 
 @noindent
-There are some issues. The first is that if @R{} is still not running, it will take a while (depending on 
-how fast your machine is) to startup. In the meanwhile the script sends commands without waiting and it
-could happen that some commands are missed by @R{}, i.e. they arrive before @R{} is ready to 
-receive applescript commands. The second issue, is that it could be that the applescript calls a bad version
-of @R{}. This could happen if you have an old version of @R{} (for example the old Carbon @R{}) installed on your
-System.
+There are some issues. The first is that if @R{} is still not running,
+it will take a while (depending on how fast your machine is) to
+startup. In the meanwhile the script sends commands without waiting and
+it could happen that some commands are missed by @R{}, i.e. they arrive
+before @R{} is ready to receive applescript commands. The second issue,
+is that it could be that the applescript calls a bad version of
+@R{}. This could happen if you have an old version of @R{} (for example
+the old Carbon @R{}) installed on your System.
 
 @noindent
 As an example, we report here a small script that asks @R{} to @command{source} a file using a file dialog.
@@ -978,9 +806,10 @@ end try
 
 @node External editors, Finder actions, AppleScript support, R and external applications
 @section External editors
-@R{} accepts the Apple Event command @emph{open}. This means than an external editor can communicate with @R{} sending
-portions of @R{} code to execute via files. This is the approach used by the @R{}-Tcl Mode in Alpha X 
-(see @uref{http://www.kelehers.org/alpha/}).
+@R{} accepts the Apple Event command @emph{open}. This means than an
+external editor can communicate with @R{} sending portions of @R{} code
+to execute via files. This is the approach used by the @R{}-Tcl Mode in
+Alpha X (see @uref{http://www.kelehers.org/alpha/}).
 
 
 @node Finder actions,  , External editors, R and external applications
@@ -1007,12 +836,6 @@ The @code{quartz()} device is the native graphic device in R for Mac OS
 X. Its name derives from Apple's Quartz Technology which is essentially
 similar to PDF rendering. 
 
-@c One of the most amazing features of Quartz is
-@c anti-aliasing which gives you @emph{very nice} plots and images
-@c (although the other standard screen devices for @R{} have also supported
-@c anti-aliasing for several years).  From its PDF nature it is also
-@c resolution independent.
-
 The @code{quartz()} device can be used from @Rapp{} or a suitable build of @R{}
 running at the Mac console.  Where supported it is the default graphics
 device.
@@ -1029,12 +852,7 @@ device.
 
 The quartz device allows for interaction. You can use both
 @command{identify} and @command{locator} functions.  To break the
-sequence you should press the @key{ESC} key on your keyboard as Apple's
-mouse/touchpad has only one button.@footnote{Right-clicking via a
-gesture (default, two-finger click) or Control-click will also
-terminate.} If you happen to have a multi-button mouse, you can use any
-of the additional buttons to break the loop, unless you redefined the
-function of the buttons.
+sequence you should right/control-click or hit the @key{ESC} key.
 
 @node Saving the image, Copying the image into the clipboard, Interactive mode, Quartz device
 @section Saving the image
@@ -1044,8 +862,7 @@ via the @R{} menu when the device window has focus.  This is a simple
 way to export high quality graphics from @R{} into other applications on
 Mac OS X as graphics is PDF-based (so are almost all applications
 available). For other solutions, see (@pxref{Copying the image into the
-clipboard}) and the @command{quartz.save} function (only available in
-@Rapp{} in @R{} < 3.0.0).
+clipboard}) and the @command{quartz.save} function.
 
 @node Copying the image into the clipboard,  , Saving the image, Quartz device
 @section Copying the image into the clipboard
@@ -1071,12 +888,15 @@ version which is of higher quality as it supports vector graphics.
 
 Each binary distribution of @R{} available through @CRAN{} is built to
 use the X11 implementation of Tcl/Tk.  Of course a X windows server has
-to be started first: this should happen automatically on OS X, but can
-take quite a while to do so the first time it is used after a reboot.
+to be started first: this should happen automatically on OS X, provided
+it has been installed (it needs a separate install on Mountain Lion and
+later).  The first time things are done in the X server there can be a
+long delay whilst a font cache is constructed; starting the server can
+take several seconds.
 
-If you don't like the X11 style of widgets you would probably want to
-build R using the Aqua version of Tcl/Tk (see the `R Installation and
-Administration Manual').
+If you don't like the X11 style of widgets and use command-line @R{} you
+would probably want to build R using the Aqua version of Tcl/Tk (see the
+`R Installation and Administration Manual').
 
 @node Internationalization of the R.app, Additional resources, Tcl/Tk issues, Top
 @chapter Internationalization of the R.app
@@ -1095,15 +915,24 @@ formats), you can override the auto-detection performed by setting
 @example
 defaults write org.R-project.R force.LANG en_US.UTF-8
 @end example
-when run in @emph{Terminal} it will enforce US-english setting regardless of the system setting. If you don't know what @emph{Terminal} is you can use this @R{} command instead:
+when run in @emph{Terminal} it will enforce US-english setting
+regardless of the system setting. If you don't know what @emph{Terminal}
+is you can use this @R{} command instead:
 @example
 system("defaults write org.R-project.R force.LANG en_US.UTF-8")
 @end example
-but do not forget to quit @R{} and start @Rapp{} again afterwards. Please note that you must always use @samp{.UTF-8} version of the locale, otherwise @Rapp{} will not work properly.
+but do not forget to quit @R{} and start @Rapp{} again
+afterwards. Please note that you must always use @samp{.UTF-8} version
+of the locale, otherwise @Rapp{} will not work properly.
 
-Another change from previous versions (R 2.0 and @Rapp{} 1.01) is the support for UTF-8 character encoding. By default @Rapp{} uses UTF-8 for newly created documents and for the console. When opening new documents @Rapp{} assumes UTF-8 and only if the document violates UTF-8 rules, it will try to fallback to legacy encoding, usually Mac Roman.
+By default @Rapp{} uses UTF-8 for newly created documents and for the
+console. When opening new documents @Rapp{} assumes UTF-8 and only if
+the document violates UTF-8 rules, it will try to fallback to legacy
+encoding, usually Mac Roman.
 
-If you are interested in translating @Rapp{} GUI into other languages, please read the developer documentation @uref{http://developer.r-project.org/Translations.html} for details.
+If you are interested in translating @Rapp{} GUI into other languages,
+please read the developer documentation at
+@uref{http://developer.r-project.org/Translations30.html}.
 
 @node Additional resources, Acknowledgments, Internationalization of the R.app, Top
 @chapter Additional resources
@@ -1133,8 +962,8 @@ It contains latest nightly builds of @R{} and @Rapp{} as well as information on 
 @node Acknowledgments, Miscellaneous questions, Additional resources, Top
 @chapter Acknowledgments
 
-Special thanks go to Simon Urbanek, Jan de Leeuw, Byron Ellis and Thomas Lumley
-in random order. Last but not least Apple for amazing OS and GUI.
+Special thanks go to Jan de Leeuw, Byron Ellis and Thomas Lumley in
+random order. Last but not least Apple for amazing OS and GUI.
 
 @node Miscellaneous questions,  , Acknowledgments, Top
 @chapter Miscellaneous questions
@@ -1145,16 +974,11 @@ in random order. Last but not least Apple for amazing OS and GUI.
 * I see spurious error messages when starting R!::  
 * Which BLAS is used and how can it be changed?::  
 * I don't see a thing when installing packages!::  
-* Why is the Quartz much bigger than it used to be?::  
-* Why is Quartz so slow?::      
 * Why are there faint lines in image plots?::  
-* Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?::  
 * Why doesn't R GUI support keyboard shortcut XYZ ?::  
-* What is the difference between the Leopard and Tiger builds?::  
 * What is the difference between the CRAN build and a vanilla build?::  
 * Why is R.home() not versioned?::  
 * R.app GUI crashes on startup!::  
-* R.app GUI does not save the workspace!::  
 * Why is the GUI not saving my history?::  
 * I get ``command not found'' in the GUI yet it works in the Terminal -- why?::  
 * I see no text in a Quartz plot!::  
@@ -1219,10 +1043,11 @@ The @CRAN{} binary uses @code{--enable-BLAS-shlib} option and two Rblas
 shared libraries are supplied: @file{libRblas.vecLib.dylib} which uses
 vecLib BLAS and @file{libRblas.0.dylib} which uses reference BLAS from
 @R{}. A symbolic link @file{libRblas.dylib} determines which one is
-used. Currently the default is to use the @R{} BLAS is recommended for
-precision.
+used. Currently the default is to use the @R{} BLAS: this is recommended
+for precision.
 
-In order to change which BLAS is used, change the @file{libRblas.dylib} symlink correspondingly -- for example in Terminal:
+In order to change which BLAS is used, change the @file{libRblas.dylib}
+symlink correspondingly -- for example in Terminal:
 @example
 cd /Library/Frameworks/R.framework/Resources/lib
 
@@ -1233,84 +1058,63 @@ ln -sf libRblas.vecLib.dylib libRblas.dylib
 ln -sf libRblas.0.dylib libRblas.dylib
 @end example
 
-This feature is only present in the @R{} @CRAN{} binary. Ordinarily compiled @R{} from sources will only have one of the above BLAS libraries, corresponding to the configuration options used.
+This feature is only present in the @R{} @CRAN{} binary. Ordinarily
+compiled @R{} from sources will only have one of the above BLAS
+libraries, corresponding to the configuration options used.
 
-@node I don't see a thing when installing packages!, Why is the Quartz much bigger than it used to be?, Which BLAS is used and how can it be changed?, Miscellaneous questions
+@node I don't see a thing when installing packages!, Why are there faint lines in image plots?, Which BLAS is used and how can it be changed?, Miscellaneous questions
 @section I don't see a thing when installing packages!
-The output is not produced continuously during the package installation. Unlike previous GUIs @Rapp{} does its best to display the output as soon as possible, but for example the documentation script does not print anything until done.
+The output is not produced continuously during the package
+installation. @Rapp{} does its best to display the output as soon as
+possible, but for example the documentation script does not print
+anything until done.
 
-Also note that the development build of @Rapp{} sends output to the error console instead of the screen. You may want to check the @emph{Console} application in that case.
+Also note that the development build of @Rapp{} sends output to the
+error console instead of the screen. You may want to check the
+@emph{Console} application in that case.
 
 
-@node Why is the Quartz much bigger than it used to be?, Why is Quartz so slow?, I don't see a thing when installing packages!, Miscellaneous questions
-@section Why are Quartz plots much bigger than they used to be?
-
-R versions before 2.7.0 had a Quartz window that was smaller both in
-size and scale. This was caused by two ``bugs'': all devices in R have a
-default size of 7 inches. Quartz used a default of 5 inches and that was
-now changed to match all other devices. In addition, Quartz was
-incorrectly assuming a resolution of 72dpi for all screens. This means
-that a plot was drawn at ca. 3/4 of its intended size (given that most
-modern monitors use 100 dpi or more). The new Quartz device correctly
-detects the resolution of a screen by default and thus the plots will
-appear larger than they used to be. The resolution can be set using the
-@code{dpi} parameter of Quartz, i.e. to obtain the old behavior use
-@code{quartz(width=5,height=5,dpi=72)} when creating a new Quartz
-device. If you want to make this your default, use
-@code{quartz.options(width=5, height=5, dpi=72)}. You can also set those
-options in the Quartz Preferences of the @Rapp{} GUI.
-
-Some other new features of Quartz in R 2.7.0 include a plot history (use
-<Cmd><Left> and <Cmd><Right> to browse), improved speed (uses Quartz
-Extreme) and the ability to create a variety of output formats (pdf,
-png, jpeg, tiff, gif, psd, bmp...) -- see @code{?quartz} for
-details. Also @code{CarbonEL} is no longer needed, Quartz starts its own
-even loop when necessary.
-
-@node Why is Quartz so slow?, Why are there faint lines in image plots?, Why is the Quartz much bigger than it used to be?, Miscellaneous questions
-@section Why is Quartz so slow?
-
-In @R{} 2.7.0 a new Quartz device was introduced for greater flexibility and speed. It was designed to take advantage of Quartz Extreme and hardware rendering where supported. Nonetheless it turned out that the way lines are drawn can be very slow for certain back-ends if Quartz falls back to software rendering. This issue was addressed in R 2.7.0 patched (r45567 or later). If you experience extreme slowness drawing lines or glitches in drawing, please update to R 2.8.0 or later.
-
-@node Why are there faint lines in image plots?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why is Quartz so slow?, Miscellaneous questions
+@node Why are there faint lines in image plots?, Why doesn't R GUI support keyboard shortcut XYZ ?, I don't see a thing when installing packages!, Miscellaneous questions
 @section Why are there faint lines in image plots?
 
-When plots based on the @code{image()} function are exported to PDF, Preview shows very faint grid lines at the edges of the rectangles that create the image. Those lines are a rendering artifact in Preview coming from the combination of anti-aliasing and sub-pixel rendering. They are not really a part of the PDF (zooming in will reveal that they are not a real object which would get larger with zoom) since the rectangles are defined as a gapless coverage of the area. The effect can be circumvented by disabling anti-aliasing in Preview.
+When plots based on the @code{image()} function are exported to PDF,
+Preview shows very faint grid lines at the edges of the rectangles that
+create the image. Those lines are a rendering artifact in Preview coming
+from the combination of anti-aliasing and sub-pixel rendering. They are
+not really a part of the PDF (zooming in will reveal that they are not a
+real object which would get larger with zoom) since the rectangles are
+defined as a gapless coverage of the area. The effect can be
+circumvented by disabling anti-aliasing in Preview.
 
-We correct for this effect in Quartz when rendering on-screen by snapping all rectangles to pixel boundaries of the screen, but Preview does not.
+We correct for this effect in Quartz when rendering on-screen by
+snapping all rectangles to pixel boundaries of the screen, but Preview
+does not.
 
-The same effect occurs in any plot with adjacent, filled polygons without border.
+The same effect occurs in any plot with adjacent, filled polygons
+without border.
 
-@node Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Why doesn't R GUI support keyboard shortcut XYZ ?, Why are there faint lines in image plots?, Miscellaneous questions
-@section Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?
-
-Mac OS X 10.5.2 contains a very serious bug that makes @code{log10} return incorrect results in 64-bit Intel programs (x86_64). The bug was fixed in Mac OS X 10.5.3 therefore you have to update to Mac OS X 10.5.3 if you want to use 64-bit Intel binaries.
-
-If you want to create a binary that works on all versions of Mac OS X 10.5, you have to replace @code{log10} by something like @code{#define log10(X) (log2(X) * 0x1.34413509F79FFp-2)} (see Apple SciTech mailing list for the corresponding discussion and different workarounds).
-
-@node Why doesn't R GUI support keyboard shortcut XYZ ?, What is the difference between the Leopard and Tiger builds?, Why doesn't x86_64 build of R pass make check on Mac OS X 10.5.2?, Miscellaneous questions
+@node Why doesn't R GUI support keyboard shortcut XYZ ?, What is the difference between the CRAN build and a vanilla build?, Why are there faint lines in image plots?, Miscellaneous questions
 @section Why doesn't R GUI support keyboard shortcut XYZ ?
 
-The @Rapp{} GUI uses Apple frameworks for text editing and thus the behavior of text views (console, editor, etc.) is consistent with other applications and allows a very flexible customization. For example if you are not satisfied with the default Emacs-like key bindings that Mac OS X provides, Apple allows you to extend them arbitrarily. For more details see Apple's documentation on @uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html, Key Bindings}. There are also many 3rd-party pages on key bindings customization, search for @code{StandardKeyBinding.dict}.
+The @Rapp{} GUI uses Apple frameworks for text editing and thus the
+behavior of text views (console, editor, etc.) is consistent with other
+applications and allows a very flexible customization. For example if
+you are not satisfied with the default Emacs-like key bindings that Mac
+OS X provides, Apple allows you to extend them arbitrarily. For more
+details see Apple's documentation on
+@uref{http://developer.apple.com/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/chapter_9_section_2.html,
+Key Bindings}. There are also many 3rd-party pages on key bindings
+customization, search for @code{StandardKeyBinding.dict}.
 
-@node What is the difference between the Leopard and Tiger builds?, What is the difference between the CRAN build and a vanilla build?, Why doesn't R GUI support keyboard shortcut XYZ ?, Miscellaneous questions
-@section What is the difference between the Leopard and Tiger builds?
-
-Before R version 2.11.0 we provided two different binary builds on @CRAN{}: Tiger (Mac OS X 10.4) and Leopard (Mac OS X 10.5) builds. The Tiger build was a 32-bit build for PowerPC and Intel and works on Mac OS X 10.4 or higher. It was built using the same setup as @R{} prior to 2.8.0. It included two architectures @code{i386} and @code{ppc}. The default package type was @code{"mac.binary"} and packages in repositories were expected in @file{bin/macosx/universal/contrib/2.x}.
-
-In contrast the Leopard build requires Mac OS X 10.5 or higher and thus uses features that are new in Leopard. Also it includes both 32-bit and 64-bit architectures. On the console 64-bit version can be started using @code{R --arch=x86_64} for Intel Macs or @code{R --arch=ppc64} for PowerPC Macs (if included). There are two GUI binaries -- one for 32-bit and one for 64-bit. The Leopard build uses Apple's gcc-4.2 compilers, the default package type is @code{"mac.binary.leopard"} and consequently packages are expected in @file{bin/macosx/leopard/contrib/2.x}. Note that some packages may not be available in 64-bit (e.g.@: if dependent libraries are not available in 64-bit).
-
-@node What is the difference between the CRAN build and a vanilla build?, Why is R.home() not versioned?, What is the difference between the Leopard and Tiger builds?, Miscellaneous questions
+@node What is the difference between the CRAN build and a vanilla build?, Why is R.home() not versioned?, Why doesn't R GUI support keyboard shortcut XYZ ?, Miscellaneous questions
 @section What is the difference between the CRAN build and a vanilla build?
 
-The @CRAN{} build of R is slightly different from a vanilla build of R, i.e., a simple @code{./configure && make && make install}. The default package type for all builds compiled from sources is @code{"source"} wheres @CRAN{} uses @code{"mac.binary"} or @code{"mac.binary.leopard"} (see above). Only the @CRAN{} build is guaranteed to be compatible with the package binaries on @CRAN{}.
-
-In addition, the @CRAN{} build contains multiple architectures (two, three or four) and thus corresponds to setting @code{r_arch} at configure time and installing each architecture. This poses some challenges for package installation, since packages with a @code{configure} script need to be installed several times (see package installation FAQ above). Therefore it is recommended for users to install binary packages instead.
-
-Further, the start script for the @CRAN{} build is modified to launch
-the current architecture instead of the most recently installed one.
-
-Since R 2.8.0 the @CRAN{} binary also contains (statically) the most recent FontConfig with configuration and cache located inside R. See the @code{tools} directory in @CRAN{} for the corresponding libraries and details.
+The @CRAN{} build of R is slightly different from a vanilla build of R,
+i.e., a simple @code{./configure && make && make install}. The default
+package type for all builds compiled from sources is @code{"source"}
+wheres @CRAN{} uses binary packages.  Only the @CRAN{} build is
+guaranteed to be compatible with the package binaries on @CRAN{} (or
+Bioconductor).
 
 @node Why is R.home() not versioned?, R.app GUI crashes on startup!, What is the difference between the CRAN build and a vanilla build?, Miscellaneous questions
 @section Why is R.home() in the R framework not versioned?
@@ -1319,7 +1123,7 @@ In the command line version of R, @code{R.home()} always points to the
 @code{Resources} directory symbolic link inside the R framework which
 points to @code{Versions/Current/Resource} which is turn points to the
 actual home -- a versioned directory such as for example
-@code{Versions/2.15/Resources}. This is how framework versioning works
+@code{Versions/3.0/Resources}. This is how framework versioning works
 in Mac OS X and is defined by Apple (see
 @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html,
 Framework Anatomy}).
@@ -1346,7 +1150,7 @@ may have used the value of @code{R.home()} at install time and thus may
 not work with incorrect setting.  Finally, if such an R start script
 happens to get copied and the R version changes, it will stop working.
 
-@node R.app GUI crashes on startup!, R.app GUI does not save the workspace!, Why is R.home() not versioned?, Miscellaneous questions
+@node R.app GUI crashes on startup!, Why is the GUI not saving my history?, Why is R.home() not versioned?, Miscellaneous questions
 @section R.app GUI crashes on startup!
 
 If your @Rapp{} GUI crashes on startup, there are two common causes for
@@ -1383,30 +1187,17 @@ If you did both of the above and @Rapp{} still crashes, please select
 console) and send us the resulting crash report (see @pxref{R.app Bugs}
 above).
 
-@node R.app GUI does not save the workspace!, Why is the GUI not saving my history?, R.app GUI crashes on startup!, Miscellaneous questions
-@section R.app GUI does not save the workspace!
-
-When you quit the R.app GUI it asks you whether to save the workspace or
-not. There was a bug in R.app GUI 1.32 (shipped with the initial release
-of R 2.11.0) that did not save the workspace even if told to. If you use
-R.app GUI version 1.32 please make sure you upgrade to 1.33 (or higher)
-to avoid this bug. The current R on @CRAN{} ships with the more recent
-R.app GUI version that does not exhibit the problem.
-
-@node Why is the GUI not saving my history?, I get ``command not found'' in the GUI yet it works in the Terminal -- why?, R.app GUI does not save the workspace!, Miscellaneous questions
+@node Why is the GUI not saving my history?, I get ``command not found'' in the GUI yet it works in the Terminal -- why?, R.app GUI crashes on startup!, Miscellaneous questions
 @section Why is the GUI not saving my history?
 
-In some older versions of R there was a conflict between the history of
-R itself and the GUI such that the history file will be always empty. In
-R 2.11.1 the default has been changed such that the GUI will by default
-use a @code{.Rapp.history} file whereas command line @R{} will use
-@code{.Rhistory}. If you have old preferences, go to Preferences ->
-Startup in the GUI and click on the Default button next to the R history
-file text box and close the preferences.
+@Rapp{} will by default save the history in a @code{.Rapp.history} file
+whereas command line @R{} will use @code{.Rhistory}.  So the saved
+history is only used in subsequent @Rapp{} sessions and not command-line
+@R{}, and conversely.
 
 Note that calling @code{savehistory()} in @Rapp{} does not currently
 save the history of the @Rapp{} session: this means that
-@code{history()} will usually show an empty window.
+@code{history()} will show an empty window.
 
 @node I get ``command not found'' in the GUI yet it works in the Terminal -- why?, I see no text in a Quartz plot!, Why is the GUI not saving my history?, Miscellaneous questions
 @section I get ``command not found'' in the GUI yet it works in the Terminal -- why?
