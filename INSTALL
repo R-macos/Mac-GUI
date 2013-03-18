@@ -1,47 +1,31 @@
 INSTALL
 
-configure, build and install R with
-
-	./configure --with-aqua --enable-R-framework
-	make
-	sudo make install
-	
-Once you have the R.framework installed in /Library/Frameworks, you
-can build R.app.
-
-Note that for universal GUI you will have to set r_arch in configure
-above to one of the supported architectures, currently i386 or x86_64.
-
+You need R built and installed as a framework: see the 'R Installation
+and Administration Manual'.  A CRAN binary install of R suffices.
 
  Building R.app
 ================
 
-Only Mac OS X 10.5 and higher are supported. The project is called
-"R.xcodeproj" and requires Xcode 3.0 or higher. (If you need support
-for older Mac OS X version, you can use a GUI version before 1.40.)
+Only Mac OS X 10.6 and higher are supported, and only 64-bit R. The
+project is called "R.xcodeproj" and requires Xcode 3.2 or higher.
 
 The project can be built by selecting "R" target and "Build" inside
 the XCode GUI.
 
-To build the project from the command line in Mac-GUI directory use
-something like:
-	xcodebuild -target R -configuration SnowLeopard64
-
 Supported configurations are:
-  Leopard (32-bit Intel, release, OS X 10.5+, Xcode 3.0+)
-  Leopard64 (64-bit Intel, release, OS X 10.5+, Xcode 3.0+)
-  SnowLeopard (32 and 64-bit Intel, release, current OS X)
-  SnowLeopard64 (64-bit Intel, release, current OS X)
-  Debug (native arch, with debugging output, current OS X)
-  Lion (32-bit Intel, release, OS X 10.7+, Xcode 4.5+)
-  Lion64 (64-bit Intel, release, OS X 10.7+, Xcode 4.5+)
-  MLion64 (64-bit Intel, release, OS X 10.8+, Xcode 4.5+)
+  SnowLeopard64 (release, current OS X, default)
+  Lion64 (release, OS X 10.7+, Xcode 4.5+)
+  MLion64 (release, OS X 10.8+, Xcode 4.5+)
+  Debug (with debugging output, current OS X)
 
-The configurations differ mainly in the SDK selected (current versions
-of Xcode only support recent SDKs) and file locations (recent versions
-of Xcode have all the files in the Xcode.app directory rather than
-some in /Developer).  The 'native arch' will be 64-bit Intel on recent
-versions of OS X.
+The configurations differ mainly in the SDK selected (recent versions
+of Xcode only support the current and immediately previous SDKs, so
+for example in Mar 2013 the default would build for 10.8, but
+configuration Lion64 allows building for >= 10.7).
+
+To build the project from the command line in the Mac-GUI directory
+use something like:
+	xcodebuild -target R -configuration SnowLeopard64
 
 To build the R for Mac OS X FAQ use either
 	xcodebuild -target Docs
@@ -56,12 +40,12 @@ Note about binary compatibility:
 The general rules for R apply, that is binary compatibility is given
 only if the major and minor version numbers match - only the patch
 level may differ. When using the X.Y.Z version form it means that X.Y
-must match. For example R-GUIs linked to 2.0.x and 2.1.x are NOT
-binary compatible (and there is some conditional code in the GUI sources).
+must match. For example R-GUIs linked to 3.0.x and 3.1.x are NOT
+binary compatible.
 
 The compiled R.app is usually bound to a specific version, such as
-2.0.1. If you upgrade R removing the older version, let's say using
-R.app built for 2.0.0 and updating R to 2.0.1, you may need to fix the
+3.0.1. If you upgrade R removing the older version, let's say using
+R.app built for 3.0.0 and updating R to 3.0.1, you may need to fix the
 absolute path to libR.dylib. The nightly builds use a generic path
 /Library/Frameworks/R.framework/Resources/lib/libR.dylib which points
 to the latest version of R, but this is done by an additional call to
@@ -71,4 +55,4 @@ the default behavior doesn't depends on the GUI, but on libR.dylib -
 changing its own reference entry changes the way R.app is linked).
 
 --
-Last update: 2013-03-04
+Last update: 2013-03-08
