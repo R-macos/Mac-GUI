@@ -59,12 +59,15 @@ char     *os_version_string;
 static SEXP RappQuit(SEXP save, SEXP status, SEXP runLast) {
 	int sc, rl, save_flag = -1, cancel = 0; /* 1=yes, 0=no, -1=ask */
 	const char *sv;
-	if (!isString(save) || LENGTH(save) != 1) Rf_error("save must be a character vector of length one.");
+	if (!isString(save) || LENGTH(save) != 1) Rf_error("'save' must be a character vector of length one.");
 	sc = asInteger(status);
 	rl = asInteger(runLast);
 	sv = CHAR(STRING_ELT(save, 0));
-	if (sv && !strcmp(sv, "yes")) save_flag = 1;
-	else if (sv && !strcmp(sv, "no")) save_flag = 0;
+	if (!strcmp(sv, "yes")) save_flag = 1;
+	else if (!strcmp(sv, "no")) save_flag = 0;
+	else if (!strcmp(sv, "ask")) save_flag = -1;
+	else if (strcmp(sv, "default"))
+	    Rf_error("unrecognized value of 'save'");
 	if ([RController sharedController])
 		cancel = [[RController sharedController] quitRequest: save_flag withCode: sc last: rl];
 	if (!cancel) /* no cancel and we're still here -> run the internal version */
