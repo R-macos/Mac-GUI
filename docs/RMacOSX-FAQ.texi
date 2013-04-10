@@ -1220,7 +1220,7 @@ selectively modify the existing @code{PATH} variable via
 Typically this means that you have corrupted fonts in your system. Open
 the @code{Font Book} application (in @code{Applications}) and check the
 fonts that you are using (for example the default font in Quartz is
-``Helvetica''). Corrupted fonts will have no glyphs (text will not
+currently ``Arial'').  Corrupted fonts will have no glyphs (text will not
 appear as it should), remove such fonts.
 
 @bye
