@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.61 (6492) - supplied with R 3.0.1 --
+
 Last-update: 2013-04-05 [BDR]
 *	Custom q() function now checks for allowed inputs.
 
