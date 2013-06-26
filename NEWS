@@ -1,5 +1,9 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2013-06-26
+*	Compile Rinit.m with -O0 since ObjC optimizations
+	break in Mac OS X 10.9 DP
+
 -- Release Version 1.61 (6492) - supplied with R 3.0.1 --
 
 Last-update: 2013-04-05 [BDR]
