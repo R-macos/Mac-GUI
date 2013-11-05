@@ -34,6 +34,41 @@
 #import "../RegexKitLite.h"
 
 
+@implementation NSString (TrimmingAdditions)
+
+- (NSString *)stringByTrimmingLeadingCharactersInSet:(NSCharacterSet *)characterSet {
+    NSUInteger location = 0;
+    NSUInteger length = [self length];
+    unichar charBuffer[length];
+    [self getCharacters:charBuffer];
+    
+    for (int location = 0; location < length; location++) {
+        if (![characterSet characterIsMember:charBuffer[location]]) {
+            break;
+        }
+    }
+    
+    return [self substringWithRange:NSMakeRange(location, length - location)];
+}
+
+- (NSString *)stringByTrimmingTrailingCharactersInSet:(NSCharacterSet *)characterSet {
+    NSUInteger location = 0;
+    NSUInteger length = [self length];
+    unichar charBuffer[length];
+    [self getCharacters:charBuffer];
+    
+    for (int length=0; length > 0; length--) {
+        if (![characterSet characterIsMember:charBuffer[length - 1]]) {
+            break;
+        }
+    }
+    
+    return [self substringWithRange:NSMakeRange(location, length - location)];
+}
+
+@end
+
+
 @implementation History
 /** implements a history with one dirty entry (i.e. an entry which is still being edited but not committed yet) */
 
@@ -131,7 +166,9 @@
 
 		if ([Preferences flagForKey:cleanupHistoryEntriesKey withDefault:YES]) {
 			// trim leading and trailing white spaces, new lines and # characters
-			entry = [entry stringByTrimmingCharactersInSet:trimmingCharSet];
+			//entry = [entry stringByTrimmingCharactersInSet:trimmingCharSet];
+            entry = [entry stringByTrimmingTrailingCharactersInSet:trimmingCharSet];
+            entry = [entry stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 			// remove empty lines
 			entry = [entry stringByReplacingOccurrencesOfRegex:@"[\n\r]\\s+[\n\r]" withString:@"\n"];
 		}
