@@ -65,19 +65,24 @@
 		int greenTint = (256 - [rgbTint greenComponent]*255);
 		int blueTint = (256 - [rgbTint blueComponent]*255);
 		// process pixels
-		for (x = 0; x < size.width; x++) {
-			for (y = 0; y < size.height; y++) {
-				pos = (y * bytesPerRow) + (x * bytesPerPixel);
-				value = sourceData[pos] - redTint;
-				destData[pos] = ((value > 0) ? value : 0);
-				value = sourceData[pos+1] - greenTint;
-				destData[pos+1] = ((value > 0) ? value : 0);
-				value = sourceData[pos+2] - blueTint;
-				destData[pos+2] = ((value > 0) ? value : 0);
-				// copy alpha from source
-				destData[pos+3] = sourceData[pos+3];
-			}
-		}
+        if (*destData== '\0') {
+            //NSLog(@"No data in destData (darkenedImageWithColor.m)");
+        } else {
+            //NSLog(@"destData has data");
+            for (x = 0; x < size.width; x++) {
+                for (y = 0; y < size.height; y++) {
+                    pos = (y * bytesPerRow) + (x * bytesPerPixel);
+                    value = sourceData[pos] - redTint;
+                    destData[pos] = ((value > 0) ? value : 0);
+                    value = sourceData[pos+1] - greenTint;
+                    destData[pos+1] = ((value > 0) ? value : 0);
+                    value = sourceData[pos+2] - blueTint;
+                    destData[pos+2] = ((value > 0) ? value : 0);
+                    // copy alpha from source
+                    destData[pos+3] = sourceData[pos+3];
+                }
+            }
+        }
 	} else {
 		NSLog(@"not a bitmap image rep");
 	}
