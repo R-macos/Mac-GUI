@@ -70,7 +70,6 @@
 #undef error
 #endif
 
-
 @interface RController : NSObject <REPLHandler, CocoaHandler, PreferencesDependent, NSTextStorageDelegate, NSToolbarDelegate>
 {
 	IBOutlet RTextView *consoleTextView;
@@ -175,8 +174,6 @@
 	NSMenuItem *toggleFullScreenMenuItem;
 
 }
-	
-@property (strong) id  activity;
 
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
 - (void) doProcessEvents: (BOOL) blocking;
