@@ -135,7 +135,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 @end
 #endif
 
-
 @interface R_WebViewSearchWindow : NSWindow
 @end
 
@@ -2366,11 +2365,15 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 }
 
+
 - (void) handleBusy: (BOOL) isBusy {
-    if (isBusy)
+    if (isBusy) {
         [progressWheel startAnimation:self];
-    else
+        self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"R busy message"];
+    } else {
         [progressWheel stopAnimation:self];
+        [NSProcessInfo endActivity:self.activity];
+    }
 	
 	busyRFlag = isBusy;
 	if (toolbarStopItem) {
