@@ -2367,10 +2367,17 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (void) handleBusy: (BOOL) isBusy {
-    if (isBusy)
+    if (isBusy) {
         [progressWheel startAnimation:self];
-    else
+        self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"R busy message"];
+    } else {
         [progressWheel stopAnimation:self];
+        if (self.activity) {
+            [[NSProcessInfo processInfo] endActivity:self.activity];
+            self.activity = NULL;
+        }
+        
+    }
 	
 	busyRFlag = isBusy;
 	if (toolbarStopItem) {
@@ -3564,6 +3571,7 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 -(IBAction) runX11:(id)sender{
 	system("open -a X11.app");
+	//system("open -a XQuartz.app");
 }
 
 -(IBAction) openColors:(id)sender{
