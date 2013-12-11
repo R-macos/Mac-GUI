@@ -3570,8 +3570,8 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 
 -(IBAction) runX11:(id)sender{
-	system("open -a X11.app");
-	//system("open -a XQuartz.app");
+	//system("open -a X11.app");
+	system("open -a XQuartz.app");
 }
 
 -(IBAction) openColors:(id)sender{
