@@ -175,8 +175,6 @@
 
 }
 
-@property (strong) id  activity;
-
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
 - (void) doProcessEvents: (BOOL) blocking;
 
