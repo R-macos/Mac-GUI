@@ -3,10 +3,10 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2013
-@set FAQ-VERSION 3.0.2 @value{FAQ-YEAR}-05-17
-@set REL-VERSION 3.0.1
-@set GUI-VERSION 1.62
+@set FAQ-YEAR 2014
+@set FAQ-VERSION 3.1.0 @value{FAQ-YEAR}-04-10
+@set REL-VERSION 3.1.0
+@set GUI-VERSION 1.64
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -150,7 +150,7 @@ the @Rapp{} GUI (@pxref{R.app}).  The second approach is mostly
 preferred by Macintosh users.
 
 Prior to @R{} 3.0.0 there were separate 32- and 64-bit version of
-@Rapp{}: nowadays only 64-bit builds are supported.
+@Rapp{}: nowadays only 64-bit builds are supported in binary form.
 
 @node What machines does R for Mac OS X run on?, How can R for Mac OS X be obtained and installed?, How many versions of R for Mac OS X?, Introduction
 @section What machines does R for Mac OS X run on?
@@ -703,11 +703,6 @@ You can either edit that file, or override settings in file
 @file{~/.R/Makevars}: see the section `Customizing package compilation'
 of the `R Installation and Administration Manual'.
 
-These settings are likely to change before release, to something like
-@example
-CC = /opt/R/bin/gcc-4.7 -std=gnu99
-@end example
-
 @node Where are the packages I've installed?,  , Installation of source packages, How to install packages
 @section Where are the packages I've installed?
 The main library of packages is the one located inside the R.framework
@@ -894,9 +889,14 @@ later).  The first time things are done in the X server there can be a
 long delay whilst a font cache is constructed; starting the server can
 take several seconds.
 
+Mac OS X 10.9 and higher no longer include X11
+by default and it has to be obtained separately from
+@uref{http://xquartz.macosforge.org}.
+
 If you don't like the X11 style of widgets and use command-line @R{} you
 would probably want to build R using the Aqua version of Tcl/Tk (see the
-`R Installation and Administration Manual').
+`R Installation and Administration Manual'). Note, however, that such
+builds do not work when used in the @Rapp{} GUI.
 
 @node Internationalization of the R.app, Additional resources, Tcl/Tk issues, Top
 @chapter Internationalization of the R.app
