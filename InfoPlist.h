@@ -14,13 +14,15 @@
 
 #if RELEASE_CFG
 /* for release config just auto-detect the SDK used */
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+/* we cannot use Availability.h because of the odd processing Xcode uses here! */
+#define MIN_VER __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
+#if MIN_VER >= 1090
 #define CFG_NAME Mavericks build
-#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
+#elif MIN_VER >= 1080
 #define CFG_NAME Mountain Lion build
-#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#elif MIN_VER >= 1070
 #define CFG_NAME Lion build
-#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#elif MIN_VER >= 1060
 #define CFG_NAME Snow Leopard build
 #else /* don't bother with the real name if older - just if it's 64-bit or not */
 #if __LP64__
