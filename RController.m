@@ -2,7 +2,7 @@
  *  R.app : a Cocoa front end to: "R A Computer Language for Statistical Data Analysis"
  *  
  *  R.app Copyright notes:
- *                     Copyright (C) 2004-5  The R Foundation
+ *                     Copyright (C) 2004-14  The R Foundation
  *                     written by Stefano M. Iacus and Simon Urbanek
  *
  *                  
@@ -2367,10 +2367,20 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 }
 
 - (void) handleBusy: (BOOL) isBusy {
-    if (isBusy)
-        [progressWheel startAnimation:self];
-    else
-        [progressWheel stopAnimation:self];
+	if (isBusy) {
+		[progressWheel startAnimation:self];
+#ifdef USE_APPNAP_API
+		self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"R busy message"];
+#endif
+	} else {
+		[progressWheel stopAnimation:self];
+#ifdef USE_APPNAP_API
+		if (self.activity) {
+			[[NSProcessInfo processInfo] endActivity:self.activity];
+			self.activity = NULL;
+		}
+#endif
+	}
 	
 	busyRFlag = isBusy;
 	if (toolbarStopItem) {
