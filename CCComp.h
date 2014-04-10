@@ -26,6 +26,12 @@
 #ifndef MAC_OS_X_VERSION_10_7
 #define MAC_OS_X_VERSION_10_7 1070
 #endif
+#ifndef MAC_OS_X_VERSION_10_8
+#define MAC_OS_X_VERSION_10_8 1080
+#endif
+#ifndef MAC_OS_X_VERSION_10_9
+#define MAC_OS_X_VERSION_10_9 1090
+#endif
 
 /* the following protocols are new in 10.6 (and useful) so for older OS X we have to define them */
 #if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_6
