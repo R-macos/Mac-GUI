@@ -1620,7 +1620,7 @@
 			};
 			name = Debug;
 		};
-		D90D7C3416D7CD6400F65176 /* SnowLeopard64 */ = {
+		D90D7C3416D7CD6400F65176 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = x86_64;
@@ -1630,15 +1630,15 @@
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "SNOWLEOPARD_CFG=1";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "RELEASE_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
 				SDKROOT = "";
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
-			name = SnowLeopard64;
+			name = Release;
 		};
-		D90D7C3516D7CD6400F65176 /* SnowLeopard64 */ = {
+		D90D7C3516D7CD6400F65176 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1665,9 +1665,9 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = SnowLeopard64;
+			name = Release;
 		};
-		D90D7C3616D7CD6400F65176 /* SnowLeopard64 */ = {
+		D90D7C3616D7CD6400F65176 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1686,9 +1686,9 @@
 				);
 				ZERO_LINK = NO;
 			};
-			name = SnowLeopard64;
+			name = Release;
 		};
-		D90D7C3716D7CD6400F65176 /* SnowLeopard64 */ = {
+		D90D7C3716D7CD6400F65176 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -1706,7 +1706,7 @@
 				);
 				ZERO_LINK = NO;
 			};
-			name = SnowLeopard64;
+			name = Release;
 		};
 		D97F77CA168E24F600EB58E7 /* Lion64 */ = {
 			isa = XCBuildConfiguration;
@@ -1892,44 +1892,44 @@
 			buildConfigurations = (
 				D97F77CC168E24F600EB58E7 /* Lion64 */,
 				D9B9248016D7AA4800B56B82 /* MLion64 */,
-				D90D7C3616D7CD6400F65176 /* SnowLeopard64 */,
+				D90D7C3616D7CD6400F65176 /* Release */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = SnowLeopard64;
+			defaultConfigurationName = Release;
 		};
 		680F0B300997CE66009CDBE8 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D97F77CD168E24F600EB58E7 /* Lion64 */,
 				D9B9248116D7AA4800B56B82 /* MLion64 */,
-				D90D7C3716D7CD6400F65176 /* SnowLeopard64 */,
+				D90D7C3716D7CD6400F65176 /* Release */,
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = SnowLeopard64;
+			defaultConfigurationName = Release;
 		};
 		680F0B350997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D97F77CB168E24F600EB58E7 /* Lion64 */,
 				D9B9247F16D7AA4800B56B82 /* MLion64 */,
-				D90D7C3516D7CD6400F65176 /* SnowLeopard64 */,
+				D90D7C3516D7CD6400F65176 /* Release */,
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = SnowLeopard64;
+			defaultConfigurationName = Release;
 		};
 		680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D97F77CA168E24F600EB58E7 /* Lion64 */,
 				D9B9247E16D7AA4800B56B82 /* MLion64 */,
-				D90D7C3416D7CD6400F65176 /* SnowLeopard64 */,
+				D90D7C3416D7CD6400F65176 /* Release */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = SnowLeopard64;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

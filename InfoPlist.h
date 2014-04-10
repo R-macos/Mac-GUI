@@ -3,14 +3,33 @@
  *  R
  *
  *  Created by Simon Urbanek on 10/23/08.
- *  Copyright 2008-2013 R Foundation for Statistical Computing. All rights reserved.
+ *  Copyright 2008-2014 R Foundation for Statistical Computing. All rights reserved.
  *
  */
 
 /* GUI version as shown in infos e.g. 1.27-devel */
-#define GUI_VER 1.63
+#define GUI_VER 1.64
 /* R postfix used to denote release versions of GUI - set to R release version (e.g. 2.8.0) or to anything that will be shown in between R and GUI (e.g. - or for Mac) */
-#define R_RELEASE 3.0.3
+#define R_RELEASE for Mac OS X
+
+#if RELEASE_CFG
+/* for release config just auto-detect the SDK used */
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+#define CFG_NAME Mavericks build
+#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
+#define CFG_NAME Mountain Lion build
+#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#define CFG_NAME Lion build
+#elif MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+#define CFG_NAME Snow Leopard build
+#else /* don't bother with the real name if older - just if it's 64-bit or not */
+#if __LP64__
+#define CFG_NAME 64-bit build
+#else
+#define CFG_NAME 32-bit build
+#endif
+#endif /* older SDK */
+#endif /* RELEASE_CFG */
 
 #if LEOPARD_CFG
 #define CFG_NAME Leopard build 32-bit
