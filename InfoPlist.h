@@ -8,9 +8,9 @@
  */
 
 /* GUI version as shown in infos e.g. 1.27-devel */
-#define GUI_VER 1.64
+#define GUI_VER 1.65-dev
 /* R postfix used to denote release versions of GUI - set to R release version (e.g. 2.8.0) or to anything that will be shown in between R and GUI (e.g. - or for Mac) */
-#define R_RELEASE 3.1.0
+#define R_RELEASE for Mac OS X
 
 #if RELEASE_CFG
 /* for release config just auto-detect the SDK used */

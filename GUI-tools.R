@@ -99,7 +99,7 @@ add.fn("package.manager", function ()
     pkgs.status <- character(length(is.loaded))
     pkgs.status[which(is.loaded)] <- "loaded"
     pkgs.status[which(!is.loaded)] <- " "
-    pkgs.url <- file.path(.find.package(pkgs), "html", "00Index.html")
+    pkgs.url <- file.path(find.package(pkgs, quiet=TRUE), "html", "00Index.html")
     load.idx <-
         .Call("pkgmanager", is.loaded, pkgs, pkgs.desc, pkgs.url)
     toload <- which(load.idx & !is.loaded)

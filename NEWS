@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2014-04-16
+*	replace defunct .find.package with find.package
+
 -- Release Version 1.64 (6734) - supplied with R 3.1.0 --
 
 Last-update: 2014-04-10
