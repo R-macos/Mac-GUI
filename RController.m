@@ -3820,8 +3820,9 @@ This method calls the showHelpFor method of the Help Manager which opens
 
 - (int) helpServerPort {
 	REngine *re = [REngine mainEngine];	
-	RSEXP *x = [re evaluateString:@"tools:::httpdPort"];
 	int port = 0;
+#if R_VERSION < R_Version(3, 2, 0)
+	RSEXP *x = [re evaluateString:@"tools:::httpdPort"];
 	if (x) {
 		port = [x integer];
 		[x release];
@@ -3833,6 +3834,14 @@ This method calls the showHelpFor method of the Help Manager which opens
 		port = [x integer];
 		[x release];
 	}
+#else
+	// Since R 3.2.0 there is actually an official API to get the port and start it if needed
+	RSEXP *x = [re evaluateString:@"tools::startDynamicHelp(NA)"];
+	if (x) {
+		port = [x integer];
+		[x release];
+	}
+#endif
 	return port;
 }
 
