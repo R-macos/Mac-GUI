@@ -21,21 +21,23 @@ add.fn("print.hsearch", function (x, ...)
             writeLines(strwrap(paste("No help files found matching",
                                      sQuote(x$pattern), "using", x$type, "matching\n\n")))
         } else {
+	    ## someone changed the case of some variables in R 3.2.0 so we have to ignore it
+	    names(db) <- tolower(names(db))
             url = character(rows)
             for (i in 1:rows) {
-		lib <- dirname(db[i, "LibPath"])
+		lib <- dirname(db[i, "libpath"])
                 tmp <- as.character(help(db[i, "topic"],
-                                         package = db[i, "Package"],
+                                         package = db[i, "package"],
                                          lib.loc = lib, help_type = 'html'))
                 if (length(tmp) > 0)
                     url[i] <- gsub(lib, '/library', tmp, fixed = TRUE)
             }
             wtitle <- paste("Help topics matching", sQuote(x$pattern))
             showhelp <- which(.Call("hsbrowser", db[, "topic"],
-                                    db[, "Package"], db[, "title"],
+                                    db[, "package"], db[, "title"],
                                     wtitle, url))
             for (i in showhelp)
-                print(help(db[i, "topic"], package = db[i, "Package"]))
+                print(help(db[i, "topic"], package = db[i, "package"]))
         }
         invisible(x)
     }
