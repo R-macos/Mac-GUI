@@ -5,6 +5,10 @@ Last-update: 2015-04-20
 
 *	adapt to changed variable names in hsearch$match
 
+Last-update: 2015-04-23
+*	adapt to  .BioC_version_associated_with_R_version
+	now being a function
+
 -- Release Version 1.65 (6932) - supplied with R 3.2.0 --
 -- Release Version 1.65 (6912) - supplied with R 3.1.3 --
 -- Release Version 1.65 (6832) - supplied with R 3.1.2 --

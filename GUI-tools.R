@@ -234,7 +234,8 @@ add.fn("setBioCversion", function()
     old <- getOption('BioC.Repos')
     if(!is.null(old)) return(old)
     mirror <- getOption("BioC_mirror", "http://www.bioconductor.org")
-    ver <- as.character(tools:::.BioC_version_associated_with_R_version)
+    ## as of R 3.2.0 it is a function and not a scalar
+    ver <- as.character(if (is.function(tools:::.BioC_version_associated_with_R_version)) tools:::.BioC_version_associated_with_R_version() else tools:::.BioC_version_associated_with_R_version)
     options("BioC.Repos" = paste(mirror, "packages",
             ver, c("bioc", "data/annotation", "data/experiment", "extra"),
             sep = "/"))
