@@ -1,5 +1,16 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2016-01-18
+*	fix segfault on exceptions in the event loop due to
+	changes in R which caused the construction of the error
+	string to segfault as the GUI tried to assemble all
+	information on the error.
+
+*	fix exception in the data entry in case the OS has requested
+	data from the table after the data has been already
+	released. Apparently it can happen in more recent OS X
+	versions where the UI is released lazily. (PR#16561)
+
 -- Release Version 1.66 (7061) - supplied with R 3.2.3 --
 -- Release Version 1.66 (6996) - supplied with R 3.2.2 --
 -- Release Version 1.66 (6956) - supplied with R 3.2.1 --
