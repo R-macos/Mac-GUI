@@ -1,5 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2016-03-02
+*	Added RLogoNew.icns based on the 2015/6 R logo and containing
+        'x2' PNGs for use on retina screens.
+        (The PNGs were made with Photoshop and converted to .icns by
+	iconutil -c icns.)
+	This logo should be used with R >= 3.3.0.
+
+
 Last-update: 2016-01-18
 *	fix segfault on exceptions in the event loop due to
 	changes in R which caused the construction of the error
