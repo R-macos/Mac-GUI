@@ -1537,7 +1537,7 @@ inside such a range (go to line, find something) the folded range will be unfold
 	}
 	
 	RScriptEditorLayoutManager *layoutManager = (RScriptEditorLayoutManager*)[self layoutManager];
-	NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPointFromBase:[event locationInWindow]] inTextContainer:[self textContainer]];
+	NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:[self convertPoint:[event locationInWindow] fromView:nil] inTextContainer:[self textContainer]];
 	
 	// trigger unfolding if inside foldingAttachmentCell
 	if (glyphIndex < [layoutManager numberOfGlyphs]) {
