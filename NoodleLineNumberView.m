@@ -831,15 +831,15 @@
 		currentRuleThickness = newThickness;
 
 		// Not a good idea to resize the view during calculations (which can happen during
-		// display). Do a delayed perform (using NSInvocation since arg is a float).
-		NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(setRuleThickness:)]];
-		[invocation setSelector:@selector(setRuleThickness:)];
-		[invocation setTarget:self];
-		[invocation setArgument:&newThickness atIndex:2];
-
-		[invocation performSelector:@selector(invoke) withObject:nil afterDelay:0.0];
+		// display). Do it indirectly since NSInvocation crashes on Sierra+.
+		[self performSelector:@selector(matchRuleThickness) withObject:nil afterDelay:0.0];
 	}
 
+}
+
+- (void) matchRuleThickness
+{
+	[self setRuleThickness: currentRuleThickness];
 }
 
 - (void)updateGutterThicknessConstants

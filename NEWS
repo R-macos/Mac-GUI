@@ -1,5 +1,8 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2017-03-07
+*	Fix crash on macOS Sierra due to delayed setRuleThickness:
+
 Last-update: 2016-12-07
 *	Do not require discrete GPU on dual-GPU machines/laptops.
 	This can save battery if the system is configured to use
