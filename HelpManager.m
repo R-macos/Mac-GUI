@@ -91,7 +91,7 @@ static id sharedHMController;
 		if (!home) home = [[RController sharedController] home];
 		if ([file hasPrefix:home])
 			file = [file substringFromIndex:[home length]];
-		url = [NSString stringWithFormat:@"http://127.0.0.1:%d%@", port, file];
+		url = [NSString stringWithFormat:@"http://localhost:%d%@", port, file];
 	}
 	SLog(@"HelpManager.showHelpUsingFile:\"%@\", topic=%@, URL=%@", file, topic, url);
 	if(url != nil) {

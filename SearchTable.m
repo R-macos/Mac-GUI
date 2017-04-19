@@ -118,7 +118,7 @@ static id sharedHSController;
 			urlText = [NSString stringWithFormat:@"file://%@", urlText];
 		else {
 			if ([urlText hasPrefix:home]) urlText = [urlText substringFromIndex:[home length]];
-			urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d%@", port, urlText];
+			urlText = [NSString stringWithFormat:@"http://localhost:%d%@", port, urlText];
 		}
 	}
 	SLog(@" - invoking help sub-panel with %@", urlText);

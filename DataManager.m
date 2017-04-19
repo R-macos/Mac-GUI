@@ -221,7 +221,7 @@ static DataManager* sharedController;
 	if (r.length > 0 && [topic length] - r.length > 3) // some datasets have the topic in parents
 		topic = [topic substringWithRange: NSMakeRange(r.location + 2, [topic length] - r.location - 3)];
 
-	urlText = [NSString stringWithFormat:@"http://127.0.0.1:%d/library/%@/html/%@.html", port, [selectedItem objectForKey:kDataManagerPackage], topic];
+	urlText = [NSString stringWithFormat:@"http://localhost:%d/library/%@/html/%@.html", port, [selectedItem objectForKey:kDataManagerPackage], topic];
 
 	[[dataInfoView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlText]]];
 

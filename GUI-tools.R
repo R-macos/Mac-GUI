@@ -208,15 +208,12 @@ add.fn("quit", function (save = "default", status = 0, runLast = TRUE)
 
 
 add.fn("aqua.browser", function(x, ...) {
+    ## El Capitan has a bug in ATS that makes it impossible to white-list 127.0.0.1 so we have to use localhost
+    x <- gsub("http://127.0.0.1", "http://localhost", x, fixed=TRUE)
     .Call("aqua.custom.print", "help-files", x)
     invisible(x)})
 
-add.fn("main.help.url",
-       function() help.start(browser = function(x, ...) {
-           .Call("aqua.custom.print", "help-files", x)
-           invisible(x)
-       })
-)
+add.fn("main.help.url", function() help.start(browser = aqua.browser))
 
 add.fn("wsbrowser", function(IDS, IsRoot, Container, ItemsPerContainer,
                             ParentID, NAMES, TYPES, DIMS)
