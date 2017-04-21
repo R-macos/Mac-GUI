@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.70 (7338) - supplied with R 3.4.0 --
+
 Last-update: 2017-04-19
 *	Add local help server to transport security exception list
 	such that help work on macOS 10.11 and higher.
