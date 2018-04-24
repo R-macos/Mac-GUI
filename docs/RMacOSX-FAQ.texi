@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2018
-@set FAQ-VERSION 3.4.4 @value{FAQ-YEAR}-03-15
-@set REL-VERSION 3.4.4
-@set GUI-VERSION 1.70
+@set FAQ-VERSION 3.5.0 @value{FAQ-YEAR}-04-23
+@set REL-VERSION 3.5.0
+@set GUI-VERSION 1.71
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -104,6 +104,112 @@ Brian Ripley                     @*
 * Additional resources::        
 * Acknowledgments::             
 * Miscellaneous questions::     
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+Introduction
+
+* How many versions of R for Mac OS X?::  
+* What machines does R for Mac OS X run on?::  
+* How can R for Mac OS X be obtained and installed?::  
+
+R.app
+
+* How to get R.app::            
+* How to install the R.app::    
+* The R Console::               
+* General Features::            
+* The Menus::                   
+* Preferences::                 
+* R.app Bugs::                  
+
+The R Console
+
+* The Input and the Output::    
+* Copy and Paste::              
+* The current and startup working directories::  
+* Resizing the R Console::      
+* R Console text colors::       
+
+General Features
+
+* Editor::                      
+* Editor undo and line numbers::  
+* Editor text completion::      
+* Editor function list::        
+* Editor syntax coloring::      
+* Editor (internal and external)::  
+* Editor help::                 
+* Drag & drop::                 
+* Help system::                 
+* History::                     
+* Authentication and .libPaths::  
+
+The Menus
+
+* Application Menu::            
+* File Menu::                   
+* Edit Menu::                   
+* Misc Menu::                   
+* Workspace Menu::              
+* Packages Menu::               
+* The Help Menu::               
+
+Preferences
+
+* Startup::                     
+
+Startup
+
+* Editor Preferences::          
+* Syntax Colors::               
+* Console Colors::              
+* Quartz window::               
+
+How to install packages
+
+* Which kind of packages can I install using the GUI?::  
+* Installation of packages::    
+* Installation of source packages::  
+* Where are the packages I've installed?::  
+
+R and external applications
+
+* AppleScript support::         
+* External editors::            
+* Finder actions::              
+
+Quartz device
+
+* Interactive mode::            
+* Saving the image::            
+* Copying the image into the clipboard::  
+
+Additional resources
+
+* Apple Developer Connection::  
+* The R for Mac OS X Developer page::  
+
+Miscellaneous questions
+
+* How can I have a per session .Rprofile?::  
+* What happens if I drag a file on the R icon?::  
+* How can I interrupt lengthy operations or output?::  
+* I see spurious error messages when starting R!::  
+* Which BLAS is used and how can it be changed?::  
+* I don't see a thing when installing packages!::  
+* Why are there faint lines in image plots?::  
+* Why doesn't R GUI support keyboard shortcut XYZ ?::  
+* What is the difference between the CRAN build and a vanilla build?::  
+* Why is R.home() not versioned?::  
+* R.app GUI crashes on startup!::  
+* Why is the GUI not saving my history?::  
+* I get ``command not found'' in the GUI yet it works in the Terminal -- why?::  
+* I see no text in a Quartz plot!::  
+* I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::  
+
+@end detailmenu
 @end menu
 
 @node Introduction, R.app, Top, Top
@@ -517,13 +623,9 @@ You can set several aspects of the @R{} GUI via preferences. You can access the 
 
 @menu
 * Startup::                     
-* Editor Preferences::          
-* Syntax Colors::               
-* Console Colors::              
-* Quartz window::               
 @end menu
 
-@node Startup, Editor Preferences, Preferences, Preferences
+@node Startup,  , Preferences, Preferences
 @subsection Startup
 The Drag & drop section defines drag & drop behaviour during R
 start-up. Options are to open file in an editor or to source
@@ -547,7 +649,14 @@ entries, to cleanup history entries (this is very useful to remove blank
 lines when submitting multiple lines using Command-Return) and the strip
 comments before the entry is added to the history.
 
-@node Editor Preferences, Syntax Colors, Startup, Preferences
+@menu
+* Editor Preferences::          
+* Syntax Colors::               
+* Console Colors::              
+* Quartz window::               
+@end menu
+
+@node Editor Preferences, Syntax Colors, Startup, Startup
 @subsubsection Editor Preferences
 If Built-in editor is selected, allows enable/disable of syntax
 coloring, brace highlighting and the showing of line numbers. If
@@ -562,15 +671,15 @@ i.e. AppleScript. The external editor can be any application
 activated through a shell script (e.g.@: see or smultron, both give better
 control on how to start the editor).
 					
-@node Syntax Colors, Console Colors, Editor Preferences, Preferences
+@node Syntax Colors, Console Colors, Editor Preferences, Startup
 @subsubsection Syntax Colors
 Enables to select the syntax colors.
 
-@node Console Colors, Quartz window, Syntax Colors, Preferences
+@node Console Colors, Quartz window, Syntax Colors, Startup
 @subsubsection Console Colors
 Enables to select the input/output colors in R Console.
 
-@node Quartz window,  , Console Colors, Preferences
+@node Quartz window,  , Console Colors, Startup
 @subsubsection Quartz window
 Currently the the Quartz preference pane is not being used.
 
@@ -982,6 +1091,7 @@ random order. Last but not least Apple for amazing OS and GUI.
 * Why is the GUI not saving my history?::  
 * I get ``command not found'' in the GUI yet it works in the Terminal -- why?::  
 * I see no text in a Quartz plot!::  
+* I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Miscellaneous questions, Miscellaneous questions
@@ -1214,7 +1324,7 @@ add more elaborate constructs to @code{.Rprofile} instead if you wish to
 selectively modify the existing @code{PATH} variable via
 @code{Sys.getenv} and @code{Sys.setenv}.
 
-@node I see no text in a Quartz plot!,  , I get ``command not found'' in the GUI yet it works in the Terminal -- why?, Miscellaneous questions
+@node I see no text in a Quartz plot!, I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, I get ``command not found'' in the GUI yet it works in the Terminal -- why?, Miscellaneous questions
 @section I see no text in a Quartz plot!
 
 Typically this means that you have corrupted fonts in your system. Open
@@ -1222,6 +1332,11 @@ the @code{Font Book} application (in @code{Applications}) and check the
 fonts that you are using (for example the default font in Quartz is
 currently ``Arial'').  Corrupted fonts will have no glyphs (text will not
 appear as it should), remove such fonts.
+
+@node I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?,  , I see no text in a Quartz plot!, Miscellaneous questions
+@section I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?
+
+CRAN binaries for the El Capitan build (the main build since R 3.4.0) come with OpenMP support (it is a way to parallelize many operations and thus make R faster), which is only available in recent Clang compilers. In order to compile packages you must install a Clang compiler with OpenMP support, we provide one in the tools section on CRAN: @uref{https://cran.r-project.org/bin/macosx/tools/}. Apple's Clang that comes with Xcode does not support OpenMP and thus cannot be used. For details please see the instructions on the aforementioned CRAN tools page -- for example, if you use our clang binary then you can set @code{PATH=/usr/local/clang6/bin:$PATH} or set the full paths to the tools in @code{~/.R/Makevars}. If you see the error @code{clang: error: unsupported option '-fopenmp'} then you are not using the correct clang compiler.
 
 @bye
 
