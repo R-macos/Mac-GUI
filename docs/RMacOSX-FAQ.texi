@@ -4,8 +4,8 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2019
-@set FAQ-VERSION 3.5.3 @value{FAQ-YEAR}-03-11
-@set REL-VERSION 3.5.3
+@set FAQ-VERSION 3.6.0 @value{FAQ-YEAR}-04-26
+@set REL-VERSION 3.6.0
 @set GUI-VERSION 1.70
 @documentlanguage en
 @documentencoding ISO-8859-1
@@ -277,7 +277,7 @@ privileges.  The installation can be customized, but the default is
 suitable for most users.
 
 Snapshots of the R-patched and R-devel flavours are available at
-@uref{http://r.research.att.com/}, packaged in the same way.
+@uref{http://mac.R-project.org/}, packaged in the same way.
 
 Further details, including uninstallation and building @R{} from the
 sources, are in the `R Installation and Administration Manual'.
@@ -316,7 +316,7 @@ framework and @Rapp{}.
 Development versions of @Rapp{} are made available on daily basis in the
 form of a disk image containing the @Rapp{} itself. See the Mac OS X
 pages on @CRAN{} for detail how to obtain such snapshots (currently at
-@uref{http://R.research.att.com/}).
+@uref{http://mac.R-project.org/}).
 
 @node How to install the R.app, The R Console, How to get R.app, R.app
 @section How to install the R.app
@@ -1065,7 +1065,7 @@ distributed through the App Store.
 @node The R for Mac OS X Developer page,  , Apple Developer Connection, Additional resources
 @section The R for Mac OS X Developer page
 There is a page dedicated to development versions for R for Mac OS X. This page is located at
-@uref{http://R.research.att.com/} and is maintained by Simon Urbanek.
+@uref{http://mac.R-project.org/} and is maintained by Simon Urbanek.
 It contains latest nightly builds of @R{} and @Rapp{} as well as information on tools necessary to build R.
 
 @node Acknowledgments, Miscellaneous questions, Additional resources, Top
@@ -1092,6 +1092,7 @@ random order. Last but not least Apple for amazing OS and GUI.
 * I get ``command not found'' in the GUI yet it works in the Terminal -- why?::  
 * I see no text in a Quartz plot!::  
 * I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::  
+* I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?::  
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Miscellaneous questions, Miscellaneous questions
@@ -1242,7 +1243,7 @@ The advantage of this setup is that it is possible to install multiple R
 versions in parallel and they all will be fully functional as long as
 the @code{Current} symbolic link points to the currently used
 version. There is even a small GUI utility @code{RSwitch} available from
-the @uref{http://r.research.att.com/, R for Mac devel page} that allows
+the @uref{http://mac.R-project.org/, R for Mac devel page} that allows
 you to select the desired version. In addition, any application
 embedding R can choose to use a specific R version (in most cases) or
 any version.  Note that @Rapp{} is compiled against a particular version
@@ -1333,10 +1334,15 @@ fonts that you are using (for example the default font in Quartz is
 currently ``Arial'').  Corrupted fonts will have no glyphs (text will not
 appear as it should), remove such fonts.
 
-@node I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?,  , I see no text in a Quartz plot!, Miscellaneous questions
+@node I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?, I see no text in a Quartz plot!, Miscellaneous questions
 @section I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?
 
-CRAN binaries for the El Capitan build (the main build since R 3.4.0) come with OpenMP support (it is a way to parallelize many operations and thus make R faster), which is only available in recent Clang compilers. In order to compile packages you must install a Clang compiler with OpenMP support, we provide one in the tools section on CRAN: @uref{https://cran.r-project.org/bin/macosx/tools/}. Apple's Clang that comes with Xcode does not support OpenMP and thus cannot be used. For details please see the instructions on the aforementioned CRAN tools page -- for example, if you use our clang binary then you can set @code{PATH=/usr/local/clang6/bin:$PATH} or set the full paths to the tools in @code{~/.R/Makevars}. If you see the error @code{clang: error: unsupported option '-fopenmp'} then you are not using the correct clang compiler.
+CRAN binaries for the El Capitan build (the main build since R 3.4.0) come with OpenMP support (it is a way to parallelize many operations and thus make R faster), which is only available in recent Clang compilers. In order to compile packages you must install a Clang compiler with OpenMP support, we provide one in the tools section on CRAN: @uref{https://cran.r-project.org/bin/macosx/tools/}. Apple's Clang that comes with Xcode does not support OpenMP and thus cannot be used. For details please see the instructions on the aforementioned CRAN tools page -- for example, if you use our clang binary then you can set @code{PATH=/usr/local/clang7/bin:$PATH} or set the full paths to the tools in @code{~/.R/Makevars}. If you see the error @code{clang: error: unsupported option '-fopenmp'} then you are not using the correct clang compiler.
+
+@node I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?,  , I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, Miscellaneous questions
+@section I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?
+
+It means you are using more recent SDK to compile packages than your machine supports, in particular using Mac OS X 10.11 with 10.12 SDK. By default, the SDK used by command line tools is in @file{/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk}. Check @file{/Library/Developer/CommandLineTools/SDKs} and make sure the SDK does not have a higher version than your macOS. If it does, you have to get the SDK which matches your OS X version. Alternatively, you can remove the @code{-isysroot} flag from R's compilation flags (if present) and use non-Apple clang compiler (see previous section).
 
 @bye
 
