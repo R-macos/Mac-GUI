@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -1105,9 +1105,10 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0820;
 			};
 			buildConfigurationList = 680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -1582,6 +1583,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1592,6 +1594,7 @@
 					"-framework",
 					R,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.R-project.R";
 				PRODUCT_NAME = R;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -1605,9 +1608,27 @@
 		680F0B3D0997CE66009CDBE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
@@ -1623,16 +1644,32 @@
 		D90D7C3416D7CD6400F65176 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = x86_64;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
 				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "RELEASE_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = "";
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1650,12 +1687,14 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-F/Library/Frameworks",
 					"-framework",
 					R,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.R-project.R";
 				PRODUCT_NAME = R;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
@@ -1708,190 +1747,12 @@
 			};
 			name = Release;
 		};
-		D97F77CA168E24F600EB58E7 /* Lion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = x86_64;
-				COPY_PHASE_STRIP = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
-				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
-				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = macosx10.7;
-				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
-				STRIP_INSTALLED_PRODUCT = NO;
-			};
-			name = Lion64;
-		};
-		D97F77CB168E24F600EB58E7 /* Lion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = R_Prefix.pch;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Applications;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-F/Library/Frameworks",
-					"-framework",
-					R,
-				);
-				PRODUCT_NAME = R;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wall",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Lion64;
-		};
-		D97F77CC168E24F600EB58E7 /* Lion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = sush;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Lion64;
-		};
-		D97F77CD168E24F600EB58E7 /* Lion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Docs;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Lion64;
-		};
-		D9B9247E16D7AA4800B56B82 /* MLion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = x86_64;
-				COPY_PHASE_STRIP = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = USE_POOLS;
-				HEADER_SEARCH_PATHS = /Library/Frameworks/R.framework/Headers;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
-				INFOPLIST_PREFIX_HEADER = InfoPlist.h;
-				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "LEOPARD64_CFG=1";
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
-				SDKROOT = macosx10.8;
-				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
-				STRIP_INSTALLED_PRODUCT = NO;
-			};
-			name = MLion64;
-		};
-		D9B9247F16D7AA4800B56B82 /* MLion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = R_Prefix.pch;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = /Applications;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-F/Library/Frameworks",
-					"-framework",
-					R,
-				);
-				PRODUCT_NAME = R;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wall",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = MLion64;
-		};
-		D9B9248016D7AA4800B56B82 /* MLion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				INSTALL_PATH = /usr/local/bin;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = sush;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = MLion64;
-		};
-		D9B9248116D7AA4800B56B82 /* MLion64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = Docs;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				ZERO_LINK = NO;
-			};
-			name = MLion64;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		680F0B2B0997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "sush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D97F77CC168E24F600EB58E7 /* Lion64 */,
-				D9B9248016D7AA4800B56B82 /* MLion64 */,
 				D90D7C3616D7CD6400F65176 /* Release */,
 				680F0B2E0997CE66009CDBE8 /* Debug */,
 			);
@@ -1901,8 +1762,6 @@
 		680F0B300997CE66009CDBE8 /* Build configuration list for PBXAggregateTarget "Docs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D97F77CD168E24F600EB58E7 /* Lion64 */,
-				D9B9248116D7AA4800B56B82 /* MLion64 */,
 				D90D7C3716D7CD6400F65176 /* Release */,
 				680F0B330997CE66009CDBE8 /* Debug */,
 			);
@@ -1912,8 +1771,6 @@
 		680F0B350997CE66009CDBE8 /* Build configuration list for PBXNativeTarget "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D97F77CB168E24F600EB58E7 /* Lion64 */,
-				D9B9247F16D7AA4800B56B82 /* MLion64 */,
 				D90D7C3516D7CD6400F65176 /* Release */,
 				680F0B380997CE66009CDBE8 /* Debug */,
 			);
@@ -1923,8 +1780,6 @@
 		680F0B3A0997CE66009CDBE8 /* Build configuration list for PBXProject "R" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D97F77CA168E24F600EB58E7 /* Lion64 */,
-				D9B9247E16D7AA4800B56B82 /* MLion64 */,
 				D90D7C3416D7CD6400F65176 /* Release */,
 				680F0B3D0997CE66009CDBE8 /* Debug */,
 			);
