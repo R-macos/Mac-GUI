@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2020-03-05
+*	Upgraded project and XIBs to Xcode 8.0 and higher.
+	Removed obsolete targets, set minimum to macOS 10.11.
+
+
 -- Release Version 1.70 (7735) - supplied with R 3.6.2 --
 -- Release Version 1.70 (7685) - supplied with R 3.6.1 --
 -- Release Version 1.70 (7657) - supplied with R 3.6.0 --
@@ -15,7 +20,7 @@ NEWS for R.app GUI for Mac OS X
 
 Last-update: 2017-04-19
 *	Add local help server to transport security exception list
-	such that help work on macOS 10.11 and higher.
+	such that help works on macOS 10.11 and higher.
 
 
 -- Release Version 1.69 (7328) - supplied with R 3.3.3 --
