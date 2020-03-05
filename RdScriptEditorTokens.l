@@ -39,7 +39,7 @@
 #import "RdScriptEditorTokens.h"
 
 size_t utf8strlenRd(const char * _s);
-size_t yyuoffset, yyuleng;
+extern size_t yyuoffset, yyuleng;
 
 //keep track of the current utf-8 character (not byte) offset and token length
 #define YY_USER_ACTION { yyuoffset += yyuleng; yyuleng = utf8strlenRd(yytext); }
