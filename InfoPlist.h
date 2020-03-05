@@ -8,15 +8,23 @@
  */
 
 /* GUI version as shown in infos e.g. 1.27-devel */
-#define GUI_VER 1.70
+#define GUI_VER 1.71-devel
 /* R postfix used to denote release versions of GUI - set to R release version (e.g. 2.8.0) or to anything that will be shown in between R and GUI (e.g. - or for Mac) */
-#define R_RELEASE 3.6.2
+#define R_RELEASE for macOS
 
 #if RELEASE_CFG
 /* for release config just auto-detect the SDK used */
 /* we cannot use Availability.h because of the odd processing Xcode uses here! */
 #define MIN_VER __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
-#if MIN_VER >= 1011
+#if MIN_VER >= 1015
+#define CFG_NAME Catalina build
+#elif MIN_VER >= 1014
+#define CFG_NAME Mojave build
+#elif MIN_VER >= 1013
+#define CFG_NAME High Sierra build
+#elif MIN_VER >= 1012
+#define CFG_NAME Sierra build
+#elif MIN_VER >= 1011
 #define CFG_NAME El Capitan build
 #elif MIN_VER >= 1010
 #define CFG_NAME Yosemite build
