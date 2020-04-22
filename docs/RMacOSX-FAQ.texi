@@ -3,10 +3,10 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2019
-@set FAQ-VERSION 3.6.2 @value{FAQ-YEAR}-12-12
-@set REL-VERSION 3.6.2
-@set GUI-VERSION 1.70
+@set FAQ-YEAR 2020
+@set FAQ-VERSION 4.0.0 @value{FAQ-YEAR}-04-22
+@set REL-VERSION 4.0.0
+@set GUI-VERSION 1.71
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -94,120 +94,122 @@ Brian Ripley                     @*
 @end ifnottex
 
 @menu
-* Introduction::                
-* R.app::                       
-* How to install packages::     
-* R and external applications::  
-* Quartz device::               
-* Tcl/Tk issues::               
-* Internationalization of the R.app::  
-* Additional resources::        
-* Acknowledgments::             
-* Miscellaneous questions::     
+* Introduction::
+* R.app::
+* How to install packages::
+* R and external applications::
+* Quartz device::
+* Tcl/Tk issues::
+* Internationalization of the R.app::
+* Additional resources::
+* Acknowledgments::
+* Miscellaneous questions::
 
 @detailmenu
  --- The Detailed Node Listing ---
 
 Introduction
 
-* How many versions of R for Mac OS X?::  
-* What machines does R for Mac OS X run on?::  
-* How can R for Mac OS X be obtained and installed?::  
+* How many versions of R for Mac OS X?::
+* What machines does R for Mac OS X run on?::
+* How can R for Mac OS X be obtained and installed?::
 
 R.app
 
-* How to get R.app::            
-* How to install the R.app::    
-* The R Console::               
-* General Features::            
-* The Menus::                   
-* Preferences::                 
-* R.app Bugs::                  
+* How to get R.app::
+* How to install the R.app::
+* The R Console::
+* General Features::
+* The Menus::
+* Preferences::
+* R.app Bugs::
 
 The R Console
 
-* The Input and the Output::    
-* Copy and Paste::              
-* The current and startup working directories::  
-* Resizing the R Console::      
-* R Console text colors::       
+* The Input and the Output::
+* Copy and Paste::
+* The current and startup working directories::
+* Resizing the R Console::
+* R Console text colors::
 
 General Features
 
-* Editor::                      
-* Editor undo and line numbers::  
-* Editor text completion::      
-* Editor function list::        
-* Editor syntax coloring::      
-* Editor (internal and external)::  
-* Editor help::                 
-* Drag & drop::                 
-* Help system::                 
-* History::                     
-* Authentication and .libPaths::  
+* Editor::
+* Editor undo and line numbers::
+* Editor text completion::
+* Editor function list::
+* Editor syntax coloring::
+* Editor (internal and external)::
+* Editor help::
+* Drag & drop::
+* Help system::
+* History::
+* Authentication and .libPaths::
 
 The Menus
 
-* Application Menu::            
-* File Menu::                   
-* Edit Menu::                   
-* Misc Menu::                   
-* Workspace Menu::              
-* Packages Menu::               
-* The Help Menu::               
+* Application Menu::
+* File Menu::
+* Edit Menu::
+* Misc Menu::
+* Workspace Menu::
+* Packages Menu::
+* The Help Menu::
 
 Preferences
 
-* Startup::                     
+* Startup::
 
 Startup
 
-* Editor Preferences::          
-* Syntax Colors::               
-* Console Colors::              
-* Quartz window::               
+* Editor Preferences::
+* Syntax Colors::
+* Console Colors::
+* Quartz window::
 
 How to install packages
 
-* Which kind of packages can I install using the GUI?::  
-* Installation of packages::    
-* Installation of source packages::  
-* Where are the packages I've installed?::  
+* Which kind of packages can I install using the GUI?::
+* Installation of packages::
+* Installation of source packages::
+* Where are the packages I've installed?::
 
 R and external applications
 
-* AppleScript support::         
-* External editors::            
-* Finder actions::              
+* AppleScript support::
+* External editors::
+* Finder actions::
 
 Quartz device
 
-* Interactive mode::            
-* Saving the image::            
-* Copying the image into the clipboard::  
+* Interactive mode::
+* Saving the image::
+* Copying the image into the clipboard::
 
 Additional resources
 
-* Apple Developer Connection::  
-* The R for Mac OS X Developer page::  
+* Apple Developer Connection::
+* The R for Mac OS X Developer page::
 
 Miscellaneous questions
 
-* How can I have a per session .Rprofile?::  
-* What happens if I drag a file on the R icon?::  
-* How can I interrupt lengthy operations or output?::  
-* I see spurious error messages when starting R!::  
-* Which BLAS is used and how can it be changed?::  
-* I don't see a thing when installing packages!::  
-* Why are there faint lines in image plots?::  
-* Why doesn't R GUI support keyboard shortcut XYZ ?::  
-* What is the difference between the CRAN build and a vanilla build?::  
-* Why is R.home() not versioned?::  
-* R.app GUI crashes on startup!::  
-* Why is the GUI not saving my history?::  
-* I get ``command not found'' in the GUI yet it works in the Terminal -- why?::  
-* I see no text in a Quartz plot!::  
-* I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::  
+* How can I have a per session .Rprofile?::
+* What happens if I drag a file on the R icon?::
+* How can I interrupt lengthy operations or output?::
+* I see spurious error messages when starting R!::
+* Which BLAS is used and how can it be changed?::
+* I don't see a thing when installing packages!::
+* Why are there faint lines in image plots?::
+* Why doesn't R GUI support keyboard shortcut XYZ ?::
+* What is the difference between the CRAN build and a vanilla build?::
+* Why is R.home() not versioned?::
+* R.app GUI crashes on startup!::
+* Why is the GUI not saving my history?::
+* I get ``command not found'' in the GUI yet it works in the Terminal -- why?::
+* I see no text in a Quartz plot!::
+* I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::
+* I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?::
+* I cannot attach debugger to R::
 
 @end detailmenu
 @end menu
@@ -242,9 +244,9 @@ sections. @emph{Always read this FAQ before asking for help on
 R-SIG-Mac!}
 
 @menu
-* How many versions of R for Mac OS X?::  
-* What machines does R for Mac OS X run on?::  
-* How can R for Mac OS X be obtained and installed?::  
+* How many versions of R for Mac OS X?::
+* What machines does R for Mac OS X run on?::
+* How can R for Mac OS X be obtained and installed?::
 @end menu
 
 @node How many versions of R for Mac OS X?, What machines does R for Mac OS X run on?, Introduction, Introduction
@@ -286,13 +288,13 @@ sources, are in the `R Installation and Administration Manual'.
 @node R.app, How to install packages, Introduction, Top
 @chapter R.app
 @menu
-* How to get R.app::            
-* How to install the R.app::    
-* The R Console::               
-* General Features::            
-* The Menus::                   
-* Preferences::                 
-* R.app Bugs::                  
+* How to get R.app::
+* How to install the R.app::
+* The R Console::
+* General Features::
+* The Menus::
+* Preferences::
+* R.app Bugs::
 @end menu
 
 @Rapp{} is the name of the GUI for Mac OS X that was introduced in R
@@ -333,11 +335,11 @@ Please, carefully read the note on the usage of tcltk and Fortran on the @file{b
 In this section you'll find general information on the @Rapp{}. For specific @R{} tasks that
 can be done via the @Rapp{} using menus you should read below (@pxref{The Menus}). 
 @menu
-* The Input and the Output::    
-* Copy and Paste::              
-* The current and startup working directories::  
-* Resizing the R Console::      
-* R Console text colors::       
+* The Input and the Output::
+* Copy and Paste::
+* The current and startup working directories::
+* Resizing the R Console::
+* R Console text colors::
 @end menu
 
 
@@ -374,17 +376,17 @@ Use the Preferences window to set the R Console text colors (@pxref{Preferences}
 @node General Features, The Menus, The R Console, R.app
 @section General Features
 @menu
-* Editor::                      
-* Editor undo and line numbers::  
-* Editor text completion::      
-* Editor function list::        
-* Editor syntax coloring::      
-* Editor (internal and external)::  
-* Editor help::                 
-* Drag & drop::                 
-* Help system::                 
-* History::                     
-* Authentication and .libPaths::  
+* Editor::
+* Editor undo and line numbers::
+* Editor text completion::
+* Editor function list::
+* Editor syntax coloring::
+* Editor (internal and external)::
+* Editor help::
+* Drag & drop::
+* Help system::
+* History::
+* Authentication and .libPaths::
 @end menu
 
 @node Editor, Editor undo and line numbers, General Features, General Features
@@ -507,13 +509,13 @@ directory will be used.
 @node The Menus, Preferences, General Features, R.app
 @section The Menus
 @menu
-* Application Menu::            
-* File Menu::                   
-* Edit Menu::                   
-* Misc Menu::                   
-* Workspace Menu::              
-* Packages Menu::               
-* The Help Menu::               
+* Application Menu::
+* File Menu::
+* Edit Menu::
+* Misc Menu::
+* Workspace Menu::
+* Packages Menu::
+* The Help Menu::
 @end menu
 
 @node Application Menu, File Menu, The Menus, The Menus
@@ -622,7 +624,7 @@ You can set several aspects of the @R{} GUI via preferences. You can access the 
 @R{} Console is open.
 
 @menu
-* Startup::                     
+* Startup::
 @end menu
 
 @node Startup,  , Preferences, Preferences
@@ -650,10 +652,10 @@ lines when submitting multiple lines using Command-Return) and the strip
 comments before the entry is added to the history.
 
 @menu
-* Editor Preferences::          
-* Syntax Colors::               
-* Console Colors::              
-* Quartz window::               
+* Editor Preferences::
+* Syntax Colors::
+* Console Colors::
+* Quartz window::
 @end menu
 
 @node Editor Preferences, Syntax Colors, Startup, Startup
@@ -712,10 +714,10 @@ discuss here only the GUI interface to the standard @R{} functions like
 documentation.
 
 @menu
-* Which kind of packages can I install using the GUI?::  
-* Installation of packages::    
-* Installation of source packages::  
-* Where are the packages I've installed?::  
+* Which kind of packages can I install using the GUI?::
+* Installation of packages::
+* Installation of source packages::
+* Where are the packages I've installed?::
 @end menu
 
 @node Which kind of packages can I install using the GUI?, Installation of packages, How to install packages, How to install packages
@@ -844,9 +846,9 @@ current defaults by issuing
 @chapter R and external applications
 
 @menu
-* AppleScript support::         
-* External editors::            
-* Finder actions::              
+* AppleScript support::
+* External editors::
+* Finder actions::
 @end menu
 
 @node AppleScript support, External editors, R and external applications, R and external applications
@@ -946,9 +948,9 @@ device.
 
  
 @menu
-* Interactive mode::            
-* Saving the image::            
-* Copying the image into the clipboard::  
+* Interactive mode::
+* Saving the image::
+* Copying the image into the clipboard::
 @end menu
 
 @node Interactive mode, Saving the image, Quartz device, Quartz device
@@ -1048,8 +1050,8 @@ please read the developer documentation at
 Here are few references that can be of interest for Mac OS X and/or developers.
 
 @menu
-* Apple Developer Connection::  
-* The R for Mac OS X Developer page::  
+* Apple Developer Connection::
+* The R for Mac OS X Developer page::
 @end menu
 
 @node Apple Developer Connection, The R for Mac OS X Developer page, Additional resources, Additional resources
@@ -1077,22 +1079,23 @@ random order. Last but not least Apple for amazing OS and GUI.
 @node Miscellaneous questions,  , Acknowledgments, Top
 @chapter Miscellaneous questions
 @menu
-* How can I have a per session .Rprofile?::  
-* What happens if I drag a file on the R icon?::  
-* How can I interrupt lengthy operations or output?::  
-* I see spurious error messages when starting R!::  
-* Which BLAS is used and how can it be changed?::  
-* I don't see a thing when installing packages!::  
-* Why are there faint lines in image plots?::  
-* Why doesn't R GUI support keyboard shortcut XYZ ?::  
-* What is the difference between the CRAN build and a vanilla build?::  
-* Why is R.home() not versioned?::  
-* R.app GUI crashes on startup!::  
-* Why is the GUI not saving my history?::  
-* I get ``command not found'' in the GUI yet it works in the Terminal -- why?::  
-* I see no text in a Quartz plot!::  
-* I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::  
-* I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?::  
+* How can I have a per session .Rprofile?::
+* What happens if I drag a file on the R icon?::
+* How can I interrupt lengthy operations or output?::
+* I see spurious error messages when starting R!::
+* Which BLAS is used and how can it be changed?::
+* I don't see a thing when installing packages!::
+* Why are there faint lines in image plots?::
+* Why doesn't R GUI support keyboard shortcut XYZ ?::
+* What is the difference between the CRAN build and a vanilla build?::
+* Why is R.home() not versioned?::
+* R.app GUI crashes on startup!::
+* Why is the GUI not saving my history?::
+* I get ``command not found'' in the GUI yet it works in the Terminal -- why?::
+* I see no text in a Quartz plot!::
+* I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?::
+* I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?::
+* I cannot attach debugger to R::
 @end menu
 
 @node How can I have a per session .Rprofile?, What happens if I drag a file on the R icon?, Miscellaneous questions, Miscellaneous questions
@@ -1339,10 +1342,24 @@ appear as it should), remove such fonts.
 
 CRAN binaries for the El Capitan build (the main build since R 3.4.0) come with OpenMP support (it is a way to parallelize many operations and thus make R faster), which is only available in recent Clang compilers. In order to compile packages you must install a Clang compiler with OpenMP support, we provide one in the tools section on CRAN: @uref{https://cran.r-project.org/bin/macosx/tools/}. Apple's Clang that comes with Xcode does not support OpenMP and thus cannot be used. For details please see the instructions on the aforementioned CRAN tools page -- for example, if you use our clang binary then you can set @code{PATH=/usr/local/clang7/bin:$PATH} or set the full paths to the tools in @code{~/.R/Makevars}. If you see the error @code{clang: error: unsupported option '-fopenmp'} then you are not using the correct clang compiler.
 
-@node I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?,  , I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, Miscellaneous questions
+@node I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?, I cannot attach debugger to R, I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, Miscellaneous questions
 @section I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?
 
 It means you are using more recent SDK to compile packages than your machine supports, in particular using Mac OS X 10.11 with 10.12 SDK. By default, the SDK used by command line tools is in @file{/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk}. Check @file{/Library/Developer/CommandLineTools/SDKs} and make sure the SDK does not have a higher version than your macOS. If it does, you have to get the SDK which matches your OS X version. Alternatively, you can remove the @code{-isysroot} flag from R's compilation flags (if present) and use non-Apple clang compiler (see previous section).
+
+@node I cannot attach debugger to R,  , I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?, Miscellaneous questions
+@section I cannot attach debugger to R
+
+R processes installed using Apple installer since R 3.6.3 cannot be attached to by debuggers. This is a limitation introduced by Apple as a security measure. Since January 2020 Apple requires all notarized applications to use ``Hardened Runtime'' @uref{https://developer.apple.com/documentation/security/hardened_runtime} and one of the implications is that such processes cannot be tampered with by debuggers. Therefore official R installers have to use hardened runtime as Apple will no longer allow installation of software that is not notarized.
+
+In order to debug R code or packages, you can use R binaries that don't use hardened runtime and are not notarized. Since R 4.0.0 such binaries are available in tar-balls at @uref{https://mac.R-project.org/} and can be installed by unpacking into @code{/}, e.g.:
+
+@example
+curl -LO http://mac.r-project.org/high-sierra/R-4.0-branch/x86_64/R-4.0-branch.tar.gz
+tar fxz R-4.0-branch.tar.gz -C /
+@end example
+
+If you are not the administrator, you may have to use @code{sudo tar ...}.
 
 @bye
 
