@@ -738,7 +738,7 @@ Binary packages are @R{} packages in ready-to-use form, such that no
 additional tools are necessary for their use. Binary packages are
 specific for a given @R{} version and OS. @CRAN{} and Bioconductor
 repositories offer @R{} packages in binary form for the last released
-@R{} version. Unlike on other Unix systems, R for Mac OS X installs
+@R{} version. Unlike on other Unix systems, @CRAN{} @R{} for Mac OS X installs
 binary packages by default, i.e. @code{install.packages} will look for
 binary repositories unless instructed otherwise.
 
@@ -1228,7 +1228,16 @@ i.e., a simple @code{./configure && make && make install}. The default
 package type for all builds compiled from sources is @code{"source"}
 wheres @CRAN{} uses binary packages.  Only the @CRAN{} build is
 guaranteed to be compatible with the package binaries on @CRAN{} (or
-Bioconductor).
+Bioconductor). The exact flags used by @CRAN{} are avaiable in the
+@R{} SVN repository of the @CRAN{} build system as @code{conf.}xxx
+files. For R 4.0.0 and higher this is
+@uref{https://svn.r-project.org/R-dev-web/trunk/QA/Simon/R4}
+and for older versions
+@uref{https://svn.r-project.org/R-dev-web/trunk/QA/Simon/R4/R-build}.
+Also the @CRAN{} build includes libraries that are required
+to run @R{} inside the framework. Static libraries used by @CRAN{} @R{}
+and packages are available in
+@uref{https://mac.R-project.org/libs-4}
 
 @node Why is R.home() not versioned?, R.app GUI crashes on startup!, What is the difference between the CRAN build and a vanilla build?, Miscellaneous questions
 @section Why is R.home() in the R framework not versioned?
@@ -1237,7 +1246,7 @@ In the command line version of R, @code{R.home()} always points to the
 @code{Resources} directory symbolic link inside the R framework which
 points to @code{Versions/Current/Resource} which is turn points to the
 actual home -- a versioned directory such as for example
-@code{Versions/3.0/Resources}. This is how framework versioning works
+@code{Versions/4.0/Resources}. This is how framework versioning works
 in Mac OS X and is defined by Apple (see
 @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html,
 Framework Anatomy}).
@@ -1340,12 +1349,12 @@ appear as it should), remove such fonts.
 @node I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?, I see no text in a Quartz plot!, Miscellaneous questions
 @section I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?
 
-CRAN binaries for the El Capitan build (the main build since R 3.4.0) come with OpenMP support (it is a way to parallelize many operations and thus make R faster), which is only available in recent Clang compilers. In order to compile packages you must install a Clang compiler with OpenMP support, we provide one in the tools section on CRAN: @uref{https://cran.r-project.org/bin/macosx/tools/}. Apple's Clang that comes with Xcode does not support OpenMP and thus cannot be used. For details please see the instructions on the aforementioned CRAN tools page -- for example, if you use our clang binary then you can set @code{PATH=/usr/local/clang7/bin:$PATH} or set the full paths to the tools in @code{~/.R/Makevars}. If you see the error @code{clang: error: unsupported option '-fopenmp'} then you are not using the correct clang compiler.
+CRAN binaries for the El Capitan build (the main build for R 3.4.0 - 3.6.3) come with OpenMP support (it is a way to parallelize many operations and thus make R faster), which is only available in recent Clang compilers. In order to compile packages you must install a Clang compiler with OpenMP support, we provide one in the tools section on CRAN: @uref{https://cran.r-project.org/bin/macosx/tools/}. Apple's Clang that comes with Xcode does not support OpenMP and thus cannot be used. For details please see the instructions on the aforementioned CRAN tools page -- for example, if you use our clang binary then you can set @code{PATH=/usr/local/clang7/bin:$PATH} or set the full paths to the tools in @code{~/.R/Makevars}. If you see the error @code{clang: error: unsupported option '-fopenmp'} then you are not using the correct clang compiler.
 
 @node I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?, I cannot attach debugger to R, I get ``clang@asis{:} error@asis{:} unsupported option -fopenmp'' when compiling a package -- why?, Miscellaneous questions
 @section I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?
 
-It means you are using more recent SDK to compile packages than your machine supports, in particular using Mac OS X 10.11 with 10.12 SDK. By default, the SDK used by command line tools is in @file{/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk}. Check @file{/Library/Developer/CommandLineTools/SDKs} and make sure the SDK does not have a higher version than your macOS. If it does, you have to get the SDK which matches your OS X version. Alternatively, you can remove the @code{-isysroot} flag from R's compilation flags (if present) and use non-Apple clang compiler (see previous section).
+It means you are using more recent SDK to compile packages than your machine supports, in particular using Mac OS X 10.11 with 10.12 SDK. By default, the SDK used by command line tools is in @file{/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk}. Check @file{/Library/Developer/CommandLineTools/SDKs} and make sure the SDK does not have a higher version than your macOS. If it does, you have to get the SDK which matches your OS X version.
 
 @node I cannot attach debugger to R,  , I get ``Symbol not found@asis{:} _clock_gettime`` when loading a package I compiled -- why?, Miscellaneous questions
 @section I cannot attach debugger to R
