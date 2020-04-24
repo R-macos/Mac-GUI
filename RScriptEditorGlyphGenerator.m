@@ -93,7 +93,7 @@ static SEL _foldindSel;
 - (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex
 {
 	NSGlyph *buffer = NULL;
-	NSInteger folded = (NSInteger)(*_foldindImp)(theTextStorage, _foldSel, charIndex);
+	NSInteger folded = [theTextStorage foldedAtIndex: charIndex];
 
 	if (folded > -1) {
 		NSRange effectiveRange = [theTextStorage foldedRangeAtIndex:folded];

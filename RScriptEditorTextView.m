@@ -791,7 +791,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 			// now loop through all the tokens
 			while ((token = rdlex())) {
-				if(hasFoldedItems && (NSInteger)(_foldedImp)(theTextStorage, _foldedSel, yyuoffset) > -1) continue;
+				if(hasFoldedItems && [theTextStorage foldedAtIndex: yyuoffset] > -1) continue;
 				switch (token) {
 					case RDPT_COMMENT:
 					    tokenColor = shColorComment;
@@ -847,7 +847,7 @@ static inline id NSMutableAttributedStringAttributeAtIndex (NSMutableAttributedS
 
 		// now loop through all the tokens
 		while ((token = yylex())) {
-			if(hasFoldedItems && (NSInteger)(_foldedImp)(theTextStorage, _foldedSel, yyuoffset) > -1) continue;
+			if(hasFoldedItems && [theTextStorage foldedAtIndex: yyuoffset] > -1) continue;
 			switch (token) {
 				case RPT_SINGLE_QUOTED_TEXT:
 				case RPT_DOUBLE_QUOTED_TEXT:

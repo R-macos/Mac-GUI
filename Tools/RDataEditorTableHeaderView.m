@@ -67,7 +67,7 @@
 // {
 // 	// Submit pending changes of column names
 // 	if([[[NSApp keyWindow] firstResponder] isKindOfClass:[NSTextView class]])
-// 		[[_tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
+// 		[[self.tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
 // }
 // 
 -(void)mouseDown:(NSEvent *)theEvent
@@ -77,35 +77,35 @@
 
 	// Submit pending changes of column names
 	if([[[NSApp keyWindow] firstResponder] isKindOfClass:[NSTextView class]])
-		[[_tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
+		[[self.tableView delegate] textView:(NSTextView*)[[NSApp keyWindow] firstResponder] doCommandBySelector:@selector(insertNewline:)];
 
 	// check if delegate implemented tableView:mouseDownInHeaderOfTableColumn:
-	if ([[_tableView delegate] respondsToSelector:@selector(tableView:mouseDownInHeaderOfTableColumn:)]) {
+	if ([[self.tableView delegate] respondsToSelector:@selector(tableView:mouseDownInHeaderOfTableColumn:)]) {
 		if(clickedColumn != -1)
-			[[_tableView delegate] tableView:_tableView mouseDownInHeaderOfTableColumn:[[_tableView tableColumns] objectAtIndex:clickedColumn]];
+			[[self.tableView delegate] tableView:self.tableView mouseDownInHeaderOfTableColumn:[[self.tableView tableColumns] objectAtIndex:clickedColumn]];
 		if([[NSApp currentEvent] clickCount] > 1) {
 			// deselect clicked column for editing column name and return
-			[_tableView deselectAll:nil];
+			[self.tableView deselectAll:nil];
 			return;
 		}
 	}
 
 	// resizing mode
-	if ([_tableView allowsColumnResizing]) {
-		NSInteger i, count=[[_tableView tableColumns] count];
+	if ([self.tableView allowsColumnResizing]) {
+		NSInteger i, count=[[self.tableView tableColumns] count];
 
 		// ends editing
-		if ([_tableView editedColumn] != -1 || [_tableView editedRow] != -1)
+		if ([self.tableView editedColumn] != -1 || [self.tableView editedRow] != -1)
 			[[self window] endEditingFor:nil];
 
 		for (i = 1; i < count; ++i) {
 			if (NSMouseInRect(location, [self _resizeRectBeforeColumn:i], [self isFlipped])) {
-				NSTableColumn *resizingColumn = [[_tableView tableColumns] objectAtIndex:i-1];
+				NSTableColumn *resizingColumn = [[self.tableView tableColumns] objectAtIndex:i-1];
 
 				if ([resizingColumn resizingMask] == NSTableColumnNoResizing)
 					return;
 
-				_resizedColumn = i - 1;
+				//FIXME: self.resizedColumn = i - 1;
 				location=[self convertPoint:[theEvent locationInWindow] fromView:nil];
 				do {
 					NSPoint newPoint;
@@ -117,43 +117,43 @@
 					newPoint=[self convertPoint:[theEvent locationInWindow] fromView:nil];
 
 					newWidth=newPoint.x;
-					for (q = 0; q < _resizedColumn; ++q) {
-						newWidth -= [[[_tableView tableColumns] objectAtIndex:q] width];
-						newWidth -= [_tableView intercellSpacing].width;
+					for (q = 0; q < self.resizedColumn; ++q) {
+						newWidth -= [[[self.tableView tableColumns] objectAtIndex:q] width];
+						newWidth -= [self.tableView intercellSpacing].width;
 					}
 
 					[resizingColumn setWidth:newWidth];
 
-					[_tableView tile];
-					newRect.origin=[_tableView convertPoint:newPoint fromView:self];
+					[self.tableView tile];
+					newRect.origin=[self.tableView convertPoint:newPoint fromView:self];
 					newRect.size=NSMakeSize(10,10);
-					[_tableView scrollRectToVisible:newRect];
+					[self.tableView scrollRectToVisible:newRect];
 
 					location=newPoint;
 				} while ([theEvent type] != NSLeftMouseUp);
 
 				[[self window] invalidateCursorRectsForView:self];
 
-				_resizedColumn = -1;
+				//self.resizedColumn = -1;
 				return;
 			}
 		}
 	}
 
 	// column selection including the chance to select non-continous columns via holding ⌘
-	if ([_tableView allowsColumnSelection]) {
+	if ([self.tableView allowsColumnSelection]) {
 		// extend/change selection
 		if ([theEvent modifierFlags] & NSCommandKeyMask) {
 			// deselect previously selected?
-			if ([_tableView isColumnSelected:clickedColumn])
-				[_tableView deselectColumn:clickedColumn];
-			else if ([_tableView allowsMultipleSelection] == YES) {
+			if ([self.tableView isColumnSelected:clickedColumn])
+				[self.tableView deselectColumn:clickedColumn];
+			else if ([self.tableView allowsMultipleSelection] == YES) {
 				// add to selection
-				[_tableView selectColumnIndexes:[NSIndexSet indexSetWithIndex:clickedColumn] byExtendingSelection:YES];
+				[self.tableView selectColumnIndexes:[NSIndexSet indexSetWithIndex:clickedColumn] byExtendingSelection:YES];
 			}
 		}
 		else if ([theEvent modifierFlags] & NSShiftKeyMask) {
-			NSInteger firstColumn = [_tableView selectedColumn];
+			NSInteger firstColumn = [self.tableView selectedColumn];
 			NSInteger lastColumn  = clickedColumn;
 
 			if (firstColumn == -1)
@@ -163,12 +163,12 @@
 				firstColumn = clickedColumn;
 			}
 
-			[_tableView deselectAll:nil];
+			[self.tableView deselectAll:nil];
 			while (firstColumn <= lastColumn)
-				[_tableView selectColumnIndexes:[NSIndexSet indexSetWithIndex:firstColumn++] byExtendingSelection:YES];
+				[self.tableView selectColumnIndexes:[NSIndexSet indexSetWithIndex:firstColumn++] byExtendingSelection:YES];
 		}
 		else
-			[_tableView selectColumnIndexes:[NSIndexSet indexSetWithIndex:clickedColumn] byExtendingSelection:NO];
+			[self.tableView selectColumnIndexes:[NSIndexSet indexSetWithIndex:clickedColumn] byExtendingSelection:NO];
 	}
 
 }
