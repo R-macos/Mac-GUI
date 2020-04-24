@@ -136,7 +136,7 @@
 	<key>CFBundleIconFile</key>
 	<string>RLogo.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.R-project.R</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -151,6 +151,22 @@
 	<string>%SVN%</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>MIN_VERSION</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>127.0.0.1</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSHumanReadableCopyright</key>
@@ -169,19 +185,19 @@
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
-				<key>default</key>
-				<string>R/R – Run selection in Console</string>
 				<key>English</key>
 				<string>R/R – Run selection in Console</string>
 				<key>de</key>
 				<string>R/R – Führe Auswahl in der Konsole aus</string>
-				<key>nl</key>
+				<key>default</key>
+				<string>R/R – Run selection in Console</string>
+				<key>fr</key>
 				<string>R/R – Run selection in Console</string>
 				<key>it</key>
 				<string>R/R – Run selection in Console</string>
 				<key>ja</key>
 				<string>R/R – Run selection in Console</string>
-				<key>fr</key>
+				<key>nl</key>
 				<string>R/R – Run selection in Console</string>
 			</dict>
 			<key>NSMessage</key>
@@ -202,19 +218,19 @@
 			</dict>
 			<key>NSMenuItem</key>
 			<dict>
-				<key>default</key>
-				<string>R/R – Open selection</string>
 				<key>English</key>
 				<string>R/R – Open selection</string>
 				<key>de</key>
 				<string>R/R – Öffne Auswahl</string>
-				<key>nl</key>
+				<key>default</key>
+				<string>R/R – Open selection</string>
+				<key>fr</key>
 				<string>R/R – Open selection</string>
 				<key>it</key>
 				<string>R/R – Open selection</string>
 				<key>ja</key>
 				<string>R/R – Open selection</string>
-				<key>fr</key>
+				<key>nl</key>
 				<string>R/R – Open selection</string>
 			</dict>
 			<key>NSMessage</key>
@@ -229,21 +245,5 @@
 	</array>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<string>YES</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-			<key>127.0.0.1</key>
-			<dict>
-				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
-	</dict>
 </dict>
 </plist>
