@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Version 1.72 (under development) --
+
+Last-update: 2020-05-12
+*	Avoid hard-coded colors so that text doesn't disappear
+	in dark mode. Note that the user still has to adjust
+	the custom colors (console, text/highlighting etc.).
+
 -- Release Version 1.71 (7827) - supplied with R 4.0.0 --
 
 Last-update: 2020-03-05
