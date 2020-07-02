@@ -65,7 +65,7 @@ static SEL _foldSel;
 
 - (NSTypesetterControlCharacterAction)actionForControlCharacterAtIndex:(NSUInteger)charIndex
 {
-	if ((NSInteger)(*_foldImp)(_attributedString, _foldSel, charIndex) > -1) return NSTypesetterZeroAdvancementAction;
+	if (_foldImp && (NSInteger)(*_foldImp)(_attributedString, _foldSel, charIndex) > -1) return NSTypesetterZeroAdvancementAction;
 	return [super actionForControlCharacterAtIndex:charIndex];
 }
 
