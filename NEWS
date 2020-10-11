@@ -1,5 +1,13 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.72 (7892) - supplied with R 4.0.3 --
+
+Last-update: 2020-07-01
+*	Fix crashes (seg-faults) on Catalina due to selectors
+	in some objects no longer being implemented by the OS.
+	Affects mainly the R script editor.
+
+
 -- Release Version 1.72 (7847) - supplied with R 4.0.2 --
 -- Release Version 1.72 (7845) - supplied with R 4.0.1 --
 
