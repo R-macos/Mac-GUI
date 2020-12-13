@@ -68,7 +68,7 @@
 // return value is unused so far
 - (int) handleInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label;
 // its usage is identical to that of the 'system' command
-- (int) handleSystemCommand: (char*) cmd;
+- (int) handleSystemCommand: (const char*) cmd;
 - (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
 - (int) handleCustomPrint: (char*) type withObject: (RSEXP*) obj;
 @end

@@ -1627,14 +1627,25 @@ extern BOOL isTimeToFinish;
 	return 0;
 }
 
-- (int) handleSystemCommand: (char*) cmd
+- (int) handleSystemCommand: (const char*) cmd
 {	
 	int cstat=-1;
 	pid_t pid;
 	
+    // we had issues with fork() and libxpc during cleanup, so fall back to regular system()
+    // during termination
+    if (terminating) {
+        signal(SIGINT, SIG_DFL);
+        signal(SIGTERM, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
+        signal(SIGALRM, SIG_DFL);
+        signal(SIGCHLD, SIG_DFL);
+        return system(cmd);
+    }
+    
 	if ([self getRootFlag]) {
 		FILE *f;
-		char *argv[3] = { "-c", cmd, 0 };
+		const char *argv[3] = { "-c", cmd, 0 };
 		int res;
  		NSBundle *b = [NSBundle mainBundle];
 		char *sushPath = 0;
