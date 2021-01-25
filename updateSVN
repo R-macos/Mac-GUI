@@ -9,7 +9,13 @@ fi
 
 OWD=`pwd`
 cd "$1"
-SVNREV=`svn info | sed -n 's/Revision:[ \t]*//p'`
+SVN=svn
+for paths in /usr/local/bin /opt/R/arm64/bin; do
+  if [ -e "$paths/svn" ]; then
+    SVN="$paths/svn"
+  fi
+done 
+SVNREV=`$SVN info | sed -n 's/Revision:[ \t]*//p'`
 if [ -z "$SVNREV" -a -f .svn/entries ]; then
   SVNREV=`sed -n 's/.*revision="\(.*\)".*/\1/p' .svn/entries|head -n 1`
   if [ -z "$SVNREV" ]; then

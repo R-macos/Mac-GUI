@@ -685,8 +685,8 @@
 				1636285106BA2B490005C811 /* Rcallbacks.h */,
 				1636285206BA2B490005C811 /* Rcallbacks.m */,
 				1636285306BA2B490005C811 /* REngine.h */,
-				1636285406BA2B490005C811 /* REngine.m */,
 				1636285606BA2B490005C811 /* Rinit.h */,
+				1636285406BA2B490005C811 /* REngine.m */,
 				16EE32EE06E48A4300D6A457 /* Rinit.m */,
 				1636285706BA2B490005C811 /* RSEXP.h */,
 				1636285806BA2B490005C811 /* RSEXP.m */,
@@ -1226,7 +1226,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# shell script goes here\ncd docs\nmakeinfo -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
+			shellScript = "# shell script goes here\ncd docs\nMAKEINFO=makeinfo\n\n# system makeinfo is too old, see if we can find a local one\nfor paths in /usr/local/bin /opt/R/arm64/bin; do\n  if [ -e $paths/makeinfo ]; then \n    MAKEINFO=\"$paths/makeinfo\"\n  fi\ndone\n\n\"$MAKEINFO\" -D UseExternalXrefs --html --force --no-split RMacOSX-FAQ.texi\n";
 		};
 		680F0D4C0997D201009CDBE8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

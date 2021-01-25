@@ -70,8 +70,12 @@ static SEXP RappQuit(SEXP save, SEXP status, SEXP runLast) {
 	    Rf_error("unrecognized value of 'save'");
 	if ([RController sharedController])
 		cancel = [[RController sharedController] quitRequest: save_flag withCode: sc last: rl];
+    // FIXME: this is never executed - we should re-visit the shutdown procedure ...
+    //        R_CleanUp is note exported so better not use it
+#if 0
 	if (!cancel) /* no cancel and we're still here -> run the internal version */
 		R_CleanUp((save_flag == 0) ? SA_NOSAVE : ((save_flag == -1) ? SA_SAVEASK : SA_SAVE), sc, rl);
+#endif
 	Rf_error("cancelled by user");
 	return R_NilValue;
 }
