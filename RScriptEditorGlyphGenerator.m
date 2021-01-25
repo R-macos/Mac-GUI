@@ -38,27 +38,13 @@
 #import "RScriptEditorLayoutManager.h"
 #import "PreferenceKeys.h"
 
-static SEL _attrStrSel;
-static SEL _foldSel;
-static SEL _foldindSel;
-
 @implementation RScriptEditorGlyphGenerator
-
-+ (void)initialize
-{
-	if ([self class] == [RScriptEditorGlyphGenerator class]) {
-		_attrStrSel = @selector(attributedString);
-		_foldSel    = @selector(foldedRangeAtIndex:);
-		_foldindSel = @selector(foldedForIndicatorAtIndex:);
-	}
-}
 
 - (id)init
 {
 	self = [super init];
 
 	if (self != nil) {
-		_attrStrImp = [self methodForSelector:_attrStrSel];
 		nullGlyph = NSNullGlyph;
 		sizeOfNSGlyph = sizeof(NSGlyph);
 	}
@@ -75,8 +61,6 @@ static SEL _foldindSel;
 {
 	if(theTextStorage) [theTextStorage release];
 	theTextStorage = [textStorage retain];
-	_foldImp = [theTextStorage methodForSelector:_foldSel];
-	_foldindImp = [theTextStorage methodForSelector:_foldindSel];
 }
 
 - (void)generateGlyphsForGlyphStorage:(id <NSGlyphStorage>)glyphStorage desiredNumberOfCharacters:(NSUInteger)nChars glyphIndex:(NSUInteger *)glyphIndex characterIndex:(NSUInteger *)charIndex

@@ -46,13 +46,6 @@
 	
 	id selfDelegate;
 
-	IMP _getImp;
-	IMP _setImp;
-	IMP _strImp;
-	IMP _replImp;
-	IMP _editImp;
-	IMP _getlImp;
-
 }
 
 - (id)initWithDelegate:(id)theDelegate;

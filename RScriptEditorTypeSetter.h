@@ -42,7 +42,6 @@
 {
 
 	RScriptEditorTextStorage *_attributedString;
-	IMP _foldImp;
 
 }
 

@@ -77,12 +77,6 @@ static SEL _getlSel;
 
 	if (self != nil) {
 		_attributedString = [[NSTextStorage alloc] init];
-		_getImp  = [_attributedString methodForSelector:_getSel];
-		_setImp  = [_attributedString methodForSelector:_setSel];
-		_strImp  = [_attributedString methodForSelector:_strSel];
-		_replImp = [_attributedString methodForSelector:_replSel];
-		_editImp = [self methodForSelector:_editSel];
-		_getlImp = [_attributedString methodForSelector:_getlSel];
 
 		selfDelegate = (RScriptEditorTextView*)theDelegate;
 		[self setDelegate:theDelegate];
@@ -304,13 +298,13 @@ static SEL _getlSel;
 
 - (NSString *)string
 { 
-	return (*_strImp)(_attributedString, _strSel);
+    return _attributedString ? [_attributedString string] : nil;
 }
 
 - (NSDictionary *)attributesAtIndex:(NSUInteger)location effectiveRange:(NSRangePointer)range
 {
 
-	NSDictionary *attributes = (*_getImp)(_attributedString, _getSel, location, range);
+    NSDictionary *attributes = [_attributedString attributesAtIndex:location effectiveRange:range];
 
 	if(!foldedCounter || location > [_attributedString length]) return attributes;
 
@@ -381,14 +375,14 @@ static SEL _getlSel;
 // NSMutableAttributedString primitives
 - (void)replaceCharactersInRange:(NSRange)range withString:(NSString *)str
 {
-	(*_replImp)(_attributedString, _replSel, range, str);
-	(*_editImp)(self, _editSel, NSTextStorageEditedCharacters, range, [str length] - range.length);
+    [_attributedString replaceCharactersInRange:range withString:str];
+    [self edited:NSTextStorageEditedCharacters range:range changeInLength: [str length] - range.length];
 }
 
 - (void)setAttributes:(NSDictionary *)attrs range:(NSRange)range
 {
-	(*_setImp)(_attributedString, _setSel, attrs, range);
-	(*_editImp)(self, _editSel, NSTextStorageEditedAttributes, range, 0);
+    [_attributedString setAttributes:attrs range:range];
+    [self edited:NSTextStorageEditedAttributes range:range changeInLength:0];
 }
 
 // Attribute Fixing Overrides

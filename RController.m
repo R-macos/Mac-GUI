@@ -115,10 +115,6 @@ int R_SetOptionWidth(int);
 
 static RController* sharedRController;
 
-static SEL _nextEventSel;
-static SEL _sendEventSel;
-static SEL _doProcessSel;
-
 static inline const char* NSStringUTF8String(NSString* self) 
 {
 	typedef const char* (*SPUTF8StringMethodPtr)(NSString*, SEL);
@@ -216,14 +212,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 
 	filteredHistory = nil;
 	
-	_nextEventSel = @selector(nextEventMatchingMask:untilDate:inMode:dequeue:);
-	_sendEventSel = @selector(sendEvent:);
-	_doProcessSel = @selector(doProcessEvents:);
-
-	_nextEventImp = [NSApp methodForSelector:_nextEventSel];
-	_sendEventImp = [NSApp methodForSelector:_sendEventSel];
-	_doProcessImp = [self methodForSelector:_doProcessSel];
-
 	specialCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"\r\b\a"] retain];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self 
@@ -1395,7 +1383,7 @@ extern BOOL isTimeToFinish;
 	
 	while ([consoleInputQueue count]==0) {
 		processingEvents = NO; // we should be at the top level, so for sanity reasons make sure we always process events
-		(_doProcessImp)(self, _doProcessSel, YES);
+		[self doProcessEvents: YES];
 	}
 	
 	currentConsoleInput = [consoleInputQueue objectAtIndex:0];
@@ -1696,9 +1684,8 @@ extern BOOL isTimeToFinish;
 			// to be processed in all cases, even if system was called from within
 			// the event handler and as such can run recursively
 			NSEvent *event;
-			if((event = (_nextEventImp)(NSApp, _nextEventSel, NSAnyEventMask, [NSDate dateWithTimeIntervalSinceNow:0.05], NSDefaultRunLoopMode, YES)))
-				(_sendEventImp)(NSApp, _sendEventSel, event);
-
+			if((event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate dateWithTimeIntervalSinceNow:0.05] inMode:NSDefaultRunLoopMode dequeue:YES]))
+				[NSApp sendEvent: event];
 		}
 		if(breakPending) {
 			kill(pid, SIGINT);
@@ -3080,11 +3067,11 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 #ifdef USE_POOLS
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 #endif
-		if (blocking){
-			(_sendEventImp)(NSApp, _sendEventSel, (_nextEventImp)(NSApp, _nextEventSel, NSAnyEventMask, [NSDate distantFuture], NSDefaultRunLoopMode, YES));
-		} else {
-			while((event = (_nextEventImp)(NSApp, _nextEventSel, NSAnyEventMask, [NSDate dateWithTimeIntervalSinceNow:0.0001], NSDefaultRunLoopMode, YES)))
-				(_sendEventImp)(NSApp, _sendEventSel, event);
+		if (blocking)
+            [NSApp sendEvent: [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate distantFuture] inMode:NSDefaultRunLoopMode dequeue:YES]];
+		else {
+            while((event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate dateWithTimeIntervalSinceNow:0.0001] inMode:NSDefaultRunLoopMode dequeue:YES]))
+				[NSApp sendEvent: event];
 		}
 #ifdef USE_POOLS
 		[pool release];
@@ -3112,7 +3099,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 - (void) handleProcessEvents
 {
-	(_doProcessImp)(self, _doProcessSel, NO);
+	[self doProcessEvents: NO];
 }
 
 
