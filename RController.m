@@ -2245,7 +2245,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 	NSInteger editedMask = [[consoleTextView textStorage] editedMask];
 
-	SLog(@"RController: textStorageDidProcessEditing <%@> with mask %d", self, editedMask);
+	SLog(@"RController: textStorageDidProcessEditing <%@> with mask %ld", self, (long)editedMask);
 
 	// if the user really changed the text
 	if(editedMask != 1) {
@@ -2343,7 +2343,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 
 	NSRange sr = [textView selectedRange];
 
-	SLog(@"completion attempt in RConsole; cursor at %d, complRange: %d-%d, commit: %d", sr.location, charRange.location, charRange.location+charRange.length, committedLength);
+	SLog(@"completion attempt in RConsole; cursor at %ld, complRange: %ld-%ld, commit: %ld", (long)sr.location, (long)charRange.location, (long)(charRange.location + charRange.length), (long)committedLength);
 
 	int bow = NSMaxRange(sr);
 
@@ -2969,7 +2969,7 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 			[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:url display:YES error:&theError];
 			if(theError != nil) {
 				NSBeep();
-				NSLog(@"RController.handlePromptRdFileAtPath %@ couldn't be opened.\n%@", theError);
+				NSLog(@"RController.handlePromptRdFileAtPath %@ couldn't be opened.\n%@", filepath, theError);
 			}
 		} else {
 			NSError *err = nil;

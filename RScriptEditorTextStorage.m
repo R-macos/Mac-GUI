@@ -33,7 +33,7 @@
  */
 
 #import "RScriptEditorTextStorage.h"
-#import "RScriptEditorTypesetter.h"
+#import "RScriptEditorTypeSetter.h"
 #import "RScriptEditorTextView.h"
 #import "FoldingSignTextAttachmentCell.h"
 #import "RGUI.h"
@@ -168,7 +168,7 @@ static SEL _getlSel;
 			foldedRanges[i][2] = (NSInteger)NSMaxRange(range);
 			foldedCounter++;
 			if(i > currentMaxFoldedIndex) currentMaxFoldedIndex = i;
-			SLog(@"RScriptEditorTextStorage:registerFoldedRange %@ at position %d : max index %d", NSStringFromRange(range), i, currentMaxFoldedIndex);
+			SLog(@"RScriptEditorTextStorage:registerFoldedRange %@ at position %ld : max index %ld", NSStringFromRange(range), (long)i, (long)currentMaxFoldedIndex);
 			break;
 		}
 	}
@@ -185,7 +185,7 @@ static SEL _getlSel;
 	BOOL exists = NO;
 	NSRange range;
 	
-	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex %d", index);
+	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex %ld", (long)index);
 	
 	if(index > -1 && index < R_MAX_FOLDED_ITEMS) {
 		if(foldedRanges[index][0] > -1 && foldedRanges[index][1] > 0) {
@@ -238,7 +238,7 @@ static SEL _getlSel;
 		}
 	}
 	currentMaxFoldedIndex = maxCount;
-	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex: done. Max index: %d", currentMaxFoldedIndex);
+	SLog(@"RScriptEditorTextStorage:removeFoldedRangeWithIndex: done. Max index: %ld", (long) currentMaxFoldedIndex);
 
 	return YES;
 }
@@ -344,7 +344,7 @@ static SEL _getlSel;
 
 }
 
-- (void)edited:(NSUInteger)mask range:(NSRange)oldRange changeInLength:(NSInteger)lengthChange
+- (void)edited:(NSTextStorageEditActions)mask range:(NSRange)oldRange changeInLength:(NSInteger)lengthChange
 {
 
 	if(foldedCounter && mask == NSTextStorageEditedCharacters) {
