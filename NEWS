@@ -1,5 +1,17 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2021-02-12
+*	Force content re-size in R document windows to fix
+	layout issues in Catalina/Big Sur.
+
+*	Remove opacity from R document windows.
+
+*	Ensure the text view in editor windows has focus
+	when created. 
+
+*	Remove indirect calls to parserContextForPosition:.
+
+
 -- Release Version 1.73 (7892) - supplied with R 4.0.3 --
 
 Last-update: 2020-07-01
