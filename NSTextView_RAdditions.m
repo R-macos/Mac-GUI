@@ -37,15 +37,6 @@
 #import "RegexKitLite.h"
 #import "RGUI.h"
 
-static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
-{
-	typedef int (*RPARSERCONTEXTFORPOSITIONMethodPtr)(RTextView*, SEL, NSUInteger);
-	static RPARSERCONTEXTFORPOSITIONMethodPtr _RPARSERCONTEXTFORPOSITION;
-	if (!_RPARSERCONTEXTFORPOSITION) _RPARSERCONTEXTFORPOSITION = (RPARSERCONTEXTFORPOSITIONMethodPtr)[self methodForSelector:@selector(parserContextForPosition:)];
-	int r = _RPARSERCONTEXTFORPOSITION(self, @selector(parserContextForPosition:), index);
-	return r;
-}
-
 @implementation NSTextView (NSTextView_RAdditions)
 
 /**
@@ -148,7 +139,7 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	// look for the first non-balanced closing bracket
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
 		if(!breakCounter--) return;
-		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
+		if([(RTextView*)self parserContextForPosition: i] != pcExpression) continue;
 		switch(CFStringGetCharacterAtIndex(parserStringRef, i)) {
 			case ')': 
 				if(!pcnt) {
@@ -187,7 +178,7 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	breakCounter = 10000;
 	for(NSInteger i=caretPosition; i>=0; i--) {
 		if(!breakCounter--) return;
-		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
+		if([(RTextView*)self parserContextForPosition: i] != pcExpression) continue;
 		c = CFStringGetCharacterAtIndex(parserStringRef, i);
 		if(c == co) {
 			if(!bracketCounter) {
@@ -206,7 +197,7 @@ static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index)
 	breakCounter = 10000;
 	for(NSUInteger i=caretPosition; i<stringLength; i++) {
 		if(!breakCounter--) return;
-		if(RPARSERCONTEXTFORPOSITION((RTextView*)self, i) != pcExpression) continue;
+		if([(RTextView*)self parserContextForPosition: i] != pcExpression) continue;
 		c = CFStringGetCharacterAtIndex(parserStringRef, i);
 		if(c == co) {
 			bracketCounter++;

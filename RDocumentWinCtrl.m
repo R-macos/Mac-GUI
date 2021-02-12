@@ -86,16 +86,6 @@ static inline const char* NSStringUTF8String(NSString* self)
 	return to_return;
 }
 
-static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
-{
-	typedef int (*RPARSERCONTEXTFORPOSITIONMethodPtr)(RTextView*, SEL, NSUInteger);
-	static RPARSERCONTEXTFORPOSITIONMethodPtr _RPARSERCONTEXTFORPOSITION;
-	if (!_RPARSERCONTEXTFORPOSITION) _RPARSERCONTEXTFORPOSITION = (RPARSERCONTEXTFORPOSITIONMethodPtr)[self methodForSelector:@selector(parserContextForPosition:)];
-	int r = _RPARSERCONTEXTFORPOSITION(self, @selector(parserContextForPosition:), index);
-	return r;
-}
-
-
 @implementation RDocumentWinCtrl
 
 //- (id)init { // NOTE: init is *not* used! put any initialization in windowDidLoad
@@ -363,8 +353,9 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:showBraceHighlightingKey options:NSKeyValueObservingOptionNew context:NULL];
 	[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:prefShowArgsHints options:NSKeyValueObservingOptionNew context:NULL];
 
-	[[self window] setBackgroundColor:[NSColor clearColor]];
-	[[self window] setOpaque:NO];
+    // FIXME: we did we use this?
+    //[[self window] setBackgroundColor:[NSColor clearColor]];
+	//[[self window] setOpaque:NO];
 
 	SLog(@" - load document contents into textView");
 	[(RDocument*)[self document] loadInitialContents];
@@ -412,13 +403,24 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		[theRulerView release];
 
 		[(NoodleLineNumberView*)[[textView enclosingScrollView] verticalRulerView] setLineWrappingMode:[Preferences flagForKey:enableLineWrappingKey withDefault: YES]];
-
+        [[self window] makeFirstResponder:theRulerView];
 	}
 	
 	[self functionReset];
 	
 	// Needed for showing tooltips of folded items
 	[[self window] setAcceptsMouseMovedEvents:YES];
+    
+	// FIXME: this is a hack for layout issues in Big Sur
+	// by forcing re-size we force layout to be updated - is there a better way?
+	NSRect clRect = [[self window] contentLayoutRect];
+	clRect.size.width += 1;
+	[[self window] setContentSize:clRect.size];
+	clRect.size.width -= 1;
+	[[self window] setContentSize:clRect.size];
+
+	// Make the text view fist responder so the user can start typing
+	[[self window] makeFirstResponder:textView];
 
 	SLog(@" - windowDidLoad is done");
 
@@ -786,7 +788,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 			unichar fc;
 			while (li>0 && ((fc=CFStringGetCharacterAtIndex((CFStringRef)s, li)) ==' ' || fc=='\t' || fc=='\r' || fc=='\n')) li--;
 
-			if(RPARSERCONTEXTFORPOSITION(textView, (li+2)) == pcComment)
+			if([textView parserContextForPosition: li + 2] == pcComment)
 				continue; // section declaration is commented out
 
 			// due to finial bracket decrease range length by 1
@@ -1001,7 +1003,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if (cursorLocation < 0 || cursorLocation >= completeStringLength) return;
 
 	// bail if current character is in quotes or comments
-	if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) != pcExpression) return;
+	if([textView parserContextForPosition:cursorLocation] != pcExpression) return;
 
 	unichar characterToCheck;
 	unichar openingChar = 0;
@@ -1019,7 +1021,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 	if (openingChar) {
 		while (cursorLocation--) {
 			if(!breakCounter--) return;
-			if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) == pcExpression) {
+			if([textView parserContextForPosition:cursorLocation] == pcExpression) {
 				c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 				if (c == openingChar) {
 					if (!skipMatchingBrace) {
@@ -1041,7 +1043,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		if (openingChar) {
 			while ((++cursorLocation)<maxLimit) {
 				if(!breakCounter--) return;
-				if(RPARSERCONTEXTFORPOSITION(textView, cursorLocation) == pcExpression) {
+				if([textView parserContextForPosition:cursorLocation] == pcExpression) {
 					c = CFStringGetCharacterAtIndex((CFStringRef)completeString, cursorLocation);
 					if (c == openingChar) {
 						if (!skipMatchingBrace) {
@@ -1137,7 +1139,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 					BOOL firstRun = YES;
 					unichar c;
 					for(i=0; i<[line length]; i++) {
-						if(RPARSERCONTEXTFORPOSITION(textView, i) == pcExpression) {
+						if([textView parserContextForPosition: i] == pcExpression) {
 							c=CFStringGetCharacterAtIndex((CFStringRef)line,i);
 							if(c==')') {
 								cntP--;
@@ -1622,7 +1624,7 @@ NSInteger _alphabeticSort(id string1, id string2, void *reverse)
 		if(!fr.length) break;
 		r = [rtvstr rangeOfRegex:comre options:0 inRange:NSMakeRange(fr.location, [rtvstr length]-fr.location) capture:1L error:nil];
 		// check if first # is a comment character i.e. not quoted
-		if(r.location+1 < [rtvstr length] && RPARSERCONTEXTFORPOSITION(rtv, r.location+1) == pcComment) {
+		if(r.location+1 < [rtvstr length] && [rtv parserContextForPosition: r.location + 1] == pcComment) {
 			rs = [rtvstr substringWithRange:[rtvstr rangeOfRegex:comre options:0 inRange:NSMakeRange(fr.location, [rtvstr length]-fr.location) capture:2L error:nil]];
 			rs = [rs stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
 			rstr = [NSString stringWithFormat:@";c=\"@__@_@_@%@\"", rs];

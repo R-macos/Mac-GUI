@@ -53,16 +53,6 @@ static inline CGFloat RRectRight(NSRect rectangle) { return rectangle.origin.x+r
 static inline CGFloat RPointDistance(NSPoint a, NSPoint b) { return sqrtf( (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y) ); }
 static inline NSPoint RPointOnLine(NSPoint a, NSPoint b, CGFloat t) { return NSMakePoint(a.x*(1.0f-t) + b.x*t, a.y*(1.0f-t) + b.y*t); }
 
-static inline int RPARSERCONTEXTFORPOSITION (RTextView* self, NSUInteger index) 
-{
-	typedef int (*RPARSERCONTEXTFORPOSITIONMethodPtr)(RTextView*, SEL, NSUInteger);
-	static RPARSERCONTEXTFORPOSITIONMethodPtr _RPARSERCONTEXTFORPOSITION;
-	if (!_RPARSERCONTEXTFORPOSITION) _RPARSERCONTEXTFORPOSITION = (RPARSERCONTEXTFORPOSITIONMethodPtr)[self methodForSelector:@selector(parserContextForPosition:)];
-	int r = _RPARSERCONTEXTFORPOSITION(self, @selector(parserContextForPosition:), index);
-	return r;
-}
-
-
 // declared external
 BOOL RTextView_autoCloseBrackets = YES;
 
@@ -82,7 +72,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 @interface RTextView (Private)
 
-- (void)selectMatchingPairAt:(int)position;
+- (void)selectMatchingPairAt:(NSInteger)position;
 - (NSString*)functionNameForCurrentScope;
 
 @end
@@ -285,13 +275,13 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 	NSString *rc = [theEvent charactersIgnoringModifiers];
 	NSString *cc = [theEvent characters];
-	unsigned int modFlags = [theEvent modifierFlags];
+	unsigned long modFlags = [theEvent modifierFlags];
 	long allFlags = (NSShiftKeyMask|NSControlKeyMask|NSAlternateKeyMask|NSCommandKeyMask);
 	long curFlags = (modFlags & allFlags);
 
 	BOOL hilite = NO;
 
-	SLog(@"RTextView: keyDown: %@ *** \"%@\" %d", theEvent, rc, modFlags);
+	SLog(@"RTextView: keyDown: %@ *** \"%@\" %lx", theEvent, rc, modFlags);
 
 	if([rc length] && [undoBreakTokensSet characterIsMember:[rc characterAtIndex:0]]) [self breakUndoCoalescing];
 
@@ -301,7 +291,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return;
 	}
 	if ([rc isEqual:@"="]) {
-		int mf = modFlags&allFlags;
+		long mf = modFlags & allFlags;
 		if ( mf ==NSControlKeyMask) {
 			[self breakUndoCoalescing];
 			[self insertText:@"<-"];
@@ -551,7 +541,7 @@ BOOL RTextView_autoCloseBrackets = YES;
  *
  * @param position The cursor position to test
  */
-- (int)parserContextForPosition:(int)position
+- (int)parserContextForPosition:(NSInteger)position
 {
 
 	int context = pcExpression;
@@ -574,9 +564,9 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if (lineStart == position)
 		return context;
 
-	SLog(@"RTextView: parserContextForPosition: %d, line start: %ld", position, lineStart);
+	SLog(@"RTextView: parserContextForPosition: %ld, line start: %ld", (long)position, (long)lineStart);
 
-	int i = lineStart;
+	long i = lineStart;
 	BOOL skip = NO;
 	unichar c;
 	unichar commentSign = (isRdDocument) ? '%' : '#';
@@ -978,7 +968,7 @@ BOOL RTextView_autoCloseBrackets = YES;
  *
  * @param position The cursor position to test
  */
-- (void)selectMatchingPairAt:(int)position
+- (void)selectMatchingPairAt:(NSInteger)position
 {
 
 	if(position < 1 || position >= [[self string] length])
@@ -1017,8 +1007,8 @@ BOOL RTextView_autoCloseBrackets = YES;
 	NSRange parseRange = NSMakeRange(0, [parseString length]);
 	NSInteger breakCounter = 1000;
 
-	int parentheses = 0;
-	int index       = 0;
+	int  parentheses = 0;
+	NSInteger index  = 0;
 
 	SLog(@"RTextView: functionNameForCurrentScope");
 
@@ -1036,11 +1026,11 @@ BOOL RTextView_autoCloseBrackets = YES;
 	// if a word was found and the word doesn't represent a numeric value
 	// and a ( follows then return word
 	if([helpString length] && ![[[NSNumber numberWithFloat:[helpString floatValue]] stringValue] isEqualToString:helpString]) {
-		int start = NSMaxRange(selectedRange);
+		NSInteger start = NSMaxRange(selectedRange);
 		if(start < [parseString length]) {
 			BOOL found = NO;
-			int i = 0;
-			int end = ([parseString length] > 100) ? 100 : [parseString length];
+			NSInteger i = 0;
+			NSInteger end = ([parseString length] > 100) ? 100 : [parseString length];
 			unichar c;
 			for(i = start; i < end; i++) {
                 if ((c = CFStringGetCharacterAtIndex((CFStringRef)parseString, i)) == '(') {
@@ -1103,7 +1093,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return nil;
 	}
 
-	SLog(@" - first not closed ( found at index: %d", index);
+	SLog(@" - first not closed ( found at index: %ld", (long) index);
 
 	// check if we still are in the parse range; otherwise bail
 	if(parseRange.location > index) {
@@ -1125,7 +1115,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		}
 	}
 
-	SLog(@" - function name found at index: %d", index);
+	SLog(@" - function name found at index: %ld", (long) index);
 
 	// check if we still are in the parse range; otherwise bail
 	if(parseRange.location > index) {
@@ -1187,7 +1177,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		c = CFStringGetCharacterAtIndex((CFStringRef)strToConvert, theCharIndex);
 		// if c is non-ASCII and inside of "" or '' quotes transform it
 		//  - this ignores all c inside of comments
-		if (c > 127 && RPARSERCONTEXTFORPOSITION((RTextView*)self, theCharIndexInTextView) < pcStringBQ)
+        if (c > 127 && [(RTextView*)self parserContextForPosition: theCharIndexInTextView] < pcStringBQ)
 			[theEncodedString appendFormat: @"\\u%04x", c];
 		else
 			[theEncodedString appendFormat: @"%C", c];
@@ -1250,7 +1240,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 		return ([[self undoManager] canRedo]);
 
 	if ([menuItem action] == @selector(makeASCIIconform:))
-		return ([self selectedRange].length || (([(RTextView*)self getRangeForCurrentWord].length) && RPARSERCONTEXTFORPOSITION((RTextView*)self, [self selectedRange].location) < pcStringBQ)) ? YES : NO;
+        return ([self selectedRange].length || (([(RTextView*)self getRangeForCurrentWord].length) && [(RTextView*)self parserContextForPosition:[self selectedRange].location] < pcStringBQ)) ? YES : NO;
 
 	if ([menuItem action] == @selector(unescapeUnicode:))
 		return ([self selectedRange].length || ([(RTextView*)self getRangeForCurrentWord].length)) ? YES : NO;
@@ -1361,7 +1351,7 @@ BOOL RTextView_autoCloseBrackets = YES;
 
 				[env setObject:filepath forKey:kShellVarNameDraggedFilePath];
 				[env setObject:[[filepath stringByReplacingOccurrencesOfRegex:[NSString stringWithFormat:@"^%@", curDir] withString:@""] stringByAbbreviatingWithTildeInPath] forKey:kShellVarNameDraggedRelativeFilePath];
-				[env setObject:[NSNumber numberWithInt:snip_cnt] forKey:kShellVarNameCurrentSnippetIndex];
+				[env setObject:[NSNumber numberWithInt:(int)snip_cnt] forKey:kShellVarNameCurrentSnippetIndex];
 
 				NSString *extension = [[filepath pathExtension] lowercaseString];
 
@@ -2134,10 +2124,10 @@ BOOL RTextView_autoCloseBrackets = YES;
 	if (curRange.length) return curRange;
 
 	NSString *str = [self string];
-	int curLocation = curRange.location;
-	int start = curLocation;
-	int end = curLocation;
-	unsigned int strLen = [[self string] length];
+	NSInteger curLocation = curRange.location;
+	NSInteger start = curLocation;
+	NSInteger end = curLocation;
+	NSUInteger strLen = [[self string] length];
 
 	if(start) {
 		start--;

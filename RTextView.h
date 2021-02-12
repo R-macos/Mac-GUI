@@ -79,7 +79,7 @@ extern BOOL RTextView_autoCloseBrackets;
 
 - (void)setConsoleMode:(BOOL)isConsole;
 
-- (int)  parserContextForPosition:(int)position;
+- (int)  parserContextForPosition:(NSInteger)position;
 - (void) showHelpForCurrentFunction;
 - (void) currentFunctionHint;
 - (BOOL) wrapSelectionWithPrefix:(NSString *)prefix suffix:(NSString *)suffix;
