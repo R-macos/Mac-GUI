@@ -2078,6 +2078,20 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 	NSColor *color=(outputType==0)?[consoleColors objectAtIndex:iStdoutColor]:((outputType==1)?[consoleColors objectAtIndex:iStderrColor]:[consoleColors objectAtIndex:iRootColor]);
 	if (len>=0 && buf[len]!=0) buf[len]=0; /* this MAY be dangerous ... */
 	NSString *s = [[NSString alloc] initWithUTF8String:buf];
+    if (outputType == 1) {
+        // FIXME horrible, horrible hack - this warning seems to be a macOS bug, because
+        // we never create NSPopoverTouchBarItemButton, so we suppress it in the console
+        // by removing a line with that content
+        NSRange r = [s rangeOfString:@"Warning: Expected min height of view: .* to be less than or equal to " options:NSRegularExpressionSearch];
+        if (r.location != NSNotFound) {
+            NSString *os = s;
+            NSUInteger start, end;
+            [s getLineStart:&start end:&end contentsEnd:0 forRange:r];
+            s = [os stringByReplacingCharactersInRange:NSMakeRange(start, end-start) withString:@""];
+            [s retain];
+            [os release];
+        }
+    }
 	[self flushROutput];
 	[self writeConsoleDirectly:s withColor:color];
 	[s release];
