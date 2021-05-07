@@ -1,0 +1,36 @@
+on: [push, pull_request]
+
+name: Build
+
+jobs:
+  Build:
+    runs-on: 'macOS-10.15'
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build
+        shell: bash
+        run: |
+          echo Downloading R ...
+          curl -s -LO https://mac.r-project.org/high-sierra/R-4.0-branch/x86_64/R-4.0-branch.tar.gz
+          echo Unpacking R ...
+          sudo rm -rf /Library/Frameworks/R.framework
+          sudo tar fxz R-4.0-branch.tar.gz -C /
+          mkdir -p build/logs
+          for bld in Release Debug; do
+            echo Build $bld ..
+            xcodebuild -configuration $bld -arch x86_64 2>&1 | tee build/logs/$bld.log
+          done
+          echo Pack ...
+          mkdir R-GUI-build
+          mv build/Debug R-GUI-build/
+          mv build/Release R-GUI-build/
+          mv build/logs R-GUI-build/
+          hdiutil create -srcfolder R-GUI-build R-GUI-build.dmg
+
+      - name: Upload build results
+        uses: actions/upload-artifact@master
+        with:
+          path: R-GUI-build.dmg
+          name: R-GUI-build
