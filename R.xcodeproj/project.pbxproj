@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		1601EFBD06CBBD2000BF60D4 /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */; };
+		08AE2B2B2644E6FD00CCBCB2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 08AE2B2A2644E6FD00CCBCB2 /* README.md */; };
 		1601EFD006CBBEC700BF60D4 /* NEWS in Resources */ = {isa = PBXBuildFile; fileRef = 1601EFCF06CBBEC700BF60D4 /* NEWS */; };
 		1601F00D06CBBF9F00BF60D4 /* TODO-LIST in Resources */ = {isa = PBXBuildFile; fileRef = 1601F00C06CBBF9F00BF60D4 /* TODO-LIST */; };
 		1601F04706CBC0EF00BF60D4 /* INSTALL in Resources */ = {isa = PBXBuildFile; fileRef = 1601F04606CBC0EF00BF60D4 /* INSTALL */; };
@@ -265,6 +265,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		08AE2B2A2644E6FD00CCBCB2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		1601EFCF06CBBEC700BF60D4 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
@@ -816,6 +817,7 @@
 		29B97314FDCFA39411CA2CEA /* R */ = {
 			isa = PBXGroup;
 			children = (
+				08AE2B2A2644E6FD00CCBCB2 /* README.md */,
 				BCD7EC921301A4EF0050850E /* Regex Engine */,
 				16A25F63072AAD110047E009 /* AMPrefs */,
 				16A25F57072AACF40047E009 /* PrefPanes */,
@@ -1142,7 +1144,6 @@
 				1C34E62406F9EE2000211ACC /* sush in Resources */,
 				16D3042806B55072009CB94A /* RLogo.png in Resources */,
 				16D3044406B556BD009CB94A /* RLogo.icns in Resources */,
-				1601EFBD06CBBD2000BF60D4 /* ReadMe.txt in Resources */,
 				1601EFD006CBBEC700BF60D4 /* NEWS in Resources */,
 				1601F00D06CBBF9F00BF60D4 /* TODO-LIST in Resources */,
 				1601F04706CBC0EF00BF60D4 /* INSTALL in Resources */,
@@ -1204,6 +1205,7 @@
 				BCE60A2315E4E95A0039D8A3 /* Folding Collapsed Pressed.png in Resources */,
 				BCE60A2415E4E95A0039D8A3 /* Folding Collapsed.png in Resources */,
 				BCE60A2515E4E95A0039D8A3 /* Folding Top Hoover.png in Resources */,
+				08AE2B2B2644E6FD00CCBCB2 /* README.md in Resources */,
 				BCE60A2615E4E95A0039D8A3 /* Folding Top Pressed.png in Resources */,
 				BCE60A2715E4E95A0039D8A3 /* Folding Top.png in Resources */,
 			);
