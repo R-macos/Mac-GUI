@@ -267,7 +267,6 @@
 /* Begin PBXFileReference section */
 		08AE2B2A2644E6FD00CCBCB2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		1601EFCF06CBBEC700BF60D4 /* NEWS */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		1601F00C06CBBF9F00BF60D4 /* TODO-LIST */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "TODO-LIST"; sourceTree = "<group>"; };
 		1601F04606CBC0EF00BF60D4 /* INSTALL */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
@@ -831,7 +830,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				1601EFBC06CBBD2000BF60D4 /* ReadMe.txt */,
 				1602BB2E0719702800805588 /* RMacOSX-FAQ.html */,
 				16DB0E89072E5CFA00380720 /* COPYRIGHTS */,
 				1601EFCF06CBBEC700BF60D4 /* NEWS */,
@@ -1115,13 +1113,9 @@
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
-				Japanese,
-				French,
-				German,
 				de,
 				it,
 				fr,
-				jp,
 				ja,
 				nl,
 			);
@@ -1585,7 +1579,6 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = (
 					"-DPLAIN_STDERR",
 					"-DDEBUG_RGUI",
@@ -1637,6 +1630,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "DEBUG_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1672,6 +1666,7 @@
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "RELEASE_CFG=1";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks /Library/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 				STRIP_INSTALLED_PRODUCT = NO;
 			};
@@ -1689,7 +1684,6 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = /Applications;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-F/Library/Frameworks",
