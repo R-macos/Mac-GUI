@@ -304,6 +304,21 @@ static inline const char* NSStringUTF8String(NSString* self)
 	}
 }
 
+- (NSTouchBar *)makeTouchBar
+{
+	// Create TouchBar object
+	SLog(@"makeTouchBar");
+	NSTouchBar *touchBar = [[NSTouchBar alloc] init];
+	touchBar.delegate = self;
+	touchBar.customizationIdentifier = @"org.R-project.R.app.console";
+
+	// Set the default ordering of items.
+	touchBar.defaultItemIdentifiers = @[@"foo", NSTouchBarItemIdentifierOtherItemsProxy];
+	touchBar.customizationAllowedItemIdentifiers = @[@"foo"];
+	touchBar.principalItemIdentifier = @"foo";
+
+	return touchBar;
+}
 
 - (void) awakeFromNib {
 
@@ -355,13 +370,17 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[consoleTextView setContinuousSpellCheckingEnabled:NO]; // force 'no spell checker'
 	[[consoleTextView textStorage] setDelegate:self];
 
-
 	RTextView_autoCloseBrackets = [Preferences flagForKey:kAutoCloseBrackets withDefault:YES];
 
 	[self setupToolbar];
 	[RConsoleWindow setOpaque:NO]; // Needed so we can see through it when we have clear stuff on top
 	[RConsoleWindow setBackgroundColor:[defaultConsoleColors objectAtIndex:iBackgroundColor]]; // we need this, because "update" doesn't touch the color if it's equal - and by default the window has *no* background - not even the default one, so we bring it in sync
 	[RConsoleWindow setDocumentEdited:YES];
+
+	// Force essentially an empty TouchBar due to performance
+	// problems with Apple's default implemenation
+	[NSApplication sharedApplication].automaticCustomizeTouchBarMenuItemEnabled = YES;
+	consoleTextView.touchBar = [self makeTouchBar];
 
 	SLog(@" - working directory setup timer");
 	WDirtimer = [NSTimer scheduledTimerWithTimeInterval:0.5
