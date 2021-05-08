@@ -1,14 +1,8 @@
-/* Entry = "150.title"; Class = "NSTextFieldCell" */
-"0.2" = "0.2";
-
 /* Entry = "49.title"; Class = "NSButtonCell" */
 "Application" = "Programma";
 
 /* Entry = "229.title"; Class = "NSButtonCell" */
 "Auto-save documents" = "Auto-save documents";
-
-/* Entry = "181.title"; Class = "NSBox" */
-"Box" = "Box";
 
 /* Entry = "96.title"; Class = "NSButtonCell" */
 "Built-in editor" = "Ingebouwde editor";
@@ -33,9 +27,6 @@
 
 /* Entry = "171.title"; Class = "NSButtonCell" */
 "Highlight current line" = "Highlight huidige lijn";
-
-/* Entry = "149.title"; Class = "NSTextFieldCell" */
-"Highlight interval:" = "Markeringsinterval:";
 
 /* Entry = "173.title"; Class = "NSButtonCell" */
 "Indent new lines" = "Indent nieuwe lijnen";
@@ -72,7 +63,4 @@
 
 /* Entry = "153.title"; Class = "NSButtonCell" */
 "Wrap lines" = "Lijnen afbreken";
-
-/* Entry = "226.title"; Class = "NSTextFieldCell" */
-"s" = "s";
 

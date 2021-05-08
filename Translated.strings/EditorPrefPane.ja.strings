@@ -1,14 +1,8 @@
-/* Entry = "150.title"; Class = "NSTextFieldCell" */
-"0.2" = "0.2";
-
 /* Entry = "49.title"; Class = "NSButtonCell" */
 "Application" = "アプリケーション";
 
 /* Entry = "229.title"; Class = "NSButtonCell" */
 "Auto-save documents" = "文書を自動的に保存する";
-
-/* Entry = "181.title"; Class = "NSBox" */
-"Box" = "Box";
 
 /* Entry = "96.title"; Class = "NSButtonCell" */
 "Built-in editor" = "内蔵エディタ";
@@ -33,9 +27,6 @@
 
 /* Entry = "171.title"; Class = "NSButtonCell" */
 "Highlight current line" = "現在の行をハイライト";
-
-/* Entry = "149.title"; Class = "NSTextFieldCell" */
-"Highlight interval:" = "ハイライトの間隔:";
 
 /* Entry = "173.title"; Class = "NSButtonCell" */
 "Indent new lines" = "新しい行をインデント";
@@ -72,7 +63,4 @@
 
 /* Entry = "153.title"; Class = "NSButtonCell" */
 "Wrap lines" = "行をラップする";
-
-/* Entry = "226.title"; Class = "NSTextFieldCell" */
-"s" = "s";
 

@@ -1,14 +1,8 @@
-/* Entry = "150.title"; Class = "NSTextFieldCell" */
-"0.2" = "0.2";
-
 /* Entry = "49.title"; Class = "NSButtonCell" */
 "Application" = "Application";
 
 /* Entry = "229.title"; Class = "NSButtonCell" */
 "Auto-save documents" = "Documents enregistrés automatiquement";
-
-/* Entry = "181.title"; Class = "NSBox" */
-"Box" = "Boite";
 
 /* Entry = "96.title"; Class = "NSButtonCell" */
 "Built-in editor" = "Editeur intégré";
@@ -33,9 +27,6 @@
 
 /* Entry = "171.title"; Class = "NSButtonCell" */
 "Highlight current line" = "Mettre en évidence la ligne actuelle";
-
-/* Entry = "149.title"; Class = "NSTextFieldCell" */
-"Highlight interval:" = "Mettre en évidence l'intervalle:";
 
 /* Entry = "173.title"; Class = "NSButtonCell" */
 "Indent new lines" = "Indenter les nouvelles lignes";
@@ -72,7 +63,4 @@
 
 /* Entry = "153.title"; Class = "NSButtonCell" */
 "Wrap lines" = "Wrap lines";
-
-/* Entry = "226.title"; Class = "NSTextFieldCell" */
-"s" = "s";
 

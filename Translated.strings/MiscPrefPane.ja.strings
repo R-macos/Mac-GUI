@@ -64,10 +64,10 @@
 /* Entry = "137.title"; Class = "NSTextFieldCell" */
 "R history file:" = "R履歴ファイル:";
 
-/* Entry = "150.title"; Class = "NSButtonCell" */
+/* Entry = "151.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
 
-/* Entry = "151.title"; Class = "NSButtonCell" */
+/* Entry = "150.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
 
 /* Entry = "140.title"; Class = "NSButtonCell" */
@@ -88,7 +88,7 @@
 /* Entry = "146.title"; Class = "NSButtonCell" */
 "Strip comments in history entries" = "履歴中のコメントを除去";
 
-/* Entry = "108.gToolTip"; Class = "NSTextField" */
+/* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
 "URL for the default CRAN URL. If left empty, the user will be prompted." = "デフォルトとして使われるCRANのURLです. 空白の場合はユーザに質問します.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */

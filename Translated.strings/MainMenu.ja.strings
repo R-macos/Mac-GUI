@@ -1,7 +1,7 @@
-/* Entry = "1684.gToolTip"; Class = "NSButton" */
+/* Entry = "1684.ibShadowedToolTip"; Class = "NSButton" */
 "(↩)" = "(↩)";
 
-/* Entry = "1677.gToolTip"; Class = "NSButton" */
+/* Entry = "1677.ibShadowedToolTip"; Class = "NSButton" */
 "(⌘R)" = "(⌘R)";
 
 /* Entry = "1499.title"; Class = "NSTextFieldCell" */
@@ -58,10 +58,10 @@
 /* Entry = "1657.title"; Class = "NSMenuItem" */
 "Balanced Brackets" = "括弧の内容を選択";
 
-/* Entry = "844.title"; Class = "NSMenuItem" */
+/* Entry = "816.title"; Class = "NSMenu" */
 "Baseline" = "ベースライン";
 
-/* Entry = "816.title"; Class = "NSMenu" */
+/* Entry = "844.title"; Class = "NSMenuItem" */
 "Baseline" = "ベースライン";
 
 /* Entry = "830.title"; Class = "NSMenuItem" */
@@ -79,12 +79,6 @@
 /* Entry = "849.title"; Class = "NSMenuItem" */
 "Bold" = "ボールド";
 
-/* Entry = "966.title"; Class = "NSBox" */
-"Box" = "Box";
-
-/* Entry = "1602.title"; Class = "NSBox" */
-"Box" = "Box";
-
 /* Entry = "5.title"; Class = "NSMenuItem" */
 "Bring All to Front" = "すべてを手前に移動";
 
@@ -100,7 +94,7 @@
 /* Entry = "1723.title"; Class = "NSMenuItem" */
 "Cancel Object Editing" = "オブジェクトの編集をキャンセル";
 
-/* Entry = "1723.gToolTip"; Class = "NSMenuItem" */
+/* Entry = "1723.ibShadowedToolTip"; Class = "NSMenuItem" */
 "Cancels object editing without passing data back to R and closes the editor window" = "オブジェクトの編集をキャンセルし、Rに変更内容を反映せずにウィンドウを閉じます";
 
 /* Entry = "829.title"; Class = "NSMenuItem" */
@@ -112,10 +106,10 @@
 /* Entry = "218.title"; Class = "NSMenuItem" */
 "Check For R Updates" = "Rのアップデートを確認";
 
-/* Entry = "1066.title"; Class = "NSMenuItem" */
+/* Entry = "1076.title"; Class = "NSMenuItem" */
 "Clear" = "消去";
 
-/* Entry = "1076.title"; Class = "NSMenuItem" */
+/* Entry = "1066.title"; Class = "NSMenuItem" */
 "Clear" = "消去";
 
 /* Entry = "1128.title"; Class = "NSMenuItem" */
@@ -130,14 +124,20 @@
 /* Entry = "243.title"; Class = "NSMenuItem" */
 "Clear Workspace" = "ワークスペースを消去";
 
-/* Entry = "1580.title"; Class = "NSButtonCell" */
-"Close" = "閉じる";
-
 /* Entry = "73.title"; Class = "NSMenuItem" */
 "Close" = "閉じる";
 
-/* Entry = "1577.gToolTip"; Class = "NSButton" */
+/* Entry = "1580.title"; Class = "NSButtonCell" */
+"Close" = "閉じる";
+
+/* Entry = "1577.ibShadowedToolTip"; Class = "NSButton" */
 "Close Find Panel (⎋)" = "検索パネルを閉じる (⎋)";
+
+/* Entry = "1758.title"; Class = "NSMenuItem" */
+"Code Folding Submenu" = "Code Folding Submenu";
+
+/* Entry = "1757.title"; Class = "NSMenuItem" */
+"Code Folding Submenu" = "Code Folding Submenu";
 
 /* Entry = "342.headerCell.title"; Class = "NSTableColumn" */
 "Commands" = "コマンド";
@@ -187,19 +187,19 @@
 /* Entry = "1496.title"; Class = "NSButtonCell" */
 "Delete entry" = "エントリを削除";
 
-/* Entry = "504.headerCell.title"; Class = "NSTableColumn" */
-"Description" = "説明";
-
 /* Entry = "447.headerCell.title"; Class = "NSTableColumn" */
 "Description" = "説明";
 
 /* Entry = "701.headerCell.title"; Class = "NSTableColumn" */
 "Description" = "説明";
 
-/* Entry = "502.gToolTip"; Class = "NSScrollView" */
+/* Entry = "504.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "説明";
+
+/* Entry = "502.ibShadowedToolTip"; Class = "NSScrollView" */
 "Double click to load data in the R workspace. " = "パッケージをダブルクリックすると R ワークスペースに読み込まれます. ";
 
-/* Entry = "577.gToolTip"; Class = "NSButton" */
+/* Entry = "577.ibShadowedToolTip"; Class = "NSButton" */
 "Downloads Selected Packages And Installs In Selected Location (↩)." = "選択されたパッケージをダウンロードし, 選択された場所にインストールします";
 
 /* Entry = "163.title"; Class = "NSMenuItem" */
@@ -214,10 +214,10 @@
 /* Entry = "221.title"; Class = "NSMenuItem" */
 "Edit Object…" = "オブジェクトの編集…";
 
-/* Entry = "1078.title"; Class = "NSMenuItem" */
+/* Entry = "1071.title"; Class = "NSMenuItem" */
 "Empty" = "空";
 
-/* Entry = "1071.title"; Class = "NSMenuItem" */
+/* Entry = "1078.title"; Class = "NSMenuItem" */
 "Empty" = "空";
 
 /* Entry = "1082.title"; Class = "NSMenuItem" */
@@ -226,10 +226,10 @@
 /* Entry = "890.title"; Class = "NSMenuItem" */
 "Execute" = "実行";
 
-/* Entry = "81.title"; Class = "NSMenu" */
+/* Entry = "83.title"; Class = "NSMenuItem" */
 "File" = "ファイル";
 
-/* Entry = "83.title"; Class = "NSMenuItem" */
+/* Entry = "81.title"; Class = "NSMenu" */
 "File" = "ファイル";
 
 /* Entry = "168.title"; Class = "NSMenuItem" */
@@ -247,10 +247,25 @@
 /* Entry = "154.title"; Class = "NSMenuItem" */
 "Find…" = "検索…";
 
-/* Entry = "836.title"; Class = "NSMenuItem" */
-"Font" = "フォント";
+/* Entry = "1764.title"; Class = "NSMenuItem" */
+"Fold" = "畳む";
+
+/* Entry = "1759.title"; Class = "NSMenuItem" */
+"Fold Level 0" = "畳む 0";
+
+/* Entry = "1760.title"; Class = "NSMenuItem" */
+"Fold Level 1" = "畳む 1";
+
+/* Entry = "1769.title"; Class = "NSMenuItem" */
+"Fold Level 2" = "畳む 2";
+
+/* Entry = "1770.title"; Class = "NSMenuItem" */
+"Fold Level 3" = "畳む 3";
 
 /* Entry = "854.title"; Class = "NSMenu" */
+"Font" = "フォント";
+
+/* Entry = "836.title"; Class = "NSMenuItem" */
 "Font" = "フォント";
 
 /* Entry = "1497.title"; Class = "NSTextFieldCell" */
@@ -283,10 +298,10 @@
 /* Entry = "1049.title"; Class = "NSMenuItem" */
 "Go To Line…" = "指定行へ";
 
-/* Entry = "106.title"; Class = "NSMenu" */
+/* Entry = "103.title"; Class = "NSMenuItem" */
 "Help" = "ヘルプ";
 
-/* Entry = "103.title"; Class = "NSMenuItem" */
+/* Entry = "106.title"; Class = "NSMenu" */
 "Help" = "ヘルプ";
 
 /* Entry = "1490.placeholderString"; Class = "NSSearchFieldCell" */
@@ -295,7 +310,7 @@
 /* Entry = "1511.placeholderString"; Class = "NSSearchFieldCell" */
 "Help Search" = "ヘルプ検索";
 
-/* Entry = "687.title"; Class = "RWindow" */
+/* Entry = "687.title"; Class = "NSWindow" */
 "Help Search Topics" = "ヘルプ検索トピック";
 
 /* Entry = "145.title"; Class = "NSMenuItem" */
@@ -325,10 +340,10 @@
 /* Entry = "815.title"; Class = "NSMenuItem" */
 "Italic" = "イタリック";
 
-/* Entry = "1030.headerCell.title"; Class = "NSTableColumn" */
+/* Entry = "1072.title"; Class = "NSMenuItem" */
 "Item" = "項目";
 
-/* Entry = "1072.title"; Class = "NSMenuItem" */
+/* Entry = "1030.headerCell.title"; Class = "NSTableColumn" */
 "Item" = "項目";
 
 /* Entry = "1075.title"; Class = "NSMenuItem" */
@@ -349,16 +364,16 @@
 /* Entry = "838.title"; Class = "NSMenuItem" */
 "Justify" = "両端揃え";
 
-/* Entry = "842.title"; Class = "NSMenu" */
-"Kern" = "カーニング";
-
 /* Entry = "839.title"; Class = "NSMenuItem" */
 "Kern" = "カーニング";
 
-/* Entry = "824.title"; Class = "NSMenu" */
-"Ligature" = "リガチャ";
+/* Entry = "842.title"; Class = "NSMenu" */
+"Kern" = "カーニング";
 
 /* Entry = "848.title"; Class = "NSMenuItem" */
+"Ligature" = "リガチャ";
+
+/* Entry = "824.title"; Class = "NSMenu" */
 "Ligature" = "リガチャ";
 
 /* Entry = "1656.title"; Class = "NSMenuItem" */
@@ -409,10 +424,10 @@
 /* Entry = "23.title"; Class = "NSMenuItem" */
 "Minimize" = "しまう";
 
-/* Entry = "318.title"; Class = "NSMenuItem" */
+/* Entry = "319.title"; Class = "NSMenu" */
 "Misc" = "その他";
 
-/* Entry = "319.title"; Class = "NSMenu" */
+/* Entry = "318.title"; Class = "NSMenuItem" */
 "Misc" = "その他";
 
 /* Entry = "945.title"; Class = "NSMenuItem" */
@@ -448,16 +463,16 @@
 /* Entry = "543.title"; Class = "NSMenu" */
 "OtherViews" = "他のビュー";
 
-/* Entry = "697.headerCell.title"; Class = "NSTableColumn" */
-"Package" = "パッケージ";
-
 /* Entry = "500.headerCell.title"; Class = "NSTableColumn" */
 "Package" = "パッケージ";
 
-/* Entry = "546.headerCell.title"; Class = "NSTableColumn" */
+/* Entry = "697.headerCell.title"; Class = "NSTableColumn" */
 "Package" = "パッケージ";
 
 /* Entry = "446.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "パッケージ";
+
+/* Entry = "546.headerCell.title"; Class = "NSTableColumn" */
 "Package" = "パッケージ";
 
 /* Entry = "559.title"; Class = "NSMenuItem" */
@@ -505,13 +520,13 @@
 /* Entry = "136.title"; Class = "NSMenuItem" */
 "Quit R" = "Rを終了";
 
-/* Entry = "56.title"; Class = "NSMenuItem" */
-"R" = "R";
-
 /* Entry = "57.title"; Class = "NSMenu" */
 "R" = "R";
 
-/* Entry = "21.title"; Class = "RWindow" */
+/* Entry = "56.title"; Class = "NSMenuItem" */
+"R" = "R";
+
+/* Entry = "21.title"; Class = "NSWindow" */
 "R Console" = "Rコンソール";
 
 /* Entry = "794.title"; Class = "NSWindow" */
@@ -523,10 +538,10 @@
 /* Entry = "332.title"; Class = "NSMenuItem" */
 "R For Mac OS X FAQ" = "MacOS X版RのFAQ";
 
-/* Entry = "728.title"; Class = "RWindow" */
+/* Entry = "111.title"; Class = "NSMenuItem" */
 "R Help" = "Rヘルプ";
 
-/* Entry = "111.title"; Class = "NSMenuItem" */
+/* Entry = "728.title"; Class = "NSWindow" */
 "R Help" = "Rヘルプ";
 
 /* Entry = "525.title"; Class = "NSWindow" */
@@ -598,16 +613,16 @@
 /* Entry = "1663.placeholderString"; Class = "NSSearchFieldCell" */
 "Search in History [regex] - ⇧⌘H" = "履歴を検索 [正規表現] - ⇧⌘H";
 
-/* Entry = "1632.title"; Class = "NSMenu" */
-"Select" = "選択";
-
 /* Entry = "1631.title"; Class = "NSMenuItem" */
 "Select" = "選択";
 
-/* Entry = "547.gToolTip"; Class = "NSScrollView" */
+/* Entry = "1632.title"; Class = "NSMenu" */
+"Select" = "選択";
+
+/* Entry = "547.ibShadowedToolTip"; Class = "NSScrollView" */
 "Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "インストール/アップデートしたいパッケージを選択して下さい. 複数選択も可能です. ";
 
-/* Entry = "573.gToolTip"; Class = "NSMatrix" */
+/* Entry = "573.ibShadowedToolTip"; Class = "NSMatrix" */
 "Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "適切なインストール先を指定して下さい. 管理者権限がない場合は「ユーザエリア」を選択して下さい.";
 
 /* Entry = "1113.title"; Class = "NSMenuItem" */
@@ -673,7 +688,7 @@
 /* Entry = "823.title"; Class = "NSMenuItem" */
 "Text" = "テキスト";
 
-/* Entry = "559.gToolTip"; Class = "NSMenuItem" */
+/* Entry = "559.ibShadowedToolTip"; Class = "NSMenuItem" */
 "The Package Installer Requires An Internet Connection" = "パッケージインストーラの実行にはインターネット接続が必要です";
 
 /* Entry = "841.title"; Class = "NSMenuItem" */
@@ -682,19 +697,19 @@
 /* Entry = "699.headerCell.title"; Class = "NSTableColumn" */
 "Topic" = "トピック";
 
-/* Entry = "1746.title"; Class = "NSMenuItem" */
-"Transformations" = "変換";
-
 /* Entry = "1747.title"; Class = "NSMenu" */
 "Transformations" = "変換";
 
-/* Entry = "545.gToolTip"; Class = "NSButton" */
+/* Entry = "1746.title"; Class = "NSMenuItem" */
+"Transformations" = "変換";
+
+/* Entry = "545.ibShadowedToolTip"; Class = "NSButton" */
 "Try To Download The List Of Packages From The Specified URL" = "指定されたURLからパッケージの一覧をダウンロードします";
 
 /* Entry = "668.headerCell.title"; Class = "NSTableColumn" */
 "Type" = "型";
 
-/* Entry = "539.gToolTip"; Class = "NSTextField" */
+/* Entry = "539.ibShadowedToolTip"; Class = "NSTextField" */
 "URL Of Repository. Must Begin With \"http://\"" = "リポジトリのURL. \"http://\"で始まっていなければなりません.";
 
 /* Entry = "1208.title"; Class = "NSMenuItem" */
@@ -706,6 +721,12 @@
 /* Entry = "158.title"; Class = "NSMenuItem" */
 "Undo" = "取り消し";
 
+/* Entry = "1773.title"; Class = "NSMenuItem" */
+"Unfold" = "Unfold";
+
+/* Entry = "1766.title"; Class = "NSMenuItem" */
+"Unfold All" = "Unfold All";
+
 /* Entry = "1748.title"; Class = "NSMenuItem" */
 "Unicode Characters in R Strings to \\uxxxx" = "R文字列中のユニコード文字を \\uxxxx 表記に変換";
 
@@ -715,13 +736,13 @@
 /* Entry = "817.title"; Class = "NSMenuItem" */
 "Use All" = "すべて使用";
 
-/* Entry = "857.title"; Class = "NSMenuItem" */
-"Use Default" = "デフォルト";
-
 /* Entry = "856.title"; Class = "NSMenuItem" */
 "Use Default" = "デフォルト";
 
 /* Entry = "846.title"; Class = "NSMenuItem" */
+"Use Default" = "デフォルト";
+
+/* Entry = "857.title"; Class = "NSMenuItem" */
 "Use Default" = "デフォルト";
 
 /* Entry = "820.title"; Class = "NSMenuItem" */
@@ -733,7 +754,7 @@
 /* Entry = "161.title"; Class = "NSMenuItem" */
 "Use Selection for Find" = "選択部分を用いて検索";
 
-/* Entry = "565.gToolTip"; Class = "NSButton" */
+/* Entry = "565.ibShadowedToolTip"; Class = "NSButton" */
 "User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "デフォルト以外のリポジトリを用いる場合には、パッケージフォーマットを指定する必要があります. 通常、拡張子 \".tar.gz\" のアーカイブは「ソース形式」, 拡張子 \".tgz\" のパッケージは「バイナリ形式」です. ";
 
 /* Entry = "1110.title"; Class = "NSMenuItem" */
@@ -742,10 +763,10 @@
 /* Entry = "333.title"; Class = "NSMenuItem" */
 "What's New In This Version?" = "このバージョンで新しくなったのは？";
 
-/* Entry = "19.title"; Class = "NSMenuItem" */
+/* Entry = "1027.title"; Class = "NSWindow" */
 "Window" = "ウィンドウ";
 
-/* Entry = "1027.title"; Class = "NSWindow" */
+/* Entry = "19.title"; Class = "NSMenuItem" */
 "Window" = "ウィンドウ";
 
 /* Entry = "24.title"; Class = "NSMenu" */
@@ -754,10 +775,10 @@
 /* Entry = "1655.title"; Class = "NSMenuItem" */
 "Word" = "単語";
 
-/* Entry = "245.title"; Class = "NSMenuItem" */
+/* Entry = "252.title"; Class = "NSMenu" */
 "Workspace" = "ワークスペース";
 
-/* Entry = "252.title"; Class = "NSMenu" */
+/* Entry = "245.title"; Class = "NSMenuItem" */
 "Workspace" = "ワークスペース";
 
 /* Entry = "249.title"; Class = "NSMenuItem" */
@@ -768,9 +789,6 @@
 
 /* Entry = "1749.title"; Class = "NSMenuItem" */
 "\\uxxxx to Character" = "\\uxxxx 表記から文字に変換";
-
-/* Entry = "1491.title"; Class = "NSTextFieldCell" */
-"\n" = "\n";
 
 /* Entry = "799.headerCell.title"; Class = "NSTableColumn" */
 "a" = "a";

@@ -1,9 +1,6 @@
 /* Entry = "45.title"; Class = "NSMenuItem" */
 "<functions>" = "<関数>";
 
-/* Entry = "87.title"; Class = "NSBox" */
-"Box" = "Box";
-
 /* Entry = "115.title"; Class = "NSMenuItem" */
 "CP1250" = "CP1250";
 
@@ -79,19 +76,19 @@
 /* Entry = "95.title"; Class = "NSButtonCell" */
 "OK" = "OK";
 
+/* Entry = "103.title"; Class = "NSMenu" */
+"OtherViews" = "他のビュー";
+
 /* Entry = "44.title"; Class = "NSMenu" */
 "OtherViews" = "他のビュー";
 
 /* Entry = "150.title"; Class = "NSMenu" */
 "OtherViews" = "他のビュー";
 
-/* Entry = "103.title"; Class = "NSMenu" */
-"OtherViews" = "他のビュー";
-
 /* Entry = "159.title"; Class = "NSMenuItem" */
 "PDF Preview" = "PDFでプレビュー";
 
-/* Entry = "68.title"; Class = "NSPanel" */
+/* Entry = "68.title"; Class = "NSWindow" */
 "Panel" = "パネル";
 
 /* Entry = "111.title"; Class = "NSMenuItem" */

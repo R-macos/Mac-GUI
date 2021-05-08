@@ -88,7 +88,7 @@
 /* Entry = "146.title"; Class = "NSButtonCell" */
 "Strip comments in history entries" = "Elimina commenti dagli elementi history";
 
-/* Entry = "108.gToolTip"; Class = "NSTextField" */
+/* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
 "URL for the default CRAN URL. If left empty, the user will be prompted." = "URL for the default CRAN URL. If left empty, the user will be prompted.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */

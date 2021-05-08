@@ -64,10 +64,10 @@
 /* Entry = "137.title"; Class = "NSTextFieldCell" */
 "R history file:" = "R geschiedenisbestand:";
 
-/* Entry = "150.title"; Class = "NSButtonCell" */
+/* Entry = "151.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
 
-/* Entry = "151.title"; Class = "NSButtonCell" */
+/* Entry = "150.title"; Class = "NSButtonCell" */
 "Radio" = "Radio";
 
 /* Entry = "140.title"; Class = "NSButtonCell" */
@@ -88,7 +88,7 @@
 /* Entry = "146.title"; Class = "NSButtonCell" */
 "Strip comments in history entries" = "Wis commentaar uit geschiedenis";
 
-/* Entry = "108.gToolTip"; Class = "NSTextField" */
+/* Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
 "URL for the default CRAN URL. If left empty, the user will be prompted." = "URL voor de default CRAN URL. Indien leeg wordt de gebruiker gevraagd.";
 
 /* Entry = "148.title"; Class = "NSTextFieldCell" */
