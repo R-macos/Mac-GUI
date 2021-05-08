@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1611" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -27,7 +25,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="5" userLabel="View">
             <rect key="frame" x="0.0" y="0.0" width="507" height="652"/>
             <autoresizingMask key="autoresizingMask"/>
@@ -35,8 +33,8 @@
                 <box title="Bewaar werkbestand bij het afsluiten van R" id="115">
                     <rect key="frame" x="17" y="16" width="473" height="53"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <view key="contentView" id="TD6-U8-whS">
-                        <rect key="frame" x="2" y="2" width="469" height="36"/>
+                    <view key="contentView" id="oZJ-y8-GTm">
+                        <rect key="frame" x="3" y="3" width="467" height="35"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="119">
@@ -79,23 +77,23 @@
                 <box title="Standaard CRAN mirror" id="106">
                     <rect key="frame" x="17" y="315" width="473" height="79"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <view key="contentView" id="ate-N9-ObB">
-                        <rect key="frame" x="2" y="2" width="469" height="62"/>
+                    <view key="contentView" id="dLD-zU-tvu">
+                        <rect key="frame" x="3" y="3" width="467" height="61"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField toolTip="URL voor de default CRAN URL. Indien leeg wordt de gebruiker gevraagd." verticalHuggingPriority="750" tag="10" id="108">
+                            <textField toolTip="URL voor de default CRAN URL. Indien leeg wordt de gebruiker gevraagd." verticalHuggingPriority="750" tag="10" allowsCharacterPickerTouchBarItem="YES" id="108">
                                 <rect key="frame" x="74" y="20" width="247" height="22"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" tag="10" drawsBackground="YES" id="147">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
                                     <action selector="changeMirrorURL:" target="-2" id="112"/>
                                 </connections>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="109">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="109">
                                 <rect key="frame" x="17" y="24" width="52" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="URL:" id="148">
@@ -121,11 +119,11 @@
                 <box title="Geschiedenis" id="44">
                     <rect key="frame" x="17" y="73" width="473" height="238"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <view key="contentView" id="Hbu-Ui-ftC">
-                        <rect key="frame" x="2" y="2" width="469" height="221"/>
+                    <view key="contentView" id="aRq-nD-La4">
+                        <rect key="frame" x="3" y="3" width="467" height="220"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" id="46">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="46">
                                 <rect key="frame" x="17" y="151" width="120" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="R geschiedenisbestand:" id="137">
@@ -145,12 +143,12 @@
                                     <action selector="changeHistoryFileNamePathToDefault:" target="-2" id="55"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" id="63">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="63">
                                 <rect key="frame" x="142" y="150" width="179" height="22"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" title=".Rhistory" drawsBackground="YES" id="139">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -168,7 +166,7 @@
                                     <action selector="changeImportOnStartup:" target="-2" id="83"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" id="87">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="87">
                                 <rect key="frame" x="17" y="107" width="417" height="24"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="141">
@@ -189,7 +187,7 @@
                                     <action selector="changeRemoveDuplicateHistoryEntries:" target="-2" id="103"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" id="94">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="94">
                                 <rect key="frame" x="17" y="87" width="329" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Maximum aantal lijnen in geschiedenis:" id="143">
@@ -198,12 +196,12 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="95">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="95">
                                 <rect key="frame" x="340" y="83" width="91" height="22"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" title="250" drawsBackground="YES" id="144">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -238,11 +236,11 @@
                 <box title="Initiële werkmap" id="34">
                     <rect key="frame" x="17" y="398" width="473" height="133"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <view key="contentView" id="U9W-YN-sOQ">
-                        <rect key="frame" x="2" y="2" width="469" height="116"/>
+                    <view key="contentView" id="KAL-7d-CLf">
+                        <rect key="frame" x="3" y="3" width="467" height="115"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" id="36">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="36">
                                 <rect key="frame" x="17" y="81" width="107" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Map:" id="132">
@@ -262,7 +260,7 @@
                                     <action selector="chooseWorkingDir:" target="-2" id="39"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" id="41">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="41">
                                 <rect key="frame" x="126" y="82" width="216" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="~" id="134">
@@ -271,7 +269,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="86">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="86">
                                 <rect key="frame" x="17" y="0.0" width="435" height="52"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="135">
@@ -298,8 +296,8 @@
                 <box title="Standaard bibliotheek pad" id="23">
                     <rect key="frame" x="254" y="534" width="236" height="113"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <view key="contentView" id="OdX-7r-dtU">
-                        <rect key="frame" x="2" y="2" width="232" height="96"/>
+                    <view key="contentView" id="m4c-EA-Cwk">
+                        <rect key="frame" x="3" y="3" width="230" height="95"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button id="25">
@@ -313,7 +311,7 @@
                                     <action selector="changeLibPaths:" target="-2" id="30"/>
                                 </connections>
                             </button>
-                            <textField verticalHuggingPriority="750" id="29">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="29">
                                 <rect key="frame" x="266" y="89" width="154" height="18"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="(was standaard in RAqua)" id="130">
@@ -322,7 +320,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="32">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="32">
                                 <rect key="frame" x="17" y="8" width="180" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" title="Opm.: Deze wijziging gaat pas in na het herstarten van R.app" id="131">
@@ -337,8 +335,8 @@
                 <box title="Drag &amp; drop actie tijdens opstarten van R" id="17">
                     <rect key="frame" x="17" y="534" width="230" height="113"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <view key="contentView" id="2Rz-ET-Ada">
-                        <rect key="frame" x="2" y="2" width="226" height="96"/>
+                    <view key="contentView" id="dRT-98-H8h">
+                        <rect key="frame" x="3" y="3" width="224" height="95"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="20">

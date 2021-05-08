@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1611" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,7 +21,7 @@
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="5" userLabel="View">
             <rect key="frame" x="0.0" y="0.0" width="357" height="284"/>
             <autoresizingMask key="autoresizingMask"/>
@@ -42,8 +40,8 @@
                 <box title="Kleuren" titlePosition="noTitle" id="26">
                     <rect key="frame" x="17" y="56" width="323" height="210"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                    <view key="contentView" id="neO-ZW-6k5">
-                        <rect key="frame" x="2" y="2" width="319" height="206"/>
+                    <view key="contentView" id="kwX-bI-4Z1">
+                        <rect key="frame" x="3" y="3" width="317" height="204"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <colorWell id="27">
@@ -55,7 +53,7 @@
                                 </connections>
                             </colorWell>
                             <colorWell id="23">
-                                <rect key="frame" x="127" y="143" width="53" height="30"/>
+                                <rect key="frame" x="126" y="143" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                 <color key="color" red="0.70652174950000002" green="0.0085044717419999992" blue="0.025164812799999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -63,14 +61,14 @@
                                 </connections>
                             </colorWell>
                             <colorWell id="29">
-                                <rect key="frame" x="223" y="77" width="53" height="30"/>
+                                <rect key="frame" x="221" y="77" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <color key="color" red="0.041136145589999999" green="0.42934781309999998" blue="0.073435530070000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="changeIdentifierColor:" target="95" id="111"/>
                                 </connections>
                             </colorWell>
-                            <textField verticalHuggingPriority="750" id="30">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="30">
                                 <rect key="frame" x="15" y="180" width="96" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Normaal" id="115">
@@ -79,8 +77,8 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="32">
-                                <rect key="frame" x="108" y="180" width="90" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="32">
+                                <rect key="frame" x="107" y="180" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Tekenreeks" id="116">
                                     <font key="font" metaFont="system"/>
@@ -88,8 +86,8 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="36">
-                                <rect key="frame" x="201" y="113" width="101" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="36">
+                                <rect key="frame" x="199" y="113" width="101" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Identificatie" id="118">
                                     <font key="font" metaFont="system"/>
@@ -105,7 +103,7 @@
                                     <action selector="changeKeywordColor:" target="95" id="107"/>
                                 </connections>
                             </colorWell>
-                            <textField verticalHuggingPriority="750" id="33">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="33">
                                 <rect key="frame" x="16" y="114" width="96" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Trefwoord" id="117">
@@ -122,7 +120,7 @@
                                     <action selector="changeCommentColor:" target="95" id="108"/>
                                 </connections>
                             </colorWell>
-                            <textField verticalHuggingPriority="750" id="38">
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="38">
                                 <rect key="frame" x="109" y="113" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Opmerking" id="119">
@@ -131,8 +129,8 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="22">
-                                <rect key="frame" x="199" y="180" width="101" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="22">
+                                <rect key="frame" x="197" y="180" width="101" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Nummer" id="114">
                                     <font key="font" metaFont="system"/>
@@ -141,7 +139,7 @@
                                 </textFieldCell>
                             </textField>
                             <colorWell id="25">
-                                <rect key="frame" x="223" y="143" width="53" height="30"/>
+                                <rect key="frame" x="221" y="143" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <color key="color" red="0.054374456410000001" green="0.0080422842880000008" blue="0.69021737579999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -149,7 +147,7 @@
                                 </connections>
                             </colorWell>
                             <colorWell id="121">
-                                <rect key="frame" x="37" y="11" width="53" height="30"/>
+                                <rect key="frame" x="37" y="9" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -157,7 +155,7 @@
                                 </connections>
                             </colorWell>
                             <colorWell id="122">
-                                <rect key="frame" x="127" y="11" width="53" height="30"/>
+                                <rect key="frame" x="127" y="9" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -165,15 +163,15 @@
                                 </connections>
                             </colorWell>
                             <colorWell id="123">
-                                <rect key="frame" x="223" y="11" width="53" height="30"/>
+                                <rect key="frame" x="223" y="9" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="changeCursorColor:" target="-2" id="132"/>
                                 </connections>
                             </colorWell>
-                            <textField verticalHuggingPriority="750" id="124">
-                                <rect key="frame" x="14" y="48" width="101" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="124">
+                                <rect key="frame" x="12" y="48" width="101" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Background" id="125">
                                     <font key="font" metaFont="system"/>
@@ -181,8 +179,8 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="126">
-                                <rect key="frame" x="103" y="48" width="101" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="126">
+                                <rect key="frame" x="101" y="48" width="101" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Current Line" id="127">
                                     <font key="font" metaFont="system"/>
@@ -190,8 +188,8 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" id="128">
-                                <rect key="frame" x="199" y="48" width="101" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="128">
+                                <rect key="frame" x="197" y="48" width="101" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
                                 <textFieldCell key="cell" alignment="center" title="Cursor" id="129">
                                     <font key="font" metaFont="system"/>
