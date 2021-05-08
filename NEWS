@@ -2,7 +2,7 @@ NEWS for R.app GUI for Mac OS X
 
 Last-update: 2021-05-09
 *	add and empty Touch Bar to the R console to avoid
-	prefromance issue sin the default Apple
+	performance issues in the default Apple
 	implementation on some machines.
 
 *	Fix warnings about connecting outlets
