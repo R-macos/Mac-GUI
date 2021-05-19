@@ -4,9 +4,9 @@
 @settitle R for Mac OS X FAQ
 @setchapternewpage on
 @set FAQ-YEAR 2021
-@set FAQ-VERSION 4.0.5 @value{FAQ-YEAR}-03-31
-@set REL-VERSION 4.0.5
-@set GUI-VERSION 1.74
+@set FAQ-VERSION 4.1.0 @value{FAQ-YEAR}-05-18
+@set REL-VERSION 4.1.0
+@set GUI-VERSION 1.75
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -1246,7 +1246,7 @@ In the command line version of R, @code{R.home()} always points to the
 @code{Resources} directory symbolic link inside the R framework which
 points to @code{Versions/Current/Resource} which is turn points to the
 actual home -- a versioned directory such as for example
-@code{Versions/4.0/Resources}. This is how framework versioning works
+@code{Versions/4.1/Resources}. This is how framework versioning works
 in Mac OS X and is defined by Apple (see
 @uref{http://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html,
 Framework Anatomy}).
@@ -1364,8 +1364,8 @@ R processes installed using Apple installer since R 3.6.3 cannot be attached to 
 In order to debug R code or packages, you can use R binaries that don't use hardened runtime and are not notarized. Since R 4.0.0 such binaries are available in tar-balls at @uref{https://mac.R-project.org/} and can be installed by unpacking into @code{/}, e.g.:
 
 @example
-curl -LO http://mac.r-project.org/high-sierra/R-4.0-branch/x86_64/R-4.0-branch.tar.gz
-tar fxz R-4.0-branch.tar.gz -C /
+curl -LO http://mac.r-project.org/high-sierra/R-4.1-branch/x86_64/R-4.1-branch.tar.gz
+tar fxz R-4.1-branch.tar.gz -C /
 @end example
 
 If you are not the administrator, you may have to use @code{sudo tar ...}.
