@@ -34,7 +34,7 @@
 @interface SelectList : NSObject
 {
 	IBOutlet NSTableView *listDataSource;	/* TableView for the list */ 
-	id  SelectListWindow;
+	IBOutlet NSWindow    *SelectListWindow;
 	
 	int totalItems;
 	NSString **listItem;
