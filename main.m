@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
  *  Created by Stefano Iacus on 7/26/04.
- *  $Id$
+ *  $Id: main.m 7917 2021-01-25 03:37:15Z urbaneks $
  */
 
 #import <Cocoa/Cocoa.h>

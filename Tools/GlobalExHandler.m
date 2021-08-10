@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
  *  Created by Simon Urbanek on 4/14/05.
- *  $Id$
+ *  $Id: GlobalExHandler.m 5707 2011-03-14 22:00:36Z urbaneks $
  */
 
 #import "GlobalExHandler.h"

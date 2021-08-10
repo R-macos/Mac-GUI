@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
  *  Created by Simon Urbanek on 4/14/05.
- *  $Id$
+ *  $Id: GlobalExHandler.h 1363 2005-04-14 16:44:08Z urbaneks $
  */
 
 #import <Cocoa/Cocoa.h>

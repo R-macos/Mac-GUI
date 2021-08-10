@@ -27,7 +27,7 @@
  *  Suite 330, Boston, MA  02111-1307  USA.
  *
  *  Created by Simon Urbanek on 5/11/05.
- *  $Id$
+ *  $Id: RTextView.h 7927 2021-02-12 02:19:59Z urbaneks $
  */
 
 #import "CCComp.h"
