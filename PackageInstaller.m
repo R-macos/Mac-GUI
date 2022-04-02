@@ -534,10 +534,8 @@ NSString *location[4] = {
 {
 	SLog(@"PackageInstaller: awakeFromNib");
 	NSString *cURL = [Preferences stringForKey:@"pkgInstaller.customURL" withDefault:defaultCustomURL];
-	{
-		// add version number to local installation 
-		location[1] = [[NSString alloc] initWithString: [NSString stringWithFormat:@"\"%@\"", [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath]]];
-	}
+	// add version number to local installation
+	location[1] = [[NSString alloc] initWithString: [NSString stringWithFormat:@"\"%@\"", [[RController userLibraryPath] stringByExpandingTildeInPath]]];
 	pkgType=[@"mac.binary" copy];
 	hasBinaries = YES;
 	[formatCheckBox setEnabled:NO];

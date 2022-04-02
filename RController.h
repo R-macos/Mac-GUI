@@ -176,6 +176,8 @@
 @property (strong) id  activity;
 #endif
 
++ (NSString*) userLibraryPath;
+
 	/* process pending events. if blocking is set to YES then the method waits indefinitely for one event. otherwise only pending events are processed. */
 - (void) doProcessEvents: (BOOL) blocking;
 

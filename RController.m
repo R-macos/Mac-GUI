@@ -320,6 +320,29 @@ static inline const char* NSStringUTF8String(NSString* self)
 	return touchBar;
 }
 
+/* This is user's library path as interpreted by the R GUI. Note that
+   during initialization the GUI has no access to R_LIBS_USER, because
+   the Rprofile has not been loaded yet.
+   Also note that the GUI preference to add the user path pre-dates
+   R_LIBS_USER so the two concepts are at odds so it's best to make
+   sure they use the same path. */
++ (NSString*) userLibraryPath {
+	NSString *archPath = @"";
+	/* really since 4.1 CRAN R uses R_LIBS_USER set to ~/Library/R/<arch>/<ver>/library
+	   but the mismatch has not been noticed until late so we define the change
+	   officially for R 4.2.0
+       Since this only affects CRAN version we only set those for x86_64 and arm64
+       architectures, others will use paths without the arch component. */
+#if R_VERSION >= R_Version(4,2,0)
+#if __x86_64__
+	archPath = @"/x86_64";
+#elif __arm64__
+	archPath = @"/arm64";
+#endif
+#endif
+	return [[NSString stringWithFormat:@"~/Library/R%@/%@/library", archPath, Rapp_R_version_short] stringByExpandingTildeInPath];
+}
+
 - (void) awakeFromNib {
 
 	SLog(@"RController.awakeFromNib");
@@ -394,7 +417,7 @@ static inline const char* NSStringUTF8String(NSString* self)
 	[self updatePreferences]; // first update, then add self
 	[[Preferences sharedPreferences] addDependent: self];
 
-	SLog(@" - init R_LIBS");	
+	SLog(@" - init R_LIBS");
 	{ // first initialize R_LIBS if necessary
 		NSString *prefStr = [Preferences stringForKey:miscRAquaLibPathKey withDefault:nil];
 		BOOL flag = !isAdmin(); // the default is YES for users and NO for admins
@@ -402,13 +425,8 @@ static inline const char* NSStringUTF8String(NSString* self)
 			flag=[prefStr isEqualToString: @"YES"];
 		if (flag) {
 			char *cRLIBS = getenv("R_LIBS");
-			NSString *addPath = [[NSString stringWithFormat:@"~/Library/R/%@/library", Rapp_R_version_short] stringByExpandingTildeInPath];
+			NSString *addPath = [RController userLibraryPath];
 			if (![fm fileExistsAtPath:addPath]) { // make sure the directory exists
-
-//				[fm createDirectoryAtPath:[@"~/Library/R" stringByExpandingTildeInPath] attributes:nil];
-//				[fm createDirectoryAtPath:[[NSString stringWithFormat:@"~/Library/R/%@", Rapp_R_version_short] stringByExpandingTildeInPath] attributes:nil];
-//              [fm createDirectoryAtPath:addPath attributes:nil];
-
                 NSError *err = nil;
                 [fm createDirectoryAtPath:addPath withIntermediateDirectories:YES attributes:nil error:&err];
                 if(err != nil) {
