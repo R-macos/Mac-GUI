@@ -1,11 +1,11 @@
-\input texinfo
+
 @c %**start of header
 @setfilename RMacOSX-FAQ.info
 @settitle R for macOS FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2021
-@set FAQ-VERSION 4.1.2 @value{FAQ-YEAR}-11-01
-@set REL-VERSION 4.1.2
+@set FAQ-YEAR 2022
+@set FAQ-VERSION 4.1.3 @value{FAQ-YEAR}-03-10
+@set REL-VERSION 4.1.3
 @set GUI-VERSION 1.77
 @documentlanguage en
 @documentencoding ISO-8859-1
