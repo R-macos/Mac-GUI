@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2022-04-18
+*	When a package is installed "At User Level" using the Package
+	Installer and library doesn't exist then the user library is
+	added to the front of .libPaths() upon creation. This avoids
+	the necessity to re-start R to make R_LIBS_USER setting
+	active.
+
 Last-update: 2022-04-03
 *	For R >= 4.2.0 user package library is set to
 	~/Library/R/<arch>/<ver> where <arch> is either of x86_64 or
