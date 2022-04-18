@@ -32,8 +32,9 @@
  *
  */
 
+#import "RGUI.h"
 #import "RScriptEditorGlyphGenerator.h"
-#import "RScriptEditorTypesetter.h"
+#import "RScriptEditorTypeSetter.h"
 #import "RScriptEditorTextStorage.h"
 #import "RScriptEditorLayoutManager.h"
 #import "PreferenceKeys.h"
@@ -76,23 +77,63 @@
 
 - (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex
 {
+	NSGlyph localBuffer[64]; /* stack-local buffer to avoid allocations */
 	NSGlyph *buffer = NULL;
 	NSInteger folded = [theTextStorage foldedAtIndex: charIndex];
 
-	if (folded > -1) {
+	// SLog(@"%@ insertGlyphs: length:%d forStartingGlyphAtIndex:%d characterIndex:%d", self, (int) length, (int) glyphIndex, (int) charIndex);
+
+	/* This part replaces the real glyphs with NSNullGlyph (empty) and/or NSControlGlyph (the symbol)
+	   inside folded code.
+
+	   FIXME: we only check whether the first glyph is inside a fold and then
+	   replace the glyphs inside that fold. It is unclear if this can be called
+	   with larger areas that include folds somewhere in the middle. Analogously,
+	   it is unclear if there can be multiple folds in the requested glyph area.
+	   Empirically, glyphs are inserted only for same attribues, so syntax highlighting
+	   seems to help us here by splitting the text in a way that supports this
+	   approach.
+	 */
+	 if (folded > -1) {
 		NSRange effectiveRange = [theTextStorage foldedRangeAtIndex:folded];
-		if(effectiveRange.length) {
-			NSInteger size = sizeOfNSGlyph * length;
-			buffer = NSZoneMalloc(NULL, size);
-			memset_pattern4(buffer, &nullGlyph, size);
-			if ((effectiveRange.location+1) == charIndex) buffer[0] = NSControlGlyph;
+		/* fold range includes the encloding { }, so we only care if we are actually inside and it's non-empty */
+		if (effectiveRange.length &&
+			charIndex + length > effectiveRange.location + 1 &&
+			charIndex < NSMaxRange(effectiveRange) - 1) {
+			SLog(@"insertGlyphs: glyphs [%d..%d] (@char %d, len %d), inside folded range %@ thus will replace glyphs",
+				 (int) glyphIndex, (int) (glyphIndex + length - 1), (int) charIndex, (int) length,
+				 NSStringFromRange(effectiveRange));
+
+			/* we will be replacing something, so have to get a buffer for the glyphs we return */
+			NSUInteger size = sizeOfNSGlyph * length;
+			buffer = (size > sizeof(localBuffer)) ? NSZoneMalloc(NULL, size) : localBuffer;
+
+			NSUInteger nullEnd = NSMaxRange(effectiveRange) - charIndex - 1;
+			if (nullEnd > length)
+				nullEnd = length;
+			NSUInteger nullStart = effectiveRange.location + 1 - charIndex;
+			NSUInteger nullLength = nullEnd - nullStart;
+			if (nullLength < length) /* some have to be retained, so copy all and then null */
+				memcpy(buffer, glyphs, sizeOfNSGlyph * length);
+			/* it is actually 4 but for safety include a fall-back ... */
+			if (sizeOfNSGlyph == 4)
+				memset_pattern4(buffer + nullStart, &nullGlyph, sizeOfNSGlyph * nullLength);
+			else {
+				size_t i = nullStart;
+				while (i < nullLength) buffer[i++] = nullGlyph;
+			}
+			/* the first glyph just after the { (position 1) is the visible glyph */
+			NSInteger ctrlLocation = effectiveRange.location + 1 - charIndex;
+			if (ctrlLocation >= 0 && ctrlLocation < length)
+				buffer[ctrlLocation] = NSControlGlyph;
 			glyphs = buffer;
 		}
 	}
 
 	[_destination insertGlyphs:glyphs length:length forStartingGlyphAtIndex:glyphIndex characterIndex:charIndex];
 
-	if (buffer) NSZoneFree(NULL, buffer);
+	if (buffer && buffer != localBuffer)
+		NSZoneFree(NULL, buffer);
 }
 
 - (void)setIntAttribute:(NSInteger)attributeTag value:(NSInteger)val forGlyphAtIndex:(NSUInteger)glyphIndex
