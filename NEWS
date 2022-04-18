@@ -7,6 +7,13 @@ Last-update: 2022-04-18
 	the necessity to re-start R to make R_LIBS_USER setting
 	active.
 
+*	R editor code folding fix: glyph generation for folded regions
+	assumed that all requested glyphs will be replaced. However,
+	more recent macOS versions perform glyph-insertion for larger
+	regions that may require some glyphs to be retained. The
+	result was code disappearing beyond the folded region. (#2)
+
+
 Last-update: 2022-04-03
 *	For R >= 4.2.0 user package library is set to
 	~/Library/R/<arch>/<ver> where <arch> is either of x86_64 or
