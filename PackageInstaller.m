@@ -141,7 +141,15 @@ NSString *location[4] = {
 		SLog(@"PackageInstaller.installSelected: real location=%@", realLoc);
 		if (!realLoc || ![[NSFileManager defaultManager] fileExistsAtPath:realLoc]) {
 			if (realLoc && pkgInst==kUserLevel) { // create user-level path if it doesn't exist
-				system([[NSString stringWithFormat:@"mkdir -p %@", realLoc] UTF8String]);
+				NSError *err = nil;
+				[[NSFileManager defaultManager] createDirectoryAtPath:realLoc withIntermediateDirectories:YES attributes:nil error:&err];
+				if(err != nil) {
+					[self busy: NO];
+					NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"User library could not be created."),NLS(@"OK"),nil,nil);
+					return;
+				}
+				// we don't want to re-start R, so add it to .libPaths() since it would have been dropped on init
+				[[REngine mainEngine] evaluateString: [NSString stringWithFormat:@".libPaths(c(%@,.libPaths()))", targetLocation]];
 			} else {
 				[self busy: NO];
 				NSRunAlertPanel(NLS(@"Package Installer"),NLS(@"The installation location doesn't exist."),NLS(@"OK"),nil,nil);				
