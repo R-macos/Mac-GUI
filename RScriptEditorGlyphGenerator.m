@@ -120,7 +120,7 @@
 				memset_pattern4(buffer + nullStart, &nullGlyph, sizeOfNSGlyph * nullLength);
 			else {
 				size_t i = nullStart;
-				while (i < nullLength) buffer[i++] = nullGlyph;
+				while (i < nullEnd) buffer[i++] = nullGlyph;
 			}
 			/* the first glyph just after the { (position 1) is the visible glyph */
 			NSInteger ctrlLocation = effectiveRange.location + 1 - charIndex;
