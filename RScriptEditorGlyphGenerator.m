@@ -77,6 +77,7 @@
 
 - (void)insertGlyphs:(const NSGlyph *)glyphs length:(NSUInteger)length forStartingGlyphAtIndex:(NSUInteger)glyphIndex characterIndex:(NSUInteger)charIndex
 {
+	if (!_destination) return;
 	NSGlyph localBuffer[64]; /* stack-local buffer to avoid allocations */
 	NSGlyph *buffer = NULL;
 	NSInteger folded = [theTextStorage foldedAtIndex: charIndex];

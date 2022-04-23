@@ -1,5 +1,7 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.78 (8075) - supplied with R 4.2.0 --
+
 Last-update: 2022-04-18
 *	When a package is installed "At User Level" using the Package
 	Installer and library doesn't exist then the user library is

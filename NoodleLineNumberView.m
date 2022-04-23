@@ -476,6 +476,16 @@
 
 }
 
+- (NSUInteger) positionAtLine: (NSUInteger) line {
+	NSArray *lines = [self lineIndices];
+	if (line < [lines count]) {
+		NSUInteger pos = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue];
+		if (pos) pos--;
+		return pos;
+	}
+	return [[clientView string] length];
+}
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
 
@@ -490,24 +500,19 @@
 	line = [self lineNumberForLocation:p.y];
 
 	// Check if click was inside folding marker
-	if(isFoldingEnabled && ((NSWidth([self bounds]) - RULER_MARGIN)+3) - p.x >= 0 && ((NSWidth([self bounds]) - RULER_MARGIN)-3) - p.x < 7) {
-
+	if (line != NSNotFound && isFoldingEnabled &&
+	    ((NSWidth([self bounds]) - RULER_MARGIN)+3) - p.x >= 0 && ((NSWidth([self bounds]) - RULER_MARGIN)-3) - p.x < 7) {
+		if (line < 1) line = 1;
 		NSUInteger caretPosition = 0;
 		NSArray *lines           = [self lineIndices];
 		NSInteger index = [NSArrayObjectAtIndex(lines, line-1) unsignedIntegerValue];
 		
 		// Check for folding markers
 		NSRange r;
-		NSUInteger selectionEnd = 0;
-		if (line < [lines count]) {
-			selectionEnd = [NSArrayObjectAtIndex(lines, line) unsignedIntegerValue] - 1;
-		} else {
-			selectionEnd = [[clientView string] length];
-		}
+		NSUInteger selectionEnd = [self positionAtLine: line];
 
-		if(index < 0 || (selectionEnd - index) >= [[clientView string] length]) {
+		if(index < 0 || (selectionEnd - index) >= [[clientView string] length])
 			return;
-		}
 
 		r = NSMakeRange(index, selectionEnd - index);
 
@@ -519,8 +524,7 @@
 		}
 		
 		if(foldItem < 2) {
-			caretPosition = [NSArrayObjectAtIndex([self lineIndices], line) unsignedIntegerValue];
-			if(caretPosition > 0) caretPosition--;
+			caretPosition = [self positionAtLine: line];
 		} else {
 			caretPosition = index;
 		}
@@ -680,7 +684,8 @@
 			startLine = line;
 			endLine = dragSelectionStartLine;
 		}
-
+		if (startLine < 1) startLine = 1;
+		if (startLine > [lines count]) return;
 		selectionStart = [NSArrayObjectAtIndex(lines, (startLine - 1)) unsignedIntegerValue];
 		if (endLine < [lines count]) {
 			selectionEnd = [NSArrayObjectAtIndex(lines, endLine) unsignedIntegerValue];
