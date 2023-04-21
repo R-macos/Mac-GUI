@@ -1,5 +1,14 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.79 (8225) - supplied with R 4.3.0 --
+-- Release Version 1.79 (8198) - supplied with R 4.2.3 --
+-- Release Version 1.79 (8160) - supplied with R 4.2.2 --
+-- Release Version 1.79 (8095) - supplied with R 4.2.1 --
+
+Last-update: 2022-06-24
+*	Suppress spurious IsMenuKeyEvent: error output in stderr
+
+
 -- Release Version 1.78 (8075) - supplied with R 4.2.0 --
 
 Last-update: 2022-04-18

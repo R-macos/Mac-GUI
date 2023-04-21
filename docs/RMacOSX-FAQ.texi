@@ -3,10 +3,10 @@
 @setfilename RMacOSX-FAQ.info
 @settitle R for macOS FAQ
 @setchapternewpage on
-@set FAQ-YEAR 2022
-@set FAQ-VERSION 4.1.3 @value{FAQ-YEAR}-03-10
-@set REL-VERSION 4.1.3
-@set GUI-VERSION 1.77
+@set FAQ-YEAR 2023
+@set FAQ-VERSION 4.3.0 @value{FAQ-YEAR}-04-21
+@set REL-VERSION 4.3.0
+@set GUI-VERSION 1.79
 @documentlanguage en
 @documentencoding ISO-8859-1
 @c %**end of header
@@ -1219,7 +1219,7 @@ files. For R 4.0.0 and higher this is
 Also the @CRAN{} build includes libraries that are required
 to run @R{} inside the framework. Static libraries used by @CRAN{} @R{}
 and packages are available in
-@uref{https://mac.R-project.org/libs-4}
+@uref{https://mac.R-project.org/bin}
 
 @node Why is R.home() not versioned?, R.app GUI crashes on startup!, What is the difference between the CRAN build and a vanilla build?, Miscellaneous questions
 @section Why is R.home() in the R framework not versioned?
@@ -1228,7 +1228,7 @@ In the command line version of R, @code{R.home()} always points to the
 @code{Resources} directory symbolic link inside the R framework which
 points to @code{Versions/Current/Resource} which is turn points to the
 actual home -- a versioned directory such as for example
-@code{Versions/4.1/Resources}. This is how framework versioning works
+@code{Versions/4.2/Resources}. This is how framework versioning works
 in macOS and is defined by Apple (see
 @uref{https://developer.apple.com/documentation/MacOSX/Conceptual/BPFrameworks/Concepts/FrameworkAnatomy.html,
 Framework Anatomy}).
@@ -1375,11 +1375,15 @@ in tar-balls at @uref{https://mac.R-project.org/} and can be installed
 by unpacking into @code{/}, e.g.:
 
 @example
-curl -LO http://mac.r-project.org/high-sierra/R-4.1-branch/x86_64/R-4.1-branch.tar.gz
-tar fxz R-4.1-branch.tar.gz -C /
+curl -LO http://mac.r-project.org/high-sierra/R-4.2-branch/x86_64/R-4.2-branch.tar.gz
+tar fxz R-4.2-branch.tar.gz -C /
 @end example
 
 If you are not the administrator, you may have to use @code{sudo tar ...}.
+
+NOTE: R releases since 4.2.0 include an entitlement in the hardened
+runtime which allows debugging, so the above issue should not occur in
+R releases since R 4.2.0.
 
 @bye
 
