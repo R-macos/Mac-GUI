@@ -17,3 +17,22 @@
 "<unknown>" = "<desconocido>";
 /* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "%@ - Active" = "%@ - Activo";
+
+/* From: RController.m (applicationDidFinishLaunching) */
+"[History restored from " = "[Historial restablecido desde ";
+
+/* From: RController.m (application)
+   From: RController.m (applicationDidFinishLaunching) */
+"[Workspace restored from " = "[Espacio de trabajo restablecido desde ";
+
+/* Add column - label for a toolbar, keep short! */
+"Add Col" = "Agregar columna";
+
+/* From: REditor.m (toolbar) */
+"Add Column" = "Agregar Columna";
+
+/* From: REditor.m (toolbar) */
+"Add New Row" = "Agregar Nueva Fila";
+
+/* Add row - label for a toolbar, keep short! */
+"Add Row" = "Agregar Fila";
