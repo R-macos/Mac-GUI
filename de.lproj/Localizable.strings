@@ -555,3 +555,1254 @@
 /* From: RController.m (searchInHistory) */
 "…invalid regular expression" = "…ungültiger regulärer Ausdruck";
 
+/* (ColorsPrefPane) Entry = "76.title"; Class = "NSTextFieldCell" */
+"Background" = "Hintergrund";
+
+/* (ColorsPrefPane) Entry = "26.title"; Class = "NSBox" */
+"Colors" = "Farben";
+
+/* (ColorsPrefPane) Entry = "78.title"; Class = "NSButtonCell" */
+"Defaults" = "Voreinstellung";
+
+/* (ColorsPrefPane) Entry = "73.title"; Class = "NSTextFieldCell" */
+"Input" = "Eingabe";
+
+/* (ColorsPrefPane) Entry = "74.title"; Class = "NSTextFieldCell" */
+"Output" = "Ausgabe";
+
+/* (ColorsPrefPane) Entry = "72.title"; Class = "NSTextFieldCell" */
+"Prompt" = "Eingabeauff.";
+
+/* (ColorsPrefPane) Entry = "75.title"; Class = "NSTextFieldCell" */
+"Stderr" = "Fehler";
+
+/* (ColorsPrefPane) Entry = "77.title"; Class = "NSTextFieldCell" */
+"Stdout" = "Extern";
+
+/* (ColorsPrefPane) Entry = "71.title"; Class = "NSTextFieldCell" */
+"Transparency :" = "Transparenz:";
+
+/* (EditorPrefPane) Entry = "49.title"; Class = "NSButtonCell" */
+"Application" = "Programm";
+
+/* (EditorPrefPane) Entry = "229.title"; Class = "NSButtonCell" */
+"Auto-save documents" = "Dokumente automatisch speichern";
+
+/* (EditorPrefPane) Entry = "96.title"; Class = "NSButtonCell" */
+"Built-in editor" = "Standard Editor";
+
+/* (EditorPrefPane) Entry = "35.title"; Class = "NSBox" */
+"Built-in editor preferences" = "Einstellungen für Standard Editor";
+
+/* (EditorPrefPane) Entry = "47.title"; Class = "NSButtonCell" */
+"Command" = "Kommandozeilenbefehl";
+
+/* (EditorPrefPane) Entry = "97.title"; Class = "NSButtonCell" */
+"External Editor" = "Externer Editor";
+
+/* (EditorPrefPane) Entry = "37.title"; Class = "NSBox" */
+"External editor settings" = "Einstellungen für externen Editor";
+
+/* (EditorPrefPane) Entry = "177.title"; Class = "NSTextFieldCell" */
+"Font:" = "Schriftart:";
+
+/* (EditorPrefPane) Entry = "147.title"; Class = "NSButtonCell" */
+"Highlight bracket pairs" = "Klammerpaare hervorheben";
+
+/* (EditorPrefPane) Entry = "171.title"; Class = "NSButtonCell" */
+"Highlight current line" = "Aktuelle Zeile hervorheben";
+
+/* (EditorPrefPane) Entry = "173.title"; Class = "NSButtonCell" */
+"Indent new lines" = "Neue Zeile automatisch einrücken";
+
+/* (EditorPrefPane) Entry = "159.title"; Class = "NSButtonCell" */
+"Match brackets/quotes" = "Klammer automatisch schließen";
+
+/* (EditorPrefPane) Entry = "161.title"; Class = "NSTextFieldCell" */
+"Note:\nCommand is executed in a shell" = "Hinweis:\nDer Befehl wird in der “Shell” ausgeführt.";
+
+/* (EditorPrefPane) Entry = "165.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* (EditorPrefPane) Entry = "164.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* (EditorPrefPane) Entry = "179.title"; Class = "NSButtonCell" */
+"Select…" = "Auswählen…";
+
+/* (EditorPrefPane) Entry = "162.title"; Class = "NSButtonCell" */
+"Set Editor" = "Editor auswählen";
+
+/* (EditorPrefPane) Entry = "158.title"; Class = "NSButtonCell" */
+"Show function hints" = "Funktionsparameter anzeigen";
+
+/* (EditorPrefPane) Entry = "148.title"; Class = "NSButtonCell" */
+"Show line numbers" = "Zeilennummern anzeigen";
+
+/* (EditorPrefPane) Entry = "146.title"; Class = "NSButtonCell" */
+"Show syntax coloring" = "Syntaxhervorhebung";
+
+/* (EditorPrefPane) Entry = "163.title"; Class = "NSTextFieldCell" */
+"SubEthaEdit" = "SubEthaEdit";
+
+/* (EditorPrefPane) Entry = "153.title"; Class = "NSButtonCell" */
+"Wrap lines" = "Zeilen umbrechen";
+
+/* (MainMenu) Entry = "1684.ibShadowedToolTip"; Class = "NSButton" */
+"(↩)" = "(↩)";
+
+/* (MainMenu) Entry = "1677.ibShadowedToolTip"; Class = "NSButton" */
+"(⌘R)" = "(⌘R)";
+
+/* (MainMenu) Entry = "1499.title"; Class = "NSTextFieldCell" */
+"11" = "11";
+
+/* (MainMenu) Entry = "1513.title"; Class = "NSButtonCell" */
+"<" = "<";
+
+/* (MainMenu) Entry = "1501.title"; Class = "NSButtonCell" */
+"< Back" = "< Zurück";
+
+/* (MainMenu) Entry = "1514.title"; Class = "NSButtonCell" */
+">" = ">";
+
+/* (MainMenu) Entry = "58.title"; Class = "NSMenuItem" */
+"About R" = "Über R";
+
+/* (MainMenu) Entry = "312.title"; Class = "NSMenuItem" */
+"Activate Quartz Device Window" = "Quartz Fenster aktivieren";
+
+/* (MainMenu) Entry = "1671.title"; Class = "NSButtonCell" */
+"Activate SearchField ⇧⌘H" = "Suchfeld aktivieren ⇧⌘H";
+
+/* (MainMenu) Entry = "1719.title"; Class = "NSMenuItem" */
+"Add Column (CHARACTER)" = "Add Column (CHARACTER)";
+
+/* (MainMenu) Entry = "1718.title"; Class = "NSMenuItem" */
+"Add Column (NUMERIC)" = "Add Column (NUMERIC)";
+
+/* (MainMenu) Entry = "1720.title"; Class = "NSMenuItem" */
+"Add Row" = "Add Row";
+
+/* (MainMenu) Entry = "834.title"; Class = "NSMenuItem" */
+"Align Left" = "Linksbündig";
+
+/* (MainMenu) Entry = "858.title"; Class = "NSMenuItem" */
+"Align Right" = "Rechtsbündig";
+
+/* (MainMenu) Entry = "1634.title"; Class = "NSMenuItem" */
+"All" = "Alles";
+
+/* (MainMenu) Entry = "1125.title"; Class = "NSButtonCell" */
+"As defined by .libPaths()" = "Wie in .libPaths() definiert";
+
+/* (MainMenu) Entry = "1122.title"; Class = "NSButtonCell" */
+"At System Level (in R framework)" = "Systemweit (in R framework)";
+
+/* (MainMenu) Entry = "1123.title"; Class = "NSButtonCell" */
+"At User Level" = "Für diesen Benutzer";
+
+/* (MainMenu) Entry = "1513.alternateTitle"; Class = "NSButtonCell" */
+"Back" = "Zurück";
+
+/* (MainMenu) Entry = "1657.title"; Class = "NSMenuItem" */
+"Balanced Brackets" = "Klammerpaare angleichen";
+
+/* (MainMenu) Entry = "844.title"; Class = "NSMenuItem" */
+"Baseline" = "Schriftlinie";
+
+/* (MainMenu) Entry = "816.title"; Class = "NSMenu" */
+"Baseline" = "Schriftlinie";
+
+/* (MainMenu) Entry = "830.title"; Class = "NSMenuItem" */
+"Bigger" = "Größer";
+
+/* (MainMenu) Entry = "1506.title"; Class = "NSButtonCell" */
+"Binary Format Packages" = "Pakete im Binärformat";
+
+/* (MainMenu) Entry = "542.title"; Class = "NSMenuItem" */
+"BioConductor (binaries)" = "BioConductor (binaries)";
+
+/* (MainMenu) Entry = "563.title"; Class = "NSMenuItem" */
+"BioConductor (sources)" = "BioConductor (sources)";
+
+/* (MainMenu) Entry = "849.title"; Class = "NSMenuItem" */
+"Bold" = "Fett";
+
+/* (MainMenu) Entry = "5.title"; Class = "NSMenuItem" */
+"Bring All to Front" = "Alle nach vorne bringen";
+
+/* (MainMenu) Entry = "541.title"; Class = "NSMenuItem" */
+"CRAN (binaries)" = "CRAN (binaries)";
+
+/* (MainMenu) Entry = "1108.title"; Class = "NSMenuItem" */
+"CRAN (sources)" = "CRAN (sources)";
+
+/* (MainMenu) Entry = "1515.title"; Class = "NSButtonCell" */
+"Cancel" = "Abbrechen";
+
+/* (MainMenu) Entry = "1723.title"; Class = "NSMenuItem" */
+"Cancel Object Editing" = "Cancel Object Editing";
+
+/* (MainMenu) Entry = "1723.ibShadowedToolTip"; Class = "NSMenuItem" */
+"Cancels object editing without passing data back to R and closes the editor window" = "Cancels object editing without passing data back to R and closes the editor window";
+
+/* (MainMenu) Entry = "829.title"; Class = "NSMenuItem" */
+"Center" = "Zentriert";
+
+/* (MainMenu) Entry = "322.title"; Class = "NSMenuItem" */
+"Change Working Directory..." = "Arbeitsverzeichnis wechseln…";
+
+/* (MainMenu) Entry = "218.title"; Class = "NSMenuItem" */
+"Check For R Updates" = "Nach R Updates suchen";
+
+/* (MainMenu) Entry = "1066.title"; Class = "NSMenuItem" */
+"Clear" = "Löschen";
+
+/* (MainMenu) Entry = "1076.title"; Class = "NSMenuItem" */
+"Clear" = "Löschen";
+
+/* (MainMenu) Entry = "1128.title"; Class = "NSMenuItem" */
+"Clear Console" = "Konsole löschen";
+
+/* (MainMenu) Entry = "1495.title"; Class = "NSButtonCell" */
+"Clear History" = "Clear History";
+
+/* (MainMenu) Entry = "126.title"; Class = "NSMenuItem" */
+"Clear Menu" = "Menü löschen";
+
+/* (MainMenu) Entry = "243.title"; Class = "NSMenuItem" */
+"Clear Workspace" = "Arbeitsbereich löschen";
+
+/* (MainMenu) Entry = "1580.title"; Class = "NSButtonCell" */
+"Close" = "Schließen";
+
+/* (MainMenu) Entry = "73.title"; Class = "NSMenuItem" */
+"Close" = "Schließen";
+
+/* (MainMenu) Entry = "1577.ibShadowedToolTip"; Class = "NSButton" */
+"Close Find Panel (⎋)" = "Suchfenster schließen (⎋)";
+
+/* (MainMenu) Entry = "1757.title"; Class = "NSMenuItem" */
+"Code Folding Submenu" = "Faltenmenu";
+
+/* (MainMenu) Entry = "1758.title"; Class = "NSMenu" */
+"Code Folding Submenu" = "Faltenmenu";
+
+/* (MainMenu) Entry = "342.headerCell.title"; Class = "NSTableColumn" */
+"Commands" = "Befehle";
+
+/* (MainMenu) Entry = "1207.title"; Class = "NSMenuItem" */
+"Comment-out" = "Auskommentieren";
+
+/* (MainMenu) Entry = "1013.title"; Class = "NSMenuItem" */
+"Complete" = "Ergänzen";
+
+/* (MainMenu) Entry = "157.title"; Class = "NSMenuItem" */
+"Copy" = "Kopieren";
+
+/* (MainMenu) Entry = "1729.title"; Class = "NSMenuItem" */
+"Copy" = "Kopieren";
+
+/* (MainMenu) Entry = "822.title"; Class = "NSMenuItem" */
+"Copy Ruler" = "Format kopieren";
+
+/* (MainMenu) Entry = "859.title"; Class = "NSMenuItem" */
+"Copy Style" = "Stil kopieren";
+
+/* (MainMenu) Entry = "1730.title"; Class = "NSMenuItem" */
+"Copy as CSV" = "Copy as CSV";
+
+/* (MainMenu) Entry = "1489.title"; Class = "NSTextFieldCell" */
+"Current Working Directory" = "Aktuelles Arbeitsverzeichnis";
+
+/* (MainMenu) Entry = "1503.placeholderString"; Class = "NSTextFieldCell" */
+"Custom Repository URL" = "Repository URL";
+
+/* (MainMenu) Entry = "160.title"; Class = "NSMenuItem" */
+"Cut" = "Ausschneiden";
+
+/* (MainMenu) Entry = "501.headerCell.title"; Class = "NSTableColumn" */
+"Data" = "Datensatz";
+
+/* (MainMenu) Entry = "267.title"; Class = "NSMenuItem" */
+"Data Manager" = "Datensatzverwaltung";
+
+/* (MainMenu) Entry = "1651.title"; Class = "NSMenuItem" */
+"Decrease Indent" = "Einrückung aufheben";
+
+/* (MainMenu) Entry = "164.title"; Class = "NSMenuItem" */
+"Delete" = "Löschen";
+
+/* (MainMenu) Entry = "1496.title"; Class = "NSButtonCell" */
+"Delete entry" = "Eintrag löschen";
+
+/* (MainMenu) Entry = "701.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Beschreibung";
+
+/* (MainMenu) Entry = "447.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Beschreibung";
+
+/* (MainMenu) Entry = "504.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Beschreibung";
+
+/* (MainMenu) Entry = "502.ibShadowedToolTip"; Class = "NSScrollView" */
+"Double click to load data in the R workspace. " = "Doppelklicken Sie, um ein Paket in den aktuellen Arbeitsbereich zu laden.";
+
+/* (MainMenu) Entry = "577.ibShadowedToolTip"; Class = "NSButton" */
+"Downloads Selected Packages And Installs In Selected Location (↩)." = "Lädt ausgewählte Pakete herunter und installiert sie (↩).";
+
+/* (MainMenu) Entry = "163.title"; Class = "NSMenuItem" */
+"Edit" = "Bearbeiten";
+
+/* (MainMenu) Entry = "169.title"; Class = "NSMenu" */
+"Edit" = "Bearbeiten";
+
+/* (MainMenu) Entry = "1740.title"; Class = "NSMenuItem" */
+"Edit Column Names" = "Edit Column Names";
+
+/* (MainMenu) Entry = "221.title"; Class = "NSMenuItem" */
+"Edit Object…" = "Objekt bearbeiten…";
+
+/* (MainMenu) Entry = "1078.title"; Class = "NSMenuItem" */
+"Empty" = "Leer";
+
+/* (MainMenu) Entry = "1071.title"; Class = "NSMenuItem" */
+"Empty" = "Leer";
+
+/* (MainMenu) Entry = "1082.title"; Class = "NSMenuItem" */
+"Exact Search" = "Exakte Suche";
+
+/* (MainMenu) Entry = "890.title"; Class = "NSMenuItem" */
+"Execute" = "Ausführen";
+
+/* (MainMenu) Entry = "83.title"; Class = "NSMenuItem" */
+"File" = "Ablage";
+
+/* (MainMenu) Entry = "81.title"; Class = "NSMenu" */
+"File" = "Ablage";
+
+/* (MainMenu) Entry = "168.title"; Class = "NSMenuItem" */
+"Find" = "Suchen";
+
+/* (MainMenu) Entry = "159.title"; Class = "NSMenu" */
+"Find" = "Suchen";
+
+/* (MainMenu) Entry = "167.title"; Class = "NSMenuItem" */
+"Find Next" = "Weitersuchen (vorwärts)";
+
+/* (MainMenu) Entry = "162.title"; Class = "NSMenuItem" */
+"Find Previous" = "Weitersuchen (rückwärts)";
+
+/* (MainMenu) Entry = "154.title"; Class = "NSMenuItem" */
+"Find…" = "Suchen…";
+
+/* (MainMenu) Entry = "1764.title"; Class = "NSMenuItem" */
+"Fold" = "Falte";
+
+/* (MainMenu) Entry = "1759.title"; Class = "NSMenuItem" */
+"Fold Level 0" = "Falte Ebene 0";
+
+/* (MainMenu) Entry = "1760.title"; Class = "NSMenuItem" */
+"Fold Level 1" = "Falte Ebene 1";
+
+/* (MainMenu) Entry = "1769.title"; Class = "NSMenuItem" */
+"Fold Level 2" = "Falte Ebene 2";
+
+/* (MainMenu) Entry = "1770.title"; Class = "NSMenuItem" */
+"Fold Level 3" = "Falte Ebene 3";
+
+/* (MainMenu) Entry = "854.title"; Class = "NSMenu" */
+"Font" = "Schrift";
+
+/* (MainMenu) Entry = "836.title"; Class = "NSMenuItem" */
+"Font" = "Schrift";
+
+/* (MainMenu) Entry = "1497.title"; Class = "NSTextFieldCell" */
+"Font Size:" = "Schriftgröße:";
+
+/* (MainMenu) Entry = "833.title"; Class = "NSMenuItem" */
+"Format" = "Format";
+
+/* (MainMenu) Entry = "828.title"; Class = "NSMenu" */
+"Format" = "Format";
+
+/* (MainMenu) Entry = "1752.title"; Class = "NSMenuItem" */
+"Format Source Code" = "Formatiere Quellcode";
+
+/* (MainMenu) Entry = "1514.alternateTitle"; Class = "NSButtonCell" */
+"Forward" = "Vorwärts";
+
+/* (MainMenu) Entry = "1084.title"; Class = "NSMenuItem" */
+"Fuzzy Search" = "Erweiterete Suche";
+
+/* (MainMenu) Entry = "1502.title"; Class = "NSButtonCell" */
+"Fwd >" = "Vor >";
+
+/* (MainMenu) Entry = "1505.title"; Class = "NSButtonCell" */
+"Get List" = "Liste holen";
+
+/* (MainMenu) Entry = "317.title"; Class = "NSMenuItem" */
+"Get Working Directory" = "Arbeitsverzeichnis anzeigen";
+
+/* (MainMenu) Entry = "1049.title"; Class = "NSMenuItem" */
+"Go To Line…" = "Gehe zu Zeile…";
+
+/* (MainMenu) Entry = "106.title"; Class = "NSMenu" */
+"Help" = "Hilfe";
+
+/* (MainMenu) Entry = "103.title"; Class = "NSMenuItem" */
+"Help" = "Hilfe";
+
+/* (MainMenu) Entry = "1490.placeholderString"; Class = "NSSearchFieldCell" */
+"Help Search" = "Hilfe";
+
+/* (MainMenu) Entry = "1511.placeholderString"; Class = "NSSearchFieldCell" */
+"Help Search" = "Hilfe";
+
+/* (MainMenu) Entry = "687.title"; Class = "NSWindow" */
+"Help Search Topics" = "Hilfethemen";
+
+/* (MainMenu) Entry = "145.title"; Class = "NSMenuItem" */
+"Hide Others" = "Andere ausblenden";
+
+/* (MainMenu) Entry = "134.title"; Class = "NSMenuItem" */
+"Hide R" = "R ausblenden";
+
+/* (MainMenu) Entry = "1124.title"; Class = "NSButtonCell" */
+"In Other Location (Will Be Asked Upon Installation)" = "In ein anderes Verzeichnis (wird bei der Installation erfragt)";
+
+/* (MainMenu) Entry = "1650.title"; Class = "NSMenuItem" */
+"Increase Indent" = "Einrücken";
+
+/* (MainMenu) Entry = "1510.title"; Class = "NSButtonCell" */
+"Install Dependencies" = "inkl. abhängiger Pakete";
+
+/* (MainMenu) Entry = "570.title"; Class = "NSBox" */
+"Install Location" = "Installationsziel";
+
+/* (MainMenu) Entry = "1508.title"; Class = "NSButtonCell" */
+"Install Selected" = "Installieren";
+
+/* (MainMenu) Entry = "548.headerCell.title"; Class = "NSTableColumn" */
+"Installed Version" = "Installierte Version";
+
+/* (MainMenu) Entry = "815.title"; Class = "NSMenuItem" */
+"Italic" = "Kursiv";
+
+/* (MainMenu) Entry = "1072.title"; Class = "NSMenuItem" */
+"Item" = "Eintrag";
+
+/* (MainMenu) Entry = "1075.title"; Class = "NSMenuItem" */
+"Item" = "Eintrag";
+
+/* (MainMenu) Entry = "1030.headerCell.title"; Class = "NSTableColumn" */
+"Item" = "Eintrag";
+
+/* (MainMenu) Entry = "1648.title"; Class = "NSMenuItem" */
+"Item 1" = "Item 1";
+
+/* (MainMenu) Entry = "1647.title"; Class = "NSMenuItem" */
+"Item 2" = "Item 2";
+
+/* (MainMenu) Entry = "1646.title"; Class = "NSMenuItem" */
+"Item 3" = "Item 3";
+
+/* (MainMenu) Entry = "155.title"; Class = "NSMenuItem" */
+"Jump to Selection" = "Auswahl anzeigen";
+
+/* (MainMenu) Entry = "838.title"; Class = "NSMenuItem" */
+"Justify" = "Blocksatz";
+
+/* (MainMenu) Entry = "842.title"; Class = "NSMenu" */
+"Kern" = "Unterschneidungen";
+
+/* (MainMenu) Entry = "839.title"; Class = "NSMenuItem" */
+"Kern" = "Unterschneidungen";
+
+/* (MainMenu) Entry = "848.title"; Class = "NSMenuItem" */
+"Ligature" = "Ligaturen";
+
+/* (MainMenu) Entry = "824.title"; Class = "NSMenu" */
+"Ligature" = "Ligaturen";
+
+/* (MainMenu) Entry = "1656.title"; Class = "NSMenuItem" */
+"Line" = "Zeile";
+
+/* (MainMenu) Entry = "1685.title"; Class = "NSButtonCell" */
+"Load Data" = "Datensatz laden";
+
+/* (MainMenu) Entry = "247.title"; Class = "NSMenuItem" */
+"Load Default Workspace" = "Arbeitsbereich laden";
+
+/* (MainMenu) Entry = "1493.title"; Class = "NSButtonCell" */
+"Load History" = "Verlauf laden";
+
+/* (MainMenu) Entry = "250.title"; Class = "NSMenuItem" */
+"Load Workspace File…" = "Gespeicherten Arbeitsbereich laden…";
+
+/* (MainMenu) Entry = "1492.title"; Class = "NSTextFieldCell" */
+"Loading R ..." = "R wird gestartet…";
+
+/* (MainMenu) Entry = "596.title"; Class = "NSMenuItem" */
+"Local Binary Package" = "Lokales Paket (binär)";
+
+/* (MainMenu) Entry = "595.title"; Class = "NSMenuItem" */
+"Local Package Directory" = "Lokales Paket (Verzeichnis)";
+
+/* (MainMenu) Entry = "597.title"; Class = "NSMenuItem" */
+"Local Source Package" = "Lokales Paket (mit Quellcode)";
+
+/* (MainMenu) Entry = "818.title"; Class = "NSMenuItem" */
+"Loosen" = "Weiter";
+
+/* (MainMenu) Entry = "821.title"; Class = "NSMenuItem" */
+"Lower" = "Tiefer";
+
+/* (MainMenu) Entry = "1083.title"; Class = "NSMenuItem" */
+"Main R Help Page" = "R Hilfeseite";
+
+/* (MainMenu) Entry = "29.title"; Class = "NSMenu" */
+"MainMenu" = "Hauptmenü";
+
+/* (MainMenu) Entry = "1074.title"; Class = "NSMenu" */
+"Menu" = "Menü";
+
+/* (MainMenu) Entry = "1064.title"; Class = "NSMenu" */
+"Menu" = "Menü";
+
+/* (MainMenu) Entry = "23.title"; Class = "NSMenuItem" */
+"Minimize" = "Im Dock ablegen";
+
+/* (MainMenu) Entry = "319.title"; Class = "NSMenu" */
+"Misc" = "Verschiedenes";
+
+/* (MainMenu) Entry = "318.title"; Class = "NSMenuItem" */
+"Misc" = "Verschiedenes";
+
+/* (MainMenu) Entry = "945.title"; Class = "NSMenuItem" */
+"New Document" = "Neues Dokument";
+
+/* (MainMenu) Entry = "311.title"; Class = "NSMenuItem" */
+"New Quartz Device Window" = "Neues Quartz Fenster";
+
+/* (MainMenu) Entry = "1743.title"; Class = "NSMenuItem" */
+"New Rd Document" = "Neues Rd Dokument";
+
+/* (MainMenu) Entry = "667.headerCell.title"; Class = "NSTableColumn" */
+"Object" = "Objekt";
+
+/* (MainMenu) Entry = "1516.title"; Class = "NSButtonCell" */
+"Ok" = "Ok";
+
+/* (MainMenu) Entry = "220.title"; Class = "NSMenuItem" */
+"Open Document..." = "Öffne Dokument…";
+
+/* (MainMenu) Entry = "125.title"; Class = "NSMenu" */
+"Open Recent" = "Benutzte Dokumente";
+
+/* (MainMenu) Entry = "124.title"; Class = "NSMenuItem" */
+"Open Recent" = "Benutzte Dokumente";
+
+/* (MainMenu) Entry = "1107.title"; Class = "NSMenuItem" */
+"Other Directory URL" = "Web-Verzeichnis";
+
+/* (MainMenu) Entry = "1109.title"; Class = "NSMenuItem" */
+"Other Repository" = "Andere 'Repository'";
+
+/* (MainMenu) Entry = "543.title"; Class = "NSMenu" */
+"OtherViews" = "Andere Ansicht";
+
+/* (MainMenu) Entry = "546.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Paket";
+
+/* (MainMenu) Entry = "500.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Paket";
+
+/* (MainMenu) Entry = "697.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Paket";
+
+/* (MainMenu) Entry = "446.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Paket";
+
+/* (MainMenu) Entry = "559.title"; Class = "NSMenuItem" */
+"Package Installer" = "Paketinstallation";
+
+/* (MainMenu) Entry = "266.title"; Class = "NSMenuItem" */
+"Package Manager" = "Paketverwaltung";
+
+/* (MainMenu) Entry = "1507.placeholderString"; Class = "NSSearchFieldCell" */
+"Package Search" = "Suche";
+
+/* (MainMenu) Entry = "270.title"; Class = "NSMenu" */
+"Packages & Data" = "Pakete und Datensätze";
+
+/* (MainMenu) Entry = "262.title"; Class = "NSMenuItem" */
+"Packages & Data" = "Pakete und Datensätze";
+
+/* (MainMenu) Entry = "538.title"; Class = "NSBox" */
+"Packages Repository" = "Paket-Repository";
+
+/* (MainMenu) Entry = "77.title"; Class = "NSMenuItem" */
+"Page Setup…" = "Papierformat…";
+
+/* (MainMenu) Entry = "171.title"; Class = "NSMenuItem" */
+"Paste" = "Einsetzen";
+
+/* (MainMenu) Entry = "1475.title"; Class = "NSMenuItem" */
+"Paste As Plain Text" = "Einsetzen (als reinen Text)";
+
+/* (MainMenu) Entry = "845.title"; Class = "NSMenuItem" */
+"Paste Ruler" = "Einsetzen und Lineal anpassen";
+
+/* (MainMenu) Entry = "837.title"; Class = "NSMenuItem" */
+"Paste Style" = "Einsetzen und Stil anpassen";
+
+/* (MainMenu) Entry = "129.title"; Class = "NSMenuItem" */
+"Preferences…" = "Einstellungen…";
+
+/* (MainMenu) Entry = "1512.title"; Class = "NSButtonCell" */
+"Print" = "Drucken";
+
+/* (MainMenu) Entry = "78.title"; Class = "NSMenuItem" */
+"Print…" = "Drucken…";
+
+/* (MainMenu) Entry = "136.title"; Class = "NSMenuItem" */
+"Quit R" = "R Beenden";
+
+/* (MainMenu) Entry = "57.title"; Class = "NSMenu" */
+"R" = "R";
+
+/* (MainMenu) Entry = "56.title"; Class = "NSMenuItem" */
+"R" = "R";
+
+/* (MainMenu) Entry = "21.title"; Class = "NSWindow" */
+"R Console" = "R Konsole";
+
+/* (MainMenu) Entry = "794.title"; Class = "NSWindow" */
+"R Data Editor" = "R Datenbearbeitung";
+
+/* (MainMenu) Entry = "498.title"; Class = "NSWindow" */
+"R Data Manager" = "R Datensatzverwaltung";
+
+/* (MainMenu) Entry = "332.title"; Class = "NSMenuItem" */
+"R For Mac OS X FAQ" = "R für Mac OS X FAQ";
+
+/* (MainMenu) Entry = "111.title"; Class = "NSMenuItem" */
+"R Help" = "R Hilfe";
+
+/* (MainMenu) Entry = "728.title"; Class = "NSWindow" */
+"R Help" = "R Hilfe";
+
+/* (MainMenu) Entry = "525.title"; Class = "NSWindow" */
+"R Package Installer" = "R Paketinstallation";
+
+/* (MainMenu) Entry = "444.title"; Class = "NSWindow" */
+"R Package Manager" = "R Paketverwaltung";
+
+/* (MainMenu) Entry = "662.title"; Class = "NSWindow" */
+"R Workspace Browser" = "R Arbeitsbereich Betrachter";
+
+/* (MainMenu) Entry = "1081.title"; Class = "NSMenuItem" */
+"R for Mac OS X FAQ" = "R für Mac OS X FAQ";
+
+/* (MainMenu) Entry = "1517.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* (MainMenu) Entry = "850.title"; Class = "NSMenuItem" */
+"Raise" = "Höher";
+
+/* (MainMenu) Entry = "173.title"; Class = "NSMenuItem" */
+"Redo" = "Wiederholen";
+
+/* (MainMenu) Entry = "1678.title"; Class = "NSButtonCell" */
+"Refresh List" = "Liste neu laden";
+
+/* (MainMenu) Entry = "1500.title"; Class = "NSButtonCell" */
+"Refresh List" = "Liste neu laden";
+
+/* (MainMenu) Entry = "1644.title"; Class = "NSMenuItem" */
+"Reinterpret with Encoding" = "Neu auslegen in Kodierung";
+
+/* (MainMenu) Entry = "1645.title"; Class = "NSMenu" */
+"Reinterpret with Encoding" = "Neu auslegen in Kodierung";
+
+/* (MainMenu) Entry = "1722.title"; Class = "NSMenuItem" */
+"Remove Selection" = "Remove Selection";
+
+/* (MainMenu) Entry = "550.headerCell.title"; Class = "NSTableColumn" */
+"Repository Version" = "Version im Repository";
+
+/* (MainMenu) Entry = "316.title"; Class = "NSMenuItem" */
+"Reset Working Directory" = "Arbeitsverzeichnis zurücksetzen";
+
+/* (MainMenu) Entry = "112.title"; Class = "NSMenuItem" */
+"Revert" = "Wiederherstellen";
+
+/* (MainMenu) Entry = "658.title"; Class = "NSMenuItem" */
+"Run X11 Server" = "X11 Server starten";
+
+/* (MainMenu) Entry = "75.title"; Class = "NSMenuItem" */
+"Save" = "Speichern";
+
+/* (MainMenu) Entry = "80.title"; Class = "NSMenuItem" */
+"Save As…" = "Speichern als…";
+
+/* (MainMenu) Entry = "246.title"; Class = "NSMenuItem" */
+"Save Default Workspace" = "Arbeitsbereich speichern";
+
+/* (MainMenu) Entry = "1494.title"; Class = "NSButtonCell" */
+"Save History" = "Verlauf speichern";
+
+/* (MainMenu) Entry = "260.title"; Class = "NSMenuItem" */
+"Save Workspace File…" = "Arbeitsbereich speichern als…";
+
+/* (MainMenu) Entry = "1680.placeholderString"; Class = "NSSearchFieldCell" */
+"Search" = "Suchen";
+
+/* (MainMenu) Entry = "1663.placeholderString"; Class = "NSSearchFieldCell" */
+"Search in History [regex] - ⇧⌘H" = "Search in History [regex] - ⇧⌘H";
+
+/* (MainMenu) Entry = "1632.title"; Class = "NSMenu" */
+"Select" = "Auswählen";
+
+/* (MainMenu) Entry = "1631.title"; Class = "NSMenuItem" */
+"Select" = "Auswählen";
+
+/* (MainMenu) Entry = "547.ibShadowedToolTip"; Class = "NSScrollView" */
+"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Wählen Sie Pakete, die installiert werden sollen. Mehrfachwahl ist erlaubt.";
+
+/* (MainMenu) Entry = "573.ibShadowedToolTip"; Class = "NSMatrix" */
+"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Wählen Sie das gewünschte Zielverzeichnis.";
+
+/* (MainMenu) Entry = "1113.title"; Class = "NSMenuItem" */
+"Select packages from previous R" = "Pakete aus vorigem R auswählen";
+
+/* (MainMenu) Entry = "130.title"; Class = "NSMenu" */
+"Services" = "Dienste";
+
+/* (MainMenu) Entry = "131.title"; Class = "NSMenuItem" */
+"Services" = "Dienste";
+
+/* (MainMenu) Entry = "150.title"; Class = "NSMenuItem" */
+"Show All" = "Alle einblenden";
+
+/* (MainMenu) Entry = "819.title"; Class = "NSMenuItem" */
+"Show Colors" = "Farbpalette einblenden";
+
+/* (MainMenu) Entry = "826.title"; Class = "NSMenuItem" */
+"Show Fonts" = "Schriftarten einblenden";
+
+/* (MainMenu) Entry = "1065.title"; Class = "NSMenuItem" */
+"Show Installed Only" = "Nur installierte anzeigen";
+
+/* (MainMenu) Entry = "843.title"; Class = "NSMenuItem" */
+"Show Ruler" = "Lineale einblenden";
+
+/* (MainMenu) Entry = "412.title"; Class = "NSMenuItem" */
+"Show Workspace" = "Arbeitsbereich anzeigen";
+
+/* (MainMenu) Entry = "855.title"; Class = "NSMenuItem" */
+"Smaller" = "Kleiner";
+
+/* (MainMenu) Entry = "970.title"; Class = "NSMenuItem" */
+"Source Document" = "Dokument ausführen";
+
+/* (MainMenu) Entry = "72.title"; Class = "NSMenuItem" */
+"Source File..." = "R Skript ausführen…";
+
+/* (MainMenu) Entry = "451.headerCell.title"; Class = "NSTableColumn" */
+"Status" = "Status";
+
+/* (MainMenu) Entry = "664.headerCell.title"; Class = "NSTableColumn" */
+"Structure" = "Struktur";
+
+/* (MainMenu) Entry = "852.title"; Class = "NSMenuItem" */
+"Subscript" = "Tiefgestellt";
+
+/* (MainMenu) Entry = "827.title"; Class = "NSMenuItem" */
+"Superscript" = "Hochgestellt";
+
+/* (MainMenu) Entry = "942.title"; Class = "NSMenuItem" */
+"Switch to Console Window" = "Zur Konsole wechseln";
+
+/* (MainMenu) Entry = "1117.title"; Class = "NSMenuItem" */
+"Switch to Last Editor Window" = "Zum letzten Editor Fenster wechseln";
+
+/* (MainMenu) Entry = "1118.title"; Class = "NSMenuItem" */
+"Switch to Last Quartz Window" = "Zum letzen Quartz Fenster wechseln";
+
+/* (MainMenu) Entry = "832.title"; Class = "NSMenu" */
+"Text" = "Text";
+
+/* (MainMenu) Entry = "823.title"; Class = "NSMenuItem" */
+"Text" = "Text";
+
+/* (MainMenu) Entry = "559.ibShadowedToolTip"; Class = "NSMenuItem" */
+"The Package Installer Requires An Internet Connection" = "Das Paketinstallationsprogramm brauch eine Internetverbindung, um Pakete installieren zu können";
+
+/* (MainMenu) Entry = "841.title"; Class = "NSMenuItem" */
+"Tighten" = "Enger";
+
+/* (MainMenu) Entry = "699.headerCell.title"; Class = "NSTableColumn" */
+"Topic" = "Thema";
+
+/* (MainMenu) Entry = "1747.title"; Class = "NSMenu" */
+"Transformations" = "Transformationen";
+
+/* (MainMenu) Entry = "1746.title"; Class = "NSMenuItem" */
+"Transformations" = "Transformationen";
+
+/* (MainMenu) Entry = "545.ibShadowedToolTip"; Class = "NSButton" */
+"Try To Download The List Of Packages From The Specified URL" = "Pakete von der angegebenen URL herunterladen.";
+
+/* (MainMenu) Entry = "668.headerCell.title"; Class = "NSTableColumn" */
+"Type" = "Typ";
+
+/* (MainMenu) Entry = "539.ibShadowedToolTip"; Class = "NSTextField" */
+"URL Of Repository. Must Begin With \"http://\"" = "URL der Repository. Muss mit \"http://\" anfangen";
+
+/* (MainMenu) Entry = "1208.title"; Class = "NSMenuItem" */
+"Uncomment" = "Ein Kommentarzeichen entfernen";
+
+/* (MainMenu) Entry = "835.title"; Class = "NSMenuItem" */
+"Underline" = "Unterstreichen";
+
+/* (MainMenu) Entry = "158.title"; Class = "NSMenuItem" */
+"Undo" = "Widerrufen";
+
+/* (MainMenu) Entry = "1773.title"; Class = "NSMenuItem" */
+"Unfold" = "Unfold";
+
+/* (MainMenu) Entry = "1766.title"; Class = "NSMenuItem" */
+"Unfold All" = "Unfold All";
+
+/* (MainMenu) Entry = "1748.title"; Class = "NSMenuItem" */
+"Unicode Characters in R Strings to \\uxxxx" = "Unicode-Zeichen in R Zeichenketten zu \\uxxxx";
+
+/* (MainMenu) Entry = "1509.title"; Class = "NSButtonCell" */
+"Update All" = "Alle Aktualisieren";
+
+/* (MainMenu) Entry = "817.title"; Class = "NSMenuItem" */
+"Use All" = "Alle verwenden";
+
+/* (MainMenu) Entry = "846.title"; Class = "NSMenuItem" */
+"Use Default" = "Normal";
+
+/* (MainMenu) Entry = "857.title"; Class = "NSMenuItem" */
+"Use Default" = "Normal";
+
+/* (MainMenu) Entry = "856.title"; Class = "NSMenuItem" */
+"Use Default" = "Normal";
+
+/* (MainMenu) Entry = "820.title"; Class = "NSMenuItem" */
+"Use None" = "Nicht verwenden";
+
+/* (MainMenu) Entry = "851.title"; Class = "NSMenuItem" */
+"Use None" = "Nicht verwenden";
+
+/* (MainMenu) Entry = "161.title"; Class = "NSMenuItem" */
+"Use Selection for Find" = "Auswahl suchen";
+
+/* (MainMenu) Entry = "565.ibShadowedToolTip"; Class = "NSButton" */
+"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "Das Format der Pakete sollte ausgewählt werden.";
+
+/* (MainMenu) Entry = "1110.title"; Class = "NSMenuItem" */
+"Vignettes" = "Vignetten";
+
+/* (MainMenu) Entry = "333.title"; Class = "NSMenuItem" */
+"What's New In This Version?" = "Neues in dieser Version";
+
+/* (MainMenu) Entry = "19.title"; Class = "NSMenuItem" */
+"Window" = "Fenster";
+
+/* (MainMenu) Entry = "1027.title"; Class = "NSWindow" */
+"Window" = "Fenster";
+
+/* (MainMenu) Entry = "24.title"; Class = "NSMenu" */
+"Window" = "Fenster";
+
+/* (MainMenu) Entry = "1655.title"; Class = "NSMenuItem" */
+"Word" = "Wort";
+
+/* (MainMenu) Entry = "245.title"; Class = "NSMenuItem" */
+"Workspace" = "Arbeitsbereich";
+
+/* (MainMenu) Entry = "252.title"; Class = "NSMenu" */
+"Workspace" = "Arbeitsbereich";
+
+/* (MainMenu) Entry = "249.title"; Class = "NSMenuItem" */
+"Workspace Browser" = "Arbeitsbereich betrachten";
+
+/* (MainMenu) Entry = "197.title"; Class = "NSMenuItem" */
+"Zoom" = "Zoomen";
+
+/* (MainMenu) Entry = "1749.title"; Class = "NSMenuItem" */
+"\\uxxxx to Character" = "\\uxxxx zu Zeichen";
+
+/* (MainMenu) Entry = "799.headerCell.title"; Class = "NSTableColumn" */
+"a" = "a";
+
+/* (MainMenu) Entry = "797.headerCell.title"; Class = "NSTableColumn" */
+"b" = "b";
+
+/* (MainMenu) Entry = "806.headerCell.title"; Class = "NSTableColumn" */
+"c" = "c";
+
+/* (MainMenu) Entry = "807.headerCell.title"; Class = "NSTableColumn" */
+"d" = "d";
+
+/* (MainMenu) Entry = "808.headerCell.title"; Class = "NSTableColumn" */
+"e" = "e";
+
+/* (MainMenu) Entry = "462.alternateTitle"; Class = "NSButtonCell" */
+"loaded" = "geladen";
+
+/* (MainMenu) Entry = "462.title"; Class = "NSButtonCell" */
+"not loaded" = "nicht geladen";
+
+/* (MiscPrefPane) Entry = "130.title"; Class = "NSTextFieldCell" */
+"(was default in RAqua)" = "(war Voreinstellung in RAqua)";
+
+/* (MiscPrefPane) Entry = "139.title"; Class = "NSTextFieldCell" */
+".Rhistory" = ".Rhistory";
+
+/* (MiscPrefPane) Entry = "144.title"; Class = "NSTextFieldCell" */
+"250" = "250";
+
+/* (MiscPrefPane) Entry = "129.title"; Class = "NSButtonCell" */
+"Add ~/Library/R…" = "Füge ~/Library/R… an";
+
+/* (MiscPrefPane) Entry = "136.title"; Class = "NSButtonCell" */
+"Always apply" = "immer anwenden";
+
+/* (MiscPrefPane) Entry = "123.title"; Class = "NSButtonCell" */
+"Ask" = "Immer nachfragen";
+
+/* (MiscPrefPane) Entry = "133.title"; Class = "NSButtonCell" */
+"Change" = "Ändern";
+
+/* (MiscPrefPane) Entry = "145.title"; Class = "NSButtonCell" */
+"Cleanup history entries" = "Verlaufseinträge aufräumen";
+
+/* (MiscPrefPane) Entry = "138.title"; Class = "NSButtonCell" */
+"Default" = "Voreinst.";
+
+/* (MiscPrefPane) Entry = "106.title"; Class = "NSBox" */
+"Default CRAN mirror" = "Bevorzugter CRAN Server";
+
+/* (MiscPrefPane) Entry = "23.title"; Class = "NSBox" */
+"Default Library Paths" = "Library Pfad";
+
+/* (MiscPrefPane) Entry = "132.title"; Class = "NSTextFieldCell" */
+"Directory:" = "Arbeitsverzeichnis nach dem Start:";
+
+/* (MiscPrefPane) Entry = "17.title"; Class = "NSBox" */
+"Drag & drop action during R start-up" = "R-Dateien wie folgt behandeln:";
+
+/* (MiscPrefPane) Entry = "44.title"; Class = "NSBox" */
+"History" = "Verlauf";
+
+/* (MiscPrefPane) Entry = "34.title"; Class = "NSBox" */
+"Initial working directory" = "Start";
+
+/* (MiscPrefPane) Entry = "143.title"; Class = "NSTextFieldCell" */
+"Max number of entries in history:" = "Maximale Anzahl der Einträge:";
+
+/* (MiscPrefPane) Entry = "124.title"; Class = "NSButtonCell" */
+"No" = "Nein";
+
+/* (MiscPrefPane) Entry = "135.title"; Class = "NSTextFieldCell" */
+"Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Normalerweise kann das Startverzeichnis geändert werden, wenn ein Ordner auf das R Symbol gezogen wird. Wenn Sie dies nicht wünschen, aktivieren Sie 'immer anwenden'.";
+
+/* (MiscPrefPane) Entry = "131.title"; Class = "NSTextFieldCell" */
+"Note: This change is effective only after a restart of R.app" = "Bemerkung: Diese Einstellung wird erst nach dem Neustart von R aktiv";
+
+/* (MiscPrefPane) Entry = "141.title"; Class = "NSTextFieldCell" */
+"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Tip: Verwenden Sie einen absoluten Pfad, um immer dieselbe Verlaufdatei zu verwenden, z.B. ~/.Rhistory";
+
+/* (MiscPrefPane) Entry = "18.title"; Class = "NSButtonCell" */
+"Open file in editor" = "Datei im Editor öffnen";
+
+/* (MiscPrefPane) Entry = "137.title"; Class = "NSTextFieldCell" */
+"R history file:" = "R Verlaufdatei:";
+
+/* (MiscPrefPane) Entry = "151.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* (MiscPrefPane) Entry = "150.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* (MiscPrefPane) Entry = "140.title"; Class = "NSButtonCell" */
+"Read history file on startup" = "Verlaufdatei beim Start laden";
+
+/* (MiscPrefPane) Entry = "142.title"; Class = "NSButtonCell" */
+"Remove duplicate entries in history" = "Dupletten im Verlauf löschen";
+
+/* (MiscPrefPane) Entry = "115.title"; Class = "NSBox" */
+"Save workspace on exit from R" = "Arbeitsbereich beim Verlassen speichern";
+
+/* (MiscPrefPane) Entry = "149.title"; Class = "NSButtonCell" */
+"Select" = "Auswählen";
+
+/* (MiscPrefPane) Entry = "19.title"; Class = "NSButtonCell" */
+"Source input file" = "Datei in R ausführen";
+
+/* (MiscPrefPane) Entry = "146.title"; Class = "NSButtonCell" */
+"Strip comments in history entries" = "Kommentare im Verlauf nicht speichern";
+
+/* (MiscPrefPane) Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "Voreinstellung für CRAN URL. Die URL wird interaktiv erfragt wenn nicht angegeben.";
+
+/* (MiscPrefPane) Entry = "148.title"; Class = "NSTextFieldCell" */
+"URL:" = "URL:";
+
+/* (MiscPrefPane) Entry = "125.title"; Class = "NSButtonCell" */
+"Yes" = "Ja";
+
+/* (MiscPrefPane) Entry = "134.title"; Class = "NSTextFieldCell" */
+"~" = "~";
+
+/* (QuartzPrefPane) Entry = "122.title"; Class = "NSTextFieldCell" */
+"12" = "12";
+
+/* (QuartzPrefPane) Entry = "112.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* (QuartzPrefPane) Entry = "113.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* (QuartzPrefPane) Entry = "31.title"; Class = "NSMenuItem" */
+"Bottom Left" = "links unten";
+
+/* (QuartzPrefPane) Entry = "32.title"; Class = "NSMenuItem" */
+"Bottom Right" = "rechts unten";
+
+/* (QuartzPrefPane) Entry = "45.title"; Class = "NSBox" */
+"Box" = "Box";
+
+/* (QuartzPrefPane) Entry = "37.title"; Class = "NSMenuItem" */
+"Centered" = "Zentriert";
+
+/* (QuartzPrefPane) Entry = "120.title"; Class = "NSButtonCell" */
+"Change" = "Ändern";
+
+/* (QuartzPrefPane) Entry = "125.title"; Class = "NSTextFieldCell" */
+"DPI:" = "DPI:";
+
+/* (QuartzPrefPane) Entry = "117.title"; Class = "NSTextFieldCell" */
+"Location:" = "Anfangsposition:";
+
+/* (QuartzPrefPane) Entry = "124.title"; Class = "NSTextFieldCell" */
+"Note: Change and press return" = "(Drücken Sie <Enter> nach einer Änderung)";
+
+/* (QuartzPrefPane) Entry = "35.title"; Class = "NSMenu" */
+"OtherViews" = "Andere Ansichten";
+
+/* (QuartzPrefPane) Entry = "111.title"; Class = "NSButtonCell" */
+"Override R Quartz width/height parameters" = "Standardeinstellungen für Quartz überschreiben";
+
+/* (QuartzPrefPane) Entry = "123.title"; Class = "NSButtonCell" */
+"Restore defaults" = "Zurücksetzen";
+
+/* (QuartzPrefPane) Entry = "121.title"; Class = "NSTextFieldCell" */
+"System Font Text" = "System-Schrift";
+
+/* (QuartzPrefPane) Entry = "36.title"; Class = "NSMenuItem" */
+"Top Left" = "links oben";
+
+/* (QuartzPrefPane) Entry = "34.title"; Class = "NSMenuItem" */
+"Top Right" = "rechts oben";
+
+/* (QuartzPrefPane) Entry = "118.title"; Class = "NSTextFieldCell" */
+"font family:" = "Schriftart:";
+
+/* (QuartzPrefPane) Entry = "119.title"; Class = "NSTextFieldCell" */
+"font point size:" = "Schriftgröße:";
+
+/* (QuartzPrefPane) Entry = "115.title"; Class = "NSTextFieldCell" */
+"height (inches):" = "Höhe (in Zoll):";
+
+/* (QuartzPrefPane) Entry = "114.title"; Class = "NSTextFieldCell" */
+"width (inches):" = "Breite (in Zoll):";
+
+/* (RConsole) Entry = "5.title"; Class = "NSWindow" */
+"Console" = "Konsole";
+
+/* (RDocument) Entry = "45.title"; Class = "NSMenuItem" */
+"<functions>" = "<Funktionen>";
+
+/* (RDocument) Entry = "115.title"; Class = "NSMenuItem" */
+"CP1250" = "CP1250";
+
+/* (RDocument) Entry = "113.title"; Class = "NSMenuItem" */
+"CP1251" = "CP1251";
+
+/* (RDocument) Entry = "114.title"; Class = "NSMenuItem" */
+"CP1252" = "CP1252";
+
+/* (RDocument) Entry = "117.title"; Class = "NSMenuItem" */
+"CP1253" = "CP1253";
+
+/* (RDocument) Entry = "116.title"; Class = "NSMenuItem" */
+"CP1254" = "CP1254";
+
+/* (RDocument) Entry = "94.title"; Class = "NSButtonCell" */
+"Cancel" = "Abbrechen";
+
+/* (RDocument) Entry = "161.title"; Class = "NSMenuItem" */
+"Check Rd Document" = "Check Rd Document";
+
+/* (RDocument) Entry = "83.title"; Class = "NSMenuItem" */
+"Clear" = "Löschen";
+
+/* (RDocument) Entry = "110.title"; Class = "NSMenuItem" */
+"EUC (jp)" = "EUC (jp)";
+
+/* (RDocument) Entry = "82.title"; Class = "NSMenuItem" */
+"Empty" = "Leer";
+
+/* (RDocument) Entry = "108.title"; Class = "NSTextFieldCell" */
+"Encoding:" = "Zeichenkodierung:";
+
+/* (RDocument) Entry = "59.title"; Class = "NSMenuItem" */
+"Exact Search" = "Exakte Suche";
+
+/* (RDocument) Entry = "60.title"; Class = "NSMenuItem" */
+"Fuzzy Search" = "Unscharfe Suche";
+
+/* (RDocument) Entry = "96.title"; Class = "NSTextFieldCell" */
+"Go to line:" = "Zeilennummer:";
+
+/* (RDocument) Entry = "153.title"; Class = "NSMenuItem" */
+"HTML Preview" = "Füge “function” Rd Vorlage ein";
+
+/* (RDocument) Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
+"Help search" = "Hilfe";
+
+/* (RDocument) Entry = "120.title"; Class = "NSMenuItem" */
+"ISO2022-JP" = "ISO2022-JP";
+
+/* (RDocument) Entry = "165.title"; Class = "NSMenuItem" */
+"Insert Data Rd Template" = "Insert Data Rd Template";
+
+/* (RDocument) Entry = "164.title"; Class = "NSMenuItem" */
+"Insert Function Rd Template" = "Insert Function Rd Template";
+
+/* (RDocument) Entry = "81.title"; Class = "NSMenuItem" */
+"Item" = "Eintrag";
+
+/* (RDocument) Entry = "106.title"; Class = "NSMenuItem" */
+"Latin1" = "Latin1";
+
+/* (RDocument) Entry = "112.title"; Class = "NSMenuItem" */
+"Latin2" = "Latin2";
+
+/* (RDocument) Entry = "105.title"; Class = "NSMenuItem" */
+"MacRoman" = "MacRoman";
+
+/* (RDocument) Entry = "58.title"; Class = "NSMenu" */
+"Menu" = "Menü";
+
+/* (RDocument) Entry = "95.title"; Class = "NSButtonCell" */
+"OK" = "OK";
+
+/* (RDocument) Entry = "44.title"; Class = "NSMenu" */
+"OtherViews" = "OtherViews";
+
+/* (RDocument) Entry = "150.title"; Class = "NSMenu" */
+"OtherViews" = "OtherViews";
+
+/* (RDocument) Entry = "103.title"; Class = "NSMenu" */
+"OtherViews" = "OtherViews";
+
+/* (RDocument) Entry = "159.title"; Class = "NSMenuItem" */
+"PDF Preview" = "PDF Preview";
+
+/* (RDocument) Entry = "68.title"; Class = "NSWindow" */
+"Panel" = "Panel";
+
+/* (RDocument) Entry = "111.title"; Class = "NSMenuItem" */
+"Shift-JIS" = "Shift-JIS";
+
+/* (RDocument) Entry = "104.title"; Class = "NSMenuItem" */
+"UTF-8" = "UTF-8";
+
+/* (RDocument) Entry = "109.title"; Class = "NSMenuItem" */
+"Unicode" = "Unicode";
+
+/* (RDocument) Entry = "5.title"; Class = "NSWindow" */
+"Window" = "Fenster";
+
+/* (SelectEncodingsPanel) Entry = "23.title"; Class = "NSButtonCell" */
+"Clear all" = "Alle abwählen";
+
+/* (SelectEncodingsPanel) Entry = "5.title"; Class = "NSWindow" */
+"Customize Encodings List" = "Kodierungsliste bearbeiten";
+
+/* (SelectEncodingsPanel) Entry = "21.title"; Class = "NSTextFieldCell" */
+"Enable the text encodings you would like to be able to use." = "Markieren Sie die Kodierungen, die Sie verwenden möchten.";
+
+/* (SelectEncodingsPanel) Entry = "24.title"; Class = "NSButtonCell" */
+"Revert to default" = "Standard";
+
+/* (SelectEncodingsPanel) Entry = "22.title"; Class = "NSButtonCell" */
+"Select all" = "Alle auswählen";
+
+/* (SelectEncodingsPanel) Entry = "25.title"; Class = "NSButtonCell" */
+"Switch" = "Umschalten";
+
+/* (SyntaxColorsPrefPane) Entry = "125.title"; Class = "NSTextFieldCell" */
+"Background" = "Hintergrund";
+
+/* (SyntaxColorsPrefPane) Entry = "26.title"; Class = "NSBox" */
+"Colors" = "Farben";
+
+/* (SyntaxColorsPrefPane) Entry = "119.title"; Class = "NSTextFieldCell" */
+"Comment" = "Kommentar";
+
+/* (SyntaxColorsPrefPane) Entry = "127.title"; Class = "NSTextFieldCell" */
+"Current Line" = "Aktuelle Zeile";
+
+/* (SyntaxColorsPrefPane) Entry = "129.title"; Class = "NSTextFieldCell" */
+"Cursor" = "Cursor";
+
+/* (SyntaxColorsPrefPane) Entry = "120.title"; Class = "NSButtonCell" */
+"Defaults" = "Voreinstellungen";
+
+/* (SyntaxColorsPrefPane) Entry = "118.title"; Class = "NSTextFieldCell" */
+"Identifier" = "Bezeichner";
+
+/* (SyntaxColorsPrefPane) Entry = "117.title"; Class = "NSTextFieldCell" */
+"Keyword" = "Schlüsselwort";
+
+/* (SyntaxColorsPrefPane) Entry = "115.title"; Class = "NSTextFieldCell" */
+"Normal" = "Normal";
+
+/* (SyntaxColorsPrefPane) Entry = "114.title"; Class = "NSTextFieldCell" */
+"Number" = "Zahlen";
+
+/* (SyntaxColorsPrefPane) Entry = "116.title"; Class = "NSTextFieldCell" */
+"String" = "Zeichenkette";
+
+/* (Vignettes) Entry = "94.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Beschreibung";
+
+/* (Vignettes) Entry = "63.title"; Class = "NSButtonCell" */
+"Open PDF" = "Öffne PDF";
+
+/* (Vignettes) Entry = "64.title"; Class = "NSButtonCell" */
+"Open Source" = "Öffne Quellcode";
+
+/* (Vignettes) Entry = "95.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Paket";
+
+/* (Vignettes) Entry = "62.placeholderString"; Class = "NSSearchFieldCell" */
+"Search" = "Suche";
+
+/* (Vignettes) Entry = "96.headerCell.title"; Class = "NSTableColumn" */
+"Vignette" = "Vignette";
+
+/* (Vignettes) Entry = "5.title"; Class = "NSWindow" */
+"Vignettes" = "Vignetten";
+
