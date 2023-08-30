@@ -1,1 +1,14 @@
 
+
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "٪@ - غير نشط";
+
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<محذوف>";
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "٪@ - نشط";
+
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(تم تعطيل البحث عن الوسيطات أثناء انشغال R)";
