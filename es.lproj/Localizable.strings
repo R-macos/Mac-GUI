@@ -101,3 +101,6 @@
 
 /* (RDocument) Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
 "Help search" = "Búsqueda de ayuda";
+
+/* From: RDocument.m (checkRdDocumentWithFilePath) */
+"Check Rd document…" = "Revisar documento Rd…";
