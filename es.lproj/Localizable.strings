@@ -36,3 +36,10 @@
 
 /* Add row - label for a toolbar, keep short! */
 "Add Row" = "Agregar Fila";
+
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(la búsqueda de argumentos está deshabilitada mientras R está ocupado)";
+
+/* From: RController.m (searchInHistory) */
+"…invalid regular expression" = "...expresión regular inválida";
