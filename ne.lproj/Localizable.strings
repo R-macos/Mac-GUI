@@ -1,1 +1,14 @@
 
+
+
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(R व्यस्त हुँदा argument लुकअप अक्षम पारिएको छ)";
+
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<deleted>";
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "%@ - सक्रिय";
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "%@ - निष्क्रिय";
