@@ -77,3 +77,27 @@
 
 /* (MainMenu) Entry = "103.title"; Class = "NSMenuItem" */
 "Help" = "Ayuda";
+
+/* (MainMenu) Entry = "1723.ibShadowedToolTip"; Class = "NSMenuItem" */
+"Cancels object editing without passing data back to R and closes the editor window" = "Cancela la edición de objetos sin devolver los datos a R y cierra la ventana del editor";
+
+/* From: RDocumentWinCtrl.m (goHelpSearch) */
+"Cannot determine package for the topic." = "No se puede determinar el paquete para el tema.";
+
+/* From: DataManager.m (showHelp)
+   From: HelpManager.m (showHelpUsingFile)
+   From: PackageManager.m (showInfo)
+   From: RDocumentWinCtrl.m (goHelpSearch) */
+"Cannot start HTML help server." = "No se puede iniciar el servidor de ayuda HTML.";
+
+/* From: main.m (sheetDidEnd) */
+"Cannot start R" = "No se puede iniciar R";
+
+/* From: RController.m (toolbar) */
+"Change the size of R console font" = "Cambiar el tamaño de la fuente de la consola de R";
+
+/* (MainMenu) Entry = "728.title"; Class = "NSWindow" */
+"R Help" = "Ayuda de R";
+
+/* (RDocument) Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
+"Help search" = "Búsqueda de ayuda";
