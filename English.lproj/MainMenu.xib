@@ -1371,7 +1371,7 @@ DQ
                         <rect key="frame" x="109" y="504" width="96" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <string key="toolTip" base64-UTF8="YES">
-KBIS4oapKQ
+KFJldHVybik=
 </string>
                         <buttonCell key="cell" type="push" title="Load Data" bezelStyle="rounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1685">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
