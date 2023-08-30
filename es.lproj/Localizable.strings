@@ -1,1 +1,19 @@
 
+
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "%@ - Inactivo";
+
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<borrado>";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+"<functions>" = "<funciones>";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+"<sections>" = "<secciones>";
+
+/* From: SearchTable.m (show) */
+"<unknown>" = "<desconocido>";
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "%@ - Activo";
