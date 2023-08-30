@@ -23,10 +23,10 @@
 
 /* From: RController.m (application)
    From: RController.m (applicationDidFinishLaunching) */
-"[Workspace restored from " = "[Workspace restablecido desde ";
+"[Workspace restored from " = "[Espacio de trabajo restablecido desde ";
 
 /* Add column - label for a toolbar, keep short! */
-"Add Col" = "Agregar columna";
+"Add Col" = "Agregar Col";
 
 /* From: REditor.m (toolbar) */
 "Add Column" = "Agregar Columna";
@@ -51,4 +51,29 @@
 "Adds a row below a group of selected rows or at the bottom of the data" = "Agrega una fila debajo de un grupo de filas seleccionadas o al final de los datos";
 
 /* From: RController.m (clearWorkSpace) */
-"All objects in the workspace will be removed. Are you sure you want to proceed?" = "Todos los objetos en el workspace serán removidos. ¿Está seguro de que desea continuar?";
+"All objects in the workspace will be removed. Are you sure you want to proceed?" = "Todos los objetos en el espacio de trabajo serán removidos. ¿Está seguro de que desea continuar?";
+
+/* From: RController.m (toolbar) */
+"Authentication" = "Autenticación";
+
+/* From: HelpManager.m (showHelpFor) */
+"Can't find help for topic, would you like to expand the search?" = "No se pudo encontrar ayuda para el tema, ¿desea ampliar la búsqueda?";
+
+/* From: RController.m (doLoadHistory) */
+"Can't open history file %@" = "No se puede abrir el archivo de historial %@";
+
+/* (RDocument) Entry = "94.title"; Class = "NSButtonCell" */
+"Cancel" = "Cancelar";
+
+/* Cancel Editing - label for a toolbar, keep short!
+   From: REditor.m (toolbar) */
+"Cancel Editing" = "Cancelar Edición";
+
+/* From: WSBrowser.m (remObject) */
+"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "¿Está seguro que desea remover el objeto '%@' del espacio de trabajo? ¡No puedes deshacer esta acción!";
+
+/* From: RController.m (toolbar) */
+"Authorize R to run system commands as root" = "Autorizar R a ejecutar comandos del sistema como root";
+
+/* (MainMenu) Entry = "103.title"; Class = "NSMenuItem" */
+"Help" = "Ayuda";
