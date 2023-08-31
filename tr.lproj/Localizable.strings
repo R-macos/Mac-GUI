@@ -1,1 +1,110 @@
 
+
+
+/* (MiscPrefPane) Entry = "139.title"; Class = "NSTextFieldCell" */
+".Rhistory" = ".Rhistory";
+
+/* (MainMenu) Entry = "1677.ibShadowedToolTip"; Class = "NSButton" */
+"(⌘R)" = "(⌘R)";
+
+/* (MainMenu) Entry = "1684.ibShadowedToolTip"; Class = "NSButton" */
+"(Return)" = "(↩)";
+
+/* (MainMenu) Entry = "1499.title"; Class = "NSTextFieldCell" */
+"11" = "11";
+
+/* (QuartzPrefPane) Entry = "122.title"; Class = "NSTextFieldCell" */
+"12" = "12";
+
+/* (MiscPrefPane) Entry = "144.title"; Class = "NSTextFieldCell" */
+"250" = "250";
+
+/* (MainMenu) Entry = "1513.title"; Class = "NSButtonCell" */
+"<" = "<";
+
+/* (MainMenu) Entry = "1501.title"; Class = "NSButtonCell" */
+"< Back" = "< Geriye Doğru";
+
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<silindi>";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+/* (RDocument) Entry = "45.title"; Class = "NSMenuItem" */
+"<functions>" = "<fonksiyonlar>";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+"<sections>" = "<bölümler>";
+
+/* From: SearchTable.m (show) */
+"<unknown>" = "<Bilinmeyen>";
+
+/* (MiscPrefPane) Entry = "130.title"; Class = "NSTextFieldCell" */
+"(was default in RAqua)" = "(RAqua da varsayılandı)";
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "%@ - Aktif değil";
+
+/* (MainMenu) Entry = "1514.title"; Class = "NSButtonCell" */
+">" = ">";
+
+/* (MainMenu) Entry = "58.title"; Class = "NSMenuItem" */
+"About R" = "R Hakkında";
+
+/* (MainMenu) Entry = "312.title"; Class = "NSMenuItem" */
+"Activate Quartz Device Window" = "Quartz Cihaz Penceresini Etkinleştirin";
+
+/* (MainMenu) Entry = "1671.title"; Class = "NSButtonCell" */
+"Activate SearchField ⇧⌘H" = "Arama Alanını Etkinleştir ⇧⌘H";
+
+/* From: REditor.m (toolbar) */
+"Add Column" = "Sütun Ekle";
+
+/* (MainMenu) Entry = "1718.title"; Class = "NSMenuItem" */
+"Add Column (NUMERIC)" = "Sütun Ekle (SAYISAL)";
+
+/* From: REditor.m (toolbar) */
+"Add New Row" = "Yeni Satır Ekle";
+
+/* Add row - label for a toolbar, keep short! */
+/* (MainMenu) Entry = "1720.title"; Class = "NSMenuItem" */
+"Add Row" = "Satır Ekle";
+
+/* (MiscPrefPane) Entry = "129.title"; Class = "NSButtonCell" */
+"Add ~/Library/R…" = "~/Library/R ekle…";
+
+/* From: REditor.m (toolbar) */
+"Adds a row below a group of selected rows or at the bottom of the data" = "Seçili satırlardan oluşan bir grubun altına veya verilerin altına bir satır ekler";
+
+/* (MainMenu) Entry = "834.title"; Class = "NSMenuItem" */
+"Align Left" = "Sola Hizalama";
+
+/* (MainMenu) Entry = "858.title"; Class = "NSMenuItem" */
+"Align Right" = "Sağa Hizalama";
+
+/* (MainMenu) Entry = "1634.title"; Class = "NSMenuItem" */
+"All" = "Tüm";
+
+/* From: RController.m (clearWorkSpace) */
+"All objects in the workspace will be removed. Are you sure you want to proceed?" = "Çalışma alanındaki tüm nesneler silinecek. Devam etmek istediğinizden emin misiniz?";
+
+/* (MiscPrefPane) Entry = "136.title"; Class = "NSButtonCell" */
+"Always apply" = "Her zaman uygula";
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "%@ - Aktif";
+
+/* (QuartzPrefPane) Entry = "112.title"; Class = "NSTextFieldCell" */
+/* (QuartzPrefPane) Entry = "113.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(R meşgulken değişken arama fonksiyonları devre dışı bırakılır)";
+
+/* Add column - label for a toolbar, keep short! */
+"Add Col" = "Sütun Ekle";
+
+/* (MainMenu) Entry = "1719.title"; Class = "NSMenuItem" */
+"Add Column (CHARACTER)" = "Sütun Ekle (KARAKTER)";
+
+/* From: REditor.m (toolbar) */
+"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "Seçili sütunlar grubunun sağına veya yalnızca verilerin sonuna yeni bir sütun ekler. Yeni sütun türü, solundaki sütunla uyumludur.\n\n(%1$@)\t'KARAKTER' türünde sütun ekleme\n(%2$@)\t'SAYISAL' türünde sütun ekleme";
