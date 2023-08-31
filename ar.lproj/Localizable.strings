@@ -2,12 +2,12 @@
 
 
 /* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"%@ - Inactive" = "٪@ - غير نشط";
+"%@ - Inactive" = "%@ - غير نشط";
 
 /* From: RController.m (showWorkingDir) */
-"<deleted>" = "<محذوف>";
+"<deleted>" = "<deleted>";
 /* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
-"%@ - Active" = "٪@ - نشط";
+"%@ - Active" = "%@ - نشط";
 
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
@@ -17,4 +17,70 @@
 "(Return)" = "(↩)";
 
 /* (MiscPrefPane) Entry = "130.title"; Class = "NSTextFieldCell" */
-"(was default in RAqua)" = "(افتراضي في RAqua)";
+"(was default in RAqua)" = "(كان افتراضيا في RAqua)";
+
+/* (MiscPrefPane) Entry = "139.title"; Class = "NSTextFieldCell" */
+".Rhistory" = "Rhistory.";
+
+/* (MainMenu) Entry = "1499.title"; Class = "NSTextFieldCell" */
+"11" = "11";
+
+/* (QuartzPrefPane) Entry = "122.title"; Class = "NSTextFieldCell" */
+"12" = "12";
+
+/* (MiscPrefPane) Entry = "144.title"; Class = "NSTextFieldCell" */
+"250" = "250";
+
+/* (QuartzPrefPane) Entry = "112.title"; Class = "NSTextFieldCell" */
+/* (QuartzPrefPane) Entry = "113.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* (MainMenu) Entry = "1513.title"; Class = "NSButtonCell" */
+"<" = "<";
+
+/* (MainMenu) Entry = "1501.title"; Class = "NSButtonCell" */
+"< Back" = "< العودة";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+"<sections>" = "<أقسام>";
+
+/* From: SearchTable.m (show) */
+"<unknown>" = "<غير معروف>";
+
+/* (MainMenu) Entry = "1514.title"; Class = "NSButtonCell" */
+">" = ">";
+
+/* (MainMenu) Entry = "58.title"; Class = "NSMenuItem" */
+"About R" = "حول R";
+
+/* (MainMenu) Entry = "1671.title"; Class = "NSButtonCell" */
+"Activate SearchField ⇧⌘H" = "تنشيط حقل البحث ⇧⌘H";
+
+/* Add column - label for a toolbar, keep short! */
+"Add Col" = "إضافة Col";
+
+/* From: REditor.m (toolbar) */
+"Add Column" = "إضافة عمود";
+
+/* (MainMenu) Entry = "1719.title"; Class = "NSMenuItem" */
+"Add Column (CHARACTER)" = "إضافة عمود (CHARACTER)";
+
+/* (MainMenu) Entry = "1718.title"; Class = "NSMenuItem" */
+"Add Column (NUMERIC)" = "إضافة عمود (NUMERIC)";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+/* (RDocument) Entry = "45.title"; Class = "NSMenuItem" */
+"<functions>" = "<دوال>";
+
+/* (MainMenu) Entry = "1677.ibShadowedToolTip"; Class = "NSButton" */
+"(⌘R)" = "(R⌘)";
+
+/* (MainMenu) Entry = "312.title"; Class = "NSMenuItem" */
+"Activate Quartz Device Window" = "تنشيط نافذة جهاز Quartz";
+
+/* From: REditor.m (toolbar) */
+"Add New Row" = "إضافة صف جديد";
+
+/* Add row - label for a toolbar, keep short! */
+/* (MainMenu) Entry = "1720.title"; Class = "NSMenuItem" */
+"Add Row" = "إضافة صف";
