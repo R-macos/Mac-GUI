@@ -126,7 +126,7 @@
                     <popUpButtonCell key="cell" type="push" title="&lt;funciones&gt;" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="45" id="93">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
-                        <menu key="menu" title="Otras Vistas" id="44">
+                        <menu key="menu" title="Otras visualizaciones" id="44">
                             <items>
                                 <menuItem title="&lt;funciones&gt;" state="on" id="45"/>
                             </items>
@@ -163,12 +163,12 @@
         </customView>
         <menu title="Menú" id="58" userLabel="Search Menu">
             <items>
-                <menuItem title="Búsqueda Exacta" state="on" tag="10" id="59">
+                <menuItem title="Búsqueda exacta" state="on" tag="10" id="59">
                     <connections>
                         <action selector="setHelpSearchType:" target="-2" id="64"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Búsqueda Difusa" tag="11" id="60">
+                <menuItem title="Búsqueda difusa" tag="11" id="60">
                     <connections>
                         <action selector="setHelpSearchType:" target="-2" id="65"/>
                     </connections>
@@ -225,7 +225,7 @@ DQ
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="72">
                         <rect key="frame" x="17" y="60" width="124" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Ir a Línea:" id="96">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Ir a línea:" id="96">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -257,7 +257,7 @@ DQ
                     <popUpButtonCell key="cell" type="push" title="UTF-8" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="104" id="102">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
-                        <menu key="menu" title="Otras Vistas" id="103">
+                        <menu key="menu" title="Otras visualizaciones" id="103">
                             <items>
                                 <menuItem title="UTF-8" state="on" tag="4" id="104"/>
                                 <menuItem title="MacRoman" tag="30" id="105"/>
@@ -325,7 +325,7 @@ DQ
                     <popUpButtonCell key="cell" type="square" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="151" id="149">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
-                        <menu key="menu" title="Otras Vistas" id="150">
+                        <menu key="menu" title="Otras visualizaciones" id="150">
                             <items>
                                 <menuItem state="on" image="NSAdvanced" hidden="YES" id="151"/>
                                 <menuItem title="Insertar plantilla Rd de función" keyEquivalent="f" id="164">
@@ -341,7 +341,7 @@ DQ
                                     </connections>
                                 </menuItem>
                                 <menuItem isSeparatorItem="YES" id="166"/>
-                                <menuItem title="Revisar Documento Rd" keyEquivalent="c" id="161">
+                                <menuItem title="Revisar documento Rd" keyEquivalent="c" id="161">
                                     <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES" command="YES"/>
                                     <connections>
                                         <action selector="checkRdDocument:" target="-2" id="163"/>

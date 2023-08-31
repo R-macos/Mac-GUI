@@ -40,7 +40,7 @@
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="87">
                     <rect key="frame" x="298" y="271" width="38" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="DPI:" id="125">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="PPP:" id="125">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -76,7 +76,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="46">
                                 <rect key="frame" x="17" y="83" width="143" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Familia de fuentes:" id="118">
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="familia de fuentes:" id="118">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -85,7 +85,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="47">
                                 <rect key="frame" x="17" y="58" width="143" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="font point size:" id="119">
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="tamaño del punto de fuente:" id="119">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -105,7 +105,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="49">
                                 <rect key="frame" x="188" y="83" width="172" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="left" title="System Font Text" id="121">
+                                <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="left" title="Texto de fuente del sistema" id="121">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -138,7 +138,7 @@
                     <popUpButtonCell key="cell" type="push" title="Abajo a la derecha" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" enabled="NO" state="on" borderStyle="borderAndBezel" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="32" id="116">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="menu"/>
-                        <menu key="menu" title="Otras Vistas" id="35">
+                        <menu key="menu" title="Otras visualizaciones" id="35">
                             <items>
                                 <menuItem title="Arriba a la derecha" id="34"/>
                                 <menuItem title="Abajo a la derecha" state="on" tag="1" id="32"/>
@@ -155,7 +155,7 @@
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="30">
                     <rect key="frame" x="17" y="254" width="155" height="20"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Altura (pulgadas):" id="115">
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="altura (pulgadas):" id="115">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -164,7 +164,7 @@
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="29">
                     <rect key="frame" x="17" y="282" width="155" height="21"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Ancho (pulgadas):" id="114">
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="ancho (pulgadas):" id="114">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -197,7 +197,7 @@
                 <button id="22">
                     <rect key="frame" x="18" y="312" width="375" height="40"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <buttonCell key="cell" type="check" title="Override R Quartz width/height parameters" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="111">
+                    <buttonCell key="cell" type="check" title="Sobrescribir los parámetros de anchura/altura de R Quartz" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="111">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>

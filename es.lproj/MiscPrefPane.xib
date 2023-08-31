@@ -81,7 +81,7 @@
                         <rect key="frame" x="4" y="5" width="465" height="59"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField toolTip="URL for the default CRAN URL. If left empty, the user will be prompted." verticalHuggingPriority="750" tag="10" allowsCharacterPickerTouchBarItem="YES" id="108">
+                            <textField toolTip="URL de la URL predeterminada a CRAN. Si se deja vacío, se le preguntará al usuario." verticalHuggingPriority="750" tag="10" allowsCharacterPickerTouchBarItem="YES" id="108">
                                 <rect key="frame" x="74" y="20" width="247" height="22"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" tag="10" drawsBackground="YES" id="147">
@@ -169,7 +169,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="87">
                                 <rect key="frame" x="17" y="107" width="417" height="24"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" id="141">
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Nota: Utilice una ruta fija para utilizar siempre el mismo archivo de historial, por ejemplo, ~/.Rhistory" id="141">
                                     <font key="font" metaFont="miniSystem"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -302,7 +302,7 @@
                             <button id="25">
                                 <rect key="frame" x="18" y="59" width="205" height="19"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <buttonCell key="cell" type="check" title="Añadir ~/Library/R…" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="129">
+                                <buttonCell key="cell" type="check" title="Agregar ~/Library/R…" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="129">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -322,7 +322,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="32">
                                 <rect key="frame" x="17" y="8" width="180" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" title="Note: This change is effective only after a restart of R.app" id="131">
+                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" title="Nota: Este cambio solo es efectivo después de reiniciar R.app" id="131">
                                     <font key="font" metaFont="miniSystem"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

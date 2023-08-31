@@ -106,7 +106,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="33">
                                 <rect key="frame" x="16" y="114" width="96" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                <textFieldCell key="cell" alignment="center" title="Palabra Clave" id="117">
+                                <textFieldCell key="cell" alignment="center" title="Palabra clave" id="117">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -123,7 +123,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="38">
                                 <rect key="frame" x="109" y="113" width="90" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                <textFieldCell key="cell" alignment="center" title="Comentar" id="119">
+                                <textFieldCell key="cell" alignment="center" title="Comentario" id="119">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -182,7 +182,7 @@
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="126">
                                 <rect key="frame" x="99" y="48" width="101" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
-                                <textFieldCell key="cell" alignment="center" title="Línea Actual" id="127">
+                                <textFieldCell key="cell" alignment="center" title="Línea actual" id="127">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

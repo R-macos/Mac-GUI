@@ -65,7 +65,7 @@
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="405">
                         <rect key="frame" x="15" y="438" width="263" height="15"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" title="Directorio de Trabajo Actual" bezelStyle="round" id="1489">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="left" title="Directorio de trabajo actual" bezelStyle="round" id="1489">
                             <font key="font" metaFont="miniSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -74,7 +74,7 @@
                     <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="680">
                         <rect key="frame" x="326" y="436" width="188" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
-                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Buscar Ayuda" bezelStyle="round" sendsWholeSearchString="YES" recentsAutosaveName="DocHelpSearch" id="1490">
+                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Buscar ayuda" bezelStyle="round" sendsWholeSearchString="YES" recentsAutosaveName="DocHelpSearch" id="1490">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -115,7 +115,7 @@
             </connections>
             <point key="canvasLocation" x="-195" y="147"/>
         </window>
-        <menu title="Menú Principal" systemMenu="main" id="29" userLabel="MainMenu">
+        <menu title="Menú principal" systemMenu="main" id="29" userLabel="MainMenu">
             <items>
                 <menuItem title="R" id="56">
                     <menu key="submenu" title="R" systemMenu="apple" id="57">
@@ -126,7 +126,7 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-2" id="142"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Buscar por Actualizaciones de R" id="218">
+                            <menuItem title="Revisar por actualizaciones de R" id="218">
                                 <connections>
                                     <action selector="checkForUpdates:" target="206" id="660"/>
                                 </connections>
@@ -153,13 +153,13 @@
                                     <action selector="hide:" target="-2" id="152"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Ocultar Otros" keyEquivalent="h" id="145">
+                            <menuItem title="Ocultar otros" keyEquivalent="h" id="145">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="hideOtherApplications:" target="-2" id="146"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Mostrar Todos" id="150">
+                            <menuItem title="Mostrar todo" id="150">
                                 <connections>
                                     <action selector="unhideAllApplications:" target="-2" id="153"/>
                                 </connections>
@@ -167,7 +167,7 @@
                             <menuItem isSeparatorItem="YES" id="149">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Terminar Sesión de R" keyEquivalent="q" id="136">
+                            <menuItem title="Terminar sesión de R" keyEquivalent="q" id="136">
                                 <connections>
                                     <action selector="terminate:" target="-2" id="139"/>
                                 </connections>
@@ -178,7 +178,7 @@
                 <menuItem title="Archivo" id="83">
                     <menu key="submenu" title="Archivo" id="81">
                         <items>
-                            <menuItem title="Nuevo Documento" keyEquivalent="n" id="945">
+                            <menuItem title="Nuevo documento" keyEquivalent="n" id="945">
                                 <connections>
                                     <action selector="newDocument:" target="-1" id="946"/>
                                 </connections>
@@ -202,10 +202,10 @@
                                     <action selector="sourceFile:" target="-1" id="949"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Abrir Reciente" id="124">
-                                <menu key="submenu" title="Abrir Reciente" systemMenu="recentDocuments" id="125">
+                            <menuItem title="Abrir reciente" id="124">
+                                <menu key="submenu" title="Abrir reciente" systemMenu="recentDocuments" id="125">
                                     <items>
-                                        <menuItem title="Limpiar Menú" id="126">
+                                        <menuItem title="Limpiar menú" id="126">
                                             <connections>
                                                 <action selector="clearRecentDocuments:" target="-1" id="127"/>
                                             </connections>
@@ -324,7 +324,7 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Limpiar Consola" keyEquivalent="l" id="1128">
+                            <menuItem title="Limpiar consola" keyEquivalent="l" id="1128">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="clearConsole:" target="206" id="1129"/>
@@ -351,13 +351,13 @@
                                                 <action selector="performFindPanelAction:" target="206" id="1569"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Use Selection for Find" tag="7" keyEquivalent="e" id="161">
+                                        <menuItem title="Usar la selección para buscar" tag="7" keyEquivalent="e" id="161">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="performFindPanelAction:" target="206" id="1570"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Saltar a Sección" keyEquivalent="j" id="155">
+                                        <menuItem title="Saltar a selección" keyEquivalent="j" id="155">
                                             <connections>
                                                 <action selector="centerSelectionInVisibleArea:" target="-1" id="203"/>
                                             </connections>
@@ -368,7 +368,7 @@
                             <menuItem isSeparatorItem="YES" id="222">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Ir a Línea…" keyEquivalent="l" id="1049">
+                            <menuItem title="Ir a línea…" keyEquivalent="l" id="1049">
                                 <connections>
                                     <action selector="goToLine:" target="-1" id="1052"/>
                                 </connections>
@@ -387,7 +387,7 @@
                             <menuItem isSeparatorItem="YES" id="1050">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Editar Objeto…" keyEquivalent="E" id="221">
+                            <menuItem title="Editar objeto…" keyEquivalent="E" id="221">
                                 <connections>
                                     <action selector="editObject:" target="-1" id="1742"/>
                                 </connections>
@@ -423,7 +423,7 @@ DQ
                             <menuItem title="Fuente" id="836">
                                 <menu key="submenu" title="Fuente" systemMenu="font" id="854">
                                     <items>
-                                        <menuItem title="Mostrar Fuentes" keyEquivalent="t" id="826">
+                                        <menuItem title="Mostrar fuentes" keyEquivalent="t" id="826">
                                             <connections>
                                                 <action selector="orderFrontFontPanel:" target="637" id="868"/>
                                             </connections>
@@ -451,7 +451,7 @@ DQ
                                                 <action selector="fontSizeBigger:" target="206" id="888"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Pequeño" tag="4" keyEquivalent="-" id="855">
+                                        <menuItem title="Más pequeño" tag="4" keyEquivalent="-" id="855">
                                             <connections>
                                                 <action selector="fontSizeSmaller:" target="206" id="889"/>
                                             </connections>
@@ -459,8 +459,8 @@ DQ
                                         <menuItem isSeparatorItem="YES" id="831">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
-                                        <menuItem title="Kern" id="839">
-                                            <menu key="submenu" title="Kern" id="842">
+                                        <menuItem title="Núcleo" id="839">
+                                            <menu key="submenu" title="Núcleo" id="842">
                                                 <items>
                                                     <menuItem title="Usar predeterminado" id="846">
                                                         <connections>
@@ -524,7 +524,7 @@ DQ
                                                             <action selector="subscript:" target="-1" id="885"/>
                                                         </connections>
                                                     </menuItem>
-                                                    <menuItem title="Raise" id="850">
+                                                    <menuItem title="Incrementar" id="850">
                                                         <connections>
                                                             <action selector="raiseBaseline:" target="-1" id="869"/>
                                                         </connections>
@@ -540,7 +540,7 @@ DQ
                                         <menuItem isSeparatorItem="YES" id="847">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
-                                        <menuItem title="Mostrar Colores" keyEquivalent="C" id="819">
+                                        <menuItem title="Mostrar colores" keyEquivalent="C" id="819">
                                             <connections>
                                                 <action selector="orderFrontColorPanel:" target="-1" id="871"/>
                                             </connections>
@@ -627,7 +627,7 @@ DQ
                                 </menu>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1649"/>
-                            <menuItem title="Incrementar Sangría" keyEquivalent="]" id="1650">
+                            <menuItem title="Incrementar sangría" keyEquivalent="]" id="1650">
                                 <connections>
                                     <action selector="shiftRight:" target="-1" id="1652"/>
                                 </connections>
@@ -637,55 +637,55 @@ DQ
                                     <action selector="shiftLeft:" target="-1" id="1653"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Formatear Código Fuente" keyEquivalent="[" id="1752">
+                            <menuItem title="Formatear código fuente" keyEquivalent="[" id="1752">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="tidyRCode:" target="-1" id="1753"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="1754"/>
-                            <menuItem title="Submenú Plegado de código" id="1757">
+                            <menuItem title="Submenú de plegado de código" id="1757">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Submenú Plegado de código" id="1758">
+                                <menu key="submenu" title="Submenú de plegado de código" id="1758">
                                     <items>
-                                        <menuItem title="Collapsar" keyEquivalent="" id="1764">
+                                        <menuItem title="Plegar" keyEquivalent="" id="1764">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="foldCurrentBlock:" target="-1" id="1765"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Unfold" keyEquivalent="" id="1773">
+                                        <menuItem title="Desplegar" keyEquivalent="" id="1773">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="unfoldCurrentBlock:" target="-1" id="1774"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Unfold All" keyEquivalent="u" id="1766">
+                                        <menuItem title="Desplegar todo" keyEquivalent="u" id="1766">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="unFoldAllBlocks:" target="-1" id="1768"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="1767"/>
-                                        <menuItem title="Collapsar nivel 0" keyEquivalent="0" id="1759">
+                                        <menuItem title="Plegar nivel 0" keyEquivalent="0" id="1759">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="foldBlockAtLevel:" target="-1" id="1761"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Collapsar nivel 1" tag="1" keyEquivalent="1" id="1760">
+                                        <menuItem title="Plegar nivel 1" tag="1" keyEquivalent="1" id="1760">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="foldBlockAtLevel:" target="-1" id="1762"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Collapsar nivel 2" tag="2" keyEquivalent="2" id="1769">
+                                        <menuItem title="Plegar nivel 2" tag="2" keyEquivalent="2" id="1769">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="foldBlockAtLevel:" target="-1" id="1771"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Collapsar nivel 3" tag="3" keyEquivalent="3" id="1770">
+                                        <menuItem title="Plegar nivel 3" tag="3" keyEquivalent="3" id="1770">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="foldBlockAtLevel:" target="-1" id="1772"/>
@@ -699,13 +699,13 @@ DQ
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Transformaciones" id="1747">
                                     <items>
-                                        <menuItem title="Unicode Characters in R Strings to \uxxxx" id="1748">
+                                        <menuItem title="Caracteres Unicode en cadenas R a \uxxxx" id="1748">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="makeASCIIconform:" target="-1" id="1750"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="\uxxxx to Character" id="1749">
+                                        <menuItem title="\uxxxx a carácter" id="1749">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="unescapeUnicode:" target="-1" id="1751"/>
@@ -731,7 +731,7 @@ DQ
                                     <action selector="showWorkSpace:" target="206" id="413"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Borrar espacio de trabajo" id="243">
+                            <menuItem title="Limpiar espacio de trabajo" id="243">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="clearWorkSpace:" target="206" id="407"/>
@@ -778,7 +778,7 @@ DQ
                                     <action selector="togglePackageManager:" target="206" id="463"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Instalador de Paquetes" keyEquivalent="i" toolTip="The Package Installer Requires An Internet Connection" id="559">
+                            <menuItem title="Instalador de paquetes" keyEquivalent="i" toolTip="El instalador de paquetes requiere una conexión a internet" id="559">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="togglePackageInstaller:" target="206" id="561"/>
@@ -787,7 +787,7 @@ DQ
                             <menuItem isSeparatorItem="YES" id="279">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Administrador de Datos" id="267">
+                            <menuItem title="Administrador de datos" id="267">
                                 <connections>
                                     <action selector="toggleDataManager:" target="206" id="515"/>
                                 </connections>
@@ -798,7 +798,7 @@ DQ
                 <menuItem title="Misceláneo" id="318">
                     <menu key="submenu" title="Misceláneo" id="319">
                         <items>
-                            <menuItem title="Cambiar el Directorio de Trabajo..." keyEquivalent="d" id="322">
+                            <menuItem title="Cambiar el directorio de trabajo..." keyEquivalent="d" id="322">
                                 <connections>
                                     <action selector="setWorkingDir:" target="206" id="404"/>
                                 </connections>
@@ -808,7 +808,7 @@ DQ
                                     <action selector="resetWorkingDir:" target="206" id="403"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Obtener Directorio de Trabajo" id="317">
+                            <menuItem title="Obtener directorio de trabajo" id="317">
                                 <connections>
                                     <action selector="getWorkingDir:" target="206" id="402"/>
                                 </connections>
@@ -832,7 +832,7 @@ DQ
                                     <action selector="newQuartzDevice:" target="206" id="939"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Activar la Ventana del Dispositivo Quartz" keyEquivalent="A" id="312">
+                            <menuItem title="Activar la ventana del dispositivo Quartz" keyEquivalent="A" id="312">
                                 <connections>
                                     <action selector="activateQuartzDevice:" target="-1" id="941"/>
                                 </connections>
@@ -840,17 +840,17 @@ DQ
                             <menuItem isSeparatorItem="YES" id="310">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Switch to Console Window" keyEquivalent="1" id="942">
+                            <menuItem title="Cambiar a la ventana de consola" keyEquivalent="1" id="942">
                                 <connections>
                                     <action selector="makeConsoleKey:" target="206" id="944"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Switch to Last Editor Window" keyEquivalent="2" id="1117">
+                            <menuItem title="Cambiar a la ventana del último editor" keyEquivalent="2" id="1117">
                                 <connections>
                                     <action selector="makeLastEditorKey:" target="206" id="1119"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Switch to Last Quartz Window" keyEquivalent="3" id="1118">
+                            <menuItem title="Cambiar a la última ventana Quartz" keyEquivalent="3" id="1118">
                                 <connections>
                                     <action selector="makeLastQuartzKey:" target="206" id="1120"/>
                                 </connections>
@@ -962,7 +962,7 @@ DQ
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="348">
                     <rect key="frame" x="139" y="27" width="110" height="16"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <buttonCell key="cell" type="push" title="Limpiar Historial" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="1495">
+                    <buttonCell key="cell" type="push" title="Limpiar historial" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="1495">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
@@ -984,7 +984,7 @@ DQ
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="346">
                     <rect key="frame" x="19" y="6" width="114" height="16"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <buttonCell key="cell" type="push" title="Cargar Historial" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="1493">
+                    <buttonCell key="cell" type="push" title="Cargar historial" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="1493">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
@@ -1043,7 +1043,7 @@ DQ
                 <searchField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1662">
                     <rect key="frame" x="2" y="357" width="261" height="19"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Buscar en Historial [regex] - ⇧⌘H" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" id="1663">
+                    <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" placeholderString="Buscar en historial [regex] - ⇧⌘H" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" id="1663">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1055,7 +1055,7 @@ DQ
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1670">
                     <rect key="frame" x="37" y="-34" width="190" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                    <buttonCell key="cell" type="push" title="Activar SearchField ⇧⌘H" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1671">
+                    <buttonCell key="cell" type="push" title="Activar búsqueda de campos ⇧⌘H" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1671">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                         <string key="keyEquivalent">H</string>
@@ -1091,7 +1091,7 @@ DQ
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="394">
                     <rect key="frame" x="17" y="8" width="114" height="20"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Tamaño de fuente:" id="1497">
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Tamaño de la fuente:" id="1497">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1214,7 +1214,7 @@ DQ
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="982">
                         <rect key="frame" x="15" y="601" width="98" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="&lt; Volver" bezelStyle="rounded" alignment="center" controlSize="small" enabled="NO" borderStyle="border" inset="2" id="1501">
+                        <buttonCell key="cell" type="push" title="&lt; Atrás" bezelStyle="rounded" alignment="center" controlSize="small" enabled="NO" borderStyle="border" inset="2" id="1501">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -1369,7 +1369,7 @@ DQ
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1684">
                         <rect key="frame" x="109" y="504" width="96" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Cargar Datos" bezelStyle="rounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1685">
+                        <buttonCell key="cell" type="push" title="Cargar datos" bezelStyle="rounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1685">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -1440,10 +1440,10 @@ DQ
                                         <outlet property="nextKeyView" destination="545" id="1698"/>
                                     </connections>
                                 </textField>
-                                <button toolTip="Try To Download The List Of Packages From The Specified URL" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="545">
+                                <button toolTip="Intente descargar la lista de paquetes desde la URL especificada" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="545">
                                     <rect key="frame" x="8" y="10" width="141" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                                    <buttonCell key="cell" type="push" title="Obtener Lista" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1505">
+                                    <buttonCell key="cell" type="push" title="Obtener lista" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1505">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                     </buttonCell>
@@ -1455,7 +1455,7 @@ DQ
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="565">
                                     <rect key="frame" x="162" y="16" width="217" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <string key="toolTip">User Should Specify The Package Format For Non-Default Repositories. Usually Archives With ".tar.gz" Extension Are In "Source Format", Packages With ".tgz" Extesion Are In "Binary Format".  </string>
+                                    <string key="toolTip">El usuario debe especificar el formato del paquete para los repositorios no predeterminados. Por lo general, los archivos con extensión ".tar.gz" están en "formato de código fuente", los paquetes con extensión ".tgz" están en formato "binario".  </string>
                                     <buttonCell key="cell" type="check" title="Paquetes en formato binario" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="1506">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="system"/>
@@ -1471,12 +1471,12 @@ DQ
                                     <popUpButtonCell key="cell" type="push" title="CRAN (binarios)" bezelStyle="rounded" alignment="left" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="541" id="1504">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="menu"/>
-                                        <menu key="menu" title="Otras Vistas" id="543">
+                                        <menu key="menu" title="Otras visualizaciones" id="543">
                                             <items>
                                                 <menuItem title="CRAN (binarios)" state="on" id="541"/>
-                                                <menuItem title="CRAN (fuentes)" tag="1" id="1108"/>
+                                                <menuItem title="CRAN (códigos fuente)" tag="1" id="1108"/>
                                                 <menuItem title="BioConductor (binarios)" tag="2" id="542"/>
-                                                <menuItem title="BioConductor (fuentes)" tag="3" id="563"/>
+                                                <menuItem title="BioConductor (códigos fuente)" tag="3" id="563"/>
                                                 <menuItem title="Otro repositorio" tag="4" id="1109"/>
                                                 <menuItem title="Otra URL del directorio" tag="8" id="1107"/>
                                                 <menuItem isSeparatorItem="YES" id="594">
@@ -1514,7 +1514,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <scrollView toolTip="Select Packages You Want To Install Or Update. Multiple Selections Allowed. " fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="547">
+                    <scrollView toolTip="Seleccione los paquetes que desea instalar o actualizar. Se permiten varias selecciones. " fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="547">
                         <rect key="frame" x="20" y="151" width="572" height="366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="QjF-Uo-CVm">
@@ -1542,7 +1542,7 @@ DQ
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
                                         <tableColumn identifier="instVer" editable="NO" width="166" minWidth="40" maxWidth="1000" id="548">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Versión Instalada">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Versión instalada">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                             </tableHeaderCell>
@@ -1587,14 +1587,14 @@ DQ
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <box fixedFrame="YES" title="Ubicación de Instalación" translatesAutoresizingMaskIntoConstraints="NO" id="570">
+                    <box fixedFrame="YES" title="Ubicación de instalación" translatesAutoresizingMaskIntoConstraints="NO" id="570">
                         <rect key="frame" x="17" y="16" width="578" height="126"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                         <view key="contentView" id="g3q-fc-rlO">
                             <rect key="frame" x="4" y="5" width="570" height="106"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <matrix toolTip="Select The Appropriate Location. Non-Admin User Should Select &quot;At User Level&quot;." verticalHuggingPriority="750" fixedFrame="YES" selectionByRect="NO" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="573">
+                                <matrix toolTip="Seleccione la ubicación adecuada. El usuario no administrador debe seleccionar &quot;A nivel de usuario&quot;." verticalHuggingPriority="750" fixedFrame="YES" selectionByRect="NO" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="573">
                                     <rect key="frame" x="14" y="9" width="361" height="88"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1632,7 +1632,7 @@ DQ
                                 <button toolTip="Descarga los paquetes seleccionados y los instala en la ubicación seleccionada (↩)." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="577">
                                     <rect key="frame" x="392" y="70" width="168" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="push" title="Instalar Seleccionado" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1508">
+                                    <buttonCell key="cell" type="push" title="Instalar seleccionados" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="1508">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="system"/>
                                         <string key="keyEquivalent" base64-UTF8="YES">
@@ -1661,7 +1661,7 @@ DQ
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1121">
                                     <rect key="frame" x="399" y="38" width="161" height="36"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <buttonCell key="cell" type="check" title="Instalar Dependencias" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="1510">
+                                    <buttonCell key="cell" type="check" title="Instalar dependencias" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="1510">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
@@ -1703,7 +1703,7 @@ DQ
                 <outlet property="WSBWindow" destination="662" id="671"/>
             </connections>
         </customObject>
-        <window title="R Workspace Browser" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="R Workspace Browser Window" animationBehavior="default" id="662" userLabel="WSBWindow">
+        <window title="Explorador de espacio de trabajo de R" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="R Workspace Browser Window" animationBehavior="default" id="662" userLabel="WSBWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="114" y="382" width="480" height="403"/>
@@ -1791,7 +1791,7 @@ DQ
                 <outlet property="delegate" destination="661" id="672"/>
             </connections>
         </window>
-        <window title="Buscar Temas de Ayuda" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Help Search Topics Window" animationBehavior="default" id="687" userLabel="helpSearchWindow" customClass="RWindow">
+        <window title="Buscar temas de ayuda" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Help Search Topics Window" animationBehavior="default" id="687" userLabel="helpSearchWindow" customClass="RWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="66" y="171" width="508" height="579"/>
@@ -1917,7 +1917,7 @@ DQ
                     <searchField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="957">
                         <rect key="frame" x="205" y="435" width="119" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
-                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Buscar Ayuda" bezelStyle="round" sendsWholeSearchString="YES" recentsAutosaveName="DocHelpSearch" id="1511">
+                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" placeholderString="Buscar ayuda" bezelStyle="round" sendsWholeSearchString="YES" recentsAutosaveName="DocHelpSearch" id="1511">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2210,7 +2210,7 @@ DQ
         </window>
         <menu title="Menú" autoenablesItems="NO" id="1064" userLabel="Pkg Search Menu">
             <items>
-                <menuItem title="Mostrar solo Instalados" tag="1" id="1065">
+                <menuItem title="Mostrar solo instalados" tag="1" id="1065">
                     <connections>
                         <action selector="toggleShowInstalled:" target="553" id="1073"/>
                     </connections>
@@ -2233,12 +2233,12 @@ DQ
         </menu>
         <menu title="Menú" id="1074" userLabel="Help Search Menu">
             <items>
-                <menuItem title="Búsqueda Exacta" state="on" tag="10" id="1082">
+                <menuItem title="Búsqueda exacta" state="on" tag="10" id="1082">
                     <connections>
                         <action selector="changeSearchType:" target="780" id="1100"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Búsqueda Difusa" tag="11" id="1084">
+                <menuItem title="Búsqueda difusa" tag="11" id="1084">
                     <connections>
                         <action selector="changeSearchType:" target="780" id="1101"/>
                     </connections>
@@ -2337,19 +2337,19 @@ Gw
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="1728"/>
-                <menuItem title="Agregar Columna (NUMERIC)" tag="1" keyEquivalent="c" id="1718">
+                <menuItem title="Agregar columna (NUMERIC)" tag="1" keyEquivalent="c" id="1718">
                     <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                     <connections>
                         <action selector="addCol:" target="800" id="1732"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Agregar Columna (CHARACTER)" tag="2" keyEquivalent="C" id="1719">
+                <menuItem title="Agregar columna (CHARACTER)" tag="2" keyEquivalent="C" id="1719">
                     <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                     <connections>
                         <action selector="addCol:" target="800" id="1733"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Agregar Fila" keyEquivalent="a" id="1720">
+                <menuItem title="Agregar fila" keyEquivalent="a" id="1720">
                     <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                     <connections>
                         <action selector="addRow:" target="800" id="1734"/>
@@ -2365,14 +2365,14 @@ CA
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="1727"/>
-                <menuItem title="Editar Nombres de Columna" id="1740">
+                <menuItem title="Editar los nombres de columna" id="1740">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="editColumnNames:" target="800" id="1741"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="1739"/>
-                <menuItem title="Cancelar la Edición del Objeto" toolTip="Cancela la edición de objetos sin devolver los datos a R y cierra la ventana del editor" id="1723">
+                <menuItem title="Cancelar la edición del objeto" toolTip="Cancela la edición de objetos sin devolver los datos a R y cierra la ventana del editor" id="1723">
                     <string key="keyEquivalent" base64-UTF8="YES">
 CA
 </string>

@@ -82,7 +82,7 @@ El comando se ejecutará en una terminal</string>
                             <button verticalHuggingPriority="750" id="105">
                                 <rect key="frame" x="66" y="260" width="110" height="28"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <buttonCell key="cell" type="push" title="Establecer Editor" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="162">
+                                <buttonCell key="cell" type="push" title="Establecer editor" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="162">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
@@ -93,7 +93,7 @@ El comando se ejecutará en una terminal</string>
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="115">
                                 <rect key="frame" x="28" y="292" width="196" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="center" title="SubEthaEditar" id="163">
+                                <textFieldCell key="cell" enabled="NO" sendsActionOnEndEditing="YES" alignment="center" title="SubEthaEdit" id="163">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -269,7 +269,7 @@ El comando se ejecutará en una terminal</string>
                             </buttonCell>
                         </column>
                         <column>
-                            <buttonCell type="radio" title="Editor Externo" imagePosition="left" alignment="left" tag="1" inset="2" id="97">
+                            <buttonCell type="radio" title="Editor externo" imagePosition="left" alignment="left" tag="1" inset="2" id="97">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>

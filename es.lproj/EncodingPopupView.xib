@@ -33,7 +33,7 @@
                     <popUpButtonCell key="cell" type="push" title="DO NOT LOCALIZE" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="59" id="76" customClass="EncodingPopUpButtonCell">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="Otras Vistas" autoenablesItems="NO" id="57">
+                        <menu key="menu" title="Otras visualizaciones" autoenablesItems="NO" id="57">
                             <items>
                                 <menuItem title="DO NOT LOCALIZE" state="on" id="59"/>
                             </items>
