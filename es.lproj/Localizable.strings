@@ -1497,3 +1497,18 @@
 
 /* (RDocument) Entry = "115.title"; Class = "NSMenuItem" */
 "CP1250" = "CP1250";
+
+/* (MainMenu) Entry = "1759.title"; Class = "NSMenuItem" */
+"Fold Level 0" = "Collapsar nivel 0";
+
+/* (MainMenu) Entry = "1760.title"; Class = "NSMenuItem" */
+"Fold Level 1" = "Collapsar nivel 1";
+
+/* (MainMenu) Entry = "1769.title"; Class = "NSMenuItem" */
+"Fold Level 2" = "Collapsar nivel 2";
+
+/* (MainMenu) Entry = "1770.title"; Class = "NSMenuItem" */
+"Fold Level 3" = "Collapsar nivel 3";
+
+/* (MiscPrefPane) Entry = "135.title"; Class = "NSTextFieldCell" */
+"Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Nota: Para hacer cumplir la normativa, seleccione \"Aplicar siempre\". De lo contrario, se utiliza para establecer el directorio de trabajo si no se especifica cuando se inicia R.app, por ejemplo, haciendo doble clic en el icono de R. Arrastrar y soltar un archivo o un directorio en el icono de R o usar 'open -a R.app <directorio-o-archivo>' anulará esta configuración si no se aplica.";
