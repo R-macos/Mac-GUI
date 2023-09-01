@@ -102,3 +102,18 @@
 
 /* (MiscPrefPane) Entry = "136.title"; Class = "NSButtonCell" */
 "Always apply" = "طبق دائما";
+
+/* (MainMenu) Entry = "1634.title"; Class = "NSMenuItem" */
+"All" = "كل";
+
+/* From: RController.m (clearWorkSpace) */
+"All objects in the workspace will be removed. Are you sure you want to proceed?" = "ستتم إزالة جميع الكائنات الموجودة في workspace. هل أنت متأكد من أنك تريد المتابعة؟";
+
+/* (MainMenu) Entry = "1125.title"; Class = "NSButtonCell" */
+"As defined by .libPaths()" = "‏‎‭ .libPaths()‮ كما هو محدد بواسطة";
+
+/* From: WSBrowser.m (remObject) */
+"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "هل أنت متأكد من أنك تريد إزالة'%@' الكائن من workspace؟ لا يمكن التراجع عن هذا الإجراء!";
+
+/* (EditorPrefPane) Entry = "49.title"; Class = "NSButtonCell" */
+"Application" = "تطبيق";
