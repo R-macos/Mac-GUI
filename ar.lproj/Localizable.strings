@@ -48,7 +48,7 @@
 "<unknown>" = "<غير معروف>";
 
 /* (MainMenu) Entry = "1514.title"; Class = "NSButtonCell" */
-">" = ">";
+">" = "‪>";
 
 /* (MainMenu) Entry = "58.title"; Class = "NSMenuItem" */
 "About R" = "حول R";
@@ -86,4 +86,19 @@
 "Add Row" = "إضافة صف";
 
 /* (MiscPrefPane) Entry = "129.title"; Class = "NSButtonCell" */
-"Add ~/Library/R…" = "~/Library/R… إضافة";
+"Add ~/Library/R…" = "إضافة ‪~/Library/R…";
+
+/* From: REditor.m (toolbar) */
+"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "إضافة عمود جديد إلى يسار مجموعة من الأعمدة المحددة أو في نهاية البيانات فقط. يتوافق نوع العمود الجديد مع هذا العمود الأيسر منه.\n\n(%1$@)\tإضافة عمود من النوع ’CHARACTER‘\n(%2$@)\tإضافة عمود من النوع ’NUMERIC‘";
+
+/* From: REditor.m (toolbar) */
+"Adds a row below a group of selected rows or at the bottom of the data" = "إضافة صف أسفل مجموعة من الصفوف المحددة أو في أسفل البيانات";
+
+/* (MainMenu) Entry = "834.title"; Class = "NSMenuItem" */
+"Align Left" = "محاذاة لليسار";
+
+/* (MainMenu) Entry = "858.title"; Class = "NSMenuItem" */
+"Align Right" = "محاذاة لليمين";
+
+/* (MiscPrefPane) Entry = "136.title"; Class = "NSButtonCell" */
+"Always apply" = "طبق دائما";
