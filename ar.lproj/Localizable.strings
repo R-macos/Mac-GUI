@@ -84,3 +84,6 @@
 /* Add row - label for a toolbar, keep short! */
 /* (MainMenu) Entry = "1720.title"; Class = "NSMenuItem" */
 "Add Row" = "إضافة صف";
+
+/* (MiscPrefPane) Entry = "129.title"; Class = "NSButtonCell" */
+"Add ~/Library/R…" = "~/Library/R… إضافة";
