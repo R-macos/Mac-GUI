@@ -4,19 +4,20 @@ name: Build
 
 jobs:
   Build:
-    runs-on: 'macOS-10.15'
+    runs-on: 'macOS-latest'
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
       - name: Build
         shell: bash
         run: |
           echo Downloading R ...
-          curl -s -LO https://mac.r-project.org/high-sierra/R-4.0-branch/x86_64/R-4.0-branch.tar.gz
+          curl -s -LO https://mac.r-project.org/big-sur/last-success/R-release-x86_64.tar.xz
           echo Unpacking R ...
           sudo rm -rf /Library/Frameworks/R.framework
-          sudo tar fxz R-4.0-branch.tar.gz -C /
+          if [ ! -e /Library/Frameworks ]; then mkdir -p /Library/Frameworks; fi 
+          sudo tar fxz R-release-x86_64.tar.xz -C /Library/Frameworks/
           mkdir -p build/logs
           for bld in Release Debug; do
             echo Build $bld ..
