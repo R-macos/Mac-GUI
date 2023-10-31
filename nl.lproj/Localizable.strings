@@ -4,14 +4,46 @@
 /* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
 "%@ - Inactive" = "%@ - Inactief";
 
+/* (MainMenu) Entry = "1684.ibShadowedToolTip"; Class = "NSButton" */
+"(Return)" = "(↩)";
+
 /* From: RController.m (hintForFunction)
    From: RDocumentWinCtrl.m (hintForFunction) */
 "(arguments lookup is disabled while R is busy)" = "(het opzoeken van argumenten kan niet als R bezig is)";
+
+/* (MiscPrefPane) Entry = "130.title"; Class = "NSTextFieldCell" */
+"(was default in RAqua)" = "(was standaard in RAqua)";
+
+/* (MainMenu) Entry = "1677.ibShadowedToolTip"; Class = "NSButton" */
+"(⌘R)" = "(⌘R)";
+
+/* (MiscPrefPane) Entry = "139.title"; Class = "NSTextFieldCell" */
+".Rhistory" = ".Rhistory";
+
+/* (MainMenu) Entry = "1499.title"; Class = "NSTextFieldCell" */
+"11" = "11";
+
+/* (QuartzPrefPane) Entry = "122.title"; Class = "NSTextFieldCell" */
+"12" = "12";
+
+/* (MiscPrefPane) Entry = "144.title"; Class = "NSTextFieldCell" */
+"250" = "250";
+
+/* (QuartzPrefPane) Entry = "113.title"; Class = "NSTextFieldCell" */
+/* (QuartzPrefPane) Entry = "112.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* (MainMenu) Entry = "1513.title"; Class = "NSButtonCell" */
+"<" = "<";
+
+/* (MainMenu) Entry = "1501.title"; Class = "NSButtonCell" */
+"< Back" = "< Terug";
 
 /* From: RController.m (showWorkingDir) */
 "<deleted>" = "<gewist>";
 
 /* From: RDocumentWinCtrl.m (functionReset) */
+/* (RDocument) Entry = "45.title"; Class = "NSMenuItem" */
 "<functions>" = "<functies>";
 
 /* From: RDocumentWinCtrl.m (functionReset) */
@@ -20,12 +52,17 @@
 /* From: SearchTable.m (show) */
 "<unknown>" = "<ongekend>";
 
-/* From: RController.m (applicationDidFinishLaunching) */
-"[History restored from " = "[Geschiedenis teruggehaald van ";
+/* (MainMenu) Entry = "1514.title"; Class = "NSButtonCell" */
+">" = ">";
 
-/* From: RController.m (application)
-   From: RController.m (applicationDidFinishLaunching) */
-"[Workspace restored from " = "[Workspace teruggehaald van ";
+/* (MainMenu) Entry = "58.title"; Class = "NSMenuItem" */
+"About R" = "Over R";
+
+/* (MainMenu) Entry = "312.title"; Class = "NSMenuItem" */
+"Activate Quartz Device Window" = "Activeer Quartz-venster";
+
+/* (MainMenu) Entry = "1671.title"; Class = "NSButtonCell" */
+"Activate SearchField ⇧⌘H" = "Activeer zoekveld ⇧⌘H";
 
 /* Add column - label for a toolbar, keep short! */
 "Add Col" = "Kolom";
@@ -33,11 +70,21 @@
 /* From: REditor.m (toolbar) */
 "Add Column" = "Voeg kolom toe";
 
+/* (MainMenu) Entry = "1719.title"; Class = "NSMenuItem" */
+"Add Column (CHARACTER)" = "Voeg kolom toe (CHARACTER)";
+
+/* (MainMenu) Entry = "1718.title"; Class = "NSMenuItem" */
+"Add Column (NUMERIC)" = "Voeg kolom toe (NUMERIC)";
+
 /* From: REditor.m (toolbar) */
 "Add New Row" = "Voeg nieuwe rij toe";
 
 /* Add row - label for a toolbar, keep short! */
+/* (MainMenu) Entry = "1720.title"; Class = "NSMenuItem" */
 "Add Row" = "Voeg rij toe";
+
+/* (MiscPrefPane) Entry = "129.title"; Class = "NSButtonCell" */
+"Add ~/Library/R…" = "Voeg ~/Library/R… toe";
 
 /* From: REditor.m (toolbar) */
 "Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "Voeg een column toe rechts van de geselecteerde kolommen of aan het eind van de data. Het nieuwe kolom data type komt overeen met het type links van de nieuwe kolom.\n\n(%1$@)\tVoeg een kolom toe met het type ‘CHARACTER’\n(%2$@)\tVoeg een kolom toe met het type ‘NUMERIC’";
@@ -45,17 +92,115 @@
 /* From: REditor.m (toolbar) */
 "Adds a row below a group of selected rows or at the bottom of the data" = "Voegt nieuwe rijen toe onder de geselecteerde kolommen of op het einde van de data";
 
+/* (MainMenu) Entry = "834.title"; Class = "NSMenuItem" */
+"Align Left" = "Links aligneren";
+
+/* (MainMenu) Entry = "858.title"; Class = "NSMenuItem" */
+"Align Right" = "Rechts aligneren";
+
+/* (MainMenu) Entry = "1634.title"; Class = "NSMenuItem" */
+"All" = "Allemaal";
+
 /* From: RController.m (clearWorkSpace) */
 "All objects in the workspace will be removed. Are you sure you want to proceed?" = "Alle objecten in de Workspace worden verwijderd. Wilt u doorgaan?";
 
+/* (MiscPrefPane) Entry = "136.title"; Class = "NSButtonCell" */
+"Always apply" = "Altijd toepassen";
+
+/* (EditorPrefPane) Entry = "49.title"; Class = "NSButtonCell" */
+"Application" = "Programma";
+
 /* From: WSBrowser.m (remObject) */
 "Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "Bent u zeker dat u object '%@' wenst te verwijderen? Deze actie kan niet hersteld worden.";
+
+/* (MainMenu) Entry = "1125.title"; Class = "NSButtonCell" */
+"As defined by .libPaths()" = "Zoals gedefinieerd in .libPaths()";
+
+/* (MiscPrefPane) Entry = "123.title"; Class = "NSButtonCell" */
+"Ask" = "Vraag";
+
+/* (MainMenu) Entry = "1122.title"; Class = "NSButtonCell" */
+"At System Level (in R framework)" = "Op systeemniveau (in R framework)";
+
+/* (MainMenu) Entry = "1123.title"; Class = "NSButtonCell" */
+"At User Level" = "Op gebruikersniveau";
 
 /* From: RController.m (toolbar) */
 "Authentication" = "Authenticatie";
 
 /* From: RController.m (toolbar) */
 "Authorize R to run system commands as root" = "Authoriseer R om systeemcommando's als root uit te voeren";
+
+/* (EditorPrefPane) Entry = "229.title"; Class = "NSButtonCell" */
+"Auto-save documents" = "Auto-save documents";
+
+/* (MainMenu) Entry = "1513.alternateTitle"; Class = "NSButtonCell" */
+"Back" = "Terug";
+
+/* (ColorsPrefPane) Entry = "76.title"; Class = "NSTextFieldCell" */
+/* (SyntaxColorsPrefPane) Entry = "125.title"; Class = "NSTextFieldCell" */
+"Background" = "Achtergrond";
+
+/* (MainMenu) Entry = "1657.title"; Class = "NSMenuItem" */
+"Balanced Brackets" = "Balanceer haakjes";
+
+/* (MainMenu) Entry = "816.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "844.title"; Class = "NSMenuItem" */
+"Baseline" = "Basislijn";
+
+/* (MainMenu) Entry = "830.title"; Class = "NSMenuItem" */
+"Bigger" = "Groter";
+
+/* (MainMenu) Entry = "1506.title"; Class = "NSButtonCell" */
+"Binary Format Packages" = "Binaire pakketten";
+
+/* (MainMenu) Entry = "542.title"; Class = "NSMenuItem" */
+"BioConductor (binaries)" = "BioConductor (binaries)";
+
+/* (MainMenu) Entry = "563.title"; Class = "NSMenuItem" */
+"BioConductor (sources)" = "BioConductor (broncode)";
+
+/* (MainMenu) Entry = "849.title"; Class = "NSMenuItem" */
+"Bold" = "Vet";
+
+/* (QuartzPrefPane) Entry = "31.title"; Class = "NSMenuItem" */
+"Bottom Left" = "Linksonder";
+
+/* (QuartzPrefPane) Entry = "32.title"; Class = "NSMenuItem" */
+"Bottom Right" = "Rechtsonder";
+
+/* (QuartzPrefPane) Entry = "45.title"; Class = "NSBox" */
+"Box" = "Vak";
+
+/* (MainMenu) Entry = "5.title"; Class = "NSMenuItem" */
+"Bring All to Front" = "Alles op voorgrond";
+
+/* (EditorPrefPane) Entry = "96.title"; Class = "NSButtonCell" */
+"Built-in editor" = "Ingebouwde editor";
+
+/* (EditorPrefPane) Entry = "35.title"; Class = "NSBox" */
+"Built-in editor preferences" = "Voorkeuren ingebouwde editor";
+
+/* (RDocument) Entry = "115.title"; Class = "NSMenuItem" */
+"CP1250" = "CP1250";
+
+/* (RDocument) Entry = "113.title"; Class = "NSMenuItem" */
+"CP1251" = "CP1251";
+
+/* (RDocument) Entry = "114.title"; Class = "NSMenuItem" */
+"CP1252" = "CP1252";
+
+/* (RDocument) Entry = "117.title"; Class = "NSMenuItem" */
+"CP1253" = "CP1253";
+
+/* (RDocument) Entry = "116.title"; Class = "NSMenuItem" */
+"CP1254" = "CP1254";
+
+/* (MainMenu) Entry = "541.title"; Class = "NSMenuItem" */
+"CRAN (binaries)" = "CRAN (binaries)";
+
+/* (MainMenu) Entry = "1108.title"; Class = "NSMenuItem" */
+"CRAN (sources)" = "CRAN (broncode)";
 
 /* From: HelpManager.m (showHelpFor) */
 "Can't find help for topic, would you like to expand the search?" = "Kan helponderwerp niet vinden, wenst u de zoekopdracht uit te breiden?";
@@ -64,13 +209,19 @@
 "Can't open history file %@" = "Kan geschiedenisbestand %@ niet openen";
 
 /* From: RController.m (didCloseAll) */
+/* (MainMenu) Entry = "1515.title"; Class = "NSButtonCell" */
+/* (RDocument) Entry = "94.title"; Class = "NSButtonCell" */
 "Cancel" = "Annuleer";
 
 /* Cancel Editing - label for a toolbar, keep short!
    From: REditor.m (toolbar) */
 "Cancel Editing" = "Cancel Editing";
 
+/* (MainMenu) Entry = "1723.title"; Class = "NSMenuItem" */
+"Cancel Object Editing" = "Cancel Object Editing";
+
 /* From: REditor.m (toolbar) */
+/* (MainMenu) Entry = "1723.ibShadowedToolTip"; Class = "NSMenuItem" */
 "Cancels object editing without passing data back to R and closes the editor window" = "Breek het wijzigen van het object af zonder de veranderingen te bewaren. De editor wordt afgesloten.";
 
 /* From: RDocumentWinCtrl.m (goHelpSearch) */
@@ -85,8 +236,27 @@
 /* From: main.m (sheetDidEnd) */
 "Cannot start R" = "Kan R niet starten";
 
+/* (MainMenu) Entry = "829.title"; Class = "NSMenuItem" */
+"Center" = "Centreer";
+
+/* (QuartzPrefPane) Entry = "37.title"; Class = "NSMenuItem" */
+"Centered" = "Gecentreerd";
+
+/* (MiscPrefPane) Entry = "133.title"; Class = "NSButtonCell" */
+/* (QuartzPrefPane) Entry = "120.title"; Class = "NSButtonCell" */
+"Change" = "Wijzig";
+
+/* (MainMenu) Entry = "322.title"; Class = "NSMenuItem" */
+"Change Working Directory..." = "Wijzig werkmap…";
+
 /* From: RController.m (toolbar) */
 "Change the size of R console font" = "Wijzig de afmetingen van het consolelettertype";
+
+/* (MainMenu) Entry = "218.title"; Class = "NSMenuItem" */
+"Check For R Updates" = "Zoek naar R updates";
+
+/* (RDocument) Entry = "161.title"; Class = "NSMenuItem" */
+"Check Rd Document" = "Check Rd Document";
 
 /* From: RDocument.m (checkRdDocumentWithFilePath) */
 "Check Rd document…" = "Check Rd document…";
@@ -98,9 +268,6 @@
    From: RController.m (openDocument) */
 "Choose File" = "Kies bestand";
 
-/* From: RController.m (doLoadHistory) */
-"Choose history File" = "Kies geschiedenisbestand";
-
 /* From: PrefPanes/MiscPrefPane.m (chooseWorkingDir) */
 "Choose Initial Working Directory" = "Toon start werkmap";
 
@@ -110,14 +277,84 @@
 /* From: RController.m (setWorkingDir) */
 "Choose New Working Directory" = "Kies nieuwe werkmap";
 
+/* From: RController.m (doLoadHistory) */
+"Choose history File" = "Kies geschiedenisbestand";
+
+/* (MiscPrefPane) Entry = "145.title"; Class = "NSButtonCell" */
+"Cleanup history entries" = "Schoon geschiedenis op (wis lege regels edm.)";
+
+/* (MainMenu) Entry = "1076.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1066.title"; Class = "NSMenuItem" */
+/* (RDocument) Entry = "83.title"; Class = "NSMenuItem" */
+"Clear" = "Wis";
+
+/* (MainMenu) Entry = "1128.title"; Class = "NSMenuItem" */
+"Clear Console" = "Wis Console";
+
+/* (MainMenu) Entry = "1495.title"; Class = "NSButtonCell" */
+"Clear History" = "Wis geschiedenis";
+
+/* (MainMenu) Entry = "126.title"; Class = "NSMenuItem" */
+"Clear Menu" = "Wis menu";
+
 /* From: RController.m (clearWorkSpace) */
+/* (MainMenu) Entry = "243.title"; Class = "NSMenuItem" */
 "Clear Workspace" = "Wis Workspace";
+
+/* (SelectEncodingsPanel) Entry = "23.title"; Class = "NSButtonCell" */
+"Clear all" = "Wis alles";
+
+/* (MainMenu) Entry = "1580.title"; Class = "NSButtonCell" */
+/* (MainMenu) Entry = "73.title"; Class = "NSMenuItem" */
+"Close" = "Sluit";
+
+/* (MainMenu) Entry = "1577.ibShadowedToolTip"; Class = "NSButton" */
+"Close Find Panel (⎋)" = "Sluit zoek paneel (⎋)";
 
 /* From: RController.m (didCloseAll) */
 "Closing R session" = "Sluit R sessie";
 
+/* (MainMenu) Entry = "1757.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1758.title"; Class = "NSMenuItem" */
+"Code Folding Submenu" = "Code Folding Submenu";
+
+/* (ColorsPrefPane) Entry = "26.title"; Class = "NSBox" */
+/* (SyntaxColorsPrefPane) Entry = "26.title"; Class = "NSBox" */
+"Colors" = "Kleuren";
+
+/* (EditorPrefPane) Entry = "47.title"; Class = "NSButtonCell" */
+"Command" = "Commando";
+
+/* (MainMenu) Entry = "342.headerCell.title"; Class = "NSTableColumn" */
+"Commands" = "Commando's";
+
+/* (SyntaxColorsPrefPane) Entry = "119.title"; Class = "NSTextFieldCell" */
+"Comment" = "Opmerking";
+
+/* (MainMenu) Entry = "1207.title"; Class = "NSMenuItem" */
+"Comment-out" = "Maak kommentaar";
+
+/* (MainMenu) Entry = "1013.title"; Class = "NSMenuItem" */
+"Complete" = "Voltooid";
+
+/* (RConsole) Entry = "5.title"; Class = "NSWindow" */
+"Console" = "Console";
+
 /* From: RDocument.m (reinterpretInEncoding) */
 "Convertion Error" = "Fout opgetreden in conversie";
+
+/* (MainMenu) Entry = "157.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1729.title"; Class = "NSMenuItem" */
+"Copy" = "Kopier";
+
+/* (MainMenu) Entry = "822.title"; Class = "NSMenuItem" */
+"Copy Ruler" = "Kopieer regel";
+
+/* (MainMenu) Entry = "859.title"; Class = "NSMenuItem" */
+"Copy Style" = "Kopieer stijl";
+
+/* (MainMenu) Entry = "1730.title"; Class = "NSMenuItem" */
+"Copy as CSV" = "Copy as CSV";
 
 /* From: RDocument.m (reinterpretInEncoding) */
 "Couldn't reinterpret the text by using the encoding" = "Het is niet gelukt de text opnieuw te interpreteren met de ingestelde codering";
@@ -128,16 +365,74 @@
 /* From: RController.m (toolbar) */
 "Create a new, empty document in the editor" = "Maak nieuw, leeg document aan in editor";
 
+/* (SyntaxColorsPrefPane) Entry = "127.title"; Class = "NSTextFieldCell" */
+"Current Line" = "Current Line";
+
+/* (MainMenu) Entry = "1489.title"; Class = "NSTextFieldCell" */
+"Current Working Directory" = "Huidige werkmap";
+
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Currently it is not possible to install binary packages from a remote repository as root.\nPlease use the CRAN binary of R to allow admin users to install system-wide packages without becoming root. Alternatively you can either use command-line version of R as root or install the packages from local files." = "Het is momenteel niet mogelijk om binaire pakketten van server te installeren als root.\nGelieve de CRAN binaire versie van R te gebruiken om administrators toe te laten systeem-wijde instalaties uit te voeren zonder root te worden. U kan ook de command-line versie van R als root gebruiken of de pakketten van lokale files installeren.";
+
+/* (SyntaxColorsPrefPane) Entry = "129.title"; Class = "NSTextFieldCell" */
+"Cursor" = "Cursor";
+
+/* (MainMenu) Entry = "1503.placeholderString"; Class = "NSTextFieldCell" */
+"Custom Repository URL" = "Eigen Repository URL";
+
+/* (SelectEncodingsPanel) Entry = "5.title"; Class = "NSWindow" */
+"Customize Encodings List" = "Coderingenlijst aanpassen";
 
 /* From: RChooseEncodingPopupAccessory.m (setupPopUpCell)
    From: RController.m (updateReInterpretEncodingMenu) */
 "Customize List…" = "Sorteer encoding lijst…";
 
+/* (MainMenu) Entry = "160.title"; Class = "NSMenuItem" */
+"Cut" = "Knip";
+
 /* From: RDocument.m (insertRdDataTemplate) */
 "DATA_NAME" = "DATA_NAME";
+
+/* (QuartzPrefPane) Entry = "125.title"; Class = "NSTextFieldCell" */
+"DPI:" = "DPI:";
+
+/* (MainMenu) Entry = "501.headerCell.title"; Class = "NSTableColumn" */
+"Data" = "Data";
+
+/* (MainMenu) Entry = "267.title"; Class = "NSMenuItem" */
+"Data Manager" = "Datamanager";
+
+/* (MainMenu) Entry = "1651.title"; Class = "NSMenuItem" */
+"Decrease Indent" = "Verminder indent";
+
+/* (MiscPrefPane) Entry = "138.title"; Class = "NSButtonCell" */
+"Default" = "Standaard";
+
+/* (MiscPrefPane) Entry = "106.title"; Class = "NSBox" */
+"Default CRAN mirror" = "Standaard CRAN mirror";
+
+/* (MiscPrefPane) Entry = "23.title"; Class = "NSBox" */
+"Default Library Paths" = "Standaard bibliotheek pad";
+
+/* (ColorsPrefPane) Entry = "78.title"; Class = "NSButtonCell" */
+/* (SyntaxColorsPrefPane) Entry = "120.title"; Class = "NSButtonCell" */
+"Defaults" = "Standaard";
+
+/* (MainMenu) Entry = "164.title"; Class = "NSMenuItem" */
+"Delete" = "Wis";
+
+/* (MainMenu) Entry = "1496.title"; Class = "NSButtonCell" */
+"Delete entry" = "Wis invoer";
+
+/* (MainMenu) Entry = "447.headerCell.title"; Class = "NSTableColumn" */
+/* (MainMenu) Entry = "701.headerCell.title"; Class = "NSTableColumn" */
+/* (MainMenu) Entry = "504.headerCell.title"; Class = "NSTableColumn" */
+/* (Vignettes) Entry = "94.headerCell.title"; Class = "NSTableColumn" */
+"Description" = "Beschrijving";
+
+/* (MiscPrefPane) Entry = "132.title"; Class = "NSTextFieldCell" */
+"Directory:" = "Map:";
 
 /* From: PackageInstaller.m (checkOptions) */
 "Do you want me to remember the mirror you selected for future sessions?" = "Wenst u de geselecteerde mirror te onthouden voor gebruik in de toekomst?";
@@ -145,20 +440,48 @@
 /* From: RController.m (didCloseAll) */
 "Don't Save" = "Niet bewaren";
 
+/* (MainMenu) Entry = "502.ibShadowedToolTip"; Class = "NSScrollView" */
+"Double click to load data in the R workspace. " = "Dubbel klik om data in workspace te laden. ";
+
+/* (MainMenu) Entry = "577.ibShadowedToolTip"; Class = "NSButton" */
+"Downloads Selected Packages And Installs In Selected Location (↩)." = "Download geselecteerde pakketten en laad in geselekteerde lokatie (↩).";
+
+/* (MiscPrefPane) Entry = "17.title"; Class = "NSBox" */
+"Drag & drop action during R start-up" = "Drag & drop actie tijdens opstarten van R";
+
+/* (RDocument) Entry = "110.title"; Class = "NSMenuItem" */
+"EUC (jp)" = "EUC (jp)";
+
 /* From: WSBrowser.m (toolbar) */
+/* (MainMenu) Entry = "169.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "163.title"; Class = "NSMenuItem" */
 "Edit" = "Wijzig";
+
+/* (MainMenu) Entry = "1740.title"; Class = "NSMenuItem" */
+"Edit Column Names" = "Edit Column Names";
 
 /* From: WSBrowser.m (toolbar) */
 "Edit Object" = "Bewerk object";
 
+/* (MainMenu) Entry = "221.title"; Class = "NSMenuItem" */
+"Edit Object…" = "Bewerk object…";
+
 /* From: WSBrowser.m (toolbar) */
 "Edit the selected object" = "Bewerk geselecteerd object";
 
-/* From: REditor.m (startDataEntry) */
-"editing cancelled" = "editing be-eindigt";
+/* (MainMenu) Entry = "1071.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1078.title"; Class = "NSMenuItem" */
+/* (RDocument) Entry = "82.title"; Class = "NSMenuItem" */
+"Empty" = "Leeg";
+
+/* (SelectEncodingsPanel) Entry = "21.title"; Class = "NSTextFieldCell" */
+"Enable the text encodings you would like to be able to use." = "Activeer de coderingen die u wilt kunnen gebruiken.";
 
 /* From: RDocumentController.m (encodingAccessory) */
 "Encoding" = "Encoding";
+
+/* (RDocument) Entry = "108.title"; Class = "NSTextFieldCell" */
+"Encoding:" = "Encoding:";
 
 /* From: RController.m (applicationDidFinishLaunching)
    From: RController.m (windowDidExitFullScreen) */
@@ -168,45 +491,191 @@
    From: RDocument.m (convertRd2PDF) */
 "Error" = "Fout";
 
-/* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
-"executing" = "aan het uitvoeren";
+/* (MainMenu) Entry = "1082.title"; Class = "NSMenuItem" */
+/* (RDocument) Entry = "59.title"; Class = "NSMenuItem" */
+"Exact Search" = "Exact zoeken";
+
+/* (MainMenu) Entry = "890.title"; Class = "NSMenuItem" */
+"Execute" = "Voer uit";
 
 /* From: RController.m (applicationDidFinishLaunching)
    From: RController.m (windowDidEnterFullScreen) */
 "Exit Full Screen" = "Be-eindig Full Screen";
 
-/* From: PackageInstaller.m (reloadURL) */
-"Fetching Package List Failed" = "Het ophalen van de pakkettenlijst mislukte";
+/* (EditorPrefPane) Entry = "97.title"; Class = "NSButtonCell" */
+"External Editor" = "Externe editor";
 
-/* From: RController.m (toolbar) */
-"Font Size" = "Lettergrootte";
-
-/* From: RDocumentWinCtrl.m (tidyRCode) */
-"Formatting…" = "Formatting…";
+/* (EditorPrefPane) Entry = "37.title"; Class = "NSBox" */
+"External editor settings" = "Instellingen externe editor";
 
 /* From: RDocument.m (insertRdFunctionTemplate) */
 "FUNCTION_NAME" = "FUNCTION_NAME";
 
+/* From: PackageInstaller.m (reloadURL) */
+"Fetching Package List Failed" = "Het ophalen van de pakkettenlijst mislukte";
+
+/* (MainMenu) Entry = "81.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "83.title"; Class = "NSMenuItem" */
+"File" = "Archief";
+
+/* (MainMenu) Entry = "159.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "168.title"; Class = "NSMenuItem" */
+"Find" = "Zoek";
+
+/* (MainMenu) Entry = "167.title"; Class = "NSMenuItem" */
+"Find Next" = "Zoek volgende";
+
+/* (MainMenu) Entry = "162.title"; Class = "NSMenuItem" */
+"Find Previous" = "Zoek vorige";
+
+/* (MainMenu) Entry = "154.title"; Class = "NSMenuItem" */
+"Find…" = "Zoek…";
+
+/* (MainMenu) Entry = "1764.title"; Class = "NSMenuItem" */
+"Fold" = "Vouw";
+
+/* (MainMenu) Entry = "1759.title"; Class = "NSMenuItem" */
+"Fold Level 0" = "Vouw niveau 0";
+
+/* (MainMenu) Entry = "1760.title"; Class = "NSMenuItem" */
+"Fold Level 1" = "Vouw niveau 1";
+
+/* (MainMenu) Entry = "1769.title"; Class = "NSMenuItem" */
+"Fold Level 2" = "Vouw niveau 2";
+
+/* (MainMenu) Entry = "1770.title"; Class = "NSMenuItem" */
+"Fold Level 3" = "Vouw niveau 3";
+
+/* (MainMenu) Entry = "854.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "836.title"; Class = "NSMenuItem" */
+"Font" = "Lettertype";
+
+/* From: RController.m (toolbar) */
+"Font Size" = "Lettergrootte";
+
+/* (MainMenu) Entry = "1497.title"; Class = "NSTextFieldCell" */
+"Font Size:" = "Lettertypegrootte:";
+
+/* (EditorPrefPane) Entry = "177.title"; Class = "NSTextFieldCell" */
+"Font:" = "Font:";
+
+/* (MainMenu) Entry = "833.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "828.title"; Class = "NSMenu" */
+"Format" = "Opmaak";
+
+/* (MainMenu) Entry = "1752.title"; Class = "NSMenuItem" */
+"Format Source Code" = "Format Source Code";
+
+/* From: RDocumentWinCtrl.m (tidyRCode) */
+"Formatting…" = "Formatting…";
+
+/* (MainMenu) Entry = "1514.alternateTitle"; Class = "NSButtonCell" */
+"Forward" = "Verder";
+
 /* From: REditorToolbar.m (updatePreferences) */
 "Functions" = "Functies";
+
+/* (MainMenu) Entry = "1084.title"; Class = "NSMenuItem" */
+/* (RDocument) Entry = "60.title"; Class = "NSMenuItem" */
+"Fuzzy Search" = "Niet-exact zoeken";
+
+/* (MainMenu) Entry = "1502.title"; Class = "NSButtonCell" */
+"Fwd >" = "Fwd >";
+
+/* (MainMenu) Entry = "1505.title"; Class = "NSButtonCell" */
+"Get List" = "Haal lijst op";
+
+/* (MainMenu) Entry = "317.title"; Class = "NSMenuItem" */
+"Get Working Directory" = "Bekom werkmap";
+
+/* (MainMenu) Entry = "1049.title"; Class = "NSMenuItem" */
+"Go To Line…" = "Ga naar regel…";
+
+/* (RDocument) Entry = "96.title"; Class = "NSTextFieldCell" */
+"Go to line:" = "Ga naar lijn:";
+
+/* (RDocument) Entry = "153.title"; Class = "NSMenuItem" */
+"HTML Preview" = "Insert Function Rd Template";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
+/* (MainMenu) Entry = "106.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "103.title"; Class = "NSMenuItem" */
 "Help" = "Help";
+
+/* (MainMenu) Entry = "1511.placeholderString"; Class = "NSSearchFieldCell" */
+/* (MainMenu) Entry = "1490.placeholderString"; Class = "NSSearchFieldCell" */
+"Help Search" = "Help zoeken";
+
+/* (MainMenu) Entry = "687.title"; Class = "NSWindow" */
+"Help Search Topics" = "Help zoekonderwerpen";
 
 /* From: RController.m (handleCustomPrint) */
 "Help for the topic \"%@\" was not found." = "Help over het onderwerp \"%@\"  werd niet gevonden.";
 
+/* (RDocument) Entry = "92.placeholderString"; Class = "NSSearchFieldCell" */
+"Help search" = "Help zoeken";
+
 /* From: RController.m (handleCustomPrint) */
 "Help topic not found" = "Helponderwerp werd niet gevonden";
 
+/* (MainMenu) Entry = "145.title"; Class = "NSMenuItem" */
+"Hide Others" = "Verberg andere";
+
+/* (MainMenu) Entry = "134.title"; Class = "NSMenuItem" */
+"Hide R" = "Verberg R";
+
+/* (EditorPrefPane) Entry = "147.title"; Class = "NSButtonCell" */
+"Highlight bracket pairs" = "Highlight haakjes paar";
+
+/* (EditorPrefPane) Entry = "171.title"; Class = "NSButtonCell" */
+"Highlight current line" = "Highlight huidige lijn";
+
 /* From: RController.m (toolbar) */
+/* (MiscPrefPane) Entry = "44.title"; Class = "NSBox" */
 "History" = "Geschiedenis";
 
+/* (RDocument) Entry = "120.title"; Class = "NSMenuItem" */
+"ISO2022-JP" = "ISO2022-JP";
+
+/* (SyntaxColorsPrefPane) Entry = "118.title"; Class = "NSTextFieldCell" */
+"Identifier" = "Identificatie";
+
+/* (MainMenu) Entry = "1124.title"; Class = "NSButtonCell" */
+"In Other Location (Will Be Asked Upon Installation)" = "Op andere plaats (wordt gevraagd bij installatie)";
+
+/* (MainMenu) Entry = "1650.title"; Class = "NSMenuItem" */
+"Increase Indent" = "Increase Indent";
+
+/* (EditorPrefPane) Entry = "173.title"; Class = "NSButtonCell" */
+"Indent new lines" = "Indent nieuwe lijnen";
+
+/* (MiscPrefPane) Entry = "34.title"; Class = "NSBox" */
+"Initial working directory" = "Initiële werkmap";
+
+/* (ColorsPrefPane) Entry = "73.title"; Class = "NSTextFieldCell" */
+"Input" = "Input";
+
+/* (RDocument) Entry = "165.title"; Class = "NSMenuItem" */
+"Insert Data Rd Template" = "Insert Data Rd Template";
+
+/* (RDocument) Entry = "164.title"; Class = "NSMenuItem" */
+"Insert Function Rd Template" = "Insert Function Rd Template";
+
+/* (MainMenu) Entry = "1510.title"; Class = "NSButtonCell" */
+"Install Dependencies" = "Installeer Dependencies";
+
+/* (MainMenu) Entry = "570.title"; Class = "NSBox" */
+"Install Location" = "Installatie locatie";
+
 /* From: PackageInstaller.m (setURL) */
-"Install Selected" = "Installeer geselecteerde pakketten";
+/* (MainMenu) Entry = "1508.title"; Class = "NSButtonCell" */
+"Install Selected" = "Installeer geselecteerde";
+
+/* (MainMenu) Entry = "548.headerCell.title"; Class = "NSTableColumn" */
+"Installed Version" = "Geïnstalleerde versie";
 
 /* From: PackageInstaller.m (setURL) */
 "Install…" = "Installeer…";
@@ -218,6 +687,50 @@
    From: PackageInstaller.m (updateAll) */
 "Invalid Repository URL" = "Ongeldige Repository URL";
 
+/* (MainMenu) Entry = "815.title"; Class = "NSMenuItem" */
+"Italic" = "Cursief";
+
+/* (MainMenu) Entry = "1030.headerCell.title"; Class = "NSTableColumn" */
+/* (MainMenu) Entry = "1072.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1075.title"; Class = "NSMenuItem" */
+/* (RDocument) Entry = "81.title"; Class = "NSMenuItem" */
+"Item" = "Item";
+
+/* (MainMenu) Entry = "1648.title"; Class = "NSMenuItem" */
+"Item 1" = "Item 1";
+
+/* (MainMenu) Entry = "1647.title"; Class = "NSMenuItem" */
+"Item 2" = "Item 2";
+
+/* (MainMenu) Entry = "1646.title"; Class = "NSMenuItem" */
+"Item 3" = "Item 3";
+
+/* (MainMenu) Entry = "155.title"; Class = "NSMenuItem" */
+"Jump to Selection" = "Ga naar selectie";
+
+/* (MainMenu) Entry = "838.title"; Class = "NSMenuItem" */
+"Justify" = "Uitgevuld";
+
+/* (MainMenu) Entry = "842.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "839.title"; Class = "NSMenuItem" */
+"Kern" = "Spatiëring";
+
+/* (SyntaxColorsPrefPane) Entry = "117.title"; Class = "NSTextFieldCell" */
+"Keyword" = "Trefwoord";
+
+/* (RDocument) Entry = "106.title"; Class = "NSMenuItem" */
+"Latin1" = "Latin1";
+
+/* (RDocument) Entry = "112.title"; Class = "NSMenuItem" */
+"Latin2" = "Latin2";
+
+/* (MainMenu) Entry = "824.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "848.title"; Class = "NSMenuItem" */
+"Ligature" = "Ligaturen";
+
+/* (MainMenu) Entry = "1656.title"; Class = "NSMenuItem" */
+"Line" = "Line";
+
 /* From: RDocumentWinCtrl.m (functionReset)
    From: REditorToolbar.m (updatePreferences) */
 "List of Functions" = "List of Functions";
@@ -226,17 +739,85 @@
    From: RDocumentWinCtrl.m (functionReset) */
 "List of Sections" = "List of Sections";
 
+/* (MainMenu) Entry = "1685.title"; Class = "NSButtonCell" */
+"Load Data" = "Load Data";
+
+/* (MainMenu) Entry = "247.title"; Class = "NSMenuItem" */
+"Load Default Workspace" = "Laad standaard Workspace";
+
+/* (MainMenu) Entry = "1493.title"; Class = "NSButtonCell" */
+"Load History" = "Laad geschiedenis";
+
+/* (MainMenu) Entry = "250.title"; Class = "NSMenuItem" */
+"Load Workspace File…" = "Laad Workspace-bestand…";
+
+/* (MainMenu) Entry = "1492.title"; Class = "NSTextFieldCell" */
+"Loading R ..." = "R laden…";
+
+/* (MainMenu) Entry = "596.title"; Class = "NSMenuItem" */
+"Local Binary Package" = "Lokaal binair pakket";
+
+/* (MainMenu) Entry = "595.title"; Class = "NSMenuItem" */
+"Local Package Directory" = "Laad pakkettenmap";
+
+/* (MainMenu) Entry = "597.title"; Class = "NSMenuItem" */
+"Local Source Package" = "Lokaal broncodepakket";
+
+/* (QuartzPrefPane) Entry = "117.title"; Class = "NSTextFieldCell" */
+"Location:" = "Locatie:";
+
+/* (MainMenu) Entry = "818.title"; Class = "NSMenuItem" */
+"Loosen" = "Maak los";
+
+/* (MainMenu) Entry = "821.title"; Class = "NSMenuItem" */
+"Lower" = "Lager";
+
+/* (RDocument) Entry = "105.title"; Class = "NSMenuItem" */
+"MacRoman" = "MacRoman";
+
+/* (MainMenu) Entry = "1083.title"; Class = "NSMenuItem" */
+"Main R Help Page" = "R hoofd-helppagina";
+
+/* (MainMenu) Entry = "29.title"; Class = "NSMenu" */
+"MainMenu" = "Hoofdmenu";
+
+/* (EditorPrefPane) Entry = "159.title"; Class = "NSButtonCell" */
+"Match brackets/quotes" = "Maak haakjes/quotes kloppend";
+
+/* (MiscPrefPane) Entry = "143.title"; Class = "NSTextFieldCell" */
+"Max number of entries in history:" = "Maximum aantal lijnen in geschiedenis:";
+
+/* (MainMenu) Entry = "1064.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "1074.title"; Class = "NSMenu" */
+/* (RDocument) Entry = "58.title"; Class = "NSMenu" */
+"Menu" = "Menu";
+
+/* (MainMenu) Entry = "23.title"; Class = "NSMenuItem" */
+"Minimize" = "Minimaliseer";
+
+/* (MainMenu) Entry = "319.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "318.title"; Class = "NSMenuItem" */
+"Misc" = "Diverse";
+
 /* From: PackageInstaller.m (checkOptions) */
 "Never" = "Nooit";
 
 /* From: RController.m (toolbar) */
+/* (MainMenu) Entry = "945.title"; Class = "NSMenuItem" */
 "New Document" = "Nieuw document";
 
 /* From: Quartz/RQuartz.m (changeDocumentTitle) */
 "New Quartz Device" = "Nieuw Quartz-venster";
 
+/* (MainMenu) Entry = "311.title"; Class = "NSMenuItem" */
+"New Quartz Device Window" = "Nieuw Quartz-venster";
+
+/* (MainMenu) Entry = "1743.title"; Class = "NSMenuItem" */
+"New Rd Document" = "Nieuw Rd document";
+
 /* Global string @ */
-"No" = "Neen";
+/* (MiscPrefPane) Entry = "124.title"; Class = "NSButtonCell" */
+"No" = "Nee";
 
 /* From: PackageInstaller.m (checkOptions) */
 "No CRAN Mirror Found" = "Geen CRAN mirror gevonden";
@@ -247,17 +828,59 @@
 /* From: PackageInstaller.m (checkOptions) */
 "No valid CRAN mirror was selected.\nYou won't be able to install any CRAN packages unless you set the CRAN option to a valid mirror URL." = "Er werd geen geldige CRAN mirror geselecteer.\n U zal geen CRAN pakketten kunnen installeren zolang u geen geldige URL kiest.";
 
-/* From: RDocument.m (displayName) */
-"Object Editor" = "Object Editor";
+/* (SyntaxColorsPrefPane) Entry = "115.title"; Class = "NSTextFieldCell" */
+"Normal" = "Normaal";
+
+/* (QuartzPrefPane) Entry = "124.title"; Class = "NSTextFieldCell" */
+"Note: Change and press return" = "Opm.: Wijzig en toets enter";
+
+/* (MiscPrefPane) Entry = "135.title"; Class = "NSTextFieldCell" */
+"Note: Enforce by selecting 'Always apply'. Otherwise used to set the working directory if not specified when R.app is started, e.g. double clicking the R icon. Drag & drop of a file or a directory on the R icon or using 'open -a R.app <dir-or-file>' will override this setting if not enforced." = "Opm.: Selecteer 'Altijd toepassen'. Anders zullen andere methodes om de werkmap in te stellen voorrang krijgen, bvb. door op het R-icoon te dubbelklikken. Door een map op het R-icoon te slepen of door  'open -a R.app <dir-or-file>' te gebruiken.";
+
+/* (MiscPrefPane) Entry = "131.title"; Class = "NSTextFieldCell" */
+"Note: This change is effective only after a restart of R.app" = "Opm.: Deze wijziging gaat pas in na het herstarten van R.app";
+
+/* (MiscPrefPane) Entry = "141.title"; Class = "NSTextFieldCell" */
+"Note: Use a fixed path to always use the same history file, e.g. ~/.Rhistory" = "Opm.: Gebruik een vast pad naar het geschiedenisbestand, bvb. ~/.Rapp.history om altijd (onafhankelijk van de werkmap) dezelfde geschiedenis te zien";
+
+/* (EditorPrefPane) Entry = "161.title"; Class = "NSTextFieldCell" */
+"Note:\nCommand is executed in a shell" = "Note:\nCommand wordt uitgevoerd in a shell";
+
+/* (SyntaxColorsPrefPane) Entry = "114.title"; Class = "NSTextFieldCell" */
+"Number" = "Nummer";
 
 /* Global string @ */
+/* (RDocument) Entry = "95.title"; Class = "NSButtonCell" */
 "OK" = "OK";
+
+/* (MainMenu) Entry = "667.headerCell.title"; Class = "NSTableColumn" */
+"Object" = "Object";
+
+/* From: RDocument.m (displayName) */
+"Object Editor" = "Object Editor";
 
 /* From: DataManager.m (showHelp)
    From: HelpManager.m (showHelpUsingFile)
    From: PackageManager.m (showInfo)
    From: RDocumentWinCtrl.m (goHelpSearch) */
+/* (MainMenu) Entry = "1516.title"; Class = "NSButtonCell" */
 "Ok" = "Ok";
+
+/* (MainMenu) Entry = "220.title"; Class = "NSMenuItem" */
+"Open Document..." = "Open document…";
+
+/* From: RController.m (toolbar) */
+"Open In Editor" = "Open in editor";
+
+/* (Vignettes) Entry = "63.title"; Class = "NSButtonCell" */
+"Open PDF" = "Open PDF";
+
+/* (MainMenu) Entry = "124.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "125.title"; Class = "NSMenu" */
+"Open Recent" = "Open recente bestanden";
+
+/* (Vignettes) Entry = "64.title"; Class = "NSButtonCell" */
+"Open Source" = "Open Broncode";
 
 /* From: RController.m (toolbar) */
 "Open a new Quartz device window" = "Open nieuw Quartz-venster";
@@ -265,8 +888,47 @@
 /* From: RController.m (toolbar) */
 "Open document in editor" = "Open document in editor";
 
-/* From: RController.m (toolbar) */
-"Open In Editor" = "Open in editor";
+/* (MiscPrefPane) Entry = "18.title"; Class = "NSButtonCell" */
+"Open file in editor" = "Open bestand in editor";
+
+/* (MainMenu) Entry = "1107.title"; Class = "NSMenuItem" */
+"Other Directory URL" = "Andere map URL";
+
+/* (MainMenu) Entry = "1109.title"; Class = "NSMenuItem" */
+"Other Repository" = "Ander repository";
+
+/* (MainMenu) Entry = "543.title"; Class = "NSMenu" */
+/* (QuartzPrefPane) Entry = "35.title"; Class = "NSMenu" */
+/* (RDocument) Entry = "44.title"; Class = "NSMenu" */
+/* (RDocument) Entry = "150.title"; Class = "NSMenu" */
+/* (RDocument) Entry = "103.title"; Class = "NSMenu" */
+"OtherViews" = "Andere weergave";
+
+/* (ColorsPrefPane) Entry = "74.title"; Class = "NSTextFieldCell" */
+"Output" = "Output";
+
+/* (QuartzPrefPane) Entry = "111.title"; Class = "NSButtonCell" */
+"Override R Quartz width/height parameters" = "Negeer R Quartz hoogte/breedte-instellingen";
+
+/* (RDocument) Entry = "159.title"; Class = "NSMenuItem" */
+"PDF Preview" = "PDF Preview";
+
+/* (MainMenu) Entry = "697.headerCell.title"; Class = "NSTableColumn" */
+/* (MainMenu) Entry = "546.headerCell.title"; Class = "NSTableColumn" */
+/* (MainMenu) Entry = "446.headerCell.title"; Class = "NSTableColumn" */
+/* (MainMenu) Entry = "500.headerCell.title"; Class = "NSTableColumn" */
+/* (Vignettes) Entry = "95.headerCell.title"; Class = "NSTableColumn" */
+"Package" = "Pakket";
+
+/* From: PackageInstaller.m (installSelected) */
+/* (MainMenu) Entry = "559.title"; Class = "NSMenuItem" */
+"Package Installer" = "Pakket-installatieprogramma";
+
+/* (MainMenu) Entry = "266.title"; Class = "NSMenuItem" */
+"Package Manager" = "Pakketmanager";
+
+/* (MainMenu) Entry = "1507.placeholderString"; Class = "NSSearchFieldCell" */
+"Package Search" = "Zoek pakket";
 
 /* From: PackageInstaller.m (installSelected) */
 "Package installation failed" = "Installatie pakket mislukte";
@@ -278,17 +940,39 @@
    From: PackageInstaller.m (updateAll) */
 "Package installer" = "Pakket-installatieprogramma";
 
-/* From: PackageInstaller.m (installSelected) */
-"Package Installer" = "Pakket-installatieprogramma";
-
 /* From: PackageInstaller.m (updateAll) */
 "Package update failed" = "Pakket kon niet geupdate worden";
 
 /* From: PackageInstaller.m (updateAll) */
 "Package update was not successful. Please see the R Console for details." = "Het updaten van het pakket mislukte. Gelieve de R console te raadplegen voor meer details.";
 
+/* (MainMenu) Entry = "270.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "262.title"; Class = "NSMenuItem" */
+"Packages & Data" = "Pakketten & Data";
+
+/* (MainMenu) Entry = "538.title"; Class = "NSBox" */
+"Packages Repository" = "Pakket Repository";
+
+/* (MainMenu) Entry = "77.title"; Class = "NSMenuItem" */
+"Page Setup…" = "Pagina-instellingen…";
+
+/* (RDocument) Entry = "68.title"; Class = "NSWindow" */
+"Panel" = "Paneel";
+
 /* From: RDocumentWinCtrl.m (tidyRCode) */
 "Parsing Error" = "Parsing Error";
+
+/* (MainMenu) Entry = "171.title"; Class = "NSMenuItem" */
+"Paste" = "Plak";
+
+/* (MainMenu) Entry = "1475.title"; Class = "NSMenuItem" */
+"Paste As Plain Text" = "Plak (platte tekst)";
+
+/* (MainMenu) Entry = "845.title"; Class = "NSMenuItem" */
+"Paste Ruler" = "Plak lineaal";
+
+/* (MainMenu) Entry = "837.title"; Class = "NSMenuItem" */
+"Paste Style" = "Plak stijl";
 
 /* From: PackageInstaller.m (reloadURL) */
 "Please consult  R Console output for details." = "Gelieve de R console te raadplegen voor meer details.";
@@ -296,9 +980,6 @@
 /* From: PackageInstaller.m (reloadURL)
    From: PackageInstaller.m (updateAll) */
 "Please specify a valid URL first." = "Gelieve een geldige URL op te geven.";
-
-/* From: AMPrefs/AMPreferenceWindowController.m (initWithAutosaveName) */
-"Preferences" = "Preferences";
 
 /* Editor preference group */
 "PrefG-Editor" = "Broncode-editor";
@@ -324,17 +1005,23 @@
 /* Syntax colors preference pane */
 "PrefP-Syntax" = "Syntax\nKleuren";
 
-/* From: RDocument.m (checkRdDocumentWithFilePath)
-   From: RDocument.m (convertRd2HTML)
-   From: RDocument.m (convertRd2PDF)
-   From: RDocument.m (insertRdDataTemplate)
-   From: RDocument.m (insertRdFunctionTemplate)
-   From: RDocumentWinCtrl.m (tidyRCode)
-   From: RTextView.m (performDragOperation) */
-"press ⌘. to cancel" = "press ⌘. to cancel";
+/* From: AMPrefs/AMPreferenceWindowController.m (initWithAutosaveName) */
+"Preferences" = "Preferences";
+
+/* (MainMenu) Entry = "129.title"; Class = "NSMenuItem" */
+"Preferences…" = "Voorkeuren…";
+
+/* (MainMenu) Entry = "1512.title"; Class = "NSButtonCell" */
+"Print" = "Print";
 
 /* From: RController.m (toolbarWillAddItem) */
 "Print this document" = "Print dit document";
+
+/* (MainMenu) Entry = "78.title"; Class = "NSMenuItem" */
+"Print…" = "Druk af…";
+
+/* (ColorsPrefPane) Entry = "72.title"; Class = "NSTextFieldCell" */
+"Prompt" = "Prompt";
 
 /* From: RController.m (toolbar) */
 "Quartz" = "Quartz";
@@ -343,10 +1030,19 @@
 "Quit" = "Stop";
 
 /* From: RController.m (toolbar) */
+/* (MainMenu) Entry = "136.title"; Class = "NSMenuItem" */
 "Quit R" = "Stop R";
 
+/* (MainMenu) Entry = "57.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "56.title"; Class = "NSMenuItem" */
+"R" = "R";
+
 /* From: RConsoleController.m (windowTitleForDocumentDisplayName) */
+/* (MainMenu) Entry = "21.title"; Class = "NSWindow" */
 "R Console" = "R Console";
+
+/* (MainMenu) Entry = "794.title"; Class = "NSWindow" */
+"R Data Editor" = "R data-editor";
 
 /* From: REditor.m (initData) */
 "R Data Editor - error while reading object data" = "R Data Editor - fout tijdens het inlezen van de object data";
@@ -354,24 +1050,59 @@
 /* From: REditor.m (windowShouldClose) */
 "R Data Editor couldn't write object data" = "R Data Editor - fout tijdens het wegschrijven van de object data";
 
+/* (MainMenu) Entry = "498.title"; Class = "NSWindow" */
+"R Data Manager" = "R datamanager";
+
 /* From: RController.m (sourceFile) */
 "R File to Source" = "R bestand naar broncode";
 
 /* From: RController.m (sourceOrLoadFile) */
 "R File to Source/Load" = "R bestand naar Broncode/Laden";
 
+/* (MainMenu) Entry = "332.title"; Class = "NSMenuItem" */
+"R For Mac OS X FAQ" = "R voor Mac OS X FAQ";
+
+/* (MainMenu) Entry = "728.title"; Class = "NSWindow" */
+/* (MainMenu) Entry = "111.title"; Class = "NSMenuItem" */
+"R Help" = "R Help";
+
 /* From: RController.m (handleShowMessage) */
 "R Message" = "R bericht";
+
+/* (MainMenu) Entry = "525.title"; Class = "NSWindow" */
+"R Package Installer" = "R pakketinstallatie";
+
+/* (MainMenu) Entry = "444.title"; Class = "NSWindow" */
+"R Package Manager" = "R pakketmanager";
+
+/* (MainMenu) Entry = "662.title"; Class = "NSWindow" */
+"R Workspace Browser" = "R Workspace Browser";
+
+/* (MainMenu) Entry = "1081.title"; Class = "NSMenuItem" */
+"R for Mac OS X FAQ" = "FAQ R voor Mac OS X";
+
+/* (MiscPrefPane) Entry = "137.title"; Class = "NSTextFieldCell" */
+"R history file:" = "R geschiedenisbestand:";
+
+/* (EditorPrefPane) Entry = "165.title"; Class = "NSButtonCell" */
+/* (EditorPrefPane) Entry = "164.title"; Class = "NSButtonCell" */
+/* (MainMenu) Entry = "1517.title"; Class = "NSButtonCell" */
+/* (MiscPrefPane) Entry = "151.title"; Class = "NSButtonCell" */
+/* (MiscPrefPane) Entry = "150.title"; Class = "NSButtonCell" */
+"Radio" = "Radio";
+
+/* (MainMenu) Entry = "850.title"; Class = "NSMenuItem" */
+"Raise" = "Verhoog";
 
 /* From: RDocument.m (checkRdDocumentWithFilePath) */
 "Rd Check" = "Rd Check";
 
+/* From: RdEditorToolbar.m (textView) */
+"Rd Toolbox" = "Rd Toolbox";
+
 /* From: RDocument.m (checkRdDocumentWithFilePath)
    From: RDocument.m (convertRd2PDF) */
 "Rd file" = "Rd file";
-
-/* From: RdEditorToolbar.m (textView) */
-"Rd Toolbox" = "Rd Toolbox";
 
 /* From: RDocument.m (convertRd2HTML) */
 "Rd → HTML…" = "Rd → HTML…";
@@ -379,11 +1110,25 @@
 /* From: RDocument.m (convertRd2PDF) */
 "Rd → PDF…" = "Rd → PDF…";
 
+/* (MiscPrefPane) Entry = "140.title"; Class = "NSButtonCell" */
+"Read history file on startup" = "Lees geschiedenisbestand in tijdens opstarten";
+
+/* (MainMenu) Entry = "173.title"; Class = "NSMenuItem" */
+"Redo" = "Opnieuw";
+
 /* From: WSBrowser.m (toolbar) */
 "Refresh" = "Ververs";
 
+/* (MainMenu) Entry = "1500.title"; Class = "NSButtonCell" */
+/* (MainMenu) Entry = "1678.title"; Class = "NSButtonCell" */
+"Refresh List" = "Ververs lijst";
+
 /* From: WSBrowser.m (toolbar) */
 "Refresh Objects List" = "Ververs objectenlijst";
+
+/* (MainMenu) Entry = "1644.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1645.title"; Class = "NSMenu" */
+"Reinterpret with Encoding" = "Pas Encoding nogmaals toe";
 
 /* From: WSBrowser.m (toolbar) */
 "Remove" = "Verwijder";
@@ -403,29 +1148,72 @@
 /* From: REditor.m (toolbar) */
 "Remove Rows" = "Verwijder rijen";
 
-/* From: REditor.m (toolbar) */
-"Remove selected columns" = "Verwijder geselecteerde kolommen";
-
 /* From: WSBrowser.m (toolbar) */
 "Remove Selected Object" = "Verwijder geselecteerd object";
+
+/* (MainMenu) Entry = "1722.title"; Class = "NSMenuItem" */
+"Remove Selection" = "Remove Selection";
+
+/* (MiscPrefPane) Entry = "142.title"; Class = "NSButtonCell" */
+"Remove duplicate entries in history" = "Verwijder dubbele geschiedenisinvoer";
+
+/* From: REditor.m (toolbar) */
+"Remove selected columns" = "Verwijder geselecteerde kolommen";
 
 /* From: REditor.m (toolbar) */
 "Removes selected rows" = "Verwijder geselecteerde rij";
 
+/* (MainMenu) Entry = "550.headerCell.title"; Class = "NSTableColumn" */
+"Repository Version" = "Repository versie";
+
+/* (MainMenu) Entry = "316.title"; Class = "NSMenuItem" */
+"Reset Working Directory" = "Stel werkmap opnieuw in";
+
 /* From: Quartz/RDeviceView.m (drawRect) */
 "Resizing to %g x %g" = "Afmetingen aanpassen naar %1$g x %2$g";
+
+/* (QuartzPrefPane) Entry = "123.title"; Class = "NSButtonCell" */
+"Restore defaults" = "Herstel standaardinstellingen";
+
+/* (MainMenu) Entry = "112.title"; Class = "NSMenuItem" */
+"Revert" = "Laatst bewaarde versie";
+
+/* (SelectEncodingsPanel) Entry = "24.title"; Class = "NSButtonCell" */
+"Revert to default" = "Herstel standaardinstellingen";
 
 /* From: RDocument.m (revertToContentsOfURL) */
 "Reverting Document" = "Reverting Document";
 
+/* (MainMenu) Entry = "658.title"; Class = "NSMenuItem" */
+"Run X11 Server" = "Draai X11 server";
+
 /* Global string @ */
+/* (MainMenu) Entry = "75.title"; Class = "NSMenuItem" */
 "Save" = "Bewaar";
+
+/* (MainMenu) Entry = "80.title"; Class = "NSMenuItem" */
+"Save As…" = "Bewaar als…";
 
 /* From: RController.m (toolbar) */
 "Save Console Window" = "Bewaar console-venster";
 
 /* From: Quartz/RQuartz.m (saveDocument) */
 "Save Content of Quartz Device to PDF file" = "Bewaar inhoud van Quartzvenster naar PDF-bestand";
+
+/* (MainMenu) Entry = "246.title"; Class = "NSMenuItem" */
+"Save Default Workspace" = "Bewaar standaard Workspace";
+
+/* (MainMenu) Entry = "1494.title"; Class = "NSButtonCell" */
+"Save History" = "Bewaar geschiedenis";
+
+/* From: RController.m (saveDocumentAs) */
+"Save R Console To File" = "Bewaar R console als bestand";
+
+/* From: RController.m (toolbar) */
+"Save R console window" = "Bewaar R consolevenster";
+
+/* (MainMenu) Entry = "260.title"; Class = "NSMenuItem" */
+"Save Workspace File…" = "Bewaar Workspac-bestand…";
 
 /* From: RdEditorToolbar.m (textView)
    From: REditorToolbar.m (updatePreferences) */
@@ -434,18 +1222,17 @@
 /* From: RController.m (doSaveHistory) */
 "Save history File" = "Bewaar geschiedenisbestand";
 
-/* From: RController.m (saveDocumentAs) */
-"Save R Console To File" = "Bewaar R console als bestand";
-
-/* From: RController.m (toolbar) */
-"Save R console window" = "Bewaar R consolevenster";
-
 /* From: RController.m (didCloseAll) */
 "Save workspace image?" = "Opname maken van werkplek?";
 
+/* (MiscPrefPane) Entry = "115.title"; Class = "NSBox" */
+"Save workspace on exit from R" = "Bewaar werkbestand bij het afsluiten van R";
+
 /* From: RdEditorToolbar.m (textView)
    From: REditorToolbar.m (updatePreferences) */
-"Search" = "Search";
+/* (MainMenu) Entry = "1680.placeholderString"; Class = "NSSearchFieldCell" */
+/* (Vignettes) Entry = "62.placeholderString"; Class = "NSSearchFieldCell" */
+"Search" = "Zoeken";
 
 /* From: RdEditorToolbar.m (textView)
    From: REditorToolbar.m (updatePreferences) */
@@ -455,15 +1242,36 @@
    From: REditorToolbar.m (updatePreferences) */
 "Search Panel" = "Search Panel";
 
+/* (MainMenu) Entry = "1663.placeholderString"; Class = "NSSearchFieldCell" */
+"Search in History [regex] - ⇧⌘H" = "Zoek in geschiedenis [regex] - ⇧⌘H";
+
 /* From: RdEditorToolbar.m (textView) */
 "Sections" = "Sections";
 
-/* From: PrefPanes/EditorPrefPane.m (changeEditor) */
-"Select editor application" = "Selecteer editor-programma";
+/* (MainMenu) Entry = "1631.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1632.title"; Class = "NSMenu" */
+/* (MiscPrefPane) Entry = "149.title"; Class = "NSButtonCell" */
+"Select" = "Selecteer";
 
 /* From: PackageInstaller.m (installSelected)
    From: PackageInstaller.m (updateAll) */
 "Select Installation Directory" = "Selecteer installatiemap";
+
+/* From: PackageInstaller.m (installSelected)
+   From: RController.m (installFromDir) */
+"Select Package Directory" = "Selecteer pakkettenmap";
+
+/* (MainMenu) Entry = "547.ibShadowedToolTip"; Class = "NSScrollView" */
+"Select Packages You Want To Install Or Update. Multiple Selections Allowed. " = "Selecteer een of meerdere pakketten om te installeren of bij te werken. ";
+
+/* (MainMenu) Entry = "573.ibShadowedToolTip"; Class = "NSMatrix" */
+"Select The Appropriate Location. Non-Admin User Should Select \"At User Level\"." = "Kies de lokatie (Non-Admin User Should Select \"At User Level\").";
+
+/* (SelectEncodingsPanel) Entry = "22.title"; Class = "NSButtonCell" */
+"Select all" = "Selecteer alles";
+
+/* From: PrefPanes/EditorPrefPane.m (changeEditor) */
+"Select editor application" = "Selecteer editor-programma";
 
 /* From: REngine/Rcallbacks.m (RKL_METHOD_PREPEND) */
 "Select one" = "Selecteer één";
@@ -471,18 +1279,24 @@
 /* From: REngine/Rcallbacks.m (RKL_METHOD_PREPEND) */
 "Select one or more" = "Selecteer één of meerdere";
 
-/* From: PackageInstaller.m (installSelected)
-   From: RController.m (installFromDir) */
-"Select Package Directory" = "Selecteer pakkettenmap";
-
 /* From: PackageInstaller.m (awakeFromNib) */
 "Select packages from R %@" = "Selecteer R pakketten van ";
 
-/* From: PackageInstaller.m (checkOptions) */
-"Set as default?" = "Als standaard instellen?";
+/* (MainMenu) Entry = "1113.title"; Class = "NSMenuItem" */
+"Select packages from previous R" = "Selecteer pakketten van vorige R";
+
+/* (EditorPrefPane) Entry = "179.title"; Class = "NSButtonCell" */
+"Select…" = "Selecteer…";
+
+/* (MainMenu) Entry = "131.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "130.title"; Class = "NSMenu" */
+"Services" = "Voorzieningen";
 
 /* From: RController.m (toolbar) */
 "Set Colors" = "Stel kleuren in";
+
+/* (EditorPrefPane) Entry = "162.title"; Class = "NSButtonCell" */
+"Set Editor" = "Set Editor";
 
 /* From: RController.m (toolbar) */
 "Set R Colors" = "Stel R kleuren in";
@@ -490,22 +1304,63 @@
 /* From: RController.m (toolbar) */
 "Set R console colors" = "Stel R consolekleuren in";
 
+/* From: PackageInstaller.m (checkOptions) */
+"Set as default?" = "Als standaard instellen?";
+
+/* (RDocument) Entry = "111.title"; Class = "NSMenuItem" */
+"Shift-JIS" = "Shift-JIS";
+
 /* From: AMPrefs/AMPreferenceWindowController.m (toolbar)
    From: PackageInstaller.m (toggleShowInstalled) */
+/* (MainMenu) Entry = "150.title"; Class = "NSMenuItem" */
 "Show All" = "Toon alle";
+
+/* (MainMenu) Entry = "819.title"; Class = "NSMenuItem" */
+"Show Colors" = "Toon kleuren";
+
+/* (MainMenu) Entry = "826.title"; Class = "NSMenuItem" */
+"Show Fonts" = "Toon lettertypen";
 
 /* From: RController.m (textView)
    From: RDocumentWinCtrl.m (textView) */
 "Show Help for current Function" = "Toon Help voor de Function";
 
 /* From: PackageInstaller.m (toggleShowInstalled) */
+/* (MainMenu) Entry = "1065.title"; Class = "NSMenuItem" */
 "Show Installed Only" = "Toon enkel geïnstalleerde";
+
+/* (MainMenu) Entry = "843.title"; Class = "NSMenuItem" */
+"Show Ruler" = "Toon lineaal";
+
+/* (MainMenu) Entry = "412.title"; Class = "NSMenuItem" */
+"Show Workspace" = "Toon Workspace";
+
+/* (EditorPrefPane) Entry = "158.title"; Class = "NSButtonCell" */
+"Show function hints" = "Toon functiehints";
+
+/* (EditorPrefPane) Entry = "148.title"; Class = "NSButtonCell" */
+"Show line numbers" = "Toon lijnnummers";
+
+/* (EditorPrefPane) Entry = "146.title"; Class = "NSButtonCell" */
+"Show syntax coloring" = "Toon syntaxkleuring";
 
 /* From: RController.m (toolbar) */
 "Show/Hide R command history" = "Toon/Verberg R commandogeschiedenis";
 
+/* (MainMenu) Entry = "855.title"; Class = "NSMenuItem" */
+"Smaller" = "Smaller";
+
 /* From: RTextView.m (performDragOperation) */
 "Snippet Error" = "Snippet Error";
+
+/* (MainMenu) Entry = "970.title"; Class = "NSMenuItem" */
+"Source Document" = "Brondocument";
+
+/* (MainMenu) Entry = "72.title"; Class = "NSMenuItem" */
+"Source File..." = "Broncodebestand…";
+
+/* (MiscPrefPane) Entry = "19.title"; Class = "NSButtonCell" */
+"Source input file" = "Source invoerbestand";
 
 /* From: RController.m (toolbar) */
 "Source or Load in R" = "Broncode in R laden";
@@ -517,16 +1372,65 @@
 "Source/Load" = "Bron/Laden";
 
 /* From: RController.m (toolbar) */
-"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Start X11 window-server om R via X11 te gebruiken";
-
-/* From: RController.m (toolbar) */
 "Start X11" = "Start X11";
 
 /* From: RController.m (toolbar) */
 "Start X11 Server" = "Start X11 Server";
 
 /* From: RController.m (toolbar) */
+"Start the X11 window server to allow R using X11 device and Tcl/Tk" = "Start X11 window-server om R via X11 te gebruiken";
+
+/* (MainMenu) Entry = "451.headerCell.title"; Class = "NSTableColumn" */
+"Status" = "Status";
+
+/* (ColorsPrefPane) Entry = "75.title"; Class = "NSTextFieldCell" */
+"Stderr" = "Stderr";
+
+/* (ColorsPrefPane) Entry = "77.title"; Class = "NSTextFieldCell" */
+"Stdout" = "Stdout";
+
+/* From: RController.m (toolbar) */
 "Stop" = "Stop";
+
+/* (SyntaxColorsPrefPane) Entry = "116.title"; Class = "NSTextFieldCell" */
+"String" = "Tekenreeks";
+
+/* (MiscPrefPane) Entry = "146.title"; Class = "NSButtonCell" */
+"Strip comments in history entries" = "Wis commentaar uit geschiedenis";
+
+/* (MainMenu) Entry = "664.headerCell.title"; Class = "NSTableColumn" */
+"Structure" = "Structuur";
+
+/* (EditorPrefPane) Entry = "163.title"; Class = "NSTextFieldCell" */
+"SubEthaEdit" = "SubEthaEdit";
+
+/* (MainMenu) Entry = "852.title"; Class = "NSMenuItem" */
+"Subscript" = "Subscript";
+
+/* (MainMenu) Entry = "827.title"; Class = "NSMenuItem" */
+"Superscript" = "Superscript";
+
+/* (SelectEncodingsPanel) Entry = "25.title"; Class = "NSButtonCell" */
+"Switch" = "Switch";
+
+/* (MainMenu) Entry = "942.title"; Class = "NSMenuItem" */
+"Switch to Console Window" = "Ga naar consolevenster";
+
+/* (MainMenu) Entry = "1117.title"; Class = "NSMenuItem" */
+"Switch to Last Editor Window" = "Voorgaande edit venster";
+
+/* (MainMenu) Entry = "1118.title"; Class = "NSMenuItem" */
+"Switch to Last Quartz Window" = "Voorgaande Quartz venster";
+
+/* (QuartzPrefPane) Entry = "121.title"; Class = "NSTextFieldCell" */
+"System Font Text" = "Systeemlettertype";
+
+/* (MainMenu) Entry = "823.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "832.title"; Class = "NSMenu" */
+"Text" = "Tekst";
+
+/* (MainMenu) Entry = "559.ibShadowedToolTip"; Class = "NSMenuItem" */
+"The Package Installer Requires An Internet Connection" = "Internet verbinding noodzakelijk om pakketten te installeren";
 
 /* From: PackageInstaller.m (installSelected) */
 "The installation location doesn't exist." = "Installatie lokatie bestaat niet.";
@@ -534,8 +1438,87 @@
 /* From: PackageInstaller.m (installSelected) */
 "The package has not been installed." = "Pakket werd niet geïnstalleerd";
 
+/* (MainMenu) Entry = "841.title"; Class = "NSMenuItem" */
+"Tighten" = "Versmald";
+
+/* (QuartzPrefPane) Entry = "36.title"; Class = "NSMenuItem" */
+"Top Left" = "Linksboven";
+
+/* (QuartzPrefPane) Entry = "34.title"; Class = "NSMenuItem" */
+"Top Right" = "Rechtsboven";
+
+/* (MainMenu) Entry = "699.headerCell.title"; Class = "NSTableColumn" */
+"Topic" = "Onderwerp";
+
+/* (MainMenu) Entry = "1746.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "1747.title"; Class = "NSMenu" */
+"Transformations" = "Omzetting";
+
+/* (ColorsPrefPane) Entry = "71.title"; Class = "NSTextFieldCell" */
+"Transparency :" = "Transparantie:";
+
+/* (MainMenu) Entry = "545.ibShadowedToolTip"; Class = "NSButton" */
+"Try To Download The List Of Packages From The Specified URL" = "Probeer lijst van beschikbare pakketten van URL te laden";
+
+/* (MainMenu) Entry = "668.headerCell.title"; Class = "NSTableColumn" */
+"Type" = "Type";
+
+/* (MainMenu) Entry = "539.ibShadowedToolTip"; Class = "NSTextField" */
+"URL Of Repository. Must Begin With \"http://\"" = "URL van Repository. Moet beginnen met \"http://\"";
+
+/* (MiscPrefPane) Entry = "108.ibShadowedToolTip"; Class = "NSTextField" */
+"URL for the default CRAN URL. If left empty, the user will be prompted." = "URL voor de default CRAN URL. Indien leeg wordt de gebruiker gevraagd.";
+
+/* (MiscPrefPane) Entry = "148.title"; Class = "NSTextFieldCell" */
+"URL:" = "URL:";
+
+/* (RDocument) Entry = "104.title"; Class = "NSMenuItem" */
+"UTF-8" = "UTF-8";
+
 /* From: main.m (sheetDidEnd) */
 "Unable to start R: %@" = "Kon R niet starten: %@";
+
+/* (MainMenu) Entry = "1208.title"; Class = "NSMenuItem" */
+"Uncomment" = "Maak uitvoerbaar";
+
+/* (MainMenu) Entry = "835.title"; Class = "NSMenuItem" */
+"Underline" = "Onderlijnen";
+
+/* (MainMenu) Entry = "158.title"; Class = "NSMenuItem" */
+"Undo" = "Herstel";
+
+/* (MainMenu) Entry = "1773.title"; Class = "NSMenuItem" */
+"Unfold" = "Unfold";
+
+/* (MainMenu) Entry = "1766.title"; Class = "NSMenuItem" */
+"Unfold All" = "Unfold All";
+
+/* (RDocument) Entry = "109.title"; Class = "NSMenuItem" */
+"Unicode" = "Unicode";
+
+/* (MainMenu) Entry = "1748.title"; Class = "NSMenuItem" */
+"Unicode Characters in R Strings to \\uxxxx" = "\\uxxxx to Character";
+
+/* (MainMenu) Entry = "1509.title"; Class = "NSButtonCell" */
+"Update All" = "Update alle";
+
+/* (MainMenu) Entry = "817.title"; Class = "NSMenuItem" */
+"Use All" = "Gebruik alle";
+
+/* (MainMenu) Entry = "856.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "846.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "857.title"; Class = "NSMenuItem" */
+"Use Default" = "Gebruik standaard";
+
+/* (MainMenu) Entry = "851.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "820.title"; Class = "NSMenuItem" */
+"Use None" = "Geen gebruiken";
+
+/* (MainMenu) Entry = "161.title"; Class = "NSMenuItem" */
+"Use Selection for Find" = "Gebruik selectie voor zoekactie";
+
+/* (MainMenu) Entry = "565.ibShadowedToolTip"; Class = "NSButton" */
+"User Should Specify The Package Format For Non-Default Repositories. Usually Archives With \".tar.gz\" Extension Are In \"Source Format\", Packages With \".tgz\" Extesion Are In \"Binary Format\".  " = "De gebruiker dient het package formaat te definieren voor Non-Default Repositories. Meestal zijn pakketten met de \".tar.gz\" extensie in \"Source Format\", pakketten met de \".tgz\" extensie in \"Binary Format\".  ";
 
 /* From: NSString_RAdditions.m (evaluateAsBashCommandWithEnvironment) */
 "User Termination" = "User Termination";
@@ -546,11 +1529,106 @@
 /* From: RDocument.m (insertRdDataTemplate) */
 "VAR_NAME_2" = "VAR_NAME_2";
 
+/* (Vignettes) Entry = "96.headerCell.title"; Class = "NSTableColumn" */
+"Vignette" = "Vignet";
+
+/* (MainMenu) Entry = "1110.title"; Class = "NSMenuItem" */
+/* (Vignettes) Entry = "5.title"; Class = "NSWindow" */
+"Vignettes" = "Vignetten";
+
 /* From: RController.m (applicationDidFinishLaunching) */
 "WARNING: You're using a non-UTF8 locale, therefore only ASCII characters will work.\nPlease read R for Mac OS X FAQ (see Help) section 9 and adjust your system preferences accordingly.\n" = "WAARSCHUWING: U gebruikt een non-UTF8 locale, alleen ASCII characters zullen werken.\nRaadpleeg de R for Mac OS X FAQ (zie Help) section 9 en pas Uw system preferences aan.\n";
 
+/* (MainMenu) Entry = "333.title"; Class = "NSMenuItem" */
+"What's New In This Version?" = "Wat is er nieuw in deze versie";
+
+/* (MainMenu) Entry = "1027.title"; Class = "NSWindow" */
+/* (MainMenu) Entry = "24.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "19.title"; Class = "NSMenuItem" */
+/* (RDocument) Entry = "5.title"; Class = "NSWindow" */
+/* (RQuartz) Entry = "5.title"; Class = "NSWindow" */
+"Window" = "Venster";
+
+/* (MainMenu) Entry = "1655.title"; Class = "NSMenuItem" */
+"Word" = "Word";
+
+/* (MainMenu) Entry = "245.title"; Class = "NSMenuItem" */
+/* (MainMenu) Entry = "252.title"; Class = "NSMenu" */
+"Workspace" = "Workspace";
+
+/* (MainMenu) Entry = "249.title"; Class = "NSMenuItem" */
+"Workspace Browser" = "Workspace browser";
+
+/* (EditorPrefPane) Entry = "153.title"; Class = "NSButtonCell" */
+"Wrap lines" = "Lijnen afbreken";
+
 /* Global string @ */
+/* (MiscPrefPane) Entry = "125.title"; Class = "NSButtonCell" */
 "Yes" = "Ja";
+
+/* (MainMenu) Entry = "197.title"; Class = "NSMenuItem" */
+"Zoom" = "Vergoot/verklein";
+
+/* From: RController.m (applicationDidFinishLaunching) */
+"[History restored from " = "[Geschiedenis teruggehaald van ";
+
+/* From: RController.m (application)
+   From: RController.m (applicationDidFinishLaunching) */
+"[Workspace restored from " = "[Workspace teruggehaald van ";
+
+/* (MainMenu) Entry = "1749.title"; Class = "NSMenuItem" */
+"\\uxxxx to Character" = "Unicode Characters in R Strings to \\uxxxx";
+
+/* (MainMenu) Entry = "799.headerCell.title"; Class = "NSTableColumn" */
+"a" = "a";
+
+/* (MainMenu) Entry = "797.headerCell.title"; Class = "NSTableColumn" */
+"b" = "b";
+
+/* (MainMenu) Entry = "806.headerCell.title"; Class = "NSTableColumn" */
+"c" = "c";
+
+/* (MainMenu) Entry = "807.headerCell.title"; Class = "NSTableColumn" */
+"d" = "d";
+
+/* (MainMenu) Entry = "808.headerCell.title"; Class = "NSTableColumn" */
+"e" = "e";
+
+/* From: REditor.m (startDataEntry) */
+"editing cancelled" = "editing be-eindigt";
+
+/* From: REngine/REngine.m (RKL_METHOD_PREPEND) */
+"executing" = "aan het uitvoeren";
+
+/* (QuartzPrefPane) Entry = "118.title"; Class = "NSTextFieldCell" */
+"font family:" = "lettertypefamilie:";
+
+/* (QuartzPrefPane) Entry = "119.title"; Class = "NSTextFieldCell" */
+"font point size:" = "lettertypegrootte:";
+
+/* (QuartzPrefPane) Entry = "115.title"; Class = "NSTextFieldCell" */
+"height (inches):" = "hoogte (inches):\n:";
+
+/* (MainMenu) Entry = "462.alternateTitle"; Class = "NSButtonCell" */
+"loaded" = "geladen";
+
+/* (MainMenu) Entry = "462.title"; Class = "NSButtonCell" */
+"not loaded" = "niet geladen";
+
+/* From: RDocument.m (checkRdDocumentWithFilePath)
+   From: RDocument.m (convertRd2HTML)
+   From: RDocument.m (convertRd2PDF)
+   From: RDocument.m (insertRdDataTemplate)
+   From: RDocument.m (insertRdFunctionTemplate)
+   From: RDocumentWinCtrl.m (tidyRCode)
+   From: RTextView.m (performDragOperation) */
+"press ⌘. to cancel" = "press ⌘. to cancel";
+
+/* (QuartzPrefPane) Entry = "114.title"; Class = "NSTextFieldCell" */
+"width (inches):" = "breedte (inches):\n";
+
+/* (MiscPrefPane) Entry = "134.title"; Class = "NSTextFieldCell" */
+"~" = "~";
 
 /* From: RController.m (searchInHistory) */
 "…invalid regular expression" = "…geen goede reguliere expressie";

@@ -454,6 +454,20 @@
 		68AAC9EB08F41CD80064CDA1 /* VignettesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VignettesController.h; sourceTree = "<group>"; };
 		68AAC9EC08F41CD80064CDA1 /* VignettesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VignettesController.m; sourceTree = "<group>"; };
 		68B8EB410A46EB0700515847 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		68B93FD92AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/EncodingPopupView.xib; sourceTree = "<group>"; };
+		68B93FDA2AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/SelectEncodingsPanel.xib; sourceTree = "<group>"; };
+		68B93FDB2AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		68B93FDC2AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		68B93FDD2AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/RConsole.xib; sourceTree = "<group>"; };
+		68B93FDE2AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/RDocument.xib; sourceTree = "<group>"; };
+		68B93FDF2AA0CAA30049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/RQuartz.xib; sourceTree = "<group>"; };
+		68B93FE02AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/Vignettes.xib; sourceTree = "<group>"; };
+		68B93FE12AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/ColorsPrefPane.xib; sourceTree = "<group>"; };
+		68B93FE22AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/EditorPrefPane.xib; sourceTree = "<group>"; };
+		68B93FE32AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/MiscPrefPane.xib; sourceTree = "<group>"; };
+		68B93FE42AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/QuartzPrefPane.xib; sourceTree = "<group>"; };
+		68B93FE52AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = es; path = es.lproj/SyntaxColorsPrefPane.xib; sourceTree = "<group>"; };
+		68B93FE62AA0CAA40049C6CF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = es; path = es.lproj/Credits.rtf; sourceTree = "<group>"; };
 		68C11BB909FED6E1004DD95C /* Rdoc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rdoc.icns; path = images/Rdoc.icns; sourceTree = "<group>"; };
 		68C11BBA09FED6E1004DD95C /* Rrun.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rrun.icns; path = images/Rrun.icns; sourceTree = "<group>"; };
 		68C11BCF09FEE47C004DD95C /* Rdata.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Rdata.icns; path = images/Rdata.icns; sourceTree = "<group>"; };
@@ -1118,6 +1132,7 @@
 				fr,
 				ja,
 				nl,
+				es,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* R */;
 			projectDirPath = "";
@@ -1368,6 +1383,7 @@
 				161034F707D2232400677899 /* ja */,
 				681D40BE081D653B0019CB4C /* fr */,
 				68DDE21309697C6100BC6883 /* nl */,
+				68B93FE62AA0CAA40049C6CF /* es */,
 			);
 			name = Credits.rtf;
 			sourceTree = "<group>";
@@ -1381,6 +1397,7 @@
 				16B66A3107B6E1F10053EDB2 /* it */,
 				161034F007D2232400677899 /* ja */,
 				68DDE1D109697A3F00BC6883 /* nl */,
+				68B93FDB2AA0CAA30049C6CF /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1394,6 +1411,7 @@
 				68958972132FB152007D8E7B /* it */,
 				68958973132FB154007D8E7B /* ja */,
 				689589B4132FB5B8007D8E7B /* nl */,
+				68B93FDC2AA0CAA30049C6CF /* es */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -1407,6 +1425,7 @@
 				68958981132FB215007D8E7B /* it */,
 				68958982132FB22D007D8E7B /* de */,
 				68958983132FB236007D8E7B /* fr */,
+				68B93FDE2AA0CAA30049C6CF /* es */,
 			);
 			name = RDocument.xib;
 			sourceTree = "<group>";
@@ -1415,6 +1434,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				68958950132FAFEB007D8E7B /* English */,
+				68B93FDF2AA0CAA30049C6CF /* es */,
 			);
 			name = RQuartz.xib;
 			sourceTree = "<group>";
@@ -1428,6 +1448,7 @@
 				BCB297AD133B7EDD007899E0 /* de */,
 				BCB297AE133B7EE2007899E0 /* it */,
 				BCB297AF133B7EF3007899E0 /* fr */,
+				68B93FE02AA0CAA40049C6CF /* es */,
 			);
 			name = Vignettes.xib;
 			sourceTree = "<group>";
@@ -1441,6 +1462,7 @@
 				6895899A132FB2E7007D8E7B /* it */,
 				6895899B132FB2E9007D8E7B /* de */,
 				BC6682FF13390A15005ACB30 /* fr */,
+				68B93FE52AA0CAA40049C6CF /* es */,
 			);
 			name = SyntaxColorsPrefPane.xib;
 			sourceTree = "<group>";
@@ -1453,6 +1475,7 @@
 				68958987132FB28D007D8E7B /* nl */,
 				68958988132FB290007D8E7B /* it */,
 				68958989132FB294007D8E7B /* de */,
+				68B93FE12AA0CAA40049C6CF /* es */,
 			);
 			name = ColorsPrefPane.xib;
 			sourceTree = "<group>";
@@ -1466,6 +1489,7 @@
 				6895898C132FB2A6007D8E7B /* it */,
 				6895898D132FB2A8007D8E7B /* de */,
 				BC6682FE13390A06005ACB30 /* fr */,
+				68B93FE22AA0CAA40049C6CF /* es */,
 			);
 			name = EditorPrefPane.xib;
 			sourceTree = "<group>";
@@ -1479,6 +1503,7 @@
 				68958990132FB2BC007D8E7B /* fr */,
 				68958991132FB2C0007D8E7B /* it */,
 				68958992132FB2C2007D8E7B /* nl */,
+				68B93FE32AA0CAA40049C6CF /* es */,
 			);
 			name = MiscPrefPane.xib;
 			sourceTree = "<group>";
@@ -1492,6 +1517,7 @@
 				68958995132FB2D3007D8E7B /* fr */,
 				68958996132FB2D5007D8E7B /* it */,
 				68958997132FB2D7007D8E7B /* nl */,
+				68B93FE42AA0CAA40049C6CF /* es */,
 			);
 			name = QuartzPrefPane.xib;
 			sourceTree = "<group>";
@@ -1502,6 +1528,7 @@
 				68958946132FAFBA007D8E7B /* English */,
 				6895897D132FB1F4007D8E7B /* ja */,
 				6895897E132FB1F7007D8E7B /* nl */,
+				68B93FDD2AA0CAA30049C6CF /* es */,
 			);
 			name = RConsole.xib;
 			sourceTree = "<group>";
@@ -1510,6 +1537,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				BC1952B51330CA3500D52B29 /* English */,
+				68B93FD92AA0CAA30049C6CF /* es */,
 			);
 			name = EncodingPopupView.xib;
 			sourceTree = "<group>";
@@ -1523,6 +1551,7 @@
 				BC6DECCE133267F900C852C1 /* it */,
 				BCE2529913326919001D3138 /* ja */,
 				BC9EF20313326D98005E61C6 /* nl */,
+				68B93FDA2AA0CAA30049C6CF /* es */,
 			);
 			name = SelectEncodingsPanel.xib;
 			sourceTree = "<group>";
