@@ -1890,6 +1890,9 @@ extern BOOL isTimeToFinish;
 			return;
 		}
 
+    // there are bugs in Sonoma, so to be safe disable focus switching in macOS 12.0 and higher
+    if (@available(macOS 12, *))
+        return;
 
 	// Get all windows
 	NSArray *appWindows = [NSApp orderedWindows];
