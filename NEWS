@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2023-10-31
+*	Add Spanish translation (many thanks to Roberto Villegas-Diaz!)
+
+*	work around a bug in macOS 14.0 (Sonoma) where invalid window
+	notifications cause unintended window switching.
+
+
 -- Release Version 1.79 (8238) - supplied with R 4.3.1 --
 -- Release Version 1.79 (8225) - supplied with R 4.3.0 --
 -- Release Version 1.79 (8198) - supplied with R 4.2.3 --
