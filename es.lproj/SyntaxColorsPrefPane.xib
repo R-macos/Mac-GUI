@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="SyntaxColorsPrefPane">
+            <connections>
+                <outlet property="backgroundSyntaxColorWell" destination="121" id="133"/>
+                <outlet property="commentSyntaxColorWell" destination="31" id="89"/>
+                <outlet property="currentLineSyntaxColorWell" destination="122" id="134"/>
+                <outlet property="cursorSyntaxColorWell" destination="123" id="135"/>
+                <outlet property="identifierSyntaxColorWell" destination="29" id="90"/>
+                <outlet property="keywordSyntaxColorWell" destination="28" id="88"/>
+                <outlet property="mainView" destination="5" id="86"/>
+                <outlet property="normalSyntaxColorWell" destination="27" id="84"/>
+                <outlet property="numberSyntaxColorWell" destination="25" id="87"/>
+                <outlet property="setDefaultSyntaxColors" destination="91" id="93"/>
+                <outlet property="stringSyntaxColorWell" destination="23" id="85"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="5" userLabel="View">
+            <rect key="frame" x="0.0" y="0.0" width="357" height="284"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <button verticalHuggingPriority="750" id="91">
+                    <rect key="frame" x="100" y="12" width="156" height="32"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <buttonCell key="cell" type="push" title="Predeterminados" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="120">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="setDefaultSyntaxColors:" target="-2" id="112"/>
+                    </connections>
+                </button>
+                <box title="Colores" titlePosition="noTitle" id="26">
+                    <rect key="frame" x="17" y="56" width="323" height="210"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                    <view key="contentView" id="kwX-bI-4Z1">
+                        <rect key="frame" x="4" y="5" width="315" height="202"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <colorWell id="27">
+                                <rect key="frame" x="37" y="143" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                <color key="color" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeNormalColor:" target="95" id="104"/>
+                                </connections>
+                            </colorWell>
+                            <colorWell id="23">
+                                <rect key="frame" x="125" y="143" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                <color key="color" red="0.70652174950000002" green="0.0085044717419999992" blue="0.025164812799999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeStringColor:" target="95" id="105"/>
+                                </connections>
+                            </colorWell>
+                            <colorWell id="29">
+                                <rect key="frame" x="219" y="77" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <color key="color" red="0.041136145589999999" green="0.42934781309999998" blue="0.073435530070000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeIdentifierColor:" target="95" id="111"/>
+                                </connections>
+                            </colorWell>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="30">
+                                <rect key="frame" x="15" y="180" width="96" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Normal" id="115">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="32">
+                                <rect key="frame" x="106" y="180" width="90" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Cadena de caracteres" id="116">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="36">
+                                <rect key="frame" x="197" y="113" width="101" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Identificador" id="118">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <colorWell id="28">
+                                <rect key="frame" x="37" y="77" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                <color key="color" red="0.79347825049999998" green="0.71062922480000001" blue="0.03721477091" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeKeywordColor:" target="95" id="107"/>
+                                </connections>
+                            </colorWell>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="33">
+                                <rect key="frame" x="16" y="114" width="96" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Palabra clave" id="117">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <colorWell id="31">
+                                <rect key="frame" x="127" y="77" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                <color key="color" red="0.78260868790000004" green="0.76328504090000004" blue="0.76328504090000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeCommentColor:" target="95" id="108"/>
+                                </connections>
+                            </colorWell>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="38">
+                                <rect key="frame" x="109" y="113" width="90" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Comentario" id="119">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="22">
+                                <rect key="frame" x="195" y="180" width="101" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Número" id="114">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <colorWell id="25">
+                                <rect key="frame" x="219" y="143" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <color key="color" red="0.054374456410000001" green="0.0080422842880000008" blue="0.69021737579999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeNumberColor:" target="95" id="106"/>
+                                </connections>
+                            </colorWell>
+                            <colorWell id="121">
+                                <rect key="frame" x="37" y="7" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeBackgroundColor:" target="-2" id="130"/>
+                                </connections>
+                            </colorWell>
+                            <colorWell id="122">
+                                <rect key="frame" x="127" y="7" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeCurrentLineColor:" target="-2" id="131"/>
+                                </connections>
+                            </colorWell>
+                            <colorWell id="123">
+                                <rect key="frame" x="223" y="7" width="53" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeCursorColor:" target="-2" id="132"/>
+                                </connections>
+                            </colorWell>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="124">
+                                <rect key="frame" x="10" y="48" width="101" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Segundo plano" id="125">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="126">
+                                <rect key="frame" x="99" y="48" width="101" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Línea actual" id="127">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="128">
+                                <rect key="frame" x="195" y="48" width="101" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES"/>
+                                <textFieldCell key="cell" alignment="center" title="Cursor" id="129">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+            </subviews>
+        </customView>
+        <customObject id="95" userLabel="SyntaxColorsPrefPane" customClass="SyntaxColorsPrefPane">
+            <connections>
+                <outlet property="commentSyntaxColorWell" destination="31" id="102"/>
+                <outlet property="identifierSyntaxColorWell" destination="29" id="103"/>
+                <outlet property="keywordSyntaxColorWell" destination="28" id="101"/>
+                <outlet property="mainView" destination="5" id="97"/>
+                <outlet property="normalSyntaxColorWell" destination="27" id="98"/>
+                <outlet property="numberSyntaxColorWell" destination="25" id="100"/>
+                <outlet property="setDefaultSyntaxColors" destination="91" id="96"/>
+                <outlet property="stringSyntaxColorWell" destination="23" id="99"/>
+            </connections>
+        </customObject>
+    </objects>
+</document>

@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# Created 2005/02/01 by Simon Urbanek
+
+# list of localizations we want to generate from English
+if [ -z "$languages" ]; then languages=`cat LANGUAGES`; fi
+
+# Get all (non-backup) NIBs in English.lproj assuming that this is where we do active development
+NIBS=`ls -d English.lproj/*.xib | grep -v \~ | awk -F / '{print substr($2,1,length($2)-4)}'`
+
+# for each languange ...
+for lang in $languages; do
+    echo "Updating $lang ..."
+    # and each NIB ...
+    if [ -e "$lang.lproj/Localizable.strings" ]; then
+	for NIB in $NIBS; do
+	    rm -rf "$lang.lproj/temp.xib" "$lang.lproj/temp~.xib"
+	    ./str2nib "English.lproj/$NIB.xib" "$lang.lproj/Localizable.strings" "$lang.lproj/temp.xib"
+	    if [ -e "$lang.lproj/temp.xib" ]; then
+		mv "$lang.lproj/temp.xib" "$lang.lproj/$NIB.xib"
+		echo "   $NIB .. OK"
+	    else
+		echo "ERROR for language \"$lang\" and XIB \"$NIB\": Localized xib was not created. Check for ibtool errors."
+	    fi
+	done
+    else
+	echo "   $lang is missing $lang.lproj/Localizable.strings"
+    fi
+done

@@ -1,1 +1,283 @@
 
+
+
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Inactive" = "%@ - غير نشط";
+
+/* From: RController.m (showWorkingDir) */
+"<deleted>" = "<deleted>";
+/* From: Quartz/QuartzDevice.m (setDefaultSyntaxColors) */
+"%@ - Active" = "%@ - نشط";
+
+/* From: RController.m (hintForFunction)
+   From: RDocumentWinCtrl.m (hintForFunction) */
+"(arguments lookup is disabled while R is busy)" = "(تم تعطيل البحث عن الوسيطات أثناء انشغال R)";
+
+/* (MainMenu) Entry = "1684.ibShadowedToolTip"; Class = "NSButton" */
+"(Return)" = "(↩)";
+
+/* (MiscPrefPane) Entry = "130.title"; Class = "NSTextFieldCell" */
+"(was default in RAqua)" = "(كان افتراضيا في RAqua)";
+
+/* (MiscPrefPane) Entry = "139.title"; Class = "NSTextFieldCell" */
+".Rhistory" = "Rhistory.";
+
+/* (MainMenu) Entry = "1499.title"; Class = "NSTextFieldCell" */
+"11" = "11";
+
+/* (QuartzPrefPane) Entry = "122.title"; Class = "NSTextFieldCell" */
+"12" = "12";
+
+/* (MiscPrefPane) Entry = "144.title"; Class = "NSTextFieldCell" */
+"250" = "250";
+
+/* (QuartzPrefPane) Entry = "112.title"; Class = "NSTextFieldCell" */
+/* (QuartzPrefPane) Entry = "113.title"; Class = "NSTextFieldCell" */
+"5.0" = "5.0";
+
+/* (MainMenu) Entry = "1513.title"; Class = "NSButtonCell" */
+"<" = "<";
+
+/* (MainMenu) Entry = "1501.title"; Class = "NSButtonCell" */
+"< Back" = "< العودة";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+"<sections>" = "<أقسام>";
+
+/* From: SearchTable.m (show) */
+"<unknown>" = "<غير معروف>";
+
+/* (MainMenu) Entry = "1514.title"; Class = "NSButtonCell" */
+">" = "‪>";
+
+/* (MainMenu) Entry = "58.title"; Class = "NSMenuItem" */
+"About R" = "حول R";
+
+/* (MainMenu) Entry = "1671.title"; Class = "NSButtonCell" */
+"Activate SearchField ⇧⌘H" = "تنشيط حقل البحث ⇧⌘H";
+
+/* Add column - label for a toolbar, keep short! */
+"Add Col" = "إضافة Col";
+
+/* From: REditor.m (toolbar) */
+"Add Column" = "إضافة عمود";
+
+/* (MainMenu) Entry = "1719.title"; Class = "NSMenuItem" */
+"Add Column (CHARACTER)" = "إضافة عمود (CHARACTER)";
+
+/* (MainMenu) Entry = "1718.title"; Class = "NSMenuItem" */
+"Add Column (NUMERIC)" = "إضافة عمود (NUMERIC)";
+
+/* From: RDocumentWinCtrl.m (functionReset) */
+/* (RDocument) Entry = "45.title"; Class = "NSMenuItem" */
+"<functions>" = "<دوال>";
+
+/* (MainMenu) Entry = "1677.ibShadowedToolTip"; Class = "NSButton" */
+"(⌘R)" = "(R⌘)";
+
+/* (MainMenu) Entry = "312.title"; Class = "NSMenuItem" */
+"Activate Quartz Device Window" = "تنشيط نافذة جهاز Quartz";
+
+/* From: REditor.m (toolbar) */
+"Add New Row" = "إضافة صف جديد";
+
+/* Add row - label for a toolbar, keep short! */
+/* (MainMenu) Entry = "1720.title"; Class = "NSMenuItem" */
+"Add Row" = "إضافة صف";
+
+/* (MiscPrefPane) Entry = "129.title"; Class = "NSButtonCell" */
+"Add ~/Library/R…" = "إضافة ‪~/Library/R…";
+
+/* From: REditor.m (toolbar) */
+"Adds a new column to the right of a group of selected columns or just at the end of the data. The new column type complies with that column left of it.\n\n(%@)\tAdd column of type ‘CHARACTER’\n(%@)\tAdd column of type ‘NUMERIC’" = "إضافة عمود جديد إلى يسار مجموعة من الأعمدة المحددة أو في نهاية البيانات فقط. يتوافق نوع العمود الجديد مع هذا العمود الأيسر منه.\n\n(%1$@)\tإضافة عمود من النوع ’CHARACTER‘\n(%2$@)\tإضافة عمود من النوع ’NUMERIC‘";
+
+/* From: REditor.m (toolbar) */
+"Adds a row below a group of selected rows or at the bottom of the data" = "إضافة صف أسفل مجموعة من الصفوف المحددة أو في أسفل البيانات";
+
+/* (MainMenu) Entry = "834.title"; Class = "NSMenuItem" */
+"Align Left" = "محاذاة لليسار";
+
+/* (MainMenu) Entry = "858.title"; Class = "NSMenuItem" */
+"Align Right" = "محاذاة لليمين";
+
+/* (MiscPrefPane) Entry = "136.title"; Class = "NSButtonCell" */
+"Always apply" = "طبق دائما";
+
+/* (MainMenu) Entry = "1634.title"; Class = "NSMenuItem" */
+"All" = "كل";
+
+/* From: RController.m (clearWorkSpace) */
+"All objects in the workspace will be removed. Are you sure you want to proceed?" = "ستتم إزالة جميع الكائنات الموجودة في workspace. هل أنت متأكد من أنك تريد المتابعة؟";
+
+/* (MainMenu) Entry = "1125.title"; Class = "NSButtonCell" */
+"As defined by .libPaths()" = "‏‎‭ .libPaths()‮ كما هو محدد بواسطة";
+
+/* From: WSBrowser.m (remObject) */
+"Are you sure you want to remove object '%@' from the workspace? You cannot undo this action!" = "هل أنت متأكد من أنك تريد إزالة الكائن \"٪ @\" من مساحة العمل؟ لا يمكنك التراجع عن هذا الإجراء!";
+
+/* (EditorPrefPane) Entry = "49.title"; Class = "NSButtonCell" */
+"Application" = "تطبيق";
+
+/* (MiscPrefPane) Entry = "123.title"; Class = "NSButtonCell" */
+"Ask" = "إسأل";
+
+/* (MainMenu) Entry = "1122.title"; Class = "NSButtonCell" */
+"At System Level (in R framework)" = "على مستوى النظام (في إطار R)";
+
+/* (MainMenu) Entry = "1123.title"; Class = "NSButtonCell" */
+"At User Level" = "على مستوى المستخدم";
+
+/* From: RController.m (toolbar) */
+"Authentication" = "المصادقه";
+
+/* From: RController.m (toolbar) */
+"Authorize R to run system commands as root" = "تخويل R لتشغيل أوامر النظام كجذر";
+
+/* (MainMenu) Entry = "1513.alternateTitle"; Class = "NSButtonCell" */
+"Back" = "خلف";
+
+/* (MainMenu) Entry = "1657.title"; Class = "NSMenuItem" */
+"Balanced Brackets" = "الأقواس المتوازنة";
+
+/* (MainMenu) Entry = "816.title"; Class = "NSMenu" */
+/* (MainMenu) Entry = "844.title"; Class = "NSMenuItem" */
+"Baseline" = "الاساس";
+
+/* (MainMenu) Entry = "830.title"; Class = "NSMenuItem" */
+"Bigger" = "أكبر";
+
+/* (MainMenu) Entry = "1506.title"; Class = "NSButtonCell" */
+"Binary Format Packages" = "حزم التنسيق الثنائي";
+
+/* (MainMenu) Entry = "542.title"; Class = "NSMenuItem" */
+"BioConductor (binaries)" = "BioConductor‫ (ثنائيات)";
+
+/* (MainMenu) Entry = "563.title"; Class = "NSMenuItem" */
+"BioConductor (sources)" = "BioConductor‫ (مصادر)";
+
+/* (MainMenu) Entry = "849.title"; Class = "NSMenuItem" */
+"Bold" = "عريض";
+
+/* (QuartzPrefPane) Entry = "31.title"; Class = "NSMenuItem" */
+"Bottom Left" = "أسفل اليسار";
+
+/* (QuartzPrefPane) Entry = "32.title"; Class = "NSMenuItem" */
+"Bottom Right" = "أسفل اليمين";
+
+/* (QuartzPrefPane) Entry = "45.title"; Class = "NSBox" */
+"Box" = "صندوق";
+
+/* (MainMenu) Entry = "5.title"; Class = "NSMenuItem" */
+"Bring All to Front" = "جلب كل شيء إلى المقدمة";
+
+/* (EditorPrefPane) Entry = "96.title"; Class = "NSButtonCell" */
+"Built-in editor" = "محرر مدمج";
+
+/* (EditorPrefPane) Entry = "35.title"; Class = "NSBox" */
+"Built-in editor preferences" = "تفضيلات المحرر المدمج";
+
+/* (RDocument) Entry = "115.title"; Class = "NSMenuItem" */
+"CP1250" = "CP1250";
+
+/* (RDocument) Entry = "113.title"; Class = "NSMenuItem" */
+"CP1251" = "CP1251";
+
+/* (RDocument) Entry = "114.title"; Class = "NSMenuItem" */
+"CP1252" = "CP1252";
+
+/* (RDocument) Entry = "117.title"; Class = "NSMenuItem" */
+"CP1253" = "CP1253";
+
+/* (RDocument) Entry = "116.title"; Class = "NSMenuItem" */
+"CP1254" = "CP1254";
+
+/* (MainMenu) Entry = "1108.title"; Class = "NSMenuItem" */
+"CRAN (sources)" = "CRAN (مصادر)";
+
+/* From: RController.m (doLoadHistory) */
+"Can't open history file %@" = "لا يمكن فتح ملف التاريخ ‪%@";
+
+/* From: RController.m (didCloseAll) */
+/* (MainMenu) Entry = "1515.title"; Class = "NSButtonCell" */
+/* (RDocument) Entry = "94.title"; Class = "NSButtonCell" */
+"Cancel" = "إلغاء الأمر";
+
+/* Cancel Editing - label for a toolbar, keep short!
+   From: REditor.m (toolbar) */
+"Cancel Editing" = "إلغاء التحرير";
+
+/* (MainMenu) Entry = "1723.title"; Class = "NSMenuItem" */
+"Cancel Object Editing" = "إلغاء تحرير الكائن";
+
+/* From: RDocumentWinCtrl.m (goHelpSearch) */
+"Cannot determine package for the topic." = "لا يمكن تحديد حزمة للموضوع.";
+
+/* From: DataManager.m (showHelp)
+   From: HelpManager.m (showHelpUsingFile)
+   From: PackageManager.m (showInfo)
+   From: RDocumentWinCtrl.m (goHelpSearch) */
+"Cannot start HTML help server." = "لا يمكن بدء تشغيل خادم تعليمات HTML.";
+
+/* From: main.m (sheetDidEnd) */
+"Cannot start R" = "لا يمكن بدء تشغيل R";
+
+/* (MainMenu) Entry = "829.title"; Class = "NSMenuItem" */
+"Center" = "مركز";
+
+/* (QuartzPrefPane) Entry = "37.title"; Class = "NSMenuItem" */
+"Centered" = "ممركز";
+
+/* (MiscPrefPane) Entry = "133.title"; Class = "NSButtonCell" */
+/* (QuartzPrefPane) Entry = "120.title"; Class = "NSButtonCell" */
+"Change" = "تغيير";
+
+/* (MainMenu) Entry = "322.title"; Class = "NSMenuItem" */
+"Change Working Directory..." = "تغيير مسار العمل ...";
+
+/* From: RController.m (toolbar) */
+"Change the size of R console font" = "تغيير حجم خط وحدة التحكم R";
+
+/* (MainMenu) Entry = "218.title"; Class = "NSMenuItem" */
+"Check For R Updates" = "تحقق من وجود تحديثات R";
+
+/* (RDocument) Entry = "161.title"; Class = "NSMenuItem" */
+"Check Rd Document" = "تحقق من ملف Rd";
+
+/* From: RDocument.m (checkRdDocumentWithFilePath) */
+"Check Rd document…" = "تحقق من ملف Rd …";
+
+/* From: RDocument.m (checkRdDocumentWithFilePath) */
+"Check was successful." = "الاختبار كان ناجحا.";
+
+/* From: RController.m (handleChooseFile)
+   From: RController.m (openDocument) */
+"Choose File" = "إختر ملف";
+
+/* From: PrefPanes/MiscPrefPane.m (chooseWorkingDir) */
+"Choose Initial Working Directory" = "اختر مسار الملف العمل الأولي";
+
+/* From: RController.m (handleChooseFile) */
+"Choose New File Name" = "اختر اسم ملف جديد";
+
+/* From: RController.m (setWorkingDir) */
+"Choose New Working Directory" = "اختر مسار ملف عمل جديد";
+
+/* From: RController.m (doLoadHistory) */
+"Choose history File" = "اختر ملف التاريخ";
+
+/* (MainMenu) Entry = "541.title"; Class = "NSMenuItem" */
+"CRAN (binaries)" = "‫‫‪‫CRAN ‫‪‫(ثنائيات‪‪‏‪‫)";
+
+/* From: HelpManager.m (showHelpFor) */
+"Can't find help for topic, would you like to expand the search?" = "لا يمكنك العثور على مساعدة للموضوع ، هل ترغب في توسيع البحث؟";
+
+/* From: REditor.m (toolbar) */
+/* (MainMenu) Entry = "1723.ibShadowedToolTip"; Class = "NSMenuItem" */
+"Cancels object editing without passing data back to R and closes the editor window" = "إلغاء تحرير الكائن دون تمرير البيانات مرة أخرى إلى R وإغلاق نافذة المحرر";
+
+/* (EditorPrefPane) Entry = "229.title"; Class = "NSButtonCell" */
+"Auto-save documents" = "حفظ تلقائي للملفات";
+
+/* (ColorsPrefPane) Entry = "76.title"; Class = "NSTextFieldCell" */
+/* (SyntaxColorsPrefPane) Entry = "125.title"; Class = "NSTextFieldCell" */
+"Background" = "خلفية";
