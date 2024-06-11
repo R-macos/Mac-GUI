@@ -2144,6 +2144,12 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		s = fixBuggyOutput(s, @"Warning: Expected min height of view: .* to be less than or equal to ");
 		/* bug in Monterey and up */
 		s = fixBuggyOutput(s, @"IsMenuKeyEvent: found no unichar data in event; retranslated without deadkeys to produce");
+
+		// new Ventura 2022-08-09 @tbates
+		s = fixBuggyOutput(s, @"Located .* match from search: item '.*' in menu '.*' with match penalty");
+		s = fixBuggyOutput(s, @"Choosing result from list: item '.*' in menu '.*' with match penalty");
+		s = fixBuggyOutput(s, @"Marking command key cache valid");
+		s = fixBuggyOutput(s, @"Warning: Could not create system idle sleep assertion");
 	}
 	[self flushROutput];
 	[self writeConsoleDirectly:s withColor:color];
