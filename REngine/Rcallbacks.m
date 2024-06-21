@@ -83,10 +83,10 @@ extern FILE*    R_Outputfile;   /* Output file */
 
 /* from src/unix/devUI.h */
 
-extern void (*ptr_R_Suicide)(char *);
+extern void (*ptr_R_Suicide)(R_EAPI_CONST char *);
 extern void (*ptr_R_ShowMessage)();
-extern int  (*ptr_R_ReadConsole)(char *, unsigned char *, int, int);
-extern void (*ptr_R_WriteConsole)(char *, int);
+extern int  (*ptr_R_ReadConsole)(R_EAPI_CONST char *, unsigned char *, int, int);
+extern void (*ptr_R_WriteConsole)(R_EAPI_CONST char *, int);
 extern void (*ptr_R_ResetConsole)();
 extern void (*ptr_do_flushconsole)();
 extern void (*ptr_R_ClearerrConsole)();
@@ -100,7 +100,7 @@ extern void (*ptr_R_savehistory)(SEXP, SEXP, SEXP, SEXP);
 
 //extern void (*ptr_R_StartCocoaRL)();
 
-void Re_WritePrompt(char *prompt)
+void Re_WritePrompt(R_EAPI_CONST char *prompt)
 {
 	NSString *s = [[NSString alloc] initWithUTF8String: prompt];
 	insideR--;
@@ -132,7 +132,7 @@ void Re_ProcessEvents(void){
 static char *readconsBuffer=0;
 static char *readconsPos=0;
 
-int Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory)
+int Re_ReadConsole(R_EAPI_CONST char *prompt, unsigned char *buf, int len, int addtohistory)
 {
 	insideR--;
 	Re_WritePrompt(prompt);
@@ -179,28 +179,20 @@ void Re_RBusy(int which)
 }
 
 
-void Re_WriteConsoleEx(char *buf, int len, int otype)
+void Re_WriteConsoleEx(R_EAPI_CONST char *buf, int len, int otype)
 {
-	NSString *s = nil;
-	if (buf[len]) { /* well, this is an ultima ratio, we are assuming null-terminated string, but one never knows ... */
-		char *c = (char*) malloc(len+1);
-		memcpy(c, buf, len);
-		c[len]=0;
-		s = [[NSString alloc] initWithUTF8String:c];
-		free(c);
-	} else s = [[NSString alloc] initWithUTF8String:buf];
-    if (!s) {
-		SLog(@"Rcallbacks:Re_WriteConsole: suspicious string of length %d doesn't parse as UTF8. Will use raw cString.", len);
-		s = [[NSString alloc] initWithCString:buf length:len];
-		SLog(@"Rcallbacks:Re_WriteConsole: string parsed as \"%@\"", s);
-	}
-    if (s) {
-		[[REngine mainHandler] handleWriteConsole: s withType: otype];
+	NSString *s = [NSString alloc];
+	NSString *ss = [s initWithBytes:buf length:len encoding:NSUTF8StringEncoding];
+	if (!ss) /* if UTF8 fails, fall back to latin1 which is guaranteed to always succeed */
+		ss = [s initWithBytes:buf length:len encoding:NSISOLatin1StringEncoding];
+	if (ss) { /* should be always true*/
+		[[REngine mainHandler] handleWriteConsole: ss withType: otype];
+		[ss release];
+	} else if (s) /* this should never happen */
 		[s release];
-	}
 }
 
-void Re_WriteConsole(char *buf, int len)
+void Re_WriteConsole(R_EAPI_CONST char *buf, int len)
 {
     Re_WriteConsoleEx(buf, len, 0);
 }
@@ -232,14 +224,14 @@ int Re_ChooseFile(int new, char *buf, int len)
 	return r;
 }
 
-void Re_ShowMessage(char *buf)
+void Re_ShowMessage(R_EAPI_CONST char *buf)
 {
 	insideR--;
 	[[REngine mainHandler] handleShowMessage: buf];
 	insideR++;
 }
 
-int  Re_Edit(char *file){
+int  Re_Edit(R_EAPI_CONST char *file){
 	int r;
 	insideR--;
 	r=[[REngine mainHandler] handleEdit: file];
@@ -247,7 +239,7 @@ int  Re_Edit(char *file){
 	return r;
 }
 
-int  Re_EditFiles(int nfile, char **file, char **wtitle, char *pager){
+int  Re_EditFiles(int nfile, R_EAPI_CONST char **file, R_EAPI_CONST char **wtitle, R_EAPI_CONST char *pager){
 	int r;
 	insideR--;
 	r = [[REngine mainHandler] handleEditFiles: nfile withNames: file titles: wtitle pager: pager];
@@ -255,7 +247,7 @@ int  Re_EditFiles(int nfile, char **file, char **wtitle, char *pager){
 	return r;
 }
 
-int Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean del, char *pager)
+int Re_ShowFiles(int nfile, R_EAPI_CONST char **file, R_EAPI_CONST char **headers, R_EAPI_CONST char *wtitle, Rboolean del, R_EAPI_CONST char *pager)
 {
 	int r;
 	insideR--;
@@ -311,7 +303,7 @@ SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl)
 	SEXP ans; 
 	int i, len;
 	
-	char **sName, **sDesc, **sURL;
+	const char **sName, **sDesc, **sURL;
 	BOOL *bStat;
 	
 	if (![REngine cocoaHandler]) return R_NilValue;
@@ -330,16 +322,16 @@ SEXP pkgmanager(SEXP pkgstatus, SEXP pkgname, SEXP pkgdesc, SEXP pkgurl)
 		return pkgstatus;
 	}
 
-	sName = (char**) malloc(sizeof(char*)*len);
-	sDesc = (char**) malloc(sizeof(char*)*len);
-	sURL  = (char**) malloc(sizeof(char*)*len);
+	sName = (const char**) malloc(sizeof(char*)*len);
+	sDesc = (const char**) malloc(sizeof(char*)*len);
+	sURL  = (const char**) malloc(sizeof(char*)*len);
 	bStat = (BOOL*) malloc(sizeof(BOOL)*len);
 
 	i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
 	while (i<len) {
-		sName[i] = (char*)CHAR(STRING_ELT(pkgname, i));
-		sDesc[i] = (char*)CHAR(STRING_ELT(pkgdesc, i));
-		sURL [i] = (char*)CHAR(STRING_ELT(pkgurl, i));
+		sName[i] = CHAR(STRING_ELT(pkgname, i));
+		sDesc[i] = CHAR(STRING_ELT(pkgdesc, i));
+		sURL [i] = CHAR(STRING_ELT(pkgurl, i));
 		bStat[i] = (BOOL)LOGICAL(pkgstatus)[i];
 		i++;
 	}
@@ -362,7 +354,7 @@ SEXP datamanager(SEXP dsets, SEXP dpkg, SEXP ddesc, SEXP durl)
   SEXP  ans;
   int i, len;
   
-  char **sName, **sDesc, **sURL, **sPkg;
+  const char **sName, **sDesc, **sURL, **sPkg;
   BOOL *res;
 
   if (!isString(dsets) || !isString(dpkg) || !isString(ddesc)  || !isString(durl) )
@@ -379,17 +371,17 @@ SEXP datamanager(SEXP dsets, SEXP dpkg, SEXP ddesc, SEXP durl)
 	  return R_NilValue;
   }
 
-  sName = (char**) malloc(sizeof(char*)*len);
-  sDesc = (char**) malloc(sizeof(char*)*len);
-  sURL  = (char**) malloc(sizeof(char*)*len);
-  sPkg  = (char**) malloc(sizeof(char*)*len);
+  sName = (const char**) malloc(sizeof(char*)*len);
+  sDesc = (const char**) malloc(sizeof(char*)*len);
+  sURL  = (const char**) malloc(sizeof(char*)*len);
+  sPkg  = (const char**) malloc(sizeof(char*)*len);
   
   i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
   while (i<len) {
-	  sName[i] = (char*)CHAR(STRING_ELT(dsets, i));
-	  sDesc[i] = (char*)CHAR(STRING_ELT(ddesc, i));
-	  sURL [i] = (char*)CHAR(STRING_ELT(durl, i));
-	  sPkg [i] = (char*)CHAR(STRING_ELT(dpkg, i));
+	  sName[i] = CHAR(STRING_ELT(dsets, i));
+	  sDesc[i] = CHAR(STRING_ELT(ddesc, i));
+	  sURL [i] = CHAR(STRING_ELT(durl, i));
+	  sPkg [i] = CHAR(STRING_ELT(dpkg, i));
 	  i++;
   }
 
@@ -421,7 +413,7 @@ SEXP pkgbrowser(SEXP rpkgs, SEXP rvers, SEXP ivers, SEXP wwwhere,
 {
   int i, len;
 
-  char **sName, **sIVer, **sRVer;
+  const char **sName, **sIVer, **sRVer;
   BOOL *bStat;
 
   if(!isString(rpkgs) || !isString(rvers) || !isString(ivers) || !isString(wwwhere) || !isLogical(install_dflt))
@@ -438,16 +430,16 @@ SEXP pkgbrowser(SEXP rpkgs, SEXP rvers, SEXP ivers, SEXP wwwhere,
 	  return R_NilValue;
   }
   
-  sName = (char**) malloc(sizeof(char*)*len);
-  sIVer = (char**) malloc(sizeof(char*)*len);
-  sRVer = (char**) malloc(sizeof(char*)*len);
+  sName = (const char**) malloc(sizeof(char*)*len);
+  sIVer = (const char**) malloc(sizeof(char*)*len);
+  sRVer = (const char**) malloc(sizeof(char*)*len);
   bStat = (BOOL*) malloc(sizeof(BOOL)*len);
   
   i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
   while (i<len) {
-	  sName[i] = (char*)CHAR(STRING_ELT(rpkgs, i));
-	  sIVer[i] = (char*)CHAR(STRING_ELT(ivers, i));
-	  sRVer[i] = (char*)CHAR(STRING_ELT(rvers, i));
+	  sName[i] = CHAR(STRING_ELT(rpkgs, i));
+	  sIVer[i] = CHAR(STRING_ELT(ivers, i));
+	  sRVer[i] = CHAR(STRING_ELT(rvers, i));
 	  bStat[i] = (BOOL)LOGICAL(install_dflt)[i];
 	  i++;
   }
@@ -465,9 +457,9 @@ SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
 {
 	SEXP ans; 
 	int i, len;
-	char **sTopic, **sDesc, **sPkg, **sURL;
+	const char **sTopic, **sDesc, **sPkg, **sURL;
 	
-	if(!isString(h_topic) | !isString(h_pkg) | !isString(h_desc) )
+	if(!isString(h_topic) || !isString(h_pkg) || !isString(h_desc) )
 		error("invalid arguments");
 	
 	len = LENGTH(h_topic);
@@ -481,17 +473,17 @@ SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
 		return R_NilValue;
 	}
 	
-	sTopic = (char**) malloc(sizeof(char*)*len);
-	sDesc = (char**) malloc(sizeof(char*)*len);
-	sPkg = (char**) malloc(sizeof(char*)*len);
-	sURL = (char**) malloc(sizeof(char*)*len);
+	sTopic = (const char**) malloc(sizeof(char*)*len);
+	sDesc = (const char**) malloc(sizeof(char*)*len);
+	sPkg = (const char**) malloc(sizeof(char*)*len);
+	sURL = (const char**) malloc(sizeof(char*)*len);
 	
 	i = 0; // we don't copy since the Obj-C side is responsible for making copies if necessary
 	while (i<len) {
-		sTopic[i] = (char*)CHAR(STRING_ELT(h_topic, i));
-		sDesc[i]  = (char*)CHAR(STRING_ELT(h_desc, i));
-		sPkg[i]   = (char*)CHAR(STRING_ELT(h_pkg, i));
-		sURL[i]   = (char*)CHAR(STRING_ELT(h_url, i));
+		sTopic[i] = CHAR(STRING_ELT(h_topic, i));
+		sDesc[i]  = CHAR(STRING_ELT(h_desc, i));
+		sPkg[i]   = CHAR(STRING_ELT(h_pkg, i));
+		sURL[i]   = CHAR(STRING_ELT(h_url, i));
 		i++;
 	}
 	
@@ -512,7 +504,7 @@ SEXP hsbrowser(SEXP h_topic, SEXP h_pkg, SEXP h_desc, SEXP h_wtitle,
 SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 {
     SEXP list, preselect, ans = R_NilValue;
-    char **clist;
+    const char **clist;
     int i, j = -1, n,  multiple, nsel = 0;
 	Rboolean haveTitle;
 	BOOL *itemStatus = 0;
@@ -531,10 +523,10 @@ SEXP Re_do_selectlist(SEXP call, SEXP op, SEXP args, SEXP rho)
 		error(_("invalid 'preselect' argument"));
 	
     n = LENGTH(list);
-    clist = (char **) R_alloc(n + 1, sizeof(char *));
+    clist = (const char **) R_alloc(n + 1, sizeof(char *));
     itemStatus = (BOOL *) R_alloc(n + 1, sizeof(BOOL));
     for(i = 0; i < n; i++) {
-		clist[i] = (char*)CHAR(STRING_ELT(list, i));
+		clist[i] = CHAR(STRING_ELT(list, i));
 		itemStatus[i] = NO;
     }
     clist[n] = NULL;

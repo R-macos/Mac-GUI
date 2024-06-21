@@ -1,5 +1,10 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2024-06-21
+*	Clean up REngine to honor const char types where
+	supported by the newer R API.
+
+
 -- Release Version 1.80 (8416) - supplied with R 4.4.1 --
 -- Release Version 1.80 (8376) - supplied with R 4.4.0 --
 -- Release Version 1.80 (8338) - supplied with R 4.3.3 --

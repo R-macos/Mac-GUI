@@ -49,28 +49,28 @@
 - (void)  handleFlushConsole;
 - (void)  handleWritePrompt: (NSString*) prompt;
 - (void)  handleProcessEvents;
-- (int)   handleChooseFile: (char*) buf len: (int) length isNew: (int) new;
-- (void)  handleShowMessage: (char*) msg;
+- (int)   handleChooseFile: (const char*) buf len: (int) length isNew: (int) new;
+- (void)  handleShowMessage: (const char*) msg;
 - (void)  handleProcessingInput: (char*) cmd;
-- (int)   handleEdit: (char*) file;
-- (int)   handleEditFiles: (int) nfile withNames: (char**) file titles: (char**) wtitle pager: (char*) pager;
-- (int)   handleShowFiles: (int) nfile withNames: (char**) file headers: (char**) headers windowTitle: (char*) wtitle pager: (char*) pages andDelete: (BOOL) del;
+- (int)   handleEdit: (const char*) file;
+- (int)   handleEditFiles: (int) nfile withNames: (const char**) file titles: (const char**) wtitle pager: (const char*) pager;
+- (int)   handleShowFiles: (int) nfile withNames: (const char**) file headers: (const char**) headers windowTitle: (const char*) wtitle pager: (const char*) pages andDelete: (BOOL) del;
 @end
 
 /* protocol defining additional callbacks specific to Aqua/Cocoa GUI */
 @protocol CocoaHandler
 // return value is unused so far - the return value on R side is 'stat', so any changes to that parameter are propagated to R
-- (int) handlePackages: (int) count withNames: (char**) name descriptions: (char**) desc URLs: (char**) url status: (BOOL*) stat;
+- (int) handlePackages: (int) count withNames: (const char**) name descriptions: (const char**) desc URLs: (const char**) url status: (BOOL*) stat;
 // return value: 0=cancel, 1=ok
-- (int) handleListItems: (int) count withNames: (char**) name status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) title;
+- (int) handleListItems: (int) count withNames: (const char**) name status: (BOOL*) stat multiple: (BOOL) multiple title: (NSString*) title;
 // returns either nil or array of booleans of the size 'count' specifying which datasets to load
-- (BOOL*) handleDatasets: (int) count withNames: (char**) name descriptions: (char**) desc packages: (char**) pkg URLs: (char**) url;
+- (BOOL*) handleDatasets: (int) count withNames: (const char**) name descriptions: (const char**) desc packages: (const char**) pkg URLs: (const char**) url;
 // return value is unused so far
-- (int) handleInstalledPackages: (int) count withNames: (char**) name installedVersions: (char**) iver repositoryVersions: (char**) rver update: (BOOL*) stat label: (char*) label;
+- (int) handleInstalledPackages: (int) count withNames: (const char**) name installedVersions: (const char**) iver repositoryVersions: (const char**) rver update: (BOOL*) stat label: (const char*) label;
 // its usage is identical to that of the 'system' command
 - (int) handleSystemCommand: (const char*) cmd;
-- (int) handleHelpSearch: (int) count withTopics: (char**) topics packages: (char**) pkgs descriptions: (char**) descs urls: (char**) urls title: (char*) title;
-- (int) handleCustomPrint: (char*) type withObject: (RSEXP*) obj;
+- (int) handleHelpSearch: (int) count withTopics: (const char**) topics packages: (const char**) pkgs descriptions: (const char**) descs urls: (const char**) urls title: (const char*) title;
+- (int) handleCustomPrint: (const char*) type withObject: (RSEXP*) obj;
 @end
 
 #endif /* end of Obj-C code */
@@ -79,22 +79,25 @@
 #include <Rinternals.h>
 #include <stdio.h>
 
+/* since R 2.7.0 (r43767) those are const */
+#define R_EAPI_CONST const
+
 /* functions provided as R callbacks */
-int  Re_ReadConsole(char *prompt, unsigned char *buf, int len, int addtohistory);
+int  Re_ReadConsole(R_EAPI_CONST char *prompt, unsigned char *buf, int len, int addtohistory);
 void Re_RBusy(int which);
-void Re_WriteConsole(char *buf, int len);
-void Re_WriteConsoleEx(char *buf, int len, int oType);
+void Re_WriteConsole(R_EAPI_CONST char *buf, int len);
+void Re_WriteConsoleEx(R_EAPI_CONST char *buf, int len, int oType);
 void Re_ResetConsole();
 void Re_FlushConsole();
 void Re_ClearerrConsole();
 int  Re_ChooseFile(int new, char *buf, int len);
-void Re_ShowMessage(char *buf);
+void Re_ShowMessage(R_EAPI_CONST char *buf);
 void Re_read_history(char *buf);
 void Re_loadhistory(SEXP call, SEXP op, SEXP args, SEXP env);
 void Re_savehistory(SEXP call, SEXP op, SEXP args, SEXP env);
-int  Re_ShowFiles(int nfile, char **file, char **headers, char *wtitle, Rboolean del, char *pager);
-int  Re_EditFiles(int nfile, char **file, char **title, char *pager);
-int  Re_Edit(char *file);
+int  Re_ShowFiles(int nfile, R_EAPI_CONST char **file, R_EAPI_CONST char **headers, R_EAPI_CONST char *wtitle, Rboolean del, R_EAPI_CONST char *pager);
+int  Re_EditFiles(int nfile, R_EAPI_CONST char **file, R_EAPI_CONST char **title, R_EAPI_CONST char *pager);
+int  Re_Edit(R_EAPI_CONST char *file);
 int  Re_system(const char *cmd);
 
 void Re_ProcessEvents(void);

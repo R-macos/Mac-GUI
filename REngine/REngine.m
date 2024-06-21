@@ -85,11 +85,11 @@ BOOL preventReentrance = NO;
 
 - (id) initWithHandler: (id <REPLHandler>) hand
 {
-    char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
+    const char *args[4]={ "R", "--no-save", "--gui=cocoa", 0 };
 	return [self initWithHandler: hand arguments: args];
 }
 
-- (id) initWithHandler: (id <REPLHandler>) hand arguments: (char**) args
+- (id) initWithHandler: (id <REPLHandler>) hand arguments: (const char**) args
 {
 	int i=0;
 	argc=0;
@@ -176,7 +176,7 @@ BOOL preventReentrance = NO;
 		}
 		@catch (NSException *foo) {
 			insideR--;
-			NSLog(@"*** REngine.runREPL: caught ObjC exception in the main loop. Update to the latest GUI version and consider reporting this properly (see FAQ) if it persists and is not known. \n*** reason: %@\n*** name: %@, info: %@\n*** Version: R %s.%s (%s) R.app %@%s\nConsider saving your work soon in case this develops into a problem.", [foo reason], [foo name], [foo userInfo], R_MAJOR, R_MINOR, R_SVN_REVISION, [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], getenv("R_ARCH"));
+			NSLog(@"*** REngine.runREPL: caught ObjC exception in the main loop. Update to the latest GUI version and consider reporting this properly (see FAQ) if it persists and is not known. \n*** reason: %@\n*** name: %@, info: %@\n*** Version: R %s.%s (%d) R.app %@%s\nConsider saving your work soon in case this develops into a problem.", [foo reason], [foo name], [foo userInfo], R_MAJOR, R_MINOR, (int) R_SVN_REVISION, [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"], getenv("R_ARCH"));
 		}
 #ifdef USE_POOLS
 		[pool release];

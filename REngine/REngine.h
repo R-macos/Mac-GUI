@@ -82,7 +82,7 @@ extern BOOL preventReentrance;
 
 - (id) init;
 - (id) initWithHandler: (id <REPLHandler>) hand;
-- (id) initWithHandler: (id <REPLHandler>) hand arguments: (char**) args;
+- (id) initWithHandler: (id <REPLHandler>) hand arguments: (const char**) args;
 - (BOOL) activate;
 
 - (BOOL) isLoopRunning;
