@@ -94,8 +94,6 @@ extern int RGUI_ReplIteration(SEXP rho, int savestack, int browselevel, R_ReplSt
 
 // from Defn.h
 
-int R_SetOptionWidth(int);
-
 #import "RController.h"
 #import "Tools/CodeCompletion.h"
 #import "Tools/FileCompletion.h"
@@ -123,6 +121,15 @@ static inline const char* NSStringUTF8String(NSString* self)
 	const char* to_return = SPNSStringGetUTF8String(self, @selector(UTF8String));
 	return to_return;
 }
+
+#if R_VERSION < R_Version(4,5,0)
+int R_SetOptionWidth(int);
+#else
+static int R_SetOptionWidth(int width) {
+  REngine *eng = [REngine mainEngine];
+  if (eng) [eng executeString: [NSString stringWithFormat:@"options(width=%dL)", width]];
+}
+#endif
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_7
 // declare the following methods to avoid compiler warnings
