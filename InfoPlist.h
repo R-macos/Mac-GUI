@@ -59,16 +59,16 @@
 #elif MIN_VER >= 101000
 #define CFG_NAME Yosemite build
 #define MIN_VERSION 10.10
-#elif MIN_VER >= 109000
+#elif MIN_VER >= 1090
 #define CFG_NAME Mavericks build
 #define MIN_VERSION 10.9
-#elif MIN_VER >= 108000
+#elif MIN_VER >= 1080
 #define CFG_NAME Mountain Lion build
 #define MIN_VERSION 10.8
-#elif MIN_VER >= 107000
+#elif MIN_VER >= 1070
 #define CFG_NAME Lion build
 #define MIN_VERSION 10.7
-#elif MIN_VER >= 106000
+#elif MIN_VER >= 1060
 #define CFG_NAME Snow Leopard build
 #define MIN_VERSION 10.6
 #else /* don't bother with the real name if older - just if it's 64-bit or not */
