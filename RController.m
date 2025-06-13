@@ -2151,6 +2151,10 @@ outputType: 0 = stdout, 1 = stderr, 2 = stdout/err as root
 		s = fixBuggyOutput(s, @"Warning: Expected min height of view: .* to be less than or equal to ");
 		/* bug in Monterey and up */
 		s = fixBuggyOutput(s, @"IsMenuKeyEvent: found no unichar data in event; retranslated without deadkeys to produce");
+		/* bug in Sequoia(?) and up (note: we don't use one regex since fixBuggyOutput
+		   only removes one line at a time so we don't want to risk getting both in one s) */
+		s = fixBuggyOutput(s, @"\\[IMKClient subclass\\]: chose ");
+		s = fixBuggyOutput(s, @"\\[IMKInputSession subclass\\]: chose ");
 	}
 	[self flushROutput];
 	[self writeConsoleDirectly:s withColor:color];
