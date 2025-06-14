@@ -4,34 +4,46 @@ name: Build
 
 jobs:
   Build:
-    runs-on: 'macOS-latest'
+    runs-on: ${{ matrix.os }}
+
+    name: ${{ matrix.os }} R ${{ matrix.r-version }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-13, macos-14 ]
+        r-version: [ release, devel ]
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install R
+        uses: s-u/R-actions/install@v2
+        with:
+          r-version: ${{ matrix.r-version }}
+          tools: base
+
       - name: Build
         shell: bash
         run: |
-          echo Downloading R ...
-          curl -s -LO https://mac.r-project.org/big-sur/last-success/R-release-x86_64.tar.xz
-          echo Unpacking R ...
-          sudo rm -rf /Library/Frameworks/R.framework
-          if [ ! -e /Library/Frameworks ]; then mkdir -p /Library/Frameworks; fi 
-          sudo tar fxz R-release-x86_64.tar.xz -C /Library/Frameworks/
+          ## Build Mac-GUI
+          echo Setup texinfo ...
+          Rscript -e 'source("https://mac.R-project.org/bin/install.R"); install.libs("texinfo", dep=FALSE)'
+          echo Build ...
           mkdir -p build/logs
           for bld in Release Debug; do
             echo Build $bld ..
-            xcodebuild -configuration $bld -arch x86_64 2>&1 | tee build/logs/$bld.log
+            xcodebuild -configuration $bld -arch `uname -m` 2>&1 | tee build/logs/$bld.log
           done
           echo Pack ...
           mkdir R-GUI-build
           mv build/Debug R-GUI-build/
           mv build/Release R-GUI-build/
           mv build/logs R-GUI-build/
-          hdiutil create -srcfolder R-GUI-build R-GUI-build.dmg
+          hdiutil create -srcfolder R-GUI-build R-GUI-build-${{ matrix.os }}-${{ matrix.r-version }}.dmg
 
       - name: Upload build results
         uses: actions/upload-artifact@master
         with:
-          path: R-GUI-build.dmg
-          name: R-GUI-build
+          path: R-GUI-build-${{ matrix.os }}-${{ matrix.r-version }}.dmg
+          name: R-GUI-build-${{ matrix.os }}-${{ matrix.r-version }}
