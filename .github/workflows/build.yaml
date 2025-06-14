@@ -33,7 +33,7 @@ jobs:
           mkdir -p build/logs
           for bld in Release Debug; do
             echo Build $bld ..
-            xcodebuild -configuration $bld -arch x86_64 2>&1 | tee build/logs/$bld.log
+            xcodebuild -configuration $bld -arch `uname -m` 2>&1 | tee build/logs/$bld.log
           done
           echo Pack ...
           mkdir R-GUI-build
