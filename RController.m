@@ -542,6 +542,12 @@ static int R_SetOptionWidth(int width) {
 					SLog(@"   - it contains @, stripped to \"%@\"", lss);
 				}
 				strncpy(cloc, [lss UTF8String], 63);
+				/* cloc can be en-NZ instead of en_NZ so convert those */
+				char *clp = cloc;
+				while (*clp && *clp != '.') {
+					if (*clp == '-') *clp = '_';
+					clp++;
+				}
 			}
 			if (! *cloc) {
 				SLog(@"   CFLocaleGetIdentifier is empty, falling back to en_US.UTF-8");
