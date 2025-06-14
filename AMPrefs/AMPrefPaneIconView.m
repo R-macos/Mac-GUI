@@ -407,8 +407,8 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 {
 	NSRect frame = [self frameForCategoryWithIndex:index];
 	if ((index % 2) == 1) {
-		[[NSColor colorWithCalibratedWhite:0.97 alpha:0.99] set];
-		NSRectFillUsingOperation(frame, NSCompositePlusDarker);
+		[[NSColor colorWithCalibratedWhite:0.97 alpha:1] set];
+		NSRectFill(frame);
 	}
 	if (sortByCategory) {
 		NSPoint captionOffset = NSMakePoint(AMPrefPaneIconViewHorizontalPadding, frame.origin.y +AMPrefPaneIconViewTopGroupPadding);
@@ -438,8 +438,8 @@ NSInteger _am_compareByCategory(id array1, id array2, void *prefsController)
 	} else {
 		theImage = [icon image];
 	}
-	[theImage setFlipped:NO];
-	[theImage drawInRect:iconRect fromRect:sourceRect operation:NSCompositeSourceAtop fraction:1.0];
+	[theImage setFlipped:YES];
+	[theImage drawInRect:iconRect fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1.0];
 	NSRect labelRect = NSZeroRect;
 	labelRect.size = [[icon title] sizeWithAttributes:_am_iconLabelAttributes];
 	labelRect.origin.x = pos.x-labelRect.size.width/2.0;
