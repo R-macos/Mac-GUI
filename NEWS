@@ -1,5 +1,14 @@
 NEWS for R.app GUI for Mac OS X
 
+-- Release Version 1.82 (8536) - supplied with R 4.5.1 --
+
+Last-update: 2025-06-12
+*	Suppress spurious IMK system messages
+
+*	Convert system locale specifications like en-NZ to valid
+	locales (here en_NZ.UTF-8).
+
+
 -- Release Version 1.81 (8526) - supplied with R 4.5.0 --
 -- Release Version 1.81 (8497) - supplied with R 4.4.3 --
 -- Release Version 1.81 (8462) - supplied with R 4.4.2 --
