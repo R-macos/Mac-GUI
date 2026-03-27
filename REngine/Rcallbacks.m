@@ -9,7 +9,7 @@
  *  R Copyright notes:
  *                     Copyright (C) 1995-1996   Robert Gentleman and Ross Ihaka
  *                     Copyright (C) 1998-2012   The R Development Core Team
- *                     Copyright (C) 2002-2005   The R Foundation
+ *                     Copyright (C) 2002-2026   The R Foundation
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -728,7 +728,6 @@ SEXP ssNewVector(SEXPTYPE type, int vlen)
 	    REAL(tvec)[j] = ssNA_REAL;
 	else if (type == STRSXP)
 	    SET_STRING_ELT(tvec, j, STRING_ELT(ssNA_STRING, 0));
-    SETLEVELS(tvec, 0);
     return (tvec);
 }
 
