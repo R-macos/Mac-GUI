@@ -39,6 +39,17 @@
 
 #import "RSEXP.h"
 
+/* this is a temporary work-around for removal for ATTRIB in R 4.6.0 */
+#include <Rversion.h>
+#if (R_VERSION >= R_Version(4,6,0))
+#include <stdint.h>
+#ifdef ATTRIB
+#undef ATTRIB
+#endif
+typedef struct sexp_compat { uint64_t bits; void *attr; } sexp_compat_attr;
+#define ATTRIB(X) ((SEXP)(((sexp_compat_attr*)(X))->attr))
+#endif
+
 @implementation RSEXP
 
 - (id) initWithSEXP: (SEXP) ct
