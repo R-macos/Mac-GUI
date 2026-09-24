@@ -143,12 +143,6 @@
 
 }
 
-- (void)runModalSavePanelForSaveOperation:(NSSaveOperationType)saveOperation delegate:(id)delegate didSaveSelector:(SEL)didSaveSelector contextInfo:(void *)contextInfo
-{
-	// dispatch didSaveSelector: in order to remain input focus to current document
-	[super runModalSavePanelForSaveOperation:saveOperation delegate:self didSaveSelector:@selector(didSaveSelector) contextInfo:contextInfo];
-}
-
 // customize Save panel by adding "encoding" view for R documents
 - (BOOL)prepareSavePanel:(NSSavePanel *)savePanel
 {
