@@ -1,5 +1,12 @@
 NEWS for R.app GUI for Mac OS X
 
+Last-update: 2026-09-24
+
+*	Selecting "Delete" in recent macOS versions while trying to close
+	a document with unsaved changes has not closed the document.
+	(Thanks to Kevin Ushey!)
+
+
 -- Release Version 1.83 (8608) - supplied with R 4.6.1 --
 -- Release Version 1.83 (8601) - supplied with R 4.6.0 --
 
