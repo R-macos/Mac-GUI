@@ -6,6 +6,10 @@ Last-update: 2026-09-24
 	a document with unsaved changes has not closed the document.
 	(Thanks to Kevin Ushey!)
 
+*	Added a work-around for recent macOS versions not correctly
+	adjusting margins of the text view in document windows.
+	(Thanks to Kevin Ushey!)
+
 
 -- Release Version 1.83 (8608) - supplied with R 4.6.1 --
 -- Release Version 1.83 (8601) - supplied with R 4.6.0 --
