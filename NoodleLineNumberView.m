@@ -830,7 +830,16 @@
 
 - (void) matchRuleThickness
 {
+	NSScrollView *sv = [self scrollView];
+	NSSize size = [sv frame].size;
 	[self setRuleThickness: currentRuleThickness];
+	// On macOS 15 the ruler overlays the clip view and its thickness becomes the clip
+	// view's left content inset, but changing the thickness doesn't re-apply that inset
+	// to the clip bounds. A frame change forces AppKit to do a full te-tile,
+	// fixing the issue, although to force it we have to re-size to an "incorrect"
+	// size first.
+	[sv setFrameSize:NSMakeSize(size.width + 1, size.height)];
+	[sv setFrameSize:size];
 }
 
 - (void)updateGutterThicknessConstants
