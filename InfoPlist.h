@@ -10,7 +10,7 @@
 /* GUI version as shown in infos e.g. 1.27-devel */
 #define GUI_VER 1.84-devel
 /* R postfix used to denote release versions of GUI - set to R release version (e.g. 2.8.0) or to anything that will be shown in between R and GUI (e.g. - or for Mac) */
-#define R_RELEASE R for macOS
+#define R_RELEASE for macOS
 
 /* NOTE: unfortunately it is NOT possible to rely on MAC_OS_X_VERSION_MIN_REQUIRED,
    because Xcode's Info.plist processing does NOT include flags that are passed to
@@ -25,7 +25,9 @@
 /* for release config just auto-detect the SDK used */
 /* we cannot use Availability.h because of the odd processing Xcode uses here! */
 
-#if MIN_VER >= 110000
+#if MIN_VER >= 140000
+#define CFG_NAME Sonoma build
+#elif MIN_VER >= 110000
 #ifdef __x86_64__
 #define CFG_NAME Big Sur Intel build
 #elif defined __arm64__
