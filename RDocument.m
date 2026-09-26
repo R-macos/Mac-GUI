@@ -35,7 +35,7 @@
 #import "RController.h"
 #import "Preferences.h"
 #import "RChooseEncodingPopupAccessory.h"
-#import "REngine.h"
+#import "REngine/REngine.h"
 #import "HelpManager.h"
 #import "NSString_RAdditions.h"
 

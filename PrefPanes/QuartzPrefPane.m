@@ -30,7 +30,7 @@
 #import "QuartzPrefPane.h"
 #import "PreferenceKeys.h"
 #import "Preferences.h"
-#import "REngine.h"
+#import "../REngine/REngine.h"
 
 @interface QuartzPrefPane (Private)
 - (void)setIdentifier:(NSString *)newIdentifier;
